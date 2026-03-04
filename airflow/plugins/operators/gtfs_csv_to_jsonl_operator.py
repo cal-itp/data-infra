@@ -4,7 +4,7 @@ import logging
 import os
 from io import StringIO
 from itertools import islice
-from typing import Generator, Sequence
+from typing import Generator, Self, Sequence
 
 from airflow.models import BaseOperator
 from airflow.models.taskinstance import Context
@@ -79,25 +79,39 @@ class GTFSCSVResults:
         }
 
 
+class NullReader:
+    def __init__(self) -> None:
+        self.fieldnames = []
+        self.dialect = "excel"
+
+    def __iter__(self) -> Self:
+        return self
+
+    def __next__(self) -> None:
+        raise TypeError("Extracted file is empty")
+
+
 class GTFSCSVConverter:
     def __init__(
         self,
         filename: str,
-        csv_data: bytes,
+        data: bytes,
         extracted_file: dict,
         extract_config: dict,
     ) -> None:
         self.filename = filename
-        self.csv_data = csv_data
+        self.data = data
         self.extracted_file = extracted_file
         self.extract_config = extract_config
 
-    def reader(self) -> csv.DictReader:
+    def _reader(self) -> csv.DictReader:
+        if self.data is None or len(self.data) == 0:
+            return NullReader()
         comma_reader = csv.DictReader(
-            StringIO(self.csv_data), restkey="calitp_unknown_fields"
+            StringIO(self.data), restkey="calitp_unknown_fields"
         )
         tab_reader = csv.DictReader(
-            StringIO(self.csv_data),
+            StringIO(self.data),
             dialect="excel-tab",
             restkey="calitp_unknown_fields",
         )
@@ -106,7 +120,7 @@ class GTFSCSVConverter:
         return comma_reader
 
     def convert(self, current_date: str) -> GTFSCSVResults:
-        reader = self.reader()
+        reader = self._reader()
         results = GTFSCSVResults(
             current_date=current_date,
             filename=self.filename,
@@ -119,7 +133,7 @@ class GTFSCSVConverter:
             for row in reader:
                 results.append(row)
         except Exception as exception:
-            results.exception = exception
+            results.set_exception(exception)
             logging.warning(f"Error adding lines on file {self.filename}: {exception}")
         return results
 
@@ -193,7 +207,7 @@ class GTFSCSVToJSONLOperator(BaseOperator):
             output.append(
                 GTFSCSVConverter(
                     filename=extracted_filename,
-                    csv_data=source.decode(),
+                    data=source.decode(),
                     extracted_file=extracted_file,
                     extract_config=extract_config,
                 )

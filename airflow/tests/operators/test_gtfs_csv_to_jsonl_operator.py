@@ -440,3 +440,200 @@ class TestGTFSCSVToJSONLOperator:
             "filename": "results.jsonl",
             "ts": "2025-06-02T00:00:00+00:00",
         }
+
+    @pytest.fixture
+    def empty_file_execution_date(self) -> datetime:
+        return datetime.fromisoformat("2026-02-28").replace(tzinfo=timezone.utc)
+
+    @pytest.fixture
+    def empty_file_source_path_fragment(self) -> str:
+        return "dt=2026-02-28/ts=2026-02-28T03:00:01.085996+00:00/base64_url=aHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA=="
+
+    @pytest.fixture
+    def empty_file_destination_path_fragment(self) -> str:
+        return "dt=2026-02-28/ts=2026-02-28T03:00:01.085996+00:00/base64_url=aHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA=="
+
+    @pytest.fixture
+    def empty_file_results_path_fragment(self) -> str:
+        return "dt=2026-02-28/ts=2026-02-28T03:00:01.085996+00:00/base64_url=aHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA==.jsonl"
+
+    @pytest.fixture
+    def empty_file_unzip_results(self) -> dict:
+        return {
+            "success": True,
+            "exception": None,
+            "extract": {
+                "filename": "google_transit.zip",
+                "ts": "2026-02-28T00:00:00+00:00",
+                "config": {
+                    "extracted_at": "2026-02-28T03:00:00+00:00",
+                    "name": "CSULB Shuttle PassioGo Schedule",
+                    "url": "https://passio3.com/longbeachcal/passioTransit/gtfs/google_transit.zip",
+                    "feed_type": "schedule",
+                    "schedule_url_for_validation": None,
+                    "auth_query_params": {},
+                    "auth_headers": {},
+                    "computed": False,
+                },
+                "response_code": 200,
+                "response_headers": {
+                    "x-powered-by": "Express",
+                    "Strict-Transport-Security": "max-age=10886400; includeSubDomains; preload",
+                    "x-ratelimit-limit": "1200",
+                    "x-ratelimit-remaining": "1198",
+                    "x-ratelimit-reset": "1772247844",
+                    "x-ratelimit-type": "remoteAddress",
+                    "vary": "Origin",
+                    "etag": "bc6d037eb02d244523f31f1ef818775b",
+                    "content-type": "application/zip",
+                    "date": "Sat, 28 Feb 2026 03:03:06 GMT",
+                    "connection": "keep-alive",
+                    "keep-alive": "timeout=300",
+                    "transfer-encoding": "chunked",
+                },
+                "reconstructed": False,
+            },
+            "zipfile_extract_md5hash": "4f72c84bd3f053ddb929289fa2de7879",
+            "zipfile_files": [
+                "frequencies.txt",
+            ],
+            "zipfile_dirs": [],
+            "extracted_files": [
+                {
+                    "filename": "frequencies.txt",
+                    "ts": "2026-02-28T03:00:01.085996+00:00",
+                    "extract_config": {
+                        "extracted_at": "2026-02-28T03:00:00+00:00",
+                        "name": "CSULB Shuttle PassioGo Schedule",
+                        "url": "https://passio3.com/longbeachcal/passioTransit/gtfs/google_transit.zip",
+                        "feed_type": "schedule",
+                        "schedule_url_for_validation": None,
+                        "auth_query_params": {},
+                        "auth_headers": {},
+                        "computed": False,
+                    },
+                    "original_filename": "frequencies.txt",
+                },
+            ],
+        }
+
+    @pytest.fixture
+    def test_empty_file_dag(self, empty_file_execution_date: datetime) -> DAG:
+        return DAG(
+            "test_empty_file_dag",
+            default_args={
+                "owner": "airflow",
+                "start_date": empty_file_execution_date,
+                "end_date": empty_file_execution_date + timedelta(days=1),
+            },
+            schedule=timedelta(days=1),
+        )
+
+    @pytest.fixture
+    def empty_file_operator(
+        self,
+        test_empty_file_dag: DAG,
+        empty_file_execution_date: datetime,
+        empty_file_source_path_fragment: str,
+        empty_file_destination_path_fragment: str,
+        empty_file_results_path_fragment: str,
+        empty_file_unzip_results: dict,
+    ) -> GTFSCSVToJSONLOperator:
+        return GTFSCSVToJSONLOperator(
+            task_id="empty_file_convert_to_jsonl",
+            gcp_conn_id="google_cloud_default",
+            dt=empty_file_execution_date.strftime("%Y-%m-%d"),
+            ts=empty_file_execution_date.isoformat(),
+            unzip_results=empty_file_unzip_results,
+            source_bucket=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"
+            ),
+            source_path_fragment=empty_file_source_path_fragment,
+            destination_bucket=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
+            ),
+            destination_path_fragment=empty_file_destination_path_fragment,
+            results_path_fragment=empty_file_results_path_fragment,
+            dag=test_empty_file_dag,
+        )
+
+    @pytest.mark.vcr
+    def test_empty_file_execute(
+        self,
+        test_empty_file_dag: DAG,
+        empty_file_operator: GTFSCSVToJSONLOperator,
+        empty_file_execution_date: datetime,
+        empty_file_destination_path_fragment: str,
+        empty_file_results_path_fragment: str,
+        gcs_hook: GCSHook,
+    ):
+        empty_file_operator.run(
+            start_date=empty_file_execution_date,
+            end_date=empty_file_execution_date + timedelta(days=1),
+            ignore_first_depends_on_past=True,
+        )
+
+        task = test_empty_file_dag.get_task("empty_file_convert_to_jsonl")
+        task_instance = TaskInstance(task, execution_date=empty_file_execution_date)
+        xcom_value = task_instance.xcom_pull()
+        assert len(xcom_value) == 0
+
+        unparsed_results = gcs_hook.download(
+            bucket_name=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
+            ).replace("gs://", ""),
+            object_name=os.path.join(
+                "frequencies.txt_parsing_results", empty_file_results_path_fragment
+            ),
+        )
+        results = json.loads(unparsed_results)
+        assert results == {
+            "success": False,
+            "exception": "Extracted file is empty",
+            "feed_file": {
+                "filename": "frequencies.txt",
+                "ts": "2026-02-28T03:00:01.085996+00:00",
+                "extract_config": {
+                    "extracted_at": "2026-02-28T03:00:00+00:00",
+                    "name": "CSULB Shuttle PassioGo Schedule",
+                    "url": "https://passio3.com/longbeachcal/passioTransit/gtfs/google_transit.zip",
+                    "feed_type": "schedule",
+                    "schedule_url_for_validation": None,
+                    "auth_query_params": {},
+                    "auth_headers": {},
+                    "computed": False,
+                },
+                "original_filename": "frequencies.txt",
+            },
+            "fields": [],
+            "parsed_file": {
+                "filename": "frequencies.jsonl.gz",
+                "ts": "2026-02-28T00:00:00+00:00",
+                "extract_config": {
+                    "extracted_at": "2026-02-28T03:00:00+00:00",
+                    "name": "CSULB Shuttle PassioGo Schedule",
+                    "url": "https://passio3.com/longbeachcal/passioTransit/gtfs/google_transit.zip",
+                    "feed_type": "schedule",
+                    "schedule_url_for_validation": None,
+                    "auth_query_params": {},
+                    "auth_headers": {},
+                    "computed": False,
+                },
+                "gtfs_filename": "frequencies",
+                "csv_dialect": "excel",
+                "num_lines": 0,
+            },
+        }
+
+        metadata = gcs_hook.get_metadata(
+            bucket_name=os.environ.get(
+                "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"
+            ).replace("gs://", ""),
+            object_name=os.path.join(
+                "frequencies.txt_parsing_results", empty_file_results_path_fragment
+            ),
+        )
+        assert json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
+            "filename": "results.jsonl",
+            "ts": "2026-02-28T00:00:00+00:00",
+        }

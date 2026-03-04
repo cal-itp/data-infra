@@ -1,0 +1,409 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/80b11a83-70b1-4cdf-9d42-b0da1f953607
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/frequencies.txt%2Fdt%3D2026-02-28%2Fts%3D2026-02-28T03%3A00%3A01.085996%2B00%3A00%2Fbase64_url%3DaHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA%3D%3D%2Ffrequencies.txt?alt=media
+  response:
+    body:
+      string: ''
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '0'
+      Content-Type:
+      - text/csv
+      Date:
+      - Mon, 02 Mar 2026 23:16:46 GMT
+      ETag:
+      - CPK4ntemgpMDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Mon, 02 Mar 2026 22:50:46 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AGQBYWynYY4QN2KOlqv0oLsnlMfZ3deyhsli7ieOlpE5fG7ww9G7uJ12-vRiqvOMe-5BtBsjlRmtgw
+      X-Goog-Generation:
+      - '1772491846950002'
+      X-Goog-Hash:
+      - crc32c=AAAAAA==,md5=1B2M2Y8AsgTpgAmY7PhCfg==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "--===============8135779310106380330==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"frequencies.txt_parsing_results/dt=2026-02-28/ts=2026-02-28T03:00:01.085996+00:00/base64_url=aHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA==.jsonl\",
+      \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"filename\\\": \\\"results.jsonl\\\",
+      \\\"ts\\\": \\\"2026-02-28T00:00:00+00:00\\\"}\"}, \"crc32c\": \"TJlaXA==\"}\r\n--===============8135779310106380330==\r\ncontent-type:
+      application/jsonl\r\n\r\n{\"exception\":\"Extracted file is empty\",\"feed_file\":{\"filename\":\"frequencies.txt\",\"ts\":\"2026-02-28T03:00:01.085996+00:00\",\"extract_config\":{\"extracted_at\":\"2026-02-28T03:00:00+00:00\",\"name\":\"CSULB
+      Shuttle PassioGo Schedule\",\"url\":\"https://passio3.com/longbeachcal/passioTransit/gtfs/google_transit.zip\",\"feed_type\":\"schedule\",\"schedule_url_for_validation\":null,\"auth_query_params\":{},\"auth_headers\":{},\"computed\":false},\"original_filename\":\"frequencies.txt\"},\"fields\":[],\"parsed_file\":{\"csv_dialect\":\"excel\",\"extract_config\":{\"extracted_at\":\"2026-02-28T03:00:00+00:00\",\"name\":\"CSULB
+      Shuttle PassioGo Schedule\",\"url\":\"https://passio3.com/longbeachcal/passioTransit/gtfs/google_transit.zip\",\"feed_type\":\"schedule\",\"schedule_url_for_validation\":null,\"auth_query_params\":{},\"auth_headers\":{},\"computed\":false},\"filename\":\"frequencies.jsonl.gz\",\"gtfs_filename\":\"frequencies\",\"num_lines\":0,\"ts\":\"2026-02-28T00:00:00+00:00\"},\"success\":false}\r\n--===============8135779310106380330==--"
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1493'
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/52e98051-2ae0-4f1d-a25d-4a8fbc262114
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT04MTM1Nzc5MzEwMTA2
+        MzgwMzMwPT0i
+      x-goog-user-project:
+      - cal-itp-data-infra
+      x-upload-content-type:
+      - application/jsonl
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/frequencies.txt_parsing_results/dt=2026-02-28/ts=2026-02-28T03:00:01.085996+00:00/base64_url=aHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA==.jsonl/1772493407431608\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/frequencies.txt_parsing_results%2Fdt=2026-02-28%2Fts=2026-02-28T03:00:01.085996%2B00:00%2Fbase64_url=aHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA==.jsonl\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/frequencies.txt_parsing_results%2Fdt=2026-02-28%2Fts=2026-02-28T03:00:01.085996%2B00:00%2Fbase64_url=aHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA==.jsonl?generation=1772493407431608&alt=media\",\n
+        \ \"name\": \"frequencies.txt_parsing_results/dt=2026-02-28/ts=2026-02-28T03:00:01.085996+00:00/base64_url=aHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA==.jsonl\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1772493407431608\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"933\",\n  \"md5Hash\": \"ivuiUQJWDqm5zIERCZGHDA==\",\n
+        \ \"crc32c\": \"TJlaXA==\",\n  \"etag\": \"CLjXqr+sgpMDEAE=\",\n  \"timeCreated\":
+        \"2026-03-02T23:16:47.440Z\",\n  \"updated\": \"2026-03-02T23:16:47.440Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-03-02T23:16:47.440Z\",\n  \"timeFinalized\":
+        \"2026-03-02T23:16:47.440Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \"{\\\"filename\\\": \\\"results.jsonl\\\", \\\"ts\\\": \\\"2026-02-28T00:00:00+00:00\\\"}\"\n
+        \ }\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1709'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Mon, 02 Mar 2026 23:16:47 GMT
+      ETag:
+      - CLjXqr+sgpMDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AGQBYWyjKhfg64cifqdmGeoBYuRQneSpfaCRtkQRiIduReIyQCeqSTxZBsagMZgG3foaV0A1MvdDiKo
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/bcefb19e-2640-47ef-9801-de4c70fb0f01
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/frequencies.txt%2Fdt%3D2026-02-28%2Fts%3D2026-02-28T03%3A00%3A01.085996%2B00%3A00%2Fbase64_url%3DaHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA%3D%3D%2Ffrequencies.txt?alt=media
+  response:
+    body:
+      string: ''
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '0'
+      Content-Type:
+      - text/csv
+      Date:
+      - Mon, 02 Mar 2026 23:16:48 GMT
+      ETag:
+      - CPK4ntemgpMDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Mon, 02 Mar 2026 22:50:46 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AGQBYWxl2Y4EvkTRgA8EaxGpqV-gDxPP3rkiWjuDj4nPGDozhguqw1_sYWW0Tu6L9kfLczjRT84HPg
+      X-Goog-Generation:
+      - '1772491846950002'
+      X-Goog-Hash:
+      - crc32c=AAAAAA==,md5=1B2M2Y8AsgTpgAmY7PhCfg==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "--===============4354552576307529455==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"frequencies.txt_parsing_results/dt=2026-02-28/ts=2026-02-28T03:00:01.085996+00:00/base64_url=aHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA==.jsonl\",
+      \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"filename\\\": \\\"results.jsonl\\\",
+      \\\"ts\\\": \\\"2026-02-28T00:00:00+00:00\\\"}\"}, \"crc32c\": \"TJlaXA==\"}\r\n--===============4354552576307529455==\r\ncontent-type:
+      application/jsonl\r\n\r\n{\"exception\":\"Extracted file is empty\",\"feed_file\":{\"filename\":\"frequencies.txt\",\"ts\":\"2026-02-28T03:00:01.085996+00:00\",\"extract_config\":{\"extracted_at\":\"2026-02-28T03:00:00+00:00\",\"name\":\"CSULB
+      Shuttle PassioGo Schedule\",\"url\":\"https://passio3.com/longbeachcal/passioTransit/gtfs/google_transit.zip\",\"feed_type\":\"schedule\",\"schedule_url_for_validation\":null,\"auth_query_params\":{},\"auth_headers\":{},\"computed\":false},\"original_filename\":\"frequencies.txt\"},\"fields\":[],\"parsed_file\":{\"csv_dialect\":\"excel\",\"extract_config\":{\"extracted_at\":\"2026-02-28T03:00:00+00:00\",\"name\":\"CSULB
+      Shuttle PassioGo Schedule\",\"url\":\"https://passio3.com/longbeachcal/passioTransit/gtfs/google_transit.zip\",\"feed_type\":\"schedule\",\"schedule_url_for_validation\":null,\"auth_query_params\":{},\"auth_headers\":{},\"computed\":false},\"filename\":\"frequencies.jsonl.gz\",\"gtfs_filename\":\"frequencies\",\"num_lines\":0,\"ts\":\"2026-02-28T00:00:00+00:00\"},\"success\":false}\r\n--===============4354552576307529455==--"
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '1493'
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/fab39911-9c31-466e-9a3b-af1b461bd51a
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT00MzU0NTUyNTc2MzA3
+        NTI5NDU1PT0i
+      x-goog-user-project:
+      - cal-itp-data-infra
+      x-upload-content-type:
+      - application/jsonl
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/frequencies.txt_parsing_results/dt=2026-02-28/ts=2026-02-28T03:00:01.085996+00:00/base64_url=aHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA==.jsonl/1772493409920947\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/frequencies.txt_parsing_results%2Fdt=2026-02-28%2Fts=2026-02-28T03:00:01.085996%2B00:00%2Fbase64_url=aHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA==.jsonl\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/frequencies.txt_parsing_results%2Fdt=2026-02-28%2Fts=2026-02-28T03:00:01.085996%2B00:00%2Fbase64_url=aHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA==.jsonl?generation=1772493409920947&alt=media\",\n
+        \ \"name\": \"frequencies.txt_parsing_results/dt=2026-02-28/ts=2026-02-28T03:00:01.085996+00:00/base64_url=aHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA==.jsonl\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1772493409920947\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"933\",\n  \"md5Hash\": \"ivuiUQJWDqm5zIERCZGHDA==\",\n
+        \ \"crc32c\": \"TJlaXA==\",\n  \"etag\": \"CLPPwsCsgpMDEAE=\",\n  \"timeCreated\":
+        \"2026-03-02T23:16:49.931Z\",\n  \"updated\": \"2026-03-02T23:16:49.931Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-03-02T23:16:49.931Z\",\n  \"timeFinalized\":
+        \"2026-03-02T23:16:49.931Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \"{\\\"filename\\\": \\\"results.jsonl\\\", \\\"ts\\\": \\\"2026-02-28T00:00:00+00:00\\\"}\"\n
+        \ }\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1709'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Mon, 02 Mar 2026 23:16:49 GMT
+      ETag:
+      - CLPPwsCsgpMDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AGQBYWwT9IsQMYd0ZXLxNBXL9l9OjOvwAPNvdrhkbTmQBQPHY6-SSasmDiYDuIkMZzMwqLT9yK0z7So
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/8f9f0379-c112-4542-be5b-eda8a9df9e44
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/frequencies.txt_parsing_results%2Fdt%3D2026-02-28%2Fts%3D2026-02-28T03%3A00%3A01.085996%2B00%3A00%2Fbase64_url%3DaHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA%3D%3D.jsonl?alt=media
+  response:
+    body:
+      string: '{"exception":"Extracted file is empty","feed_file":{"filename":"frequencies.txt","ts":"2026-02-28T03:00:01.085996+00:00","extract_config":{"extracted_at":"2026-02-28T03:00:00+00:00","name":"CSULB
+        Shuttle PassioGo Schedule","url":"https://passio3.com/longbeachcal/passioTransit/gtfs/google_transit.zip","feed_type":"schedule","schedule_url_for_validation":null,"auth_query_params":{},"auth_headers":{},"computed":false},"original_filename":"frequencies.txt"},"fields":[],"parsed_file":{"csv_dialect":"excel","extract_config":{"extracted_at":"2026-02-28T03:00:00+00:00","name":"CSULB
+        Shuttle PassioGo Schedule","url":"https://passio3.com/longbeachcal/passioTransit/gtfs/google_transit.zip","feed_type":"schedule","schedule_url_for_validation":null,"auth_query_params":{},"auth_headers":{},"computed":false},"filename":"frequencies.jsonl.gz","gtfs_filename":"frequencies","num_lines":0,"ts":"2026-02-28T00:00:00+00:00"},"success":false}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '933'
+      Content-Type:
+      - application/jsonl
+      Date:
+      - Mon, 02 Mar 2026 23:16:50 GMT
+      ETag:
+      - CLPPwsCsgpMDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Mon, 02 Mar 2026 23:16:49 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AGQBYWzk8BShtg_zz16THca4X1wLTdazZ2PFQCjyexernpUE70MJug2HrieKPvQd2CtGNyg1n9Izdw
+      X-Goog-Generation:
+      - '1772493409920947'
+      X-Goog-Hash:
+      - crc32c=TJlaXA==,md5=ivuiUQJWDqm5zIERCZGHDA==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '933'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/4a1fb7c4-bba7-4dd7-bb37-4f3f04da424c
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/frequencies.txt_parsing_results%2Fdt%3D2026-02-28%2Fts%3D2026-02-28T03%3A00%3A01.085996%2B00%3A00%2Fbase64_url%3DaHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA%3D%3D.jsonl?prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/frequencies.txt_parsing_results/dt=2026-02-28/ts=2026-02-28T03:00:01.085996+00:00/base64_url=aHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA==.jsonl/1772493409920947","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/frequencies.txt_parsing_results%2Fdt=2026-02-28%2Fts=2026-02-28T03:00:01.085996%2B00:00%2Fbase64_url=aHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA==.jsonl","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/frequencies.txt_parsing_results%2Fdt=2026-02-28%2Fts=2026-02-28T03:00:01.085996%2B00:00%2Fbase64_url=aHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA==.jsonl?generation=1772493409920947&alt=media","name":"frequencies.txt_parsing_results/dt=2026-02-28/ts=2026-02-28T03:00:01.085996+00:00/base64_url=aHR0cHM6Ly9wYXNzaW8zLmNvbS9sb25nYmVhY2hjYWwvcGFzc2lvVHJhbnNpdC9ndGZzL2dvb2dsZV90cmFuc2l0LnppcA==.jsonl","bucket":"calitp-staging-pytest","generation":"1772493409920947","metageneration":"1","contentType":"application/jsonl","storageClass":"STANDARD","size":"933","md5Hash":"ivuiUQJWDqm5zIERCZGHDA==","crc32c":"TJlaXA==","etag":"CLPPwsCsgpMDEAE=","timeCreated":"2026-03-02T23:16:49.931Z","updated":"2026-03-02T23:16:49.931Z","timeStorageClassUpdated":"2026-03-02T23:16:49.931Z","timeFinalized":"2026-03-02T23:16:49.931Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":
+        \"results.jsonl\", \"ts\": \"2026-02-28T00:00:00+00:00\"}"}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '1622'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Mon, 02 Mar 2026 23:16:51 GMT
+      ETag:
+      - CLPPwsCsgpMDEAE=
+      Expires:
+      - Mon, 02 Mar 2026 23:16:51 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AGQBYWxdlG47QdT_QB6G0qEzs5rHoXJGbi6_f7qThmV_AWNE_NWqeEEZnWmzsqlhrjsU2zo2CCt0zw
+    status:
+      code: 200
+      message: OK
+version: 1
