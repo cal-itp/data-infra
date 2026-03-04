@@ -1,15 +1,66 @@
 import json
 import logging
 import os
-from base64 import urlsafe_b64encode
 from email.message import Message
 from typing import Sequence
 
 from hooks.download_config_hook import DownloadConfigHook
 
+from airflow.exceptions import AirflowException
 from airflow.models import BaseOperator
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
+
+
+class ManualDownload:
+    hook: GCSHook
+    current_time: str
+    bucket_name: str
+    object_name: str
+    download_config: dict
+
+    def __init__(
+        self,
+        hook: GCSHook,
+        bucket_name: str,
+        object_name: str,
+        current_time: str,
+        download_config: dict,
+    ) -> None:
+        self.hook = hook
+        self.current_time = current_time
+        self.bucket_name = bucket_name
+        self.object_name = object_name
+        self.download_config = download_config
+
+    def exists(self) -> bool:
+        return self.hook.exists(
+            bucket_name=self.bucket_name, object_name=self.object_name
+        )
+
+    def content(self) -> str:
+        return self.hook.download(
+            bucket_name=self.bucket_name, object_name=self.object_name
+        )
+
+    def mime_type(self) -> str:
+        return "application/zip"
+
+    def filename(self) -> str:
+        return "gtfs.zip"
+
+    def extract(self) -> dict:
+        return {
+            "reconstructed": False,
+            "ts": self.current_time,
+            "filename": self.filename(),
+            "config": self.download_config,
+            "response_code": 200,
+            "response_headers": {
+                "Content-Type": "application/zip",
+                "Content-Disposition": "attachment; filename=gtfs.zip",
+            },
+        }
 
 
 class Download:
@@ -47,9 +98,6 @@ class Download:
     def success(self) -> bool:
         return self.response() is not None
 
-    def base64_url(self) -> str:
-        return urlsafe_b64encode(self.hook.url().encode()).decode()
-
     def content(self) -> str:
         return self.response().content
 
@@ -79,22 +127,18 @@ class Download:
             "response_headers": dict(self.response_headers()),
         }
 
-    def summary(self) -> dict:
-        return {
-            "backfilled": False,
-            "success": self.success(),
-            "exception": str(self.exception) if self.exception else None,
-            "config": self.hook.download_config,
-            "extract": self.extract(),
-        }
-
 
 class DownloadConfigToGCSOperator(BaseOperator):
     _download: Download
+    _manual_download: ManualDownload
+    _gcs_hook: GCSHook
     template_fields: Sequence[str] = (
         "dt",
         "ts",
+        "base64_url",
         "download_config",
+        "source_bucket",
+        "source_path",
         "destination_bucket",
         "destination_path",
         "results_path",
@@ -105,7 +149,10 @@ class DownloadConfigToGCSOperator(BaseOperator):
         self,
         dt: str,
         ts: str,
+        base64_url: str,
         download_config: dict,
+        source_bucket: str,
+        source_path: str,
         destination_bucket: str,
         destination_path: str,
         results_path: str,
@@ -115,9 +162,14 @@ class DownloadConfigToGCSOperator(BaseOperator):
         super().__init__(**kwargs)
 
         self._download: Download = None
+        self._manual_download: ManualDownload = None
+        self._gcs_hook: GCSHook = None
         self.dt: str = dt
         self.ts: str = ts
+        self.base64_url: str = base64_url
         self.download_config: dict = download_config
+        self.source_bucket: str = source_bucket
+        self.source_path: str = source_path
         self.destination_bucket: str = destination_bucket
         self.destination_path: str = destination_path
         self.results_path: str = results_path
@@ -126,55 +178,101 @@ class DownloadConfigToGCSOperator(BaseOperator):
     def destination_name(self) -> str:
         return self.destination_bucket.replace("gs://", "")
 
+    def source_name(self) -> str:
+        return self.source_bucket.replace("gs://", "")
+
     def gcs_hook(self) -> GCSHook:
-        return GCSHook(gcp_conn_id=self.gcp_conn_id)
+        if self._gcs_hook is None:
+            self._gcs_hook = GCSHook(gcp_conn_id=self.gcp_conn_id)
+        return self._gcs_hook
 
     def download_config_hook(self) -> DownloadConfigHook:
         return DownloadConfigHook(download_config=self.download_config)
 
-    def download(self) -> dict:
+    def download(self) -> Download:
         if not self._download:
             self._download = Download(
                 hook=self.download_config_hook(), current_time=self.ts
             )
         return self._download
 
-    def execute(self, context: Context) -> dict:
-        ti = context["task_instance"]
-        last_retry = ti.try_number - 1 == ti.max_tries
-        logging.info(
-            f"Max tries: {ti.max_tries}, Try number: {ti.try_number}, Last retry: {last_retry}"
-        )
-        schedule_feed_path = f"{self.destination_path}/base64_url={self.download().base64_url()}/{self.download().filename()}"
+    def manual_download(self) -> ManualDownload:
+        if not self._manual_download:
+            self._manual_download = ManualDownload(
+                hook=self.gcs_hook(),
+                bucket_name=self.source_name(),
+                object_name=self.source_path,
+                current_time=self.ts,
+                download_config=self.download_config,
+            )
+        return self._manual_download
 
-        if self.download().success():
+    def execute(self, context: Context) -> dict:
+        if self.manual_download().exists():
+            extract = self.manual_download().extract()
+            exception = None
+            schedule_feed_path = os.path.join(
+                self.destination_path,
+                self.manual_download().filename(),
+            )
             self.gcs_hook().upload(
                 bucket_name=self.destination_name(),
                 object_name=schedule_feed_path,
-                data=self.download().content(),
-                mime_type=self.download().mime_type(),
+                data=self.manual_download().content(),
+                mime_type=self.manual_download().mime_type(),
                 metadata={
                     "PARTITIONED_ARTIFACT_METADATA": json.dumps(
-                        self.download().extract()
+                        self.manual_download().extract()
                     ),
                 },
             )
 
-        if not self.download().success() and not last_retry:
-            raise self.download().exception
+        else:
+            extract = self.download().extract()
+            exception = (
+                str(self.download().exception) if self.download().exception else None
+            )
+            schedule_feed_path = os.path.join(
+                self.destination_path,
+                self.download().filename(),
+            )
 
-        download_schedule_feed_results = self.download().summary()
+            if self.download().success():
+                self.gcs_hook().upload(
+                    bucket_name=self.destination_name(),
+                    object_name=schedule_feed_path,
+                    data=self.download().content(),
+                    mime_type=self.download().mime_type(),
+                    metadata={
+                        "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                            self.download().extract()
+                        ),
+                    },
+                )
+        ti = context["task_instance"]
+        if (
+            exception is not None and not ti.try_number - 1 == ti.max_tries
+        ):  # last retry
+            raise AirflowException(exception)
+
+        download_schedule_feed_results = {
+            "backfilled": False,
+            "success": exception is None,
+            "exception": exception,
+            "config": self.download_config,
+            "extract": extract,
+        }
 
         self.gcs_hook().upload(
             bucket_name=self.destination_name(),
-            object_name=f"{self.results_path}/{self.download().base64_url()}.jsonl",
+            object_name=self.results_path,
             data=json.dumps(download_schedule_feed_results, separators=(",", ":")),
             mime_type="application/jsonl",
             gzip=False,
             metadata={
                 "PARTITIONED_ARTIFACT_METADATA": json.dumps(
                     {
-                        "filename": f"{self.download().base64_url()}.jsonl",
+                        "filename": f"{self.base64_url}.jsonl",
                         "ts": self.ts,
                         "end": self.ts,
                         "backfilled": False,
@@ -183,13 +281,13 @@ class DownloadConfigToGCSOperator(BaseOperator):
             },
         )
 
-        if not self.download().success():
-            raise self.download().exception
+        if exception is not None:
+            raise AirflowException(exception)
 
         return {
             "dt": self.dt,
             "ts": self.ts,
-            "base64_url": self.download().base64_url(),
+            "base64_url": self.base64_url,
             "schedule_feed_path": schedule_feed_path,
             "download_schedule_feed_results": download_schedule_feed_results,
         }

@@ -3,6 +3,7 @@ from datetime import datetime
 
 from cosmos import DbtTaskGroup, ProfileConfig, ProjectConfig, RenderConfig
 from cosmos.constants import TestBehavior
+from dags import log_failure_to_slack
 from src.dag_utils import log_group_failure_to_slack
 
 from airflow import DAG
@@ -20,6 +21,7 @@ with DAG(
         "email": os.getenv("CALITP_NOTIFY_EMAIL"),
         "email_on_failure": True,
         "email_on_retry": False,
+        "on_failure_callback": log_failure_to_slack,
     },
 ):
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)

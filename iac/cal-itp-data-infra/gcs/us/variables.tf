@@ -1,5 +1,6 @@
 locals {
   environment_buckets = toset([
+    "calitp-gtfs-schedule-manual",
     "calitp-kuba",
   ])
 }

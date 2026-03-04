@@ -2890,6 +2890,10 @@ output "google_storage_bucket_calitp-kuba_name" {
   value = google_storage_bucket.calitp["calitp-kuba"].name
 }
 
+output "google_storage_bucket_calitp-gtfs-schedule-manual_name" {
+  value = google_storage_bucket.calitp["calitp-gtfs-schedule-manual"].name
+}
+
 output "google_storage_bucket_cal-itp-data-infra-cf-source_name" {
   value = google_storage_bucket.cal-itp-data-infra-cf-source-tf.name
 }
