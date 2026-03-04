@@ -4,12 +4,14 @@
         incremental_strategy='microbatch',
         event_time = '_feed_valid_from',
         batch_size = 'day',
-        begin='2022-10-01',
+        begin=var('GTFS_SCHEDULE_START'),
+        lookback=5,
         partition_by={
             'field': '_feed_valid_from',
             'data_type': 'timestamp',
             'granularity': 'day',
         },
+        full_refresh=false,
         cluster_by='feed_key'
     )
 }}
