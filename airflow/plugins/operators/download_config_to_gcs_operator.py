@@ -208,52 +208,47 @@ class DownloadConfigToGCSOperator(BaseOperator):
         return self._manual_download
 
     def execute(self, context: Context) -> dict:
-        if self.manual_download().exists():
-            extract = self.manual_download().extract()
-            exception = None
+        ti = context["task_instance"]
+        extract = self.download().extract()
+        exception = (
+            str(self.download().exception) if self.download().exception else None
+        )
+        schedule_feed_path = os.path.join(
+            self.destination_path,
+            self.download().filename(),
+        )
+
+        if self.download().success():
+            self.gcs_hook().upload(
+                bucket_name=self.destination_name(),
+                object_name=schedule_feed_path,
+                data=self.download().content(),
+                mime_type=self.download().mime_type(),
+                metadata={
+                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                        self.download().extract()
+                    ),
+                },
+            )
+
+        if (
+            exception is not None and not ti.try_number - 1 == ti.max_tries
+        ):  # last retry
             schedule_feed_path = os.path.join(
                 self.destination_path,
                 self.manual_download().filename(),
             )
+            extract = self.manual_download().extract()
+            exception = None
             self.gcs_hook().upload(
                 bucket_name=self.destination_name(),
                 object_name=schedule_feed_path,
                 data=self.manual_download().content(),
                 mime_type=self.manual_download().mime_type(),
                 metadata={
-                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(
-                        self.manual_download().extract()
-                    ),
+                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(extract),
                 },
             )
-
-        else:
-            extract = self.download().extract()
-            exception = (
-                str(self.download().exception) if self.download().exception else None
-            )
-            schedule_feed_path = os.path.join(
-                self.destination_path,
-                self.download().filename(),
-            )
-
-            if self.download().success():
-                self.gcs_hook().upload(
-                    bucket_name=self.destination_name(),
-                    object_name=schedule_feed_path,
-                    data=self.download().content(),
-                    mime_type=self.download().mime_type(),
-                    metadata={
-                        "PARTITIONED_ARTIFACT_METADATA": json.dumps(
-                            self.download().extract()
-                        ),
-                    },
-                )
-        ti = context["task_instance"]
-        if (
-            exception is not None and not ti.try_number - 1 == ti.max_tries
-        ):  # last retry
-            raise AirflowException(exception)
 
         download_schedule_feed_results = {
             "backfilled": False,

@@ -3,9 +3,9 @@ import os
 from datetime import datetime, timedelta, timezone
 
 import pytest
+from google.api_core.exceptions import NotFound
 from operators.download_config_to_gcs_operator import DownloadConfigToGCSOperator
 
-from airflow.exceptions import AirflowException
 from airflow.models.dag import DAG
 from airflow.models.taskinstance import TaskInstance
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
@@ -628,14 +628,14 @@ class TestDownloadConfigToGCSOperator:
         not_found_destination_path: str,
         not_found_results_path: str,
     ):
-        with pytest.raises(AirflowException) as exception:
+        with pytest.raises(NotFound) as exception:
             not_found_operator.run(
                 start_date=execution_date,
                 end_date=execution_date + timedelta(days=1),
                 ignore_first_depends_on_past=True,
             )
 
-        assert "404:Not Found" in str(exception.value)
+        assert "No such object" in str(exception.value)
 
         zip_file = gcs_hook.exists(
             bucket_name=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW").replace(
