@@ -75,6 +75,7 @@ resource "google_composer_environment" "calitp-composer" {
         "CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"                  = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-download-config_name}",
         "CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG_PROD_SOURCE"      = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-download-config_name}",
         "CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG_TEST_DESTINATION" = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-download-config-test_name}",
+        "CALITP_BUCKET__GTFS_SCHEDULE_MANUAL"                  = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-schedule-manual_name}",
         "CALITP_BUCKET__GTFS_RT_PARSED"                        = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-rt-parsed_name}",
         "CALITP_BUCKET__GTFS_RT_RAW"                           = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-rt-raw-v2_name}",
         "CALITP_BUCKET__GTFS_RT_VALIDATION"                    = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-rt-validation_name}",
