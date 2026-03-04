@@ -6,6 +6,7 @@ from typing import Sequence
 
 from hooks.download_config_hook import DownloadConfigHook
 
+from airflow.exceptions import AirflowException
 from airflow.models import BaseOperator
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
@@ -207,13 +208,12 @@ class DownloadConfigToGCSOperator(BaseOperator):
         return self._manual_download
 
     def execute(self, context: Context) -> dict:
-        ti = context["task_instance"]
-
         if self.manual_download().exists():
             extract = self.manual_download().extract()
             exception = None
             schedule_feed_path = os.path.join(
-                self.destination_path, self.manual_download().filename()
+                self.destination_path,
+                self.manual_download().filename(),
             )
             self.gcs_hook().upload(
                 bucket_name=self.destination_name(),
@@ -232,7 +232,10 @@ class DownloadConfigToGCSOperator(BaseOperator):
             exception = (
                 str(self.download().exception) if self.download().exception else None
             )
-            schedule_feed_path = f"{self.destination_path}/{self.download().filename()}"
+            schedule_feed_path = os.path.join(
+                self.destination_path,
+                self.download().filename(),
+            )
 
             if self.download().success():
                 self.gcs_hook().upload(
@@ -246,11 +249,11 @@ class DownloadConfigToGCSOperator(BaseOperator):
                         ),
                     },
                 )
-
+        ti = context["task_instance"]
         if (
             exception is not None and not ti.try_number - 1 == ti.max_tries
         ):  # last retry
-            raise exception
+            raise AirflowException(exception)
 
         download_schedule_feed_results = {
             "backfilled": False,
@@ -279,7 +282,7 @@ class DownloadConfigToGCSOperator(BaseOperator):
         )
 
         if exception is not None:
-            raise exception
+            raise AirflowException(exception)
 
         return {
             "dt": self.dt,

@@ -1,0 +1,632 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/1b000799-69f0-4ccf-9223-240797eba37f
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/manual%2Fbase64_url%3DaHR0cHM6Ly9jc3VtYi5lZHUvbWVkaWEvY3N1bWIvc2VjdGlvbi1lZGl0b3JzL2ZhY2lsaXRpZXMvdGhlLXdhdmV4MmZ0cmFuc3BvcnRhdGlvbi9DU1VNQl9ndGZzLnppcA%3D%3D%2Fgtfs.zip?fields=name&prettyPrint=false
+  response:
+    body:
+      string: '{"error":{"code":404,"message":"No such object: calitp-staging-pytest/manual/base64_url=aHR0cHM6Ly9jc3VtYi5lZHUvbWVkaWEvY3N1bWIvc2VjdGlvbi1lZGl0b3JzL2ZhY2lsaXRpZXMvdGhlLXdhdmV4MmZ0cmFuc3BvcnRhdGlvbi9DU1VNQl9ndGZzLnppcA==/gtfs.zip","errors":[{"message":"No
+        such object: calitp-staging-pytest/manual/base64_url=aHR0cHM6Ly9jc3VtYi5lZHUvbWVkaWEvY3N1bWIvc2VjdGlvbi1lZGl0b3JzL2ZhY2lsaXRpZXMvdGhlLXdhdmV4MmZ0cmFuc3BvcnRhdGlvbi9DU1VNQl9ndGZzLnppcA==/gtfs.zip","domain":"global","reason":"notFound"}]}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '493'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 04 Mar 2026 18:30:15 GMT
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AGQBYWyyGXFfPf_yKrWHD81PrdPFfvx90c281io1kJHkK3g8IxgfQJ6b6ZUoi1mUinonYcoY11gIXA
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+      Accept-Encoding:
+      - gzip, deflate
+      Accept-Language:
+      - en-US,en;q=0.9
+      Cache-Control:
+      - max-age=0
+      Connection:
+      - keep-alive
+      Sec-Ch-Ua:
+      - '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145'
+      Sec-Fetch-Dest:
+      - document
+      Sec-Fetch-Mode:
+      - navigate
+      Sec-Fetch-Site:
+      - cross-site
+      Sec-Fetch-User:
+      - ?1
+      Upgrade-Insecure-Requests:
+      - '1'
+      User-Agent:
+      - Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML,
+        like Gecko) Chrome/145.0.0.0 Safari/537.36
+    method: GET
+    uri: https://csumb.edu/media/csumb/section-editors/facilities/the-wavex2ftransportation/CSUMB_gtfs.zip
+  response:
+    body:
+      string: "<!-- <li>404</li> Hidden breadcrumb--> \r\n<!DOCTYPE html>\r\n<html
+        lang=\"en\" class=\"no-js\">\r\n<head>\r\n<link rel=\"icon\" href=\"/favicon.ico\"
+        type=\"image/x-icon\" />\n<link rel=\"shortcut icon\" href=\"/favicon.ico\"
+        type=\"image/x-icon\" />\n<!--favicon added by T4 -->\r\n<meta charset=\"UTF-8\">\r\n<meta
+        name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no\">\r\n<meta
+        http-equiv=\"X-UA-Compatible\" content=\"ie=edge\">\r\n\r\n\r\n<meta name=\"author\"
+        content=\"California State University Monterey Bay\">\r\n<meta name=\"generator\"
+        content=\"Terminalfour\">\r\n<meta name=\"twitter:card\" content=\"summary_large_image\">\r\n<meta
+        name=\"twitter:site\" content=\"@csumb \">\r\n<meta name=\"twitter:creator\"
+        content=\"@csumb \">\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n<meta property=\"fb:app_id\"
+        content=\"626886828256304\">\r\n<meta property=\"og:type\" content=\"website\">
+        \r\n<link rel=\"stylesheet\" href=\"https://catalog.csumb.edu/widget-api/widget-api.min.css\">\r\n\r\n<link
+        rel=\"stylesheet\" href=\"//fonts.googleapis.com/css2?family=Bitter:ital,wght@0,400;0,600;1,300;1,600&amp;display=swap\">
+        \r\n<link rel=\"stylesheet\" href=\"//fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&amp;display=swap\">
+        \r\n<link href=\"https://fonts.googleapis.com/css2?family=Hind:wght@400;500;600;700&amp;family=Open+Sans:wght@400;600;700&amp;display=swap\"
+        rel=\"stylesheet\">\r\n<link href=\"https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap\"
+        rel=\"stylesheet\">\r\n\r\n<link rel=\"stylesheet\" type=\"text/css\" media=\"all\"
+        href=\"/media/csumb/admissions-landing/site-assets/css/theme.css\" />  <!--
+        theme.css -->\r\n\r\n<link rel=\"stylesheet\" type=\"text/css\" media=\"all\"
+        href=\"/media/csumb/site-assets/css/style.css\" /> \r\n<link rel=\"stylesheet\"
+        type=\"text/css\" media=\"screen\" href=\"/media/csumb/site-assets/css/t4extra.css\"
+        />  <!-- t4extra.css -->\r\n<link rel=\"stylesheet\" type=\"text/css\" media=\"screen\"
+        href=\"/media/csumb/site-assets/css/emergency-notice.css\" /> \r\n\r\n<title>404
+        | California State University Monterey Bay</title>\r\n<script>document.getElementsByTagName('html')[0].setAttribute('class',
+        'js')</script>\r\n  <script src=\"https://www.google.com/recaptcha/api.js\"
+        async defer></script>\r\n<!--[if IE]>\r\n<script>document.getElementsByTagName('html')[0].setAttribute('class',
+        'js old-ie')</script>\r\n<![endif]-->\r\n  \r\n\r\n<!--<li>\r\n    <a href=\"/admissions-aid/how-to-apply/\">Apply</a>\r\n
+        \ \r\n    \r\n            \r\n            \r\n        \r\n          \r\n            \r\n
+        \       \r\n          \r\n            \r\n        \r\n          \r\n            \r\n
+        \       \r\n          \r\n            \r\n        \r\n          \r\n            \r\n
+        \        \r\n        \r\n</li><li>\r\n    <a href=\"/admissions-aid/\">Explore</a>\r\n
+        \ \r\n    \r\n            \r\n            \r\n        \r\n          \r\n            \r\n
+        \       \r\n          \r\n            \r\n        \r\n          \r\n            \r\n
+        \       \r\n          \r\n            \r\n        \r\n          \r\n            \r\n
+        \        \r\n        \r\n</li><li>\r\n    <a href=\"/giving/\">Give</a>\r\n
+        \ \r\n    \r\n            \r\n            \r\n        \r\n          \r\n            \r\n
+        \       \r\n          \r\n            \r\n        \r\n          \r\n            \r\n
+        \       \r\n          \r\n            \r\n        \r\n          \r\n            \r\n
+        \        \r\n        \r\n</li>-->\r\n<script>\n(function(h,o,t,j,a,r){\nh.hj=h.hj||function()\n\n{(h.hj.q=h.hj.q||[]).push(arguments)}\n;\nh._hjSettings=\n\n{hjid:1194959,hjsv:6}\n;\na=o.getElementsByTagName('head')[0];\nr=o.createElement('script');r.async=1;\nr.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;\na.appendChild(r);\n})(window,document,'https://static.hotjar.com/c/hotjar-','.js?sv=');\n</script>\r\n<!--
+        Hotjar -->  \r\n<!-- begin CBE code -->\n<script>\n(function(a,b,c,d,e,f,g)
+        {\na[e] = a[e] || function() {(a[e].q = a[e].q || []).push(arguments)};f=b.createElement(c);\ng=b.getElementsByTagName(c)[0];f.async=1;f.src=d+\"/cbe/cbe.js\";g.parentNode.insertBefore(f,g);\n})(window,document,\"script\",\"https://cbe.capturehighered.net\",\"_cbe\");\n\n_cbe(\"create\",\"47c73d87\");\n_cbe(\"log\",\"pageview\");\n</script>\n<!--
+        end CBE code -->\r\n<script type=\"text/javascript\">\nadroll_adv_id =\"LXWSKXVD6VAKNIBJHCA4CA\";
+        \nadroll_pix_id = \"J33YSPTWEFG33GZZFLYFYW\"; \nadroll_version = \"2.0\";
+        \n(function(w, d, e, o, a) { \n\tw.__adroll_loaded = true; \n\tw.adroll =
+        w.adroll || []; \n\tw.adroll.f = [ 'setProperties', 'identify', 'track' ];
+        \n\tvar roundtripUrl = \"https://s.adroll.com/j/\" + adroll_adv_id + \"/roundtrip.js\";
+        \n\t\n\tfor (a = 0; a < w.adroll.f.length; a++) { \n\t\tw.adroll[w.adroll.f[a]]
+        = w.adroll[w.adroll.f[a]] || (function(n) { return function() { w.adroll.push([
+        n, arguments ]) } })\n\t\t(w.adroll.f[a]) } e = d.createElement('script');
+        \n\t\to = d.getElementsByTagName('script')[0]; e.async = 1; \n\t\te.src =
+        roundtripUrl; \n\t\to.parentNode.insertBefore(e, o); \n})(window, document);
+        \nadroll.track(\"pageView\"); \n</script>\r\n\r\n</head>\r\n<body class=\"inner-page\">\r\n<!--
+        Everbridge & Site Wide Alerts -->\r\n<div class=\"emergencynotice\" aria-atomic=\"true\"
+        aria-live=\"assertive\" data-t4-emergency-notices=\"/media/csumb/site-assets/site-wide-alerts/emergency-notice.php\"></div>\r\n
+        \ \r\n  \r\n<link xmlns:gcse=\"http://www.google.com\" rel=\"stylesheet\"
+        href=\"https://www.csuci.edu/webapps/search/css/search-results-gcs.css\">\n<script
+        async src=\"https://cse.google.com/cse.js?cx=017752867313261290055:qexsyyoilns\"></script>\r\n<!--
+        Google Search -->\r\n  \r\n<div class=\"page page-admissions page--page\">\r\n<header
+        class=\"header\" aria-label=\"Site header\">\r\n  <nav class=\"navbar-expand-lg\"
+        aria-label=\"Header navigation\">\r\n    <div class=\"header__container container-fluid
+        container-t4-xl\">\r\n      <a href=\"/\" class=\"navbar-logo\">\r\n        <img
+        src=\"/media/csumb/admissions-landing/site-assets/images/logo-amp-favicon/CSUMB_wordmark_color.png\"
+        alt=\"CSUMB Logo\"  /> \r\n\r\n      </a>\r\n      <div class=\"navbar-util\">\r\n
+        \       <button class=\"btn-open-search\" type=\"button\" aria-label=\"Open
+        search modal\">\r\n          <svg class=\"svg-md-48px\" focusable=\"false\"
+        aria-hidden=\"true\">\r\n            <title>Open search</title>\r\n            <use
+        xlink:href=\"/media/csumb/site-assets/images/material-sprite.svg#ic_search_48px\"></use>\r\n
+        \         </svg>\r\n        </button>\r\n        <div class=\"navbar-toggler\"
+        tabindex=\"0\" aria-label=\"Toggle mobile navigation\">\r\n          <div></div>\r\n
+        \       </div>\r\n      </div>\r\n      <!-- Mobile Sidemenu Design -->\r\n
+        \     <div class=\"navbar-collapse\">\r\n        <div class=\"navbar-primary\">\r\n
+        \         <div class=\"navbar-primary__top\">\r\n            <div class=\"navbar-auth\">\r\n
+        \           <a href=\"/dashboard/\" class=\"nav-login nav-link\">Dashboard</a>\r\n
+        \           </div>\r\n            <div class=\"navbar-form\" style=\"height:
+        2.4rem;\">\r\n \t\t\t\t\t\t\t<div class=\"gsearch-container-top\">\r\n    \t\t\t\t\t\t<article>\r\n
+        \       \t\t\t\t\t<form role=\"form\" action=\"/search/\" class=\"flush--bottom\">\r\n
+        \          \t\t\t\t\t<fieldset class=\"flush--bottom\">\r\n              \t\t\t\t<div
+        class=\"form__group\">\r\n                 \t\t\t\t<div class=\"gw  gw--narrow\">\r\n
+        \                   \t\t\t<div class=\"g  spicy--three-quarters\">\r\n                            <label
+        for=\"results-page-search\" class=\"sr-only\">Search</label>\r\n                       \t\t\t<input
+        class=\"st-default-search-input\" type=\"search\" name=\"q\" id=\"results-page-search\"
+        class=\"form__control\" />\r\n                    \t\t\t</div>\r\n                 \t\t\t\t</div>\r\n
+        \             \t\t\t\t</div>\r\n           \t\t\t\t\t</fieldset>\r\n        \t\t\t\t\t</form>\r\n
+        \       \t\t\t\t<script src=\"//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js\"></script>\r\n
+        \       \t\t\t\t<script>\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\r\n                 (function()
+        {\r\n                 var cx = '017752867313261290055:qexsyyoilns';\r\n                 var
+        gcse = document.createElement('script');\r\n                 gcse.type = 'text/javascript';\r\n
+        \                gcse.async = true;\r\n                 gcse.src = 'https://cse.google.com/cse.js?cx='
+        + cx;\r\n                 var s = document.getElementsByTagName('script')[0];\r\n
+        \                s.parentNode.insertBefore(gcse, s);\r\n                 //var
+        urlString = window.location.href;\r\n                 var urlString = 'https://csumb.edu/search/';
+        \r\n                 var url = new URL(urlString);\r\n                 var
+        q = url.searchParams.get('q');\r\n                 $('#results-page-search').val(q);
+        //jQuery\r\n                 })();\r\n        \t\t\t\t</script>\r\n     \t\t\t\t\t</article>\r\n
+        \   \t\t\t\t</div>\r\n           </div>\r\n          </div>\r\n          <div
+        class=\"navbar-primary__bottom\">\r\n            <ul class=\"navbar-nav\">\r\n
+        \            <li>\r\n    <a href=\"/admissions-aid/how-to-apply/\">Apply</a>\r\n
+        \ \r\n    \r\n            \r\n            \r\n        \r\n          \r\n            \r\n
+        \       \r\n          \r\n            \r\n        \r\n          \r\n            \r\n
+        \       \r\n          \r\n            \r\n        \r\n          \r\n            \r\n
+        \        \r\n        \r\n</li><li>\r\n    <a href=\"/admissions-aid/\">Explore</a>\r\n
+        \ \r\n    \r\n            \r\n            \r\n        \r\n          \r\n            \r\n
+        \       \r\n          \r\n            \r\n        \r\n          \r\n            \r\n
+        \       \r\n          \r\n            \r\n        \r\n          \r\n            \r\n
+        \        \r\n        \r\n</li><li>\r\n    <a href=\"/giving/\">Give</a>\r\n
+        \ \r\n    \r\n            \r\n            \r\n        \r\n          \r\n            \r\n
+        \       \r\n          \r\n            \r\n        \r\n          \r\n            \r\n
+        \       \r\n          \r\n            \r\n        \r\n          \r\n            \r\n
+        \        \r\n        \r\n</li>\r\n             <li>\r\n    <a href=\"#\">Menu</a>\r\n
+        \   <ul>\r\n        <li>\r\n    <a href=\"#\">Academics\n</a>\r\n\t<ul>\n<li><a
+        href=\"/academicaffairs/\">Academic Affairs</a></li>\n<li><a href=\"/academics/centers-institutes/\">Centers</a></li>\n<li><a
+        href=\"/academics/colleges-schools/\">Colleges</a></li>\n<li><a href=\"/academics/programs-degrees/\">Degrees</a></li>\n<li><a
+        href=\"/library/\">Library</a></li>\n<li><a href=\"/academics/research-engage/\">Research</a></li>\n</ul>\r\n</li>
+        <li>\r\n    <a href=\"#\">Admission</a>\r\n\t<ul>\n<li><a href=\"/admissions-aid/how-to-apply/first-year/\">First
+        Year</a></li>\n<li><a href=\"/admissions-aid/how-to-apply/transfer/\">Transfer</a></li>\n<li><a
+        href=\"/admissions-aid/how-to-apply/graduate/\">Graduate</a></li>\n<li><a
+        href=\"/admissions-aid/how-to-apply/international/\">International</a></li>\n<li><a
+        href=\"/admissions-aid/visit-campus/\">Visit Campus</a></li>\n</ul>\r\n</li>
+        <li>\r\n    <a href=\"#\">Campus Life</a>\r\n\t<ul>\n<li><a href=\"/seld/\">Activities</a></li>\n<li><a
+        href=\"https://otterathletics.com/\">Athletics</a></li>\n<li><a href=\"/hws/\">Wellness</a></li>\n<li><a
+        href=\"https://csumb.edu/housing-dining/\">Housing and dining</a></li>\n<li><a
+        href=\"/traditions/\">Traditions</a></li>\n</ul>\r\n</li> <li>\r\n    <a href=\"#\">Resources</a>\r\n\t<ul>\n<li><a
+        href=\"/mastercalendar/\">Academic calendar</a></li>\n<li><a href=\"/af/\">Admin
+        and finance</a></li>\n<li><a href=\"/cost/\">Cost calculator</a></li>\n<li><a
+        href=\"/registrar/records/\">Records</a></li>\n<li><a href=\"/iar/\">Reports
+        and data</a></li>\n<li><a href=\"/hr/\">University careers</a></li>\n</ul>\r\n</li>
+        <li>\r\n    <a href=\"#\">Services</a>\r\n\t<ul>\n<li><a href=\"/academics/academic-support-services/\">Academic
+        support</a></li>\n<li><a href=\"/admissions-aid/how-to-apply/\">Enrollment</a></li>\n<li><a
+        href=\"/admissions-aid/costs-financial-aid/\">Financial aid</a></li>\n<li><a
+        href=\"/transportation/\">Parking and transportation</a></li>\n<li><a href=\"/life/safety-conduct/\">Safety</a></li>\n</ul>\r\n</li>
+        <li>\r\n    <a href=\"#\">About</a>\r\n\t<ul>\n<li>Accreditation</li>\n<li><a
+        href=\"/about/leadership/\">Administration</a></li>\n<li><a href=\"/about/\">Campus</a></li>\n<li><a
+        href=\"/diversity\">Inclusion</a></li>\n<li><a href=\"/president\">President</a></li>\n<li><a
+        href=\"/departments/president/strategic-planning/\">Strategic plan</a></li>\n</ul>\r\n</li>
+        \r\n        <li class=\"navbar-cta-icons\">\r\n            <div class=\"navbar-cta-icons__lists\">\r\n
+        \              <div class=\"navbar-cta-icons__item\">\r\n                 <a
+        href=\"/map/\" class=\"navbar-cta-icons__link\">\r\n                   \r\n
+        \                  \r\n                   <img src=\"/media/csumb/site-assets/map-marker-alt-solid-white.svg\"
+        alt=\"maps icon\">\r\n                   <span>Maps</span>\r\n                 </a>\r\n
+        \              </div>\r\n              <div class=\"navbar-cta-icons__item\">\r\n
+        \                <a href=\"/news/\" class=\"navbar-cta-icons__link\">\r\n
+        \                  \r\n                   <img src=\"/media/csumb/site-assets/newspaper-solid-white.svg\"
+        alt=\"news icon\">\r\n                   <span>News</span>\r\n                 </a>\r\n
+        \              </div>\r\n             <div class=\"navbar-cta-icons__item\">\r\n
+        \                <a href=\"/events/\" class=\"navbar-cta-icons__link\">\r\n
+        \                  \r\n                   <img src=\"/media/csumb/site-assets/calendar-alt-solid-white.svg\"
+        alt=\"calendar icon\">\r\n                   <span>Events</span>\r\n                 </a>\r\n
+        \              </div>\r\n              <div class=\"navbar-cta-icons__item\">\r\n
+        \                <a href=\"\" class=\"navbar-cta-icons__link\">\r\n                 \r\n
+        \                   <img src=\"/media/csumb/site-assets/user-graduate-solid-white.svg\"
+        alt=\"alumni icon\">\r\n                   <span>Alumni\t\t\t\t\t\t</span>\r\n
+        \                </a>\r\n               </div>\r\n             </div>\r\n
+        \       </li>\r\n    </ul>\r\n</li> \r\n           </ul>\r\n          </div>\r\n
+        \       </div>\r\n      </div>\r\n      <div id=\"search-modal\"class=\"search-modal\"
+        aria-label=\"Site Search\">\r\n \t     <div class=\"gsearch-container-top\">\r\n
+        \   \t  <article>\r\n         <form role=\"form\" action=\"/search/\" class=\"flush--bottom
+        cse-search-box-mobile\">\r\n  \t\t\t\t<div class=\"form__group\">\r\n     \t\t\t
+        <div class=\"gw  gw--narrow\">\r\n            <div class=\"g  spicy--three-quarters\">\r\n
+        \            <label for=\"search-mobile\" class=\"sr-only\">Search</label>\r\n
+        \             <input class=\"st-default-search-input\" type=\"search\" name=\"q\"
+        id=\"search-mobile\">\r\n            </div>\r\n          </div>\r\n         </div>\r\n\t\t\t
+        \ </form>\r\n       <script src=\"//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js\"></script>\r\n
+        \    \t </article>\r\n      </div>\r\n     </div>\r\n    </div>\r\n  </nav>\r\n</header>\r\n<div
+        class=\"header-placeholder\"></div>\r\n</div>\r\n\r\n<main>\r\n  <!-- /404/redirects.csv
+        --><span id=\"d.en.10977\"></span>\r\n<section class=\"general-content\">\r\n
+        \ <div class=\"general-content__wrapper container-fluid container-t4-xl\">\r\n
+        \   \r\n    <p><strong>The page you're looking for may have been removed from
+        our site.</strong> This is usually due to one of the following reasons:</p>\n<ul>\n<li>The
+        page has been moved, renamed, or is otherwise now offline. Therefore, the
+        URL is no longer valid.</li>\n<li>The URL is&nbsp;mistyped in the address
+        bar.</li>\n</ul>\n<p>If you came to this message&nbsp;via a bookmark, please
+        delete it as it appears to be out of date. To find the page you're looking
+        for, try using&nbsp;the search tool or the mega menu, both of which are in
+        the upper right corner of the page.</p>\r\n  </div>\r\n</section><!-- <br
+        style=\"clear: both\" />  -->\r\n</main>\r\n<footer class='footer ' aria-label=\"Site
+        footer\">\r\n    <div class=\"container-fluid container-t4-xl\">\r\n      <div
+        class=\"row\">\r\n        <div class=\"footer__col col-lg-3\">\r\n          <ul
+        class=\"footer__lists\">\r\n            <li class=\"footer__items\">\r\n              <span
+        class=\"footer__link-title\">\r\n                Helpful Links\r\n              </span>\r\n
+        \           </li>\r\n            <ul>\n<li class=\"footer__item\"><a href=\"/mastercalendar/\"
+        class=\"footer__link\">Calendars</a></li>\n<li class=\"footer__item\"><a class=\"footer__link\"
+        href=\"https://catalog.csumb.edu/\">Catalog</a></li>\n<li class=\"footer__item\"><a
+        href=\"/planning/class-schedule/\" class=\"footer__link\">Class Schedule</a></li>\n<li
+        class=\"footer__item\"><a href=\"/directory/\" class=\"footer__link\">Directory</a></li>\n<li
+        class=\"footer__item\"><a href=\"https://careers.csumb.edu/en-us/listing\">Jobs</a></li>\n<li
+        class=\"footer__item\"><a href=\"/map/\" class=\"footer__link\">Maps</a></li>\n<li
+        class=\"footer__item\"><a href=\"/studentlife/student-parents/\" class=\"footer__link\">Student
+        Parents</a></li>\n</ul>\r\n          </ul>\r\n        </div>\r\n        <div
+        class=\"footer__col col-lg-3\">\r\n          <ul class=\"footer__lists\">\r\n
+        \           <li class=\"footer__items\">\r\n                <span class=\"footer__link-title\">\r\n
+        \                 Health and Safety\r\n                </span>\r\n            </li>\r\n
+        \           <ul>\n<li class=\"footer__item\"><a href=\"/departments/police/\"
+        class=\"footer__link\">University Police</a></li>\n<li class=\"footer__item\"><a
+        href=\"/departments/president/wellness-raft/\">Wellness RAFT</a></li>\n<li
+        class=\"footer__item\"><a href=\"/studentlife/care-team/\" class=\"footer__link\">Care
+        Team</a></li>\n<li class=\"footer__item\"><a href=\"/health-wellness/\" class=\"footer__link\">Health
+        and Wellness</a></li>\n<li class=\"footer__item\"><a href=\"/emergency/\"
+        class=\"footer__link\">Emergency Information</a></li>\n</ul>\r\n          </ul>\r\n
+        \         \r\n        </div>\r\n        <div class=\"footer__col col-lg-6\">\r\n
+        \         <div class=\"footer__content\">\r\n            <p class=\"footer__heading\">\r\n
+        \             California State University, Monterey Bay\r\n            </p>\r\n
+        \           <div class=\"footer__contact\">\r\n              <p>\r\n                <strong>Call:
+        </strong>\r\n                <span>831-582-3000</span>\r\n              </p>\r\n
+        \             <p>\r\n                <strong>Visit: </strong>\r\n                <span>5108
+        Fourth Avenue, Marina, CA 93933</span>\r\n              </p>\r\n              <p>\r\n
+        \               <strong>Mail: </strong>\r\n                <span>100 Campus
+        Center, Seaside, CA 93955</span>\r\n              </p>\r\n            </div>\r\n
+        \         </div>\r\n        </div>\r\n      </div>\r\n      <div class=\"row
+        footer__badge-social\">\r\n        <div class=\"col-lg-6 footer__badge\">\r\n
+        \          \t<a href=\"https://csumb.edu/about/rankings/\" aria-label=\"U.S.
+        News And World Report Rankings link\" style=\"color: white;\">\r\n            \t<span
+        class=\"footer__link-title\">\r\n          \t\t\tU.S. News And World Report
+        Rankings\r\n          \t\t</span>\r\n            </a> \r\n            <ul
+        class=\"footer__badge__list\">\r\n                <li class=\"footer__badge__item\"><a
+        href=\"https://csumb.edu/about/rankings/\" aria-label=\"Badge Rankings Page
+        Link\">\r\n\t\t\t\t\t<img class=\"img_badge_tag\" src=\"/media/csumb/legacy/legacy-site-images/ucomm-news-library/BC06-RegionalUniversities-West-2025.png\"
+        alt=\"US News 2025 - Regional Universities in the West\">\r\n                </li></a>\r\n
+        \               <li class=\"footer__badge__item\"><a href=\"https://csumb.edu/about/rankings/\"
+        aria-label=\"Badge Rankings Page Link\">\r\n                \t<img class=\"img_badge_tag\"
+        src=\"/media/csumb/legacy/legacy-site-images/ucomm-news-library/BC26-Public-RegionalUniversities-2025.png\"
+        alt=\"US News 2025 - Regional Public Universities Badge\">\r\n                </li></a>\r\n
+        \               <li class=\"footer__badge__item\"><a href=\"https://csumb.edu/about/rankings/\"
+        aria-label=\"Badge Rankings Page Link\">\r\n                \t<img class=\"img_badge_tag\"
+        src=\"/media/csumb/legacy/legacy-site-images/ucomm-news-library/BC32-SocialMobility-2025.png\"
+        alt=\"US News 2025 - Social Mobility Badge\">\r\n                </li></a>\r\n
+        \           </ul>\r\n        </div>\r\n        <div class=\"col-lg-6 footer__social\">\r\n
+        \           <span class=\"footer__link-title\">\r\n          \t\tGet Social
+        With Us!\r\n          \t</span>\r\n            <ul class=\"footer__social__list\">\r\n
+        \           <li class=\"footer__social__item\">\r\n                <a href=\"https://twitter.com/CSUMB\"
+        class=\"footer__social__link\">\r\n                <svg xmlns=\"http://www.w3.org/2000/svg\"
+        viewBox=\"0 0 24 24\" version=\"1.1\">\r\n                    <title>Twitter</title>\r\n
+        \                   <path d=\"M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99
+        21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084
+        4.126H5.117z\"/> \r\n                </svg>\r\n                <span class=\"sr-only\">Twitter</span>\r\n
+        \               </a>\r\n            </li>\r\n            <li class=\"footer__social__item\">\r\n
+        \               <a href=\"https://www.facebook.com/CSUMB/\" class=\"footer__social__link\">\r\n
+        \               <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 448
+        512\" focusable=\"false\" aria-hidden=\"true\">\r\n                    <title>Facebook</title>\r\n
+        \                   <path d=\"M448 56.7v398.5c0 13.7-11.1 24.7-24.7 24.7H309.1V306.5h58.2l8.7-67.6h-67v-43.2c0-19.6
+        5.4-32.9 33.5-32.9h35.8v-60.5c-6.2-.8-27.4-2.7-52.2-2.7-51.6 0-87 31.5-87
+        89.4v49.9h-58.4v67.6h58.4V480H24.7C11.1 480 0 468.9 0 455.3V56.7C0 43.1 11.1
+        32 24.7 32h398.5c13.7 0 24.8 11.1 24.8 24.7z\">\r\n                    </path>\r\n
+        \               </svg>\r\n                <span class=\"sr-only\">Facebook</span>\r\n
+        \               </a>\r\n            </li>\r\n            <li class=\"footer__social__item\">\r\n
+        \               <a href=\"https://www.instagram.com/csumb/\" class=\"footer__social__link\">\r\n
+        \               <svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 448
+        512\" focusable=\"false\" aria-hidden=\"true\">\r\n                    <title>Instagram</title>\r\n
+        \                   <path d=\"M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3
+        114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7
+        74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8
+        26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9
+        0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9
+        1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7
+        67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8
+        388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7
+        9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1
+        9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z\">\r\n
+        \                   </path>\r\n                </svg>\r\n                <span
+        class=\"sr-only\">Instagram</span>\r\n                </a>\r\n            </li>\r\n
+        \           <li class=\"footer__social__item\">\r\n                <a href=\"https://www.linkedin.com/school/csu-monterey-bay/\"
+        class=\"footer__social__link\">\r\n                <svg xmlns=\"http://www.w3.org/2000/svg\"
+        viewBox=\"0 0 448 512\" focusable=\"false\" aria-hidden=\"true\">\r\n                    <title>LinkedIn</title>\r\n
+        \                   <path d=\"M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5
+        14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4
+        416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2
+        96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6
+        0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5
+        67.2 0 79.7 44.3 79.7 101.9V416z\"></path>\r\n                </svg>\r\n                <span
+        class=\"sr-only\">LinkedIn</span>\r\n                </a>\r\n            </li>\r\n
+        \           <li class=\"footer__social__item\">\r\n                <a href=\"https://www.youtube.com/channel/UCgds89PGe1OLf_n10bCyLrQ\"
+        class=\"footer__social__link\">\r\n                <svg xmlns=\"http://www.w3.org/2000/svg\"
+        viewBox=\"0 0 576 512\" focusable=\"false\" aria-hidden=\"true\">\r\n                    <title>You
+        Tube</title>\r\n                    <path d=\"M549.655 124.083c-6.281-23.65-24.787-42.276-48.284-48.597C458.781
+        64 288 64 288 64S117.22 64 74.629 75.486c-23.497 6.322-42.003 24.947-48.284
+        48.597-11.412 42.867-11.412 132.305-11.412 132.305s0 89.438 11.412 132.305c6.281
+        23.65 24.787 41.5 48.284 47.821C117.22 448 288 448 288 448s170.78 0 213.371-11.486c23.497-6.321
+        42.003-24.171 48.284-47.821 11.412-42.867 11.412-132.305 11.412-132.305s0-89.438-11.412-132.305zm-317.51
+        213.508V175.185l142.739 81.205-142.739 81.201z\">\r\n                    </path>\r\n
+        \               </svg>\r\n                <span class=\"sr-only\">YouTube</span>\r\n
+        \               </a>\r\n            </li>\r\n            </ul>\r\n        </div>\r\n
+        \     </div>\r\n      <div class=\"row\">\r\n        <div class=\"footer__col
+        col-lg-10\">\r\n          <ul class=\"footer__lists footer__lists--inline\">\r\n
+        \           <li><a href=\"https://cm.maxient.com/reporting.php?CSUMontereyBay\">Report
+        concerning/discriminating behavior</a></li><li><a href=\"/title-ix/\">Title
+        IX</a></li>\r\n              <!-- prasant test -->\r\n            <li class=\"footer__item\"
+        id=\"improve_form_li\" onclick=\"toggleForm()\"><a id=\"improve_form\" class=\"footer__link\">Report
+        website issue</a></li>\r\n            <!-- prasant test -->\r\n          </ul>\r\n
+        \       </div>\r\n        <div class=\"footer__col col-lg-2\">\r\n          <ul
+        class=\"footer__lists footer__lists--inline footer__lists--inline-left\">\r\n
+        \           <li>\r\n<a class=\"t4Edit-page\" href=\"https://csumbedu-cms01-production.terminalfour.net/terminalfour/page/directEdit#edit/2/en/7836\">&copy;
+        CSUMB 2025</a>\r\n          </li>\r\n        </ul>\r\n      </div>\r\n    </div>\r\n
+        \ </div>\r\n</footer>\r\n<!-- prasant test 2 generate file -->\r\n\r\n <script>\r\n
+        \      function validateForm(event) {\r\n        event.preventDefault(); //
+        Prevent form submission\r\n\r\n        var doingMessage = document.getElementById('doingMessage').value;\r\n
+        \       //var email = document.getElementById('email').value;\r\n        var
+        wrongMessage = document.getElementById('wrongMessage').value;\r\n        var
+        recaptchaResponse = document.getElementById('g-recaptcha-response').value;\r\n
+        \       var recaptchav2Response = grecaptcha.getResponse();\r\n\r\n        var
+        errors = [];\r\n\r\n        if (doingMessage.trim() === '') {\r\n            errors.push('Please
+        explain briefly with your message on what you were doing.');\r\n        }\r\n\r\n
+        \      /* var emailPattern = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;\r\n        if
+        (!emailPattern.test(email)) {\r\n            errors.push('Please enter a valid
+        email address.');\r\n        }*/\r\n\r\n        if (wrongMessage.trim() ===
+        '') {\r\n            errors.push('Please elaborate with your message on what
+        went wrong.');\r\n        }\r\n\r\n       /* if (recaptchaResponse.trim()
+        === '') {\r\n            errors.push('Please complete the reCAPTCHA.');\r\n
+        \       }*/\r\n         \r\n        if (recaptchav2Response.length === 0)
+        {\r\n          errors.push('Please complete the reCAPTCHA.');\r\n          //
+        Show a JavaScript error message\r\n          document.getElementById('captchaError').textContent
+        = 'Please complete the reCAPTCHA.';\r\n        } else {\r\n          // Hide
+        the JavaScript error message if reCAPTCHA is completed\r\n          document.getElementById('captchaError').textContent
+        = '';\r\n        }\r\n\r\n        var doingMessageError = document.getElementById('doingMessageError');\r\n
+        \       //var emailError = document.getElementById('emailError');\r\n        var
+        wrongMessageError = document.getElementById('wrongMessageError');\r\n        var
+        captchaError = document.getElementById('captchaError');\r\n\r\n        if
+        (errors.length > 0) {\r\n            if (errors.includes(\"Please explain
+        briefly with your message on what you were doing.\")) {\r\n                doingMessageError.textContent
+        = \"Please explain briefly with your message on what you were doing.\";\r\n
+        \           } else {\r\n                doingMessageError.textContent = \"\";\r\n
+        \           }\r\n\r\n           /* if (errors.includes(\"Please enter a valid
+        email address.\")) {\r\n                emailError.textContent = \"Please
+        enter a valid email address.\";\r\n            } else {\r\n                emailError.textContent
+        = \"\";\r\n            }*/\r\n\r\n            if (errors.includes(\"Please
+        elaborate with your message on what went wrong.\")) {\r\n                wrongMessageError.textContent
+        = \"Please elaborate with your message on what went wrong.\";\r\n            }
+        else {\r\n                wrongMessageError.textContent = \"\";\r\n            }\r\n
+        \         \r\n            /*if (errors.includes(\"Please complete the reCAPTCHA.\"))
+        {\r\n                captchaError.textContent = \"Please complete the reCAPTCHA.\";\r\n
+        \           } else {\r\n                captchaError.textContent = \"\";\r\n
+        \           }*/\r\n        }else {\r\n          document.getElementById('requestImproveForm').submit();\r\n
+        \               /*var recaptchaAction = 'submit';\r\n                grecaptcha.execute('6LfqmGUbAAAAAKLK9TnlZ2GaWv7qou8wNSNZVPRZ',
+        { action: recaptchaAction }).then(function(token) {\r\n                    \r\n
+        \                   document.getElementById('recaptchaToken').value = token;\r\n
+        \                   document.getElementById('requestImproveForm').submit();\r\n
+        \               });*/\r\n            }\r\n    }\r\n    </script>\r\n\r\n<div
+        class=\"container-fluid container-t4-xl improve-form-container\">\r\n  <div
+        class=\"row\">\r\n\r\n<div class=\"contact-form col-lg-12\" id=\"improvewebForm\"
+        style=\"display:none\">\r\n    <form class=\"improveForm\" id=\"requestImproveForm\"
+        action=\"/media/csumb/site-assets/php-form/improve-contact-form-handler-1.php\"
+        method=\"POST\">\r\n      \r\n        <span class=\"improveFormTitle contact-form-title\">Help
+        us to improve csumb.edu</span>\r\n        <h2>Thanks for helping us improve
+        csumb.edu. Spot a broken link, typo, or didn't find something where you expected
+        to? Let us know. We'll use your feedback to improve this page, and the site
+        overall.</h2>\r\n        \r\n      \t<div class=\"formSeperator\">\r\n            <label
+        class=\"improveFormLabel\" for=\"doingMessage\">What you were doing *</label><br>
+        \           \r\n          \t<input class=\"improveFromInputs\" type=\"text\"
+        id=\"doingMessage\" name=\"doingMessage\" required>\r\n          \t<div style=\"color:
+        red;\" id=\"doingMessageError\"></div>\r\n            \r\n        </div>\r\n
+        \       <div class=\"formSeperator\">\r\n            <label class=\"improveFormLabel\"
+        for=\"wrongMessage\">What went wrong *</label><br>            \r\n          \t<textarea
+        class=\"improveFromInputs\" id=\"wrongMessage\" name=\"wrongMessage\" required></textarea>\r\n
+        \         \t <div id=\"wrongMessageError\" style=\"color: red;\"></div>\r\n
+        \           \r\n        </div>\r\n      \t<div id=\"emailForm\" class=\"formSeperator\">\r\n
+        \           <label class=\"improveFormLabel\" for=\"email_address\">Your email
+        address </label><br>\r\n            <input class=\"improveFromInputs\" type=\"email\"
+        id=\"email_address\" name=\"email\" placeholder=\"Enter your email\">\t \r\n
+        \         <!--<div id=\"emailError\" style=\"color: red;\"></div>-->\r\n\t\t\t\r\n
+        \       </div>\r\n      \t<label for=\"g-recaptcha-response\" class=\"sr-only\">Recaptcha
+        response</label>\r\n      \t<div class=\"g-recaptcha formSeperator\" data-sitekey=\"6LegVBgoAAAAADXtZO90D77z5PrVOPW-cxbJtdvm\"></div>\r\n
+        \     \t<div id=\"captchaError\" style=\"color: red;\"></div>\r\n \r\n        <input
+        type=\"hidden\" id=\"reference_id\" name=\"reference\" value=\"148240\">\r\n
+        \     \t<!---->      \t<input type=\"hidden\" id=\"emailListValues\" name=\"emailListValues\"
+        value=\"https://csumb.edu/404/emailJSON.json\" >\r\n\t\t<input type=\"hidden\"
+        id=\"emailImage\" name=\"emailImage\" value=\"/media/csumb/site-assets/php-form/emailImage.png\"
+        >\r\n        <input type=\"hidden\" id=\"recaptchaToken\" name=\"recaptchaToken\">\r\n
+        \       \r\n      \t<button type=\"submit\" onclick=\"validateForm(event)\"
+        class=\"btn btn-primary\" >Send Message</button>\r\n      \t<!--<div id=\"captchaError\"
+        style=\"color: red;\"></div>-->\r\n    </form> \r\n</div>\r\n\r\n\r\n    \r\n
+        \   \r\n    \r\n<script>\r\n   function onSubmit(token) {\r\n     document.querySelector('.contact-form
+        form').submit();\r\n   }\r\n  \r\n   function toggleForm() {\r\n     var form
+        = document.getElementById('emailForm');\r\n     //var display = form.style.display;\r\n
+        \    //form.style.display = display === 'none' ? 'block' : 'none';\r\n\r\n
+        \    // Scroll to the form\r\n     //if (display === 'none') {\r\n\t if (form)
+        {\r\n    \tform.scrollIntoView({ behavior: 'smooth' });  \r\n       \t var
+        thanksMsg = document.getElementById('thanksmsg');\r\n         if (thanksMsg)
+        {\r\n           thanksMsg.style.display = 'none';\r\n         }\r\n     }\r\n
+        \  }\r\n  \r\n  // Check if the URL contains the anchor tag\r\n        if
+        (window.location.hash === '#thanksmsg') {\r\n            var thanksMsg = document.getElementById('thanksmsg');\r\n
+        \           if (thanksMsg) {\r\n                thanksMsg.style.display =
+        'none';\r\n            }\r\n        }\r\n\r\n</script>\r\n  </div>\r\n</div><!--
+        get improve form section meta description-->\r\n<!-- Global site tag (gtag.js)
+        - Google Analytics -->\n<script async src=\"https://www.googletagmanager.com/gtag/js?id=G-TS03D92EYX\"></script>\n<script>\n
+        \ window.dataLayer = window.dataLayer || [];\n  function gtag(){dataLayer.push(arguments);}\n
+        \ gtag('js', new Date());\n\n  gtag('config', 'G-TS03D92EYX');\n</script>\r\n\r\n<script
+        src=\"https://code.jquery.com/jquery-3.6.0.min.js\" integrity=\"sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=\"
+        crossorigin=\"anonymous\"></script>\r\n<!-- <script type=\"text/javascript\"
+        src=\"/media/csumb/site-assets/js/scripts.js\"></script> -->\r\n<script type=\"text/javascript\"
+        src=\"/media/csumb/site-assets/js/scripts-1.js\"></script><!-- Emergency Alert
+        & Accordion Fixes -->\r\n<script type=\"text/javascript\" src=\"/media/csumb/site-assets/js/emergency-notice.js\"></script>\r\n<script
+        type=\"text/javascript\" src=\"/media/csumb/site-assets/js/t4extra.js\"></script><!--
+        Mobile Mega Menu fix -->\r\n<script type=\"text/javascript\" src=\"/media/csumb/site-assets/js/emergency.js\"></script>
+        <!-- T4 Alert -->\r\n<script type=\"text/javascript\" src=\"/media/csumb/site-assets/js/site-wide-notice.js\"></script>
+        <!-- T4 Site Wide Alert -->\r\n<script type=\"text/javascript\" src=\"/media/csumb/site-assets/js/date.js\"></script>\r\n<script>\r\n
+        \   /*if (new URL(document.URL).pathname.split('/')[1] !== 'dashboard') {\r\n
+        \       const cookies = document.cookie.split(';').map(val => val.trim());\r\n
+        \       if (!cookies.includes('isLoggedIn=true')) {\r\n            $('.navbar-auth
+        a.nav-login').html('Login')\r\n        }\r\n    }*/\r\n</script>\r\n<script
+        type=\"text/javascript\">\n/*<![CDATA[*/\n(function() {\nvar sz = document.createElement('script');
+        sz.type = 'text/javascript'; sz.async = true;\nsz.src = '//siteimproveanalytics.com/js/siteanalyze_40230.js';\nvar
+        s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(sz,
+        s);\n})();\n/*]]>*/\n</script>\n\r\n\r\n\r\n<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js\"></script>\r\n<script
+        src=\"https://catalog.csumb.edu/widget-api/widget-api.min.js\"></script>\n<script>\n\n$(function()
+        {\n    $('.acalog').acalogWidgetize({\n        gateway: 'http://catalog.csumb.edu'\n
+        \   });\n});\n\n</script>\r\n</body>\r\n</html>"
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Cache-Control:
+      - no-store, no-cache, must-revalidate
+      Connection:
+      - keep-alive
+      Content-Security-Policy-Report-Only:
+      - default-src 'self'; script-src 'self' https://code.jquery.com https://www.googletagmanager.com
+        https://pxl-csumbedu.terminalfour.net https://static.hotjar.com https://script.hotjar.com
+        https://cbe.capturehighered.net https://s.adroll.com https://d.adroll.com
+        https://www.google.com https://cse.google.com https://www.gstatic.com https://siteimproveanalytics.com
+        'unsafe-inline'; style-src 'self' https://fonts.googleapis.com https://pxl-csumbedu.terminalfour.net
+        https://www.google.com https://www.csuci.edu 'unsafe-inline'; font-src 'self'
+        https://fonts.gstatic.com https://pxl-csumbedu.terminalfour.net data:; img-src
+        'self' https://www.csuci.edu https://pxl-csumbedu.terminalfour.net https://40230.global.siteimproveanalytics.io
+        data:; media-src 'self' https://player.vimeo.com https://vimeocdn.com https://download-video-ak.vimeocdn.com;
+        connect-src 'self' https://region1.google-analytics.com https://content.hotjar.io
+        wss://ws.hotjar.com https://vc.hotjar.io; frame-src 'self' https://www.google.com;
+        frame-ancestors 'self'; object-src 'none'; base-uri 'none';
+      Content-Type:
+      - text/html; charset=UTF-8
+      Date:
+      - Wed, 04 Mar 2026 18:30:15 GMT
+      Expires:
+      - Thu, 19 Nov 1981 08:52:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - Apache
+      Set-Cookie:
+      - AWSALB=OpkRM7sXfop8gXzStioa1wEfJVDFY45gk3PmgpHNkOHlwHkSrcP+IW+qX/k4qR4cCxJQRLuWOcFOvT1s4Ks0CRwprEghedlbFAjyxOM0k4iTznm94weohMXy/7OY;
+        Expires=Wed, 11 Mar 2026 18:30:15 GMT; Path=/
+      - AWSALBCORS=OpkRM7sXfop8gXzStioa1wEfJVDFY45gk3PmgpHNkOHlwHkSrcP+IW+qX/k4qR4cCxJQRLuWOcFOvT1s4Ks0CRwprEghedlbFAjyxOM0k4iTznm94weohMXy/7OY;
+        Expires=Wed, 11 Mar 2026 18:30:15 GMT; Path=/; SameSite=None; Secure
+      - phpCas=23f803c8e7b4cc3601ee3245a2ef1914; expires=Thu, 05-Mar-2026 06:30:15
+        GMT; Max-Age=43200; path=/; domain=csumb.edu; HttpOnly
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - User-Agent
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/91d0aac0-cd0c-40ca-b320-ca240802506a
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/schedule%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cHM6Ly9jc3VtYi5lZHUvbWVkaWEvY3N1bWIvc2VjdGlvbi1lZGl0b3JzL2ZhY2lsaXRpZXMvdGhlLXdhdmV4MmZ0cmFuc3BvcnRhdGlvbi9DU1VNQl9ndGZzLnppcA%3D%3D?fields=name&prettyPrint=false
+  response:
+    body:
+      string: '{"error":{"code":404,"message":"No such object: calitp-staging-pytest/schedule/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cHM6Ly9jc3VtYi5lZHUvbWVkaWEvY3N1bWIvc2VjdGlvbi1lZGl0b3JzL2ZhY2lsaXRpZXMvdGhlLXdhdmV4MmZ0cmFuc3BvcnRhdGlvbi9DU1VNQl9ndGZzLnppcA==","errors":[{"message":"No
+        such object: calitp-staging-pytest/schedule/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cHM6Ly9jc3VtYi5lZHUvbWVkaWEvY3N1bWIvc2VjdGlvbi1lZGl0b3JzL2ZhY2lsaXRpZXMvdGhlLXdhdmV4MmZ0cmFuc3BvcnRhdGlvbi9DU1VNQl9ndGZzLnppcA==","domain":"global","reason":"notFound"}]}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '565'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 04 Mar 2026 18:30:16 GMT
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AGQBYWyJygwsxkyVM63IpBGkxxqZmO-3ID6aW5g1KJhnlPpEWl6i7uxMHx4OkcMG0BnpwCEIa9TsJNc
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/9c86c370-df10-4d89-9c6d-513d05e2af12
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/download_schedule_feed_results%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2FaHR0cHM6Ly9jc3VtYi5lZHUvbWVkaWEvY3N1bWIvc2VjdGlvbi1lZGl0b3JzL2ZhY2lsaXRpZXMvdGhlLXdhdmV4MmZ0cmFuc3BvcnRhdGlvbi9DU1VNQl9ndGZzLnppcA%3D%3D.jsonl?fields=name&prettyPrint=false
+  response:
+    body:
+      string: '{"error":{"code":404,"message":"No such object: calitp-staging-pytest/download_schedule_feed_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cHM6Ly9jc3VtYi5lZHUvbWVkaWEvY3N1bWIvc2VjdGlvbi1lZGl0b3JzL2ZhY2lsaXRpZXMvdGhlLXdhdmV4MmZ0cmFuc3BvcnRhdGlvbi9DU1VNQl9ndGZzLnppcA==.jsonl","errors":[{"message":"No
+        such object: calitp-staging-pytest/download_schedule_feed_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cHM6Ly9jc3VtYi5lZHUvbWVkaWEvY3N1bWIvc2VjdGlvbi1lZGl0b3JzL2ZhY2lsaXRpZXMvdGhlLXdhdmV4MmZ0cmFuc3BvcnRhdGlvbi9DU1VNQl9ndGZzLnppcA==.jsonl","domain":"global","reason":"notFound"}]}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '599'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 04 Mar 2026 18:30:16 GMT
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AGQBYWzUL98z4WW34AjC7f1-1RiN85AylqO1lD1nBXrrpUgiP-6zXTMdTZRREzEjYsSZMRDx1WxPuvg
+    status:
+      code: 404
+      message: Not Found
+version: 1
