@@ -844,6 +844,8 @@ models:
       Each row is a cleaned row from a trips.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#tripstxt.
+    config:
+      event_time: _feed_valid_from
     columns:
       - *schedule_dim_pk
       - *schedule_dim_gtfs_key_with_dupe_flag
@@ -964,6 +966,8 @@ models:
       status in the Cal-ITP data warehouse and
       https://github.com/MobilityData/gtfs-flex/blob/master/spec/reference.md
       for the Flex v2 specification.
+    config:
+      event_time: _feed_valid_from
     tests:
       - dbt_utils.expression_is_true:
           expression: "EXTRACT(DAY FROM arrival_time_interval) = 0"
