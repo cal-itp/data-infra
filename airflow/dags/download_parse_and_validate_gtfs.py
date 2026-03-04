@@ -117,7 +117,6 @@ def download_parse_and_validate_gtfs():
         destination_path="schedule/dt={{ dag_run.start_date | ds }}/ts={{ dag_run.start_date | ts }}/base64_url={{ task.base64_url }}",
         results_path="download_schedule_feed_results/dt={{ dag_run.start_date | ds }}/ts={{ dag_run.start_date | ts }}/{{ task.base64_url }}.jsonl",
         map_index_template="{{ task.download_config['name'] }}",
-        trigger_rule=TriggerRule.ALL_DONE,
         pool="schedule_download_pool",
     ).expand(download_config=XComArg(schedule_download_configs))
 
