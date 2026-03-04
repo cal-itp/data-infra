@@ -75,18 +75,31 @@
 
    - Runs [**DownloadConfigToGCSOperator**](airflow/plugins/operators/download_config_to_gcs_operator.py) and [**DownloadConfigHook**](airflow/plugins/hooks/download_config_hook.py) replacing [download_gtfs_schedule_v2 DAG](airflow/dags/download_gtfs_schedule_v2).
 
-      + Tries to download a zip file for each schedule dataset.
-         * Adds default headers
-         * Replaces key params by specific secret values (old process sends all secrets to each dataset)
-         * Allows redirects
-         * Encodes url to base64 url
-         * Adds PARTITIONED_ARTIFACT_METADATA to files
+> [!NOTE]
+> This process will try to download files from `Manual Download Bucket` first
 
-      + Uploads successfull zip files downloaded to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_RAW}/schedule/dt={DATE}/ts={UTC_TIMESTAMP}/base64_url={base64_url}/{file_name}.zip`.
+   + Downloads a zip file for each schedule dataset.
+      * Adds default headers
+      * Replaces key params by specific secret values (old process sends all secrets to each dataset)
+      * Allows redirects
+      * Encodes url to base64 url
+      * Adds PARTITIONED_ARTIFACT_METADATA to files
 
-      + Uploads summary results for each dataset to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_RAW}/gtfs_download_configs/dt={DATE}/ts={UTC_TIMESTAMP}/{base64_url}.jsonl`.
-           The v2 process generates a unique file (`results.jsonl`) containing the summary for all datasets.
-           To visualize the raw data from these files, you can query **external_gtfs_schedule.download_outcomes** or **mart_gtfs_audit.dim_gtfs_schedule_download_outcomes** in BigQuery.
+   + Uploads successfull zip files downloaded to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_RAW}/schedule/dt={DATE}/ts={UTC_TIMESTAMP}/base64_url={base64_url}/{file_name}.zip`.
+
+   + Uploads summary results for each dataset to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_RAW}/gtfs_download_configs/dt={DATE}/ts={UTC_TIMESTAMP}/{base64_url}.jsonl`.
+        The v2 process generates a unique file (`results.jsonl`) containing the summary for all datasets.
+        To visualize the raw data from these files, you can query **external_gtfs_schedule.download_outcomes** or **mart_gtfs_audit.dim_gtfs_schedule_download_outcomes** in BigQuery.
+
+
+   To add manually downloaded zip files:
+   1. Go to [download_parse_and_validate_gtfs](https://b15efed84aa34881b71da3b8fa87acd6-dot-us-west2.composer.byoid.googleusercontent.com/dags/download_parse_and_validate_gtfs/grid) DAG
+   2. Click on `download_config_to_gcs` task, then `Mapped Tasks` tab
+   3. Click on the dataset that you want to add a zip file
+   4. Click on `Details` tab
+   5. Copy the `base64_url` and `url` information (`url` is located inside `download_config`)
+   6. Download the file using the `url` from step 5
+   7. Upload the zip file to `gs://{CALITP_BUCKET__GTFS_SCHEDULE_MANUAL}/manual/<base64_url>`, replacing <base64_url> with the `base64_url` from step 5
 
 
 ### 3. Validates files
