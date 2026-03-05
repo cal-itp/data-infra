@@ -4,7 +4,6 @@ locals {
     "calitp-staging-airtable",
     "calitp-staging-amplitude-benefits-events",
     "calitp-staging-analysis-output-models",
-    "calitp-staging-cloud-functions",
     "calitp-staging-elavon-parsed",
     "calitp-staging-elavon-raw",
     "calitp-staging-gtfs-download-config",

@@ -174,8 +174,8 @@ output "google_service_account_composer-service-account_name" {
   value = google_service_account.composer-service-account.name
 }
 
-output "google_service_account_workflow-service-account_email" {
-  value = google_service_account.workflow-service-account.email
+output "google_service_account_gtfs-rt-archiver-service-account_email" {
+  value = google_service_account.gtfs-rt-archiver-service-account.email
 }
 
 output "google_service_account_sftp-pod-service-account_id" {

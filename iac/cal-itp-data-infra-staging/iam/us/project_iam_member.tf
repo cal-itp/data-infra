@@ -266,7 +266,7 @@ resource "google_project_iam_member" "composer-service-account" {
   project = "cal-itp-data-infra-staging"
 }
 
-resource "google_project_iam_member" "workflow-service-account" {
+resource "google_project_iam_member" "gtfs-rt-archiver-service-account" {
   for_each = toset([
     "roles/storage.objectUser",
     "roles/bigquery.dataViewer",
@@ -277,7 +277,7 @@ resource "google_project_iam_member" "workflow-service-account" {
     "roles/iam.serviceAccountTokenCreator"
   ])
   role    = each.key
-  member  = "serviceAccount:${google_service_account.workflow-service-account.email}"
+  member  = "serviceAccount:${google_service_account.gtfs-rt-archiver-service-account.email}"
   project = "cal-itp-data-infra-staging"
 }
 
