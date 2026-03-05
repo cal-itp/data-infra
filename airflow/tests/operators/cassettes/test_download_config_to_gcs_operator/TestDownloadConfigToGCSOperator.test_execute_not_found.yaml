@@ -3,54 +3,6 @@ interactions:
     body: null
     headers:
       Accept:
-      - '*/*'
-      Accept-Encoding:
-      - gzip
-      Authorization:
-      - FILTERED
-      Connection:
-      - keep-alive
-      User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
-      X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/1b000799-69f0-4ccf-9223-240797eba37f
-      x-goog-user-project:
-      - cal-itp-data-infra
-    method: GET
-    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/manual%2Fbase64_url%3DaHR0cHM6Ly9jc3VtYi5lZHUvbWVkaWEvY3N1bWIvc2VjdGlvbi1lZGl0b3JzL2ZhY2lsaXRpZXMvdGhlLXdhdmV4MmZ0cmFuc3BvcnRhdGlvbi9DU1VNQl9ndGZzLnppcA%3D%3D%2Fgtfs.zip?fields=name&prettyPrint=false
-  response:
-    body:
-      string: '{"error":{"code":404,"message":"No such object: calitp-staging-pytest/manual/base64_url=aHR0cHM6Ly9jc3VtYi5lZHUvbWVkaWEvY3N1bWIvc2VjdGlvbi1lZGl0b3JzL2ZhY2lsaXRpZXMvdGhlLXdhdmV4MmZ0cmFuc3BvcnRhdGlvbi9DU1VNQl9ndGZzLnppcA==/gtfs.zip","errors":[{"message":"No
-        such object: calitp-staging-pytest/manual/base64_url=aHR0cHM6Ly9jc3VtYi5lZHUvbWVkaWEvY3N1bWIvc2VjdGlvbi1lZGl0b3JzL2ZhY2lsaXRpZXMvdGhlLXdhdmV4MmZ0cmFuc3BvcnRhdGlvbi9DU1VNQl9ndGZzLnppcA==/gtfs.zip","domain":"global","reason":"notFound"}]}}'
-    headers:
-      Alt-Svc:
-      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
-      Cache-Control:
-      - no-cache, no-store, max-age=0, must-revalidate
-      Content-Length:
-      - '493'
-      Content-Type:
-      - application/json; charset=UTF-8
-      Date:
-      - Wed, 04 Mar 2026 18:30:15 GMT
-      Expires:
-      - Mon, 01 Jan 1990 00:00:00 GMT
-      Pragma:
-      - no-cache
-      Server:
-      - UploadServer
-      Vary:
-      - Origin
-      - X-Origin
-      X-GUploader-UploadID:
-      - AGQBYWyyGXFfPf_yKrWHD81PrdPFfvx90c281io1kJHkK3g8IxgfQJ6b6ZUoi1mUinonYcoY11gIXA
-    status:
-      code: 404
-      message: Not Found
-- request:
-    body: null
-    headers:
-      Accept:
       - text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
       Accept-Encoding:
       - gzip, deflate
@@ -506,7 +458,7 @@ interactions:
       Content-Type:
       - text/html; charset=UTF-8
       Date:
-      - Wed, 04 Mar 2026 18:30:15 GMT
+      - Wed, 04 Mar 2026 23:03:33 GMT
       Expires:
       - Thu, 19 Nov 1981 08:52:00 GMT
       Pragma:
@@ -514,11 +466,11 @@ interactions:
       Server:
       - Apache
       Set-Cookie:
-      - AWSALB=OpkRM7sXfop8gXzStioa1wEfJVDFY45gk3PmgpHNkOHlwHkSrcP+IW+qX/k4qR4cCxJQRLuWOcFOvT1s4Ks0CRwprEghedlbFAjyxOM0k4iTznm94weohMXy/7OY;
-        Expires=Wed, 11 Mar 2026 18:30:15 GMT; Path=/
-      - AWSALBCORS=OpkRM7sXfop8gXzStioa1wEfJVDFY45gk3PmgpHNkOHlwHkSrcP+IW+qX/k4qR4cCxJQRLuWOcFOvT1s4Ks0CRwprEghedlbFAjyxOM0k4iTznm94weohMXy/7OY;
-        Expires=Wed, 11 Mar 2026 18:30:15 GMT; Path=/; SameSite=None; Secure
-      - phpCas=23f803c8e7b4cc3601ee3245a2ef1914; expires=Thu, 05-Mar-2026 06:30:15
+      - AWSALB=8RcmEdtEC1hvxmwBaM6thxHjAgyNXAZuHsnf/G0zvr9JCHVnuYO0hVdRymogTBmKY6fcic0RN1ZZ6PIA7F4sHbImt6nFmcb3BxTXGz8TFKCDvT2jWxrVjo+Fj0wW;
+        Expires=Wed, 11 Mar 2026 23:03:33 GMT; Path=/
+      - AWSALBCORS=8RcmEdtEC1hvxmwBaM6thxHjAgyNXAZuHsnf/G0zvr9JCHVnuYO0hVdRymogTBmKY6fcic0RN1ZZ6PIA7F4sHbImt6nFmcb3BxTXGz8TFKCDvT2jWxrVjo+Fj0wW;
+        Expires=Wed, 11 Mar 2026 23:03:33 GMT; Path=/; SameSite=None; Secure
+      - phpCas=edc6ee6bb346266770113e218c3833f9; expires=Thu, 05-Mar-2026 11:03:33
         GMT; Max-Age=43200; path=/; domain=csumb.edu; HttpOnly
       Strict-Transport-Security:
       - max-age=31536000; includeSubDomains
@@ -537,9 +489,7 @@ interactions:
     body: null
     headers:
       Accept:
-      - '*/*'
-      Accept-Encoding:
-      - gzip
+      - application/json
       Authorization:
       - FILTERED
       Connection:
@@ -547,85 +497,40 @@ interactions:
       User-Agent:
       - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/91d0aac0-cd0c-40ca-b320-ca240802506a
-      x-goog-user-project:
-      - cal-itp-data-infra
-    method: GET
-    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/schedule%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cHM6Ly9jc3VtYi5lZHUvbWVkaWEvY3N1bWIvc2VjdGlvbi1lZGl0b3JzL2ZhY2lsaXRpZXMvdGhlLXdhdmV4MmZ0cmFuc3BvcnRhdGlvbi9DU1VNQl9ndGZzLnppcA%3D%3D?fields=name&prettyPrint=false
-  response:
-    body:
-      string: '{"error":{"code":404,"message":"No such object: calitp-staging-pytest/schedule/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cHM6Ly9jc3VtYi5lZHUvbWVkaWEvY3N1bWIvc2VjdGlvbi1lZGl0b3JzL2ZhY2lsaXRpZXMvdGhlLXdhdmV4MmZ0cmFuc3BvcnRhdGlvbi9DU1VNQl9ndGZzLnppcA==","errors":[{"message":"No
-        such object: calitp-staging-pytest/schedule/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/base64_url=aHR0cHM6Ly9jc3VtYi5lZHUvbWVkaWEvY3N1bWIvc2VjdGlvbi1lZGl0b3JzL2ZhY2lsaXRpZXMvdGhlLXdhdmV4MmZ0cmFuc3BvcnRhdGlvbi9DU1VNQl9ndGZzLnppcA==","domain":"global","reason":"notFound"}]}}'
-    headers:
-      Alt-Svc:
-      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
-      Cache-Control:
-      - no-cache, no-store, max-age=0, must-revalidate
-      Content-Length:
-      - '565'
-      Content-Type:
-      - application/json; charset=UTF-8
-      Date:
-      - Wed, 04 Mar 2026 18:30:16 GMT
-      Expires:
-      - Mon, 01 Jan 1990 00:00:00 GMT
-      Pragma:
-      - no-cache
-      Server:
-      - UploadServer
-      Vary:
-      - Origin
-      - X-Origin
-      X-GUploader-UploadID:
-      - AGQBYWyJygwsxkyVM63IpBGkxxqZmO-3ID6aW5g1KJhnlPpEWl6i7uxMHx4OkcMG0BnpwCEIa9TsJNc
-    status:
-      code: 404
-      message: Not Found
-- request:
-    body: null
-    headers:
-      Accept:
-      - '*/*'
-      Accept-Encoding:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/f96954f8-5c84-4802-af01-7ace8caa1e31
+      accept-encoding:
       - gzip
-      Authorization:
-      - FILTERED
-      Connection:
-      - keep-alive
-      User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
-      X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/9c86c370-df10-4d89-9c6d-513d05e2af12
+      content-type:
+      - application/json; charset=UTF-8
       x-goog-user-project:
       - cal-itp-data-infra
+      x-upload-content-type:
+      - application/json; charset=UTF-8
     method: GET
-    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/download_schedule_feed_results%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2FaHR0cHM6Ly9jc3VtYi5lZHUvbWVkaWEvY3N1bWIvc2VjdGlvbi1lZGl0b3JzL2ZhY2lsaXRpZXMvdGhlLXdhdmV4MmZ0cmFuc3BvcnRhdGlvbi9DU1VNQl9ndGZzLnppcA%3D%3D.jsonl?fields=name&prettyPrint=false
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/manual%2Fbase64_url%3DaHR0cHM6Ly9jc3VtYi5lZHUvbWVkaWEvY3N1bWIvc2VjdGlvbi1lZGl0b3JzL2ZhY2lsaXRpZXMvdGhlLXdhdmV4MmZ0cmFuc3BvcnRhdGlvbi9DU1VNQl9ndGZzLnppcA%3D%3D%2Fgtfs.zip?alt=media
   response:
     body:
-      string: '{"error":{"code":404,"message":"No such object: calitp-staging-pytest/download_schedule_feed_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cHM6Ly9jc3VtYi5lZHUvbWVkaWEvY3N1bWIvc2VjdGlvbi1lZGl0b3JzL2ZhY2lsaXRpZXMvdGhlLXdhdmV4MmZ0cmFuc3BvcnRhdGlvbi9DU1VNQl9ndGZzLnppcA==.jsonl","errors":[{"message":"No
-        such object: calitp-staging-pytest/download_schedule_feed_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cHM6Ly9jc3VtYi5lZHUvbWVkaWEvY3N1bWIvc2VjdGlvbi1lZGl0b3JzL2ZhY2lsaXRpZXMvdGhlLXdhdmV4MmZ0cmFuc3BvcnRhdGlvbi9DU1VNQl9ndGZzLnppcA==.jsonl","domain":"global","reason":"notFound"}]}}'
+      string: 'No such object: calitp-staging-pytest/manual/base64_url=aHR0cHM6Ly9jc3VtYi5lZHUvbWVkaWEvY3N1bWIvc2VjdGlvbi1lZGl0b3JzL2ZhY2lsaXRpZXMvdGhlLXdhdmV4MmZ0cmFuc3BvcnRhdGlvbi9DU1VNQl9ndGZzLnppcA==/gtfs.zip'
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       Cache-Control:
-      - no-cache, no-store, max-age=0, must-revalidate
+      - private, max-age=0
       Content-Length:
-      - '599'
+      - '197'
       Content-Type:
-      - application/json; charset=UTF-8
+      - text/html; charset=UTF-8
       Date:
-      - Wed, 04 Mar 2026 18:30:16 GMT
+      - Wed, 04 Mar 2026 23:03:34 GMT
       Expires:
-      - Mon, 01 Jan 1990 00:00:00 GMT
-      Pragma:
-      - no-cache
+      - Wed, 04 Mar 2026 23:03:34 GMT
       Server:
       - UploadServer
       Vary:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AGQBYWzUL98z4WW34AjC7f1-1RiN85AylqO1lD1nBXrrpUgiP-6zXTMdTZRREzEjYsSZMRDx1WxPuvg
+      - AGQBYWz6Mz9yebc9HW7r5HdNeNGrhUiKTSvOSxdOByof6kpCyn0DopK9Gywd1hlvVuJsgJeEtu_hpEM
     status:
       code: 404
       message: Not Found
