@@ -20,7 +20,7 @@ jobs:
         fetch-depth: 0
     - uses: actions/setup-python@v1
       with:
-        python-version: 3.9
+        python-version: '3.11'
     - run: pip install -r docs/requirements.txt
     - uses: 'google-github-actions/auth@v2'
       with:
