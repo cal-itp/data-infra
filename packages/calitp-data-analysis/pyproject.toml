@@ -1,12 +1,12 @@
 [project]
 name = "calitp-data-analysis"
-version = "2026.2.27"
+version = "2026.3.5"
 description = "Shared code for querying Cal-ITP data in notebooks, primarily."
 authors = [{ name = "Cal-ITP" }, { name = "Erika Pacheco" }, { name = "Rae Bonfanti" }]
 requires-python = ">=3.11.0, <3.12.0"
 
 dependencies = [
-    "altair (>=5.1.1, <6.0.0)",
+    "altair (>=5.1.1)",
     "black==24.10.0",
     "dask (>=2024.10.0, <2025.4.0)", # breaking changes introduced with 2025.4.0 https://docs.dask.org/en/stable/changelog.html#v2025-4-0
     "dask-geopandas (>=0.2.0, <0.3.0)",
