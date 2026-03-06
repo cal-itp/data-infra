@@ -14,13 +14,13 @@ resource "google_monitoring_notification_channel" "email_dds_notify" {
 
 # 2. Define the Alerting Policy
 resource "google_monitoring_alert_policy" "gtfs_low_write_alert" {
-  display_name = "Low Write Activity - GTFS Bucket (15m)"
+  display_name = "Low Write Activity - GTFS Bucket"
   project      = data.google_project.project.project_id
   combiner     = "OR"
   severity     = "WARNING" # Options: "WARNING", "ERROR", "CRITICAL"
 
   conditions {
-    display_name = "GCS Write Count < 1500 in 15m (MQL)"
+    display_name = "GCS Write Count below 5000 in 5m (MQL)"
 
     condition_monitoring_query_language {
       query = <<-EOT
@@ -28,18 +28,20 @@ resource "google_monitoring_alert_policy" "gtfs_low_write_alert" {
         | metric 'storage.googleapis.com/api/request_count'
         | filter (resource.bucket_name == '${local.gtfs_rt_raw_v2_bucket_name}')
         | filter (metric.method =~ '.*Write.*|.*Upload.*')
-        | align delta(5m)
-        | time_shift 5m
+        | align rate(5m)
         | every 5m
         | group_by [], [value_request_count_sum: sum(val())]
+        | mul 300
+        | cast_units("")
+        | time_shift 5m
         | condition val() < 5000
       EOT
       # time_shift due to the metrics data delay
-      # effectively, every 5 mins, checking the total writes between 5 mins ago and 10 mins ago.
+      # effectively, every 5 mins, checking the total writes between 10 mins ago and 5 mins ago.
 
-      evaluation_missing_data = "EVALUATION_MISSING_DATA_NO_OP"
+      evaluation_missing_data = "EVALUATION_MISSING_DATA_INACTIVE"
 
-      duration = "120s" # Alert after the count remains low for 2 minutes.
+      duration = "300s" # Alert after the count remains low for 5 minutes.
 
       trigger {
         count = 1
@@ -60,7 +62,7 @@ resource "google_monitoring_alert_policy" "gtfs_low_write_alert" {
 
   # Metadata to help Vivian or other team members when they receive the alert
   documentation {
-    content   = "The GTFS Realtime raw bucket has dropped below 1500 writes in the last 15 minutes. This usually indicates the ingestion pipeline is stalled or a feed provider is down."
+    content   = "The GTFS Realtime raw bucket has dropped below 5000 writes in the last 5 minutes. This usually indicates the ingestion pipeline is stalled or a feed provider is down."
     mime_type = "text/markdown"
   }
 
