@@ -1,0 +1,117 @@
+name: Metabase Docker image
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/build-gtfs-rt-archiver.yml'
+      - 'services/gtfs-rt-archiver/**'
+      - 'iac/cal-itp-data-infra-staging/gtfs-rt-archiver/**'
+      - 'iac/cal-itp-data-infra/gtfs-rt-archiver/**'
+  pull_request:
+    paths:
+      - '.github/workflows/build-gtfs-rt-archiver.yml'
+      - 'services/gtfs-rt-archiver/**'
+      - 'iac/cal-itp-data-infra-staging/gtfs-rt-archiver/**'
+      - 'iac/cal-itp-data-infra/gtfs-rt-archiver/**'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-gtfs-rt-archiver
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  changes:
+    name: Detect changes
+
+    runs-on: ubuntu-latest
+
+    outputs:
+      staging: ${{ steps.staging-changes.outputs.all_changed_files }}
+      production: ${{ steps.production-changes.outputs.all_changed_files }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Staging Changes
+        uses: tj-actions/changed-files@v46
+        id: staging-changes
+        with:
+          matrix: true
+          dir_names: true
+          files: services/gtfs-rt-archiver/**/*
+
+      - name: Production Changes
+        uses: tj-actions/changed-files@v46
+        id: production-changes
+        with:
+          matrix: true
+          dir_names: true
+          files: services/gtfs-rt-archiver/**/*
+
+  staging:
+    name: Build staging image
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: ${{ needs.changes.outputs.staging != '[]' || needs.changes.outputs.staging != '' }}
+
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Login to GitHub Repository
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push
+        uses: docker/build-push-action@v6
+        with:
+          context: services/gtfs-rt-archiver
+          push: true
+          tags: ghcr.io/${{ github.repository }}/gtfs-rt-archiver:staging
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/gtfs-rt-archiver:staging
+          cache-to: type=inline
+
+  production:
+    name: Build production image
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: ${{ needs.changes.outputs.production != '[]' || needs.changes.outputs.production != '' }}
+
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Login to GitHub Repository
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Push
+        uses: docker/build-push-action@v6
+        with:
+          context: services/gtfs-rt-archiver
+          push: true
+          tags: ghcr.io/${{ github.repository }}/gtfs-rt-archiver:production
+          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/gtfs-rt-archiver:production
+          cache-to: type=inline
