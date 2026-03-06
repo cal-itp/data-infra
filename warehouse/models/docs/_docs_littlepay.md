@@ -336,6 +336,180 @@ Possible values:
 * `PURCHASE`
 {% enddocs %}
 
+{% docs lp_previous_version_id %}
+Refers to the previous version ID of the product.
+{% enddocs %}
+
+{% docs lp_original_version_id %}
+Refers to the original version ID of the product.
+
+The `original_version_id` may differ from the `previous_version_id` if the product has been updated more than once.
+{% enddocs %}
+
+{% docs lp_activation_type %}
+The type of customers the product will be actioned for.
+{% enddocs %}
+
+{% docs lp_product_status %}
+The status of the product as set in the Merchant Portal.
+
+Possible values:
+* `ACTIVE`
+* `INACTIVE`
+* `EXPIRED`
+{% enddocs %}
+
+{% docs lp_superseded %}
+If `true`, indicates that the product version is obsolete as a new version of the product is in use.
+{% enddocs %}
+
+{% docs lp_created_date %}
+The date the product was created in the Merchant Portal.
+{% enddocs %}
+
+{% docs lp_capping_type %}
+Type of capping assigned to the product.
+
+Possible values:
+* `Daily Capping`
+* `Weekly Capping`
+* `Multi Day Capping`
+* `Time Based Capping`
+{% enddocs %}
+
+{% docs lp_multi_operator %}
+If `TRUE`, indicates that the product falls under a multi-operator scheme.
+{% enddocs %}
+
+{% docs lp_rules_default_limit %}
+Maximum capping limit for the product.
+{% enddocs %}
+
+{% docs lp_rules_max_fare_value %}
+Maximum fare value used. Anything exceeding this value is not included in capping.
+{% enddocs %}
+
+{% docs lp_rules_transaction_types %}
+The types of transactions that can be applied to this product.
+
+Possible values:
+* `Autoscan`
+* `Variable`
+* `Flat`
+{% enddocs %}
+
+{% docs lp_capping_start_time %}
+Indicates capping start time. This is used when the capping product has a specific start time.
+{% enddocs %}
+
+{% docs lp_capping_end_time %}
+Indicates capping end time. This is used when the capping product has a specific end time.
+{% enddocs %}
+
+{% docs lp_all_day %}
+If set to `1`, indicates that the capping product is in effect for the entire day.
+{% enddocs %}
+
+{% docs lp_weekly_cap_start_day %}
+Indicates the start day of the product's weekly cap.
+
+Possible values are `SUNDAY` or `MONDAY`.
+{% enddocs %}
+
+{% docs lp_weekly_cap_end_day %}
+Indicates the end day of the product's weekly cap.
+
+Possible values are `SATURDAY` or `SUNDAY`.
+{% enddocs %}
+
+{% docs lp_number_of_days_in_cap_window %}
+The number of days in the capping window set against the product.
+{% enddocs %}
+
+{% docs lp_capping_duration %}
+The duration of time after the customer initially taps where future taps are not charged.
+{% enddocs %}
+
+{% docs lp_number_of_transfer %}
+The number of free transfers after the initial tap.
+{% enddocs %}
+
+{% docs lp_capping_time_zone %}
+The time zone where the capping product was used.
+{% enddocs %}
+
+{% docs lp_capping_overlap_time %}
+The time a customer can overlap within a 24-hour period.
+{% enddocs %}
+
+{% docs lp_capping_application_level %}
+The customer level tapping as customers can have multiple cards (physical / digital).
+{% enddocs %}
+
+{% docs lp_scheduled_start_date_time %}
+Expected Blank.
+{% enddocs %}
+
+{% docs lp_scheduled_end_date_time %}
+Expected Blank.
+{% enddocs %}
+
+{% docs lp_route_capping_enabled %}
+If `true`, route capping is enabled.
+{% enddocs %}
+
+{% docs lp_routes %}
+List of routes that apply to the product.
+{% enddocs %}
+
+{% docs lp_zoned_capping_enabled %}
+If `true`, zoned capping is enabled.
+{% enddocs %}
+
+{% docs lp_zoned_capping_mode %}
+Defines how the zones are mapped relative to one another.
+
+Possible values:
+* `Concentric` — Zones start from an inner zone and expand outwards with each new zone.
+* `Nonconcentric` — Zones are next to each other and do not overlap.
+{% enddocs %}
+
+{% docs lp_zoned_capping_pricing_type %}
+Defines which pricing period applies to the product.
+
+Possible values are `PEAK` or `OFFPEAK`.
+{% enddocs %}
+
+{% docs lp_on_peak_zones %}
+JSON object that defines the rules for the peak zones.
+{% enddocs %}
+
+{% docs lp_off_peak_zones %}
+JSON object that defines the rules for the off-peak zones.
+{% enddocs %}
+
+{% docs lp_incentive_enabled %}
+If `true`, an incentive is enabled on the product.
+{% enddocs %}
+
+{% docs lp_incentive_type %}
+The type of the incentive associated to the product.
+
+Possible values are `DAILY_CAP` or `CUMULATIVE_CAP`.
+{% enddocs %}
+
+{% docs lp_discount_qualifier %}
+The type of qualifier that gives eligibility to the product.
+
+Possible values are `CAP_REACHED` or `SINGLE_TRIP`.
+{% enddocs %}
+
+{% docs lp_configuration %}
+Configuration type for the incentive.
+
+Possible values are `DAILY_TABLE` or `ZONE_TRIANGLE`.
+{% enddocs %}
+
 -------------------------------- PAIRED DEVICE TRANSACTIONS TABLE --------------------------------
 
 {% docs lp_paired_first_transaction_id %}
