@@ -621,3 +621,113 @@ models:
         description: '{{ doc("lp_extract_filename") }}'
       - name: ts
         description: '{{ doc("lp_ts") }}'
+  - name: int_payments__dim_product_data
+    description: >
+      Slowly-changing dimension (type 2) for product data.
+    data_tests:
+      - dbt_utils.mutually_exclusive_ranges:
+          lower_bound_column: _valid_from
+          upper_bound_column: _valid_to
+          partition_by: product_id
+    columns:
+      - *participant_id
+      - name: product_id
+        description: '{{ doc("lp_product_id") }}'
+      - name: previous_version_id
+        description: '{{ doc("lp_previous_version_id") }}'
+      - name: original_version_id
+        description: '{{ doc("lp_original_version_id") }}'
+      - name: product_code
+        description: '{{ doc("lp_product_code") }}'
+      - name: product_description
+        description: '{{ doc("lp_product_description") }}'
+      - name: product_type
+        description: '{{ doc("lp_product_type") }}'
+      - name: activation_type
+        description: '{{ doc("lp_activation_type") }}'
+      - name: product_status
+        description: '{{ doc("lp_product_status") }}'
+      - name: superseded
+        description: '{{ doc("lp_superseded") }}'
+      - name: created_date
+        description: '{{ doc("lp_created_date") }}'
+      - name: capping_type
+        description: '{{ doc("lp_capping_type") }}'
+      - name: multi_operator
+        description: '{{ doc("lp_multi_operator") }}'
+      - name: rules_default_limit
+        description: '{{ doc("lp_rules_default_limit") }}'
+      - name: rules_max_fare_value
+        description: '{{ doc("lp_rules_max_fare_value") }}'
+      - name: rules_transaction_types
+        description: '{{ doc("lp_rules_transaction_types") }}'
+      - name: capping_start_time
+        description: '{{ doc("lp_capping_start_time") }}'
+      - name: capping_end_time
+        description: '{{ doc("lp_capping_end_time") }}'
+      - name: all_day
+        description: '{{ doc("lp_all_day") }}'
+      - name: weekly_cap_start_day
+        description: '{{ doc("lp_weekly_cap_start_day") }}'
+      - name: weekly_cap_end_day
+        description: '{{ doc("lp_weekly_cap_end_day") }}'
+      - name: number_of_days_in_cap_window
+        description: '{{ doc("lp_number_of_days_in_cap_window") }}'
+      - name: capping_duration
+        description: '{{ doc("lp_capping_duration") }}'
+      - name: number_of_transfer
+        description: '{{ doc("lp_number_of_transfer") }}'
+      - name: capping_time_zone
+        description: '{{ doc("lp_capping_time_zone") }}'
+      - name: capping_overlap_time
+        description: '{{ doc("lp_capping_overlap_time") }}'
+      - name: capping_application_level
+        description: '{{ doc("lp_capping_application_level") }}'
+      - name: scheduled_start_date_time
+        description: '{{ doc("lp_scheduled_start_date_time") }}'
+      - name: scheduled_end_date_time
+        description: '{{ doc("lp_scheduled_end_date_time") }}'
+      - name: route_capping_enabled
+        description: '{{ doc("lp_route_capping_enabled") }}'
+      - name: routes
+        description: '{{ doc("lp_routes") }}'
+      - name: zoned_capping_enabled
+        description: '{{ doc("lp_zoned_capping_enabled") }}'
+      - name: zoned_capping_mode
+        description: '{{ doc("lp_zoned_capping_mode") }}'
+      - name: zoned_capping_pricing_type
+        description: '{{ doc("lp_zoned_capping_pricing_type") }}'
+      - name: on_peak_zones
+        description: '{{ doc("lp_on_peak_zones") }}'
+      - name: off_peak_zones
+        description: '{{ doc("lp_off_peak_zones") }}'
+      - name: incentive_enabled
+        description: '{{ doc("lp_incentive_enabled") }}'
+      - name: incentive_type
+        description: '{{ doc("lp_incentive_type") }}'
+      - name: discount_qualifier
+        description: '{{ doc("lp_discount_qualifier") }}'
+      - name: configuration
+        description: '{{ doc("lp_configuration") }}'
+      - name: littlepay_export_date
+        description: |
+          Date of the source file from Littlepay. Date is extracted from filenames, which generally have the
+          structure {timestamp}_{data_type}.{file extension}.
+      - name: littlepay_export_ts
+        description: |
+          Timestamp of the source file from Littlepay. Timestamp is extracted from filenames, which generally have the
+          structure {timestamp}_{data_type}.{file extension}.
+      - name: _line_number
+        description: |
+          Line number of this row in the source file.
+          Some line numbers may be missing because we drop extra copies of rows that are full duplicates of another row.
+      - name: _key
+        description: |
+          Synthetic key composed of Littlepay file date and line number to uniquely identify a row within source data.
+      - name: _payments_key
+        description: |
+          Synthentic key composed of the elements that define a natural key within the source data (primary key according to Littlepay schema.)
+      - name: _content_hash
+        description: |
+          Hash of all data columns to uniquely identify row's content, mostly for debugging purposes.
+          Should ideally be handled by uniqueness of _payments_key but surfaced for troubleshooting.
