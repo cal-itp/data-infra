@@ -66,6 +66,14 @@ resource "google_service_account" "composer-service-account" {
   project      = "cal-itp-data-infra-staging"
 }
 
+resource "google_service_account" "gtfs-rt-archiver-service-account" {
+  account_id   = "gtfs-rt-service-account"
+  description  = "Service account for the GTFS-RT archiver"
+  disabled     = "false"
+  display_name = "workflow"
+  project      = "cal-itp-data-infra-staging"
+}
+
 resource "google_service_account" "sftp-pod-service-account" {
   account_id   = "sftp-pod-service-account"
   description  = "Service account for sftp server"
