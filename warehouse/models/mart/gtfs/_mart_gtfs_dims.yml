@@ -97,6 +97,8 @@ models:
       what was in effect on January 2.
       This table should be used to understand "versions" of constituent data like
       routes, trips, etc.
+    config:
+      event_time: _valid_from
     tests:
       - dbt_utils.mutually_exclusive_ranges:
           lower_bound_column: _valid_from
