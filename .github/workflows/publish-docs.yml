@@ -11,31 +11,51 @@ on:
       - 'docs/**'
   workflow_dispatch:
 
+env:
+  PYTHON_VERSION: '3.11'
+
 jobs:
   build-docs:
+    name: Build docs
     runs-on: ubuntu-latest
+
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout
+      uses: actions/checkout@v6
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
       with:
-        fetch-depth: 0
-    - uses: actions/setup-python@v1
+        python-version: ${{ env.PYTHON_VERSION }}
+
+    - name: Cache Python packages
+      uses: actions/cache@v3
       with:
-        python-version: 3.9
-    - run: pip install -r docs/requirements.txt
-    - uses: 'google-github-actions/auth@v2'
+        path: ~/.local
+        key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-${{ hashFiles('.github/workflows/*.yml') }}
+
+    - name: Install requirements
+      working-directory: docs
+      run: pip install -r requirements.txt
+
+    - name: Authenticate Google Service Account
+      uses: google-github-actions/auth@v2
       with:
         credentials_json: '${{ secrets.GCP_SA_KEY }}'
-    - uses: google-github-actions/setup-gcloud@v2
+
+    - name: Setup GCloud utilities
+      uses: google-github-actions/setup-gcloud@v2
 
     - name: Build jupyter book
       run: jb build docs --warningiserror --keep-going # set doc to fail on any sphinx warning
-    - uses: actions/upload-artifact@v4
+
+    - name: Archive docs
+      uses: actions/upload-artifact@v4
       if: always()
       with:
         name: docs-build
         path: docs/_build/html
 
-    # Production
     - name: Deploy docs to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3
       if: ${{ github.ref == 'refs/heads/main' }}
@@ -54,7 +74,8 @@ jobs:
         NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
         PR_NUMBER: ${{ github.event.number }}
 
-    - uses: peter-evans/find-comment@v2
+    - name: Find comment
+      uses: peter-evans/find-comment@v2
       if: ${{ github.event_name == 'pull_request' }}
       id: fc
       with:
@@ -62,7 +83,8 @@ jobs:
         comment-author: 'github-actions[bot]'
         body-includes: --cal-itp-previews.netlify.app
 
-    - uses: peter-evans/create-or-update-comment@v2
+    - name: Add preview URL to a comment
+      uses: peter-evans/create-or-update-comment@v2
       if: ${{ github.event_name == 'pull_request' }}
       with:
         comment-id: ${{ steps.fc.outputs.comment-id }}
