@@ -7,12 +7,14 @@
 
 WITH schedule_trips AS (
     SELECT *
-    FROM {{ ref('fct_scheduled_trips') }}
+    FROM `cal-itp-data-infra.mart_gtfs.fct_scheduled_trips`--{{ ref('fct_scheduled_trips') }}
+    WHERE service_date >= "2026-02-01"
 ),
 
 observed_trips AS (
     SELECT *
-    FROM {{ ref('fct_observed_trips') }}
+    FROM `cal-itp-data-infra.mart_gtfs.fct_observed_trips`--{{ ref('fct_observed_trips') }}
+    WHERE service_date >= "2026-02-01"
 ),
 
 
@@ -174,7 +176,7 @@ route_direction_aggregation AS (
         AND schedule.schedule_base64_url = vp.schedule_base64_url
         AND schedule.route_name = vp.route_name
         AND COALESCE(schedule.direction_id, -1) = COALESCE(vp.direction_id, -1)
-    WHERE n_trips > 0 AND (n_vp_trips > 0 OR n_tu_trips > 0)
+    WHERE n_trips > 0
 )
 
 SELECT * FROM route_direction_aggregation
