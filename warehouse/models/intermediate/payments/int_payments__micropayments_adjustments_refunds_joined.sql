@@ -18,7 +18,7 @@ adjustments AS (
 ),
 
 products AS (
-    SELECT * FROM {{ ref('int_littlepay__unioned_product_data') }}
+    SELECT * FROM {{ ref('int_payments__dim_product_data') }}
 ),
 
 individual_refunds AS (
@@ -70,15 +70,25 @@ int_payments__micropayments_adjustments_refunds_joined AS (
         aggregation_refunds.total_refund_activity_amount_dollars AS aggregation_refund_amount,
         debit_micropayments.feed_version
     FROM debit_micropayments
-    INNER JOIN valid_micropayment_ids USING (micropayment_id)
-    LEFT JOIN adjustments USING (participant_id, micropayment_id, feed_version)
-    -- there are products with the same product_id across feed_version
-    -- so include feed_version in this join to only get the same feed_version as the micropayment
-    -- (and include feed_version in the adjustments join above so we can still use "using" for this)
-    LEFT JOIN products USING (participant_id, product_id, feed_version)
-    LEFT JOIN individual_refunds USING (participant_id, micropayment_id, aggregation_id)
-    LEFT JOIN aggregation_refunds USING (participant_id, aggregation_id)
-    LEFT JOIN micropayments_per_aggregation USING (participant_id, aggregation_id)
+    INNER JOIN valid_micropayment_ids
+        ON debit_micropayments.micropayment_id = valid_micropayment_ids.micropayment_id
+    LEFT JOIN adjustments
+        ON debit_micropayments.participant_id = adjustments.participant_id
+        AND debit_micropayments.micropayment_id = adjustments.micropayment_id
+    LEFT JOIN products
+        ON debit_micropayments.participant_id = products.participant_id
+        AND adjustments.product_id = products.product_id
+        AND debit_micropayments.transaction_time BETWEEN products._valid_from AND products._valid_to
+    LEFT JOIN individual_refunds
+        ON debit_micropayments.participant_id = individual_refunds.participant_id
+        AND debit_micropayments.micropayment_id = individual_refunds.micropayment_id
+        AND debit_micropayments.aggregation_id = individual_refunds.aggregation_id
+    LEFT JOIN aggregation_refunds
+        ON debit_micropayments.participant_id = aggregation_refunds.participant_id
+        AND debit_micropayments.aggregation_id = aggregation_refunds.aggregation_id
+    LEFT JOIN micropayments_per_aggregation
+        ON debit_micropayments.participant_id = micropayments_per_aggregation.participant_id
+        AND debit_micropayments.participant_id = micropayments_per_aggregation.aggregation_id
 )
 
 SELECT * FROM int_payments__micropayments_adjustments_refunds_joined
