@@ -4,7 +4,7 @@
         incremental_strategy='microbatch',
         event_time = '_feed_valid_from',
         batch_size = 'day',
-        begin='2026-02-01',
+        begin='2026-02-21',
         lookback=5,
         partition_by={
             'field': '_feed_valid_from',
