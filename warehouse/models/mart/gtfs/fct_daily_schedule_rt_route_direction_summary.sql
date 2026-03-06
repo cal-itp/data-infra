@@ -7,14 +7,12 @@
 
 WITH schedule_trips AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_gtfs.fct_scheduled_trips`--{{ ref('fct_scheduled_trips') }}
-    WHERE service_date >= "2026-02-01"
+    FROM {{ ref('fct_scheduled_trips') }}
 ),
 
 observed_trips AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_gtfs.fct_observed_trips`--{{ ref('fct_observed_trips') }}
-    WHERE service_date >= "2026-02-01"
+    FROM {{ ref('fct_observed_trips') }}
 ),
 
 
