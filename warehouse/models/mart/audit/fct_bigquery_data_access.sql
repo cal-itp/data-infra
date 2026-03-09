@@ -37,10 +37,13 @@ WITH fct_bigquery_data_access AS (
         dbt_header,
         dbt_node,
         -- Short name from dbt_node or fallback to destination_table_short_name
-        COALESCE(
-            SPLIT(dbt_node, '.')[SAFE_OFFSET(ARRAY_LENGTH(SPLIT(dbt_node, '.')) - 1)],
-            SPLIT(destination_table, '/')[SAFE_OFFSET(ARRAY_LENGTH(SPLIT(destination_table, '/')) - 1)]
-        ) AS dbt_node_short_name,
+        SPLIT(
+            COALESCE(
+                SPLIT(dbt_node, '.')[SAFE_OFFSET(ARRAY_LENGTH(SPLIT(dbt_node, '.')) - 1)],
+                SPLIT(destination_table, '/')[SAFE_OFFSET(ARRAY_LENGTH(SPLIT(destination_table, '/')) - 1)]
+            ),
+            '__dbt_tmp'
+        )[OFFSET(0)] AS dbt_node_short_name, # Remove __dbt_tmp* suffix if present, helps with microbatches especially for incremental models
         payload,
         metadata,
         job
