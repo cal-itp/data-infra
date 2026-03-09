@@ -44,9 +44,9 @@ int_payments__customer_funding_source_vaults AS (
     FROM {{ ref('int_payments__customer_funding_source_vaults') }}
 ),
 
-int_littlepay__unioned_product_data AS (
+int_payments__dim_product_data AS (
     SELECT *
-    FROM {{ ref('int_littlepay__unioned_product_data') }}
+    FROM {{ ref('int_payments__dim_product_data') }}
 ),
 
 participants_to_routes_and_agency AS (
@@ -157,12 +157,10 @@ fct_payments_rides_v2 AS (
     LEFT JOIN int_payments__matched_device_transactions AS device_transactions
         ON micropayments.participant_id = device_transactions.participant_id
             AND micropayments.micropayment_id = device_transactions.micropayment_id
-    LEFT JOIN int_littlepay__unioned_product_data AS products
+    LEFT JOIN int_payments__dim_product_data AS products
         ON micropayments.participant_id = products.participant_id
             AND micropayments.product_id = products.product_id
-            -- there are products with the same product_id across feed_version
-            -- so include feed_version in this join to only get the same feed_version as the micropayment
-            AND micropayments.feed_version = products.feed_version
+            AND micropayments.transaction_time BETWEEN products._valid_from AND products._valid_to
     LEFT JOIN participants_to_routes_and_agency AS routes
         ON routes.littlepay_participant_id = micropayments.participant_id
             -- here, can just use t1 because transaction date will be populated
