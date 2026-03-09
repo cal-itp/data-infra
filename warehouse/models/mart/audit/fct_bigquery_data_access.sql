@@ -43,7 +43,8 @@ WITH fct_bigquery_data_access AS (
                 SPLIT(destination_table, '/')[SAFE_OFFSET(ARRAY_LENGTH(SPLIT(destination_table, '/')) - 1)]
             ),
             '__dbt_tmp'
-        )[OFFSET(0)] AS dbt_node_short_name,
+        )[OFFSET(0)] AS dbt_node_short_name, # Remove __dbt_tmp* suffix if present, helps with microbatches especially for incremental models
+        payload,
         metadata,
         job
     FROM {{ ref('stg_audit__cloudaudit_googleapis_com_data_access') }}
