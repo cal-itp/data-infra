@@ -156,7 +156,7 @@ route_direction_aggregation AS (
     SELECT
         schedule.service_date,
         schedule.schedule_base64_url,
-        schedule.schedule_gtfs_dataset_name,
+        schedule.schedule_gtfs_dataset_name AS schedule_name,
         schedule.schedule_gtfs_dataset_key,
         schedule.feed_key,
 
