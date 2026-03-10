@@ -61,7 +61,7 @@ pivoted_timeofday AS (
         FROM time_of_day_counts
     )
     PIVOT(
-        MIN(n_trips) AS trips,
+        MIN(n_trips) AS daily_trips,
         MIN(n_trips / n_hours) AS frequency
         FOR time_of_day IN
         ("owl", "early_am", "am_peak", "midday", "pm_peak", "evening")
@@ -86,7 +86,6 @@ schedule_aggregation AS (
         route_type,
 
         COUNT(DISTINCT trip_instance_key) AS n_trips,
-        COUNT(DISTINCT route_id) AS n_routes,
         COUNT(DISTINCT shape_id) AS n_shapes,
         ROUND(AVG(num_distinct_stops_served), 1) AS avg_stops_served,
         SUM(num_stop_times) AS num_stop_times,
@@ -175,7 +174,6 @@ route_direction_aggregation AS (
         vp.vp_base64_url,
 
         schedule.n_trips,
-        schedule.n_routes,
         schedule.n_shapes,
         schedule.avg_stops_served,
         schedule.num_stop_times,
@@ -183,14 +181,14 @@ route_direction_aggregation AS (
         schedule.flex_service_hours,
 
         -- from pivoted
-        COALESCE(trips_owl, 0) AS trips_owl,
-		COALESCE(trips_early_am, 0) AS trips_early_am,
-		COALESCE(trips_am_peak, 0) AS trips_am_peak,
-		COALESCE(trips_midday, 0) AS trips_midday,
-		COALESCE(trips_pm_peak, 0) AS trips_pm_peak,
-		COALESCE(trips_evening, 0) AS trips_evening,
-		COALESCE(trips_am_peak, 0) + COALESCE(trips_pm_peak, 0) AS trips_peak,
-		n_trips - (COALESCE(trips_am_peak, 0) + COALESCE(trips_pm_peak, 0)) AS trips_offpeak,
+        COALESCE(daily_trips_owl, 0) AS daily_trips_owl,
+		COALESCE(daily_trips_early_am, 0) AS daily_trips_early_am,
+		COALESCE(daily_trips_am_peak, 0) AS daily_trips_am_peak,
+		COALESCE(daily_trips_midday, 0) AS daily_trips_midday,
+		COALESCE(daily_trips_pm_peak, 0) AS daily_trips_pm_peak,
+		COALESCE(daily_trips_evening, 0) AS daily_trips_evening,
+		COALESCE(daily_trips_am_peak, 0) + COALESCE(daily_trips_pm_peak, 0) AS daily_trips_peak,
+		n_trips - (COALESCE(daily_trips_am_peak, 0) + COALESCE(daily_trips_pm_peak, 0)) AS daily_trips_offpeak,
 
 		COALESCE(ROUND(frequency_owl, 2), 0) AS frequency_owl,
 		COALESCE(ROUND(frequency_early_am, 2), 0) AS frequency_early_am,
