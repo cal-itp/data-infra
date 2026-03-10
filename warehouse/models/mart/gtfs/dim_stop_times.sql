@@ -4,13 +4,14 @@
         incremental_strategy='microbatch',
         event_time = '_feed_valid_from',
         batch_size = 'day',
-        begin='2026-02-21',
+        begin=var('GTFS_SCHEDULE_START'),
         lookback=var('DBT_ALL_MICROBATCH_LOOKBACK_DAYS'),
         partition_by={
             'field': '_feed_valid_from',
             'data_type': 'timestamp',
             'granularity': 'day',
         },
+        full_refresh=false,
         cluster_by='feed_key'
     )
 }}
