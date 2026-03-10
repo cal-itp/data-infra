@@ -83,6 +83,7 @@ schedule_aggregation AS (
             'route_id', 'route_short_name', 'route_long_name'
         ) }} AS route_name,
         direction_id,
+        route_type,
 
         COUNT(DISTINCT trip_instance_key) AS n_trips,
         COUNT(DISTINCT route_id) AS n_routes,
@@ -92,7 +93,7 @@ schedule_aggregation AS (
         COALESCE(ROUND(SUM(service_hours), 2), 0) AS service_hours,
         COALESCE(ROUND(SUM(flex_service_hours), 2), 0) AS flex_service_hours,
     FROM gtfs_join
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 ),
 
 tu_aggregation AS (
@@ -164,6 +165,7 @@ route_direction_aggregation AS (
         schedule.route_id_cleaned,
         schedule.route_name,
         schedule.direction_id,
+        schedule.route_type,
 
         tu.tu_gtfs_dataset_key,
         tu.tu_name,
