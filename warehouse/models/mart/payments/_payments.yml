@@ -32,13 +32,16 @@ models:
         description: '{{ doc("lp_funding_source_vault_id") }}'
       - name: customer_id
         description: '{{ doc("lp_customer_id") }}'
-      - name: principal_customer_id
+      - &principal_customer_id
+        name: principal_customer_id
         description: From payments.customer_funding_source.principal_customer_id (by participant_id).
-      - name: bin
+      - &bin
+        name: bin
         description: From payments.customer_funding_source.bin
       - name: masked_pan
         description: From payments.customer_funding_source.masked_pan
-      - name: card_scheme
+      - &card_scheme
+        name: card_scheme
         description: From payments.customer_funding_source.card_scheme
       - name: issuer
         description: From payments.customer_funding_source.issuer
@@ -142,7 +145,8 @@ models:
         description: '{{ doc("lp_paired_duration") }}'
       - name: distance_meters
         description: '{{ doc("lp_paired_distance") }}'
-      - name: transaction_date_pacific
+      - &transaction_date_pacific
+        name: transaction_date_pacific
         description: '{{ doc("lp_paired_first_transaction_date") }}'
       - name: day_of_week
         description: '{{ doc("lp_paired_first_day_of_week") }}'
@@ -185,8 +189,7 @@ models:
         tests:
           - not_null
       - name: aggregation_id
-        description: |
-          Aggregation ID that uniquely identifies this aggregation.
+        description: '{{ doc("lp_aggregation_id") }}'
         tests:
           - not_null
           - unique
@@ -241,7 +244,8 @@ models:
           Transaction amount of the most recent authorisation associated with this aggregation.
           Note that `CARD_CHECK` authorisations may have transaction amount of 0 even if the transaction being authorised will
           ultimately have a larger transaction amount.
-      - name: latest_authorisation_status
+      - &latest_authorisation_status
+        name: latest_authorisation_status
         description: |
           Status of the most recent authorisation associated with this aggregation.
       - name: final_authorisation_has_null_status
@@ -298,7 +302,8 @@ models:
         description: '{{ doc("lp_customer_id") }}'
       - name: funding_source_id
         description: '{{ doc("lp_funding_source_id") }}'
-      - name: settlement_type
+      - &settlement_type
+        name: settlement_type
         description: |
           Type of settlement that occurred. Possible values are `DEBIT` or `CREDIT`.
           If refunding a micropayment that has already been settled, the value will be `CREDIT`.
@@ -322,7 +327,8 @@ models:
         description: '{{ doc("lp_acquirer") }}'
       - name: acquirer_response_rrn
         description: '{{ doc("lp_acquirer_response_rrn") }}'
-      - name: settlement_status
+      - &settlement_status
+        name: settlement_status
         description: '{{ doc("lp_settlement_status") }}'
       - name: request_created_timestamp_utc
         description: '{{ doc("lp_request_created_timestamp_utc") }}'
@@ -679,7 +685,9 @@ models:
       - *organization_source_record_id
       - *participant_id
       - name: aggregation_id
-        description: The aggregation that is being authorised. A single aggregation can have multiple authorisations. The authorisations that are submitted depend on the scheme and the result of the initial authorisation (if declined, debt recovery authorisations may be performed).
+        description: >
+          The aggregation that is being authorised. A single aggregation can have multiple authorisations.
+          The authorisations that are submitted depend on the scheme and the result of the initial authorisation (if declined, debt recovery authorisations may be performed).
       - name: acquirer_id
         description: The institution that acquired the transaction
       - name: request_type
@@ -824,3 +832,84 @@ models:
       - name: end_of_month_date_pacific
       - name: end_of_month_date_utc
       - name: _content_hash
+  - name: fct_payments_settlements_reconciliation_littlepay
+    description: >
+      Elavon and Littlepay data joined at the settlement_requested_date + retrieval_reference_number level.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          severity: warn
+          combination_of_columns:
+            - rrn
+            - requested_for_settlement_date
+    columns:
+      - *participant_id
+      - &rrn
+        name: rrn
+        description: Littlepay retrieval_reference_number
+      - &requested_for_settlement_date
+        name: requested_for_settlement_date
+        description: Date (in America/Los_Angeles time zone) that settlement was requested on Littlepay side.
+      - *settlement_type
+      - *settlement_status
+      - name: requested_for_settlement_amount
+        description: Total amount requested in Littlepay settlements on this date for this RRN.
+      - &elavon_purch_id
+        name: elavon_purch_id
+        description: purch_id from Elavon.
+      - &elavon_amount
+        name: elavon_amount
+        description: Amount in Elavon transaction.
+      - &elavon_settlement_date
+        name: elavon_settlement_date
+        description: Settlement date from Elavon.
+      - &elavon_payment_date
+        name: elavon_payment_date
+        description: Payment date from Elavon.
+  - name: fct_payments_sales_reconciliation_littlepay
+    description: >
+      Elavon and Littlepay sales data identifying the reconciliation status between the two data sources
+      for each settlement (RRN).
+    columns:
+      - *participant_id
+      - *card_scheme
+      - *bin
+      - *principal_customer_id
+      - name: aggregation_id
+        description: '{{ doc("lp_aggregation_id") }}'
+      - *rrn
+      - name: micropayments_in_aggregation
+        description: Count of distinct micropayment IDs in this aggregation ID.
+      - *transaction_date_pacific
+      - name: nominal_amount
+        description: >
+          Total nominal amount associated with this aggregation ID + card_scheme/bin
+          + principal_customer_id
+      - name: charge_amount
+        description: >
+          Total charge amount associated with this aggregation ID + card_scheme/bin
+          + principal_customer_id
+      - *requested_for_settlement_date
+      - *settlement_type
+      - *settlement_status
+      - name: requested_for_settlement_amount
+        description: >
+          Total amount requested in Littlepay settlements on this date for this RRN (customer_id, aggregation_id, settlement_type, settlement_status also included in group by
+          statement)
+      - *elavon_purch_id
+      - *elavon_amount
+      - *elavon_settlement_date
+      - *elavon_payment_date
+      - *latest_authorisation_status
+      - name: reconciliation_category
+        description: >
+          Category of transaction for reconciliation purposes.
+          Options:
+          * 'Zero-dollar value' if charge_amount = 0
+          * 'Settled non-zero sales (with Elavon match)' if settlement_status is
+            SETTLED and elavon_purch_id is present
+          * 'Settled non-zero sales (no Elavon match)' if settlement_status is
+            SETTLED and elavon_purch_id is missing
+          * 'Unsettled non-zero sales' if latest_authorisation_status is empty or something other than any of
+            LOST,DECLINED,UNAVAILABLE,UNRECOVERABLE,INVALID and settlement_status is missing or something other than SETTLED
+          * 'Declined sales' if latest_authorisation_status is missing or something other than AUTHORISED or VERIFIED
+          * 'Unknown' if none of the other conditions are met
