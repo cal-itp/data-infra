@@ -27,6 +27,7 @@ vars:
   PROD_GTFS_RT_START: '2022-09-15'
   KUBA_DEVICE_START: '2025-08-11'
   INCREMENTAL_MAX_DT: ''
+  DBT_ALL_MICROBATCH_LOOKBACK_DAYS: 5
   DBT_START_DATE: '' # placeholder to use as start data range on incremental models
   DBT_END_DATE: '' # placeholder to use as end data range on incremental models
   'dbt_date:time_zone': 'America/Los_Angeles'

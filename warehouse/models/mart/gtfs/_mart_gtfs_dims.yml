@@ -97,6 +97,8 @@ models:
       what was in effect on January 2.
       This table should be used to understand "versions" of constituent data like
       routes, trips, etc.
+    config:
+      event_time: _valid_from
     tests:
       - dbt_utils.mutually_exclusive_ranges:
           lower_bound_column: _valid_from
@@ -966,8 +968,6 @@ models:
       status in the Cal-ITP data warehouse and
       https://github.com/MobilityData/gtfs-flex/blob/master/spec/reference.md
       for the Flex v2 specification.
-    config:
-      event_time: _feed_valid_from
     tests:
       - dbt_utils.expression_is_true:
           expression: "EXTRACT(DAY FROM arrival_time_interval) = 0"
