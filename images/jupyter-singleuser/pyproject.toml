@@ -1,61 +1,26 @@
 [project]
 name = "jupyter-singleuser"
-version = "2026.2.6"
+version = "2026.3.18"
 description = "This is the notebook image that individual users are served via JupyterHub."
 requires-python = ">=3.11.0, <3.12.0"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.11",
 ]
+# Data science packages are now managed by the data-analyses uv workspace.
+# Analysts install them via `uv sync` into a persistent venv.
 dependencies = [
-    "black==24.10.0",
-    "branca (>=0.8.2, <0.9.0)",
-    "calitp-data-analysis==2026.1.30",
-    "csvkit==1.0.7",
-    "dask[dataframe]>=2024.10.0,<2025.4.0",  # breaking changes introduced with 2025.4.0 https://docs.dask.org/en/stable/changelog.html#v2025-4-0
-    "dask-geopandas (>=0.2.0, <0.3.0)",
-    "folium (>=0.20.0, <0.21.0)",
-    "httpcore==1.0.9", # pinning this because otherwise uv installs 1.0.6 in container and that results in a conflict with h11
-    "intake-dcat==0.4.0",
-    "intake-geopandas>=0.3.0",
-    "intake-parquet>=0.2.3",
-    "intake==0.6.4",
-    "ipyleaflet==0.15.0",
-    "isort==5.10.1",
     "jupyterlab (>=4.5.0, <4.6.0)",
+    "pyproject-local-kernel>=0.11.0",
     "jupyter-resource-usage (>=1.1.1, <2.0.0)",
     "jupyter-server-proxy (>=4.1.1, <5.0.0)",
     "jupyterlab-code-formatter>=1.4.10",
     "jupytext>=1.13.5",
-    "lxml_html_clean>=0.4.1",
-    "matplotlib (>=3.10.5, <4.0.0)",
-    "numpy (>=1.26.4, <2.0.0)",
-    "openpyxl (>=3.1.5, <4.0.0)",
-    "pendulum (>=2.1.2, <3.0.0)",
-    "plotly==5.5.0",
-    "plotnine>=0.8.0",
-    "pre-commit==2.18.1",
-    "pygeos==0.14.0",
-    "python-dotenv==0.19.2",
-    "rasterio (>=1.4.3, <2.0.0)",
-    "seaborn (>=0.11.2, <0.12.0)",
-    "sqlalchemy-bigquery (>=1.4.4, <2.0.0)",
-    "statsmodels==0.14.5",
     "voila (>=0.5.11,<0.6.0)",
-    "ydata-profiling[notebook] (>=4.9.0, <5.0.0)",
-]
-
-[dependency-groups]
-dev = [
-    "llvmlite>=0.44.0,<0.45",
-    "pytest>=7.2.0,<8",
 ]
 
 [tool.uv]
 package = false
-default-groups = [
-    "dev",
-]
 
 [build-system]
 requires = ["uv_build>=0.9.21,<0.10.0"]
