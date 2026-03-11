@@ -626,6 +626,8 @@ models:
     description: |
       Cleaned GTFS schedule stop_times data.
       See https://gtfs.org/schedule/reference/#calendar_datestxt for specification.
+    config:
+      event_time: ts
     columns:
       - name: base64_url
       - name: ts
