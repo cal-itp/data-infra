@@ -42,7 +42,7 @@ scaled_prediction_error_by_operator AS (
 ),
 
 -- select only positive values for array (only do it on unscaled)
-pos_prediction_errors AS ( -- noqa: L045
+prediction_errors_subset AS ( -- noqa: L045
 	SELECT
 		month_first_day,
 		day_type,
@@ -50,38 +50,29 @@ pos_prediction_errors AS ( -- noqa: L045
 		schedule_base64_url,
 	    ARRAY(
             SELECT pe FROM UNNEST(prediction_error_by_minute_array) AS pe WHERE pe > 0
-        ) AS prediction_error
+        ) AS pos_prediction_error,
+	    ARRAY(
+            SELECT pe FROM UNNEST(prediction_error_by_minute_array) AS pe WHERE pe < 0
+        ) AS neg_prediction_error,
 	FROM tu_stop_metrics2
 ),
 
-pos_prediction_errors2 AS (
+pos_prediction_errors AS (
     {{ get_percentiles_by_group(
-        'pos_prediction_errors',
+        'prediction_errors_subset',
         ('month_first_day', 'day_type',
         'base64_url', 'schedule_base64_url'),
-        array_col='prediction_error',
+        array_col='pos_prediction_error',
         decimals=1)
     }}
 ),
 
-neg_prediction_errors AS ( -- noqa: L045
-	SELECT
-		month_first_day,
-		day_type,
-		base64_url,
-		schedule_base64_url,
-	    ARRAY(
-            SELECT pe FROM UNNEST(prediction_error_by_minute_array) AS pe WHERE pe < 0
-        ) AS prediction_error
-	FROM tu_stop_metrics2
-),
-
-neg_prediction_errors2 AS (
+neg_prediction_errors AS (
     {{ get_percentiles_by_group(
-        'neg_prediction_errors',
+        'prediction_errors_subset',
         ('month_first_day', 'day_type',
         'base64_url', 'schedule_base64_url'),
-        array_col='prediction_error',
+        array_col='neg_prediction_error',
         decimals=1)
     }}
 ),
@@ -96,7 +87,6 @@ prediction_array_results AS (
         pe.value_array AS prediction_error_sec_array,
         pe.value_percentile_array AS prediction_error_sec_percentile_array,
         spe.value_array AS scaled_prediction_error_sec_array,
-        spe.value_percentile_array AS scaled_prediction_error_sec_percentile_array,
 
         -- there seems to be some null elements in the pos/neg ones, why? isolating this join to where data is complete hasn't made this go away
         ARRAY(
@@ -104,20 +94,18 @@ prediction_array_results AS (
                 COALESCE(pe, 0) AS pe
                 FROM UNNEST(pos_pe.value_array) AS pe
         ) AS pos_prediction_error_sec_array,
-        pos_pe.value_percentile_array AS pos_prediction_error_sec_percentile_array,
         ARRAY(
             SELECT
                 COALESCE(pe, 0) AS pe
                 FROM UNNEST(neg_pe.value_array) AS pe
         ) AS neg_prediction_error_sec_array,
-        neg_pe.value_percentile_array AS neg_prediction_error_sec_percentile_array,
 
     FROM prediction_error_by_operator AS pe
     INNER JOIN scaled_prediction_error_by_operator AS spe
         USING (month_first_day, day_type, base64_url, schedule_base64_url)
-    LEFT JOIN pos_prediction_errors2 AS pos_pe --not sure if filtering impacts rows disappearing, use left join for now
+    LEFT JOIN pos_prediction_errors AS pos_pe --not sure if filtering impacts rows disappearing, use left join for now
         USING (month_first_day, day_type, base64_url, schedule_base64_url)
-    LEFT JOIN neg_prediction_errors2 AS neg_pe
+    LEFT JOIN neg_prediction_errors AS neg_pe
         USING (month_first_day, day_type, base64_url, schedule_base64_url)
 ),
 
