@@ -8,6 +8,7 @@
             'granularity': 'day',
         },
         cluster_by='base64_url',
+        full_refresh=false,
     )
 }}
 
