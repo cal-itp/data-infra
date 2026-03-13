@@ -1269,14 +1269,14 @@ SQLAlchemy = ">=1.1"
 
 [[package]]
 name = "geopandas"
-version = "1.1.0"
+version = "1.1.2"
 description = "Geographic pandas extensions"
 optional = false
 python-versions = ">=3.10"
 groups = ["main"]
 files = [
-    {file = "geopandas-1.1.0-py3-none-any.whl", hash = "sha256:b19b18bdc736ee05b237f5e9184211c452768a4c883f7d7f8421b0cbe1da5875"},
-    {file = "geopandas-1.1.0.tar.gz", hash = "sha256:d176b084170539044ce7554a1219a4433fa1bfba94035b5a519c8986330e429e"},
+    {file = "geopandas-1.1.2-py3-none-any.whl", hash = "sha256:2bb0b1052cb47378addb4ba54c47f8d4642dcbda9b61375638274f49d9f0bb0d"},
+    {file = "geopandas-1.1.2.tar.gz", hash = "sha256:33f7b33565c46a45b8459a2ab699ec943fdbb5716e58e251b3c413cf7783106c"},
 ]
 
 [package.dependencies]
@@ -4986,4 +4986,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.1"
 python-versions = "~3.11"
-content-hash = "c41f8166d8744b15a6858565bfa414bcacb9e0122eef6d980e3fd275beb6415c"
+content-hash = "669e6ac4fc59f5fa5e9bbb2bae71a2316d31aba547fad67f5f6404e2cee36c6a"

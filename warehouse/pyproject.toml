@@ -17,7 +17,7 @@ pandas-gbq = ">=0.26.1" # the poetry picked versions don't work.
 tqdm = "^4.64.0"
 pendulum = "^2.1.2"
 Shapely = "^2.0.0"
-geopandas = "^1.0.0"
+geopandas = "^1.1.2"
 python-slugify = "^6.1.2"
 sentry-sdk = "^1.9.8"
 backoff = "^2.2.1"
