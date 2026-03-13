@@ -25,10 +25,3 @@ resource "google_storage_bucket_object" "calitp-composer-catalog" {
   bucket       = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-composer_name
   content_type = "application/json"
 }
-
-resource "google_storage_bucket_object" "calitp-composer-index" {
-  name         = "data/warehouse/target/index.html"
-  content      = data.google_storage_bucket_object_content.calitp-dbt-index.content
-  bucket       = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-composer_name
-  content_type = "text/html; charset=utf-8"
-}
