@@ -2,7 +2,7 @@
 
 # Adding Ad-Hoc Data to the Warehouse
 
-To work with data in our BI tool ([Metabase](https://dashboards.calitp.org/)) we first have to add the data to our warehouse ([BigQuery](https://console.cloud.google.com/bigquery)). This page describes how to do an ad-hoc, one-time import of a dataset (for example, an individual extract from some other system.)
+To work with data in our BI tool ([Metabase](https://metabase.dds.dot.ca.gov/)) we first have to add the data to our warehouse ([BigQuery](https://console.cloud.google.com/bigquery)). This page describes how to do an ad-hoc, one-time import of a dataset (for example, an individual extract from some other system.)
 
 ```{warning}
 If you are working with a data source that needs to be updated regularly (like data that should be ingested/updated daily, weekly, or monthly), you should follow the [general data pipeline architecture](architecture-data) and create a dedicated pipeline. The instructions here are only for one-time imports of individual files that will not be regularly updated.

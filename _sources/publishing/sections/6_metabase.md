@@ -8,7 +8,7 @@ An [Airflow DAG](https://github.com/cal-itp/data-infra/tree/main/airflow/dags) n
 
 Any tweaks to the data processing steps are easily done in scripts and notebooks, and it ensures that the visualizations in the dashboard remain updated with little friction.
 
-Ex: [Payments Dashboard](https://dashboards.calitp.org/dashboard/3-payments-performance-dashboard?transit_provider=mst)
+Ex: [Payments Dashboard](https://metabase.dds.dot.ca.gov/dashboard/3-payments-performance-dashboard?transit_provider=mst)
 
 ## Metabase Training Guide 2024
 
