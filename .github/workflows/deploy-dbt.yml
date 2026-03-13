@@ -28,6 +28,7 @@ env:
   CALITP_BUCKET__PUBLISH: ${{ github.ref == 'refs/heads/main' && 'calitp-publish' || 'calitp-staging-publish' }}
   GOOGLE_CLOUD_PROJECT: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
   METABASE_DESTINATION_DATABASE: ${{ github.ref == 'refs/heads/main' && 'Data Marts (formerly Warehouse Views)' || '(Internal) Staging Warehouse Views' }}
+  METABASE_URL: 'https://metabase.dds.dot.ca.gov'
   DBT_DOCS_URL: ${{ github.ref == 'refs/heads/main' && 'https://dbt-docs.dds.dot.ca.gov' || 'https://dbt-docs-staging.dds.dot.ca.gov' }}
 
 jobs:
@@ -330,7 +331,7 @@ jobs:
 
       - name: Synchronize Metabase
         working-directory: warehouse
-        run: poetry run dbt-metabase models -v --manifest-path=target/manifest.json --skip-sources --exclude-schemas=staging,payments,mart_payments --docs-url="${{ env.DBT_DOCS_URL }}" --metabase-url="https://dashboards.calitp.org" --metabase-database="${{ env.METABASE_DESTINATION_DATABASE }}" --metabase-api-key="${{ secrets.METABASE_API_KEY}}"
+        run: poetry run dbt-metabase models -v --manifest-path=target/manifest.json --skip-sources --exclude-schemas=staging,payments,mart_payments --docs-url="${{ env.DBT_DOCS_URL }}" --metabase-url="${{ env.METABASE_URL }}" --metabase-database="${{ env.METABASE_DESTINATION_DATABASE }}" --metabase-api-key="${{ secrets.METABASE_API_KEY}}"
 
   upload_dbt_docs:
     name: Upload to dbt-docs site
