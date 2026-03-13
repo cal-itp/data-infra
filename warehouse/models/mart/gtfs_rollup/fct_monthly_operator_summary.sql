@@ -99,6 +99,10 @@ prediction_array_results AS (
                 COALESCE(pe, 0) AS pe
                 FROM UNNEST(neg_pe.value_array) AS pe
         ) AS neg_prediction_error_sec_array,
+		-- do this because the Newmark paper plots these arrays
+		-- to create the charts where smaller errors (closer to zero) are better,
+		-- the larger positive errors reverse the percentiles them so that the 10th percentile has larger values
+		ARRAY_REVERSE(pos_pe.value_percentile_array) AS pos_prediction_error_sec_percentile_array
 
     FROM prediction_error_by_operator AS pe
     INNER JOIN scaled_prediction_error_by_operator AS spe
