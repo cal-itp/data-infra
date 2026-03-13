@@ -38,7 +38,7 @@ Most issues fall into a few broad categories.
 This category includes external issues that a retry cannot resolve. For example, an RT feed that intermittently throws 500s. For RT fetch issues specifically:
 
 - *If the issue occurred \<10 times:*  Do nothing (don't "ignore" or "resolve" in Sentry, just leave the issue as-is.)
-- *If the issue occurred more than 10 times:* Check the [feed-level Metabase dashboard](https://dashboards.calitp.org/dashboard/112-feed-level-v2?date_filter=past3days~&text=Bay%20Area%20511%20Regional%20Alerts&text=Bay%20Area%20511%20Regional%20TripUpdates&text=Bay%20Area%20511%20Regional%20VehiclePositions) to see whether it seems like the feed has had a sustained outage. If they have had an outage lasting more than 6 hours, plan to check again the following day. Once a feed has been down for a full 24 hours we should notify a relevant customer success manager to monitor and, if the outage lasts long enough, consider contacting the agency.
+- *If the issue occurred more than 10 times:* Check the [feed-level Metabase dashboard](https://metabase.dds.dot.ca.gov/dashboard/112-feed-level-v2?date_filter=past3days~&text=Bay%20Area%20511%20Regional%20Alerts&text=Bay%20Area%20511%20Regional%20TripUpdates&text=Bay%20Area%20511%20Regional%20VehiclePositions) to see whether it seems like the feed has had a sustained outage. If they have had an outage lasting more than 6 hours, plan to check again the following day. Once a feed has been down for a full 24 hours we should notify a relevant customer success manager to monitor and, if the outage lasts long enough, consider contacting the agency.
 
 ### Bug, or external issue handleable by retry
 

@@ -8,7 +8,7 @@
 | -------------------------------------------------------------------------------------------------- | --------------------------------------- |
 | [**Analytics Repo**](https://github.com/cal-itp/data-analyses)                                     | Analytics team code repository.         |
 | [**notebooks.calitp.org**](https://notebooks.calitp.org/)                                          | JupyterHub cloud-based notebooks        |
-| [**dashboards.calitp.org**](https://dashboards.calitp.org/)                                        | Metabase dashboards & Business Insights |
+| [**metabase.dds.dot.ca.gov**](https://metabase.dds.dot.ca.gov/)                                    | Metabase dashboards & Business Insights |
 | [**dbt-docs.dds.dot.ca.gov**](https://dbt-docs.dds.dot.ca.gov/)                                    | DBT warehouse documentation             |
 | [**analysis.calitp.org**](https://analysis.calitp.org/)                                            | Analytics portfolio landing page        |
 | [**Google BigQuery**](https://console.cloud.google.com/bigquery)                                   | Our warehouse and SQL Querying          |
