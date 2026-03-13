@@ -10,7 +10,6 @@ are already configured/installed.
 
 - Libraries such as gdal and graphviz
 - The `gcloud` CLI
-- `uv`
 
 > You may have already authenticated gcloud and the GitHub CLI (gh) if you followed the
 > [JupyterHub setup docs](https://docs.calitp.org/data-infra/analytics_tools/jupyterhub.html). If not, follow those instructions before proceeding.
@@ -30,6 +29,8 @@ are already configured/installed.
 3. Execute `uv sync` to create a virtual environment and install requirements.
 
 > [!NOTE]
+> If you run into the error `No such file or directory` you need to [install uv](#Install-uv).
+>
 > If you run into an error complaining about graphviz (e.g. `fatal error: 'graphviz/cgraph.h' file not found`); see [pygraphviz#398](https://github.com/pygraphviz/pygraphviz/issues/398).
 >
 > ```bash
@@ -37,6 +38,8 @@ are already configured/installed.
 > export LDFLAGS="-L $(brew --prefix graphviz)/lib"
 > uv sync
 > ```
+>
+
 
 4. Execute `uv run dbt deps` to install the dbt dependencies defined in `packages.yml` (such as `dbt_utils`).
 
@@ -369,7 +372,7 @@ You can enable [displaying hidden folders/files in macOS Finder](https://www.mac
 
 ### Install uv
 
-> [!NOTE]
+> [!IMPORTANT]
 > Use uv instead of Poetry
 > `pip install uv`
 
