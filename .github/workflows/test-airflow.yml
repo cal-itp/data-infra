@@ -16,7 +16,7 @@ on:
 
 env:
   PYTHON_VERSION: '3.11'
-  POETRY_VERSION: '2.0.1'
+  UV_VERSION: '0.10.9'
   SERVICE_ACCOUNT: github-actions-service-account@cal-itp-data-infra-staging.iam.gserviceaccount.com
   WORKLOAD_IDENTITY_PROVIDER: projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra
   PROJECT_ID: cal-itp-data-infra-staging
@@ -52,10 +52,12 @@ jobs:
           project_id: ${{ env.PROJECT_ID }}
 
       - name: Install uv
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@v7
         with:
-          version: ${{ env.UV_VERSION }}
+          version:  ${{ env.UV_VERSION }}
+          python-version: ${{ env.PYTHON_VERSION }}
           enable-cache: true
+          cache-python: true
           working-directory: airflow
 
       - name: Install the project

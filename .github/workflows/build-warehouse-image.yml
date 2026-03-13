@@ -18,7 +18,6 @@ concurrency:
 
 env:
   PYTHON_VERSION: '3.11'
-  POETRY_VERSION: '2.0.1'
 
 jobs:
   lint:
@@ -31,35 +30,21 @@ jobs:
       - name: Setup Graphviz
         uses: ts-graphviz/setup-graphviz@v2
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
         with:
+          working-directory: warehouse
           python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+          cache-python: true
 
-      - name: Cache poetry
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pypoetry
-          key: poetry-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-poetry-${{ env.POETRY_VERSION }}
-
-      - name: Setup Poetry
-        uses: abatilo/actions-poetry@v3
-        with:
-          poetry-version: ${{ env.POETRY_VERSION }}
-
-      - name: Cache python packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.local
-          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
-
-      - name: Install dependencies
+      - name: Install the project
         working-directory: warehouse
-        run: poetry install
+        run: uv sync --locked --all-extras --dev
 
       - name: Run mypy
         working-directory: warehouse
-        run: poetry run mypy scripts
+        run: uv run mypy scripts
 
   docker:
     name: Push docker image
