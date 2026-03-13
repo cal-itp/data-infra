@@ -126,6 +126,8 @@ sentry:
       enabled: false
     zookeeper:
       enabled: true
+      image:
+        repository: bitnamilegacy/zookeeper
 
   clickhouse:
     clickhouse:
