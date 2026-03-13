@@ -744,6 +744,8 @@ models:
       Due to data size, this table **must** be queried with a date filter
       (like `WHERE dt = 'YYYY-MM-DD'`).
       Hour filters will also further improve performance.
+    config:
+      event_time: dt
     columns:
       - name: key
         description: |
