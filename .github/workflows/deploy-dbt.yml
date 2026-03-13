@@ -18,7 +18,6 @@ concurrency:
 
 env:
   PYTHON_VERSION: '3.11'
-  POETRY_VERSION: '2.0.1'
   SERVICE_ACCOUNT: ${{ github.ref == 'refs/heads/main' && 'github-actions-service-account@cal-itp-data-infra.iam.gserviceaccount.com' || 'github-actions-service-account@cal-itp-data-infra-staging.iam.gserviceaccount.com' }}
   WORKLOAD_IDENTITY_PROVIDER: ${{ github.ref == 'refs/heads/main' && 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions/providers/data-infra' || 'projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra' }}
   PROJECT_ID: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
@@ -58,53 +57,33 @@ jobs:
       - name: Setup Graphviz
         uses: ts-graphviz/setup-graphviz@v2
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
         with:
+          working-directory: warehouse
           python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+          cache-python: true
 
-      - name: Cache Poetry
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pypoetry
-          key: poetry-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-poetry-${{ env.POETRY_VERSION }}
-
-      - name: Setup Poetry
-        uses: abatilo/actions-poetry@v3
-        with:
-          poetry-version: ${{ env.POETRY_VERSION }}
-
-      - name: Cache Python packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.local
-          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
-
-      - name: Install dependencies
+      - name: Install the project
         working-directory: warehouse
-        run: poetry install
-
-      - name: Cache dbt packages
-        uses: actions/cache@v3
-        with:
-          path: warehouse/dbt_packages
-          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-dbt-packages-${{ hashFiles('warehouse/packages.yml') }}
+        run: uv sync --locked --all-extras --dev
 
       - name: Install dbt dependencies
         working-directory: warehouse
-        run: poetry run dbt deps
+        run: uv run dbt deps
 
       - name: Print dbt environment
         working-directory: warehouse
-        run: poetry run dbt debug --target ${{ env.DBT_TARGET }}
+        run: uv run dbt debug --target ${{ env.DBT_TARGET }}
 
       - name: Compile dbt
         working-directory: warehouse
-        run: poetry run dbt compile --target ${{ env.DBT_TARGET }}
+        run: uv run dbt compile --target ${{ env.DBT_TARGET }}
 
       - name: Generate dbt documentation
         working-directory: warehouse
-        run: poetry run dbt docs generate --target ${{ env.DBT_TARGET }} --no-compile
+        run: uv run dbt docs generate --target ${{ env.DBT_TARGET }} --no-compile
 
       - name: Archive compilation artifacts
         uses: actions/upload-artifact@v4
@@ -198,62 +177,42 @@ jobs:
       - name: Setup Graphviz
         uses: ts-graphviz/setup-graphviz@v2
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
         with:
+          enable-cache: true
+          cache-python: true
+          working-directory: warehouse
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Cache Poetry
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pypoetry
-          key: poetry-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-poetry-${{ env.POETRY_VERSION }}
-
-      - name: Setup Poetry
-        uses: abatilo/actions-poetry@v3
-        with:
-          poetry-version: ${{ env.POETRY_VERSION }}
-
-      - name: Cache Python packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.local
-          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
-
-      - name: Install dependencies
+      - name: Install the project
         working-directory: warehouse
-        run: poetry install
-
-      - name: Cache dbt packages
-        uses: actions/cache@v3
-        with:
-          path: warehouse/dbt_packages
-          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-dbt-packages-${{ hashFiles('warehouse/packages.yml') }}
+        run: uv sync --locked --all-extras --dev
 
       - name: Install dbt dependencies
         working-directory: warehouse
-        run: poetry run dbt deps
+        run: uv run dbt deps
 
       - name: Print dbt environment
         working-directory: warehouse
-        run: poetry run dbt debug --target ${{ env.DBT_TARGET }}
+        run: uv run dbt debug --target ${{ env.DBT_TARGET }}
 
       - name: List changed and downstream models
         working-directory: warehouse
-        run: poetry run dbt list --select "${{ needs.dbt-changed.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --resource-type=model
+        run: uv run dbt list --select "${{ needs.dbt-changed.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --resource-type=model
 
       - name: Run seeds
         if: ${{ needs.dbt-changed.outputs.has-changed-seeds == 'true' }}
         working-directory: warehouse
-        run: poetry run dbt seed --select "${{ needs.dbt-changed.outputs.changed-seeds }}" --target ${{ env.DBT_TARGET }}
+        run: uv run dbt seed --select "${{ needs.dbt-changed.outputs.changed-seeds }}" --target ${{ env.DBT_TARGET }}
 
       - name: Full-Refresh changed models
         working-directory: warehouse
-        run: poetry run dbt run --select "${{ needs.dbt-changed.outputs.changed-models }}" --target ${{ env.DBT_TARGET }} --full-refresh
+        run: uv run dbt run --select "${{ needs.dbt-changed.outputs.changed-models }}" --target ${{ env.DBT_TARGET }} --full-refresh
 
       - name: Run downstream models
         working-directory: warehouse
-        run: poetry run dbt run --select "${{ needs.dbt-changed.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --exclude "${{ needs.dbt-changed.outputs.changed-models }}"
+        run: uv run dbt run --select "${{ needs.dbt-changed.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --exclude "${{ needs.dbt-changed.outputs.changed-models }}"
 
   metabase:
     name: Sync Metabase
@@ -289,49 +248,29 @@ jobs:
       - name: Setup Graphviz
         uses: ts-graphviz/setup-graphviz@v2
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
         with:
+          enable-cache: true
+          cache-python: true
+          working-directory: warehouse
           python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Cache Poetry
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pypoetry
-          key: poetry-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-poetry-${{ env.POETRY_VERSION }}
-
-      - name: Setup Poetry
-        uses: abatilo/actions-poetry@v3
-        with:
-          poetry-version: ${{ env.POETRY_VERSION }}
-
-      - name: Cache Python packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.local
-          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-${{ hashFiles('.github/workflows/*.yml') }}
-
-      - name: Install dependencies
+      - name: Install the project
         working-directory: warehouse
-        run: poetry install
-
-      - name: Cache dbt packages
-        uses: actions/cache@v3
-        with:
-          path: warehouse/dbt_packages
-          key: python-cache-${{ runner.os }}-python-${{ env.PYTHON_VERSION }}-lock-${{ hashFiles('warehouse/poetry.lock') }}-dbt-packages-${{ hashFiles('warehouse/packages.yml') }}
+        run: uv sync --locked --all-extras --dev
 
       - name: Install dbt dependencies
         working-directory: warehouse
-        run: poetry run dbt deps
+        run: uv run dbt deps
 
       - name: Print dbt environment
         working-directory: warehouse
-        run: poetry run dbt debug --target ${{ env.DBT_TARGET }}
+        run: uv run dbt debug --target ${{ env.DBT_TARGET }}
 
       - name: Synchronize Metabase
         working-directory: warehouse
-        run: poetry run dbt-metabase models -v --manifest-path=target/manifest.json --skip-sources --exclude-schemas=staging,payments,mart_payments --docs-url="${{ env.DBT_DOCS_URL }}" --metabase-url="${{ env.METABASE_URL }}" --metabase-database="${{ env.METABASE_DESTINATION_DATABASE }}" --metabase-api-key="${{ secrets.METABASE_API_KEY}}"
+        run: uv run dbt-metabase models -v --manifest-path=target/manifest.json --skip-sources --exclude-schemas=staging,payments,mart_payments --docs-url="${{ env.DBT_DOCS_URL }}" --metabase-url="${{ env.METABASE_URL }}" --metabase-database="${{ env.METABASE_DESTINATION_DATABASE }}" --metabase-api-key="${{ secrets.METABASE_API_KEY}}"
 
   upload_dbt_docs:
     name: Upload to dbt-docs site
