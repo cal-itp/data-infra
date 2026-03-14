@@ -2,8 +2,14 @@
 # python_callable: process_elavon_data_to_jsonl
 # provide_context: true
 # ---
+# To run locally:
+#   PYTHONPATH=/Users/vivek/github/data-infra/airflow/plugins uv run elavon_to_gcs_jsonl.py
+#
 import gzip
+import io
+import logging
 import os
+import zipfile
 from typing import ClassVar, List, Optional
 
 import pandas as pd
@@ -15,53 +21,19 @@ from calitp_data_infra.storage import (  # type: ignore
 )
 
 CALITP_BUCKET__ELAVON_RAW = os.environ["CALITP_BUCKET__ELAVON_RAW"]
+# CALITP_BUCKET__ELAVON_RAW = "calitp-staging-elavon-raw"
 CALITP_BUCKET__ELAVON_PARSED = os.environ["CALITP_BUCKET__ELAVON_PARSED"]
+# CALITP_BUCKET__ELAVON_PARSED = "calitp-staging-elavon-parsed"
 
-
-def fetch_and_clean_from_gcs(fs):
-    """
-    Download raw Elavon transaction records from GCS as a DataFrame and write out
-    in BigQuery-ready JSONL format after cleaning
-    """
-
-    all_rows = pd.DataFrame()
-
-    # List raw files available from GCS
-    file_and_dir_list = fs.ls(f"{CALITP_BUCKET__ELAVON_RAW}/", detail=False)
-    dir_list = [x for x in file_and_dir_list if fs.isdir(x)]
-
-    # Drill down to the latest export (folders are "ts=" format)
-    target_dir = max(dir_list)
-    file_list = fs.ls(f"{target_dir}/", detail=False)
-
-    file_list = [x for x in file_list if fs.isfile(x)]
-    for file in file_list:
-        print(f"Processing file {file}")
-
-        # Save each file locally to read into Pandas
-        if not os.path.exists("transferred_files"):
-            os.mkdir("transferred_files")
-        local_path = f"transferred_files/{file}"
-        fs.get(file, local_path)
-
-        if all_rows.empty:
-            all_rows = pd.read_csv(
-                local_path, delimiter="|", dtype=str
-            )  # Read from local version
-        else:
-            all_rows = pd.concat([all_rows, pd.read_csv(local_path, delimiter="|")])
-
-    extract = ElavonExtract(
-        filename="transactions.jsonl.gz",
-    )
-
-    if all_rows.empty:
-        return extract
-
-    cleaned_df = all_rows.rename(make_name_bq_safe, axis="columns")
-    extract.data = cleaned_df
-
-    return extract
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(name)s %(message)s",
+    handlers=[
+        logging.FileHandler("elavon_to_gcs_jsonl.log", mode="w"),
+        logging.StreamHandler(),
+    ],
+)
+logger = logging.getLogger(__name__)
 
 
 class ElavonExtract(PartitionedGCSArtifact):
@@ -87,18 +59,39 @@ class ElavonExtract(PartitionedGCSArtifact):
         )
 
 
-def process_elavon_data_to_jsonl(**kwargs):
+def process_elavon_data_to_jsonl():
     fs = get_fs()
-    extract = fetch_and_clean_from_gcs(fs)
 
-    if extract.data is None:
-        print("No extracts were found in GCS")
-        return
-    if extract.data.empty:
-        print("All extracts found in GCS were empty")
+    # List raw files available from GCS
+    file_and_dir_list = fs.ls(f"{CALITP_BUCKET__ELAVON_RAW}/", detail=False)
+    dir_list = [x for x in file_and_dir_list if fs.isdir(x)]
+
+    if not dir_list:
+        logger.warning("No extracts were found in GCS")
         return
 
-    extract.save_to_gcs(fs=fs)
+    # Drill down to the latest export (folders are "ts=" format)
+    target_dir = max(dir_list)
+    logger.info(f"Using latest export directory: {target_dir}")
+    file_list = [x for x in fs.ls(f"{target_dir}/", detail=False) if fs.isfile(x)]
+
+    execution_ts = pendulum.now()
+    for file in file_list:
+        logger.info(f"Processing file {file}")
+
+        buf = io.BytesIO(fs.cat(file))
+        with zipfile.ZipFile(buf) as zf:
+            inner = zf.namelist()[0]
+            with zf.open(inner) as f:
+                df = pd.read_csv(f, delimiter="|", dtype=str)
+        cleaned_df = df.rename(make_name_bq_safe, axis="columns")
+
+        filename = file.split("/")[-1].rsplit(".", 1)[0] + ".jsonl.gz"
+        extract = ElavonExtract(filename=filename, execution_ts=execution_ts)
+        extract.data = cleaned_df
+
+        logger.info(f"Saving {filename} with {len(cleaned_df)} rows")
+        extract.save_to_gcs(fs=fs)
 
 
 if __name__ == "__main__":
