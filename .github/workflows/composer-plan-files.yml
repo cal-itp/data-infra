@@ -1,16 +1,21 @@
 name: Plan Terraform for Warehouse and DAG changes
 
+# on:
+#   pull_request:
+#     paths:
+#       - 'airflow/**'
+#       - 'warehouse/**'
 on:
-  pull_request:
-    paths:
-      - 'airflow/**'
-      - 'warehouse/**'
+  workflow_run:
+    workflows: [Deploy dbt]
+    types: [completed]
 
 jobs:
   airflow-changes:
     name: Detect Airflow Terraform changes
-
     runs-on: ubuntu-latest
+
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
     outputs:
       staging: ${{ steps.staging-changes.outputs.all_changed_files }}
