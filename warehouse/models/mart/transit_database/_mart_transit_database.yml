@@ -5,10 +5,11 @@ models:
     description: '{{ doc("components_table") }}'
     tests: &mutually_exclusive_ranges
       - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: source_record_id
-          gaps: required
+          arguments:
+            lower_bound_column: _valid_from
+            upper_bound_column: _valid_to
+            partition_by: source_record_id
+            gaps: required
     columns:
       - &key
         name: key
@@ -48,16 +49,18 @@ models:
           table to come later.
         tests:
           - relationships:
-             to: ref('dim_organizations')
-             field: source_record_id
+              arguments:
+                to: ref('dim_organizations')
+                field: source_record_id
       - name: contract_vendor_organization_key
         description: |
           Unversioned Airtable record ID for contract vendor organization; versioned bridge
           table to come later.
         tests:
           - relationships:
-             to: ref('dim_organizations')
-             field: source_record_id
+              arguments:
+                to: ref('dim_organizations')
+                field: source_record_id
       - name: is_active
         description: |
           Categorical field indicating the current status of the contract: "planned", "active", or "deprecated".
@@ -297,8 +300,9 @@ models:
       - name: contract_key
         tests:
           - relationships:
-             to: ref('dim_contracts')
-             field: key
+              arguments:
+                to: ref('dim_contracts')
+                field: key
       - *valid_from_placeholder
       - *valid_to_placeholder
       - *is_current_placeholder
@@ -362,15 +366,17 @@ models:
           Service record key for this service / dataset relationship.
         tests:
           - relationships:
-             to: ref('dim_services')
-             field: key
+              arguments:
+                to: ref('dim_services')
+                field: key
       - name: gtfs_dataset_key
         description: |
           GTFS dataset record key for this service / dataset relationship.
         tests:
           - relationships:
-             to: ref('dim_gtfs_datasets')
-             field: key
+              arguments:
+                to: ref('dim_gtfs_datasets')
+                field: key
       - name: customer_facing
         description: |
           Indicates that this gtfs service data relationship represents the primary way that customers
@@ -389,8 +395,9 @@ models:
         # TODO: make an aliased version of the relationship test
         # tests:
         #   - relationships:
-        #      to: ref('dim_gtfs_service_data')
-        #      field: key
+        #       arguments:
+        #         to: ref('dim_gtfs_service_data')
+        #         field: key
       - *valid_from_actual
       - *valid_to_actual
       - *is_current_actual
@@ -409,23 +416,27 @@ models:
       - name: component_key
         tests:
           - relationships:
-             to: ref('dim_components')
-             field: key
+              arguments:
+                to: ref('dim_components')
+                field: key
       - name: product_key
         tests:
           - relationships:
-             to: ref('dim_products')
-             field: key
+              arguments:
+                to: ref('dim_products')
+                field: key
       - name: service_key
         tests:
           - relationships:
-             to: ref('dim_services')
-             field: key
+              arguments:
+                to: ref('dim_services')
+                field: key
       - name: product_vendor_organization_key
         tests:
           - relationships:
-             to: ref('dim_organizations')
-             field: key
+              arguments:
+                to: ref('dim_organizations')
+                field: key
       - name: is_active
         description: |
           Categorical field indicating the current status of the association between the service and component: "planned", "active", or "deprecated".
@@ -451,20 +462,23 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - component_key
-            - product_key
+          arguments:
+            combination_of_columns:
+              - component_key
+              - product_key
     columns:
       - name: component_key
         tests:
           - relationships:
-             to: ref('dim_components')
-             field: key
+              arguments:
+                to: ref('dim_components')
+                field: key
       - name: product_key
         tests:
           - relationships:
-             to: ref('dim_products')
-             field: key
+              arguments:
+                to: ref('dim_products')
+                field: key
   - name: dim_provider_gtfs_data
     description: |
       Each record links together an organization with a service and a set of up to four
@@ -485,18 +499,21 @@ models:
       - name: service_key
         tests:
           - relationships:
-             to: ref('dim_services')
-             field: key
+              arguments:
+                to: ref('dim_services')
+                field: key
           # is there a way to partition this by date?
           # - unique:
-          #     config:
-          #       where: gtfs_service_data_customer_facing
+          #     arguments:
+          #       config:
+          #         where: gtfs_service_data_customer_facing
       - name: schedule_gtfs_dataset_key
         tests:
           - &ref_gtfs_datasets_key
             relationships:
-              to: ref('dim_gtfs_datasets')
-              field: key
+              arguments:
+                to: ref('dim_gtfs_datasets')
+                field: key
       - name: public_customer_facing_fixed_route
         description: |
           If "Yes", this service should be considered "assessed" by Cal-ITP for guideline/quality purposes.
@@ -515,8 +532,9 @@ models:
       - name: organization_key
         tests:
           - relationships:
-              to: ref('dim_organizations')
-              field: key
+              arguments:
+                to: ref('dim_organizations')
+                field: key
       - name: service_name
       - name: organization_name
       - name: schedule_gtfs_dataset_name
@@ -618,20 +636,23 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - component_key
-            - property_feature_key
+          arguments:
+            combination_of_columns:
+              - component_key
+              - property_feature_key
     columns:
       - name: component_key
         tests:
           - relationships:
-             to: ref('dim_components')
-             field: key
+              arguments:
+                to: ref('dim_components')
+                field: key
       - name: property_feature_key
         tests:
           - relationships:
-             to: ref('dim_properties_and_features')
-             field: key
+              arguments:
+                to: ref('dim_properties_and_features')
+                field: key
   - name: bridge_data_schemas_x_products_inputs
     description: |
       Mapping table between data schemas and products.
@@ -643,20 +664,23 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - data_schema_key
-            - product_key
+          arguments:
+            combination_of_columns:
+              - data_schema_key
+              - product_key
     columns:
       - name: data_schema_key
         tests:
           - relationships:
-             to: ref('dim_data_schemas')
-             field: key
+              arguments:
+                to: ref('dim_data_schemas')
+                field: key
       - name: product_key
         tests:
           - relationships:
-             to: ref('dim_products')
-             field: key
+              arguments:
+                to: ref('dim_products')
+                field: key
   - name: bridge_data_schemas_x_products_outputs
     description: |
       Mapping table between data schemas and products.
@@ -668,20 +692,23 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - data_schema_key
-            - product_key
+          arguments:
+            combination_of_columns:
+              - data_schema_key
+              - product_key
     columns:
       - name: data_schema_key
         tests:
           - relationships:
-             to: ref('dim_data_schemas')
-             field: key
+              arguments:
+                to: ref('dim_data_schemas')
+                field: key
       - name: product_key
         tests:
           - relationships:
-             to: ref('dim_products')
-             field: key
+              arguments:
+                to: ref('dim_products')
+                field: key
   - name: bridge_organizations_x_services_managed
     description: |
       Mapping table between organizations and services.
@@ -691,20 +718,23 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - organization_key
-            - service_key
+          arguments:
+            combination_of_columns:
+              - organization_key
+              - service_key
     columns:
       - name: organization_key
         tests:
           - relationships:
-             to: ref('dim_organizations')
-             field: key
+              arguments:
+                to: ref('dim_organizations')
+                field: key
       - name: service_key
         tests:
           - relationships:
-             to: ref('dim_services')
-             field: key
+              arguments:
+                to: ref('dim_services')
+                field: key
   - name: bridge_parent_organizations
     description: |
       Mapping table between organizations and their parents
@@ -713,20 +743,23 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - organization_key
-            - parent_organization_key
+          arguments:
+            combination_of_columns:
+              - organization_key
+              - parent_organization_key
     columns:
       - name: organization_key
         tests:
           - relationships:
-             to: ref('dim_organizations')
-             field: key
+              arguments:
+                to: ref('dim_organizations')
+                field: key
       - name: parent_organization_key
         tests:
           - relationships:
-             to: ref('dim_organizations')
-             field: key
+              arguments:
+                to: ref('dim_organizations')
+                field: key
   - name: bridge_paratransit_services
     description: |
       Mapping table between services and services for which
@@ -736,20 +769,23 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - service_key
-            - paratransit_for_service_key
+          arguments:
+            combination_of_columns:
+              - service_key
+              - paratransit_for_service_key
     columns:
       - name: service_key
         tests:
           - relationships:
-             to: ref('dim_services')
-             field: key
+              arguments:
+                to: ref('dim_services')
+                field: key
       - name: paratransit_for_service_key
         tests:
           - relationships:
-             to: ref('dim_services')
-             field: key
+              arguments:
+                to: ref('dim_services')
+                field: key
   - name: bridge_organizations_x_gtfs_datasets_produced
     description: |
       Mapping table between organizations and GTFS datasets
@@ -760,20 +796,23 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - organization_key
-            - gtfs_dataset_key
+          arguments:
+            combination_of_columns:
+              - organization_key
+              - gtfs_dataset_key
     columns:
       - name: organization_key
         tests:
           - relationships:
-             to: ref('dim_organizations')
-             field: key
+              arguments:
+                to: ref('dim_organizations')
+                field: key
       - name: gtfs_dataset_key
         tests:
           - relationships:
-             to: ref('dim_gtfs_datasets')
-             field: key
+              arguments:
+                to: ref('dim_gtfs_datasets')
+                field: key
   - name: bridge_organizations_x_funding_programs
     description: |
       Mapping table between organizations and associated
@@ -787,20 +826,23 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - organization_key
-            - funding_program_key
+          arguments:
+            combination_of_columns:
+              - organization_key
+              - funding_program_key
     columns:
       - name: organization_key
         tests:
           - relationships:
-             to: ref('dim_organizations')
-             field: key
+              arguments:
+                to: ref('dim_organizations')
+                field: key
       - name: funding_program_key
         tests:
           - relationships:
-             to: ref('dim_funding_programs')
-             field: key
+              arguments:
+                to: ref('dim_funding_programs')
+                field: key
   - name: bridge_fare_systems_x_services
     description: |
       Mapping table between fare systems and services.
@@ -815,20 +857,23 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - fare_system_key
-            - service_key
+          arguments:
+            combination_of_columns:
+              - fare_system_key
+              - service_key
     columns:
       - name: fare_system_key
         tests:
           - relationships:
-             to: ref('dim_fare_systems')
-             field: key
+              arguments:
+                to: ref('dim_fare_systems')
+                field: key
       - name: service_key
         tests:
           - relationships:
-             to: ref('dim_services')
-             field: key
+              arguments:
+                to: ref('dim_services')
+                field: key
   - name: bridge_contracts_x_components
     description: |
       Mapping table between contracts and components.
@@ -837,20 +882,23 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - contract_key
-            - component_key
+          arguments:
+            combination_of_columns:
+              - contract_key
+              - component_key
     columns:
       - name: contract_key
         tests:
           - relationships:
-             to: ref('dim_contracts')
-             field: key
+              arguments:
+                to: ref('dim_contracts')
+                field: key
       - name: component_key
         tests:
           - relationships:
-             to: ref('dim_components')
-             field: key
+              arguments:
+                to: ref('dim_components')
+                field: key
   - name: bridge_contracts_x_services
     description: |
       Mapping table between contracts and services.
@@ -859,20 +907,23 @@ models:
       Joins via this table can result in fanout.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - contract_key
-            - service_key
+          arguments:
+            combination_of_columns:
+              - contract_key
+              - service_key
     columns:
       - name: contract_key
         tests:
           - relationships:
-             to: ref('dim_contracts')
-             field: key
+              arguments:
+                to: ref('dim_contracts')
+                field: key
       - name: service_key
         tests:
           - relationships:
-             to: ref('dim_services')
-             field: key
+              arguments:
+                to: ref('dim_services')
+                field: key
   - name: bridge_schedule_dataset_for_validation
     description: |
       Mapping table between GTFS RT datasets and the schedule dataset that is used to validate it
@@ -883,22 +934,25 @@ models:
       Thus, joins via this table can result in fanout if they don't limit to validity on a specific date.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - gtfs_dataset_key
-            - schedule_to_use_for_rt_validation_gtfs_dataset_key
+          arguments:
+            combination_of_columns:
+              - gtfs_dataset_key
+              - schedule_to_use_for_rt_validation_gtfs_dataset_key
     columns:
       - name: gtfs_dataset_key
         tests:
           - dbt_utils.relationships_where:
-             to: ref('dim_gtfs_datasets')
-             field: key
-             to_condition: "type != 'schedule'"
+              arguments:
+                to: ref('dim_gtfs_datasets')
+                field: key
+                to_condition: "type != 'schedule'"
       - name: schedule_to_use_for_rt_validation_gtfs_dataset_key
         tests:
           - dbt_utils.relationships_where:
-             to: ref('dim_gtfs_datasets')
-             field: key
-             to_condition: "type = 'schedule'"
+              arguments:
+                to: ref('dim_gtfs_datasets')
+                field: key
+                to_condition: "type = 'schedule'"
   - name: bridge_services_x_modes
     description: |
       Mapping table between services and associated
@@ -907,20 +961,23 @@ models:
       Joins via this table can result in fanout because of versioning.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - service_key
-            - mode_key
+          arguments:
+            combination_of_columns:
+              - service_key
+              - mode_key
     columns:
       - name: service_key
         tests:
           - relationships:
-             to: ref('dim_services')
-             field: key
+              arguments:
+                to: ref('dim_services')
+                field: key
       - name: mode_key
         tests:
           - relationships:
-             to: ref('dim_modes')
-             field: key
+              arguments:
+                to: ref('dim_modes')
+                field: key
   - name: bridge_organizations_x_headquarters_county_geography
     description: |
       Mapping table between organizations and associated
