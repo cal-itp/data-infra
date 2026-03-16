@@ -29,8 +29,9 @@ current_stops AS (
 
 
 stops_on_shn AS (
-    SELECT
-        current_stops.*
+    SELECT distinct
+    current_stops._gtfs_key
+    -- current_stops.* old code, hotfix since we are getting duplicates here
     FROM buffer_geometry_table, current_stops
     WHERE ST_DWITHIN(
             buffer_geometry_table.buffer_geometry,current_stops.pt_geom, 0)
