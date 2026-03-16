@@ -5,10 +5,11 @@ models:
     description: GTFS datasets extracted from airtable.california_transit__gtfs_datasets
     tests:
       - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: source_record_id
-          gaps: required
+          arguments:
+            lower_bound_column: _valid_from
+            upper_bound_column: _valid_to
+            partition_by: source_record_id
+            gaps: required
     columns:
       - name: key
         description: Synthetic primary key constructed from incoming record ID and `_valid_from`.
@@ -21,9 +22,10 @@ models:
       a given feed on a given date.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
+          arguments:
+            combination_of_columns:
+              - base64_url
+              - ts
     columns:
       - name: ts
       - name: base64_url
@@ -45,9 +47,10 @@ models:
       parseable on a pure file-format level (i.e., the file was not corrupt.)
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - base64_url
-            - ts
+          arguments:
+            combination_of_columns:
+              - base64_url
+              - ts
     columns:
       - name: base64_url
       - name: ts
@@ -81,8 +84,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('dim_schedule_feeds')
-              field: key
+              arguments:
+                to: ref('dim_schedule_feeds')
+                field: key
       - name: _feed_valid_from
         tests:
           - not_null
@@ -100,15 +104,17 @@ models:
           Boolean indicating whether there is service for this `service_id` / `date` pair.
         tests:
           - not_null:
-              # TODO: remove this once we deal with Auburn feed that has tab-delimited files
-              where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+              arguments:
+                # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+                where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
       - name: calendar_key
         description: |
           Foreign key to dim_calendar.
         tests:
           - relationships:
-              to: ref('dim_calendar')
-              field: key
+              arguments:
+                to: ref('dim_calendar')
+                field: key
       - &feed_timezone_no_tests
         name: feed_timezone
         description: '{{ doc("gtfs_schedule_feed_timezone") }}'
@@ -133,10 +139,11 @@ models:
       overlaps with service date) but where service was not scheduled.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - feed_key
-            - service_date
-            - service_id
+          arguments:
+            combination_of_columns:
+              - feed_key
+              - service_date
+              - service_id
     columns:
       - *feed_key
       - name: calendar_key
@@ -145,16 +152,18 @@ models:
           defined exclusively via `calendar_dates`.
         tests:
           - relationships:
-              to: ref('dim_calendar')
-              field: key
+              arguments:
+                to: ref('dim_calendar')
+                field: key
       - name: calendar_dates_key
         description: |
           Foreign key for `dim_calendar_dates`. If null, the service for this date was
           defined exclusively via `calendar`.
         tests:
           - relationships:
-              to: ref('dim_calendar_dates')
-              field: key
+              arguments:
+                to: ref('dim_calendar_dates')
+                field: key
       - name: service_date
         description: Date on which service was scheduled.
         tests:
@@ -201,7 +210,8 @@ models:
       on to facilitate downstream use.
     tests:
       - dbt_utils.equal_rowcount:
-          compare_model: ref('stg_gtfs_schedule__file_parse_outcomes')
+          arguments:
+            compare_model: ref('stg_gtfs_schedule__file_parse_outcomes')
     columns:
       - name: feed_key
         description: |
@@ -210,8 +220,9 @@ models:
           for downloads where no data changed relative to what had already been ingested.
         tests:
           - relationships:
-              to: ref('dim_schedule_feeds')
-              field: key
+              arguments:
+                to: ref('dim_schedule_feeds')
+                field: key
       - name: parse_success
         description: '{{ doc("column_schedule_parse_success") }}'
       - name: parse_exception
@@ -235,22 +246,29 @@ models:
       Stop times grouped by trip_id with trip aggregation calculations.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - feed_key
-            - trip_id
-            - iteration_num
+          arguments:
+            combination_of_columns:
+              - feed_key
+              - trip_id
+              - iteration_num
       - dbt_utils.expression_is_true:
-          expression: "num_regularly_scheduled_pickup_stop_times + num_no_pickup_stop_times + num_phone_call_required_for_pickup_stop_times + num_coordinate_pickup_with_driver_stop_times = num_stop_times"
+          arguments:
+            expression: "num_regularly_scheduled_pickup_stop_times + num_no_pickup_stop_times + num_phone_call_required_for_pickup_stop_times + num_coordinate_pickup_with_driver_stop_times = num_stop_times"
       - dbt_utils.expression_is_true:
-          expression: "num_regularly_scheduled_drop_off_stop_times + num_no_drop_off_stop_times + num_phone_call_required_for_drop_off_stop_times + num_coordinate_drop_off_with_driver_stop_times = num_stop_times"
+          arguments:
+            expression: "num_regularly_scheduled_drop_off_stop_times + num_no_drop_off_stop_times + num_phone_call_required_for_drop_off_stop_times + num_coordinate_drop_off_with_driver_stop_times = num_stop_times"
       - dbt_utils.expression_is_true:
-          expression: "num_continuous_pickup_stop_times + num_no_continuous_pickup_stop_times + num_phone_call_required_for_continuous_pickup_stop_times + num_coordinate_continuous_pickup_with_driver_stop_times = num_stop_times"
+          arguments:
+            expression: "num_continuous_pickup_stop_times + num_no_continuous_pickup_stop_times + num_phone_call_required_for_continuous_pickup_stop_times + num_coordinate_continuous_pickup_with_driver_stop_times = num_stop_times"
       - dbt_utils.expression_is_true:
-          expression: "num_continuous_drop_off_stop_times + num_no_continuous_drop_off_stop_times + num_phone_call_required_for_continuous_drop_off_stop_times + num_coordinate_continuous_drop_off_with_driver_stop_times = num_stop_times"
+          arguments:
+            expression: "num_continuous_drop_off_stop_times + num_no_continuous_drop_off_stop_times + num_phone_call_required_for_continuous_drop_off_stop_times + num_coordinate_continuous_drop_off_with_driver_stop_times = num_stop_times"
       - dbt_utils.expression_is_true:
-          expression: "num_approximate_timepoint_stop_times + num_exact_timepoint_stop_times = num_stop_times"
+          arguments:
+            expression: "num_approximate_timepoint_stop_times + num_exact_timepoint_stop_times = num_stop_times"
       - dbt_utils.expression_is_true:
-          expression: "(num_gtfs_flex_stop_times > 0) = is_gtfs_flex_trip"
+          arguments:
+            expression: "(num_gtfs_flex_stop_times > 0) = is_gtfs_flex_trip"
     columns:
       - *feed_key
       - name: trip_id
@@ -371,9 +389,10 @@ models:
       This allows us to reconstruct what URLs were in our configuration list for each date.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - dt
-            - _config_extract_ts
+          arguments:
+            combination_of_columns:
+              - dt
+              - _config_extract_ts
     columns:
       - name: dt
         description: Date that RT data was extracted.
@@ -384,9 +403,10 @@ models:
       All RT URLs that were present at least once for each given day.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - dt
-            - base64_url
+          arguments:
+            combination_of_columns:
+              - dt
+              - base64_url
     columns:
       - name: dt
         description: |
@@ -441,16 +461,18 @@ models:
           defined exclusively via `calendar_dates`.
         tests:
           - relationships:
-              to: ref('dim_calendar')
-              field: key
+              arguments:
+                to: ref('dim_calendar')
+                field: key
       - name: calendar_dates_key
         description: |
           Foreign key for `dim_calendar_dates`. If null, the service for this date was
           defined exclusively via `calendar`.
         tests:
           - relationships:
-              to: ref('dim_calendar_dates')
-              field: key
+              arguments:
+                to: ref('dim_calendar_dates')
+                field: key
       - name: service_date
         description: Date on which service was scheduled.
         tests:
@@ -640,13 +662,14 @@ models:
       See downstream `fct_service_alerts_trip_summaries` table for further documentation.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
-            - service_date
-            - trip_schedule_relationship
-            - schedule_base64_url
-          where: '__rt_sampled__'
+          arguments:
+            combination_of_columns:
+              - key
+              - dt
+              - service_date
+              - trip_schedule_relationship
+              - schedule_base64_url
+            where: '__rt_sampled__'
   - name: int_gtfs_rt__trip_updates_trip_day_map_grouping
     description: |
       This table groups trip updates messages by `dt` (UTC) and `service_date` (usually Pacific)
@@ -656,17 +679,18 @@ models:
       See downstream `fct_trip_updates_trip_summaries` table for further documentation.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
-            - service_date
-            - trip_schedule_relationship
-            - trip_route_id
-            - trip_direction_id
-            - schedule_base64_url
-          # this will fail if run on all historical data, specifically for days where a given feed's time zone changed;
-          # even then the number of failures is very small
-          where: '__rt_sampled__'
+          arguments:
+            combination_of_columns:
+              - key
+              - dt
+              - service_date
+              - trip_schedule_relationship
+              - trip_route_id
+              - trip_direction_id
+              - schedule_base64_url
+            # this will fail if run on all historical data, specifically for days where a given feed's time zone changed;
+            # even then the number of failures is very small
+            where: '__rt_sampled__'
   - name: int_gtfs_rt__trip_updates_trip_stop_day_map_grouping
     description: |
       This table groups trip updates (stop_time_updates) messages by `dt` (UTC) and `service_date` (usually Pacific)
@@ -684,24 +708,25 @@ models:
       See downstream `fct_vehicle_positions_summaries` table for further documentation.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - dt
-            - service_date
-            - trip_schedule_relationship
-            - trip_route_id
-            - trip_direction_id
-            - schedule_base64_url
-          # this will fail if run on all historical data, specifically for days where a given feed's time zone changed;
-          # even then the number of failures is very small
-          where: '__rt_sampled__'
-  - name: int_gtfs_rt__vehicle_positions_trip_stop_day_map_grouping
+          arguments:
+            combination_of_columns:
+              - key
+              - dt
+              - service_date
+              - trip_schedule_relationship
+              - trip_route_id
+              - trip_direction_id
+              - schedule_base64_url
+            # this will fail if run on all historical data, specifically for days where a given feed's time zone changed;
+            # even then the number of failures is very small
+            where: '__rt_sampled__'
+  - name: int_gtfs_rt__vehicle_positions_trip_day_map_grouping_orig
     description: |
       This table groups vehicle positions messages by `dt` (UTC) and `service_date` (usually Pacific)
       to enable:
         1. Incremental materialization based on `dt` (to make efficient use of upstream partitions)
         2. Downstream grouping by `service_date` alone (since that is the appropriate final grain for trip-based analysis)
       See downstream `fct_vehicle_positions_stop_metrics` table for further documentation.
-  - name: int_gtfs_rt__vehicle_positions_trip_stop_day_map_grouping_orig
+  - name: int_gtfs_rt__vehicle_positions_trip_stop_day_map_grouping
     description: |
       Temporary copy for microbatch testing.

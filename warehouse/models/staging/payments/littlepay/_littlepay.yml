@@ -69,10 +69,12 @@ models:
         tests:
           - not_null
           - unique_proportion:
-              at_least: 0.999
+              arguments:
+                at_least: 0.999
           - relationships:
-              to: ref('int_payments__authorisations_deduped')
-              field: _payments_key
+              arguments:
+                to: ref('int_payments__authorisations_deduped')
+                field: _payments_key
       - &_content_hash
         name: _content_hash
         description: |
@@ -265,18 +267,19 @@ models:
       each applicable product but only one will be applied.)
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - micropayment_id
-            - adjustment_id
-            - participant_id
-            - customer_id
-            - product_id
-            - type
-            - description
-            - amount
-            - time_period_type
-            - applied
-            - zone_ids_used
+          arguments:
+            combination_of_columns:
+              - micropayment_id
+              - adjustment_id
+              - participant_id
+              - customer_id
+              - product_id
+              - type
+              - description
+              - amount
+              - time_period_type
+              - applied
+              - zone_ids_used
     columns:
       - name: adjustment_id
         description: '{{ doc("lp_adjustment_id") }}'
@@ -284,7 +287,8 @@ models:
         description: '{{ doc("lp_micropayment_id") }}'
         tests:
           - unique:
-              where: applied
+              arguments:
+                where: applied
       - *participant_id
       - name: customer_id
         description: '{{ doc("lp_customer_id") }}'
@@ -332,11 +336,12 @@ models:
     tests:
       - &littlepay_uniqueness
         dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - instance
-            - extract_filename
-            - ts
-            - _line_number
+          arguments:
+            combination_of_columns:
+              - instance
+              - extract_filename
+              - ts
+              - _line_number
     description: This model makes the assumption that, in the case of duplicated micropayment_id values, the one with the latest transaction_time in the latest export file takes precedence.
     columns:
       - name: micropayment_id
@@ -479,8 +484,9 @@ models:
           then a debt recovery authorisation may be performed.
         tests:
           - relationships:
-              to: ref('int_payments__refunds_deduped')
-              field: aggregation_id
+              arguments:
+                to: ref('int_payments__refunds_deduped')
+                field: aggregation_id
       - *participant_id
       - name: customer_id
         description: Identifies the customer that the micropayment belongs to.
@@ -515,8 +521,9 @@ models:
           If the acquirer is Elavon, this value will be split between `littlepay_reference_number` and `external_reference_number`.
         tests:
           - relationships:
-              to: ref('int_payments__refunds_deduped')
-              field: retrieval_reference_number
+              arguments:
+                to: ref('int_payments__refunds_deduped')
+                field: retrieval_reference_number
       - name: littlepay_reference_number
         description: |
           Uniquely identifies a card transaction.

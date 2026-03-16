@@ -10,21 +10,25 @@ models:
         tests:
           - not_null
           - unique_proportion:
-              at_least: 0.999
+              arguments:
+                at_least: 0.999
       - name: aggregation_id
         description: '{{ doc("lp_aggregation_id") }}'
         tests:
           - not_null
           - relationships:
-              to: ref('fct_payments_aggregations')
-              field: aggregation_id
+              arguments:
+                to: ref('fct_payments_aggregations')
+                field: aggregation_id
       - name: littlepay_transaction_id
         description: '{{ doc("lp_paired_first_transaction_id") }}'
         tests:
           - dbt_utils.not_null_proportion:
-              at_least: 0.998
+              arguments:
+                at_least: 0.998
           - unique_proportion:
-              at_least: 0.999
+              arguments:
+                at_least: 0.999
       - &participant_id
         name: participant_id
         description: '{{ doc("lp_participant_id") }}'
@@ -292,8 +296,9 @@ models:
         description: '{{ doc("lp_aggregation_id") }}'
         tests:
             - relationships:
-                to: ref('fct_payments_aggregations')
-                field: aggregation_id
+                arguments:
+                  to: ref('fct_payments_aggregations')
+                  field: aggregation_id
       - name: customer_id
         description: '{{ doc("lp_customer_id") }}'
       - name: funding_source_id
@@ -310,8 +315,9 @@ models:
         description: '{{ doc("lp_retrieval_reference_number") }}'
         tests:
             - relationships:
-                to: ref('fct_payments_aggregations')
-                field: settlement_retrieval_reference_number
+                arguments:
+                  to: ref('fct_payments_aggregations')
+                  field: settlement_retrieval_reference_number
       - name: littlepay_reference_number
         description: '{{ doc("lp_littlepay_reference_number") }}'
       - name: external_reference_number

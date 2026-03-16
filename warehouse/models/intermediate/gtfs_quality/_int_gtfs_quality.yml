@@ -7,7 +7,8 @@ models:
     description: '{{ doc("int_gtfs_quality__guideline_checks_long") }}'
     tests:
       - dbt_utils.expression_is_true:
-          expression: 'status != {{ guidelines_to_be_assessed_status() }}'
+          arguments:
+            expression: 'status != {{ guidelines_to_be_assessed_status() }}'
     columns:
     #TODO: use these anchors below
       - &key
@@ -61,9 +62,10 @@ models:
           - not_null
           # This is a useful test but dbt-metabase fails since
           # Metabase does not sync the staging schema
-#          - relationships:
-#              to: ref('stg_gtfs_quality__intended_checks')
-#              field: check
+          # - relationships:
+          #   arguments:
+          #     to: ref('stg_gtfs_quality__intended_checks')
+          #     field: check
       - name: status
         tests:
           - not_null
@@ -86,10 +88,11 @@ models:
       All entity-related columns are inherited from `int_gtfs_quality__daily_assessment_candidate_entities`.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - date
-            - check
+          arguments:
+            combination_of_columns:
+              - key
+              - date
+              - check
 
 # Other tables
 
@@ -109,10 +112,11 @@ models:
       a new GTFS validator version.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - code
-            - severity
-            - gtfs_validator_version
+          arguments:
+            combination_of_columns:
+              - code
+              - severity
+              - gtfs_validator_version
 
   - name: int_gtfs_quality__schedule_validator_rule_details_unioned
     description: |
@@ -160,9 +164,10 @@ models:
       Entities that fail any of the criteria will *not* be included as `assessed` for the given date.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - key
-            - date
+          arguments:
+            combination_of_columns:
+              - key
+              - date
     columns:
       - name: key
         description: |
@@ -247,39 +252,44 @@ models:
       in this table.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - date
-            - organization_key
-            - gtfs_dataset_key
+          arguments:
+            combination_of_columns:
+              - date
+              - organization_key
+              - gtfs_dataset_key
 
   - name: int_gtfs_quality__feed_version_history
     description: |
       Describes attributes of the previous and following versions of each feed.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - feed_key
-            - base64_url
+          arguments:
+            combination_of_columns:
+              - feed_key
+              - base64_url
       - dbt_utils.equal_rowcount:
-          compare_model: ref('dim_schedule_feeds')
+          arguments:
+            compare_model: ref('dim_schedule_feeds')
 
   - name: int_gtfs_quality__outcome_validator_versions
     description: |
       Unique observed validator versions for each extract.
     tests:
     - dbt_utils.unique_combination_of_columns:
-        combination_of_columns:
-          - dt
-          - base64_url
-          - ts
-          - gtfs_validator_version
+        arguments:
+          combination_of_columns:
+            - dt
+            - base64_url
+            - ts
+            - gtfs_validator_version
   - name: int_gtfs_quality__scheduled_trip_version_summary
     description: |
       Summary of a schedule feed's stops and stop times by trip and (calendar) service, to support the GTFS guideline
       check about sufficient lead time for schedule updates.
     tests:
     - dbt_utils.unique_combination_of_columns:
-        combination_of_columns:
-          - feed_key
-          - trip_id
-          - service_id
+        arguments:
+          combination_of_columns:
+            - feed_key
+            - trip_id
+            - service_id

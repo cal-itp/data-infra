@@ -13,16 +13,18 @@ models:
       - name: request_type
         tests:
           - accepted_values:
-              values: ['AUTHORISATION', 'DEBT_RECOVERY_AUTHCHECK', 'DEBT_RECOVERY_REVERSAL', 'CARD_CHECK']
+              arguments:
+                values: ['AUTHORISATION', 'DEBT_RECOVERY_AUTHCHECK', 'DEBT_RECOVERY_REVERSAL', 'CARD_CHECK']
       - name: aggregation_id
         tests:
           - relationships:
-              to: ref('int_payments__latest_authorisations_by_aggregation')
-              field: aggregation_id
-              config:
-                # there is a single update from 2021 where there's only one update with a null status
-                # we're comfortable letting this row get dropped
-                where: "_key != '60e1a87f2cafe52c08589cb13fb39707'"
+              arguments:
+                to: ref('int_payments__latest_authorisations_by_aggregation')
+                field: aggregation_id
+                config:
+                  # there is a single update from 2021 where there's only one update with a null status
+                  # we're comfortable letting this row get dropped
+                  where: "_key != '60e1a87f2cafe52c08589cb13fb39707'"
   - name: int_payments__latest_authorisations_by_aggregation
     description: |
       This model contains only the most recent authorisations data per `aggregation_id`.
@@ -42,8 +44,9 @@ models:
       - name: currency_code
         tests:
           - accepted_values:
-              values: [840]
-              quote: false
+              arguments:
+                values: [840]
+                quote: false
       - name: final_authorisation_has_null_status
         descrpition: |
           A boolean flag that identifies aggregations for which the chosen "latest" authorisation
@@ -53,13 +56,16 @@ models:
       This model contains Littlepay settlements aggregated to the `aggregation_id + retrieval_reference_number` level.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - aggregation_id
-            - retrieval_reference_number
+          arguments:
+            combination_of_columns:
+              - aggregation_id
+              - retrieval_reference_number
       - dbt_utils.expression_is_true:
-          expression: "debit_amount + credit_amount = net_settled_amount_dollars"
+          arguments:
+            expression: "debit_amount + credit_amount = net_settled_amount_dollars"
       - dbt_utils.expression_is_true:
-          expression: "contains_refund = (credit_amount < 0)"
+          arguments:
+            expression: "contains_refund = (credit_amount < 0)"
     columns:
       - *aggregation_pk
       - name: retrieval_reference_number
@@ -79,8 +85,9 @@ models:
         description: '{{ doc("lp_net_settled_amount_dollars") }}'
         tests:
           - dbt_utils.accepted_range:
-              min_value: 0
-              inclusive: true
+              arguments:
+                min_value: 0
+                inclusive: true
       - name: debit_amount
         description: '{{ doc("lp_settlement_debit_amount") }}'
       - name: credit_amount
@@ -96,7 +103,8 @@ models:
       Littlepay micropayments grouped to the aggregation (`aggregation_id`) level.
     tests:
       - dbt_utils.expression_is_true:
-          expression: "total_nominal_amount_dollars >= net_micropayment_amount_dollars"
+          arguments:
+            expression: "total_nominal_amount_dollars >= net_micropayment_amount_dollars"
     columns:
       - *participant_id
       - *aggregation_pk
@@ -132,9 +140,10 @@ models:
       that all rows dropped do in fact have a duplicate and no refunds are lost.)
     data_tests:
       - dbt_utils.expression_is_true:
-          expression: "refund_amount = micropayments_refund_amount"
-          config:
-            where: "source_table='both_refunds_and_micropayments'"
+          arguments:
+            expression: "refund_amount = micropayments_refund_amount"
+            config:
+              where: "source_table='both_refunds_and_micropayments'"
     columns:
       - name: refund_id
         description: The unique identifier for each requested refund. (Only present if refund was in refunds table.)
@@ -282,7 +291,8 @@ models:
       any applied adjustments (ex. fare capping), and any associated refunds.
     tests:
       - dbt_utils.expression_is_true:
-          expression: "micropayment_refund_amount <= charge_amount"
+          arguments:
+            expression: "micropayment_refund_amount <= charge_amount"
     columns:
       - *participant_id
       - &micropayment_id
@@ -291,8 +301,9 @@ models:
         tests:
           - not_null
           - unique:
-              config:
-                error_if: ">5"
+              arguments:
+                config:
+                  error_if: ">5"
       - name: aggregation_id
         description: '{{ doc("lp_aggregation_id") }}'
       - name: funding_source_vault_id
@@ -346,8 +357,9 @@ models:
           - not_null
           # refunds cause duplicates; ignore them here
           - unique:
-              config:
-                where: micropayment_type != "CREDIT"
+              arguments:
+                config:
+                  where: micropayment_type != "CREDIT"
       - name: route_id
         description: '{{ doc("lp_paired_transaction_route_id") }}'
       - name: direction
@@ -420,9 +432,10 @@ models:
       of the associated micropayment to assist in later modeling.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - micropayment_id
-            - littlepay_transaction_id
+          arguments:
+            combination_of_columns:
+              - micropayment_id
+              - littlepay_transaction_id
     columns:
       - name: micropayment_id
         description: '{{ doc("lp_micropayment_id") }}'
@@ -432,8 +445,9 @@ models:
         tests:
           - not_null
           - unique:
-              config:
-                where: micropayment_type != "CREDIT"
+              arguments:
+                config:
+                  where: micropayment_type != "CREDIT"
       - name: micropayment_charge_type
         description: '{{ doc("lp_charge_type") }}'
       - name: micropayment_type
@@ -496,15 +510,17 @@ models:
       table is unique at the funding_source_vault_id + participant_id level.
     tests:
       - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: calitp_valid_at
-          upper_bound_column: calitp_invalid_at
-          partition_by: funding_source_vault_id, participant_id
-          gaps: not_allowed
-          zero_length_range_allowed: true
+          arguments:
+            lower_bound_column: calitp_valid_at
+            upper_bound_column: calitp_invalid_at
+            partition_by: funding_source_vault_id, participant_id
+            gaps: not_allowed
+            zero_length_range_allowed: true
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - participant_id
-            - funding_source_id
+          arguments:
+            combination_of_columns:
+              - participant_id
+              - funding_source_id
     columns:
       - name: funding_source_id
         tests:
@@ -539,9 +555,10 @@ models:
       table is unique at the customer_id + participant_id level.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - participant_id
-            - customer_id
+          arguments:
+            combination_of_columns:
+              - participant_id
+              - customer_id
     columns:
       - name: customer_id
         description: '{{ doc("customer_funding_source_customer_id") }}'
@@ -626,9 +643,10 @@ models:
       Slowly-changing dimension (type 2) for product data.
     data_tests:
       - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: product_id
+          arguments:
+            lower_bound_column: _valid_from
+            upper_bound_column: _valid_to
+            partition_by: product_id
     columns:
       - *participant_id
       - name: product_id

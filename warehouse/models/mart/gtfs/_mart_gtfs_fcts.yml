@@ -13,8 +13,9 @@ x-common-fields:
     tests:
       - not_null
       - relationships:
-          to: ref('dim_schedule_feeds')
-          field: key
+          arguments:
+            to: ref('dim_schedule_feeds')
+            field: key
   - &feed_timezone_no_tests
     name: feed_timezone
     description: '{{ doc("gtfs_schedule_feed_timezone") }}'
@@ -27,35 +28,39 @@ x-common-fields:
       '{{ doc("gtfs_schedule_gtfs_dataset_key") }}'
     tests:
       - not_null:
-          config:
-            error_if: ">10000"
+          arguments:
+            config:
+              error_if: ">10000"
       - relationships:
-          to: ref('dim_gtfs_datasets')
-          field: key
-          config:
-            # there are a dozen rows of SMART transit which was deleted from
-            # Airtable this will work without exception once the Airtable dim is
-            # historical; this threshold may need to increase if the backfill
-            # occurs prior to that
-            error_if: ">20"
+          arguments:
+            to: ref('dim_gtfs_datasets')
+            field: key
+            config:
+              # there are a dozen rows of SMART transit which was deleted from
+              # Airtable this will work without exception once the Airtable dim is
+              # historical; this threshold may need to increase if the backfill
+              # occurs prior to that
+              error_if: ">20"
   - &gtfs_dataset_key_errorif_sampled
     name: gtfs_dataset_key
     description: |
       Foreign key to the associated GTFS dataset record.
     tests:
       - not_null:
-          config:
-            where: '__rt_sampled__'
+          arguments:
+            config:
+              where: '__rt_sampled__'
       - relationships:
-          to: ref('dim_gtfs_datasets')
-          field: key
-          config:
-            # there are a dozen rows of SMART transit which was deleted from
-            # Airtable this will work without exception once the Airtable dim is
-            # historical; this threshold may need to increase if the backfill
-            # occurs prior to that
-            error_if: ">20"
-            where: '__rt_sampled__'
+          arguments:
+            to: ref('dim_gtfs_datasets')
+            field: key
+            config:
+              # there are a dozen rows of SMART transit which was deleted from
+              # Airtable this will work without exception once the Airtable dim is
+              # historical; this threshold may need to increase if the backfill
+              # occurs prior to that
+              error_if: ">20"
+              where: '__rt_sampled__'
   - &gtfs_rt_name
     name: gtfs_dataset_name
     description: &gtfs_dataset_name_desc |
@@ -65,27 +70,30 @@ x-common-fields:
     description: *gtfs_dataset_key_desc
     tests:
       - dbt_utils.not_null_proportion:
-          # TODO: raise back to .999 after some time getting new data -
-          # was .998 because old data pipeline produced more nulls
-          at_least: 0.998
+          arguments:
+            # TODO: raise back to .999 after some time getting new data -
+            # was .998 because old data pipeline produced more nulls
+            at_least: 0.998
       - relationships:
-          to: ref('dim_gtfs_datasets')
-          field: key
-          config:
-            # there are a dozen rows of SMART transit which was deleted from
-            # Airtable this will work without exception once the Airtable dim is
-            # historical; this threshold may need to increase if the backfill
-            # occurs prior to that
-            error_if: ">20"
+          arguments:
+            to: ref('dim_gtfs_datasets')
+            field: key
+            config:
+              # there are a dozen rows of SMART transit which was deleted from
+              # Airtable this will work without exception once the Airtable dim is
+              # historical; this threshold may need to increase if the backfill
+              # occurs prior to that
+              error_if: ">20"
   - &gtfs_rt_schedule_dataset_key
     name: schedule_gtfs_dataset_key
     description: '{{ doc("column_rt_schedule_dataset_key") }}'
     tests:
       - relationships:
-          to: ref('dim_gtfs_datasets')
-          field: key
-          config:
-            where: '__rt_sampled__'
+          arguments:
+            to: ref('dim_gtfs_datasets')
+            field: key
+            config:
+              where: '__rt_sampled__'
   - &gtfs_rt_schedule_dataset_name
     name: schedule_name
     description: '{{ doc("column_rt_schedule_dataset_name") }}'
@@ -94,10 +102,11 @@ x-common-fields:
     description: '{{ doc("column_rt_schedule_feed_key") }}'
     tests:
       - relationships:
-          to: ref('dim_schedule_feeds')
-          field: key
-          config:
-            where: '__rt_sampled__'
+          arguments:
+            to: ref('dim_schedule_feeds')
+            field: key
+            config:
+              where: '__rt_sampled__'
   - &gtfs_rt_schedule_feed_timezone
     name: schedule_feed_timezone
     description: '{{ doc("column_rt_schedule_feed_timezone") }}'
@@ -119,7 +128,8 @@ x-common-fields:
     tests:
       - not_null
       - unique_proportion:
-          at_least: 0.9999
+          arguments:
+            at_least: 0.9999
   - &rt_trip_summary_key
     name: key
     description: |
@@ -127,7 +137,8 @@ x-common-fields:
     tests:
       - not_null
       - unique_proportion:
-          at_least: 0.9999
+          arguments:
+            at_least: 0.9999
   - &rt_iteration_num
     name: iteration_num
     description: |
@@ -509,11 +520,13 @@ models:
       - <<: *feed_key
         tests:
           - not_null:
-              config:
-                where: download_success AND unzip_success
+              arguments:
+                config:
+                  where: download_success AND unzip_success
           - relationships:
-              to: ref('dim_schedule_feeds')
-              field: key
+              arguments:
+                to: ref('dim_schedule_feeds')
+                field: key
       - *gtfs_dataset_key_errorif
       - name: ts
         description: |
@@ -553,10 +566,12 @@ models:
           entity `id`, `vehicle_id`, and `trip_id`.
         tests: &almost_unique_rt_key_tests
           - unique_proportion:
-              at_least: 0.999
-              where: '__rt_sampled__'
+              arguments:
+                at_least: 0.999
+                where: '__rt_sampled__'
           - not_null:
-              where: '__rt_sampled__'
+              arguments:
+                where: '__rt_sampled__'
       - *gtfs_dataset_key_errorif_sampled
       - *gtfs_rt_dt
       - *gtfs_rt_hour
@@ -699,8 +714,9 @@ models:
       - <<: *rt_trip_id
         tests:
           - not_null:
-              config:
-                where: '__rt_sampled__'
+              arguments:
+                config:
+                  where: '__rt_sampled__'
       - *rt_trip_route_id
       - *rt_trip_direction_id
       - *rt_trip_start_time
@@ -827,14 +843,16 @@ models:
       description: '{{ doc("column_rt_schedule_dataset_key") }}'
       tests:
           - relationships:
-              to: ref('dim_gtfs_datasets')
-              field: key
+              arguments:
+                to: ref('dim_gtfs_datasets')
+                field: key
     - name: schedule_feed_key
       description: '{{ doc("column_rt_schedule_feed_key") }}'
       tests:
           - relationships:
-              to: ref('dim_schedule_feeds')
-              field: key
+              arguments:
+                to: ref('dim_schedule_feeds')
+                field: key
 
   - name: fct_daily_feed_scheduled_service_summary
     description: |
@@ -846,11 +864,13 @@ models:
       the summary columns.)
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - service_date
-            - feed_key
+          arguments:
+            combination_of_columns:
+              - service_date
+              - feed_key
       - dbt_utils.expression_is_true:
-          expression: "ttl_service_hours >= 0"
+          arguments:
+            expression: "ttl_service_hours >= 0"
     columns:
       - *service_date_for_summaries
       - *feed_key
@@ -1011,9 +1031,11 @@ models:
           entity `id`.
         tests: &rt_primary_key_tests
           - unique:
-              where: '__rt_sampled__'
+              arguments:
+                where: '__rt_sampled__'
           - not_null:
-              where: '__rt_sampled__'
+              arguments:
+                where: '__rt_sampled__'
       - *gtfs_dataset_key_errorif_sampled
       - *gtfs_rt_dt
       - *gtfs_rt_hour
@@ -1070,8 +1092,9 @@ models:
       field definitions.
     tests:
       - dbt_utils.expression_is_true:
-          expression: "active_period_start <= active_period_end"
-          where: '__rt_sampled__'
+          arguments:
+            expression: "active_period_start <= active_period_end"
+            where: '__rt_sampled__'
     columns:
       - name: key
         description: |
@@ -1083,15 +1106,17 @@ models:
           The primary key for the message in `fct_service_alerts_messages`.
         tests:
           - not_null:
-              config:
-                where: '__rt_sampled__'
+              arguments:
+                config:
+                  where: '__rt_sampled__'
           # this doesn't work because we would need to do partition elimination on fct_service_alerts_messages
           # TODO: create a custom relationships_where to handle the partition elimination
           # - relationships:
-          #     to: ref('fct_service_alerts_messages')
-          #     field: key
-          #     config:
-          #       where: '__rt_sampled__'
+          #     arguments:
+          #       to: ref('fct_service_alerts_messages')
+          #       field: key
+          #       config:
+          #         where: '__rt_sampled__'
       - *rt_service_date
       - *gtfs_dataset_key_errorif_sampled
       - *gtfs_rt_dt
@@ -1179,7 +1204,8 @@ models:
           `base64_url`, `id`, entity selectors, and alert active period.
         tests:
           - unique_proportion:
-              at_least: 0.999
+              arguments:
+                at_least: 0.999
           - not_null
       - *base64_url
       - *gtfs_rt_schedule_feed_timezone
@@ -1238,7 +1264,8 @@ models:
           and `shape_array_key`.
         tests:
           - unique:
-              where: "not contains_warning_duplicate_trip_primary_key"
+              arguments:
+                where: "not contains_warning_duplicate_trip_primary_key"
           - not_null
       - name: n_trips
         description: The number of trips associated with this shape on the given date.
@@ -1308,7 +1335,8 @@ models:
           `stop_key`.
         tests:
           - unique:
-              where: "not contains_warning_duplicate_trip_primary_key AND not contains_warning_duplicate_stop_times_primary_key AND not contains_warning_duplicate_stop_primary_key"
+              arguments:
+                where: "not contains_warning_duplicate_trip_primary_key AND not contains_warning_duplicate_stop_times_primary_key AND not contains_warning_duplicate_stop_primary_key"
           - not_null
       - *service_date_for_summaries
       - *feed_key
@@ -1424,8 +1452,9 @@ models:
         description: Foreign key to the `dim_stops` table.
         tests:
           - relationships:
-              to: ref('dim_stops')
-              field: key
+              arguments:
+                to: ref('dim_stops')
+                field: key
       - name: tts_stop_name
         description: '{{ doc("gtfs_stops__tts_stop_name") }}'
       - name: pt_geom
@@ -1479,8 +1508,9 @@ models:
           join key.
         tests:
           - not_null:
-              config:
-                where: "appeared_in_tu"
+              arguments:
+                config:
+                  where: "appeared_in_tu"
       - name: vp_name
         description: |
           Name from the vehicle positions GTFS dataset record associated
@@ -1490,8 +1520,9 @@ models:
           join key.
         tests:
           - not_null:
-              config:
-                where: "appeared_in_vp"
+              arguments:
+                config:
+                  where: "appeared_in_vp"
       - name: schedule_name
         description: |
           Name from the schedule GTFS dataset record associated
@@ -1529,25 +1560,28 @@ models:
         description: *gtfs_dataset_key_desc
         tests:
           - dbt_utils.relationships_where:
-              to: ref('dim_gtfs_datasets')
-              field: key
-              to_condition: "type = 'trip_updates'"
+              arguments:
+                to: ref('dim_gtfs_datasets')
+                field: key
+                to_condition: "type = 'trip_updates'"
       - <<: *base64_url
         name: tu_base64_url
       - name: vp_gtfs_dataset_key
         description: *gtfs_dataset_key_desc
         tests:
           - dbt_utils.relationships_where:
-              to: ref('dim_gtfs_datasets')
-              field: key
-              to_condition: "type = 'vehicle_positions'"
+              arguments:
+                to: ref('dim_gtfs_datasets')
+                field: key
+                to_condition: "type = 'vehicle_positions'"
       - name: schedule_gtfs_dataset_key
         description: *gtfs_dataset_key_desc
         tests:
           - dbt_utils.relationships_where:
-              to: ref('dim_gtfs_datasets')
-              field: key
-              to_condition: "type = 'schedule'"
+              arguments:
+                to: ref('dim_gtfs_datasets')
+                field: key
+                to_condition: "type = 'schedule'"
       - <<: *base64_url
         name: vp_base64_url
       # trip update facts
@@ -1822,7 +1856,8 @@ models:
       - name: key
         tests:
           - unique:
-              where: "not contains_warning_duplicate_trip_primary_key"
+              arguments:
+                where: "not contains_warning_duplicate_trip_primary_key"
           - not_null
       - *feed_key
       - name: name
@@ -1862,8 +1897,9 @@ models:
         description: Foreign key to dim_trips.
         tests:
           - relationships:
-              to: ref('dim_trips')
-              field: key
+              arguments:
+                to: ref('dim_trips')
+                field: key
       - name: trip_id
         description: '{{ doc("gtfs_trips__trip_id") }}'
       - name: trip_short_name
@@ -1876,14 +1912,16 @@ models:
         tests:
           - not_null
           - unique:
-              config:
-                where: "not contains_warning_duplicate_trip_primary_key"
+              arguments:
+                config:
+                  where: "not contains_warning_duplicate_trip_primary_key"
       - name: route_key
         description: Foreign key to dim_routes.
         tests:
           - relationships:
-              to: ref('dim_routes')
-              field: key
+              arguments:
+                to: ref('dim_routes')
+                field: key
       - name: route_id
         description: '{{ doc("gtfs_routes__route_id") }}'
       - name: route_type
@@ -1910,8 +1948,9 @@ models:
         description: Foreign key to dim_shapes_arrays.
         tests:
           - relationships:
-              to: ref('dim_shapes_arrays')
-              field: key
+              arguments:
+                to: ref('dim_shapes_arrays')
+                field: key
       - name: gtfs_dataset_key
         description: |
           Foreign key to the associated GTFS dataset record.
@@ -2183,8 +2222,9 @@ models:
     tests:
       - &warn_rt_trip_hours_past_midnight_no_start_date
         dbt_utils.expression_is_true:
-          expression: "NOT (EXTRACT(HOUR FROM trip_start_time_interval) > 24 AND trip_start_date IS NULL)"
-          severity: warn
+          arguments:
+            expression: "NOT (EXTRACT(HOUR FROM trip_start_time_interval) > 24 AND trip_start_date IS NULL)"
+            severity: warn
     columns:
       - *rt_trip_summary_key
       - *trip_instance_key
@@ -2285,10 +2325,12 @@ models:
         tests:
           - not_null
           - unique_proportion:
-              at_least: 0.9999
+              arguments:
+                at_least: 0.9999
           - relationships:
-              to: ref('fct_observed_trips')
-              field: trip_instance_key
+              arguments:
+                to: ref('fct_observed_trips')
+                field: trip_instance_key
       - *gtfs_rt_schedule_feed_timezone
       - *rt_service_date
       - *base64_url
@@ -2393,10 +2435,12 @@ models:
         tests:
           - not_null
           - unique_proportion:
-              at_least: 0.9999
+              arguments:
+                at_least: 0.9999
           - relationships:
-              to: ref('fct_observed_trips')
-              field: trip_instance_key
+              arguments:
+                to: ref('fct_observed_trips')
+                field: trip_instance_key
       - *gtfs_rt_schedule_feed_timezone
       - *rt_service_date
       - *base64_url
