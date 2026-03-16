@@ -304,10 +304,11 @@ models:
       Use _is_current to find the latest version for each set of year, ntd_id, and state_parent_ntd_id.
     tests:
       - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: CONCAT(year, '_', ntd_id, '_', COALESCE(state_parent_ntd_id, ''))
-          gaps: required
+          arguments:
+            lower_bound_column: _valid_from
+            upper_bound_column: _valid_to
+            partition_by: CONCAT(year, '_', ntd_id, '_', COALESCE(state_parent_ntd_id, ''))
+            gaps: required
     columns:
       - *key
       - <<: *report_year
@@ -382,7 +383,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ["federal", "state", "local"]
+              arguments:
+                values: ["federal", "state", "local"]
       - *agency
       - *agency_voms
       - *city
@@ -473,8 +475,9 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: [2022, 2023, 2024]
-              quote: false
+              arguments:
+                values: [2022, 2023, 2024]
+                quote: false
       - *reporter_type
       - name: sales_tax
         description: |
@@ -503,8 +506,9 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: [2022, 2023, 2024]
-              quote: false
+              arguments:
+                values: [2022, 2023, 2024]
+                quote: false
       - *ntd_id
       - *agency
       - *reporter_type
@@ -549,8 +553,9 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: [2022, 2023, 2024]
-              quote: false
+              arguments:
+                values: [2022, 2023, 2024]
+                quote: false
       - *reporter_type
       - *ntd_id
       - *agency
@@ -560,7 +565,8 @@ models:
       - <<: *time_period
         tests:
           - accepted_values:
-              values: ["Average Weekday - AM Peak", "Average Weekday - Midday", "Average Weekday - PM Peak", "Average Weekday - Other", "Average Typical Weekday", "Average Typical Saturday", "Average Typical Sunday"]
+              arguments:
+                values: ["Average Weekday - AM Peak", "Average Weekday - Midday", "Average Weekday - PM Peak", "Average Weekday - Other", "Average Typical Weekday", "Average Typical Saturday", "Average Typical Sunday"]
       - *time_service_begins
       - *time_service_ends
       - *organization_type
@@ -653,8 +659,9 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: [2022, 2023, 2024]
-              quote: false
+              arguments:
+                values: [2022, 2023, 2024]
+                quote: false
       - *ntd_id
       - *type_of_service
       - *mode
@@ -667,4 +674,5 @@ models:
           This table displays only "Annual Total".
         tests:
           - accepted_values:
-              values: ["Annual Total"]
+              arguments:
+                values: ["Annual Total"]

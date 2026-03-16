@@ -14,7 +14,8 @@ models:
       NOTE: This model uses dynamic variables for "this_year" and "last_year" which are based on the timestamp that this run started.
     # tests:
     #   - dbt_utils.expression_is_true:
-    #       expression: 'status != {{ guidelines_to_be_assessed_status() }}'
+    #       arguments:
+    #         expression: 'status != {{ guidelines_to_be_assessed_status() }}'
     # columns:
   - name: int_ntd_rr20_financial_specific_funds
     description: |

@@ -16,7 +16,8 @@ models:
       Contracts table in Airtable.
     tests:
       - dbt_utils.equal_rowcount:
-          compare_model: ref('base_tts_contracts_idmap')
+          arguments:
+            compare_model: ref('base_tts_contracts_idmap')
     columns:
       - *id
       - *name
@@ -34,7 +35,8 @@ models:
       IDs have been translated from the Transit Technology Service base to the California Transit base.
     tests:
       - dbt_utils.equal_rowcount:
-          compare_model: ref('base_tts_service_components_idmap')
+          arguments:
+            compare_model: ref('base_tts_service_components_idmap')
     columns:
       - *id
       - *name
