@@ -12,23 +12,23 @@ RUN apt-get update \
 
 RUN npm install -g --unsafe-perm=true --allow-root netlify-cli
 
-RUN curl -sSL https://install.python-poetry.org | POETRY_VERSION=2.0.1 python -
+ADD https://astral.sh/uv/0.10.9/install.sh /uv-installer.sh
+RUN sh /uv-installer.sh && rm /uv-installer.sh
 ENV PATH="/root/.local/bin:${PATH}"
-RUN poetry self add poetry-plugin-export@1.9.0
+ENV UV_NO_DEV=1
 
 RUN mkdir /app
 WORKDIR /app
 
 COPY ./pyproject.toml /app/pyproject.toml
-COPY ./poetry.lock /app/poetry.lock
-RUN poetry export -f requirements.txt --without-hashes --output requirements.txt \
-    && pip install -r requirements.txt
-RUN pip install memray
-
+COPY ./uv.lock /app/uv.lock
 COPY ./dbt_project.yml /app/dbt_project.yml
 COPY ./packages.yml /app/packages.yml
 COPY ./profiles.yml /app/profiles.yml
-RUN dbt deps
+
+RUN uv sync
+RUN uv run dbt deps
+RUN uv pip install memray
 
 COPY . /app
 
