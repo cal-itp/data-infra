@@ -11,8 +11,9 @@ x-common-fields:
     tests:
       - not_null
       - relationships:
-          to: ref('dim_schedule_feeds')
-          field: key
+          arguments:
+            to: ref('dim_schedule_feeds')
+            field: key
   - &gtfs_rt_name
     name: gtfs_dataset_name
     description: &gtfs_dataset_name_desc |

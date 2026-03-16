@@ -24,8 +24,9 @@ x-common-fields:
     tests:
       - not_null
       - accepted_values:
-          values: [2022, 2023, 2024]
-          quote: false
+          arguments:
+            values: [2022, 2023, 2024]
+            quote: false
   - &reporter_type
     name: reporter_type
     description: '{{ doc("ntd_reporter_type") }}'
@@ -563,7 +564,8 @@ models:
           This table displays only "Annual Total".
         tests:
           - accepted_values:
-              values: ["Annual Total"]
+              arguments:
+                values: ["Annual Total"]
       - <<: *time_service_begins
         name: min_time_service_begins
       - <<: *time_service_ends
@@ -660,16 +662,17 @@ models:
       - <<: *time_period
         tests:
           - accepted_values:
-              values: [
-                "Annual Total",
-                "Average Weekday - AM Peak",
-                "Average Weekday - Midday",
-                "Average Weekday - PM Peak",
-                "Average Weekday - Other",
-                "Average Typical Weekday",
-                "Average Typical Saturday",
-                "Average Typical Sunday"
-              ]
+              arguments:
+                values: [
+                  "Annual Total",
+                  "Average Weekday - AM Peak",
+                  "Average Weekday - Midday",
+                  "Average Weekday - PM Peak",
+                  "Average Weekday - Other",
+                  "Average Typical Weekday",
+                  "Average Typical Saturday",
+                  "Average Typical Sunday"
+                ]
       - *time_service_begins
       - *time_service_ends
       - *reporter_type

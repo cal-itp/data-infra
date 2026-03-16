@@ -16,12 +16,13 @@ x-common-fields:
     tests:
       - not_null
       - dbt_expectations.expect_column_most_common_value_to_be_in_set:
-          value_set: [false]
-          top_n: 1
-          quote_values: false
-          data_type: "boolean"
-          # TODO: remove this once we deal with Auburn feed that has tab-delimited files
-          row_condition: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+          arguments:
+            value_set: [false]
+            top_n: 1
+            quote_values: false
+            data_type: "boolean"
+            # TODO: remove this once we deal with Auburn feed that has tab-delimited files
+            row_condition: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
   - &schedule_dim_pk
     name: key
     description: |
@@ -40,20 +41,22 @@ x-common-fields:
     tests:
       - not_null
       - unique:
-          # TODO: remove this once we deal with Auburn feed that has
-          # tab-delimited files and at that point can move the
-          # &primary_key_tests anchor up to here (until exclusion is dropped,
-          # this exclusion condition is different because it's for key instead
-          # of feed_key)
-          where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+          arguments:
+            # TODO: remove this once we deal with Auburn feed that has
+            # tab-delimited files and at that point can move the
+            # &primary_key_tests anchor up to here (until exclusion is dropped,
+            # this exclusion condition is different because it's for key instead
+            # of feed_key)
+            where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
   - &schedule_dim_gtfs_key_with_dupe_flag
     <<: *schedule_dim_gtfs_key
     tests:
       - not_null
       - unique:
-          # TODO: remove feed_key filter once we deal with Auburn feed that has
-          # tab-delimited files
-          where: "NOT warning_duplicate_gtfs_key AND feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+          arguments:
+            # TODO: remove feed_key filter once we deal with Auburn feed that has
+            # tab-delimited files
+            where: "NOT warning_duplicate_gtfs_key AND feed_key != '6368fe701bdd68c4f521751a9a222a10'"
   - &schedule_dim_dt
     name: _dt
     description: |
@@ -74,8 +77,9 @@ x-common-fields:
     tests:
       - not_null
       - relationships:
-          to: ref('dim_schedule_feeds')
-          field: key
+          arguments:
+            to: ref('dim_schedule_feeds')
+            field: key
 
 
 models:
@@ -101,22 +105,24 @@ models:
       event_time: _valid_from
     tests:
       - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url
-          gaps: required
+          arguments:
+            lower_bound_column: _valid_from
+            upper_bound_column: _valid_to
+            partition_by: base64_url
+            gaps: required
     columns:
       - name: key
         description: |
           Synthetic primary key constructed from `base64_url` and `_valid_from`.
         tests:
           - unique:
-          # TODO: remove this once we deal with Auburn feed that has
-          # tab-delimited files and at that point can move the
-          # &primary_key_tests anchor up to here (until exclusion is dropped,
-          # this exclusion condition is different because it's for key instead
-          # of feed_key)
-              where: "key != '6368fe701bdd68c4f521751a9a222a10'"
+              arguments:
+                # TODO: remove this once we deal with Auburn feed that has
+                # tab-delimited files and at that point can move the
+                # &primary_key_tests anchor up to here (until exclusion is dropped,
+                # this exclusion condition is different because it's for key instead
+                # of feed_key)
+                where: "key != '6368fe701bdd68c4f521751a9a222a10'"
           - not_null
       - *base64_url
       - name: download_success
@@ -155,8 +161,9 @@ models:
         description: '{{ doc("gtfs_agency__agency_name") }}'
         tests: &not_null_warn_99_threshold
           - dbt_utils.not_null_proportion:
-              at_least: 0.99
-              severity: warn
+              arguments:
+                at_least: 0.99
+                severity: warn
       - name: agency_url
         description: '{{ doc("gtfs_agency__agency_url") }}'
         tests: *not_null_warn_99_threshold
@@ -164,11 +171,12 @@ models:
         description: '{{ doc("gtfs_agency__agency_timezone") }}'
         tests: &not_null_warn
         - not_null:
-            # TODO: remove feed_key filter once we deal with Auburn feed that has
-            # tab-delimited files
-            where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
-            config:
-              severity: warn
+            arguments:
+              # TODO: remove feed_key filter once we deal with Auburn feed that has
+              # tab-delimited files
+              where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+              config:
+                severity: warn
       - name: agency_lang
         description: '{{ doc("gtfs_agency__agency_lang") }}'
       - name: agency_phone
@@ -201,9 +209,10 @@ models:
         description: '{{ doc("gtfs_areas__area_id") }}'
         tests: &not_null_error
           - not_null:
-              # TODO: remove feed_key filter once we deal with Auburn feed that has
-              # tab-delimited files
-              where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+              arguments:
+                # TODO: remove feed_key filter once we deal with Auburn feed that has
+                # tab-delimited files
+                where: "feed_key != '6368fe701bdd68c4f521751a9a222a10'"
       - name: area_name
         description: '{{ doc("gtfs_areas__area_name") }}'
       - *_feed_valid_from
@@ -220,7 +229,8 @@ models:
         tests:
           - not_null
           - unique:
-              where: "NOT warning_duplicate_gtfs_key AND feed_key != '6368fe701bdd68c4f521751a9a222a10'"
+              arguments:
+                where: "NOT warning_duplicate_gtfs_key AND feed_key != '6368fe701bdd68c4f521751a9a222a10'"
       # attribution_id is optional in the GTFS spec, so the flag is present
       # on most/all rows
       - <<: *warning_duplicate_gtfs_key
@@ -715,7 +725,8 @@ models:
         description: '{{ doc("gtfs_stops__stop_id") }}'
         tests: &not_null_error_99_threshold
           - dbt_utils.not_null_proportion:
-              at_least: 0.99
+              arguments:
+                at_least: 0.99
       - name: stop_code
         description: '{{ doc("gtfs_stops__stop_code") }}'
       - name: stop_name
@@ -786,12 +797,14 @@ models:
         description: '{{ doc("gtfs_transfers__from_stop_id") }}'
         tests:
           - not_null:
-              error_if: "> 5"
+              arguments:
+                error_if: "> 5"
       - name: to_stop_id
         description: '{{ doc("gtfs_transfers__to_stop_id") }}'
         tests:
           - not_null:
-              error_if: "> 5"
+              arguments:
+                error_if: "> 5"
       - name: transfer_type
         description: '{{ doc("gtfs_transfers__transfer_type") }}'
         tests: *not_null_warn
@@ -866,7 +879,8 @@ models:
         description: '{{ doc("gtfs_trips__trip_id") }}'
         tests:
           - not_null:
-              error_if: ">1"
+              arguments:
+                error_if: ">1"
       - name: trip_headsign
         description: '{{ doc("gtfs_trips__trip_headsign") }}'
       - name: trip_short_name
@@ -970,11 +984,13 @@ models:
       for the Flex v2 specification.
     tests:
       - dbt_utils.expression_is_true:
-          expression: "EXTRACT(DAY FROM arrival_time_interval) = 0"
-          where: "TIMESTAMP_DIFF(CURRENT_TIMESTAMP(), _feed_valid_from, DAY) <= 3"
+          arguments:
+            expression: "EXTRACT(DAY FROM arrival_time_interval) = 0"
+            where: "TIMESTAMP_DIFF(CURRENT_TIMESTAMP(), _feed_valid_from, DAY) <= 3"
       - dbt_utils.expression_is_true:
-          expression: "EXTRACT(DAY FROM departure_time_interval) = 0"
-          where: "TIMESTAMP_DIFF(CURRENT_TIMESTAMP(), _feed_valid_from, DAY) <= 3"
+          arguments:
+              expression: "EXTRACT(DAY FROM departure_time_interval) = 0"
+              where: "TIMESTAMP_DIFF(CURRENT_TIMESTAMP(), _feed_valid_from, DAY) <= 3"
     columns:
       - *schedule_dim_pk
       - *schedule_dim_gtfs_key_with_dupe_flag
@@ -994,7 +1010,8 @@ models:
         description: '{{ doc("gtfs_stop_times__stop_id") }}'
         tests:
         - not_null:
-            where: "not warning_missing_foreign_key_stop_id"
+            arguments:
+              where: "not warning_missing_foreign_key_stop_id"
       - name: stop_sequence
         description: '{{ doc("gtfs_stop_times__stop_sequence") }}'
         tests: *not_null_warn

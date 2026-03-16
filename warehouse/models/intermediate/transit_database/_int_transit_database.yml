@@ -8,19 +8,21 @@ models:
       service, product, and component keys unnested.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - id
-            - service_key
-            - product_key
-            - component_key
-            - dt
+          arguments:
+            combination_of_columns:
+              - id
+              - service_key
+              - product_key
+              - component_key
+              - dt
       - dbt_utils.unique_combination_of_columns:
-          severity: warn
-          combination_of_columns:
-            - service_key
-            - product_key
-            - component_key
-            - dt
+          arguments:
+            severity: warn
+            combination_of_columns:
+              - service_key
+              - product_key
+              - component_key
+              - dt
   - name: int_transit_database__urls_to_gtfs_datasets
     description: |
       Creates a 1:N relationship so any given extract/URL in the
@@ -38,10 +40,11 @@ models:
       GTFS feed data to organizations, services, etc.
     tests:
       - dbt_utils.mutually_exclusive_ranges:
-          lower_bound_column: _valid_from
-          upper_bound_column: _valid_to
-          partition_by: base64_url
-          gaps: required
+          arguments:
+            lower_bound_column: _valid_from
+            upper_bound_column: _valid_to
+            partition_by: base64_url
+            gaps: required
     columns:
       - name: base64_url
         tests:
@@ -49,8 +52,9 @@ models:
       - name: gtfs_dataset_key
         tests:
           - relationships:
-              to: ref('dim_gtfs_datasets')
-              field: key
+              arguments:
+                to: ref('dim_gtfs_datasets')
+                field: key
   - name: int_transit_database__transit_data_quality_issues
     description: TODO
     columns:

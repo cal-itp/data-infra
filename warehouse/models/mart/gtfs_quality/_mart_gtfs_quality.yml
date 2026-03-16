@@ -12,7 +12,8 @@ models:
       a lack of validation for that feed on that day.
     tests:
       - dbt_utils.expression_is_true:
-          expression: 'validated_extracts = validation_successes + validation_exceptions'
+          arguments:
+            expression: 'validated_extracts = validation_successes + validation_exceptions'
     columns:
       - &key
         name: key
@@ -38,27 +39,35 @@ models:
       - name: parsed_files
         tests:
           - dbt_utils.not_null_proportion:
-              at_least: 0.99
+              arguments:
+                at_least: 0.99
           - dbt_utils.expression_is_true:
-              expression: '<= 4320'
+              arguments:
+                expression: '<= 4320'
       - name: validated_extracts
         tests:
           - dbt_utils.not_null_proportion:
-              at_least: 0.99
+              arguments:
+                at_least: 0.99
           - dbt_utils.expression_is_true:
-              expression: '<= 4320'
+              arguments:
+                expression: '<= 4320'
       - name: validation_successes
         tests:
           - dbt_utils.not_null_proportion:
-              at_least: 0.99
+              arguments:
+                at_least: 0.99
           - dbt_utils.expression_is_true:
-              expression: '<= 4320'
+              arguments:
+                expression: '<= 4320'
       - name: validation_exceptions
         tests:
           - dbt_utils.not_null_proportion:
-              at_least: 0.99
+              arguments:
+                at_least: 0.99
           - dbt_utils.expression_is_true:
-              expression: '<= 4320'
+              arguments:
+                expression: '<= 4320'
       - name: total_notices
 
   - name: fct_daily_schedule_feed_validation_notices
@@ -75,39 +84,47 @@ models:
           # These tests ensure we only display notices during
           # the "range" of validator versions.
           - dbt_utils.accepted_range:
-              min_value: "DATE'2021-04-16'"
-              max_value: "DATE'2022-09-14'"
-              where: validation_validator_version = 'v2.0.0'
+              arguments:
+                min_value: "DATE'2021-04-16'"
+                max_value: "DATE'2022-09-14'"
+                where: validation_validator_version = 'v2.0.0'
           - dbt_utils.accepted_range:
-              min_value: "DATE'2022-09-15'"
-              max_value: "DATE'2022-11-15'"
-              where: validation_validator_version = 'v3.1.1'
+              arguments:
+                min_value: "DATE'2022-09-15'"
+                max_value: "DATE'2022-11-15'"
+                where: validation_validator_version = 'v3.1.1'
           - dbt_utils.accepted_range:
-              min_value: "DATE'2022-11-16'"
-              max_value: "DATE'2023-08-31'"
-              where: validation_validator_version = 'v4.0.0'
+              arguments:
+                min_value: "DATE'2022-11-16'"
+                max_value: "DATE'2023-08-31'"
+                where: validation_validator_version = 'v4.0.0'
           - dbt_utils.accepted_range:
-              min_value: "DATE'2023-09-01'"
-              max_value: "DATE'2024-01-19'"
-              where: validation_validator_version = 'v4.1.0'
+              arguments:
+                min_value: "DATE'2023-09-01'"
+                max_value: "DATE'2024-01-19'"
+                where: validation_validator_version = 'v4.1.0'
           - dbt_utils.accepted_range:
-              min_value: "DATE'2024-01-20'"
-              max_value: "DATE'2024-03-26'"
-              where: validation_validator_version = 'v4.2.0'
+              arguments:
+                min_value: "DATE'2024-01-20'"
+                max_value: "DATE'2024-03-26'"
+                where: validation_validator_version = 'v4.2.0'
           - dbt_utils.accepted_range:
-              min_value: "DATE'2024-03-27'"
-              max_value: "DATE'2026-02-24'"
-              where: validation_validator_version = 'v5.0.0'
+              arguments:
+                min_value: "DATE'2024-03-27'"
+                max_value: "DATE'2026-02-24'"
+                where: validation_validator_version = 'v5.0.0'
           - dbt_utils.accepted_range:
-              min_value: "DATE'2026-02-25'"
-              where: validation_validator_version = 'v7.1.0'
+              arguments:
+                min_value: "DATE'2026-02-25'"
+                where: validation_validator_version = 'v7.1.0'
       - &schedule_feed_key
         name: feed_key
         tests:
           - not_null
           - relationships:
-              to: ref('dim_schedule_feeds')
-              field: key
+              arguments:
+                to: ref('dim_schedule_feeds')
+                field: key
       - &base64_url
         name: base64_url
         tests:
@@ -115,8 +132,9 @@ models:
       - name: outcome_extract_dt
         tests:
           - dbt_utils.expression_is_true:
-              # outcomes only count for the outcomes's date and onwards
-              expression: '<= date'
+              arguments:
+                # outcomes only count for the outcomes's date and onwards
+                expression: '<= date'
       - &schedule_validation_validator_version
         name: validation_validator_version
         description: |
@@ -125,7 +143,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['v2.0.0', 'v3.1.1', 'v4.0.0', 'v4.1.0', 'v4.2.0', 'v5.0.0', 'v7.1.0']
+              arguments:
+                values: ['v2.0.0', 'v3.1.1', 'v4.0.0', 'v4.1.0', 'v4.2.0', 'v5.0.0', 'v7.1.0']
       - &schedule_validator_code
         name: code
         description: |
@@ -140,12 +159,14 @@ models:
       - name: validation_success
         tests:
           - dbt_utils.not_null_proportion:
-              at_least: 0.99
+              arguments:
+                at_least: 0.99
       - name: validation_exception
       - name: total_notices
         tests:
           - dbt_utils.not_null_proportion:
-              at_least: 0.99
+              arguments:
+                at_least: 0.99
 
   - name: fct_implemented_checks
     description: |
@@ -154,13 +175,16 @@ models:
       the "intended checks" to verify checks are actually implemented.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - check
-            - feature
+          arguments:
+            combination_of_columns:
+              - check
+              - feature
       - dbt_utils.equal_rowcount:
-          compare_model: ref('stg_gtfs_quality__intended_checks')
+          arguments:
+            compare_model: ref('stg_gtfs_quality__intended_checks')
       - dbt_utils.expression_is_true:
-          expression: "is_implemented"
+          arguments:
+            expression: "is_implemented"
     columns:
       - name: is_implemented
 
@@ -277,8 +301,9 @@ models:
           This may be null if the unzip operation failed.
         tests:
           - relationships:
-              to: ref('dim_schedule_feeds')
-              field: key
+              arguments:
+                to: ref('dim_schedule_feeds')
+                field: key
       - name: original_filepath
         description: |
           The original full file path to this file in the zipfile.
@@ -324,8 +349,9 @@ models:
       - name: gtfs_dataset_key
         tests:
           - relationships:
-              to: ref('dim_gtfs_datasets')
-              field: key
+              arguments:
+                to: ref('dim_gtfs_datasets')
+                field: key
       - name: gtfs_dataset_name
   - name: fct_daily_reports_site_organization_scheduled_service_summary
     description: |
@@ -364,8 +390,9 @@ models:
         tests:
           - not_null
           - relationships:
-              to: ref('dim_organizations')
-              field: key
+              arguments:
+                to: ref('dim_organizations')
+                field: key
       - name: ttl_service_hours
         description: |
           Sum of total service hours for all reports-assessed feeds for this organization on this date.
@@ -569,9 +596,10 @@ models:
       - `avg` refers to the mean.
     tests: &message_age_summary_tests
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - dt
-            - base64_url
+          arguments:
+            combination_of_columns:
+              - dt
+              - base64_url
     columns: &message_age_summary_cols
       - name: dt
         tests:
@@ -592,9 +620,10 @@ models:
       - `avg` refers to the mean.
     tests:
       - dbt_utils.unique_combination_of_columns:
-          combination_of_columns:
-            - dt
-            - organization_name
+          arguments:
+            combination_of_columns:
+              - dt
+              - organization_name
     columns:
       - name: dt
         tests:
