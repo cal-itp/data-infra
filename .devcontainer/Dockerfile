@@ -24,18 +24,18 @@ USER $USER
 WORKDIR /home/$USER/app/warehouse
 # pip install location for non-root
 ENV PATH="$PATH:/home/$USER/.local/bin"
-# upgrade pip, install poetry
-RUN python -m pip install --upgrade pip && pip install poetry
+# upgrade pip, install uv
+RUN python -m pip install --upgrade pip && pip install uv
 
 # copy source files
 COPY ./warehouse/pyproject.toml pyproject.toml
-COPY ./warehouse/poetry.lock poetry.lock
+COPY ./warehouse/uv.lock uv.lock
 COPY ./warehouse/dbt_project.yml dbt_project.yml
 COPY ./warehouse/packages.yml packages.yml
 
 # install warehouse deps
-RUN poetry install
-RUN poetry run dbt deps
+RUN uv install
+RUN uv run dbt deps
 
 # install dev deps
 RUN pip install black memray pre-commit
