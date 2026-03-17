@@ -3,7 +3,7 @@
 # provide_context: true
 # ---
 # To run locally:
-#   PYTHONPATH=/Users/vivek/github/data-infra/airflow/plugins uv run elavon_to_gcs_jsonl.py
+#   PYTHONPATH=[local fully qualified path to repo root]/airflow/plugins uv run elavon_to_gcs_jsonl.py
 #
 import gzip
 import io
@@ -21,9 +21,7 @@ from calitp_data_infra.storage import (  # type: ignore
 )
 
 CALITP_BUCKET__ELAVON_RAW = os.environ["CALITP_BUCKET__ELAVON_RAW"]
-# CALITP_BUCKET__ELAVON_RAW = "calitp-staging-elavon-raw"
 CALITP_BUCKET__ELAVON_PARSED = os.environ["CALITP_BUCKET__ELAVON_PARSED"]
-# CALITP_BUCKET__ELAVON_PARSED = "calitp-staging-elavon-parsed"
 
 logging.basicConfig(
     level=logging.INFO,
