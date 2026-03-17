@@ -10,10 +10,10 @@ pre-commit install --install-hooks --overwrite
 cd warehouse/
 
 if [ ! -f ~/.dbt/profiles.yml ]; then
-    poetry run dbt init
+    uv run dbt init
 fi
 
-poetry run dbt debug
+uv run dbt debug
 
 if [[ $? != 0 ]]; then
     gcloud init
