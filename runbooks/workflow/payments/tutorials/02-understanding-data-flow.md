@@ -16,7 +16,7 @@ graph TB
     A --> B2[Enghouse Validator]
     B --> C[Littlepay S3 Bucket]
     B2 --> C2[Enghouse Direct to GCS]
-    D[Payment Processed\ (Received from Littlepay or Elavon)] --> E[Elavon SFTP Server]
+    D[Payment Processed (Received from Littlepay or Elavon)] --> E[Elavon SFTP Server]
     
     C --> F[sync_littlepay_v3 DAG]
     C2 --> H2[GCS: calitp-enghouse-raw]
@@ -541,6 +541,9 @@ A: Data for all vendors should appear within 24 hours. Exact timing depends on w
 
 **Q: What if a file is corrupted?**\
 A: We can re-run the parse DAG for that specific partition without re-syncing from the vendor.
+
+**Q: Why doesn't Enghouse have sync and parse DAGs like Littlepay and Elavon?**\
+A: Enghouse delivers data directly to our GCS bucket (`gs://calitp-enghouse-raw/`) via SFTP, so there is no vendor-managed bucket for us to copy from (no sync needed). Additionally, Enghouse delivers data as CSV files that BigQuery external tables can read directly — no format conversion is required (no parse needed). Data lands in GCS and is immediately queryable via the external tables once `create_external_tables` has been run.
 
 ______________________________________________________________________
 

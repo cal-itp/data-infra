@@ -71,7 +71,8 @@ Navigate to the GCP Composer/ Airflow UI (link in your onboarding docs) and find
 **For all agencies:**
 
 1. **create_external_tables** - Creates BigQuery external tables from raw or parsed data
-2. **dbt_daily** - Runs dbt models to transform data into analytics-ready tables (includes dbt_payments task group)
+2. **dbt_daily** - Runs dbt models to transform data into analytics-ready tables (includes dbt_payments task group). Runs most days of the week (Sun/Tue/Wed/Fri/Sat). Only runs specific task groups (payments, GTFS, benefits, etc.) rather than the full warehouse.
+3. **dbt_all** - Runs all dbt models across the entire warehouse. Runs on Mon/Thu. Use this DAG when you need to confirm a model outside the payments task group is up to date.
 
 ### Data Storage
 
