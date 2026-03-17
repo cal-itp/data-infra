@@ -16,7 +16,7 @@ graph TB
     A --> B2[Enghouse Validator]
     B --> C[Littlepay S3 Bucket]
     B2 --> C2[Enghouse Direct to GCS]
-    D[Payment Processed (Received from Littlepay or Elavon)] --> E[Elavon SFTP Server]
+    D["Payment Processed (Received from Littlepay or Elavon)"] --> E[Elavon SFTP Server]
     
     C --> F[sync_littlepay_v3 DAG]
     C2 --> H2[GCS: calitp-enghouse-raw]
