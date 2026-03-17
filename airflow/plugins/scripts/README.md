@@ -7,22 +7,22 @@ within BigQuery external table file count limits.
 
 ## Running automated tests
 
-1. Install poetry dependencies for airflow:
+1. Install uv dependencies for airflow:
 
 ```bash
-$ poetry install
+$ uv sync
 ```
 
 2. Run gtfs-rt-parser tests:
 
 ```bash
-$ poetry run pytest tests/scripts/test_gtfs_rt_parser.py
+$ uv run pytest tests/scripts/test_gtfs_rt_parser.py
 ```
 
 To run only a specific test, you can reference like this:
 
 ```bash
-$ poetry run pytest tests/scripts/test_gtfs_rt_parser.py::TestGtfsRtParser::test_no_vehicle_positions_for_date
+$ uv run pytest tests/scripts/test_gtfs_rt_parser.py::TestGtfsRtParser::test_no_vehicle_positions_for_date
 ```
 
 
