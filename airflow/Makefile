@@ -32,9 +32,9 @@ endif
 
 $(WAREHOUSE_PATH)/target/manifest.json:
 	cd $(WAREHOUSE_PATH) && \
-	poetry install && \
-	poetry run dbt deps && \
-	poetry run dbt compile --target $(WAREHOUSE_TARGET)
+	uv sync && \
+	uv run dbt deps && \
+	uv run dbt compile --target $(WAREHOUSE_TARGET)
 
 $(COMPOSER_PATH):
 	mkdir $(COMPOSER_PATH)

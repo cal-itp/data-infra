@@ -135,7 +135,7 @@ When you `dbt compile` locally, you will compile SQL that's pointed at the stagi
 
 If you noticed an issue that wasn't caused by a failing test, you can start with the model that you noticed the problem in.
 
-In either case, you may need to consider upstream models. To identify your model's parents, you can look at the [dbt docs website](https://dbt-docs.dds.dot.ca.gov/#!/overview) page for your model. [See the dbt docs](https://docs.getdbt.com/docs/collaborate/documentation#navigating-the-documentation-site) for how to look at the model's lineage. You can modify the model selector in the bottom middle to just `+<your model name>` to only see the model's parents. You can also run `poetry run dbt ls -s +<your model> --resource-type model` to see a model's parents just on the command line. Try to figure out where the root cause of the problem is occurring. This may involve running ad-hoc SQL queries to inspect the models involved.
+In either case, you may need to consider upstream models. To identify your model's parents, you can look at the [dbt docs website](https://dbt-docs.dds.dot.ca.gov/#!/overview) page for your model. [See the dbt docs](https://docs.getdbt.com/docs/collaborate/documentation#navigating-the-documentation-site) for how to look at the model's lineage. You can modify the model selector in the bottom middle to just `+<your model name>` to only see the model's parents. You can also run `uv run dbt ls -s +<your model> --resource-type model` to see a model's parents just on the command line. Try to figure out where the root cause of the problem is occurring. This may involve running ad-hoc SQL queries to inspect the models involved.
 
 (tool_choice)=
 
@@ -218,7 +218,7 @@ Once you have made some changes, it is important to test them.
 Functional testing during development is different than adding dbt tests ([described below](dbt-tests)). dbt tests ensure some floor of model validity over time; while developing, you should run more holistic tests to ensure that your code is working as expected.
 ```
 
-The first step is running your changes in the test/staging environment. You can run a command like `poetry run dbt run -s +<your model>` to run your model and its antecedents.  Your models will be created in the `cal-itp-data-infra-staging.<your name>_<dbt folder name, like mart_gtfs>` BigQuery dataset. Note that this is in the `cal-itp-data-infra-staging` Google Cloud Platform project, *not* the production `cal-itp-data-infra` project.
+The first step is running your changes in the test/staging environment. You can run a command like `uv run dbt run -s +<your model>` to run your model and its antecedents.  Your models will be created in the `cal-itp-data-infra-staging.<your name>_<dbt folder name, like mart_gtfs>` BigQuery dataset. Note that this is in the `cal-itp-data-infra-staging` Google Cloud Platform project, *not* the production `cal-itp-data-infra` project.
 
 What to test/check will vary based on what you're doing, but below are some example things to consider.
 
@@ -317,7 +317,7 @@ If the model takes more than 100 GB to build, or if test queries seem to be read
 Below are a few options to improve performance. [Data infra PR #2711](https://github.com/cal-itp/data-infra/pull/2711) has examples of several different types of performance interventions.
 
 - If the model is expensive to **build**: First, try to figure out what specific steps are expensive. You can run individual portions of your model SQL in the BigQuery console to assess the performance of individual [CTEs](https://docs.getdbt.com/terms/cte).
-  - If the model involves transformations on a lot of data that doesn't need to be reprocessed every day, you may want to make the model [incremental](https://docs.getdbt.com/docs/build/incremental-models). You can run `poetry run dbt ls -s config.materialized:incremental --resource-type model` to see examples of other incremental models in the repo.
+  - If the model involves transformations on a lot of data that doesn't need to be reprocessed every day, you may want to make the model [incremental](https://docs.getdbt.com/docs/build/incremental-models). You can run `uv run dbt ls -s config.materialized:incremental --resource-type model` to see examples of other incremental models in the repo.
   - If the model reads data from an expensive parent table, you may want to consider leveraging clustering or partitioning on that parent table to make a join or select more efficient. See [this comment on data infra PR #2743](https://github.com/cal-itp/data-infra/pull/2743#pullrequestreview-1570532320) for an example of a case where changing a join condition was a more appropriate performance intervention than making the table incremental.
 - If the model is expensive to **query**: The main interventions to make a model more efficient to query involve changing the data storage.
   - Consider storing it as a [table rather than a view](https://docs.getdbt.com/docs/build/materializations).
@@ -335,11 +335,11 @@ If you make your table incremental, you should make sure to run both a full refr
 
 Another important consideration is the potential downstream impacts of your changes, particularly if you are changing existing models.
 
-You can run dbt tests on the downstream models using `poetry run dbt test -s <your_model>+`. You should make sure that your changes do not cause new test failures in downstream models.
+You can run dbt tests on the downstream models using `uv run dbt test -s <your_model>+`. You should make sure that your changes do not cause new test failures in downstream models.
 
-Check which models are downstream of your changes using `poetry run dbt ls -s <your_model>+ --resource-type model`. If your model has a lot of descendents, consider performing additional tests to ensure that your changes will not cause problems downstream.
+Check which models are downstream of your changes using `uv run dbt ls -s <your_model>+ --resource-type model`. If your model has a lot of descendents, consider performing additional tests to ensure that your changes will not cause problems downstream.
 
-To check for impacts on defined downstream artifacts (like the reports site and open data publishing), you can check which [exposures](https://docs.getdbt.com/docs/build/exposures) are downstream of your model using `poetry run dbt ls -s <your_model>+ --resource-type exposure`.
+To check for impacts on defined downstream artifacts (like the reports site and open data publishing), you can check which [exposures](https://docs.getdbt.com/docs/build/exposures) are downstream of your model using `uv run dbt ls -s <your_model>+ --resource-type exposure`.
 
 #### Other considerations
 
@@ -364,7 +364,7 @@ We usually prefer to have tests on [tables (rather than views)](https://docs.get
 You may want to find a model similar to the one you're changing and see what tests that other model has.
 
 ```{admonition} Make sure your tests pass!
-After you add your tests, you should make sure they pass by running `poetry run dbt test -s <your_model>`. If your tests don't pass, you should [figure out why](identify-bug) and [make changes](change-models) until they do.
+After you add your tests, you should make sure they pass by running `uv run dbt test -s <your_model>`. If your tests don't pass, you should [figure out why](identify-bug) and [make changes](change-models) until they do.
 ```
 
 #### Documentation
@@ -386,7 +386,7 @@ Once your changes merge, if they will impact other users (for example by changin
 ```{warning}
 [Incremental models](https://docs.getdbt.com/docs/build/incremental-models) downstream of your changes may require a **full refresh** after your changes merge.
 
-To check for incremental models downstream of your model, run `poetry run dbt ls -s <your_model>+,config.materialized:incremental --resource-type model`. If you need to refresh incremental models:
+To check for incremental models downstream of your model, run `uv run dbt ls -s <your_model>+,config.materialized:incremental --resource-type model`. If you need to refresh incremental models:
 1. Wait for the [build-dbt](https://github.com/cal-itp/data-infra/actions/workflows/build-dbt.yml) GitHub action associated with your PR to complete after you merge.
 
 2. Go into the [Airflow UI](https://b2062ffca77d44a28b4e05f8f5bf4996-dot-us-west2.composer.googleusercontent.com/home) and go to the [transform_warehouse_full_refresh DAG](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse_full_refresh). **Specify appropriate model selectors to only refresh models that were affected by your changes** and then run the DAG task.
@@ -409,7 +409,7 @@ You can compile the SQL for an incremental model and run it directly in BigQuery
 Working with incremental models can affect how you approach various dbt-related workflows. See callouts in the individual step sections above related to incremental models for more details.
 
 ```{admonition} Identifying incremental models in your dependency tree
-If you're trying to identify whether there are incremental models in the dependency tree of a model you're working with, you can use the following command (run from the `warehouse` directory in the data infra repo): `poetry run dbt ls -s +<your_model>+,config.materialized:incremental --resource-type model`.
+If you're trying to identify whether there are incremental models in the dependency tree of a model you're working with, you can use the following command (run from the `warehouse` directory in the data infra repo): `uv run dbt ls -s +<your_model>+,config.materialized:incremental --resource-type model`.
 ```
 
 ## Helpful talks and presentations
