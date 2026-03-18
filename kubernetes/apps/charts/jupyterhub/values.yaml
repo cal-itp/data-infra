@@ -40,6 +40,10 @@ jupyterhub:
           mem_limit: "12G"
           mem_guarantee: "10G"
           cpu_guarantee: 1.5
+      - display_name: "Prototype Image - 2026.3.18, Python 3.11"
+        description: "Thinned image with pyproject-local-kernel. Data science packages installed via uv sync into a project venv. Select 'Pyproject Local' kernel in notebooks. See #1882."
+        kubespawner_override:
+          image: ghcr.io/cal-itp/data-infra/jupyter-singleuser:2026.3.18
       - display_name: "Legacy Image - 2026.1.12, Python 3.11"
         description: "This is the previous default image version, siuba was removed and both SQLAlchemy and Pandas were upgraded to their respective v2 versions. Your code will run on a shared machine with 3–10G of memory and 0.7–1.9 CPU cores."
         kubespawner_override:
