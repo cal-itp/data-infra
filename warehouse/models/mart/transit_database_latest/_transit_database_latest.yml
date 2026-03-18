@@ -164,3 +164,66 @@ models:
       - name: caltrans_district_name
         meta:
           publish.include: true
+
+  - name: dim_services_latest
+    description: |
+      Current-only snapshot of services in the Cal-ITP Airtable Transit Database.
+    meta:
+      ckan.authority: https://calitp.org/
+    columns:
+      - name: source_record_id
+        description: |
+          The unique identifier for this service record in the Airtable Database.
+        meta:
+          publish.include: true
+      - name: name
+        description: Service name
+        meta:
+          publish.include: true
+      - name: service_type
+        description: |
+          Categorical Field
+        meta:
+          publish.include: true
+      - name: mode
+        description: |
+          Categorical Field
+        meta:
+          publish.include: true
+      - name: operating_counties
+        meta:
+          publish.include: true
+      - name: fixed_route
+        description: |
+          This will be set to true for services that have the following:
+          - Have a published schedule
+          - Run along a predetermined route.
+        meta:
+          publish.include: true
+      - name: is_public
+        description: |
+          Formula in source system returns "Yes" value if the rider requirement of "Public" has been set in the `rider_requirements` column.
+        meta:
+          publish.include: true
+      - name: public_currently_operating
+        description: |
+          Formula in source system returns true value if the following criteria are met:
+            1. Service has "Operating" value in `operational_status` column (for organizations, only at least one managed service must meet this criterion)
+            2. Service is rideable by the general public (for organizations, only at least one managed service must meet this criterion)
+            3. Provider is either an NTD reporter (indicated by non-empty `raw_ntd_id`) or is a public entity.
+        meta:
+          publish.include: true
+      - name: public_currently_operating_fixed_route
+        description: |
+          Formula in source system returns true value under same conditions as `public_currently_operating`
+          plus additional requirement that service has `fixed_route = true` (for organizations, only at least one managed service must meet this criterion).
+        meta:
+          publish.include: true
+      - name: operational_status
+        description: |
+          Formula in source system automatically calculates the operational status based on the following criteria:
+            A. Status is "Planned" when the service "Start Date" is in the future.
+            B. Status is "Operating" when the current date is not before the start date and not after the deprecated date or both start date and deprecated date are empty
+            C. Status is "Deprecated" when the service "Deprecated Date" is in the past.
+        meta:
+          publish.include: true
