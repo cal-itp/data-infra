@@ -26,10 +26,9 @@ ENV GCLOUD_HOME=/gcloud
 RUN mkdir $GCLOUD_HOME && chown $NB_USER $GCLOUD_HOME
 RUN mkdir /reqs && chown $NB_USER /reqs
 
-USER $NB_UID
+RUN curl -LsSf https://astral.sh/uv/0.9.26/install.sh | env UV_INSTALL_DIR=/usr/local/bin sh
 
-RUN curl -LsSf https://astral.sh/uv/0.9.26/install.sh | sh
-ENV PATH="$HOME/.local/bin:$PATH"
+USER $NB_UID
 
 RUN npm install -g --unsafe-perm=true --allow-root netlify-cli
 RUN npm install -g --unsafe-perm=true --allow-root sql-language-server
