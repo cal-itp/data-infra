@@ -196,5 +196,4 @@ build_my_reports:
 When redeploying your portfolio with new content and there’s an old version with existing files or content on your portfolio site or in your local environment, it’s important to clean up the old files before adding new content.
 
 Use python `portfolio/portfolio.py clean my_report` before deploying your report to remove the local folders that are not checked in.
-We currently use Git Large File Storage (lfs) to store these parameterized notebooks.
 Swap out the `git add` and `git rm` steps. If using `gcsfs`, we can use the `fs.put` and `fs.rm` to cache the parameterized notebooks and built HTML files for JupyterBook.
