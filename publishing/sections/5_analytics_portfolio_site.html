@@ -718,7 +718,6 @@
 <h3>Redeploying Portfolio/ Refresh Index Page<a class="headerlink" href="#redeploying-portfolio-refresh-index-page" title="Link to this heading">#</a></h3>
 <p>When redeploying your portfolio with new content and there’s an old version with existing files or content on your portfolio site or in your local environment, it’s important to clean up the old files before adding new content.</p>
 <p>Use python <code class="docutils literal notranslate"><span class="pre">portfolio/portfolio.py</span> <span class="pre">clean</span> <span class="pre">my_report</span></code> before deploying your report to remove the local folders that are not checked in.
-We currently use Git Large File Storage (lfs) to store these parameterized notebooks.
 Swap out the <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code> and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rm</span></code> steps. If using <code class="docutils literal notranslate"><span class="pre">gcsfs</span></code>, we can use the <code class="docutils literal notranslate"><span class="pre">fs.put</span></code> and <code class="docutils literal notranslate"><span class="pre">fs.rm</span></code> to cache the parameterized notebooks and built HTML files for JupyterBook.</p>
 </section>
 </section>
