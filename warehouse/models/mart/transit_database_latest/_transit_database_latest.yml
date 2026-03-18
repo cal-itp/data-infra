@@ -78,6 +78,18 @@ models:
           schedule_to_use_for_rt_validation_base64_url.
         meta:
           publish.include: true
+      - name: service_source_record_ids
+        description: |
+          Array of Airtable source record IDs for customer-facing services associated with this GTFS dataset,
+          joinable to source_record_id in dim_services_latest.
+        meta:
+          publish.include: true
+      - name: organization_source_record_ids
+        description: |
+          Array of Airtable source record IDs for organizations that produce this GTFS dataset,
+          joinable to source_record_id in dim_organizations_latest_with_caltrans_district.
+        meta:
+          publish.include: true
 
   - name: dim_organizations_latest_with_caltrans_district
     description: |
