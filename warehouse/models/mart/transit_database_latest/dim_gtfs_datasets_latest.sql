@@ -12,6 +12,7 @@ bridge_schedule_dataset_for_validation AS (
 
 dim_gtfs_datasets_latest AS (
     SELECT
+        unfiltered_entries_latest.source_record_id,
         unfiltered_entries_latest.name,
         unfiltered_entries_latest.type,
         unfiltered_entries_latest.regional_feed_type,
