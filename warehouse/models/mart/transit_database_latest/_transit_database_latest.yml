@@ -78,3 +78,89 @@ models:
           schedule_to_use_for_rt_validation_base64_url.
         meta:
           publish.include: true
+
+  - name: dim_organizations_latest_with_caltrans_district
+    description: |
+      Current-only snapshot of organizations in the Cal-ITP Airtable Transit Database.
+    meta:
+      ckan.authority: https://calitp.org/
+    columns:
+      - name: source_record_id
+        description: |
+          The unique identifier for this organization record in the Airtable Database.
+        meta:
+          publish.include: true
+      - name: name
+        meta:
+          publish.include: true
+      - name: organization_type
+        description: |
+          Categorical data
+        meta:
+          publish.include: true
+      - name: roles
+        meta:
+          publish.include: true
+      - name: website
+        meta:
+          publish.include: true
+      - name: is_public_entity
+        description: |
+          Formula in source system returns true if the `organization_type` column has been set to one of the following:
+            City/Town,
+            Independent Agency,
+            MPO/RTPA,
+            County,
+            Tribe,
+            Federal Government,
+            Joint Powers Agency, or
+            Council of Governments
+        meta:
+          publish.include: true
+      - name: ntd_id
+        meta:
+          publish.include: true
+      - name: ntd_agency_info_key
+        meta:
+          publish.include: true
+      - name: ntd_id_2022
+        meta:
+          publish.include: true
+      - name: rtpa_key
+        meta:
+          publish.include: true
+      - name: rtpa_name
+        description: |
+          Regional Transportation Planning Agency. It shows which RTPA each transit agency is headquartered in.
+          All transit agencies will be associated with a single RTPA given that there are RTPAs covering the entire state of California.
+        meta:
+          publish.include: true
+      - name: mpo_key
+        meta:
+          publish.include: true
+      - name: mpo_name
+        description: |
+          Metropolitan Planning Organization. It shows which MPO each transit agency is headquartered in.
+          Not all transit agencies are associated with an MPO, since there are not MPOs covering the entire state.
+        meta:
+          publish.include: true
+      - name: public_currently_operating
+        description: |
+          Formula in source system returns true value if the following criteria are met:
+            1. Service has "Operating" value in `operational_status` column (for organizations, only at least one managed service must meet this criterion)
+            2. Service is rideable by the general public (for organizations, only at least one managed service must meet this criterion)
+            3. Provider is either an NTD reporter (indicated by non-empty `raw_ntd_id`) or is a public entity.
+        meta:
+          publish.include: true
+      - name: public_currently_operating_fixed_route
+        description: |
+          Formula in source system returns true value under same conditions as `public_currently_operating`
+          plus additional requirement that service has `fixed_route = true` (for organizations, only at least one managed service must meet this criterion).
+        meta:
+          publish.include: true
+      - name: caltrans_district
+        meta:
+          publish.include: true
+      - name: caltrans_district_name
+        meta:
+          publish.include: true
