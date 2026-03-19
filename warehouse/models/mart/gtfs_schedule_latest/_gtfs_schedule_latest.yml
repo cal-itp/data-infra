@@ -1288,7 +1288,6 @@ exposures:
       - ref("dim_fare_transfer_rules_latest")
       - ref("dim_feed_info_latest")
       - ref("dim_frequencies_latest")
-      - ref("dim_gtfs_datasets_latest")
       - ref("dim_levels_latest")
       - ref("dim_pathways_latest")
       - ref("dim_routes_latest")
@@ -1299,6 +1298,9 @@ exposures:
       - ref("dim_transfers_latest")
       - ref("dim_translations_latest")
       - ref("dim_trips_latest")
+      - ref("dim_gtfs_datasets_latest")
+      - ref("dim_organizations_latest_with_caltrans_district")
+      - ref("dim_services_latest")
 
     owner:
       email: hello@calitp.org
@@ -1457,6 +1459,15 @@ exposures:
                 Each row is a cleaned row from a trips.txt file.
                 Definitions for the original GTFS fields are available at:
                 https://gtfs.org/reference/static#tripstxt.
+            dim_organizations_latest_with_caltrans_district:
+              id: 0472efd7-c5a2-4cb0-9f9b-a4ec7882adf3
+              description: |
+                Each row represents a organization in the Cal-ITP Transit Database.  These
+                organizations may or not be a transit agency.
+            dim_services_latest:
+              id: 855ce20b-2d9e-401f-bafb-a6b17cd6dafc
+              description: |
+                Each row represents a transit service in the Cal-ITP Transit Database.
 
 
   - name: calitp_map_tile_server
