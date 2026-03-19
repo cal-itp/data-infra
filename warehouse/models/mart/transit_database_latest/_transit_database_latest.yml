@@ -227,3 +227,83 @@ models:
             C. Status is "Deprecated" when the service "Deprecated Date" is in the past.
         meta:
           publish.include: true
+
+  - name: dim_provider_gtfs_data_latest
+    description: |
+      Current-only snapshot linking organizations, services, and their associated GTFS datasets.
+      Each record links together an organization with a service and a set of up to four
+      GTFS datasets (schedule, RT service alerts, RT vehicle positions, and RT trip updates),
+      where the organization manages the service.
+      Joinable to dim_organizations_latest_with_caltrans_district, dim_services_latest,
+      and dim_gtfs_datasets_latest via the respective source_record_id fields.
+    meta:
+      ckan.authority: https://calitp.org/
+    columns:
+      - name: organization_source_record_id
+        meta:
+          publish.include: true
+      - name: organization_name
+        meta:
+          publish.include: true
+      - name: organization_ntd_id
+        meta:
+          publish.include: true
+      - name: service_source_record_id
+        meta:
+          publish.include: true
+      - name: service_name
+        meta:
+          publish.include: true
+      - name: gtfs_service_data_customer_facing
+        description: |
+          If true, we believe this GTFS data is the feed an agency wishes to be
+          used by trip-planning applications for this service/organization.
+        meta:
+          publish.include: true
+      - name: regional_feed_type
+        description: |
+          This is only populated for GTFS datasets that have some relationship with a regional,
+          combined feed like MTC 511 or VCTC.
+          The types are:
+          * "Combined Regional Feed" - These GTFS datasets contain information
+            about services managed by a variety of different organizations. If the
+            customer-facing feed for an organization or service is this category,
+            users may need to filter within feed data when doing more granular (ex.
+            agency-level) analysis.
+          * "Regional Subfeed" - Currently this category only applies to MTC 511, which provides
+            an option to query the combined regional feed for a given agency's data.
+          * "Regional Precursor Feed" - This category applies to agencies whose data appears in a
+            combined regional feed but who produce some other independent dataset.
+            The independent dataset may be an input into the combined regional feed.
+        meta:
+          publish.include: true
+      - name: public_customer_facing_fixed_route
+        meta:
+          publish.include: true
+      - name: public_customer_facing_or_regional_subfeed_fixed_route
+        meta:
+          publish.include: true
+      - name: schedule_source_record_id
+        meta:
+          publish.include: true
+      - name: schedule_gtfs_dataset_name
+        meta:
+          publish.include: true
+      - name: service_alerts_source_record_id
+        meta:
+          publish.include: true
+      - name: service_alerts_gtfs_dataset_name
+        meta:
+          publish.include: true
+      - name: vehicle_positions_source_record_id
+        meta:
+          publish.include: true
+      - name: vehicle_positions_gtfs_dataset_name
+        meta:
+          publish.include: true
+      - name: trip_updates_source_record_id
+        meta:
+          publish.include: true
+      - name: trip_updates_gtfs_dataset_name
+        meta:
+          publish.include: true

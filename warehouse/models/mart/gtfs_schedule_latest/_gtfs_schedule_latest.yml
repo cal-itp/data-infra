@@ -1300,6 +1300,7 @@ exposures:
       - ref("dim_trips_latest")
       - ref("dim_gtfs_datasets_latest")
       - ref("dim_organizations_latest_with_caltrans_district")
+      - ref("dim_provider_gtfs_data_latest")
       - ref("dim_services_latest")
 
     owner:
@@ -1468,6 +1469,12 @@ exposures:
               id: 855ce20b-2d9e-401f-bafb-a6b17cd6dafc
               description: |
                 Each row represents a transit service in the Cal-ITP Transit Database.
+            dim_provider_gtfs_data_latest:
+              id: ""
+              description: |
+                Each row links an organization to a service and its associated GTFS datasets
+                (schedule, service alerts, vehicle positions, trip updates).
+                Use this table to join organizations, services, and GTFS datasets via their source_record_id fields.
 
 
   - name: calitp_map_tile_server
