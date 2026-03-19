@@ -1470,7 +1470,7 @@ exposures:
               description: |
                 Each row represents a transit service in the Cal-ITP Transit Database.
             dim_provider_gtfs_data_latest:
-              id: ""
+              id: "c71affc6-fc50-406d-93c2-d8cf2104a0c7"
               description: |
                 Each row links an organization to a service and its associated GTFS datasets
                 (schedule, service alerts, vehicle positions, trip updates).
