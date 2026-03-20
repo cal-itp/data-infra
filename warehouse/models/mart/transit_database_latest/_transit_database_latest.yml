@@ -99,8 +99,6 @@ models:
         meta:
           publish.include: true
       - name: roles
-        meta:
-          publish.include: true
       - name: website
         meta:
           publish.include: true
