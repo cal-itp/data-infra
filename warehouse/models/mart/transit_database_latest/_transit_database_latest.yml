@@ -10,6 +10,11 @@ models:
     meta:
       ckan.authority: https://calitp.org/
     columns:
+      - name: source_record_id
+        description: |
+          The unique identifier for this GTFS dataset record in the Airtable Database.
+        meta:
+          publish.include: true
       - name: name
         description: |
           An arbitrary human-readable title for the GTFS feed in question, usually
@@ -71,5 +76,234 @@ models:
           filled with a value for rows representing non-schedule-type feeds,
           unencoded for convenience directly from the value of
           schedule_to_use_for_rt_validation_base64_url.
+        meta:
+          publish.include: true
+
+  - name: dim_organizations_latest_with_caltrans_district
+    description: |
+      Current-only snapshot of organizations in the Cal-ITP Airtable Transit Database.
+    meta:
+      ckan.authority: https://calitp.org/
+    columns:
+      - name: source_record_id
+        description: |
+          The unique identifier for this organization record in the Airtable Database.
+        meta:
+          publish.include: true
+      - name: name
+        meta:
+          publish.include: true
+      - name: organization_type
+        description: |
+          Categorical data
+        meta:
+          publish.include: true
+      - name: roles
+        meta:
+          publish.include: true
+      - name: website
+        meta:
+          publish.include: true
+      - name: is_public_entity
+        description: |
+          Formula in source system returns true if the `organization_type` column has been set to one of the following:
+            City/Town,
+            Independent Agency,
+            MPO/RTPA,
+            County,
+            Tribe,
+            Federal Government,
+            Joint Powers Agency, or
+            Council of Governments
+        meta:
+          publish.include: true
+      - name: ntd_id
+        meta:
+          publish.include: true
+      - name: ntd_agency_info_key
+        meta:
+          publish.include: true
+      - name: ntd_id_2022
+        meta:
+          publish.include: true
+      - name: rtpa_key
+        meta:
+          publish.include: true
+      - name: rtpa_name
+        description: |
+          Regional Transportation Planning Agency. It shows which RTPA each transit agency is headquartered in.
+          All transit agencies will be associated with a single RTPA given that there are RTPAs covering the entire state of California.
+        meta:
+          publish.include: true
+      - name: mpo_key
+        meta:
+          publish.include: true
+      - name: mpo_name
+        description: |
+          Metropolitan Planning Organization. It shows which MPO each transit agency is headquartered in.
+          Not all transit agencies are associated with an MPO, since there are not MPOs covering the entire state.
+        meta:
+          publish.include: true
+      - name: public_currently_operating
+        description: |
+          Formula in source system returns true value if the following criteria are met:
+            1. Service has "Operating" value in `operational_status` column (for organizations, only at least one managed service must meet this criterion)
+            2. Service is rideable by the general public (for organizations, only at least one managed service must meet this criterion)
+            3. Provider is either an NTD reporter (indicated by non-empty `raw_ntd_id`) or is a public entity.
+        meta:
+          publish.include: true
+      - name: public_currently_operating_fixed_route
+        description: |
+          Formula in source system returns true value under same conditions as `public_currently_operating`
+          plus additional requirement that service has `fixed_route = true` (for organizations, only at least one managed service must meet this criterion).
+        meta:
+          publish.include: true
+      - name: caltrans_district
+        meta:
+          publish.include: true
+      - name: caltrans_district_name
+        meta:
+          publish.include: true
+
+  - name: dim_services_latest
+    description: |
+      Current-only snapshot of services in the Cal-ITP Airtable Transit Database.
+    meta:
+      ckan.authority: https://calitp.org/
+    columns:
+      - name: source_record_id
+        description: |
+          The unique identifier for this service record in the Airtable Database.
+        meta:
+          publish.include: true
+      - name: name
+        description: Service name
+        meta:
+          publish.include: true
+      - name: service_type
+        description: |
+          Categorical Field
+        meta:
+          publish.include: true
+      - name: mode
+        description: |
+          Categorical Field
+        meta:
+          publish.include: true
+      - name: operating_counties
+        meta:
+          publish.include: true
+      - name: fixed_route
+        description: |
+          This will be set to true for services that have the following:
+          - Have a published schedule
+          - Run along a predetermined route.
+        meta:
+          publish.include: true
+      - name: is_public
+        description: |
+          Formula in source system returns "Yes" value if the rider requirement of "Public" has been set in the `rider_requirements` column.
+        meta:
+          publish.include: true
+      - name: public_currently_operating
+        description: |
+          Formula in source system returns true value if the following criteria are met:
+            1. Service has "Operating" value in `operational_status` column (for organizations, only at least one managed service must meet this criterion)
+            2. Service is rideable by the general public (for organizations, only at least one managed service must meet this criterion)
+            3. Provider is either an NTD reporter (indicated by non-empty `raw_ntd_id`) or is a public entity.
+        meta:
+          publish.include: true
+      - name: public_currently_operating_fixed_route
+        description: |
+          Formula in source system returns true value under same conditions as `public_currently_operating`
+          plus additional requirement that service has `fixed_route = true` (for organizations, only at least one managed service must meet this criterion).
+        meta:
+          publish.include: true
+      - name: operational_status
+        description: |
+          Formula in source system automatically calculates the operational status based on the following criteria:
+            A. Status is "Planned" when the service "Start Date" is in the future.
+            B. Status is "Operating" when the current date is not before the start date and not after the deprecated date or both start date and deprecated date are empty
+            C. Status is "Deprecated" when the service "Deprecated Date" is in the past.
+        meta:
+          publish.include: true
+
+  - name: dim_provider_gtfs_data_latest
+    description: |
+      Current-only snapshot linking organizations, services, and their associated GTFS datasets.
+      Each record links together an organization with a service and a set of up to four
+      GTFS datasets (schedule, RT service alerts, RT vehicle positions, and RT trip updates),
+      where the organization manages the service.
+      Joinable to dim_organizations_latest_with_caltrans_district, dim_services_latest,
+      and dim_gtfs_datasets_latest via the respective source_record_id fields.
+    meta:
+      ckan.authority: https://calitp.org/
+    columns:
+      - name: organization_source_record_id
+        meta:
+          publish.include: true
+      - name: organization_name
+        meta:
+          publish.include: true
+      - name: organization_ntd_id
+        meta:
+          publish.include: true
+      - name: service_source_record_id
+        meta:
+          publish.include: true
+      - name: service_name
+        meta:
+          publish.include: true
+      - name: gtfs_service_data_customer_facing
+        description: |
+          If true, we believe this GTFS data is the feed an agency wishes to be
+          used by trip-planning applications for this service/organization.
+        meta:
+          publish.include: true
+      - name: regional_feed_type
+        description: |
+          This is only populated for GTFS datasets that have some relationship with a regional,
+          combined feed like MTC 511 or VCTC.
+          The types are:
+          * "Combined Regional Feed" - These GTFS datasets contain information
+            about services managed by a variety of different organizations. If the
+            customer-facing feed for an organization or service is this category,
+            users may need to filter within feed data when doing more granular (ex.
+            agency-level) analysis.
+          * "Regional Subfeed" - Currently this category only applies to MTC 511, which provides
+            an option to query the combined regional feed for a given agency's data.
+          * "Regional Precursor Feed" - This category applies to agencies whose data appears in a
+            combined regional feed but who produce some other independent dataset.
+            The independent dataset may be an input into the combined regional feed.
+        meta:
+          publish.include: true
+      - name: public_customer_facing_fixed_route
+        meta:
+          publish.include: true
+      - name: public_customer_facing_or_regional_subfeed_fixed_route
+        meta:
+          publish.include: true
+      - name: schedule_source_record_id
+        meta:
+          publish.include: true
+      - name: schedule_gtfs_dataset_name
+        meta:
+          publish.include: true
+      - name: service_alerts_source_record_id
+        meta:
+          publish.include: true
+      - name: service_alerts_gtfs_dataset_name
+        meta:
+          publish.include: true
+      - name: vehicle_positions_source_record_id
+        meta:
+          publish.include: true
+      - name: vehicle_positions_gtfs_dataset_name
+        meta:
+          publish.include: true
+      - name: trip_updates_source_record_id
+        meta:
+          publish.include: true
+      - name: trip_updates_gtfs_dataset_name
         meta:
           publish.include: true
