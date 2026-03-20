@@ -4,4 +4,9 @@ dim_services_latest AS (
     WHERE _is_current
 )
 
-SELECT * FROM dim_services_latest
+SELECT
+    * EXCEPT (service_type, mode, operating_counties),
+    ARRAY_TO_STRING(service_type, ", ") AS service_type,
+    ARRAY_TO_STRING(mode, ", ") AS mode,
+    ARRAY_TO_STRING(operating_counties, ", ") AS operating_counties
+FROM dim_services_latest
