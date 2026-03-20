@@ -16,8 +16,8 @@ from airflow.operators.latest_only import LatestOnlyOperator
 with DAG(
     dag_id="publish_gtfs",
     tags=["gtfs", "open-data"],
-    # Every month
-    schedule="0 0 1 * *",
+    # Every Monday at 4pm Pacific (midnight UTC Tuesday), after the dbt_all runs
+    schedule="0 0 * * 2",
     start_date=datetime(2025, 10, 1),
     catchup=False,
     default_args={
