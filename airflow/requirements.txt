@@ -1,5 +1,6 @@
 apache-airflow-providers-amazon>=9.17.0
 astronomer-cosmos
+azure-communication-email>=1.0.0
 beautifulsoup4==4.12.3
 boto3==1.41.2
 ckanapi==4.8
