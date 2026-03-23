@@ -9,6 +9,7 @@ dependencies = [
     "apache-airflow-providers-cncf-kubernetes==10.1.0",
     "apache-airflow-providers-google==15.1.0",
     "astronomer-cosmos==1.9.0",
+    "azure-communication-email>=1.0.0",
     "beautifulsoup4==4.12.3",
     "boto3==1.41.2",
     "ckanapi>=4.8",
