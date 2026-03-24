@@ -8,7 +8,8 @@ from operators.bigquery_to_airtable_issues_operator import (
 )
 
 from airflow import DAG
-from airflow.operators.latest_only import LatestOnlyOperator
+
+# from airflow.operators.latest_only import LatestOnlyOperator
 
 local_tz = pendulum.timezone("America/Los_Angeles")
 
@@ -22,10 +23,10 @@ with DAG(
         "email": ["airtable-issue-alerts@dot.ca.gov"],
     },
 ) as dag:
-    latest_only = LatestOnlyOperator(
-        task_id="latest_only",
-        depends_on_past=False,
-    )
+    # latest_only = LatestOnlyOperator(
+    #     task_id="latest_only",
+    #     depends_on_past=False,
+    # )
 
     airtable_issues = BigQueryToAirtableIssuesOperator(
         task_id="bigquery_to_airtable_issues",
