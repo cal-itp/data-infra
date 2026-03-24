@@ -71,7 +71,7 @@ pivoted_timeofday AS (
         FROM time_of_day_counts
     )
     PIVOT(
-        MIN(n_trips) AS daily_trips,
+        MIN(n_trips) AS trips,
         MIN(n_trips / n_hours) AS frequency
         FOR time_of_day IN
         ("owl", "early_am", "am_peak", "midday", "pm_peak", "evening")
@@ -93,16 +93,16 @@ schedule_aggregation AS (
             'route_id', 'route_short_name', 'route_long_name'
         ) }} AS route_name,
         direction_id,
-        route_type,
 
         COUNT(DISTINCT trip_instance_key) AS n_trips,
+        COUNT(DISTINCT route_id) AS n_routes,
         COUNT(DISTINCT shape_id) AS n_shapes,
         ROUND(AVG(num_distinct_stops_served), 1) AS avg_stops_served,
         SUM(num_stop_times) AS num_stop_times,
         COALESCE(ROUND(SUM(service_hours), 2), 0) AS service_hours,
         COALESCE(ROUND(SUM(flex_service_hours), 2), 0) AS flex_service_hours,
     FROM gtfs_join
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
 ),
 
 tu_aggregation AS (
@@ -161,6 +161,14 @@ vp_aggregation AS (
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
 ),
 
+schedule_with_quartet AS (
+    SELECT
+        schedule_aggregation.*,
+        dim_provider_gtfs_data.trip_updates_gtfs_dataset_key,
+        dim_provider_gtfs_data.vehicle_positions_gtfs_dataset_key,
+    FROM schedule_aggregation
+    INNER JOIN dim_provider_gtfs_data USING (schedule_gtfs_dataset_key)
+),
 
 route_direction_aggregation AS (
     SELECT
@@ -174,7 +182,6 @@ route_direction_aggregation AS (
         schedule.route_id_cleaned,
         schedule.route_name,
         schedule.direction_id,
-        schedule.route_type,
 
         tu.tu_gtfs_dataset_key,
         tu.tu_name,
@@ -184,6 +191,7 @@ route_direction_aggregation AS (
         vp.vp_base64_url,
 
         schedule.n_trips,
+        schedule.n_routes,
         schedule.n_shapes,
         schedule.avg_stops_served,
         schedule.num_stop_times,
@@ -191,14 +199,14 @@ route_direction_aggregation AS (
         schedule.flex_service_hours,
 
         -- from pivoted
-        COALESCE(daily_trips_owl, 0) AS daily_trips_owl,
-		COALESCE(daily_trips_early_am, 0) AS daily_trips_early_am,
-		COALESCE(daily_trips_am_peak, 0) AS daily_trips_am_peak,
-		COALESCE(daily_trips_midday, 0) AS daily_trips_midday,
-		COALESCE(daily_trips_pm_peak, 0) AS daily_trips_pm_peak,
-		COALESCE(daily_trips_evening, 0) AS daily_trips_evening,
-		COALESCE(daily_trips_am_peak, 0) + COALESCE(daily_trips_pm_peak, 0) AS daily_trips_peak,
-		n_trips - (COALESCE(daily_trips_am_peak, 0) + COALESCE(daily_trips_pm_peak, 0)) AS daily_trips_offpeak,
+        COALESCE(trips_owl, 0) AS trips_owl,
+		COALESCE(trips_early_am, 0) AS trips_early_am,
+		COALESCE(trips_am_peak, 0) AS trips_am_peak,
+		COALESCE(trips_midday, 0) AS trips_midday,
+		COALESCE(trips_pm_peak, 0) AS trips_pm_peak,
+		COALESCE(trips_evening, 0) AS trips_evening,
+		COALESCE(trips_am_peak, 0) + COALESCE(trips_pm_peak, 0) AS trips_peak,
+		n_trips - (COALESCE(trips_am_peak, 0) + COALESCE(trips_pm_peak, 0)) AS trips_offpeak,
 
 		COALESCE(ROUND(frequency_owl, 2), 0) AS frequency_owl,
 		COALESCE(ROUND(frequency_early_am, 2), 0) AS frequency_early_am,
@@ -221,6 +229,14 @@ route_direction_aggregation AS (
         tu_base64_url IS NOT NULL AS appeared_in_tu,
         vp_base64_url IS NOT NULL AS appeared_in_vp,
 
+        -- add this to detect rows that are nulls that are double counting schedule data
+        COUNT(tu_base64_url) OVER(
+            PARTITION BY schedule.service_date, schedule_gtfs_dataset_name, schedule.route_id, schedule.direction_id
+        ) AS has_tu,
+        COUNT(vp_base64_url) OVER(
+            PARTITION BY schedule.service_date, schedule_gtfs_dataset_name, schedule.route_id, schedule.direction_id
+        ) AS has_vp,
+
         -- vehicle positions
         vp.vp_num_distinct_updates,
         vp.n_vp_trips,
@@ -233,27 +249,36 @@ route_direction_aggregation AS (
         tu.tu_extract_duration_minutes,
         tu.tu_messages_per_minute,
 
-    FROM schedule_aggregation AS schedule
+    FROM schedule_with_quartet AS schedule
     INNER JOIN pivoted_timeofday AS pivoted
         ON schedule.service_date = pivoted.service_date
         AND schedule.schedule_gtfs_dataset_key = pivoted.schedule_gtfs_dataset_key
         AND schedule.route_id = pivoted.route_id
         AND COALESCE(schedule.direction_id, -1) = COALESCE(pivoted.direction_id, -1)
-    INNER JOIN dim_provider_gtfs_data
-		ON schedule.schedule_gtfs_dataset_key = dim_provider_gtfs_data.schedule_gtfs_dataset_key
     LEFT JOIN tu_aggregation AS tu
         ON schedule.service_date = tu.service_date
         AND schedule.schedule_base64_url = tu.schedule_base64_url
-    	AND dim_provider_gtfs_data.trip_updates_gtfs_dataset_key = tu.tu_gtfs_dataset_key
+        AND schedule.trip_updates_gtfs_dataset_key = tu.tu_gtfs_dataset_key
         AND schedule.route_name = tu.route_name
         AND COALESCE(schedule.direction_id, -1) = COALESCE(tu.direction_id, -1)
     LEFT JOIN vp_aggregation AS vp
         ON schedule.service_date = vp.service_date
         AND schedule.schedule_base64_url = vp.schedule_base64_url
-        AND dim_provider_gtfs_data.vehicle_positions_gtfs_dataset_key = vp.vp_gtfs_dataset_key
+		AND schedule.vehicle_positions_gtfs_dataset_key = vp.vp_gtfs_dataset_key
         AND schedule.route_name = vp.route_name
         AND COALESCE(schedule.direction_id, -1) = COALESCE(vp.direction_id, -1)
     WHERE n_trips > 0
+),
+
+route_direction_aggregation2 AS (
+    SELECT
+        * EXCEPT(has_vp, has_tu)
+    FROM route_direction_aggregation
+    -- the has_tu/has_vp check means that if the service_date-schedule-route-direction combination found
+    -- some RT data, then we know there was RT on that day.
+    -- drop the rows where schedule is linked to null values for vp_name/tu_name.
+    -- those nulls came in because of the left join with dim_provider_gtfs_data
+    WHERE (appeared_in_tu AND has_tu >= 1) OR (appeared_in_vp AND has_vp >= 1)
 )
 
-SELECT * FROM route_direction_aggregation
+SELECT * FROM route_direction_aggregation2
