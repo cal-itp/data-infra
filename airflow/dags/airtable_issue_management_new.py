@@ -55,8 +55,9 @@ with DAG(
     )
 
     (
-        latest_only
-        >> airtable_issues
+        # latest_only
+        # >> airtable_issues
+        airtable_issues
         >> update_airtable_issues
         >> send_airtable_issue_email
     )
