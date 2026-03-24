@@ -19,7 +19,7 @@ summarize_service AS (
     SELECT
         service_date,
         schedule_base64_url,
-        schedule_gtfs_dataset_name,
+        schedule_name,
         schedule_gtfs_dataset_key,
         feed_key,
 
