@@ -124,6 +124,13 @@ def setup_module():
         conn_type="generic",
         password=os.environ.get("CALITP_AIRTABLE_PERSONAL_ACCESS_TOKEN"),
     )
+    clean_connections(session, "airtable_issue_management")
+    add_connection(
+        session,
+        conn_id="airtable_issue_management",
+        conn_type="generic",
+        password=os.environ.get("CALITP_AIRTABLE_ISSUE_MANAGEMENT_TOKEN"),
+    )
     clean_connections(session, "http_ntd")
     add_connection(
         session,
