@@ -48,7 +48,7 @@ resource "google_composer_environment" "calitp-staging-composer" {
         core-max_templated_field_length            = 25000
         cosmos-use_dataset_airflow3_uri_standard   = true
         email-email_backend                        = "src.acs_email_backend.send_email"
-        email-from_email                           = "DoNotReply@dds.dot.ca.gov"
+        email-from_email                           = "DoNotReply@49b9b73f-ee9a-41ec-bd74-88138a3637ed.azurecomm.net"
         scheduler-min_file_process_interval        = 120
         scheduler-scheduler_health_check_threshold = 120
         secrets-backend                            = "airflow.providers.google.cloud.secrets.secret_manager.CloudSecretManagerBackend"
