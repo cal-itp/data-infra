@@ -6,11 +6,21 @@
 }}
 
 WITH schedule_trips AS (
-    SELECT * FROM {{ ref('fct_scheduled_trips') }}
+    SELECT * FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.fct_scheduled_trips_testing`--{{ ref('fct_scheduled_trips') }}
 ),
 
 observed_trips AS (
-    SELECT * FROM {{ ref('fct_observed_trips') }}
+    SELECT * FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.fct_observed_trips_testing`--{{ ref('fct_observed_trips') }}
+),
+
+-- add this to make sure we correctly link quartets
+dim_provider_gtfs_data AS (
+    SELECT
+        schedule_gtfs_dataset_key,
+        vehicle_positions_gtfs_dataset_key,
+        trip_updates_gtfs_dataset_key
+    FROM `cal-itp-data-infra.mart_transit_database.dim_provider_gtfs_data`--{{ ref('dim_provider_gtfs_data') }}
+    GROUP BY 1, 2, 3
 ),
 
 gtfs_join AS (
@@ -229,14 +239,18 @@ route_direction_aggregation AS (
         AND schedule.schedule_gtfs_dataset_key = pivoted.schedule_gtfs_dataset_key
         AND schedule.route_id = pivoted.route_id
         AND COALESCE(schedule.direction_id, -1) = COALESCE(pivoted.direction_id, -1)
+    INNER JOIN dim_provider_gtfs_data
+		ON schedule.schedule_gtfs_dataset_key = dim_provider_gtfs_data.schedule_gtfs_dataset_key
     LEFT JOIN tu_aggregation AS tu
         ON schedule.service_date = tu.service_date
         AND schedule.schedule_base64_url = tu.schedule_base64_url
+    	AND dim_provider_gtfs_data.trip_updates_gtfs_dataset_key = tu.tu_gtfs_dataset_key
         AND schedule.route_name = tu.route_name
         AND COALESCE(schedule.direction_id, -1) = COALESCE(tu.direction_id, -1)
     LEFT JOIN vp_aggregation AS vp
         ON schedule.service_date = vp.service_date
         AND schedule.schedule_base64_url = vp.schedule_base64_url
+        AND dim_provider_gtfs_data.vehicle_positions_gtfs_dataset_key = vp.vp_gtfs_dataset_key
         AND schedule.route_name = vp.route_name
         AND COALESCE(schedule.direction_id, -1) = COALESCE(vp.direction_id, -1)
     WHERE n_trips > 0
