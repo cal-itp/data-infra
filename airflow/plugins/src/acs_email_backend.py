@@ -33,5 +33,4 @@ def send_email(
     }
 
     poller = client.begin_send(message)
-    result = poller.result()
-    return result.message_id
+    poller.result()
