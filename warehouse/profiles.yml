@@ -20,7 +20,7 @@ calitp_warehouse:
       submission_method: serverless
       dataproc_batch:
         runtime_config:
-          container_image: gcr.io/cal-itp-data-infra/dbt-spark:2023.3.28
+          container_image: us-west2-docker.pkg.dev/cal-itp-data-infra-staging/dbt-spark/dbt-spark:2026.3.23
           properties:
             spark.executor.cores: "4" # this is the default but put it here for clarity
             spark.executor.instances: "4" # dbt defaults to 2

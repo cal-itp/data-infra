@@ -1,51 +1,53 @@
 # from https://cloud.google.com/dataproc-serverless/docs/guides/custom-containers#example_custom_container_image_build
 
-# Debian 11 is recommended.
-FROM debian:11-slim
+# Recommendation: Use Debian 12.
+# Platform pinned to linux/amd64 — Dataproc Serverless runs on x86_64.
+# Required when building on Apple Silicon (ARM) Macs.
+FROM --platform=linux/amd64 debian:12-slim
 
 LABEL org.opencontainers.image.source https://github.com/cal-itp/data-infra
 
-# Suppress interactive prompts
+# Suppress interactive prompts.
 ENV DEBIAN_FRONTEND=noninteractive
 
 # (Required) Install utilities required by Spark scripts.
 RUN apt update && apt install -y procps tini libjemalloc2
 
-# Enable jemalloc2 as default memory allocator
+# Enable jemalloc as default memory allocator.
 ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
 
-# (Optional) Add extra jars.
-#ENV SPARK_EXTRA_JARS_DIR=/opt/spark/jars/
-#ENV SPARK_EXTRA_CLASSPATH='/opt/spark/jars/*'
-#RUN mkdir -p "${SPARK_EXTRA_JARS_DIR}"
-#COPY spark-bigquery-with-dependencies_2.12-0.22.2.jar "${SPARK_EXTRA_JARS_DIR}"
-
-# (Optional) Install and configure Miniconda3.
-ENV CONDA_HOME=/opt/miniconda3
+# (Optional) Install and configure Miniforge3.
+# Uses ADD to download directly — no local installer file required.
+ENV CONDA_HOME=/opt/miniforge3
 ENV PYSPARK_PYTHON=${CONDA_HOME}/bin/python
 ENV PATH=${CONDA_HOME}/bin:${PATH}
-COPY Miniconda3-py39_4.10.3-Linux-x86_64.sh .
-RUN bash Miniconda3-py39_4.10.3-Linux-x86_64.sh -b -p /opt/miniconda3 \
+ADD https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh .
+RUN bash Miniforge3-Linux-x86_64.sh -b -p /opt/miniforge3 \
   && ${CONDA_HOME}/bin/conda config --system --set always_yes True \
   && ${CONDA_HOME}/bin/conda config --system --set auto_update_conda False \
-  && ${CONDA_HOME}/bin/conda config --system --prepend channels conda-forge \
   && ${CONDA_HOME}/bin/conda config --system --set channel_priority strict
+
+# Required for notebook support.
+RUN ${CONDA_HOME}/bin/mamba install ipython ipykernel
+
+# Install Google Cloud SDK.
+RUN ${CONDA_HOME}/bin/mamba install -n base google-cloud-sdk
 
 # (Optional) Install Conda packages.
 #
-# The following packages are installed in the default image, it is strongly
+# The following packages are installed in the default image; it is strongly
 # recommended to include all of them.
 #
-# Use mamba to install packages quickly.
-RUN ${CONDA_HOME}/bin/conda install mamba -n base -c conda-forge \
-    && ${CONDA_HOME}/bin/mamba install \
-      conda \
+# Use mamba to quickly install packages.
+# NumPy 2.0 removed np.NaN; system PySpark's pyspark.pandas still uses it, so pin to NumPy 1.x for now.
+RUN ${CONDA_HOME}/bin/mamba install -n base \
       cython \
       fastavro \
       fastparquet \
       gcsfs \
+      geopandas \
       google-cloud-bigquery-storage \
-      google-cloud-bigquery[pandas] \
+      "google-cloud-bigquery[pandas]" \
       google-cloud-bigtable \
       google-cloud-container \
       google-cloud-datacatalog \
@@ -62,18 +64,18 @@ RUN ${CONDA_HOME}/bin/conda install mamba -n base -c conda-forge \
       google-cloud-texttospeech \
       google-cloud-translate \
       google-cloud-vision \
-      koalas \
       matplotlib \
+      movingpandas==0.22.4 \
       nltk \
       numba \
-      numpy \
+      "numpy<2" \
       openblas \
       orc \
       pandas \
       pyarrow \
       pysal \
       pytables \
-      python \
+      python=3.12 \
       regex \
       requests \
       rtree \
@@ -81,35 +83,13 @@ RUN ${CONDA_HOME}/bin/conda install mamba -n base -c conda-forge \
       scikit-learn \
       scipy \
       seaborn \
+      shapely \
       sqlalchemy \
       sympy \
-      virtualenv \
-      shapely==1.8.5.post1
+      virtualenv
 
-# (Optional) Add extra Python modules.
-#ENV PYTHONPATH=/opt/python/packages
-#RUN mkdir -p "${PYTHONPATH}"
-#COPY test_util.py "${PYTHONPATH}"
-
-# (Optional) Install R and R libraries.
-# The key ID sometimes needs to be updated; the error output will reference the current key ID to import
-#RUN apt update \
-#  && apt install -y gnupg \
-#  && apt-key adv --no-tty \
-#      --keyserver "hkp://keyserver.ubuntu.com:80" \
-#      --recv-keys B8F25A8A73EACF41 \
-#  && echo "deb http://cloud.r-project.org/bin/linux/debian bullseye-cran40/" \
-#      >/etc/apt/sources.list.d/cran-r.list \
-#  && apt update \
-#  && apt install -y \
-#      libopenblas-base \
-#      libssl-dev \
-#      r-base \
-#      r-base-dev \
-#      r-recommended \
-#      r-cran-blob
-#
-#ENV R_HOME=/usr/lib/R
+# Install packages not available on conda-forge.
+RUN ${CONDA_HOME}/bin/pip install stonesoup
 
 # (Required) Create the 'spark' group/user.
 # The GID and UID must be 1099. Home directory is required.

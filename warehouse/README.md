@@ -96,7 +96,7 @@ are already configured/installed.
          submission_method: serverless
          dataproc_batch:
            runtime_config:
-             container_image: gcr.io/cal-itp-data-infra/dbt-spark:2023.3.28
+             container_image: ghcr.io/cal-itp-data-infra/dbt-spark:2026.3.23
              properties:
                spark.executor.cores: "4"
                spark.executor.instances: "4"
@@ -402,26 +402,36 @@ If you need to install any specific Python version [follow this instructions](ht
 
 [dbt docs](https://docs.getdbt.com/docs/build/python-models) exist for setting up Python models in general, as well as the specific steps required to configure BigQuery/Dataproc.
 
-The default profile template specifies `gcr.io/cal-itp-data-infra/dbt-spark:<date_tag>` as the custom image for
-Dataproc batch jobs. This image is built and pushed via the following; note that the image is hosted on Google
-Container Registry (`gcr.io`) not GitHub Container Registry (`ghcr.io`). This will need to be migrated to Google Artifact Repository
-at some point in the future, as it is replacing GCR.
+
+The default profile template specifies `us-west2-docker.pkg.dev/cal-itp-data-infra-staging/dbt-spark/dbt-spark:<date_tag>` as the custom image for Dataproc batch jobs.
+
+This created the pkg space to push the docker image:
+```
+  gcloud artifacts repositories create dbt-spark \
+    --repository-format=docker \
+    --location=us-west2 \
+    --project=cal-itp-data-infra-staging
+```
+
 
 ```bash
-docker build -f Dockerfile.spark -t gcr.io/cal-itp/data-infra/dbt-spark:2023.3.28
-docker push gcr.io/cal-itp-data-infra/dbt-spark:2023.3.28
+docker build --platform linux/amd64 -f Dockerfile.spark -t us-west2-docker.pkg.dev/cal-itp-data-infra-staging/dbt-spark/dbt-spark:2026.3.23 . --progress=plain 2>&1 | tee build.log
+```
+Need to do 'oglogin'
+
+```bash
+docker push us-west2-docker.pkg.dev/cal-itp-data-infra-staging/dbt-spark/dbt-spark:2026.3.23
 ```
 
 Dockerfile.spark is based on the [example provided by Google in their Dataproc Serverless documentation](https://cloud.google.com/dataproc-serverless/docs/guides/custom-containers#example_custom_container_image_build).
-It references two files that are copied from local into the image; links are provided as comments for downloading these if the image needs to be re-built.
 
+This wasn't done for this build:
 In addition to the steps specified in the dbt docs, [Google Private Access was enabled on our default VPC](https://cloud.google.com/vpc/docs/configure-private-google-access#enabling-pga)
 and the cal-itp-data-infra-staging project's default service account (`473674835135-compute@developer.gserviceaccount.com`) was granted access to the production project
 since the buckets for compiled Python models (`gs://calitp-dbt-python-models` and `gs://test-calitp-dbt-python-models`)
 as well as external tables exist in the production project.
 
-
-## Run with VS Code Dev Containers
+## Run with VS Code Dev Containers (Unmaintained)
 
 This repository comes with a [Dev Containers](https://containers.dev/) configuration that makes it possible to run everything
 within VS Code with minimal dependencies, from any operating system.
@@ -459,18 +469,6 @@ E.g.
 ```console
 docker compose run dbt debug
 ```
-
-
-## Testing Warehouse Image Changes
-
-A person with Docker set up locally can build a development version of the underlying warehouse image at any time after making changes to the Dockerfile or its requirements. From the relevant subfolder, run
-
-```bash
-docker build -t ghcr.io/cal-itp/data-infra/warehouse:development .
-```
-
-That image can be used alongside [a local Airflow instance](../airflow/README.md) to test changes locally prior to merging, [if pushed to GHCR first](https://github.com/cal-itp/data-infra/tree/main/airflow#podoperators).
-
 
 ## Deploying Changes to Production
 
