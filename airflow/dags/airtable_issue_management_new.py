@@ -17,7 +17,7 @@ with DAG(
     dag_id="airtable_issue_management_new",
     tags=["airtable", "tdq", "automation"],
     schedule="0 6 * * 5",
-    start_date=datetime(2026, 3, 27, tzinfo=local_tz),
+    start_date=datetime(2026, 3, 20, tzinfo=local_tz),
     catchup=False,
     default_args={
         "email": ["airtable-issue-alerts@dot.ca.gov"],
