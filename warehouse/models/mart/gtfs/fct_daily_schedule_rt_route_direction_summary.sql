@@ -274,10 +274,13 @@ route_direction_aggregation2 AS (
     SELECT
         * EXCEPT(has_vp, has_tu)
     FROM route_direction_aggregation
-    -- the has_tu/has_vp check means that if the service_date-schedule-route-direction combination found
-    -- some RT data, then we know there was RT on that day.
-    -- drop the rows where schedule is linked to null values for vp_name/tu_name.
-    -- those nulls came in because of the left join with dim_provider_gtfs_data
+    -- distinguish between rows that have no RT for that operator at all vs
+    -- particular row didn't have RT for that route-dir combo but had RT observed that day
+    -- for a day, there can be several combos from the left join:
+    -- day1  schedule1  no_tu_route_dir  yes_vp_route_dir
+    -- day1  schedule1  yes_tu_route_dir yes_vp_route_dir
+    -- day1  schedule1  no_tu_route_dir  no_vp_route_dir (drop row)
+    -- day1  schedule2  no_tu_route_dir  no_vp_route_dir (keep row)
     WHERE (appeared_in_tu AND has_tu >= 1) OR (appeared_in_vp AND has_vp >= 1)
 )
 

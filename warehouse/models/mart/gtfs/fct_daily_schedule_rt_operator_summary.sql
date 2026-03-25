@@ -82,7 +82,7 @@ daily_summary AS (
         daily_schedule.feed_key,
         daily_schedule.gtfs_dataset_key, -- should get rid of a set of these so schedule keys aren't doubled up...once we figure out how to tag cases
         daily_schedule.gtfs_dataset_name,
-        daily_schedule.ttl_service_hours,
+        ROUND(daily_schedule.ttl_service_hours, 2) AS ttl_service_hours,
         COALESCE(daily_schedule.n_trips, 0) AS n_trips,
         daily_schedule.first_departure_sec,
         daily_schedule.last_arrival_sec,
