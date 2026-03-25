@@ -6,11 +6,11 @@
 }}
 
 WITH schedule_trips AS (
-    SELECT * FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.fct_scheduled_trips_testing`--{{ ref('fct_scheduled_trips') }}
+    SELECT * FROM {{ ref('fct_scheduled_trips') }}
 ),
 
 observed_trips AS (
-    SELECT * FROM `cal-itp-data-infra-staging.tiffany_mart_gtfs.fct_observed_trips_testing`--{{ ref('fct_observed_trips') }}
+    SELECT * FROM {{ ref('fct_observed_trips') }}
 ),
 
 -- add this to make sure we correctly link quartets
@@ -19,7 +19,7 @@ dim_provider_gtfs_data AS (
         schedule_gtfs_dataset_key,
         vehicle_positions_gtfs_dataset_key,
         trip_updates_gtfs_dataset_key
-    FROM `cal-itp-data-infra.mart_transit_database.dim_provider_gtfs_data`--{{ ref('dim_provider_gtfs_data') }}
+    FROM {{ ref('dim_provider_gtfs_data') }}
     GROUP BY 1, 2, 3
 ),
 
