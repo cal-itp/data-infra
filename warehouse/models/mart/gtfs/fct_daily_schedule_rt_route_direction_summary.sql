@@ -93,6 +93,7 @@ schedule_aggregation AS (
             'route_id', 'route_short_name', 'route_long_name'
         ) }} AS route_name,
         direction_id,
+        route_type,
 
         COUNT(DISTINCT trip_instance_key) AS n_trips,
         COUNT(DISTINCT route_id) AS n_routes,
@@ -102,7 +103,7 @@ schedule_aggregation AS (
         COALESCE(ROUND(SUM(service_hours), 2), 0) AS service_hours,
         COALESCE(ROUND(SUM(flex_service_hours), 2), 0) AS flex_service_hours,
     FROM gtfs_join
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 ),
 
 tu_aggregation AS (
@@ -182,6 +183,7 @@ route_direction_aggregation AS (
         schedule.route_id_cleaned,
         schedule.route_name,
         schedule.direction_id,
+        schedule.route_type,
 
         tu.tu_gtfs_dataset_key,
         tu.tu_name,
@@ -199,14 +201,14 @@ route_direction_aggregation AS (
         schedule.flex_service_hours,
 
         -- from pivoted
-        COALESCE(trips_owl, 0) AS trips_owl,
-		COALESCE(trips_early_am, 0) AS trips_early_am,
-		COALESCE(trips_am_peak, 0) AS trips_am_peak,
-		COALESCE(trips_midday, 0) AS trips_midday,
-		COALESCE(trips_pm_peak, 0) AS trips_pm_peak,
-		COALESCE(trips_evening, 0) AS trips_evening,
-		COALESCE(trips_am_peak, 0) + COALESCE(trips_pm_peak, 0) AS trips_peak,
-		n_trips - (COALESCE(trips_am_peak, 0) + COALESCE(trips_pm_peak, 0)) AS trips_offpeak,
+        COALESCE(trips_owl, 0) AS daily_trips_owl,
+		COALESCE(trips_early_am, 0) AS daily_trips_early_am,
+		COALESCE(trips_am_peak, 0) AS daily_trips_am_peak,
+		COALESCE(trips_midday, 0) AS daily_trips_midday,
+		COALESCE(trips_pm_peak, 0) AS daily_trips_pm_peak,
+		COALESCE(trips_evening, 0) AS daily_trips_evening,
+		COALESCE(trips_am_peak, 0) + COALESCE(trips_pm_peak, 0) AS daily_trips_peak,
+		n_trips - (COALESCE(trips_am_peak, 0) + COALESCE(trips_pm_peak, 0)) AS daily_trips_offpeak,
 
 		COALESCE(ROUND(frequency_owl, 2), 0) AS frequency_owl,
 		COALESCE(ROUND(frequency_early_am, 2), 0) AS frequency_early_am,
