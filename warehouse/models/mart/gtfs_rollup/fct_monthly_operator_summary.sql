@@ -198,14 +198,14 @@ monthly_summary AS (
         ROUND(SUM(n_vp_trips) / COUNT(DISTINCT service_date), 1) AS daily_vp_trips,
         ROUND(AVG(pct_vp_trips), 3) AS pct_vp_trips,
         MAX(pct_vp_routes) AS pct_vp_routes, -- should the max be used for coverage?
-        SUM(vp_extract_duration_minutes) / COUNT(DISTINCT service_date) AS daily_vp_extract_duration_minutes,
+        ROUND(SUM(vp_extract_duration_minutes) / COUNT(DISTINCT service_date), 2) AS daily_vp_extract_duration_minutes,
 
         ROUND(AVG(tu_messages_per_minute), 1) AS tu_messages_per_minute,
         SUM(n_tu_trips) AS n_tu_trips,
         ROUND(SUM(n_tu_trips) / COUNT(DISTINCT service_date), 1) AS daily_tu_trips,
         ROUND(AVG(pct_tu_trips), 3) AS pct_tu_trips,
         MAX(pct_tu_routes) AS pct_tu_routes, -- should the max be used for coverage?
-        SUM(tu_extract_duration_minutes) / COUNT(DISTINCT service_date) AS daily_tu_extract_duration_minutes,
+        ROUND(SUM(tu_extract_duration_minutes) / COUNT(DISTINCT service_date), 2) AS daily_tu_extract_duration_minutes,
 
         ROUND(AVG(pct_tu_complete_minutes), 3) AS pct_tu_complete_minutes,
         ROUND(AVG(pct_tu_accurate_minutes), 3) AS pct_tu_accurate_minutes,
