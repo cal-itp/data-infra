@@ -1,6 +1,6 @@
 {% macro get_percentiles_by_group(table_name, iterable_of_group_columns, array_col, decimals) %}
 
-WITH unfiltered_aggregated_table AS (
+WITH table_expanded AS (
     SELECT
         {{ list_of_columns(iterable_of_group_columns) }},
 
@@ -23,13 +23,13 @@ WITH unfiltered_aggregated_table AS (
     GROUP BY {{ list_of_columns(iterable_of_group_columns) }}
 ),
 
-unfiltered_aggregated_table2 AS (
+results AS (
     SELECT
         {{ list_of_columns(iterable_of_group_columns) }},
         [p5, p10, p20, p25, p30, p40, p50, p60, p70, p75, p80, p90, p95] AS value_array,
         [5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 95] AS value_percentile_array
-    FROM unfiltered_aggregated_table
+    FROM table_expanded
 )
 
-SELECT * FROM unfiltered_aggregated_table2
+SELECT * FROM results
 {% endmacro %}

@@ -82,7 +82,7 @@ daily_summary AS (
         daily_schedule.feed_key,
         daily_schedule.gtfs_dataset_key, -- should get rid of a set of these so schedule keys aren't doubled up...once we figure out how to tag cases
         daily_schedule.gtfs_dataset_name,
-        daily_schedule.ttl_service_hours,
+        ROUND(daily_schedule.ttl_service_hours, 2) AS ttl_service_hours,
         COALESCE(daily_schedule.n_trips, 0) AS n_trips,
         daily_schedule.first_departure_sec,
         daily_schedule.last_arrival_sec,
@@ -96,7 +96,7 @@ daily_summary AS (
 
         daily_rt.schedule_base64_url,
         daily_rt.schedule_gtfs_dataset_key,
-        daily_rt.schedule_gtfs_dataset_name AS schedule_name,
+        daily_rt.schedule_name,
         daily_rt.vp_gtfs_dataset_key,
         daily_rt.vp_name,
         daily_rt.vp_base64_url,
@@ -134,12 +134,12 @@ daily_summary AS (
         daily_rt.vp_messages_per_minute,
 
         -- figure out which ones are missing
-        IF(gtfs_dataset_name IS NULL AND daily_schedule.feed_key IS NULL AND schedule_gtfs_dataset_name IS NOT NULL, 1, 0) AS in_obs_only,
+        IF(gtfs_dataset_name IS NULL AND daily_schedule.feed_key IS NULL AND schedule_name IS NOT NULL, 1, 0) AS in_obs_only,
 
     FROM daily_schedule
     FULL OUTER JOIN daily_rt -- full outer join to see which ones don't match up
         ON daily_schedule.service_date = daily_rt.service_date
-        AND daily_schedule.gtfs_dataset_name = daily_rt.schedule_gtfs_dataset_name
+        AND daily_schedule.gtfs_dataset_name = daily_rt.schedule_name
         AND daily_schedule.gtfs_dataset_key = daily_rt.schedule_gtfs_dataset_key
     LEFT JOIN tu_operator_metrics
         ON daily_rt.service_date = tu_operator_metrics.service_date

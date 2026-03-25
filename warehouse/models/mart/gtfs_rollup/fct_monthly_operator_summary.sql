@@ -41,6 +41,78 @@ scaled_prediction_error_by_operator AS (
     }}
 ),
 
+-- select only positive values for array (only do it on unscaled)
+prediction_errors_subset AS ( -- noqa: L045
+	SELECT
+		month_first_day,
+		day_type,
+		base64_url,
+		schedule_base64_url,
+	    ARRAY(
+            SELECT pe FROM UNNEST(prediction_error_by_minute_array) AS pe WHERE pe > 0
+        ) AS pos_prediction_error,
+	    ARRAY(
+            SELECT pe FROM UNNEST(prediction_error_by_minute_array) AS pe WHERE pe < 0
+        ) AS neg_prediction_error,
+	FROM tu_stop_metrics2
+),
+
+pos_prediction_errors AS (
+    {{ get_percentiles_by_group(
+        'prediction_errors_subset',
+        ('month_first_day', 'day_type',
+        'base64_url', 'schedule_base64_url'),
+        array_col='pos_prediction_error',
+        decimals=1)
+    }}
+),
+
+neg_prediction_errors AS (
+    {{ get_percentiles_by_group(
+        'prediction_errors_subset',
+        ('month_first_day', 'day_type',
+        'base64_url', 'schedule_base64_url'),
+        array_col='neg_prediction_error',
+        decimals=1)
+    }}
+),
+
+prediction_array_results AS (
+    SELECT
+        month_first_day,
+        day_type,
+        base64_url,
+        schedule_base64_url,
+
+        pe.value_array AS prediction_error_sec_array,
+        pe.value_percentile_array AS prediction_error_sec_percentile_array,
+        spe.value_array AS scaled_prediction_error_sec_array,
+
+        -- there seems to be some null elements in the pos/neg ones, why? isolating this join to where data is complete hasn't made this go away
+        ARRAY(
+            SELECT
+                COALESCE(pe, 0) AS pe
+                FROM UNNEST(pos_pe.value_array) AS pe
+        ) AS pos_prediction_error_sec_array,
+        ARRAY(
+            SELECT
+                COALESCE(pe, 0) AS pe
+                FROM UNNEST(neg_pe.value_array) AS pe
+        ) AS neg_prediction_error_sec_array,
+		-- do this because the Newmark paper plots these arrays
+		-- to create the charts where smaller errors (closer to zero) are better,
+		-- the larger positive errors reverse the percentiles them so that the 10th percentile has larger values
+		ARRAY_REVERSE(pos_pe.value_percentile_array) AS pos_prediction_error_sec_percentile_array
+
+    FROM prediction_error_by_operator AS pe
+    INNER JOIN scaled_prediction_error_by_operator AS spe
+        USING (month_first_day, day_type, base64_url, schedule_base64_url)
+    LEFT JOIN pos_prediction_errors AS pos_pe --not sure if filtering impacts rows disappearing, use left join for now
+        USING (month_first_day, day_type, base64_url, schedule_base64_url)
+    LEFT JOIN neg_prediction_errors AS neg_pe
+        USING (month_first_day, day_type, base64_url, schedule_base64_url)
+),
+
 daily_summary2 AS (
     SELECT
         *,
@@ -126,14 +198,14 @@ monthly_summary AS (
         ROUND(SUM(n_vp_trips) / COUNT(DISTINCT service_date), 1) AS daily_vp_trips,
         ROUND(AVG(pct_vp_trips), 3) AS pct_vp_trips,
         MAX(pct_vp_routes) AS pct_vp_routes, -- should the max be used for coverage?
-        SUM(vp_extract_duration_minutes) / COUNT(DISTINCT service_date) AS daily_vp_extract_duration_minutes,
+        ROUND(SUM(vp_extract_duration_minutes) / COUNT(DISTINCT service_date), 2) AS daily_vp_extract_duration_minutes,
 
         ROUND(AVG(tu_messages_per_minute), 1) AS tu_messages_per_minute,
         SUM(n_tu_trips) AS n_tu_trips,
         ROUND(SUM(n_tu_trips) / COUNT(DISTINCT service_date), 1) AS daily_tu_trips,
         ROUND(AVG(pct_tu_trips), 3) AS pct_tu_trips,
         MAX(pct_tu_routes) AS pct_tu_routes, -- should the max be used for coverage?
-        SUM(tu_extract_duration_minutes) / COUNT(DISTINCT service_date) AS daily_tu_extract_duration_minutes,
+        ROUND(SUM(tu_extract_duration_minutes) / COUNT(DISTINCT service_date), 2) AS daily_tu_extract_duration_minutes,
 
         ROUND(AVG(pct_tu_complete_minutes), 3) AS pct_tu_complete_minutes,
         ROUND(AVG(pct_tu_accurate_minutes), 3) AS pct_tu_accurate_minutes,
@@ -143,27 +215,12 @@ monthly_summary AS (
         ROUND(AVG(pct_predictions_ontime), 3) AS pct_predictions_ontime,
         ROUND(AVG(pct_predictions_late), 3) AS pct_predictions_late,
 
-        ARRAY_CONCAT_AGG(pe.value_array) AS prediction_error_sec_array,
-        ARRAY_CONCAT_AGG(pe.value_percentile_array) AS prediction_error_sec_percentile_array,
-        ARRAY_CONCAT_AGG(spe.value_array) AS scaled_prediction_error_sec_array,
-        ARRAY_CONCAT_AGG(spe.value_percentile_array) AS scaled_prediction_error_sec_percentile_array,
-
         MAX(pivoted.n_days_schedule_only) AS n_days_schedule_only,
         MAX(pivoted.n_days_schedule_and_rt) AS n_days_schedule_and_rt,
         MAX(pivoted.n_days_schedule_and_vp_only) AS n_days_schedule_and_vp_only,
         MAX(pivoted.n_days_schedule_and_tu_only) AS n_days_schedule_and_tu_only,
 
     FROM daily_summary2
-    LEFT JOIN prediction_error_by_operator AS pe
-        ON daily_summary2.month_first_day = pe.month_first_day
-        AND daily_summary2.day_type = pe.day_type
-        AND daily_summary2.tu_base64_url = pe.base64_url
-        AND daily_summary2.schedule_base64_url = pe.schedule_base64_url
-    LEFT JOIN scaled_prediction_error_by_operator AS spe
-        ON daily_summary2.month_first_day = spe.month_first_day
-        AND daily_summary2.day_type = spe.day_type
-        AND daily_summary2.tu_base64_url = spe.base64_url
-        AND daily_summary2.schedule_base64_url = spe.schedule_base64_url
     LEFT JOIN pivoted
         ON daily_summary2.month_first_day = pivoted.month_first_day
         AND daily_summary2.schedule_name = pivoted.schedule_name
@@ -172,6 +229,18 @@ monthly_summary AS (
         AND daily_summary2.tu_base64_url = pivoted.tu_base64_url
         AND daily_summary2.day_type = pivoted.day_type
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+),
+
+monthly_summary2 AS (
+    SELECT
+        monthly_summary.*,
+        prediction_array_results.* EXCEPT(month_first_day, day_type, base64_url, schedule_base64_url)
+    FROM monthly_summary
+    LEFT JOIN prediction_array_results
+        ON monthly_summary.month_first_day = prediction_array_results.month_first_day
+        AND monthly_summary.day_type = prediction_array_results.day_type
+        AND monthly_summary.tu_base64_url = prediction_array_results.base64_url
+        AND monthly_summary.schedule_base64_url = prediction_array_results.schedule_base64_url
 )
 
-SELECT * FROM monthly_summary
+SELECT * FROM monthly_summary2
