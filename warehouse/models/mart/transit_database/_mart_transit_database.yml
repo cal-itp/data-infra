@@ -1075,4 +1075,3 @@ models:
       - name: outreach_status
       - name: gtfs_dataset_name
       - name: new_end_date
-      - name: service_name
