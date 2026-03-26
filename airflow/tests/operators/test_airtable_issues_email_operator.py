@@ -1,29 +1,45 @@
 from __future__ import annotations
 
-from unittest.mock import MagicMock
-
 import pytest
 from operators.airtable_issues_email_operator import AirtableIssuesEmailOperator
 
 
 class TestAirtableIssuesEmailOperator:
-    # Fixture to create a reusable instance of the email operator
     @pytest.fixture
     def operator(self) -> AirtableIssuesEmailOperator:
         return AirtableIssuesEmailOperator(
             task_id="send_airtable_issue_email",
             to_emails=["airtable-issue-alerts@dot.ca.gov"],
             subject="[Airflow] Airtable Issue Management",
-            source_task_id="update_airtable_issues",
+            update_result={},
         )
 
-    # Test that build_failed_html returns "None" when there are no failed batches
+    @pytest.fixture
+    def populated_update_result(self) -> dict:
+        return {
+            "email_rows": [
+                {
+                    "issue_number": "ISSUE-1",
+                    "gtfs_dataset_name": "Dataset A",
+                    "status": "Fixed - on its own",
+                    "new_end_date": "2026-03-20",
+                },
+                {
+                    "issue_number": "ISSUE-2",
+                    "gtfs_dataset_name": "Dataset B",
+                    "status": "Fixed - with Cal-ITP help",
+                    "new_end_date": "2026-03-21",
+                },
+            ],
+            "failed_batches": [{"batch_num": 2, "error": "Partial failure"}],
+            "updated_record_ids": ["rec1", "rec2"],
+        }
+
     def test_build_failed_html_none(self, operator: AirtableIssuesEmailOperator):
         result = operator.build_failed_html([])
 
         assert result == "None"
 
-    # Test that build_failed_html correctly formats multiple failed batches
     def test_build_failed_html_with_batches(
         self, operator: AirtableIssuesEmailOperator
     ):
@@ -38,7 +54,6 @@ class TestAirtableIssuesEmailOperator:
         assert "Batch 2: Boom 2" in result
         assert "<br>" in result
 
-    # Test that build_email_body produces correct HTML content with rows and failures
     def test_build_email_body(self, operator: AirtableIssuesEmailOperator):
         email_rows = [
             {
@@ -72,85 +87,58 @@ class TestAirtableIssuesEmailOperator:
         assert "2026-03-21" in body
         assert "Batch 3: Test failure" in body
 
-    # Test execute() behavior when no XCom result is returned
     def test_execute_no_update_result(self, operator: AirtableIssuesEmailOperator):
-        mock_ti = MagicMock()
-        mock_ti.xcom_pull.return_value = None
+        result = operator.execute(context={})
 
-        context = {"ti": mock_ti}
-
-        result = operator.execute(context=context)
-
-        mock_ti.xcom_pull.assert_called_once_with(task_ids="update_airtable_issues")
         assert result == {
             "email_sent": False,
             "reason": "no_update_result",
         }
 
-    # Test execute() behavior when XCom exists but no rows were updated
-    def test_execute_no_updated_rows(self, operator: AirtableIssuesEmailOperator):
-        mock_ti = MagicMock()
-        mock_ti.xcom_pull.return_value = {
-            "email_rows": [],
-            "failed_batches": [],
-            "updated_record_ids": [],
-        }
+    def test_execute_no_updated_rows(self):
+        operator = AirtableIssuesEmailOperator(
+            task_id="send_airtable_issue_email",
+            to_emails=["airtable-issue-alerts@dot.ca.gov"],
+            subject="[Airflow] Airtable Issue Management",
+            update_result={
+                "email_rows": [],
+                "failed_batches": [],
+                "updated_record_ids": [],
+            },
+        )
 
-        context = {"ti": mock_ti}
+        result = operator.execute(context={})
 
-        result = operator.execute(context=context)
-
-        mock_ti.xcom_pull.assert_called_once_with(task_ids="update_airtable_issues")
         assert result == {
             "email_sent": False,
             "reason": "no_updated_rows",
         }
 
-    # Test execute() happy path: email is "sent" and content is correct
     def test_execute_sends_email(
         self,
-        operator: AirtableIssuesEmailOperator,
+        populated_update_result: dict,
         monkeypatch: pytest.MonkeyPatch,
     ):
         sent = {}
 
-        # Mock function to replace Airflow's send_email
-        # Captures arguments instead of sending a real email
         def mock_send_email(to, subject, html_content):
             sent["to"] = to
             sent["subject"] = subject
             sent["html_content"] = html_content
 
-        # Patch the send_email function inside the operator module
         monkeypatch.setattr(
             "operators.airtable_issues_email_operator.send_email",
             mock_send_email,
         )
-        mock_ti = MagicMock()
-        mock_ti.xcom_pull.return_value = {
-            "email_rows": [
-                {
-                    "issue_number": "ISSUE-1",
-                    "gtfs_dataset_name": "Dataset A",
-                    "status": "Fixed - on its own",
-                    "new_end_date": "2026-03-20",
-                },
-                {
-                    "issue_number": "ISSUE-2",
-                    "gtfs_dataset_name": "Dataset B",
-                    "status": "Fixed - with Cal-ITP help",
-                    "new_end_date": "2026-03-21",
-                },
-            ],
-            "failed_batches": [{"batch_num": 2, "error": "Partial failure"}],
-            "updated_record_ids": ["rec1", "rec2"],
-        }
 
-        context = {"ti": mock_ti}
+        operator = AirtableIssuesEmailOperator(
+            task_id="send_airtable_issue_email",
+            to_emails=["airtable-issue-alerts@dot.ca.gov"],
+            subject="[Airflow] Airtable Issue Management",
+            update_result=populated_update_result,
+        )
 
-        result = operator.execute(context=context)
-
-        mock_ti.xcom_pull.assert_called_once_with(task_ids="update_airtable_issues")
+        result = operator.execute(context={})
 
         assert sent["to"] == ["airtable-issue-alerts@dot.ca.gov"]
         assert sent["subject"] == "[Airflow] Airtable Issue Management"

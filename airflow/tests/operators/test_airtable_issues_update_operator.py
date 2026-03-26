@@ -12,8 +12,7 @@ production-like Airtable records. Instead, it uses a mock-based approach.
 It uses pytest's monkeypatch to replace the Airtable hook's batch_update() method
 with a fake function, ensuring that no real API calls are made.
 
-The test simulates the upstream BigQuery task by using a PythonOperator that
-pushes sample rows into XCom. The operator under test then pulls from XCom,
+The operator under test pulls some sample rows,
 transforms the data into Airtable update payloads, and invokes the mocked hook.
 
 Assertions validate that:
@@ -35,7 +34,6 @@ from operators.airtable_issues_update_operator import AirtableIssuesUpdateOperat
 
 from airflow.models.dag import DAG
 from airflow.models.taskinstance import TaskInstance
-from airflow.operators.python import PythonOperator
 
 
 class TestAirtableIssuesUpdateOperator:
@@ -69,28 +67,20 @@ class TestAirtableIssuesUpdateOperator:
         )
 
     @pytest.fixture
-    def upstream_task(self, test_dag: DAG, sample_rows: list[dict]) -> PythonOperator:
-        return PythonOperator(
-            task_id="bigquery_to_airtable_issues",
-            python_callable=lambda: sample_rows,
-            dag=test_dag,
-        )
-
-    @pytest.fixture
-    def operator(self, test_dag: DAG) -> AirtableIssuesUpdateOperator:
+    def operator(
+        self, test_dag: DAG, sample_rows: list[dict]
+    ) -> AirtableIssuesUpdateOperator:
         return AirtableIssuesUpdateOperator(
             task_id="update_airtable_issues",
             airtable_conn_id="airtable_issue_management",
             air_base_id="test_base",
             air_table_name="test_table",
-            source_task_id="bigquery_to_airtable_issues",
+            rows=sample_rows,
             dag=test_dag,
         )
 
     def test_execute(
         self,
-        test_dag: DAG,
-        upstream_task: PythonOperator,
         operator: AirtableIssuesUpdateOperator,
         execution_date: datetime,
         monkeypatch,
@@ -106,15 +96,7 @@ class TestAirtableIssuesUpdateOperator:
             fake_batch_update,
         )
 
-        monkeypatch.setattr(operator, "today_pst", lambda: "2026-01-01")
-
-        upstream_task >> operator
-
-        upstream_task.run(
-            start_date=execution_date,
-            end_date=execution_date + timedelta(days=1),
-            ignore_first_depends_on_past=True,
-        )
+        monkeypatch.setattr(operator, "today", lambda: "2026-01-01")
 
         operator.run(
             start_date=execution_date,
@@ -122,8 +104,7 @@ class TestAirtableIssuesUpdateOperator:
             ignore_first_depends_on_past=True,
         )
 
-        task = test_dag.get_task("update_airtable_issues")
-        ti = TaskInstance(task, execution_date=execution_date)
+        ti = TaskInstance(operator, execution_date=execution_date)
         result = ti.xcom_pull()
 
         print("\n=== DEBUG OUTPUT ===")

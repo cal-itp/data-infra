@@ -1065,6 +1065,10 @@ models:
       - name: outreach_status
       - name: should_wait_until
   - name: fct_close_expired_issues
+    description: |
+      Contains Airtable GTFS expired or about to expire issue records that are no more valid
+      and should be automatically closed by the Airtable Issue Management DAG.
+      This model is used by the Airflow DAG to update Airtable records and send summary emails.
     columns:
       - name: issue_number
       - name: issue_source_record_id

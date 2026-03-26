@@ -11,21 +11,21 @@ class AirtableIssuesEmailOperator(BaseOperator):
     template_fields: Sequence[str] = (
         "to_emails",
         "subject",
-        "source_task_id",
+        "update_result",
     )
 
     def __init__(
         self,
         to_emails: list[str] | str,
+        update_result: dict[str, Any],
         subject: str = "[Airflow] Airtable Issue Management",
-        source_task_id: str = "update_airtable_issues",
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
 
         self.to_emails = to_emails
         self.subject = subject
-        self.source_task_id = source_task_id
+        self.update_result = update_result
 
     def build_table_rows(self, email_rows: list[dict[str, Any]]) -> str:
         table_rows = ""
@@ -76,9 +76,9 @@ class AirtableIssuesEmailOperator(BaseOperator):
         """
 
     def execute(self, context: Context) -> dict[str, Any]:
-        ti = context["ti"]
+        del context
 
-        update_result = ti.xcom_pull(task_ids=self.source_task_id)
+        update_result = self.update_result
 
         if not update_result:
             self.log.info("No update result found. Email not sent.")
