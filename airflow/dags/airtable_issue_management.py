@@ -15,7 +15,7 @@ from airflow.operators.latest_only import LatestOnlyOperator
 local_tz = pendulum.timezone("America/Los_Angeles")
 
 with DAG(
-    dag_id="airtable_issue_management_new",
+    dag_id="airtable_issue_management",
     tags=["airtable", "tdq", "automation"],
     # Every Friday at 6am PT (1pm UTC during PDT / 2pm UTC during PST)
     schedule="0 6 * * 5",

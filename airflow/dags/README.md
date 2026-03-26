@@ -16,7 +16,7 @@
 |  2:00 PM    | 6:00 AM              | 7:00 AM              | [dbt_all](#dbt_all)                                                                                                              | Monday and Thursday |
 |  2:00 PM    | 6:00 AM              | 7:00 AM              | [dbt_daily](#dbt_daily)                                                                                                          | Sunday, Tuesday, Wednesday, Friday, and Saturday |
 |  -          | -                    | -                    | [dbt_manual](#dbt_manual)<br>[download_gtfs_schedule_v2](./download_gtfs_schedule_v2)<br>[unzip_and_validate_gtfs_schedule_hourly](./unzip_and_validate_gtfs_schedule_hourly)| Runs Only Manually |
-| 2:00 PM     | 6:00 AM              | 6:00 AM              | [airtable_issue_management_new](#airtable_issue_management_new)                                                                  | Fridays    |
+| 2:00 PM     | 6:00 AM              | 6:00 AM              | [airtable_issue_management](#airtable_issue_management)                                                                  | Fridays    |
 
 ## dbt_all
 
@@ -203,7 +203,7 @@
 
    Each operator and hook file have pytest under `airflow/tests/` folder. Go to [running-automated-tests](https://github.com/cal-itp/data-infra/tree/main/airflow#running-automated-tests) for more information.
 
-### airtable_issue_management_new
+### airtable_issue_management
 
    This DAG automates the lifecycle management of Transit Data Quality (TDQ) expired GTFS issues.
    It performs the following tasks:
