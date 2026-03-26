@@ -1161,9 +1161,6 @@ models:
           defines its "Time" type.
     meta:
       publish.gis_coordinate_system_epsg: WGS84
-  - name: dim_stop_times_orig
-    description: |
-      Cleaned GTFS schedule stop_times data. Temporary copy for microbatch testing.
 
   - name: dim_shapes_arrays
     description: |
