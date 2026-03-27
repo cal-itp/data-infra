@@ -2,21 +2,26 @@
 name = "calitp-microbatch-runbook"
 version = "0.1.0"
 description = ""
-authors = [
-    {name = "Your Name",email = "you@example.com"}
-]
-readme = "README.md"
+authors = [{ name = "Your Name", email = "you@example.com" }]
 requires-python = ">=3.11,<4"
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+]
 dependencies = [
     "google-cloud (>=0.34.0,<0.35.0)",
     "google-cloud-bigquery (>=3.40.1,<4.0.0)",
     "ipykernel (>=7.2.0,<8.0.0)",
-    "rsa (>=4.7)"
+    "rsa (>=4.7)",
 ]
 
-[tool.poetry]
-package-mode = false
+[tool.uv]
+package = false
 
 [build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.10.9,<0.11.0"]
+build-backend = "uv_build"
