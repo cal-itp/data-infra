@@ -124,9 +124,6 @@ class LittlepayS3ToGCSOperator(BaseOperator):
             )
         return self._source_object
 
-    def source_etag(self) -> str:
-        return self.source_object()["ETag"].replace('"', "")
-
     def metadata(self) -> dict:
         return {
             "filename": self.filename(),
@@ -135,8 +132,8 @@ class LittlepayS3ToGCSOperator(BaseOperator):
             "s3bucket": self.source_bucket_name(),
             "s3object": {
                 "Key": self.source_path,
-                "LastModified": self.source_object()["LastModified"],
-                "ETag": self.source_etag(),
+                "LastModified": str(self.source_object()["LastModified"]),
+                "ETag": self.source_object()["ETag"].replace('"', ""),
                 "Size": self.source_object()["ContentLength"],
                 "StorageClass": self.source_object().get("StorageClass"),
             },
@@ -152,24 +149,17 @@ class LittlepayS3ToGCSOperator(BaseOperator):
             )
         return self._prior_artifact
 
-    def valid(self) -> bool:
-        # return (
-        #     self.prior_artifact().s3object_metadata() is None
-        #     or self.source_object()["LastModified"]
-        #     != self.prior_artifact().s3object_metadata().get("LastModified")
-        #     or self.source_object()["ETag"]
-        #     != self.prior_artifact().s3object_metadata().get("ETag")
-        # )
+    def exists(self) -> bool:
         return (
             self.prior_artifact().s3object_metadata() is not None
             and str(self.source_object()["LastModified"])
             == self.prior_artifact().s3object_metadata().get("LastModified")
-            and str(self.source_etag())
+            and self.source_object()["ETag"].replace('"', "")
             == self.prior_artifact().s3object_metadata().get("ETag")
         )
 
     def execute(self, context: Context) -> dict:
-        if self.valid():
+        if self.exists():
             raise AirflowSkipException
 
         self.gcs_hook().upload(
