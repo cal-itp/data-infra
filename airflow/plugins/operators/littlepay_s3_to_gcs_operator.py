@@ -1,11 +1,55 @@
 import json
 import os
-from typing import Sequence
+from typing import Self, Sequence
 
+from airflow.exceptions import AirflowSkipException
 from airflow.models import BaseOperator
 from airflow.models.taskinstance import Context
 from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
+
+
+class PriorArtifact:
+    @staticmethod
+    def retrieve(
+        gcs_hook: GCSHook, bucket_name: str, prefix: str, match_glob: str
+    ) -> Self:
+        prior_object_names = gcs_hook.list(
+            bucket_name=bucket_name, prefix=prefix, match_glob=match_glob
+        )
+        recent_prior_object_names = sorted(
+            prior_object_names,
+            key=lambda object_name: gcs_hook.get_blob_update_time(
+                bucket_name=bucket_name, object_name=object_name
+            ),
+            reverse=True,
+        )
+        if len(recent_prior_object_names) > 0:
+            metadata = gcs_hook.get_metadata(
+                bucket_name=bucket_name, object_name=recent_prior_object_names[0]
+            )
+            return PriorArtifact(
+                bucket_name=bucket_name,
+                object_name=recent_prior_object_names[0],
+                metadata=metadata,
+            )
+        else:
+            return PriorArtifact()
+
+    def __init__(
+        self, bucket_name: str = None, object_name: str = None, metadata: dict = {}
+    ) -> None:
+        self.bucket_name: str = bucket_name
+        self.object_name: str = object_name
+        self.metadata: dict = metadata
+
+    def s3object_metadata(self) -> dict:
+        if self.metadata is None:
+            return {}
+
+        return json.loads(self.metadata.get("PARTITIONED_ARTIFACT_METADATA", "{}")).get(
+            "s3object", {}
+        )
 
 
 class LittlepayS3ToGCSOperator(BaseOperator):
@@ -50,6 +94,8 @@ class LittlepayS3ToGCSOperator(BaseOperator):
         self.report_path: str = report_path
         self.aws_conn_id: str = aws_conn_id
         self.gcp_conn_id: str = gcp_conn_id
+        self._source_object = None
+        self._prior_artifact: PriorArtifact = None
 
     def gcs_hook(self) -> GCSHook:
         return GCSHook(gcp_conn_id=self.gcp_conn_id)
@@ -70,47 +116,16 @@ class LittlepayS3ToGCSOperator(BaseOperator):
         return os.path.basename(os.path.dirname(self.source_path))
 
     def source_object(self) -> any:
-        return (
-            self.s3_hook()
-            .get_key(bucket_name=self.source_bucket_name(), key=self.source_path)
-            .get()
-        )
-
-    def prior_destination_paths(self) -> list[str]:
-        return self.gcs_hook().list(
-            bucket_name=self.destination_bucket_name(),
-            prefix=self.destination_search_prefix,
-            match_glob=self.destination_search_glob,
-        )
-
-    def latest_destination_path(self) -> str:
-        return sorted(
-            self.prior_destination_paths(),
-            key=lambda file_path: self.gcs_hook().get_blob_update_time(
-                bucket_name=self.destination_bucket_name(), object_name=file_path
-            ),
-            reverse=True,
-        )[0]
-
-    def latest_destination_metadata(self) -> dict:
-        return json.loads(
-            self.gcs_hook()
-            .get_metadata(
-                bucket_name=self.destination_bucket_name(),
-                object_name=self.latest_destination_path(),
+        if self._source_object is None:
+            self._source_object = (
+                self.s3_hook()
+                .get_key(bucket_name=self.source_bucket_name(), key=self.source_path)
+                .get()
             )
-            .get("PARTITIONED_ARTIFACT_METADATA", "{}")
-        ).get("s3object", {})
+        return self._source_object
 
-    def valid(self) -> bool:
-        return (
-            len(self.prior_destination_paths()) == 0
-            or self.latest_destination_metadata() is None
-            or self.source_object()["LastModified"]
-            != self.latest_destination_metadata()["LastModified"]
-            or self.source_object()["ETag"]
-            != self.latest_destination_metadata()["ETag"]
-        )
+    def source_etag(self) -> str:
+        return self.source_object()["ETag"].replace('"', "")
 
     def metadata(self) -> dict:
         return {
@@ -121,57 +136,82 @@ class LittlepayS3ToGCSOperator(BaseOperator):
             "s3object": {
                 "Key": self.source_path,
                 "LastModified": self.source_object()["LastModified"],
-                "ETag": self.source_object()["ETag"].replace('"', ""),
+                "ETag": self.source_etag(),
                 "Size": self.source_object()["ContentLength"],
                 "StorageClass": self.source_object().get("StorageClass"),
             },
         }
 
-    def execute(self, context: Context) -> list[dict]:
-        valid = self.valid()
-
-        if valid:
-            self.gcs_hook().upload(
+    def prior_artifact(self) -> PriorArtifact:
+        if self._prior_artifact is None:
+            self._prior_artifact = PriorArtifact.retrieve(
+                gcs_hook=self.gcs_hook(),
                 bucket_name=self.destination_bucket_name(),
-                object_name=self.destination_path,
-                data=self.source_object()["Body"].read(),
-                mime_type=self.source_object()["ContentType"],
-                gzip=False,
-                metadata={
-                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(
-                        self.metadata(), default=str
-                    )
-                },
+                prefix=self.destination_search_prefix,
+                match_glob=self.destination_search_glob,
             )
+        return self._prior_artifact
 
-            report = {
-                "success": True,
-                "exception": None,
-                "prior": self.latest_destination_metadata()
-                if len(self.prior_destination_paths()) > 0
-                else None,
-                "extract": self.metadata(),
-            }
+    def valid(self) -> bool:
+        # return (
+        #     self.prior_artifact().s3object_metadata() is None
+        #     or self.source_object()["LastModified"]
+        #     != self.prior_artifact().s3object_metadata().get("LastModified")
+        #     or self.source_object()["ETag"]
+        #     != self.prior_artifact().s3object_metadata().get("ETag")
+        # )
+        return (
+            self.prior_artifact().s3object_metadata() is not None
+            and str(self.source_object()["LastModified"])
+            == self.prior_artifact().s3object_metadata().get("LastModified")
+            and str(self.source_etag())
+            == self.prior_artifact().s3object_metadata().get("ETag")
+        )
 
-            self.gcs_hook().upload(
-                bucket_name=self.destination_bucket_name(),
-                object_name=self.report_path,
-                data=json.dumps(report, separators=(",", ":"), default=str),
-                mime_type="application/jsonl",
-                gzip=False,
-                metadata={
-                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(
-                        {
-                            "filename": f"results_{self.filename()}.jsonl",
-                            "instance": self.provider,
-                            "ts": self.ts,
-                        }
-                    )
+    def execute(self, context: Context) -> dict:
+        if self.valid():
+            raise AirflowSkipException
+
+        self.gcs_hook().upload(
+            bucket_name=self.destination_bucket_name(),
+            object_name=self.destination_path,
+            data=self.source_object()["Body"].read(),
+            mime_type=self.source_object()["ContentType"],
+            gzip=False,
+            metadata={
+                "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                    self.metadata(), default=str
+                )
+            },
+        )
+
+        self.gcs_hook().upload(
+            bucket_name=self.destination_bucket_name(),
+            object_name=self.report_path,
+            data=json.dumps(
+                {
+                    "success": True,
+                    "exception": None,
+                    "prior": self.prior_artifact().s3object_metadata(),
+                    "extract": self.metadata(),
                 },
-            )
+                separators=(",", ":"),
+                default=str,
+            ),
+            mime_type="application/jsonl",
+            gzip=False,
+            metadata={
+                "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                    {
+                        "filename": f"results_{self.filename()}.jsonl",
+                        "instance": self.provider,
+                        "ts": self.ts,
+                    }
+                )
+            },
+        )
 
         return {
-            "valid": valid,
             "filename": self.filename(),
             "filetype": self.filetype(),
             "destination_path": self.destination_path,
