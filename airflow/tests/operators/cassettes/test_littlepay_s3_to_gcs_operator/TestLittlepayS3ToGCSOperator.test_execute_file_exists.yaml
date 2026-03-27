@@ -1,0 +1,165 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/9878c899-57f3-485b-b660-fcf4e83c84da
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?matchGlob=%2A%2A%2F202504291119_authorisations.psv&prefix=authorisations%2Finstance%3Datn%2Ffilename%3D202504291119_authorisations.psv&prettyPrint=false
+  response:
+    body:
+      string: '{"kind":"storage#objects","items":[{"kind":"storage#object","id":"calitp-staging-pytest/authorisations/instance=atn/filename=202504291119_authorisations.psv/ts=2025-06-01T00:00:00+00:00/202504291119_authorisations.psv/1774643794444003","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/authorisations%2Finstance=atn%2Ffilename=202504291119_authorisations.psv%2Fts=2025-06-01T00:00:00%2B00:00%2F202504291119_authorisations.psv","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/authorisations%2Finstance=atn%2Ffilename=202504291119_authorisations.psv%2Fts=2025-06-01T00:00:00%2B00:00%2F202504291119_authorisations.psv?generation=1774643794444003&alt=media","name":"authorisations/instance=atn/filename=202504291119_authorisations.psv/ts=2025-06-01T00:00:00+00:00/202504291119_authorisations.psv","bucket":"calitp-staging-pytest","generation":"1774643794444003","metageneration":"1","contentType":"binary/octet-stream","storageClass":"STANDARD","size":"429","md5Hash":"XUboS5yfo8yH5JFsRSxN6A==","crc32c":"hQqhOQ==","etag":"COP94af3wJMDEAE=","timeCreated":"2026-03-27T20:36:34.472Z","updated":"2026-03-27T20:36:34.472Z","timeStorageClassUpdated":"2026-03-27T20:36:34.472Z","timeFinalized":"2026-03-27T20:36:34.472Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":
+        \"202504291119_authorisations.psv\", \"instance\": \"atn\", \"ts\": \"2025-06-01T00:00:00+00:00\",
+        \"s3bucket\": \"mock-littlepay-bucket\", \"s3object\": {\"Key\": \"atn/v3/authorisations/202504291119_authorisations.psv\",
+        \"LastModified\": \"2026-03-27 19:19:02+00:00\", \"ETag\": \"5d46e84b9c9fa3cc87e4916c452c4de8\",
+        \"Size\": 429, \"StorageClass\": null}}"}}]}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '1703'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Cross-Origin-Opener-Policy-Report-Only:
+      - same-origin; report-to="gfe-default_product_name"
+      Date:
+      - Fri, 27 Mar 2026 21:01:15 GMT
+      Expires:
+      - Fri, 27 Mar 2026 21:01:15 GMT
+      Report-To:
+      - '{"group":"gfe-default_product_name","max_age":2592000,"endpoints":[{"url":"https://csp.withgoogle.com/csp/report-to/default_product_name"}]}'
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AMNfjG1MinzAS2H-1YWiIoqfdKuVlEg8vcazl1g30LpWZ7qjyE82iKYbEFUja_gi2-WaeTyO
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/9525e2a8-22a1-4257-ad01-62ea0f115437
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/authorisations%2Finstance%3Datn%2Ffilename%3D202504291119_authorisations.psv%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2F202504291119_authorisations.psv?prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/authorisations/instance=atn/filename=202504291119_authorisations.psv/ts=2025-06-01T00:00:00+00:00/202504291119_authorisations.psv/1774643794444003","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/authorisations%2Finstance=atn%2Ffilename=202504291119_authorisations.psv%2Fts=2025-06-01T00:00:00%2B00:00%2F202504291119_authorisations.psv","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/authorisations%2Finstance=atn%2Ffilename=202504291119_authorisations.psv%2Fts=2025-06-01T00:00:00%2B00:00%2F202504291119_authorisations.psv?generation=1774643794444003&alt=media","name":"authorisations/instance=atn/filename=202504291119_authorisations.psv/ts=2025-06-01T00:00:00+00:00/202504291119_authorisations.psv","bucket":"calitp-staging-pytest","generation":"1774643794444003","metageneration":"1","contentType":"binary/octet-stream","storageClass":"STANDARD","size":"429","md5Hash":"XUboS5yfo8yH5JFsRSxN6A==","crc32c":"hQqhOQ==","etag":"COP94af3wJMDEAE=","timeCreated":"2026-03-27T20:36:34.472Z","updated":"2026-03-27T20:36:34.472Z","timeStorageClassUpdated":"2026-03-27T20:36:34.472Z","timeFinalized":"2026-03-27T20:36:34.472Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":
+        \"202504291119_authorisations.psv\", \"instance\": \"atn\", \"ts\": \"2025-06-01T00:00:00+00:00\",
+        \"s3bucket\": \"mock-littlepay-bucket\", \"s3object\": {\"Key\": \"atn/v3/authorisations/202504291119_authorisations.psv\",
+        \"LastModified\": \"2026-03-27 19:19:02+00:00\", \"ETag\": \"5d46e84b9c9fa3cc87e4916c452c4de8\",
+        \"Size\": 429, \"StorageClass\": null}}"}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '1666'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Cross-Origin-Opener-Policy-Report-Only:
+      - same-origin; report-to="gfe-default_product_name"
+      Date:
+      - Fri, 27 Mar 2026 21:01:15 GMT
+      ETag:
+      - COP94af3wJMDEAE=
+      Expires:
+      - Fri, 27 Mar 2026 21:01:15 GMT
+      Report-To:
+      - '{"group":"gfe-default_product_name","max_age":2592000,"endpoints":[{"url":"https://csp.withgoogle.com/csp/report-to/default_product_name"}]}'
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AMNfjG2nEt65fyYKNzrhgYjeL-F5FpFCffjJWk_heGfm45DtPCtmGom2DxplTEFhclJjZLY3
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/ba0e906a-73a1-4954-ad95-6d7e0f93b9e0
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/authorisations%2Finstance%3Datn%2Ffilename%3D202504291119_authorisations.psv%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2F202504291119_authorisations.psv?prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/authorisations/instance=atn/filename=202504291119_authorisations.psv/ts=2025-06-01T00:00:00+00:00/202504291119_authorisations.psv/1774643794444003","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/authorisations%2Finstance=atn%2Ffilename=202504291119_authorisations.psv%2Fts=2025-06-01T00:00:00%2B00:00%2F202504291119_authorisations.psv","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/authorisations%2Finstance=atn%2Ffilename=202504291119_authorisations.psv%2Fts=2025-06-01T00:00:00%2B00:00%2F202504291119_authorisations.psv?generation=1774643794444003&alt=media","name":"authorisations/instance=atn/filename=202504291119_authorisations.psv/ts=2025-06-01T00:00:00+00:00/202504291119_authorisations.psv","bucket":"calitp-staging-pytest","generation":"1774643794444003","metageneration":"1","contentType":"binary/octet-stream","storageClass":"STANDARD","size":"429","md5Hash":"XUboS5yfo8yH5JFsRSxN6A==","crc32c":"hQqhOQ==","etag":"COP94af3wJMDEAE=","timeCreated":"2026-03-27T20:36:34.472Z","updated":"2026-03-27T20:36:34.472Z","timeStorageClassUpdated":"2026-03-27T20:36:34.472Z","timeFinalized":"2026-03-27T20:36:34.472Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":
+        \"202504291119_authorisations.psv\", \"instance\": \"atn\", \"ts\": \"2025-06-01T00:00:00+00:00\",
+        \"s3bucket\": \"mock-littlepay-bucket\", \"s3object\": {\"Key\": \"atn/v3/authorisations/202504291119_authorisations.psv\",
+        \"LastModified\": \"2026-03-27 19:19:02+00:00\", \"ETag\": \"5d46e84b9c9fa3cc87e4916c452c4de8\",
+        \"Size\": 429, \"StorageClass\": null}}"}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '1666'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Cross-Origin-Opener-Policy-Report-Only:
+      - same-origin; report-to="gfe-default_product_name"
+      Date:
+      - Fri, 27 Mar 2026 21:01:16 GMT
+      ETag:
+      - COP94af3wJMDEAE=
+      Expires:
+      - Fri, 27 Mar 2026 21:01:16 GMT
+      Report-To:
+      - '{"group":"gfe-default_product_name","max_age":2592000,"endpoints":[{"url":"https://csp.withgoogle.com/csp/report-to/default_product_name"}]}'
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AMNfjG2Un94yWrxcIc4z5uC1DEXPlQbPjMzYB5aQYq0aW3fRvAgUnI1P9legiVZv4HBfD7K8
+    status:
+      code: 200
+      message: OK
+version: 1
