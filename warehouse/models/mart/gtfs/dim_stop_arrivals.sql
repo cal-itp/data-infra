@@ -5,7 +5,7 @@
         event_time = '_feed_valid_from',
         batch_size = 'day',
         begin=var('GTFS_SCHEDULE_START'),
-        lookback=5,
+        lookback=var('DBT_ALL_MICROBATCH_LOOKBACK_DAYS'),
         partition_by={
             'field': '_feed_valid_from',
             'data_type': 'timestamp',
