@@ -55,7 +55,7 @@ FILTER_BODY_STRINGS: list = [
 ]
 
 
-def scrub_sensitive_data(request):
+def scrub_request(request):
     for body_string, replacement in FILTER_BODY_STRINGS:
         if request.body and body_string and replacement:
             request.body = request.body.replace(
@@ -68,7 +68,7 @@ def scrub_sensitive_data(request):
 def vcr_config():
     return {
         "allow_playback_repeats": True,
-        "before_record_request": scrub_sensitive_data,
+        "before_record_request": scrub_request,
         "filter_headers": [
             ("cookie", "FILTERED"),
             ("Authorization", "FILTERED"),
