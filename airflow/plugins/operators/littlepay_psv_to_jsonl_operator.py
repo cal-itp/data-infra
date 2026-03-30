@@ -23,7 +23,7 @@ class JsonlFormatter:
         )
 
 
-class LittlepayToJSONLOperator(BaseOperator):
+class LittlepayPSVToJSONLOperator(BaseOperator):
     template_fields: Sequence[str] = (
         "source_bucket",
         "source_path",

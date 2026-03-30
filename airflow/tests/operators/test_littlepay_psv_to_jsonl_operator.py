@@ -4,14 +4,14 @@ import os
 from datetime import datetime, timedelta, timezone
 
 import pytest
-from operators.littlepay_to_jsonl_operator import LittlepayToJSONLOperator
+from operators.littlepay_psv_to_jsonl_operator import LittlepayPSVToJSONLOperator
 
 from airflow.models.dag import DAG
 from airflow.models.taskinstance import TaskInstance
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 
-class TestLittlepayToJSONLOperator:
+class TestLittlepayPSVToJSONLOperator:
     @pytest.fixture
     def execution_date(self) -> datetime:
         return datetime.fromisoformat("2025-06-02").replace(tzinfo=timezone.utc)
@@ -47,8 +47,8 @@ class TestLittlepayToJSONLOperator:
         execution_date: datetime,
         destination_path: str,
         source_path: str,
-    ) -> LittlepayToJSONLOperator:
-        return LittlepayToJSONLOperator(
+    ) -> LittlepayPSVToJSONLOperator:
+        return LittlepayPSVToJSONLOperator(
             task_id="littlepay_to_jsonl",
             gcp_conn_id="google_cloud_default",
             source_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3"),
@@ -64,7 +64,7 @@ class TestLittlepayToJSONLOperator:
     def test_execute(
         self,
         test_dag: DAG,
-        operator: LittlepayToJSONLOperator,
+        operator: LittlepayPSVToJSONLOperator,
         execution_date: datetime,
         gcs_hook: GCSHook,
     ):
