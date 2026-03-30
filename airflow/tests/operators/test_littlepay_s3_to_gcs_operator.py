@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 from io import StringIO
 
 import pytest
+from freezegun import freeze_time
 from dateutil.relativedelta import relativedelta
 from moto import mock_aws
 from operators.littlepay_s3_to_gcs_operator import LittlepayS3ToGCSOperator
@@ -171,7 +172,7 @@ class TestLittlepayS3ToGCSOperator:
             "s3bucket": "mock-littlepay-bucket",
             "s3object": {
                 "Key": "atn/v3/authorisations/202510241114_authorisations.psv",
-                "LastModified": str(s3_file["LastModified"]),
+                "LastModified": parsed_metadata["s3object"]["LastModified"],
                 "ETag": s3_file["ETag"].replace('"', ""),
                 "Size": s3_file["ContentLength"],
                 "StorageClass": None,
@@ -264,22 +265,23 @@ class TestLittlepayS3ToGCSOperator:
         gcs_hook: GCSHook,
         s3_hook: S3Hook,
     ):
-        s3_hook.create_bucket("mock-littlepay-bucket")
-        fixture_path = os.path.normpath(
-            os.path.join(
-                os.path.dirname(os.path.realpath(__file__)),
-                "../fixtures/littlepay-stub.psv",
+        with freeze_time("2026-03-01T00:00:00"):
+            s3_hook.create_bucket("mock-littlepay-bucket")
+            fixture_path = os.path.normpath(
+                os.path.join(
+                    os.path.dirname(os.path.realpath(__file__)),
+                    "../fixtures/littlepay-stub.psv",
+                )
             )
-        )
-        s3_hook.load_file(
-            filename=fixture_path,
-            key="atn/v3/authorisations/202504291120_authorisations.psv",
-            bucket_name="mock-littlepay-bucket",
-        )
-        s3_file = s3_hook.get_key(
-            bucket_name="mock-littlepay-bucket",
-            key="atn/v3/authorisations/202504291120_authorisations.psv",
-        ).get()
+            s3_hook.load_file(
+                filename=fixture_path,
+                key="atn/v3/authorisations/202504291120_authorisations.psv",
+                bucket_name="mock-littlepay-bucket",
+            )
+            s3_file = s3_hook.get_key(
+                bucket_name="mock-littlepay-bucket",
+                key="atn/v3/authorisations/202504291120_authorisations.psv",
+            ).get()
 
         with open(fixture_path, "r") as fixture_file:
             gcs_hook.upload(
