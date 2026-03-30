@@ -174,10 +174,6 @@ output "google_storage_bucket_acl_tfer--dataproc-temp-us-west2-1005246706141-x9m
   value = google_storage_bucket_acl.tfer--dataproc-temp-us-west2-1005246706141-x9mtxbwg.id
 }
 
-output "google_storage_bucket_acl_tfer--dev-calitp-aggregator-scraper_id" {
-  value = google_storage_bucket_acl.tfer--dev-calitp-aggregator-scraper.id
-}
-
 output "google_storage_bucket_acl_tfer--dev-calitp-gtfs-rt-raw_id" {
   value = google_storage_bucket_acl.tfer--dev-calitp-gtfs-rt-raw.id
 }
@@ -228,10 +224,6 @@ output "google_storage_bucket_acl_tfer--rt-parsed_id" {
 
 output "google_storage_bucket_acl_tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com_id" {
   value = google_storage_bucket_acl.tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-aggregator-scraper_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-aggregator-scraper.id
 }
 
 output "google_storage_bucket_acl_tfer--test-calitp-airtable_id" {
@@ -558,10 +550,6 @@ output "google_storage_bucket_iam_binding_tfer--dataproc-temp-us-west2-100524670
   value = google_storage_bucket_iam_binding.tfer--dataproc-temp-us-west2-1005246706141-x9mtxbwg.id
 }
 
-output "google_storage_bucket_iam_binding_tfer--dev-calitp-aggregator-scraper_id" {
-  value = google_storage_bucket_iam_binding.tfer--dev-calitp-aggregator-scraper.id
-}
-
 output "google_storage_bucket_iam_binding_tfer--dev-calitp-gtfs-rt-raw_id" {
   value = google_storage_bucket_iam_binding.tfer--dev-calitp-gtfs-rt-raw.id
 }
@@ -612,10 +600,6 @@ output "google_storage_bucket_iam_binding_tfer--rt-parsed_id" {
 
 output "google_storage_bucket_iam_binding_tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com_id" {
   value = google_storage_bucket_iam_binding.tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-aggregator-scraper_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-aggregator-scraper.id
 }
 
 output "google_storage_bucket_iam_binding_tfer--test-calitp-airtable_id" {
@@ -950,10 +934,6 @@ output "google_storage_bucket_iam_member_tfer--dataproc-temp-us-west2-1005246706
   value = google_storage_bucket_iam_member.tfer--dataproc-temp-us-west2-1005246706141-x9mtxbwg.id
 }
 
-output "google_storage_bucket_iam_member_tfer--dev-calitp-aggregator-scraper_id" {
-  value = google_storage_bucket_iam_member.tfer--dev-calitp-aggregator-scraper.id
-}
-
 output "google_storage_bucket_iam_member_tfer--dev-calitp-gtfs-rt-raw_id" {
   value = google_storage_bucket_iam_member.tfer--dev-calitp-gtfs-rt-raw.id
 }
@@ -1004,10 +984,6 @@ output "google_storage_bucket_iam_member_tfer--rt-parsed_id" {
 
 output "google_storage_bucket_iam_member_tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com_id" {
   value = google_storage_bucket_iam_member.tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-aggregator-scraper_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-aggregator-scraper.id
 }
 
 output "google_storage_bucket_iam_member_tfer--test-calitp-airtable_id" {
@@ -1342,10 +1318,6 @@ output "google_storage_bucket_iam_policy_tfer--dataproc-temp-us-west2-1005246706
   value = google_storage_bucket_iam_policy.tfer--dataproc-temp-us-west2-1005246706141-x9mtxbwg.id
 }
 
-output "google_storage_bucket_iam_policy_tfer--dev-calitp-aggregator-scraper_id" {
-  value = google_storage_bucket_iam_policy.tfer--dev-calitp-aggregator-scraper.id
-}
-
 output "google_storage_bucket_iam_policy_tfer--dev-calitp-gtfs-rt-raw_id" {
   value = google_storage_bucket_iam_policy.tfer--dev-calitp-gtfs-rt-raw.id
 }
@@ -1396,10 +1368,6 @@ output "google_storage_bucket_iam_policy_tfer--rt-parsed_id" {
 
 output "google_storage_bucket_iam_policy_tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com_id" {
   value = google_storage_bucket_iam_policy.tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-aggregator-scraper_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-aggregator-scraper.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--test-calitp-airtable_id" {
@@ -1918,14 +1886,6 @@ output "google_storage_bucket_tfer--dataproc-temp-us-west2-1005246706141-x9mtxbw
   value = google_storage_bucket.tfer--dataproc-temp-us-west2-1005246706141-x9mtxbwg.self_link
 }
 
-output "google_storage_bucket_tfer--dev-calitp-aggregator-scraper_name" {
-  value = google_storage_bucket.tfer--dev-calitp-aggregator-scraper.name
-}
-
-output "google_storage_bucket_tfer--dev-calitp-aggregator-scraper_self_link" {
-  value = google_storage_bucket.tfer--dev-calitp-aggregator-scraper.self_link
-}
-
 output "google_storage_bucket_tfer--dev-calitp-gtfs-rt-raw_name" {
   value = google_storage_bucket.tfer--dev-calitp-gtfs-rt-raw.name
 }
@@ -2028,14 +1988,6 @@ output "google_storage_bucket_tfer--staging-002E-cal-itp-data-infra-002E-appspot
 
 output "google_storage_bucket_tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com_self_link" {
   value = google_storage_bucket.tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-aggregator-scraper_name" {
-  value = google_storage_bucket.tfer--test-calitp-aggregator-scraper.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-aggregator-scraper_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-aggregator-scraper.self_link
 }
 
 output "google_storage_bucket_tfer--test-calitp-airtable_name" {
@@ -2514,10 +2466,6 @@ output "google_storage_default_object_acl_tfer--dataproc-temp-us-west2-100524670
   value = google_storage_default_object_acl.tfer--dataproc-temp-us-west2-1005246706141-x9mtxbwg.id
 }
 
-output "google_storage_default_object_acl_tfer--dev-calitp-aggregator-scraper_id" {
-  value = google_storage_default_object_acl.tfer--dev-calitp-aggregator-scraper.id
-}
-
 output "google_storage_default_object_acl_tfer--dev-calitp-gtfs-rt-raw_id" {
   value = google_storage_default_object_acl.tfer--dev-calitp-gtfs-rt-raw.id
 }
@@ -2568,10 +2516,6 @@ output "google_storage_default_object_acl_tfer--rt-parsed_id" {
 
 output "google_storage_default_object_acl_tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com_id" {
   value = google_storage_default_object_acl.tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-aggregator-scraper_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-aggregator-scraper.id
 }
 
 output "google_storage_default_object_acl_tfer--test-calitp-airtable_id" {

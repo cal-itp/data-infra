@@ -686,33 +686,6 @@ resource "google_storage_bucket" "tfer--dataproc-temp-us-west2-1005246706141-x9m
   uniform_bucket_level_access = "false"
 }
 
-resource "google_storage_bucket" "tfer--dev-calitp-aggregator-scraper" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "dev-calitp-aggregator-scraper"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
 resource "google_storage_bucket" "tfer--dev-calitp-gtfs-rt-raw" {
   default_event_based_hold    = "false"
   force_destroy               = "false"
@@ -989,33 +962,6 @@ resource "google_storage_bucket" "tfer--staging-002E-cal-itp-data-infra-002E-app
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "false"
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-aggregator-scraper" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-aggregator-scraper"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
 }
 
 resource "google_storage_bucket" "tfer--test-calitp-airtable" {

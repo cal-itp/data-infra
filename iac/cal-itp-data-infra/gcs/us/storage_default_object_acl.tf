@@ -178,10 +178,6 @@ resource "google_storage_default_object_acl" "tfer--dataproc-temp-us-west2-10052
   role_entity = ["OWNER:project-editors-1005246706141", "OWNER:project-owners-1005246706141", "READER:project-viewers-1005246706141"]
 }
 
-resource "google_storage_default_object_acl" "tfer--dev-calitp-aggregator-scraper" {
-  bucket = "dev-calitp-aggregator-scraper"
-}
-
 resource "google_storage_default_object_acl" "tfer--dev-calitp-gtfs-rt-raw" {
   bucket = "dev-calitp-gtfs-rt-raw"
 }
@@ -235,10 +231,6 @@ resource "google_storage_default_object_acl" "tfer--rt-parsed-deprecated" {
 resource "google_storage_default_object_acl" "tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com" {
   bucket      = "staging.cal-itp-data-infra.appspot.com"
   role_entity = ["OWNER:project-editors-1005246706141", "OWNER:project-owners-1005246706141", "READER:project-viewers-1005246706141"]
-}
-
-resource "google_storage_default_object_acl" "tfer--test-calitp-aggregator-scraper" {
-  bucket = "test-calitp-aggregator-scraper"
 }
 
 resource "google_storage_default_object_acl" "tfer--test-calitp-airtable" {
