@@ -194,6 +194,15 @@
 
    This DAG orchestrates the publishing of data from the Cal-ITP data warehouse to the California Open Data Portal. Failures in this job may require coordination with the central data portal team if there is an issue with CKAN itself.
 
+## airtable_issue_management
+
+   This DAG automates the lifecycle management of Transit Data Quality (TDQ) expired GTFS issues.
+   It performs the following tasks:
+   1. Queries BigQuery for expired or soon-to-expire GTFS issues that should be closed
+   2. Updates the corresponding records in Airtable to mark them as resolved
+   3. Sends an HTML email summarizing the updates
+   4. Logs any failed update batches for troubleshooting
+
 
 ## Testing DAGs
 
@@ -202,12 +211,3 @@
 ### Automated Tests
 
    Each operator and hook file have pytest under `airflow/tests/` folder. Go to [running-automated-tests](https://github.com/cal-itp/data-infra/tree/main/airflow#running-automated-tests) for more information.
-
-### airtable_issue_management
-
-   This DAG automates the lifecycle management of Transit Data Quality (TDQ) expired GTFS issues.
-   It performs the following tasks:
-   1. Queries BigQuery for expired or soon-to-expire GTFS issues that should be closed
-   2. Updates the corresponding records in Airtable to mark them as resolved
-   3. Sends an HTML email summarizing the updates
-   4. Logs any failed update batches for troubleshooting
