@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from operators.littlepay_csv_to_jsonl_operator import LittlepayCSVToJSONLOperator
+from operators.littlepay_psv_to_jsonl_operator import LittlepayPSVToJSONLOperator
 from operators.littlepay_s3_to_gcs_operator import LittlepayS3ToGCSOperator
 
 from airflow import DAG, XComArg
@@ -112,7 +112,7 @@ with DAG(
                     ),
                 }
 
-            parse_littlepay = LittlepayCSVToJSONLOperator(
+            parse_littlepay = LittlepayPSVToJSONLOperator(
                 source_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3"),
                 destination_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_PARSED_V3"),
             ).expand_kwargs(XComArg(sync_littlepay).map(parse_littlepay_kwargs))
