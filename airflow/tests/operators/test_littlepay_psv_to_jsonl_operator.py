@@ -53,9 +53,7 @@ class TestLittlepayPSVToJSONLOperator:
             gcp_conn_id="google_cloud_default",
             source_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3"),
             source_path=source_path,
-            destination_bucket=os.environ.get(
-                "CALITP_BUCKET__LITTLEPAY_PARSED_V3"
-            ),
+            destination_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_PARSED_V3"),
             destination_path=destination_path,
             dag=test_dag,
         )
@@ -88,26 +86,26 @@ class TestLittlepayPSVToJSONLOperator:
         }
 
         compressed_result = gcs_hook.download(
-            bucket_name=os.environ.get(
-                "CALITP_BUCKET__LITTLEPAY_PARSED_V3"
-            ).replace("gs://", ""),
+            bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_PARSED_V3").replace(
+                "gs://", ""
+            ),
             object_name=xcom_value["destination_path"],
         )
         decompressed_result = gzip.decompress(compressed_result)
         result = [json.loads(x) for x in decompressed_result.splitlines()]
         assert result[0] == {
-            '_line_number': 1,
-            'acquirer_code': 'CS',
-            'aggregation_id': 'abc123',
-            'amount': '0.00',
-            'authorisation_timestamp_utc': '2025-10-24T00:00:00.000Z',
-            'channel': 'TRANSIT',
-            'currency_code': '840',
-            'participant_id': 'atn',
-            'record_updated_timestamp_utc': '2025-10-24T00:00:00.000Z',
-            'request_created_timestamp_utc': '2025-10-24T00:00:00.000Z',
-            'request_type': 'CARD_CHECK',
-            'response_code': '100',
-            'retrieval_reference_number': '1234567890123456789012',
-            'status': 'VERIFIED',
+            "_line_number": 1,
+            "acquirer_code": "CS",
+            "aggregation_id": "abc123",
+            "amount": "0.00",
+            "authorisation_timestamp_utc": "2025-10-24T00:00:00.000Z",
+            "channel": "TRANSIT",
+            "currency_code": "840",
+            "participant_id": "atn",
+            "record_updated_timestamp_utc": "2025-10-24T00:00:00.000Z",
+            "request_created_timestamp_utc": "2025-10-24T00:00:00.000Z",
+            "request_type": "CARD_CHECK",
+            "response_code": "100",
+            "retrieval_reference_number": "1234567890123456789012",
+            "status": "VERIFIED",
         }
