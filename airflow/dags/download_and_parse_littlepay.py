@@ -68,7 +68,7 @@ with DAG(
                         f"filename={filename}",
                     ),
                     "destination_search_glob": os.path.join(
-                        "ts=*",
+                        "**",
                         filename,
                     ),
                     "destination_path": os.path.join(
