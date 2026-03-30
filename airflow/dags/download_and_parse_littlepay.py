@@ -5,10 +5,10 @@ from dags import log_failure_to_slack
 from operators.littlepay_psv_to_jsonl_operator import LittlepayPSVToJSONLOperator
 from operators.littlepay_s3_to_gcs_operator import LittlepayS3ToGCSOperator
 
-from airflow import XComArg
-from airflow.decorators import dag, task_group
-from airflow.providers.amazon.aws.operators.s3 import S3ListOperator
+from airflow import DAG, XComArg
+from airflow.utils.task_group import TaskGroup
 from airflow.operators.latest_only import LatestOnlyOperator
+from airflow.providers.amazon.aws.operators.s3 import S3ListOperator
 
 LITTLEPAY_TRANSIT_PROVIDER_BUCKETS = {
     "atn": "littlepay-datafeed-prod-atn-5c319c40",
@@ -41,7 +41,9 @@ LITTLEPAY_ENTITIES = [
     "terminal-device-transactions",
 ]
 
-@dag(
+
+with DAG(
+    dag_id="download_and_parse_littlepay",
     # Every day at midnight
     schedule="0 0 * * *",
     start_date=datetime(2026, 3, 1),
@@ -53,17 +55,13 @@ LITTLEPAY_ENTITIES = [
         "email_on_retry": False,
         "on_failure_callback": log_failure_to_slack,
     },
-)
-def download_and_parse_littlepay():
+):
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
 
-    provider_groups = []
     for provider, bucket in LITTLEPAY_TRANSIT_PROVIDER_BUCKETS.items():
-        @task_group(group_id=provider)
-        def provider_group():
+        with TaskGroup(group_id=provider) as provider_group:
             for entity in LITTLEPAY_ENTITIES:
-                @task_group(group_id=entity)
-                def entity_group():
+                with TaskGroup(group_id=entity) as entity_group:
                     littlepay_files = S3ListOperator(
                         task_id="littlepay_list",
                         prefix=os.path.join(provider, "v3", entity),
@@ -105,7 +103,9 @@ def download_and_parse_littlepay():
                         provider=provider,
                         ts="{{ ts }}",
                         source_bucket=bucket,
-                        destination_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3"),
+                        destination_bucket=os.environ.get(
+                            "CALITP_BUCKET__LITTLEPAY_RAW_V3"
+                        ),
                     ).expand_kwargs(XComArg(littlepay_files).map(sync_littlepay_kwargs))
 
                     def parse_littlepay_kwargs(source_file):
@@ -129,10 +129,10 @@ def download_and_parse_littlepay():
                     parse_littlepay = LittlepayPSVToJSONLOperator.partial(
                         task_id="littlepay_parse",
                         source_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3"),
-                        destination_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_PARSED_V3"),
+                        destination_bucket=os.environ.get(
+                            "CALITP_BUCKET__LITTLEPAY_PARSED_V3"
+                        ),
                     ).expand_kwargs(XComArg(sync_littlepay).map(parse_littlepay_kwargs))
 
                     littlepay_files >> sync_littlepay >> parse_littlepay
-                entity_group()
-        provider_groups.append(provider_group())
-    latest_only >> provider_groups
+
