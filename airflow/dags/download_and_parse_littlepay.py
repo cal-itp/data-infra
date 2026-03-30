@@ -5,6 +5,7 @@ from dags import log_failure_to_slack
 from operators.littlepay_psv_to_jsonl_operator import LittlepayPSVToJSONLOperator
 from operators.littlepay_s3_to_gcs_operator import LittlepayS3ToGCSOperator
 
+from airflow import XComArg
 from airflow.decorators import dag, task_group
 from airflow.providers.amazon.aws.operators.s3 import S3ListOperator
 from airflow.operators.latest_only import LatestOnlyOperator
