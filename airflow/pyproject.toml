@@ -30,7 +30,6 @@ dev = [
     "moto[s3]>=5.1.21",
     "pytest>=9.0.2",
     "pytest-dotenv>=0.5.2",
-    "pytest-freezegun>=0.4.2",
     "pytest-recording>=0.13.4",
     "vcrpy>=8.0.0",
 ]
