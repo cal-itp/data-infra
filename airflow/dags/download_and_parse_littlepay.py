@@ -9,6 +9,7 @@ from airflow import XComArg
 from airflow.decorators import dag, task_group
 from airflow.operators.latest_only import LatestOnlyOperator
 from airflow.providers.amazon.aws.operators.s3 import S3ListOperator
+from airflow.utils.trigger_rule import TriggerRule
 
 LITTLEPAY_TRANSIT_PROVIDER_BUCKETS = {
     "atn": "littlepay-datafeed-prod-atn-5c319c40",
@@ -111,6 +112,7 @@ def download_and_parse_littlepay():
                         destination_bucket=os.environ.get(
                             "CALITP_BUCKET__LITTLEPAY_RAW_V3"
                         ),
+                        map_index_template="{{ task.source_path.split('/')[-1] }}",
                     ).expand_kwargs(XComArg(littlepay_files).map(sync_littlepay_kwargs))
 
                     def parse_littlepay_kwargs(source_file):
@@ -137,6 +139,8 @@ def download_and_parse_littlepay():
                         destination_bucket=os.environ.get(
                             "CALITP_BUCKET__LITTLEPAY_PARSED_V3"
                         ),
+                        trigger_rule=TriggerRule.ALL_DONE,
+                        map_index_template="{{ task.source_path.split('/')[-1] }}",
                     ).expand_kwargs(XComArg(sync_littlepay).map(parse_littlepay_kwargs))
 
                     littlepay_files >> sync_littlepay >> parse_littlepay
