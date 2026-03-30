@@ -399,7 +399,7 @@ class TestLittlepayS3ToGCSOperator:
                             "s3bucket": "mock-littlepay-bucket",
                             "s3object": {
                                 "Key": "atn/v3/authorisations/202504300000_authorisations.psv",
-                                "LastModified": str(s3_file["LastModified"]),
+                                "LastModified": "2025-05-01 00:00:00+00:00",
                                 "ETag": s3_file["ETag"].replace('"', ""),
                                 "Size": s3_file["ContentLength"],
                                 "StorageClass": None,
@@ -449,7 +449,7 @@ class TestLittlepayS3ToGCSOperator:
             "s3bucket": "mock-littlepay-bucket",
             "s3object": {
                 "Key": "atn/v3/authorisations/202504300000_authorisations.psv",
-                "LastModified": str(s3_file["LastModified"]),
+                "LastModified": parsed_metadata["s3object"]["LastModified"],
                 "ETag": s3_file["ETag"].replace('"', ""),
                 "Size": s3_file["ContentLength"],
                 "StorageClass": None,
@@ -468,7 +468,7 @@ class TestLittlepayS3ToGCSOperator:
             "success": True,
             "prior": {
                 "Key": "atn/v3/authorisations/202504300000_authorisations.psv",
-                "LastModified": str(s3_file["LastModified"]),
+                "LastModified": parsed_report[0]["prior"]["LastModified"],
                 "ETag": s3_file["ETag"].replace('"', ""),
                 "Size": s3_file["ContentLength"],
                 "StorageClass": None,
@@ -480,7 +480,7 @@ class TestLittlepayS3ToGCSOperator:
                 "s3bucket": "mock-littlepay-bucket",
                 "s3object": {
                     "Key": "atn/v3/authorisations/202504300000_authorisations.psv",
-                    "LastModified": str(s3_file["LastModified"]),
+                    "LastModified": parsed_report[0]["extract"]["s3object"]["LastModified"],
                     "ETag": s3_file["ETag"].replace('"', ""),
                     "Size": s3_file["ContentLength"],
                     "StorageClass": None,
