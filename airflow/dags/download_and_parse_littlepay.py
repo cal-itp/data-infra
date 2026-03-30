@@ -5,8 +5,8 @@ from dags import log_failure_to_slack
 from operators.littlepay_psv_to_jsonl_operator import LittlepayPSVToJSONLOperator
 from operators.littlepay_s3_to_gcs_operator import LittlepayS3ToGCSOperator
 
-from airflow import DAG, XComArg
-from airflow.utils.task_group import TaskGroup
+from airflow import XComArg
+from airflow.decorators import dag, task_group
 from airflow.operators.latest_only import LatestOnlyOperator
 from airflow.providers.amazon.aws.operators.s3 import S3ListOperator
 
@@ -42,8 +42,7 @@ LITTLEPAY_ENTITIES = [
 ]
 
 
-with DAG(
-    dag_id="download_and_parse_littlepay",
+@dag(
     # Every day at midnight
     schedule="0 0 * * *",
     start_date=datetime(2026, 3, 1),
@@ -55,13 +54,19 @@ with DAG(
         "email_on_retry": False,
         "on_failure_callback": log_failure_to_slack,
     },
-):
+)
+def download_and_parse_littlepay():
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
 
+    provider_groups = []
     for provider, bucket in LITTLEPAY_TRANSIT_PROVIDER_BUCKETS.items():
-        with TaskGroup(group_id=provider) as provider_group:
+
+        @task_group(group_id=provider)
+        def provider_group():
             for entity in LITTLEPAY_ENTITIES:
-                with TaskGroup(group_id=entity) as entity_group:
+
+                @task_group(group_id=entity)
+                def entity_group():
                     littlepay_files = S3ListOperator(
                         task_id="littlepay_list",
                         prefix=os.path.join(provider, "v3", entity),
@@ -136,3 +141,10 @@ with DAG(
 
                     littlepay_files >> sync_littlepay >> parse_littlepay
 
+                entity_group()
+
+        provider_groups.append(provider_group())
+    latest_only >> provider_groups
+
+
+download_and_parse_littlepay()
