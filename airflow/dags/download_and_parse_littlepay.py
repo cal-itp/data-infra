@@ -5,8 +5,7 @@ from dags import log_failure_to_slack
 from operators.littlepay_psv_to_jsonl_operator import LittlepayPSVToJSONLOperator
 from operators.littlepay_s3_to_gcs_operator import LittlepayS3ToGCSOperator
 
-from airflow import XComArg
-from airflow.decorators import dag, task_group
+from airflow.decorators import dag, task, task_group
 from airflow.operators.latest_only import LatestOnlyOperator
 from airflow.providers.amazon.aws.operators.s3 import S3ListOperator
 from airflow.utils.trigger_rule import TriggerRule
@@ -59,6 +58,54 @@ LITTLEPAY_ENTITIES = [
 def download_and_parse_littlepay():
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
 
+    @task
+    def create_sync_kwargs(source_path: str, entity: str, provider: str):
+        filename = os.path.basename(source_path)
+        return {
+            "source_path": source_path,
+            "destination_search_prefix": os.path.join(
+                entity,
+                f"instance={provider}",
+                f"filename={filename}",
+            ),
+            "destination_search_glob": os.path.join(
+                "**",
+                filename,
+            ),
+            "destination_path": os.path.join(
+                entity,
+                f"instance={provider}",
+                f"filename={filename}",
+                "ts={{ ts }}",
+                filename,
+            ),
+            "report_path": os.path.join(
+                "raw_littlepay_sync_job_result",
+                f"instance={provider}",
+                "ts={{ ts }}",
+                f"results_{filename}.jsonl",
+            ),
+        }
+
+    @task
+    def create_parse_kwargs(source_file: dict, provider: str):
+        return {
+            "source_path": os.path.join(
+                source_file["filetype"],
+                f"instance={provider}",
+                f"filename={source_file['filename']}",
+                "ts={{ ts }}",
+                source_file["filename"],
+            ),
+            "destination_path": os.path.join(
+                source_file["filetype"],
+                f"instance={provider}",
+                f"extract_filename={source_file['filename']}",
+                "ts={{ ts }}",
+                f"{os.path.splitext(source_file['filename'])[0]}.jsonl.gz",
+            ),
+        }
+
     provider_groups = []
     for provider, bucket in LITTLEPAY_TRANSIT_PROVIDER_BUCKETS.items():
 
@@ -68,42 +115,19 @@ def download_and_parse_littlepay():
 
                 @task_group(group_id=entity)
                 def entity_group():
-                    littlepay_files = S3ListOperator(
+                    source_paths = S3ListOperator(
                         task_id="littlepay_list",
                         prefix=os.path.join(provider, "v3", entity),
                         bucket=bucket,
                         aws_conn_id=f"aws_{provider}",
                     )
 
-                    def sync_littlepay_kwargs(source_path):
-                        filename = os.path.basename(source_path)
-                        return {
-                            "source_path": source_path,
-                            "destination_search_prefix": os.path.join(
-                                entity,
-                                f"instance={provider}",
-                                f"filename={filename}",
-                            ),
-                            "destination_search_glob": os.path.join(
-                                "**",
-                                filename,
-                            ),
-                            "destination_path": os.path.join(
-                                entity,
-                                f"instance={provider}",
-                                f"filename={filename}",
-                                "ts={{ ts }}",
-                                filename,
-                            ),
-                            "report_path": os.path.join(
-                                "raw_littlepay_sync_job_result",
-                                f"instance={provider}",
-                                "ts={{ ts }}",
-                                f"results_{filename}.jsonl",
-                            ),
-                        }
+                    sync_kwargs = create_sync_kwargs.partial(
+                        provider=provider,
+                        entity=entity,
+                    ).expand(source_path=source_paths.output)
 
-                    sync_littlepay = LittlepayS3ToGCSOperator.partial(
+                    synced_files = LittlepayS3ToGCSOperator.partial(
                         task_id="littlepay_copy",
                         aws_conn_id=f"aws_{provider}",
                         provider=provider,
@@ -113,27 +137,13 @@ def download_and_parse_littlepay():
                             "CALITP_BUCKET__LITTLEPAY_RAW_V3"
                         ),
                         map_index_template="{{ task.source_path.split('/')[-1] }}",
-                    ).expand_kwargs(XComArg(littlepay_files).map(sync_littlepay_kwargs))
+                    ).expand_kwargs(sync_kwargs)
 
-                    def parse_littlepay_kwargs(source_file):
-                        return {
-                            "source_path": os.path.join(
-                                source_file["filetype"],
-                                f"instance={provider}",
-                                f"filename={source_file['filename']}",
-                                "ts={{ ts }}",
-                                source_file["filename"],
-                            ),
-                            "destination_path": os.path.join(
-                                source_file["filetype"],
-                                f"instance={provider}",
-                                f"extract_filename={source_file['filename']}",
-                                "ts={{ ts }}",
-                                f"{os.path.splitext(source_file['filename'])[0]}.jsonl.gz",
-                            ),
-                        }
+                    parse_kwargs = create_parse_kwargs.partial(
+                        provider=provider,
+                    ).expand(source_file=synced_files.output)
 
-                    parse_littlepay = LittlepayPSVToJSONLOperator.partial(
+                    parsed_files = LittlepayPSVToJSONLOperator.partial(
                         task_id="littlepay_parse",
                         source_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3"),
                         destination_bucket=os.environ.get(
@@ -141,9 +151,15 @@ def download_and_parse_littlepay():
                         ),
                         trigger_rule=TriggerRule.ALL_DONE,
                         map_index_template="{{ task.source_path.split('/')[-1] }}",
-                    ).expand_kwargs(XComArg(sync_littlepay).map(parse_littlepay_kwargs))
+                    ).expand_kwargs(parse_kwargs)
 
-                    littlepay_files >> sync_littlepay >> parse_littlepay
+                    (
+                        source_paths
+                        >> sync_kwargs
+                        >> synced_files
+                        >> parse_kwargs
+                        >> parsed_files
+                    )
 
                 entity_group()
 
