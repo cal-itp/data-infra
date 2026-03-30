@@ -96,7 +96,10 @@ class TestLittlepayS3ToGCSOperator:
             key="atn/v3/authorisations/202510241114_authorisations.psv",
             bucket_name="mock-littlepay-bucket",
         )
-        s3_file = s3_hook.get_key(bucket_name="mock-littlepay-bucket", key="atn/v3/authorisations/202510241114_authorisations.psv").get()
+        s3_file = s3_hook.get_key(
+            bucket_name="mock-littlepay-bucket",
+            key="atn/v3/authorisations/202510241114_authorisations.psv",
+        ).get()
 
         operator.run(
             start_date=execution_date,
@@ -273,7 +276,10 @@ class TestLittlepayS3ToGCSOperator:
             key="atn/v3/authorisations/202504291120_authorisations.psv",
             bucket_name="mock-littlepay-bucket",
         )
-        s3_file = s3_hook.get_key(bucket_name="mock-littlepay-bucket", key="atn/v3/authorisations/202504291120_authorisations.psv").get()
+        s3_file = s3_hook.get_key(
+            bucket_name="mock-littlepay-bucket",
+            key="atn/v3/authorisations/202504291120_authorisations.psv",
+        ).get()
 
         with open(fixture_path, "r") as fixture_file:
             gcs_hook.upload(
@@ -285,19 +291,21 @@ class TestLittlepayS3ToGCSOperator:
                 mime_type="binary/octet-stream",
                 gzip=False,
                 metadata={
-                    "PARTITIONED_ARTIFACT_METADATA": json.dumps({
-                        "filename": "202504291120_authorisations.psv",
-                        "instance": "atn",
-                        "ts": "2025-05-01T00:00:00+00:00",
-                        "s3bucket": "mock-littlepay-bucket",
-                        "s3object": {
-                            "Key": "atn/v3/authorisations/202504291120_authorisations.psv",
-                            "LastModified": str(s3_file["LastModified"]),
-                            "ETag": s3_file["ETag"].replace('"', ""),
-                            "Size": s3_file["ContentLength"],
-                            "StorageClass": None,
-                        },
-                    })
+                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                        {
+                            "filename": "202504291120_authorisations.psv",
+                            "instance": "atn",
+                            "ts": "2025-05-01T00:00:00+00:00",
+                            "s3bucket": "mock-littlepay-bucket",
+                            "s3object": {
+                                "Key": "atn/v3/authorisations/202504291120_authorisations.psv",
+                                "LastModified": str(s3_file["LastModified"]),
+                                "ETag": s3_file["ETag"].replace('"', ""),
+                                "Size": s3_file["ContentLength"],
+                                "StorageClass": None,
+                            },
+                        }
+                    )
                 },
             )
 
@@ -366,7 +374,10 @@ class TestLittlepayS3ToGCSOperator:
             key="atn/v3/authorisations/202504300000_authorisations.psv",
             bucket_name="mock-littlepay-bucket",
         )
-        s3_file = s3_hook.get_key(bucket_name="mock-littlepay-bucket", key="atn/v3/authorisations/202504300000_authorisations.psv").get()
+        s3_file = s3_hook.get_key(
+            bucket_name="mock-littlepay-bucket",
+            key="atn/v3/authorisations/202504300000_authorisations.psv",
+        ).get()
 
         with open(fixture_path, "r") as fixture_file:
             gcs_hook.upload(
@@ -378,19 +389,21 @@ class TestLittlepayS3ToGCSOperator:
                 mime_type="binary/octet-stream",
                 gzip=False,
                 metadata={
-                    "PARTITIONED_ARTIFACT_METADATA": json.dumps({
-                        "filename": "202504300000_authorisations.psv",
-                        "instance": "atn",
-                        "ts": "2025-05-01T00:00:00+00:00",
-                        "s3bucket": "mock-littlepay-bucket",
-                        "s3object": {
-                            "Key": "atn/v3/authorisations/202504300000_authorisations.psv",
-                            "LastModified": "2025-05-01 00:00:00+00:00",
-                            "ETag": s3_file["ETag"].replace('"', ""),
-                            "Size": s3_file["ContentLength"],
-                            "StorageClass": None,
-                        },
-                    })
+                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                        {
+                            "filename": "202504300000_authorisations.psv",
+                            "instance": "atn",
+                            "ts": "2025-05-01T00:00:00+00:00",
+                            "s3bucket": "mock-littlepay-bucket",
+                            "s3object": {
+                                "Key": "atn/v3/authorisations/202504300000_authorisations.psv",
+                                "LastModified": str(s3_file["LastModified"]),
+                                "ETag": s3_file["ETag"].replace('"', ""),
+                                "Size": s3_file["ContentLength"],
+                                "StorageClass": None,
+                            },
+                        }
+                    )
                 },
             )
 
@@ -453,7 +466,7 @@ class TestLittlepayS3ToGCSOperator:
             "success": True,
             "prior": {
                 "Key": "atn/v3/authorisations/202504300000_authorisations.psv",
-                "LastModified": "2025-05-01 00:00:00+00:00",
+                "LastModified": str(s3_file["LastModified"]),
                 "ETag": s3_file["ETag"].replace('"', ""),
                 "Size": s3_file["ContentLength"],
                 "StorageClass": None,
