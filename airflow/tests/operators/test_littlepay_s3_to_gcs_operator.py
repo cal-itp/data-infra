@@ -5,8 +5,8 @@ from datetime import datetime, timedelta, timezone
 from io import StringIO
 
 import pytest
-from freezegun import freeze_time
 from dateutil.relativedelta import relativedelta
+from freezegun import freeze_time
 from moto import mock_aws
 from operators.littlepay_s3_to_gcs_operator import LittlepayS3ToGCSOperator
 
@@ -480,7 +480,9 @@ class TestLittlepayS3ToGCSOperator:
                 "s3bucket": "mock-littlepay-bucket",
                 "s3object": {
                     "Key": "atn/v3/authorisations/202504300000_authorisations.psv",
-                    "LastModified": parsed_report[0]["extract"]["s3object"]["LastModified"],
+                    "LastModified": parsed_report[0]["extract"]["s3object"][
+                        "LastModified"
+                    ],
                     "ETag": s3_file["ETag"].replace('"', ""),
                     "Size": s3_file["ContentLength"],
                     "StorageClass": None,
