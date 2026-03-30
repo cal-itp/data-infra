@@ -1,11 +1,13 @@
+apache-airflow-providers-common-compat>=1.7.4
+apache-airflow-providers-amazon>=8.15.0
+apache-airflow==2.10.5
 astronomer-cosmos
 beautifulsoup4==4.12.3
-boto3==1.41.2
+boto3
 ckanapi==4.8
 gtfs-realtime-bindings>=1.0.0
 gusty==0.6.0
 openpyxl==3.1.5
-platformdirs>=2.5
 pyairtable==2.2.1
 sentry-sdk>=2.44.0
-typer==0.4.1
+typer
