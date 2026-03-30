@@ -174,10 +174,6 @@ resource "google_storage_bucket_acl" "tfer--dataproc-temp-us-west2-1005246706141
   bucket = "dataproc-temp-us-west2-1005246706141-x9mtxbwg"
 }
 
-resource "google_storage_bucket_acl" "tfer--dev-calitp-aggregator-scraper" {
-  bucket = "dev-calitp-aggregator-scraper"
-}
-
 resource "google_storage_bucket_acl" "tfer--dev-calitp-gtfs-rt-raw" {
   bucket = "dev-calitp-gtfs-rt-raw"
 }
@@ -228,10 +224,6 @@ resource "google_storage_bucket_acl" "tfer--rt-parsed-deprecated" {
 
 resource "google_storage_bucket_acl" "tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com" {
   bucket = "staging.cal-itp-data-infra.appspot.com"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-aggregator-scraper" {
-  bucket = "test-calitp-aggregator-scraper"
 }
 
 resource "google_storage_bucket_acl" "tfer--test-calitp-airtable" {

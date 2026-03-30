@@ -1757,43 +1757,6 @@ resource "google_storage_bucket_iam_policy" "tfer--dataproc-temp-us-west2-100524
 POLICY
 }
 
-resource "google_storage_bucket_iam_policy" "tfer--dev-calitp-aggregator-scraper" {
-  bucket = "b/dev-calitp-aggregator-scraper"
-
-  policy_data = <<POLICY
-{
-  "bindings": [
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketReader"
-    },
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectReader"
-    }
-  ]
-}
-POLICY
-}
-
 resource "google_storage_bucket_iam_policy" "tfer--dev-calitp-gtfs-rt-raw" {
   bucket = "b/dev-calitp-gtfs-rt-raw"
 
@@ -2286,43 +2249,6 @@ resource "google_storage_bucket_iam_policy" "tfer--staging-002E-cal-itp-data-inf
         "projectViewer:cal-itp-data-infra"
       ],
       "role": "roles/storage.legacyBucketReader"
-    }
-  ]
-}
-POLICY
-}
-
-resource "google_storage_bucket_iam_policy" "tfer--test-calitp-aggregator-scraper" {
-  bucket = "b/test-calitp-aggregator-scraper"
-
-  policy_data = <<POLICY
-{
-  "bindings": [
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketReader"
-    },
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectReader"
     }
   ]
 }

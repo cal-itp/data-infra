@@ -274,12 +274,6 @@ resource "google_storage_bucket_iam_binding" "tfer--dataproc-temp-us-west2-10052
   role    = "roles/storage.legacyBucketReader"
 }
 
-resource "google_storage_bucket_iam_binding" "tfer--dev-calitp-aggregator-scraper" {
-  bucket  = "b/dev-calitp-aggregator-scraper"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectReader"
-}
-
 resource "google_storage_bucket_iam_binding" "tfer--dev-calitp-gtfs-rt-raw" {
   bucket  = "b/dev-calitp-gtfs-rt-raw"
   members = ["projectViewer:cal-itp-data-infra"]
@@ -354,12 +348,6 @@ resource "google_storage_bucket_iam_binding" "tfer--rt-parsed-deprecated" {
 
 resource "google_storage_bucket_iam_binding" "tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com" {
   bucket  = "b/staging.cal-itp-data-infra.appspot.com"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketOwner"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-aggregator-scraper" {
-  bucket  = "b/test-calitp-aggregator-scraper"
   members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
   role    = "roles/storage.legacyBucketOwner"
 }
