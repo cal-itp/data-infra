@@ -1075,3 +1075,16 @@ models:
       - name: outreach_status
       - name: gtfs_dataset_name
       - name: new_end_date
+  - name: fct_create_expiring_gtfs_issues
+    description: |
+      Contains GTFS datasets whose schedule feeds are expired or about to expire and do not
+      already have an open Airtable issue for the same type of expiration-related problem.
+      This model is used by the Airtable Issue Management DAG to create new Airtable records
+      and send summary emails.
+    columns:
+      - name: gtfs_dataset_name
+      - name: max_end_date
+      - name: expiration_status
+      - name: gtfs_dataset_record_id
+      - name: service_name
+      - name: service_record_id
