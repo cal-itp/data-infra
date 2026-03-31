@@ -11,20 +11,62 @@ from airflow.providers.amazon.aws.operators.s3 import S3ListOperator
 from airflow.utils.trigger_rule import TriggerRule
 
 LITTLEPAY_TRANSIT_PROVIDER_BUCKETS = {
-    "atn": "littlepay-datafeed-prod-atn-5c319c40",
-    "ccjpa": "littlepay-datafeed-prod-ccjpa-5ca349d0",
-    "clean-air-express": "littlepay-datafeed-prod-cal-itp-5b3f9b20",
-    "eldorado-transit": "littlepay-datafeed-prod-eldorado-transit-fae490a0",
-    "humboldt-transit-authority": "littlepay-datafeed-prod-humboldt-transit-aut-5c476e30",
-    "lake-transit-authority": "littlepay-datafeed-prod-lake-transit-authori-5cb54b30",
-    "mendocino-transit-authority": "littlepay-datafeed-prod-mendocino-transit-au-596cfe00",
-    "mst": "littlepay-datafeed-prod-mst-5aa508d0",
-    "nevada-county-connects": "littlepay-datafeed-prod-nevada-county-connec-7c9479e0",
-    "redwood-coast-transit": "littlepay-datafeed-prod-redwood-coast-transi-5c4dfde0",
-    "sacrt": "littlepay-datafeed-prod-sacrt-56af2970",
-    "sbmtd": "littlepay-datafeed-prod-sbmtd-58599230",
-    "slo-transit": "littlepay-datafeed-prod-slo-transit-979e5390",
-    "slorta": "littlepay-datafeed-prod-slorta-991b7db0",
+    "atn": {
+        "bucket": "littlepay-datafeed-prod-atn-5c319c40",
+        "prefix": "atn/v3",
+    },
+    "ccjpa": {
+        "bucket": "littlepay-datafeed-prod-ccjpa-5ca349d0",
+        "prefix": "ccjpa/v3",
+    },
+    "clean-air-express": {
+        "bucket": "littlepay-datafeed-prod-cal-itp-5b3f9b20",
+        "prefix": "cal-itp/v3",
+    },
+    "eldorado-transit": {
+        "bucket": "littlepay-datafeed-prod-eldorado-transit-fae490a0",
+        "prefix": "eldorado-transit/v3",
+    },
+    "humboldt-transit-authority": {
+        "bucket": "littlepay-datafeed-prod-humboldt-transit-aut-5c476e30",
+        "prefix": "humboldt-transit-authority/v3",
+    },
+    "lake-transit-authority": {
+        "bucket": "littlepay-datafeed-prod-lake-transit-authori-5cb54b30",
+        "prefix": "lake-transit-authority/v3",
+    },
+    "mendocino-transit-authority": {
+        "bucket": "littlepay-datafeed-prod-mendocino-transit-au-596cfe00",
+        "prefix": "mendocino-transit-authority/v3",
+    },
+    "mst": {
+        "bucket": "littlepay-datafeed-prod-mst-5aa508d0",
+        "prefix": "mst/v3",
+    },
+    "nevada-county-connects": {
+        "bucket": "littlepay-datafeed-prod-nevada-county-connec-7c9479e0",
+        "prefix": "nevada-county-connects/v3",
+    },
+    "redwood-coast-transit": {
+        "bucket": "littlepay-datafeed-prod-redwood-coast-transi-5c4dfde0",
+        "prefix": "redwood-coast-transit/v3",
+    },
+    "sacrt": {
+        "bucket": "littlepay-datafeed-prod-sacrt-56af2970",
+        "prefix": "sacrt/v3",
+    },
+    "sbmtd": {
+        "bucket": "littlepay-datafeed-prod-sbmtd-58599230",
+        "prefix": "sbmtd/v3",
+    },
+    "slo-transit": {
+        "bucket": "littlepay-datafeed-prod-slo-transit-979e5390",
+        "prefix": "slo-transit/v3",
+    },
+    "slorta": {
+        "bucket": "littlepay-datafeed-prod-slorta-991b7db0",
+        "prefix": "slorta/v3",
+    },
 }
 
 LITTLEPAY_ENTITIES = [
@@ -63,7 +105,7 @@ def download_and_parse_littlepay():
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
 
     provider_groups = []
-    for provider, bucket in LITTLEPAY_TRANSIT_PROVIDER_BUCKETS.items():
+    for provider, config in LITTLEPAY_TRANSIT_PROVIDER_BUCKETS.items():
 
         @task_group(group_id=provider)
         def provider_group():
@@ -73,8 +115,8 @@ def download_and_parse_littlepay():
                 def entity_group():
                     source_paths = S3ListOperator(
                         task_id="littlepay_list",
-                        prefix=os.path.join(provider, "v3", entity),
-                        bucket=bucket,
+                        prefix=os.path.join(config["prefix"], entity),
+                        bucket=config["bucket"],
                         aws_conn_id=f"aws_{provider}",
                     )
 
@@ -84,7 +126,7 @@ def download_and_parse_littlepay():
                         provider=provider,
                         entity=entity,
                         ts="{{ dag_run.start_date | ts }}",
-                        source_bucket=bucket,
+                        source_bucket=config["bucket"],
                         destination_bucket=os.environ.get(
                             "CALITP_BUCKET__LITTLEPAY_RAW_V3"
                         ),
