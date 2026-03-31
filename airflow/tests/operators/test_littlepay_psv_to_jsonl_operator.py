@@ -57,6 +57,7 @@ class TestLittlepayPSVToJSONLOperator:
             destination_path=destination_path,
             entity="authorisations",
             provider="atn",
+            filename="202510241114_authorisations.psv",
             ts="2025-06-01T00:00:00+00:00",
             dag=test_dag,
         )
