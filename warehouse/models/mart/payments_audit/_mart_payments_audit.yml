@@ -1,0 +1,5 @@
+version: 2
+
+models:
+  - name: dim_littlepay_sync_job_results
+    description: Summary of Sync Littlepay Files

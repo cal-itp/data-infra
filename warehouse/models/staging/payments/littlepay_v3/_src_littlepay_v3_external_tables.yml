@@ -1,0 +1,20 @@
+version: 2
+
+sources:
+  - name: external_littlepay_v3
+    description: Hive-partitioned external tables reading Littlepay feed v3 payments data.
+    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
+    schema: external_littlepay_v3
+    tables:
+      - name: authorisations
+      - name: customer_funding_sources
+      - name: device_transaction_purchases
+      - name: device_transactions
+      - name: micropayment_adjustments
+      - name: micropayment_device_transactions
+      - name: micropayments
+      - name: products
+      - name: refunds
+      - name: settlements
+      - name: terminal_device_transactions
+      - name: raw_littlepay_sync_job_result

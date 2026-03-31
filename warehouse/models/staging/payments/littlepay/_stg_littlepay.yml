@@ -1,25 +1,7 @@
 version: 2
 
-sources:
-  - name: external_littlepay_v3
-    description: Hive-partitioned external tables reading Littlepay feed v3 payments data.
-    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
-    schema: external_littlepay_v3
-    tables:
-      - name: authorisations
-      - name: customer_funding_sources
-      - name: device_transaction_purchases
-      - name: device_transactions
-      - name: micropayment_adjustments
-      - name: micropayment_device_transactions
-      - name: micropayments
-      - name: products
-      - name: refunds
-      - name: settlements
-      - name: terminal_device_transactions
-
 models:
-  - name: stg_littlepay__authorisations_v3
+  - name: stg_littlepay__authorisations
     columns:
       - &participant_id
         name: participant_id
@@ -82,7 +64,7 @@ models:
           Hash of all data columns to uniquely identify row's content, mostly for debugging purposes.
           Should ideally be handled by uniqueness of _payments_key but surfaced for troubleshooting.
 
-  - name: stg_littlepay__customer_funding_source_v3
+  - name: stg_littlepay__customer_funding_source
     columns:
       - name: littlepay_export_ts
         description: Export timestamp parsed from filename.
@@ -134,7 +116,7 @@ models:
           - unique
       - *_content_hash
 
-  - name: stg_littlepay__device_transaction_purchases_v3
+  - name: stg_littlepay__device_transaction_purchases
     columns:
       - name: littlepay_transaction_id
         description: '{{ doc("lp_littlepay_transaction_id") }}'
@@ -164,7 +146,7 @@ models:
       - *payments_key_full_uniqueness
       - *_content_hash
 
-  - name: stg_littlepay__device_transactions_v3
+  - name: stg_littlepay__device_transactions
     description: In the case of duplicated littlepay_transaction_id values, the one with the latest transaction_date_time_utc in the latest export file takes precedence.
     columns:
       - name: customer_id
@@ -259,7 +241,7 @@ models:
       - *payments_key_full_uniqueness
       - *_content_hash
 
-  - name: stg_littlepay__micropayment_adjustments_v3
+  - name: stg_littlepay__micropayment_adjustments
     description: |
       Only adjustments with `applied = True` were actually applied;
       there may be adjustments present for which a micropayment qualified but
@@ -317,7 +299,7 @@ models:
       - *payments_key_full_uniqueness
       - *_content_hash
 
-  - name: stg_littlepay__micropayment_device_transactions_v3
+  - name: stg_littlepay__micropayment_device_transactions
     columns:
       - name: littlepay_transaction_id
         description: |
@@ -333,7 +315,7 @@ models:
       - *payments_key_full_uniqueness
       - *_content_hash
 
-  - name: stg_littlepay__micropayments_v3
+  - name: stg_littlepay__micropayments
     tests:
       - &littlepay_uniqueness
         dbt_utils.unique_combination_of_columns:
@@ -378,7 +360,7 @@ models:
       - *_content_hash
       - *payments_key_full_uniqueness
 
-  - name: stg_littlepay__product_data_v3
+  - name: stg_littlepay__product_data
     columns:
       - *participant_id
       - name: product_id
@@ -469,7 +451,7 @@ models:
       - *payments_key_full_uniqueness
       - *_content_hash
 
-  - name: stg_littlepay__refunds_v3
+  - name: stg_littlepay__refunds
     tests:
       - *littlepay_uniqueness
     columns:
@@ -511,7 +493,10 @@ models:
 
           Possible values are `Approved` or `Pending Approval`.
       - name: settlement_status
-        description: Deprecated in v3, not present for refunds. Look up via settlements.
+        description: |
+          The status of the refund.
+
+          Possible values are `Sent for Settlement` or `Settled`.
       - name: retrieval_reference_number
         description: |
           Uniquely identifies a card transaction, based on the ISO 8583 standard. The value is generated during authorisation.
@@ -547,9 +532,12 @@ models:
       - name: approved_time
         description: The time the approval was processed.
       - name: status
-        description: Deprecated in v3, not present for refunds. Look up via settlements.
+        description: |
+          The status of the refund.
+
+          Possible values are `SENT_FOR_SETTLEMENT` or `SETTLED`.
       - name: settlement_status_time
-        description: Deprecated in v3, not present for refunds. Look up via settlements.
+        description: The time the refund was settled.
       - name: settlement_reason_code
         description: This field is not in use.
       - name: settlement_response_text
@@ -561,7 +549,7 @@ models:
       - *_content_hash
       - *payments_key_full_uniqueness
 
-  - name: stg_littlepay__settlements_v3
+  - name: stg_littlepay__settlements
     tests:
       - *littlepay_uniqueness
     columns:
@@ -612,5 +600,3 @@ models:
       - *payments_input_row_key
       - *_content_hash
       - *payments_key_full_uniqueness
-
-  - name: stg_littlepay__terminal_device_transactions_v3

@@ -1,0 +1,48 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__LITTLEPAY_RAW_V3') }}"
+source_objects:
+  - "raw_littlepay_sync_job_result/*.jsonl"
+destination_project_dataset_table: "external_littlepay_v3.raw_littlepay_sync_job_result"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "raw_littlepay_sync_job_result/{instance:STRING}/{ts:TIMESTAMP}/"
+schema_fields:
+  # For data security, do not show the bucket name or file path.
+  - name: success
+    type: BOOLEAN
+  - name: exception
+    type: STRING
+  - name: extract
+    type: RECORD
+    fields:
+    - name: filename
+      type: STRING
+    - name: instance
+      type: STRING
+    - name: ts
+      type: TIMESTAMP
+    - name: s3object
+      type: RECORD
+      fields:
+        - name: ETag
+          type: STRING
+        - name: LastModified
+          type: TIMESTAMP
+        - name: Size
+          type: INTEGER
+        - name: StorageClass
+          type: STRING
+  - name: prior
+    type: RECORD
+    fields:
+      - name: ETag
+        type: STRING
+      - name: LastModified
+        type: TIMESTAMP
+      - name: Size
+        type: INTEGER
+      - name: StorageClass
+        type: STRING
