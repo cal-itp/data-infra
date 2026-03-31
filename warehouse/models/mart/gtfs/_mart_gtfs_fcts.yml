@@ -612,6 +612,8 @@ models:
   - name: fct_stop_time_updates
     description: |
       Unnested and de-duped stop time updates.
+    config:
+      event_time: dt
     columns:
       - name: key
         tests: *almost_unique_rt_key_tests
