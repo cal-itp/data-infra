@@ -5,7 +5,7 @@ from dags import log_failure_to_slack
 from operators.littlepay_psv_to_jsonl_operator import LittlepayPSVToJSONLOperator
 from operators.littlepay_s3_to_gcs_operator import LittlepayS3ToGCSOperator
 
-from airflow.decorators import dag, task, task_group
+from airflow.decorators import dag, task_group
 from airflow.operators.latest_only import LatestOnlyOperator
 from airflow.providers.amazon.aws.operators.s3 import S3ListOperator
 from airflow.utils.trigger_rule import TriggerRule
@@ -54,57 +54,13 @@ LITTLEPAY_ENTITIES = [
         "email_on_retry": False,
         "on_failure_callback": log_failure_to_slack,
     },
+    user_defined_macros={
+        "basename": os.path.basename,
+        "splitext": os.path.splitext,
+    },
 )
 def download_and_parse_littlepay():
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
-
-    @task
-    def create_sync_kwargs(source_path: str, entity: str, provider: str):
-        filename = os.path.basename(source_path)
-        return {
-            "source_path": source_path,
-            "destination_search_prefix": os.path.join(
-                entity,
-                f"instance={provider}",
-                f"filename={filename}",
-            ),
-            "destination_search_glob": os.path.join(
-                "**",
-                filename,
-            ),
-            "destination_path": os.path.join(
-                entity,
-                f"instance={provider}",
-                f"filename={filename}",
-                "ts={{ ts }}",
-                filename,
-            ),
-            "report_path": os.path.join(
-                "raw_littlepay_sync_job_result",
-                f"instance={provider}",
-                "ts={{ ts }}",
-                f"results_{filename}.jsonl",
-            ),
-        }
-
-    @task
-    def create_parse_kwargs(source_file: dict, provider: str):
-        return {
-            "source_path": os.path.join(
-                source_file["filetype"],
-                f"instance={provider}",
-                f"filename={source_file['filename']}",
-                "ts={{ ts }}",
-                source_file["filename"],
-            ),
-            "destination_path": os.path.join(
-                source_file["filetype"],
-                f"instance={provider}",
-                f"extract_filename={source_file['filename']}",
-                "ts={{ ts }}",
-                f"{os.path.splitext(source_file['filename'])[0]}.jsonl.gz",
-            ),
-        }
 
     provider_groups = []
     for provider, bucket in LITTLEPAY_TRANSIT_PROVIDER_BUCKETS.items():
@@ -122,26 +78,22 @@ def download_and_parse_littlepay():
                         aws_conn_id=f"aws_{provider}",
                     )
 
-                    sync_kwargs = create_sync_kwargs.partial(
-                        provider=provider,
-                        entity=entity,
-                    ).expand(source_path=source_paths.output)
-
                     synced_files = LittlepayS3ToGCSOperator.partial(
                         task_id="littlepay_copy",
                         aws_conn_id=f"aws_{provider}",
                         provider=provider,
-                        ts="{{ ts }}",
+                        entity=entity,
+                        ts="{{ dag_run.start_date | ts }}",
                         source_bucket=bucket,
                         destination_bucket=os.environ.get(
                             "CALITP_BUCKET__LITTLEPAY_RAW_V3"
                         ),
-                        map_index_template="{{ task.source_path.split('/')[-1] }}",
-                    ).expand_kwargs(sync_kwargs)
-
-                    parse_kwargs = create_parse_kwargs.partial(
-                        provider=provider,
-                    ).expand(source_file=synced_files.output)
+                        map_index_template="{{ basename(task.source_path) }}",
+                        destination_search_prefix="{{ task.entity }}/instance={{ task.provider }}/filename={{ basename(task.source_path) }}",
+                        destination_search_glob="**/{{ basename(task.source_path) }}",
+                        destination_path="{{ task.entity }}/instance={{ task.provider }}/filename={{ basename(task.source_path) }}/ts={{ task.ts }}/{{ basename(task.source_path) }}",
+                        report_path="raw_littlepay_sync_job_result/instance={{ task.provider }}/ts={{ task.ts }}/results_{{ basename(task.source_path) }}.jsonl",
+                    ).expand(source_path=source_paths.output)
 
                     parsed_files = LittlepayPSVToJSONLOperator.partial(
                         task_id="littlepay_parse",
@@ -150,16 +102,21 @@ def download_and_parse_littlepay():
                             "CALITP_BUCKET__LITTLEPAY_PARSED_V3"
                         ),
                         trigger_rule=TriggerRule.ALL_DONE,
-                        map_index_template="{{ task.source_path.split('/')[-1] }}",
-                    ).expand_kwargs(parse_kwargs)
-
-                    (
-                        source_paths
-                        >> sync_kwargs
-                        >> synced_files
-                        >> parse_kwargs
-                        >> parsed_files
+                        map_index_template="{{ task.filename }}",
+                        source_path="{{ task.entity }}/instance={{ task.provider }}/filename={{ task.filename }}/ts={{ task.ts }}/{{ task.filename }}",
+                        destination_path="{{ task.entity }}/instance={{ task.provider }}/extract_filename={{ task.filename }}/ts={{ task.ts }}/{{ splitext(task.filename)[0] }}.jsonl.gz",
+                    ).expand_kwargs(
+                        synced_files.output.map(
+                            lambda file: {
+                                "entity": file["entity"],
+                                "provider": file["provider"],
+                                "filename": file["filename"],
+                                "ts": file["ts"],
+                            }
+                        )
                     )
+
+                    (source_paths >> synced_files >> parsed_files)
 
                 entity_group()
 

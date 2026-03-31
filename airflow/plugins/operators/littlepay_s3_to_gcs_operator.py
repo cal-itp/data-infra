@@ -56,6 +56,7 @@ class LittlepayS3ToGCSOperator(BaseOperator):
     template_fields: Sequence[str] = (
         "ts",
         "provider",
+        "entity",
         "source_bucket",
         "source_path",
         "destination_bucket",
@@ -71,6 +72,7 @@ class LittlepayS3ToGCSOperator(BaseOperator):
         self,
         ts: str,
         provider: str,
+        entity: str,
         source_bucket: str,
         source_path: str,
         destination_bucket: str,
@@ -85,6 +87,7 @@ class LittlepayS3ToGCSOperator(BaseOperator):
         super().__init__(**kwargs)
         self.ts: str = ts
         self.provider: str = provider
+        self.entity: str = entity
         self.source_bucket: str = source_bucket
         self.source_path: str = source_path
         self.destination_bucket: str = destination_bucket
@@ -111,9 +114,6 @@ class LittlepayS3ToGCSOperator(BaseOperator):
 
     def filename(self) -> str:
         return os.path.basename(self.source_path)
-
-    def filetype(self) -> str:
-        return os.path.basename(os.path.dirname(self.source_path))
 
     def source_object(self) -> any:
         if self._source_object is None:
@@ -202,8 +202,10 @@ class LittlepayS3ToGCSOperator(BaseOperator):
         )
 
         return {
+            "provider": self.provider,
+            "entity": self.entity,
+            "ts": self.ts,
             "filename": self.filename(),
-            "filetype": self.filetype(),
             "destination_path": self.destination_path,
             "report_path": self.report_path,
         }
