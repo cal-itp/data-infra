@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from dags import log_failure_to_slack
 from operators.littlepay_psv_to_jsonl_operator import LittlepayPSVToJSONLOperator
@@ -115,6 +115,8 @@ def download_and_parse_littlepay():
                 def entity_group():
                     source_paths = S3ListOperator(
                         task_id="littlepay_list",
+                        retries=1,
+                        retry_delay=timedelta(seconds=10),
                         prefix=os.path.join(config["prefix"], entity),
                         bucket=config["bucket"],
                         aws_conn_id=f"aws_{provider}",
@@ -122,8 +124,10 @@ def download_and_parse_littlepay():
 
                     synced_files = LittlepayS3ToGCSOperator.partial(
                         task_id="littlepay_copy",
-                        aws_conn_id=f"aws_{provider}",
+                        retries=1,
+                        retry_delay=timedelta(seconds=10),
                         provider=provider,
+                        aws_conn_id=f"aws_{provider}",
                         entity=entity,
                         ts="{{ dag_run.start_date | ts }}",
                         source_bucket=config["bucket"],
@@ -139,6 +143,8 @@ def download_and_parse_littlepay():
 
                     parsed_files = LittlepayPSVToJSONLOperator.partial(
                         task_id="littlepay_parse",
+                        retries=1,
+                        retry_delay=timedelta(seconds=10),
                         source_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3"),
                         destination_bucket=os.environ.get(
                             "CALITP_BUCKET__LITTLEPAY_PARSED_V3"
