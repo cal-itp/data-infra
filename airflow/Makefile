@@ -24,7 +24,7 @@ stop:
 sync: $(WAREHOUSE_PATH)/target/manifest.json $(COMPOSER_ENVIRONMENT_PATH)
 	rsync -ar plugins/ $(COMPOSER_ENVIRONMENT_PATH)/plugins/
 	rsync -ar $(WAREHOUSE_PATH)/ $(COMPOSER_ENVIRONMENT_PATH)/data/warehouse/
-	cp -f requirements.txt $(COMPOSER_ENVIRONMENT_PATH)/requirements.txt
+	cp -f requirements-dev.txt $(COMPOSER_ENVIRONMENT_PATH)/requirements.txt
 	cp -f .development.env $(COMPOSER_ENVIRONMENT_PATH)/variables.env
 ifneq (,$(wildcard .env))
 	cat .env >> $(COMPOSER_ENVIRONMENT_PATH)/variables.env
