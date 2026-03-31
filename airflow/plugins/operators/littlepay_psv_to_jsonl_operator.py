@@ -29,6 +29,10 @@ class LittlepayPSVToJSONLOperator(BaseOperator):
         "source_path",
         "destination_bucket",
         "destination_path",
+        "provider",
+        "entity",
+        "ts",
+        "filename",
         "gcp_conn_id",
     )
 
@@ -38,6 +42,10 @@ class LittlepayPSVToJSONLOperator(BaseOperator):
         source_path: str,
         destination_bucket: str,
         destination_path: str,
+        provider: str,
+        entity: str,
+        ts: str,
+        filename: str,
         gcp_conn_id: str = "google_cloud_default",
         **kwargs,
     ) -> None:
@@ -48,6 +56,10 @@ class LittlepayPSVToJSONLOperator(BaseOperator):
         self.source_path: str = source_path
         self.destination_bucket: str = destination_bucket
         self.destination_path: str = destination_path
+        self.provider: str = provider
+        self.entity: str = entity
+        self.ts: str = ts
+        self.filename: str = filename
         self.gcp_conn_id: str = gcp_conn_id
 
     def gcs_hook(self) -> GCSHook:

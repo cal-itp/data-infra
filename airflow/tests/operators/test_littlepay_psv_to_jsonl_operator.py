@@ -55,6 +55,9 @@ class TestLittlepayPSVToJSONLOperator:
             source_path=source_path,
             destination_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_PARSED_V3"),
             destination_path=destination_path,
+            entity="authorisations",
+            provider="atn",
+            ts="2025-06-01T00:00:00+00:00",
             dag=test_dag,
         )
 

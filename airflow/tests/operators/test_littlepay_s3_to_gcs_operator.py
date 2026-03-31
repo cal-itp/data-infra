@@ -50,6 +50,7 @@ class TestLittlepayS3ToGCSOperator:
             task_id="littlepay_s3_to_gcs",
             ts=execution_date.isoformat(),
             provider="atn",
+            entity="authorisations",
             aws_conn_id="aws_default",
             gcp_conn_id="google_cloud_default",
             source_bucket="mock-littlepay-bucket",
@@ -112,8 +113,10 @@ class TestLittlepayS3ToGCSOperator:
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
         assert xcom_value == {
+            "provider": "atn",
+            "entity": "authorisations",
             "filename": "202510241114_authorisations.psv",
-            "filetype": "authorisations",
+            "ts": "2025-06-01T00:00:00+00:00",
             "destination_path": os.path.join(
                 "authorisations",
                 "instance=atn",
@@ -244,6 +247,7 @@ class TestLittlepayS3ToGCSOperator:
             task_id="file_exists_littlepay_s3_to_gcs",
             ts=execution_date.isoformat(),
             provider="atn",
+            entity="authorisations",
             aws_conn_id="aws_default",
             gcp_conn_id="google_cloud_default",
             source_bucket="mock-littlepay-bucket",
@@ -343,6 +347,7 @@ class TestLittlepayS3ToGCSOperator:
             task_id="old_file_littlepay_s3_to_gcs",
             ts=execution_date.isoformat(),
             provider="atn",
+            entity="authorisations",
             aws_conn_id="aws_default",
             gcp_conn_id="google_cloud_default",
             source_bucket="mock-littlepay-bucket",
@@ -419,8 +424,10 @@ class TestLittlepayS3ToGCSOperator:
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
         assert xcom_value == {
+            "provider": "atn",
+            "entity": "authorisations",
             "filename": "202504300000_authorisations.psv",
-            "filetype": "authorisations",
+            "ts": "2025-06-01T00:00:00+00:00",
             "destination_path": os.path.join(
                 "authorisations",
                 "instance=atn",
