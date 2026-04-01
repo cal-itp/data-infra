@@ -153,14 +153,9 @@ models:
       - name: distance_miles
         description: The distance between location_name and off_location_name (in miles)
 
-  - name: fct_payments_aggregations
+  - name: fct_payments_aggregations_reconciliation
     description: |
-      Each row in this table is an "aggregation".
-      An "aggregation" is a group of micropayment/transactions processed (authorised and settled) together.
-      This table summarizes information about aggregations which can be used to reconcile
-      payments information with other sources.
-      Note: This table does not currently include information from the refunds source data, but it does contain refund information
-      present in the micropayments and settlements source data.
+
     columns:
       - *participant_id
       - &organization_name
@@ -173,6 +168,126 @@ models:
         description: |
           `source_record_id` of the Cal-ITP defined organization (from `dim_organizations`) associated with this payments activity.
           The mapping of organization records to payments entities is manually maintained in a seed file.
+      - name: end_of_month_date_pacific
+        description: |
+          The last day of the month of the aggregation_datetime in Pacific Time (involves conversion of aggregation_datetime to Pacific Time).
+          This column is primarily for use in BI tooling to support consistent dates across activity types.
+          Aggregation activity happens throughout the month.
+        tests:
+          - not_null
+      - name: end_of_month_date_utc
+        description: |
+          The last day of the month of the aggregation_datetime in UTC.
+          This column preserves the end of month date value for the original UTC date as received by Littlepay, however,
+          `end_of_month_date_pacific` is primarily used in BI tooling instead to support consistent dates across activity types.
+          Aggregation activity happens throughout the month.
+        tests:
+          - not_null
+      - name: aggregation_id
+        description: |
+          Aggregation ID that uniquely identifies this aggregation.
+        tests:
+          - not_null
+          - unique
+      - name: aggregation_datetime
+        description: |
+          Datetime of settlement if present, otherwise falls back to authorisation, otherwise falls back to micropayment.
+          This can be used to represent the most recent update for the aggregation.
+      - name: has_micropayment
+        description: |
+          If "true", there is at least one micropayment in the micropayments source data with this aggregation ID.
+          Essentially all aggregations should have a micropayment because the micropayment is the first step
+          in the payment workflow.
+      - name: has_authorisation
+        description: |
+          If "true", there is at least one authorisation in the authorisations source data with this aggregation ID.
+          Authorisation is the second step in the payment workflow after the micropayment occurs.
+      - name: has_settlement
+        description: |
+          If "true", there is at least one settlement in the settlements source data with this aggregation ID.
+          Settlement is the final step in the payment workflow, so some aggregations may be missing
+          settlements simply because they are not processed yet.
+      - name: authorisation_retrieval_reference_number
+        description: |
+          Retrieval reference number for the most recent authorisation of this aggregation.
+      - name: settlement_retrieval_reference_number
+        description: |
+          Retrieval reference number for the settlement of this aggregation.
+          This field can be used to map to Elavon data.
+      - name: net_micropayment_amount_dollars
+        description: '{{ doc("lp_net_micropayment_amount_dollars") }}'
+      - name: total_micropayment_nominal_amount_dollars
+        description: '{{ doc("lp_total_nominal_amount_dollars") }}'
+      - name: latest_micropayment_transaction_datetime
+        description: '{{ doc("lp_mp_latest_transaction_time") }}'
+      - name: num_micropayments
+        description: '{{ doc("lp_num_micropayments") }}'
+      - name: contains_pre_settlement_refund
+        description: '{{ doc("lp_contains_pre_settlement_refund") }}'
+      - name: contains_variable_fare
+        description: '{{ doc("lp_contains_variable_fare") }}'
+      - name: contains_flat_fare
+        description: '{{ doc("lp_contains_flat_fare") }}'
+      - name: contains_pending_charge
+        description: '{{ doc("lp_contains_pending_charge") }}'
+      - name: contains_adjusted_micropayment
+        description: '{{ doc("lp_contains_adjusted_micropayment") }}'
+      - name: latest_authorisation_request_type
+        description: |
+          Request type of the most recent authorisation associated with this aggregation.
+      - name: authorisation_transaction_amount
+        description: |
+          Transaction amount of the most recent authorisation associated with this aggregation.
+          Note that `CARD_CHECK` authorisations may have transaction amount of 0 even if the transaction being authorised will
+          ultimately have a larger transaction amount.
+      - name: latest_authorisation_status
+        description: |
+          Status of the most recent authorisation associated with this aggregation.
+      - name: final_authorisation_has_null_status
+        description: |
+          Indicates the existence of another authorisation record, not represented directly here,
+          which occured after the "latest" authorisation in an aggregation but had a null status.
+      - name: latest_authorisation_update_datetime
+        description: |
+          `authorisation_date_time_utc` of the most recent authorisation associated with this aggregation.
+          This is a UTC datetime.
+      - name: settlement_contains_imputed_type
+        description: '{{ doc("lp_settlement_contains_imputed_type") }}'
+      - name: latest_settlement_update_datetime
+        description: '{{ doc("lp_settlement_latest_update_timestamp") }}'
+      - name: net_settled_amount_dollars
+        description: '{{ doc("lp_net_settled_amount_dollars") }}'
+      - name: settlement_contains_refund
+        description: '{{ doc("lp_settlement_contains_refund") }}'
+      - name: settlement_debit_amount
+        description: '{{ doc("lp_settlement_debit_amount") }}'
+      - name: settlement_credit_amount
+        description: '{{ doc("lp_settlement_credit_amount") }}'
+      - name: aggregation_is_settled
+        description: '{{ doc("lp_aggregation_is_settled") }}'
+      - name: debit_is_settled
+        description: '{{ doc("lp_debit_is_settled") }}'
+      - name: credit_is_settled
+        description: '{{ doc("lp_credit_is_settled") }}'
+      - name: principal_customer_id
+        description: '{{ doc("customer_funding_source_principal_customer_id") }}'
+      - name: bin
+        description: '{{ doc("lp_bin") }}'
+      - name: card_scheme
+        description: '{{ doc("lp_card_scheme") }}'
+
+  - name: fct_payments_aggregations
+    description: |
+      Each row in this table is an "aggregation".
+      An "aggregation" is a group of micropayment/transactions processed (authorised and settled) together.
+      This table summarizes information about aggregations which can be used to reconcile
+      payments information with other sources.
+      Note: This table does not currently include information from the refunds source data, but it does contain refund information
+      present in the micropayments and settlements source data.
+    columns:
+      - *participant_id
+      - *organization_name
+      - *organization_source_record_id
       - name: end_of_month_date_pacific
         description: |
           The last day of the month of the aggregation_datetime in Pacific Time (involves conversion of aggregation_datetime to Pacific Time).
