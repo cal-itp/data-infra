@@ -3,6 +3,8 @@
 This is the notebook image that individual users are served
 via JupyterHub.
 
+The image is intentionally thin — it provides JupyterLab, system tools (gcloud, GDAL, uv, etc.), and [pyproject-local-kernel](https://github.com/bluss/pyproject-local-kernel). Data science packages (pandas, geopandas, altair, etc.) are managed in the [data-analyses](https://github.com/cal-itp/data-analyses) repo as a uv workspace and installed at runtime via `uv sync`.
+
 ## Testing Changes
 
 A person with Docker set up locally can build a new version of the image at any time after making changes.
