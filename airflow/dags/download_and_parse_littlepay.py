@@ -10,7 +10,7 @@ from airflow.operators.latest_only import LatestOnlyOperator
 from airflow.providers.amazon.aws.operators.s3 import S3ListOperator
 from airflow.utils.trigger_rule import TriggerRule
 
-LITTLEPAY_TRANSIT_PROVIDER_BUCKETS = {
+LITTLEPAY_TRANSIT_PROVIDER_CONFIG = {
     "atn": {
         "bucket": "littlepay-datafeed-prod-atn-5c319c40",
         "prefix": "atn/v3",
@@ -105,13 +105,13 @@ def download_and_parse_littlepay():
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
 
     provider_groups = []
-    for provider, config in LITTLEPAY_TRANSIT_PROVIDER_BUCKETS.items():
+    for provider, config in LITTLEPAY_TRANSIT_PROVIDER_CONFIG.items():
 
         @task_group(group_id=provider)
         def provider_group():
             for entity in LITTLEPAY_ENTITIES:
                 source_paths = S3ListOperator(
-                    task_id="littlepay_list",
+                    task_id=f"{entity}_littlepay_list",
                     retries=1,
                     retry_delay=timedelta(seconds=10),
                     prefix=os.path.join(config["prefix"], entity),
@@ -120,7 +120,7 @@ def download_and_parse_littlepay():
                 )
 
                 synced_files = LittlepayS3ToGCSOperator.partial(
-                    task_id="littlepay_copy",
+                    task_id=f"{entity}_littlepay_copy",
                     retries=1,
                     retry_delay=timedelta(seconds=10),
                     provider=provider,
@@ -139,7 +139,7 @@ def download_and_parse_littlepay():
                 ).expand(source_path=source_paths.output)
 
                 parsed_files = LittlepayPSVToJSONLOperator.partial(
-                    task_id="littlepay_parse",
+                    task_id=f"{entity}_littlepay_parse",
                     retries=1,
                     retry_delay=timedelta(seconds=10),
                     source_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3"),
