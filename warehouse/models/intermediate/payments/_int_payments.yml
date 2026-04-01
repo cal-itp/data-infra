@@ -533,12 +533,12 @@ models:
         description: '{{ doc("customer_funding_source_principal_customer_id") }}'
       - &bin
         name: bin
-        description: First six numbers of the PAN.
+        description: '{{ doc("lp_bin") }}'
       - name: masked_pan
         description: First six and last four numbers of the PAN.
       - &card_scheme
         name: card_scheme
-        description: Card scheme of this funding source. One of (`VISA`, `MASTERCARD`).
+        description: '{{ doc("lp_card_scheme") }}'
       - name: issuer
         description: Name of the card issuer.
       - name: issuer_country
