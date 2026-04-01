@@ -13,13 +13,10 @@ settlement_aggregations_customer_map as (
         participant_id,
         aggregation_id,
         customer_id,
+        -- this column name got changed as part of v3 cutover and it's been inconsistently applied in our warehouse
         funding_source_id as funding_source_vault_id,
         record_updated_timestamp_utc
     from {{ ref('fct_payments_settlements') }}
-),
-
-customer_mapping as (
-    select * from {{ ref('int_payments__customers') }}
 ),
 
 vaults as (
@@ -46,13 +43,10 @@ int_payments__customers_vaults_to_aggregations as (
     select distinct
         aggregations.participant_id,
         aggregations.aggregation_id,
-        customer_mapping.principal_customer_id,
+        vaults.principal_customer_id,
         vaults.bin,
         vaults.card_scheme,
     from aggregations_map_to_customers_vaults as aggregations
-    left join customer_mapping
-        on aggregations.customer_id = customer_mapping.customer_id
-        and aggregations.participant_id = customer_mapping.participant_id
     left join vaults
         on aggregations.funding_source_vault_id = vaults.funding_source_vault_id
         and aggregations.participant_id = vaults.participant_id
