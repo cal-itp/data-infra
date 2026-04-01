@@ -1,0 +1,171 @@
+{{ config(materialized='table') }}
+
+WITH base_calendar_max AS (
+  SELECT
+    feed_key,
+    MAX(end_date) AS max_calendar
+  FROM {{ ref('dim_calendar_latest') }}
+  WHERE monday = 1
+     OR tuesday = 1
+     OR wednesday = 1
+     OR thursday = 1
+     OR friday = 1
+     OR saturday = 1
+     OR sunday = 1
+  GROUP BY feed_key
+),
+
+base_calendar_exceptions_max AS (
+  SELECT
+    feed_key,
+    MAX(date) AS max_calendar_date
+  FROM {{ ref('dim_calendar_dates_latest') }}
+  WHERE exception_type = 1
+  GROUP BY feed_key
+),
+
+feed_max_service_end AS (
+  SELECT
+    COALESCE(c.feed_key, e.feed_key) AS feed_key,
+    GREATEST(
+      COALESCE(c.max_calendar, e.max_calendar_date),
+      COALESCE(e.max_calendar_date, c.max_calendar)
+    ) AS max_end_date
+  FROM base_calendar_max c
+  FULL OUTER JOIN base_calendar_exceptions_max e
+    USING (feed_key)
+),
+
+current_schedule_feeds AS (
+  SELECT
+    ms.feed_key,
+    ms.max_end_date,
+    sf.base64_url
+  FROM feed_max_service_end ms
+  INNER JOIN {{ ref('dim_schedule_feeds') }} sf
+    ON ms.feed_key = sf.key
+  WHERE sf._is_current = TRUE
+),
+
+datasets_with_expiration AS (
+  SELECT
+    dg.name,
+    dg.key AS gtfs_dataset_key,
+    csf.max_end_date,
+    CASE
+      WHEN csf.max_end_date < CURRENT_DATE() THEN 'Expired'
+      WHEN DATE_ADD(csf.max_end_date, INTERVAL -31 DAY) < CURRENT_DATE()
+        THEN 'Expiring in Less Than 30 Days'
+      ELSE 'OK'
+    END AS expiration_status
+  FROM current_schedule_feeds csf
+  INNER JOIN {{ ref('dim_gtfs_datasets') }} dg
+    USING (base64_url)
+  WHERE dg._is_current = TRUE
+),
+
+expiring_datasets AS (
+  SELECT
+    dwe.name,
+    dwe.max_end_date,
+    dwe.expiration_status,
+    dp.service_name
+  FROM datasets_with_expiration dwe
+  INNER JOIN {{ ref('dim_provider_gtfs_data') }} dp
+    ON dwe.gtfs_dataset_key = dp.schedule_gtfs_dataset_key
+  WHERE dwe.expiration_status != 'OK'
+    AND dp._is_current = TRUE
+    AND dp.public_customer_facing_or_regional_subfeed_fixed_route
+),
+
+airtable_services_latest AS (
+  SELECT DISTINCT
+    name,
+    id
+  FROM {{ source('external_airtable', 'transit_data_quality_issues__services') }}
+  WHERE dt = (
+    SELECT MAX(dt)
+    FROM {{ source('external_airtable', 'transit_data_quality_issues__services') }}
+  )
+),
+
+airtable_datasets_latest AS (
+  SELECT DISTINCT
+    name,
+    id
+  FROM {{ source('external_airtable', 'transit_data_quality_issues__gtfs_datasets') }}
+  WHERE dt = (
+    SELECT MAX(dt)
+    FROM {{ source('external_airtable', 'transit_data_quality_issues__gtfs_datasets') }}
+  )
+),
+
+expiring_datasets_with_airtable_ids AS (
+  SELECT
+    ed.name,
+    ed.max_end_date,
+    ed.expiration_status,
+    ed.service_name,
+    s.id AS service_record_id,
+    d.id AS gtfs_dataset_record_id
+  FROM expiring_datasets ed
+  INNER JOIN airtable_services_latest s
+    ON ed.service_name = s.name
+  INNER JOIN airtable_datasets_latest d
+    ON ed.name = d.name
+),
+
+aggregated_expiring_datasets AS (
+  SELECT
+    name,
+    max_end_date,
+    expiration_status,
+    gtfs_dataset_record_id,
+    ARRAY_AGG(
+      STRUCT(
+        service_name,
+        service_record_id
+      )
+      ORDER BY service_record_id
+      LIMIT 1
+    )[OFFSET(0)] AS service_info
+  FROM expiring_datasets_with_airtable_ids
+  GROUP BY
+    name,
+    max_end_date,
+    expiration_status,
+    gtfs_dataset_record_id
+),
+
+expiring_open_issues AS (
+  SELECT
+    gtfs_dataset_name,
+    issue__ AS issue_number
+  FROM {{ ref('fct_transit_data_quality_issues') }}
+  WHERE is_open = TRUE
+    AND issue_type_name IN (
+      'About to Expire Schedule Feed',
+      'Expired Schedule Feed',
+      'Expiring feed maintained by Cal-ITP',
+      'Los Angeles Metro feed transition',
+      'About to Expire Feed'
+    )
+),
+
+fct_create_expiring_gtfs_issues AS (
+  SELECT
+    aed.name AS gtfs_dataset_name,
+    aed.max_end_date,
+    aed.expiration_status,
+    aed.gtfs_dataset_record_id,
+    aed.service_info.service_name AS service_name,
+    aed.service_info.service_record_id AS service_record_id
+  FROM aggregated_expiring_datasets aed
+  LEFT JOIN expiring_open_issues i
+    ON aed.name = i.gtfs_dataset_name
+  WHERE i.issue_number IS NULL
+)
+
+SELECT *
+FROM fct_create_expiring_gtfs_issues
+ORDER BY max_end_date, gtfs_dataset_name

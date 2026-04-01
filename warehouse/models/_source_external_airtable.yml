@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: external_airtable
+    description: External Airtable tables loaded into BigQuery.
+    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
+    schema: external_airtable
+    tables:
+      - name: transit_data_quality_issues__gtfs_datasets
+      - name: transit_data_quality_issues__services
