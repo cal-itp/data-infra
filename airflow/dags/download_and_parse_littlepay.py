@@ -110,65 +110,61 @@ def download_and_parse_littlepay():
         @task_group(group_id=provider)
         def provider_group():
             for entity in LITTLEPAY_ENTITIES:
+                source_paths = S3ListOperator(
+                    task_id="littlepay_list",
+                    retries=1,
+                    retry_delay=timedelta(seconds=10),
+                    prefix=os.path.join(config["prefix"], entity),
+                    bucket=config["bucket"],
+                    aws_conn_id=f"aws_{provider}",
+                )
 
-                @task_group(group_id=entity)
-                def entity_group():
-                    source_paths = S3ListOperator(
-                        task_id="littlepay_list",
-                        retries=1,
-                        retry_delay=timedelta(seconds=10),
-                        prefix=os.path.join(config["prefix"], entity),
-                        bucket=config["bucket"],
-                        aws_conn_id=f"aws_{provider}",
+                synced_files = LittlepayS3ToGCSOperator.partial(
+                    task_id="littlepay_copy",
+                    retries=1,
+                    retry_delay=timedelta(seconds=10),
+                    provider=provider,
+                    aws_conn_id=f"aws_{provider}",
+                    entity=entity,
+                    ts="{{ dag_run.start_date | ts }}",
+                    source_bucket=config["bucket"],
+                    destination_bucket=os.environ.get(
+                        "CALITP_BUCKET__LITTLEPAY_RAW_V3"
+                    ),
+                    map_index_template="{{ basename(task.source_path) }}",
+                    destination_search_prefix="{{ task.entity }}/instance={{ task.provider }}/filename={{ basename(task.source_path) }}",
+                    destination_search_glob="**/{{ basename(task.source_path) }}",
+                    destination_path="{{ task.entity }}/instance={{ task.provider }}/filename={{ basename(task.source_path) }}/ts={{ task.ts }}/{{ basename(task.source_path) }}",
+                    report_path="raw_littlepay_sync_job_result/instance={{ task.provider }}/ts={{ task.ts }}/results_{{ basename(task.source_path) }}.jsonl",
+                ).expand(source_path=source_paths.output)
+
+                parsed_files = LittlepayPSVToJSONLOperator.partial(
+                    task_id="littlepay_parse",
+                    retries=1,
+                    retry_delay=timedelta(seconds=10),
+                    source_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3"),
+                    destination_bucket=os.environ.get(
+                        "CALITP_BUCKET__LITTLEPAY_PARSED_V3"
+                    ),
+                    trigger_rule=TriggerRule.ALL_DONE,
+                    map_index_template="{{ task.filename }}",
+                    source_path="{{ task.entity }}/instance={{ task.provider }}/filename={{ task.filename }}/ts={{ task.ts }}/{{ task.filename }}",
+                    destination_path="{{ task.entity }}/instance={{ task.provider }}/extract_filename={{ task.filename }}/ts={{ task.ts }}/{{ splitext(task.filename)[0] }}.jsonl.gz",
+                ).expand_kwargs(
+                    synced_files.output.map(
+                        lambda file: {
+                            "entity": file["entity"],
+                            "provider": file["provider"],
+                            "filename": file["filename"],
+                            "ts": file["ts"],
+                        }
                     )
+                )
 
-                    synced_files = LittlepayS3ToGCSOperator.partial(
-                        task_id="littlepay_copy",
-                        retries=1,
-                        retry_delay=timedelta(seconds=10),
-                        provider=provider,
-                        aws_conn_id=f"aws_{provider}",
-                        entity=entity,
-                        ts="{{ dag_run.start_date | ts }}",
-                        source_bucket=config["bucket"],
-                        destination_bucket=os.environ.get(
-                            "CALITP_BUCKET__LITTLEPAY_RAW_V3"
-                        ),
-                        map_index_template="{{ basename(task.source_path) }}",
-                        destination_search_prefix="{{ task.entity }}/instance={{ task.provider }}/filename={{ basename(task.source_path) }}",
-                        destination_search_glob="**/{{ basename(task.source_path) }}",
-                        destination_path="{{ task.entity }}/instance={{ task.provider }}/filename={{ basename(task.source_path) }}/ts={{ task.ts }}/{{ basename(task.source_path) }}",
-                        report_path="raw_littlepay_sync_job_result/instance={{ task.provider }}/ts={{ task.ts }}/results_{{ basename(task.source_path) }}.jsonl",
-                    ).expand(source_path=source_paths.output)
-
-                    parsed_files = LittlepayPSVToJSONLOperator.partial(
-                        task_id="littlepay_parse",
-                        retries=1,
-                        retry_delay=timedelta(seconds=10),
-                        source_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3"),
-                        destination_bucket=os.environ.get(
-                            "CALITP_BUCKET__LITTLEPAY_PARSED_V3"
-                        ),
-                        trigger_rule=TriggerRule.ALL_DONE,
-                        map_index_template="{{ task.filename }}",
-                        source_path="{{ task.entity }}/instance={{ task.provider }}/filename={{ task.filename }}/ts={{ task.ts }}/{{ task.filename }}",
-                        destination_path="{{ task.entity }}/instance={{ task.provider }}/extract_filename={{ task.filename }}/ts={{ task.ts }}/{{ splitext(task.filename)[0] }}.jsonl.gz",
-                    ).expand_kwargs(
-                        synced_files.output.map(
-                            lambda file: {
-                                "entity": file["entity"],
-                                "provider": file["provider"],
-                                "filename": file["filename"],
-                                "ts": file["ts"],
-                            }
-                        )
-                    )
-
-                    (source_paths >> synced_files >> parsed_files)
-
-                entity_group()
+                (source_paths >> synced_files >> parsed_files)
 
         provider_groups.append(provider_group())
+
     latest_only >> provider_groups
 
 
