@@ -123,7 +123,7 @@ If you discover merge conflicts and they are within a single notebook that only 
 
 Pre-commit checks are used to ensure our code meets our quality standards and fix formatting issues before being committed to the remote repo. If your Pull Request or files are failing the pre-commit checks, try these steps to resolve them.
 
-- In the root repo, run `pip install pre-commit` and `pre-commit install`. Specifically, if you are in the root of the `data-analyses` repo you can run `make add_precommit` to run the same commands.
+- In the root of the `data-analyses` repo, run `make add_precommit` (which runs `uv run pre-commit install`).
 - Run `git add` and `git commit` like normal. The pre-commit checks will run and identify any errors it finds, automatically correct errors it can do, and identify errors that need manual changes.
 - If you are not able to `git push` your commit and get a `Everything up-to-date` message, or if your PR is failing the pre-commit check, then run `pre-commit run --all-files`. Running `pre-commit run --all-files` will run the pre-commit checks again on all files.
 - Address any manual changes the check identifies ("E402 module level import not at top of file", "\<> imported but unused", "expected 2 blank lines, found 1", etc.)
