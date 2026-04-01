@@ -120,6 +120,7 @@ with DAG(
                 "models/staging/payments",
                 "models/intermediate/payments",
                 "models/mart/payments",
+                "models/mart/payments_audit",
             ],
             test_behavior=None,
         ),
