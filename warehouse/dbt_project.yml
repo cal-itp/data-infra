@@ -228,6 +228,12 @@ models:
           domain: mart
           dataset: payments
         schema: mart_payments
+      payments_audit:
+        +materialized: table
+        +labels:
+          domain: mart
+          dataset: payments_audit
+        schema: mart_payments_audit
       transit_database:
         +labels:
           domain: mart
