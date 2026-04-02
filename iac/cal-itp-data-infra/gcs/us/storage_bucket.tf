@@ -2123,6 +2123,18 @@ resource "google_storage_bucket" "calitp-analysis" {
   }
 }
 
+resource "google_storage_bucket" "calitp-elavon-raw-v2" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-elavon-raw-v2"
+  project                     = "cal-itp-data-infra"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
 resource "google_storage_bucket" "calitp-enghouse-raw" {
   default_event_based_hold    = "false"
   force_destroy               = "true"
