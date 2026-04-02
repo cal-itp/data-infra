@@ -75,7 +75,7 @@ resource "google_composer_environment" "calitp-staging-composer" {
         "CALITP_BUCKET__DBT_ARTIFACTS"                         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-dbt-artifacts_name}",
         "CALITP_BUCKET__DBT_DOCS"                              = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-dbt-docs_name}",
         "CALITP_BUCKET__ELAVON_PARSED"                         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-elavon-parsed_name}",
-        "CALITP_BUCKET__ELAVON_RAW"                            = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-elavon-raw_name}",
+        "CALITP_BUCKET__ELAVON_RAW"                            = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-elavon-raw-v2_name}",
         "CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"                  = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-download-config_name}",
         "CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG_PROD_SOURCE"      = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-download-config_name}",
         "CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG_TEST_DESTINATION" = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-download-config-test_name}",
