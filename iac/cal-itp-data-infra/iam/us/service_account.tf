@@ -303,3 +303,11 @@ resource "google_service_account" "enghouse-sftp-service-account" {
   display_name = "enghouse-sftp-service-account"
   project      = "cal-itp-data-infra"
 }
+
+resource "google_service_account" "elavon-sftp-service-account" {
+  account_id   = "elavon-sftp-service-account"
+  description  = "Service account for elavon sftp server"
+  disabled     = "false"
+  display_name = "elavon-sftp-service-account"
+  project      = "cal-itp-data-infra"
+}
