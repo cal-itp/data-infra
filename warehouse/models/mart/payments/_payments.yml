@@ -155,7 +155,13 @@ models:
 
   - name: fct_payments_aggregations_reconciliation
     description: |
-
+      [This is a copy for testing reconciliation workflow enhancements]
+      Each row in this table is an "aggregation".
+      An "aggregation" is a group of micropayment/transactions processed (authorised and settled) together.
+      This table summarizes information about aggregations which can be used to reconcile
+      payments information with other sources.
+      Note: This table does not currently include information from the refunds source data, but it does contain refund information
+      present in the micropayments and settlements source data.
     columns:
       - *participant_id
       - &organization_name
@@ -275,6 +281,15 @@ models:
         description: '{{ doc("lp_bin") }}'
       - name: card_scheme
         description: '{{ doc("lp_card_scheme") }}'
+      - name: latest_micropayment_transaction_datetime_pacific
+        description: |
+          `latest_micropayment_transaction_datetime` in Pacific Time.
+      - name: latest_settlement_update_datetime_pacific
+        description: |
+          `latest_settlement_update_datetime` in Pacific Time.
+      - name: contains_nonzero_sales
+        description: |
+          Boolean flag for whether this aggregation contains a debit (sales) amount greater than 0.
 
   - name: fct_payments_aggregations
     description: |
