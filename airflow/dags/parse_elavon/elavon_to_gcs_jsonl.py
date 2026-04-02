@@ -62,16 +62,13 @@ def process_elavon_data_to_jsonl():
 
     # List raw files available from GCS
     file_and_dir_list = fs.ls(f"{CALITP_BUCKET__ELAVON_RAW}/", detail=False)
-    dir_list = [x for x in file_and_dir_list if fs.isdir(x)]
+    file_list = [x for x in file_and_dir_list if fs.isfile(x) and x.endswith(".zip")]
 
-    if not dir_list:
+    if not file_list:
         logger.warning("No extracts were found in GCS")
         return
 
-    # Drill down to the latest export (folders are "ts=" format)
-    target_dir = max(dir_list)
-    logger.info(f"Using latest export directory: {target_dir}")
-    file_list = [x for x in fs.ls(f"{target_dir}/", detail=False) if fs.isfile(x)]
+    logger.info(f"Found {len(file_list)} zip files to process")
 
     execution_ts = pendulum.now()
     for file in file_list:
