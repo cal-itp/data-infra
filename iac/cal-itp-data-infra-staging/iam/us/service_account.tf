@@ -81,3 +81,11 @@ resource "google_service_account" "sftp-pod-service-account" {
   display_name = "sftp-pod"
   project      = "cal-itp-data-infra-staging"
 }
+
+resource "google_service_account" "elavon-sftp-service-account" {
+  account_id   = "elavon-sftp-service-account"
+  description  = "Service account for elavon sftp server"
+  disabled     = "false"
+  display_name = "elavon-sftp-service-account"
+  project      = "cal-itp-data-infra-staging"
+}

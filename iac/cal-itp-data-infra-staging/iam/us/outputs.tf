@@ -189,3 +189,15 @@ output "google_service_account_sftp-pod-service-account_name" {
 output "google_service_account_sftp-pod-service-account_email" {
   value = google_service_account.sftp-pod-service-account.email
 }
+
+output "google_service_account_elavon-sftp-service-account_id" {
+  value = google_service_account.elavon-sftp-service-account.id
+}
+
+output "google_service_account_elavon-sftp-service-account_name" {
+  value = google_service_account.elavon-sftp-service-account.name
+}
+
+output "google_service_account_elavon-sftp-service-account_email" {
+  value = google_service_account.elavon-sftp-service-account.email
+}
