@@ -51,6 +51,7 @@ datasets_with_expiration AS (
   SELECT
     dg.name,
     dg.key AS gtfs_dataset_key,
+    dg.source_record_id AS gtfs_dataset_source_record_id,
     csf.max_end_date,
     CASE
       WHEN csf.max_end_date < CURRENT_DATE() THEN 'Expired'
@@ -67,9 +68,11 @@ datasets_with_expiration AS (
 expiring_datasets AS (
   SELECT
     dwe.name,
+    dwe.gtfs_dataset_source_record_id,
     dwe.max_end_date,
     dwe.expiration_status,
-    dp.service_name
+    dp.service_name,
+    dp.service_source_record_id
   FROM datasets_with_expiration dwe
   INNER JOIN {{ ref('dim_provider_gtfs_data') }} dp
     ON dwe.gtfs_dataset_key = dp.schedule_gtfs_dataset_key
@@ -80,7 +83,7 @@ expiring_datasets AS (
 
 airtable_services_latest AS (
   SELECT DISTINCT
-    name,
+    source_record_id,
     id
   FROM {{ source('external_airtable', 'transit_data_quality_issues__services') }}
   WHERE dt = (
@@ -91,7 +94,7 @@ airtable_services_latest AS (
 
 airtable_datasets_latest AS (
   SELECT DISTINCT
-    name,
+    source_record_id,
     id
   FROM {{ source('external_airtable', 'transit_data_quality_issues__gtfs_datasets') }}
   WHERE dt = (
@@ -103,21 +106,24 @@ airtable_datasets_latest AS (
 expiring_datasets_with_airtable_ids AS (
   SELECT
     ed.name,
+    ed.gtfs_dataset_source_record_id,
     ed.max_end_date,
     ed.expiration_status,
     ed.service_name,
+    ed.service_source_record_id,
     s.id AS service_record_id,
     d.id AS gtfs_dataset_record_id
   FROM expiring_datasets ed
   INNER JOIN airtable_services_latest s
-    ON ed.service_name = s.name
+    ON ed.service_source_record_id = s.source_record_id
   INNER JOIN airtable_datasets_latest d
-    ON ed.name = d.name
+    ON ed.gtfs_dataset_source_record_id = d.source_record_id
 ),
 
 aggregated_expiring_datasets AS (
   SELECT
     name,
+    gtfs_dataset_source_record_id,
     max_end_date,
     expiration_status,
     gtfs_dataset_record_id,
@@ -132,6 +138,7 @@ aggregated_expiring_datasets AS (
   FROM expiring_datasets_with_airtable_ids
   GROUP BY
     name,
+    gtfs_dataset_source_record_id,
     max_end_date,
     expiration_status,
     gtfs_dataset_record_id
@@ -139,7 +146,7 @@ aggregated_expiring_datasets AS (
 
 expiring_open_issues AS (
   SELECT
-    gtfs_dataset_name,
+    gtfs_dataset_source_record_id,
     issue__ AS issue_number
   FROM {{ ref('fct_transit_data_quality_issues') }}
   WHERE is_open = TRUE
@@ -162,7 +169,7 @@ fct_create_expiring_gtfs_issues AS (
     aed.service_info.service_record_id AS service_record_id
   FROM aggregated_expiring_datasets aed
   LEFT JOIN expiring_open_issues i
-    ON aed.name = i.gtfs_dataset_name
+    ON aed.gtfs_dataset_source_record_id = i.gtfs_dataset_source_record_id
   WHERE i.issue_number IS NULL
 )
 
