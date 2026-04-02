@@ -1075,6 +1075,7 @@ models:
       - name: outreach_status
       - name: gtfs_dataset_name
       - name: new_end_date
+      - name: service_name
   - name: fct_create_expiring_gtfs_issues
     description: |
       Contains GTFS datasets whose schedule feeds are expired or about to expire and do not
