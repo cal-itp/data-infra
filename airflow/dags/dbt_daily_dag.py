@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 
 from cosmos import DbtTaskGroup, ProfileConfig, ProjectConfig, RenderConfig
+from cosmos.constants import TestBehavior
 from dags import log_failure_to_slack
 from src.dag_utils import log_group_failure_to_slack
 
@@ -52,7 +53,7 @@ with DAG(
             select=[
                 "stg_audit__cloudaudit_googleapis_com_data_access+",
             ],
-            test_behavior=None,
+            test_behavior=TestBehavior.AFTER_ALL,
         ),
         operator_args={
             "install_deps": True,
@@ -68,7 +69,7 @@ with DAG(
             select=[
                 "+fct_benefits_events",
             ],
-            test_behavior=None,
+            test_behavior=TestBehavior.AFTER_ALL,
         ),
         operator_args={
             "install_deps": True,
@@ -86,7 +87,7 @@ with DAG(
                 "+fct_schedule_feed_downloads",
                 "+fct_schedule_feed_files",
             ],
-            test_behavior=None,
+            test_behavior=TestBehavior.AFTER_ALL,
         ),
         operator_args={
             "install_deps": True,
@@ -103,7 +104,7 @@ with DAG(
                 "models/staging/kuba",
                 "models/mart/kuba",
             ],
-            test_behavior=None,
+            test_behavior=TestBehavior.AFTER_ALL,
         ),
         operator_args={
             "install_deps": True,
@@ -122,7 +123,7 @@ with DAG(
                 "models/mart/payments",
                 "models/mart/payments_audit",
             ],
-            test_behavior=None,
+            test_behavior=TestBehavior.AFTER_ALL,
         ),
         operator_args={
             "install_deps": True,
