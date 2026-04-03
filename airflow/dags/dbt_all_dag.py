@@ -2,6 +2,7 @@ import os
 from datetime import datetime
 
 from cosmos import DbtTaskGroup, ProfileConfig, ProjectConfig, RenderConfig
+from cosmos.constants import TestBehavior
 from dags import log_failure_to_slack
 from src.dag_utils import log_group_failure_to_slack
 
@@ -46,7 +47,7 @@ with DAG(
                 "models/mart/gtfs/fct_trip_updates_stop_metrics.sql",
                 "models/mart/gtfs/fct_trip_updates_trip_metrics.sql",
             ],
-            test_behavior=None,
+            test_behavior=TestBehavior.AFTER_ALL,
         ),
         operator_args={
             "install_deps": True,

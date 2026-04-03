@@ -244,3 +244,16 @@ models:
           domain: mart
           dataset: transit_database_latest
         schema: mart_transit_database_latest
+
+data_tests:
+  calitp_warehouse:
+    +enabled: false
+    staging:
+      payments:
+        +enabled: true
+    intermediate:
+      payments:
+        +enabled: true
+    mart:
+      payments:
+        +enabled: true
