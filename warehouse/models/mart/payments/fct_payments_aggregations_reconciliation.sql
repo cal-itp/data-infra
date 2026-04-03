@@ -143,7 +143,7 @@ fct_payments_aggregations AS (
             WHEN net_micropayment_amount_dollars = 0 THEN 'Zero-dollar value sales'
             WHEN net_micropayment_amount_dollars > 0 AND aggregation_is_settled AND elavon_purch_id IS NOT NULL THEN 'Settled non-zero sales (with Elavon match)'
             WHEN net_micropayment_amount_dollars > 0 AND aggregation_is_settled AND elavon_purch_id IS NULL THEN 'Settled non-zero sales (no Elavon match)'
-            WHEN net_micropayment_amount_dollars > 0 AND (status IS NULL OR status NOT IN ('LOST','DECLINED','UNAVAILABLE','UNRECOVERABLE','INVALID')) AND (NOT aggregation_is_settled) THEN 'Unsettled non-zero sales'
+            WHEN net_micropayment_amount_dollars > 0 AND (status IS NULL OR status NOT IN ('LOST','DECLINED','UNAVAILABLE','UNRECOVERABLE','INVALID')) AND (NOT COALESCE(aggregation_is_settled, FALSE)) THEN 'Unsettled non-zero sales'
             WHEN COALESCE(status,'') != '' AND status NOT IN ('AUTHORISED', 'VERIFIED') THEN 'Declined sales'
             ELSE 'UNKNOWN'
         END AS Reconciliation_Category
