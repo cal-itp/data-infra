@@ -5,8 +5,6 @@ locals {
     "calitp-staging-amplitude-benefits-events",
     "calitp-staging-analysis-output-models",
     "calitp-staging-gtfs-rt-archiver",
-    "calitp-staging-elavon-parsed",
-    "calitp-staging-elavon-raw",
     "calitp-staging-gtfs-download-config",
     "calitp-staging-gtfs-download-config-test",
     "calitp-staging-gtfs-rt-parsed",

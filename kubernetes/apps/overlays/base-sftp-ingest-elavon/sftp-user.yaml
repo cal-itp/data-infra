@@ -1,6 +1,0 @@
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: sftp-user
-data:
-  SFTP_USER: elavon
