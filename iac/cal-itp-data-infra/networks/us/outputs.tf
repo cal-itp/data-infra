@@ -9,3 +9,7 @@ output "google_compute_network_static-load-balancer-address_id" {
 output "google_compute_address_enghouse-sftp-address_ip" {
   value = google_compute_address.enghouse-sftp-address.address
 }
+
+output "google_compute_address_elavon-sftp-address_ip" {
+  value = google_compute_address.elavon-sftp-address.address
+}
