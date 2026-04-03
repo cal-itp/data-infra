@@ -171,6 +171,7 @@ resource "kubernetes_service" "elavon-sftp" {
       target_port = 22
     }
 
-    type = "LoadBalancer"
+    type             = "LoadBalancer"
+    load_balancer_ip = data.terraform_remote_state.networks.outputs.google_compute_address_elavon-sftp-address_ip
   }
 }
