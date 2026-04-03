@@ -290,6 +290,9 @@ models:
       - name: contains_nonzero_sales
         description: |
           Boolean flag for whether this aggregation contains a debit (sales) amount greater than 0.
+      - name: reconciliation_category
+        description: |
+          Category for reconciliation purposes (whether the aggregation is settled and whether it has an Elavon match.)
 
   - name: fct_payments_aggregations
     description: |
