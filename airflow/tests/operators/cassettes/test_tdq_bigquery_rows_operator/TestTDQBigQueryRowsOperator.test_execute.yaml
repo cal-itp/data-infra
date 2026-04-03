@@ -1,0 +1,506 @@
+interactions:
+- request:
+    body: '{"jobReference": {"jobId": "airflow_1775244128461841_af8905d39d8f18faea5750bb31f956bd",
+      "projectId": "cal-itp-data-infra-staging", "location": "us-west2"}, "configuration":
+      {"query": {"query": "\n                SELECT issue_number, issue_source_record_id,
+      outreach_status, gtfs_dataset_name, new_end_date\n                FROM `mart_transit_database.fct_close_expired_issues`\n            ",
+      "priority": "INTERACTIVE", "useLegacySql": false, "schemaUpdateOptions": []}}}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '471'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - gl-python/3.11.10 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      X-Goog-API-Client:
+      - gl-python/3.11.10 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: POST
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/jobs?prettyPrint=false
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/6VUa2/TShD9K5H5SBK/YseJVEFpjSgqpaTuRSAks49Zd+lm1+yuGyLEf2fspOFC
+        xZUu5JMzz3PmzM7X4FZqHiwDKpvPHdjto0+GBuMAPGnQui27d++/vLx2b9NSF9d8e+mPHx8fHWGE
+        7LMYURPp2wknnkykFpZMHGZK3Sw7N9mA88mUSCuU2dTxfJ4ls1mcFLM8LmZxTUSxiDKeLngh4kIQ
+        INk8iyhNY7HIcsqxiQMlzqW+xVY33rduGYb3QKeNMY0C0ko3ZWZ9sId3Sdha8wmYd+Hv8YXI04V/
+        jO2JMox4afTRPU9Ey4wWsuns4AiWX4MB0L8+gg969MvvqjwvT6qRdK6DWndrCna8/+dMZxnUFpix
+        vJZ8PDKdt0DYTY0kfOfGo8YLV/fkHPhakzWMRxo2NWjeW+Fhu+er169GH9fE+tpbop30QzrFAlPB
+        fM2UcVDDl1ZawJ49Dvfx5zJIlCNhqQeaFaEKeor7mZ/991r0yTu4Q2BNIc1STvOM0zlkSSpynvEs
+        TgFHTqMkjyhhDBXBPN93GrKINjqN8ziLFjNG0jwjSSQWDDjwZC7IPMoZoHp5UvAojSNazDNB6SwX
+        nCw45EWe0ij4Ng42Vno4la41OIdBsuDt6qwq62p1fXFyXJXYtbXSYFgv3tlFVa6OT6qzf3pH5+Ac
+        GsK2V59VsBREOcCSuFXVtsWBBG+uy9W7YGdagQALmv2/QWHiju5fPKD7NcUyh0VFTP3+SNSQuR4R
+        w6UatJTrHvmPPnmRBUOw9Q988yzu74TmDzxFMshlPFHPth7cpTUMnIOeS4Sew6v4fcgPzzOp1MHM
+        cPfhhfTB0tsOdjRgDdrvZ757TMG3PcNuYDcEofP09UXZc0dFNZMtUbXraK8E+g42PDCSrH+9LfdT
+        dGGjDCUq3Bh7Kwy+zktjlAu58RNGJo25C/c1w+fE3hA+vSIK1vIpBkwZwbJ3O11P9hNfAXG7U8EM
+        70GuStybq6o8RRLfAYF3GxacBQAA
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Fri, 03 Apr 2026 19:22:08 GMT
+      ETag:
+      - yEuYZxJUsW3En8UdyPtA+A==
+      Server:
+      - ESF
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - X-Origin
+      - Referer
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gl-python/3.11.10 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      X-Goog-API-Client:
+      - gl-python/3.11.10 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: GET
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/airflow_1775244128461841_af8905d39d8f18faea5750bb31f956bd?location=us-west2&maxResults=0&prettyPrint=false
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/5VUUY+bOBD+L/R1I22ANNmV+mBjx4FgpzYQFldVRBInpZtACo7SvdX+9xtvT7rT
+        6XRS/eKZ0XzfzDceePWem3bvPXrb5vjjavqXD0djpTOUGa4nO8B16drBeHeesfURMu+tNc8P/Yod
+        X0RZyf5nefvDyE+fIGPYfTPn2nt89Q6NOe0H7/HLq9fWZwOwZhiuZtNez1vTQ6p9ubhoLHLKqILA
+        udu7gCjSFOGUem93/4IO3bXfmU1vdl2/3zT7v0myXMWC/T9Hd7W9qXffNoOt7XX4PfDRHobNvrb1
+        YOzmPfZb8NbcNqbdO4Z/IAnK6X/hvr7ded+7rTIH05t2Z9w4L3333exs7F5qV59Gjb2MXD+jpj30
+        9Qg0HZv26L0D35Pqpj+cuttmPJ1O/DAc+7Pw43gWjjf1YfZwP9kHD/vZYTw71KaeTCf3220wPjxM
+        Pm7dVE/drrZN1wLNdRjdzGB9UOPZztYn1d3gVb0Q0i710eTds3F5mIbpPPOLvEASIZShkCJEKZIR
+        QksmY4wQxtOnKRy5iudyXS2LdVJFOAlRkcRLkqgyCrAQc3+B0pTyuc+iNE2Ezhe0SsRKgK8D5yvy
+        OaALTMsQuZNE2VMQ8ULnSx5QHgdkqUnEJhn4KudVwGKRUlZUOdMp4/OspBxnrKoYrVLCeZVLgXwq
+        IW+VFFypcqmxYFTnkieCSV26+jzJGfAJVoQs5km1QD5BgpAFDRRVBAv9VIZcK+CFulgz4Im4Ltla
+        5pQTtpg7XjLnUpOVzjELKwK9zUEcWQqVLXBGkMNjRaTQa2dSgUuuMxatYB5FAHHQE1e40NAMDUgk
+        ErmgPmMV+JUP9ZTkVViCTsrXGaEiYJwGORI54UUId1Ky2PWPAQ/6V/iJrZ2pCqZzFleJ5irL+QqX
+        TCiC4mDO4zCX0CfTWeRDnyxRmS9AD5aZX73PN/JdXe47fOH0r6Ce99e64Bdrhs99tzPDYNxe3v/a
+        0ag7X04GvoZH21/NHew0/DkWjf3lv/0J9EpaE5YEAAA=
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Fri, 03 Apr 2026 19:22:08 GMT
+      ETag:
+      - 0ttek9rOGgyNWYQrxWwzeQ==
+      Server:
+      - ESF
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - X-Origin
+      - Referer
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Authorization:
+      - FILTERED
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      content-length:
+      - '0'
+      user-agent:
+      - airflow/2.10.5 (gzip)
+      x-goog-api-client:
+      - gdcl/2.187.0 gl-python/3.11.10
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: GET
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/airflow_1775244128461841_af8905d39d8f18faea5750bb31f956bd?alt=json&location=us-west2
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/8VVW0/bMBR+76+wslcixb2mk3hoSymdoIKkdBoTipzkJJgmdvGFEhD/fU7aQh/Y
+        Vm6bZMU+F58v/vL55KGGkDWnLLa+Iiuk6Y0GUXxJQZ2VCw+kzpQ004IzCdZemQ2KpGU2byTSv705
+        wXdHP+68Q3x9sSTT3v7+KktGV5ATk/dgLGMnFLJYGvtnZaO1v4oxkkNZkUqpIWA6D0FUVdZxVSyq
+        +HgyHY6G3nYo53EVmpwfH/f6x0NrHXrc+xuM5FpEEAiIuIgDGr8E6E+98WT0XjyulQASXQVSEaXl
+        5wGlKpFBTBSRoILK+WlQDJYBsLhEexHloDcd7oRRzZe1NZp1zUMPEhDAIngWz0Lwa4jUuFJpRDKb
+        qoVdHtSmLBHENsSmlKVrwLLIKpVQkWR8GeBOp1VvNnHdbbax28QBSdyu04ob3dhNsJsQIK1OywnD
+        Bk66rXa4EYOV8YgoyllZTEt7CVLVraeXVVyRzOPLUtZWc6V7sTJXKt8QZyVbwt/m04Ruy83Y6bjW
+        k/dx7w+pRrBXauQn8Xz+7WJ5cNrccd93QpXhCHGGBloqnoNAvo4ikHLHCn1SoJ5RMmphjAZcM1WY
+        iTHzZQxFyDc3PtYZ7Fit7tTbtlOOrQ3r1WVta/srSOzi3Uk8P/ejw5uID0a3k/v7/0OizxnPiX1C
+        BGUrr0dohqaCMEnVGxjt2A62sfNxjLq7yssw2up77CQsLlQ/nwnn9Yxujt1Lze0vduWTpqifaUB9
+        Ld8mQdeMjyOs8woJzmcdhsXpZCH94Wz+jwgb5wsQlGRoRrIMineIrW3jut3Av+XOPC+f+2S/UCBP
+        BS/vClTd2bE2LX/A80UGquz4Smio3JH5Y8IRVWtf7bH2C059rFisCAAA
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Fri, 03 Apr 2026 19:22:09 GMT
+      ETag:
+      - o3fsSvqM1xHYxRF1jZwaTA==
+      Server:
+      - ESF
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - X-Origin
+      - Referer
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Authorization:
+      - FILTERED
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      content-length:
+      - '0'
+      user-agent:
+      - airflow/2.10.5 (gzip)
+      x-goog-api-client:
+      - gdcl/2.187.0 gl-python/3.11.10
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: GET
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/airflow_1775244128461841_af8905d39d8f18faea5750bb31f956bd?alt=json&location=us-west2
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/8VVW0/bMBR+76+wslcixb2mk3hoSymdoIKkdBoTipzkJJgmdvGFEhD/fU7aQh/Y
+        Vm6bZMU+F58v/vL55KGGkDWnLLa+Iiuk6Y0GUXxJQZ2VCw+kzpQ004IzCdZemQ2KpGU2byTSv705
+        wXdHP+68Q3x9sSTT3v7+KktGV5ATk/dgLGMnFLJYGvtnZaO1v4oxkkNZkUqpIWA6D0FUVdZxVSyq
+        +HgyHY6G3nYo53EVmpwfH/f6x0NrHXrc+xuM5FpEEAiIuIgDGr8E6E+98WT0XjyulQASXQVSEaXl
+        5wGlKpFBTBSRoILK+WlQDJYBsLhEexHloDcd7oRRzZe1NZp1zUMPEhDAIngWz0Lwa4jUuFJpRDKb
+        qoVdHtSmLBHENsSmlKVrwLLIKpVQkWR8GeBOp1VvNnHdbbax28QBSdyu04ob3dhNsJsQIK1OywnD
+        Bk66rXa4EYOV8YgoyllZTEt7CVLVraeXVVyRzOPLUtZWc6V7sTJXKt8QZyVbwt/m04Ruy83Y6bjW
+        k/dx7w+pRrBXauQn8Xz+7WJ5cNrccd93QpXhCHGGBloqnoNAvo4ikHLHCn1SoJ5RMmphjAZcM1WY
+        iTHzZQxFyDc3PtYZ7Fit7tTbtlOOrQ3r1WVta/srSOzi3Uk8P/ejw5uID0a3k/v7/0OizxnPiX1C
+        BGUrr0dohqaCMEnVGxjt2A62sfNxjLq7yssw2up77CQsLlQ/nwnn9Yxujt1Lze0vduWTpqifaUB9
+        Ld8mQdeMjyOs8woJzmcdhsXpZCH94Wz+jwgb5wsQlGRoRrIMineIrW3jut3Av+XOPC+f+2S/UCBP
+        BS/vClTd2bE2LX/A80UGquz4Smio3JH5Y8IRVWtf7bH2C059rFisCAAA
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Fri, 03 Apr 2026 19:22:09 GMT
+      ETag:
+      - o3fsSvqM1xHYxRF1jZwaTA==
+      Server:
+      - ESF
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - X-Origin
+      - Referer
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"jobReference": {"jobId": "airflow_1775244130408615_af8905d39d8f18faea5750bb31f956bd",
+      "projectId": "cal-itp-data-infra-staging", "location": "us-west2"}, "configuration":
+      {"query": {"query": "\n                SELECT issue_number, issue_source_record_id,
+      outreach_status, gtfs_dataset_name, new_end_date\n                FROM `mart_transit_database.fct_close_expired_issues`\n            ",
+      "priority": "INTERACTIVE", "useLegacySql": false, "schemaUpdateOptions": []}}}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '471'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - gl-python/3.11.10 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      X-Goog-API-Client:
+      - gl-python/3.11.10 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: POST
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/jobs?prettyPrint=false
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/6VUa2/bNhT9Kwb31bZelvwAgi11FMxDlnSO2mHAAJWPS4W1TKokFS8r+t97KTvu
+        1qADtvmTfJ/n3HMvP5Kd0oKsCFPNhx7s03fvDSNjAp42aN0wfbfL1upwvbvs4O6RyfSnPw8XFxih
+        Qhan7UT5biKopxOlpaUTh5lKN6veTQ7gfDqlysrWHOpkPs/T2SzJ4lm8KJK8pnKxjHORLcVCJgtJ
+        gebzPGYsS+QyL5jAJg5aeaP0Dls9eN+5VRQ9A502xjQt0E65KTf7sz16TKPOmvfAvYu+jS9Cni76
+        z9i+bw2nXhl98cwT0XKjpWp6OzjI6iMZAP3lg/yuR1/97subcl2NlHM91LrfM7Dj0z9nesuhtsCN
+        FbUS45HpvQXKH2ok4Xs3HjVeujqQc+BrTfcwHmk41KBFsMLLdtfbu59H7/bU+tpbqp3yQzrDAlPJ
+        fc1b46CGPzplAXsGHO7d38sgUYGElR5oVpS1ECieZr7557UIyUe4Q2DNIMszwYpcsDnkaSYLkYs8
+        yQBHzuK0iBnlPFnMMM+HTkMW1UZnCcoUL2ecZkVO01guOQgQ6VzSeVxwQPWKdCHiLInZYp5LxmaF
+        FHQpoFgUGYvJpzE5WOXhSrnO4BwGyciv201V1tX2ze36siqxa2eVwbAg3ua2KreX62rzNjh6BzfQ
+        UP50/6ElK0lbB1gSt6p66nAg5Jc35fY3cjRtQYIFzf/doDDxSPd/HNDzmmKZ86IiprA/CjXkLiDi
+        uFSDlmofkH/pU8QJGYKtf+lbBh9u2gvPvMiCXMbT9tWTB/faGg7OQeASo+d8Fd8O+eJ5pdr2bOa4
+        +/Cj8mTlbQ9HGrAH7U8zPx4T+XRi2A/shiB0Xt3dloE7Kqq56mhbu54FJdB3tuEDo+j+67fleYou
+        alrDaBsdjN1Jg9f52pjWRcL4CaeTxjxGp5rRNbUPVEzvaQt79QMGTDnFso9HXdeniW+BuuNTwY0I
+        ILcl7s19VV4hic+v25vPnAUAAA==
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Fri, 03 Apr 2026 19:22:10 GMT
+      ETag:
+      - IbnOk3CiwFkApeOvbf2Jzw==
+      Server:
+      - ESF
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - X-Origin
+      - Referer
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gl-python/3.11.10 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      X-Goog-API-Client:
+      - gl-python/3.11.10 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: GET
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/airflow_1775244130408615_af8905d39d8f18faea5750bb31f956bd?location=us-west2&maxResults=0&prettyPrint=false
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/5VUUY+jNhD+L/R1oyZALrsr3YONHQPBzmFMWFxVEUmcLHsJpOBotVrtf+94r1Kr
+        qqp0fvHMaL5v5hsPvHvf2+7gPXq79vTHzQxvv5yMzZ0hzXg72xGua9+NxrvzjG1OkPnr7iXk5JnH
+        qh8104nfRJdN/vUrZIz7Z3NpvMd379ia82H0Hn9797rmYgDWjuPNbLvbZWcGSLVvVxdNhKKMSghc
+        +oMLiDLLEM6o93H3L+jY34a92Q5m3w+HbXv4m6RQMhHs/zn6mx1Ms3/ejraxt/HnwCd7HLeHxjaj
+        sdvP2E/BO/O6Nd3BMfwDSZCi/4X7/ePOe+l30hzNYLq9ceO8Dv2L2dvEvdS+OU9ae524fiZtdxya
+        CWg6td3J+wR+JjXtcDz3r9vZYjH3w3AWTMPp/ZfZfNsc7x+m80PwcLg/zu6PjWnmi/l0twtmx4f5
+        l52b6rnfN7btO6C5jZNXM1of1Hi2t81Z9q/wql4IadfmZFT/3bg8HC8DVfilKlGOECpQSBGiFOUR
+        QiuWJxghjBdPCzj5Olnmm3pVbtI6wmmIyjRZkVRWUYCFWPoxyjLKlz6LsiwVWsW0TsVagK8D50vy
+        LaAxplWI3Emj4imIeKnVigeUJwFZaRKxeQG+VLwOWCIyyspaMZ0xviwqynHB6prROiOc1yoXyKc5
+        5K3TkktZrTQWjGqV81SwXFeuPk8VAz7BypAlPK1j5BMkCIlpIKkkWOinKuRaAi/UxZoBT8R1xTa5
+        opyweOl4yZLnmqy1wiysCfS2BHFkJWQR44Igh8eS5EJvnEkFrrguWLSGeZQBxEFPUuNSQzM0IJFI
+        85j6jNXg1z7Ukzmvwwp0Ur4pCBUB4zRQSCjCyxDutGKJ6x8DHvSv8RPbOFOWTCuW1KnmslB8jSsm
+        JEFJsORJqHLok+ki8qFPlsrCF6AH54Vff8438l1d7jt86fSvoZ7317rgN2vGb0O/N+No3F5Of+xo
+        1F+uZwNfw6MdbuYOdhr+HHFrf/gffwIGRfNMlgQAAA==
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Fri, 03 Apr 2026 19:22:10 GMT
+      ETag:
+      - /bj4MDhMHTosZGZI2aCmVQ==
+      Server:
+      - ESF
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - X-Origin
+      - Referer
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Authorization:
+      - FILTERED
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      content-length:
+      - '0'
+      user-agent:
+      - airflow/2.10.5 (gzip)
+      x-goog-api-client:
+      - gdcl/2.187.0 gl-python/3.11.10
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: GET
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/airflow_1775244130408615_af8905d39d8f18faea5750bb31f956bd?alt=json&location=us-west2
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/8VVW2/aMBR+51dY2WsjJUAITOoDoYyyAaPcqnWqIpOcpC6JnfpSlFb973MCtDx0
+        G71tkhX7XHy++Mvnk/sKQsaK0ND4jIwliW8U8PxTDPKsWExAqEQKPWWMCjCOimyQOC6yvw+/LQan
+        P+bn47Mz97x3V8tOh+318fEmSwRXkGKdd68tbUcEklBo+2dpo62/jFGcQlGRCKHApypdAi+rbOMy
+        z8p4fzTr9rqT/VDKwjI0mg8GbW/QNbahh6O/wQimeAA+h4Dx0Cfhc4DT2aQ/6r0VjynJAQdXvpBY
+        KvFxQLGMhB9iiQVIv3R+GBSFtQ80LNCeRTlpz7oHYZTzZWWLZlyz5QQi4EADeBJPxtk1BLJfqjTA
+        iUlkZhYHNQmNODY1sTGh8RawKLJJxYRHCVv7tus61Xrdrll1q9mwHR9HzZblhLVW2IzsZoQBO65j
+        LZc1O2o5jeVODEbCAiwJo0UxJcw1CFk1Hl9WMomTCVsXsjbqG93zjblR+Y44I9oT/j6fOnRbbLYt
+        t2k8eh+O/pCqBXsle9MoXK2+XqxPxvUD951jIjVHiFHUUUKyFDiaqiAAIQ6s4OEctbWSkWPbqMMU
+        lbmeKNVfRlOEpvrGhyqBA6tVrWrDtIqxt2G7uqzsbX8BiS37cBLn82nw5SZgnd7t6O7u/5A4ZZSl
+        2BxiTujGO8EkQTOOqSDyFYy6pmWbtvV+jDYPlZdm1PEmdLjML6SXLrj1ckZ3x27H+vbnh/JJYuQl
+        CpCnxOsk2NTj/QhzXyDB1cKlNh+PMjHtLlb/iLB+mgEnOEELnCSQv0FsDdOumjX7t9zp5+VTn/Ry
+        CWLMWXFXoOzOlrFr+R2WZgnIouNLrqB0B/qPCadEbn2Vh8ovMKTghawIAAA=
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Fri, 03 Apr 2026 19:22:11 GMT
+      ETag:
+      - OMKVLHYUWPQQ7WGz3pHMAw==
+      Server:
+      - ESF
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - X-Origin
+      - Referer
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Authorization:
+      - FILTERED
+      accept:
+      - application/json
+      accept-encoding:
+      - gzip, deflate
+      content-length:
+      - '0'
+      user-agent:
+      - airflow/2.10.5 (gzip)
+      x-goog-api-client:
+      - gdcl/2.187.0 gl-python/3.11.10
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: GET
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/airflow_1775244130408615_af8905d39d8f18faea5750bb31f956bd?alt=json&location=us-west2
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/8VVW2/aMBR+51dY2WsjJUAITOoDoYyyAaPcqnWqIpOcpC6JnfpSlFb973MCtDx0
+        G71tkhX7XHy++Mvnk/sKQsaK0ND4jIwliW8U8PxTDPKsWExAqEQKPWWMCjCOimyQOC6yvw+/LQan
+        P+bn47Mz97x3V8tOh+318fEmSwRXkGKdd68tbUcEklBo+2dpo62/jFGcQlGRCKHApypdAi+rbOMy
+        z8p4fzTr9rqT/VDKwjI0mg8GbW/QNbahh6O/wQimeAA+h4Dx0Cfhc4DT2aQ/6r0VjynJAQdXvpBY
+        KvFxQLGMhB9iiQVIv3R+GBSFtQ80LNCeRTlpz7oHYZTzZWWLZlyz5QQi4EADeBJPxtk1BLJfqjTA
+        iUlkZhYHNQmNODY1sTGh8RawKLJJxYRHCVv7tus61Xrdrll1q9mwHR9HzZblhLVW2IzsZoQBO65j
+        LZc1O2o5jeVODEbCAiwJo0UxJcw1CFk1Hl9WMomTCVsXsjbqG93zjblR+Y44I9oT/j6fOnRbbLYt
+        t2k8eh+O/pCqBXsle9MoXK2+XqxPxvUD951jIjVHiFHUUUKyFDiaqiAAIQ6s4OEctbWSkWPbqMMU
+        lbmeKNVfRlOEpvrGhyqBA6tVrWrDtIqxt2G7uqzsbX8BiS37cBLn82nw5SZgnd7t6O7u/5A4ZZSl
+        2BxiTujGO8EkQTOOqSDyFYy6pmWbtvV+jDYPlZdm1PEmdLjML6SXLrj1ckZ3x27H+vbnh/JJYuQl
+        CpCnxOsk2NTj/QhzXyDB1cKlNh+PMjHtLlb/iLB+mgEnOEELnCSQv0FsDdOumjX7t9zp5+VTn/Ry
+        CWLMWXFXoOzOlrFr+R2WZgnIouNLrqB0B/qPCadEbn2Vh8ovMKTghawIAAA=
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Fri, 03 Apr 2026 19:22:11 GMT
+      ETag:
+      - OMKVLHYUWPQQ7WGz3pHMAw==
+      Server:
+      - ESF
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - X-Origin
+      - Referer
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+version: 1
