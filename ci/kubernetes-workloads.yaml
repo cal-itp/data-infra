@@ -90,10 +90,6 @@ calitp:
       helm_chart: kubernetes/apps/charts/promtail
       helm_values:
         - kubernetes/apps/values/promtail.yaml
-    - name: sftp-ingest-elavon
-      driver: kustomize
-      kustomize_dir: kubernetes/apps/overlays/prod-sftp-ingest-elavon
-      # TODO: sftp secrets
     - name: sentry
       driver: helm
       namespace: sentry
