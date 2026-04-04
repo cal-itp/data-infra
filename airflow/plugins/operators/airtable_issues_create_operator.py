@@ -81,11 +81,7 @@ class AirtableIssuesCreateOperator(BaseOperator):
                     "gtfs_dataset_name": source_row["gtfs_dataset_name"],
                     "service_name": source_row["service_name"],
                     "expiration_status": source_row["expiration_status"],
-                    "max_end_date": (
-                        source_row["max_end_date"].isoformat()
-                        if source_row["max_end_date"] is not None
-                        else None
-                    ),
+                    "max_end_date": str(source_row["max_end_date"]),
                 }
             )
 
