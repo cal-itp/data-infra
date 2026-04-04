@@ -67,7 +67,7 @@ resource "google_service_account" "composer-service-account" {
 }
 
 resource "google_service_account" "gtfs-rt-archiver-service-account" {
-  account_id   = "gtfs-rt-service-account"
+  account_id   = "gtfs-rt-archiver-service-account"
   description  = "Service account for the GTFS-RT archiver"
   disabled     = "false"
   display_name = "workflow"
