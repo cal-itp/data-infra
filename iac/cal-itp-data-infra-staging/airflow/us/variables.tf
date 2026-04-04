@@ -28,11 +28,6 @@ data "google_storage_bucket_object_content" "calitp-staging-dbt-catalog" {
   bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-dbt-docs_name
 }
 
-data "google_storage_bucket_object_content" "calitp-staging-dbt-index" {
-  name   = "index.html"
-  bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-dbt-docs_name
-}
-
 data "terraform_remote_state" "networks" {
   backend = "gcs"
 
