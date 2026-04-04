@@ -531,12 +531,14 @@ models:
         description: Identifies the funding source (for example, card) that the micropayment will be charged to. This is always the card that was tapped. A registered customer can have multiple funding sources linked to them.
       - name: principal_customer_id
         description: '{{ doc("customer_funding_source_principal_customer_id") }}'
-      - name: bin
-        description: First six numbers of the PAN.
+      - &bin
+        name: bin
+        description: '{{ doc("lp_bin") }}'
       - name: masked_pan
         description: First six and last four numbers of the PAN.
-      - name: card_scheme
-        description: Card scheme of this funding source. One of (`VISA`, `MASTERCARD`).
+      - &card_scheme
+        name: card_scheme
+        description: '{{ doc("lp_card_scheme") }}'
       - name: issuer
         description: Name of the card issuer.
       - name: issuer_country
@@ -749,3 +751,19 @@ models:
         description: |
           Hash of all data columns to uniquely identify row's content, mostly for debugging purposes.
           Should ideally be handled by uniqueness of _payments_key but surfaced for troubleshooting.
+  - name: int_payments__customers_vaults_to_aggregations
+    description: >
+      Mapping of aggregation ID to the associated principal customer ID, bin, and card scheme.
+      This mapping takes into account both the micropayments and the settlement information.
+    columns:
+      - *participant_id
+      - name: aggregation_id
+        description: '{{ doc("lp_aggregation_id") }}'
+        tests:
+        - unique_proportion:
+            arguments:
+              at_least: 0.999
+      - name: principal_customer_id
+        description: '{{ doc("customer_funding_source_principal_customer_id") }}'
+      - *bin
+      - *card_scheme
