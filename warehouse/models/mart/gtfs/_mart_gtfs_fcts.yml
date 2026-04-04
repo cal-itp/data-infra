@@ -612,6 +612,8 @@ models:
   - name: fct_stop_time_updates
     description: |
       Unnested and de-duped stop time updates.
+    config:
+      event_time: dt
     columns:
       - name: key
         tests: *almost_unique_rt_key_tests
@@ -1090,6 +1092,8 @@ models:
       distinct.)
       See: https://gtfs.org/realtime/reference/#message-alert for
       field definitions.
+    config:
+      event_time: dt
     tests:
       - dbt_utils.expression_is_true:
           arguments:

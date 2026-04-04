@@ -1,12 +1,17 @@
 {{
     config(
         materialized='incremental',
-        incremental_strategy='insert_overwrite',
+        incremental_strategy='microbatch',
+        event_time = 'dt',
+        batch_size = 'day',
+        begin=var('PROD_GTFS_RT_START'),
+        lookback=var('DBT_ALL_MICROBATCH_LOOKBACK_DAYS'),
         partition_by={
             'field': 'dt',
             'data_type': 'date',
             'granularity': 'day',
         },
+        full_refresh=false,
         cluster_by='base64_url',
     )
 }}
@@ -14,7 +19,6 @@
 WITH service_alerts AS (
     SELECT *
     FROM {{ ref('fct_service_alerts_messages_unnested') }}
-    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 -- group by *both* the UTC date that data was scraped (dt) *and* calculated local active date
