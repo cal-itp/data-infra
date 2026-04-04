@@ -50,19 +50,17 @@ class AirtableIssuesCreateOperator(BaseOperator):
 
         return [
             {
-                "fields": {
-                    "Issue Type": [ISSUE_TYPE_MAP[row["expiration_status"]]],
-                    "GTFS Datasets": [row["gtfs_dataset_record_id"]],
-                    "Status": "Outreach",
-                    "Outreach Status": "Waiting on Customer Success",
-                    "Description": (
-                        f"The feed expired on {row['max_end_date']}."
-                        if row["expiration_status"] == "Expired"
-                        else f"The feed is about to expire on {row['max_end_date']}."
-                    ),
-                    "Services": [row["service_record_id"]],
-                    "Waiting Since": today_date,
-                }
+                "Issue Type": [ISSUE_TYPE_MAP[row["expiration_status"]]],
+                "GTFS Datasets": [row["gtfs_dataset_record_id"]],
+                "Status": "Outreach",
+                "Outreach Status": "Waiting on Customer Success",
+                "Description": (
+                    f"The feed expired on {row['max_end_date']}."
+                    if row["expiration_status"] == "Expired"
+                    else f"The feed is about to expire on {row['max_end_date']}."
+                ),
+                "Services": [row["service_record_id"]],
+                "Waiting Since": today_date,
             }
             for row in rows
         ]
