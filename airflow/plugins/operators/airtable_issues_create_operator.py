@@ -10,7 +10,7 @@ from airflow.models.taskinstance import Context
 
 ISSUE_TYPE_MAP = {
     "Expired": "recXHbaInR8Uebp5D",
-    "Expiring": "recEmZkgNkfKgYe6N",
+    "Expiring in Less Than 30 Days": "recEmZkgNkfKgYe6N",
 }
 
 
