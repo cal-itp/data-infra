@@ -35,3 +35,15 @@ class AirtableIssuesHook(BaseHook):
         records: list[dict[str, Any]],
     ) -> Any:
         return self.table(air_base_id, air_table_name).batch_update(records)
+
+    def batch_create(
+        self,
+        *,
+        air_base_id: str,
+        air_table_name: str,
+        records: list[dict[str, Any]],
+    ) -> list[dict[str, Any]]:
+        return self.table(
+            air_base_id=air_base_id,
+            air_table_name=air_table_name,
+        ).batch_create(records)
