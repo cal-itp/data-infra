@@ -310,3 +310,12 @@ resource "google_project_iam_member" "ms-entra-id-DDS_Cloud_Admins" {
   member  = "principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DDS_Cloud_Admins"
   project = "cal-itp-data-infra-staging"
 }
+
+resource "google_project_iam_member" "ms-entra-id-DDS_Cloud_Owners" {
+  for_each = toset([
+    "roles/owner"
+  ])
+  role    = each.key
+  member  = "principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DDS_Cloud_Owners"
+  project = "cal-itp-data-infra-staging"
+}
