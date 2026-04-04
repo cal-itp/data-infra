@@ -58,7 +58,7 @@ class TestAirtableIssuesCreateOperator:
                 "service_name": "Service B",
                 "service_record_id": "rec_service_2",
                 "max_end_date": date(2026, 1, 30),
-                "expiration_status": "Expiring",
+                "expiration_status": "Expiring in Less Than 30 Days",
             },
         ]
 
@@ -174,7 +174,7 @@ class TestAirtableIssuesCreateOperator:
                 "issue_number": 102,
                 "gtfs_dataset_name": "Dataset B",
                 "service_name": "Service B",
-                "expiration_status": "Expiring",
+                "expiration_status": "Expiring in Less Than 30 Days",
                 "max_end_date": "2026-01-30",
             },
         ]
