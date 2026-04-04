@@ -4,9 +4,7 @@ from datetime import datetime, timedelta
 import pendulum
 from operators.airtable_issues_email_operator import AirtableIssuesEmailOperator
 from operators.airtable_issues_update_operator import AirtableIssuesUpdateOperator
-from operators.bigquery_to_airtable_issues_operator import (
-    BigQueryToAirtableIssuesOperator,
-)
+from operators.tdq_bigquery_rows_operator import TDQBigQueryRowsOperator
 
 from airflow import DAG
 from airflow.models.xcom_arg import XComArg
@@ -31,12 +29,19 @@ with DAG(
         depends_on_past=False,
     )
 
-    airtable_issues = BigQueryToAirtableIssuesOperator(
-        task_id="bigquery_to_airtable_issues",
+    close_expired_issue_candidates = TDQBigQueryRowsOperator(
+        task_id="bq_close_expired_issues_candidates",
         retries=1,
         retry_delay=timedelta(seconds=10),
         dataset_name="mart_transit_database",
         table_name="fct_close_expired_issues",
+        columns=[
+            "issue_number",
+            "issue_source_record_id",
+            "outreach_status",
+            "gtfs_dataset_name",
+            "new_end_date",
+        ],
     )
 
     update_airtable_issues = AirtableIssuesUpdateOperator(
@@ -46,7 +51,7 @@ with DAG(
         airtable_conn_id="airtable_issue_management",
         air_base_id="appmBGOFTvsDv4jdJ",
         air_table_name=dag.default_args["air_table_name"],
-        rows=XComArg(airtable_issues),
+        rows=XComArg(close_expired_issue_candidates),
     )
 
     send_airtable_issue_email = AirtableIssuesEmailOperator(
@@ -60,7 +65,7 @@ with DAG(
 
     (
         latest_only
-        >> airtable_issues
+        >> close_expired_issue_candidates
         >> update_airtable_issues
         >> send_airtable_issue_email
     )

@@ -6,7 +6,7 @@ from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.bigquery import BigQueryHook
 
 
-class BigQueryToAirtableIssuesOperator(BaseOperator):
+class TDQBigQueryRowsOperator(BaseOperator):
     template_fields: Sequence[str] = (
         "dataset_name",
         "table_name",
@@ -18,21 +18,14 @@ class BigQueryToAirtableIssuesOperator(BaseOperator):
         self,
         dataset_name: str,
         table_name: str,
-        columns: list[str] | None = None,
+        columns: list[str],
         gcp_conn_id: str = "google_cloud_default",
         **kwargs,
     ) -> None:
         super().__init__(**kwargs)
-
         self.dataset_name = dataset_name
         self.table_name = table_name
-        self.columns = columns or [
-            "issue_number",
-            "issue_source_record_id",
-            "outreach_status",
-            "gtfs_dataset_name",
-            "new_end_date",
-        ]
+        self.columns = columns
         self.gcp_conn_id = gcp_conn_id
 
     def location(self) -> str | None:
@@ -48,7 +41,7 @@ class BigQueryToAirtableIssuesOperator(BaseOperator):
     def rows(self) -> list[tuple[Any, ...]]:
         return self.bigquery_hook().get_records(
             sql=f"""
-                SELECT {','.join(self.columns)}
+                SELECT {", ".join(self.columns)}
                 FROM `{self.dataset_name}.{self.table_name}`
             """
         )
