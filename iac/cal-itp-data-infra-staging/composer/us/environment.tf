@@ -14,7 +14,7 @@ resource "google_composer_environment" "calitp-staging-composer" {
 
     workloads_config {
       scheduler {
-        cpu        = 1
+        cpu        = 2
         memory_gb  = 2
         storage_gb = 1
         count      = 1
@@ -25,15 +25,15 @@ resource "google_composer_environment" "calitp-staging-composer" {
         storage_gb = 1
       }
       worker {
-        cpu        = 2
-        memory_gb  = 8
-        storage_gb = 1
+        cpu        = 4
+        memory_gb  = 13
+        storage_gb = 5
         min_count  = 1
-        max_count  = 2
+        max_count  = 8
       }
     }
 
-    environment_size = "ENVIRONMENT_SIZE_SMALL"
+    environment_size = "ENVIRONMENT_SIZE_MEDIUM"
 
     software_config {
       image_version = "composer-2.15.2-airflow-2.10.5"
