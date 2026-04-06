@@ -117,6 +117,7 @@ def download_and_parse_littlepay():
                     prefix=os.path.join(config["prefix"], entity),
                     bucket=config["bucket"],
                     aws_conn_id=f"aws_{provider}",
+                    pool="littlepay_list_pool",
                 )
 
                 synced_files = LittlepayS3ToGCSOperator.partial(
@@ -136,6 +137,7 @@ def download_and_parse_littlepay():
                     destination_search_glob="**/{{ basename(task.source_path) }}",
                     destination_path="{{ task.entity }}/instance={{ task.provider }}/filename={{ basename(task.source_path) }}/ts={{ task.ts }}/{{ basename(task.source_path) }}",
                     report_path="raw_littlepay_sync_job_result/instance={{ task.provider }}/ts={{ task.ts }}/results_{{ basename(task.source_path) }}.jsonl",
+                    pool="littlepay_download_pool",
                 ).expand(source_path=source_paths.output)
 
                 parsed_files = LittlepayPSVToJSONLOperator.partial(
@@ -150,6 +152,7 @@ def download_and_parse_littlepay():
                     map_index_template="{{ task.filename }}",
                     source_path="{{ task.entity }}/instance={{ task.provider }}/filename={{ task.filename }}/ts={{ task.ts }}/{{ task.filename }}",
                     destination_path="{{ task.entity }}/instance={{ task.provider }}/extract_filename={{ task.filename }}/ts={{ task.ts }}/{{ splitext(task.filename)[0] }}.jsonl.gz",
+                    pool="littlepay_parse_pool",
                 ).expand_kwargs(
                     synced_files.output.map(
                         lambda file: {
