@@ -627,3 +627,13 @@ The date (Pacific Time) of the first tap transaction
 {% docs lp_paired_first_day_of_week %}
 Pacific Time day of week value of the first tap transaction represented as an integer in the range [1,7] with `Sunday = 1`.
 {% enddocs %}
+
+-------------------------------- FUNDING SOURCES TABLE --------------------------------
+
+{% docs lp_bin %}
+First six numbers of the PAN.
+{% enddocs %}
+
+{% docs lp_card_scheme %}
+Card scheme of this funding source. One of (`VISA`, `MASTERCARD`, `DISCOVER`, `AMEX`).
+{% enddocs %}
