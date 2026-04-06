@@ -1,6 +1,7 @@
 import csv
 import io
 import json
+import os
 from typing import Sequence
 
 from src.bigquery_cleaner import BigQueryCleaner
@@ -29,6 +30,7 @@ class LittlepayPSVToJSONLOperator(BaseOperator):
         "source_path",
         "destination_bucket",
         "destination_path",
+        "report_path",
         "provider",
         "entity",
         "ts",
@@ -42,6 +44,7 @@ class LittlepayPSVToJSONLOperator(BaseOperator):
         source_path: str,
         destination_bucket: str,
         destination_path: str,
+        report_path: str,
         provider: str,
         entity: str,
         ts: str,
@@ -56,26 +59,36 @@ class LittlepayPSVToJSONLOperator(BaseOperator):
         self.source_path: str = source_path
         self.destination_bucket: str = destination_bucket
         self.destination_path: str = destination_path
+        self.report_path: str = report_path
         self.provider: str = provider
         self.entity: str = entity
         self.ts: str = ts
         self.filename: str = filename
         self.gcp_conn_id: str = gcp_conn_id
+        self._source_metadata = None
 
     def gcs_hook(self) -> GCSHook:
         return GCSHook(gcp_conn_id=self.gcp_conn_id)
 
-    def destination_name(self) -> str:
-        return self.destination_bucket.replace("gs://", "")
-
-    def source_name(self) -> str:
+    def source_bucket_name(self) -> str:
         return self.source_bucket.replace("gs://", "")
 
     def source(self) -> bytes:
         return self.gcs_hook().download(
-            bucket_name=self.source_name(),
+            bucket_name=self.source_bucket_name(),
             object_name=self.source_path,
         )
+
+    def source_metadata(self) -> dict:
+        if self._source_metadata is None:
+            metadata = self.gcs_hook().get_metadata(
+                bucket_name=self.source_bucket_name(),
+                object_name=self.source_path,
+            )
+            self._source_metadata = json.loads(
+                metadata.get("PARTITIONED_ARTIFACT_METADATA", "{}")
+            )
+        return self._source_metadata
 
     def rows(self) -> bytes:
         reader = csv.DictReader(
@@ -88,13 +101,52 @@ class LittlepayPSVToJSONLOperator(BaseOperator):
             for line_number, row in enumerate(reader, start=1)
         ]
 
+    def destination_bucket_name(self) -> str:
+        return self.destination_bucket.replace("gs://", "")
+
+    def destination_filename(self) -> str:
+        return os.path.basename(self.destination_path)
+
+    def destination_metadata(self) -> dict:
+        return {
+            "filename": self.destination_filename(),
+            "extract": self.source_metadata(),
+        }
+
     def execute(self, context: Context) -> str:
         self.gcs_hook().upload(
-            bucket_name=self.destination_name(),
+            bucket_name=self.destination_bucket_name(),
             object_name=self.destination_path,
             data=JsonlFormatter(self.rows()).format(),
             mime_type="application/jsonl",
             gzip=True,
+            metadata={
+                "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                    self.destination_metadata(),
+                    separators=(",", ":"),
+                    default=str,
+                )
+            },
+        )
+
+        self.gcs_hook().upload(
+            bucket_name=self.destination_bucket_name(),
+            object_name=self.report_path,
+            data=json.dumps(
+                self.destination_metadata(),
+                default=str,
+            ),
+            mime_type="application/jsonl",
+            gzip=False,
+            metadata={
+                "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                    {
+                        "filename": f"results_{self.filename}.jsonl",
+                        "instance": self.provider,
+                        "ts": self.ts,
+                    }
+                )
+            },
         )
 
         return {

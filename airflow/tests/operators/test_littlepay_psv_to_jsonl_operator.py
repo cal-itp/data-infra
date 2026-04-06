@@ -29,6 +29,10 @@ class TestLittlepayPSVToJSONLOperator:
         return "authorisations/instance=atn/extract_filename=202510241114_authorisations.psv/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl.gz"
 
     @pytest.fixture
+    def report_path(self) -> str:
+        return "parse_littlepay_job_result/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl"
+
+    @pytest.fixture
     def test_dag(self, execution_date: datetime) -> DAG:
         return DAG(
             "test_dag",
@@ -47,6 +51,7 @@ class TestLittlepayPSVToJSONLOperator:
         execution_date: datetime,
         destination_path: str,
         source_path: str,
+        report_path: str,
     ) -> LittlepayPSVToJSONLOperator:
         return LittlepayPSVToJSONLOperator(
             task_id="littlepay_to_jsonl",
@@ -55,6 +60,7 @@ class TestLittlepayPSVToJSONLOperator:
             source_path=source_path,
             destination_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_PARSED_V3"),
             destination_path=destination_path,
+            report_path=report_path,
             entity="authorisations",
             provider="atn",
             filename="202510241114_authorisations.psv",
@@ -69,6 +75,8 @@ class TestLittlepayPSVToJSONLOperator:
         operator: LittlepayPSVToJSONLOperator,
         execution_date: datetime,
         gcs_hook: GCSHook,
+        destination_path: str,
+        report_path: str,
     ):
         operator.run(
             start_date=execution_date,
@@ -93,7 +101,7 @@ class TestLittlepayPSVToJSONLOperator:
             bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_PARSED_V3").replace(
                 "gs://", ""
             ),
-            object_name=xcom_value["destination_path"],
+            object_name=destination_path,
         )
         decompressed_result = gzip.decompress(compressed_result)
         result = [json.loads(x) for x in decompressed_result.splitlines()]
@@ -112,4 +120,71 @@ class TestLittlepayPSVToJSONLOperator:
             "response_code": "100",
             "retrieval_reference_number": "1234567890123456789012",
             "status": "VERIFIED",
+        }
+
+        metadata = gcs_hook.get_metadata(
+            bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_PARSED_V3").replace(
+                "gs://", ""
+            ),
+            object_name=destination_path,
+        )
+        parsed_metadata = json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"])
+        assert parsed_metadata == {
+            "filename": "202510241114_authorisations.jsonl.gz",
+            "extract": {
+                "filename": "202510241114_authorisations.psv",
+                "instance": "atn",
+                "s3bucket": "mock-littlepay-bucket",
+                "s3object": {
+                    "Key": "atn/v3/authorisations/202510241114_authorisations.psv",
+                    "LastModified": parsed_metadata["extract"]["s3object"][
+                        "LastModified"
+                    ],
+                    "ETag": "5d46e84b9c9fa3cc87e4916c452c4de8",
+                    "Size": 429,
+                    "StorageClass": None,
+                },
+                "ts": "2025-06-01T00:00:00+00:00",
+            },
+        }
+
+        report = gcs_hook.download(
+            bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_PARSED_V3").replace(
+                "gs://", ""
+            ),
+            object_name=report_path,
+        )
+        parsed_report = [json.loads(x) for x in report.splitlines()]
+        assert parsed_report[0] == {
+            "filename": "202510241114_authorisations.jsonl.gz",
+            "extract": {
+                "filename": "202510241114_authorisations.psv",
+                "instance": "atn",
+                "s3bucket": "mock-littlepay-bucket",
+                "s3object": {
+                    "Key": "atn/v3/authorisations/202510241114_authorisations.psv",
+                    "LastModified": parsed_report[0]["extract"]["s3object"][
+                        "LastModified"
+                    ],
+                    "ETag": "5d46e84b9c9fa3cc87e4916c452c4de8",
+                    "Size": 429,
+                    "StorageClass": None,
+                },
+                "ts": "2025-06-01T00:00:00+00:00",
+            },
+        }
+
+        report_metadata = gcs_hook.get_metadata(
+            bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_PARSED_V3").replace(
+                "gs://", ""
+            ),
+            object_name=report_path,
+        )
+        parsed_report_metadata = json.loads(
+            report_metadata["PARTITIONED_ARTIFACT_METADATA"]
+        )
+        assert parsed_report_metadata == {
+            "ts": "2025-06-01T00:00:00+00:00",
+            "filename": "results_202510241114_authorisations.psv.jsonl",
+            "instance": "atn",
         }
