@@ -1089,3 +1089,4 @@ models:
       - name: gtfs_dataset_record_id
       - name: service_name
       - name: service_record_id
+      - name: organization_name

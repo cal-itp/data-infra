@@ -72,7 +72,8 @@ expiring_datasets AS (
     dwe.max_end_date,
     dwe.expiration_status,
     dp.service_name,
-    dp.service_source_record_id
+    dp.service_source_record_id,
+    dp.organization_name
   FROM datasets_with_expiration dwe
   INNER JOIN {{ ref('dim_provider_gtfs_data') }} dp
     ON dwe.gtfs_dataset_key = dp.schedule_gtfs_dataset_key
@@ -112,7 +113,8 @@ expiring_datasets_with_airtable_ids AS (
     ed.service_name,
     ed.service_source_record_id,
     s.id AS service_record_id,
-    d.id AS gtfs_dataset_record_id
+    d.id AS gtfs_dataset_record_id,
+    ed.organization_name
   FROM expiring_datasets ed
   INNER JOIN airtable_services_latest s
     ON ed.service_source_record_id = s.source_record_id
@@ -127,6 +129,7 @@ aggregated_expiring_datasets AS (
     max_end_date,
     expiration_status,
     gtfs_dataset_record_id,
+    organization_name,
     ARRAY_AGG(
       STRUCT(
         service_name,
@@ -141,7 +144,8 @@ aggregated_expiring_datasets AS (
     gtfs_dataset_source_record_id,
     max_end_date,
     expiration_status,
-    gtfs_dataset_record_id
+    gtfs_dataset_record_id,
+    organization_name
 ),
 
 expiring_open_issues AS (
@@ -166,7 +170,8 @@ fct_create_expiring_gtfs_issues AS (
     aed.expiration_status,
     aed.gtfs_dataset_record_id,
     aed.service_info.service_name AS service_name,
-    aed.service_info.service_record_id AS service_record_id
+    aed.service_info.service_record_id AS service_record_id,
+    aed.organization_name
   FROM aggregated_expiring_datasets aed
   LEFT JOIN expiring_open_issues i
     ON aed.gtfs_dataset_source_record_id = i.gtfs_dataset_source_record_id
