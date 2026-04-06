@@ -43,6 +43,8 @@ resource "google_composer_environment" "calitp-composer" {
         core-dag_file_processor_timeout            = 1200
         core-dagbag_import_timeout                 = 600
         core-dags_are_paused_at_creation           = true
+        core-max_templated_field_length            = 25000
+        cosmos-use_dataset_airflow3_uri_standard   = true
         email-email_backend                        = "airflow.utils.email.send_email_smtp"
         email-email_conn_id                        = "smtp_postmark"
         email-from_email                           = "bot+airflow@calitp.org"
@@ -75,10 +77,10 @@ resource "google_composer_environment" "calitp-composer" {
         "CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"                  = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-download-config_name}",
         "CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG_PROD_SOURCE"      = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-download-config_name}",
         "CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG_TEST_DESTINATION" = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-download-config-test_name}",
-        "CALITP_BUCKET__GTFS_SCHEDULE_MANUAL"                  = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-schedule-manual_name}",
         "CALITP_BUCKET__GTFS_RT_PARSED"                        = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-rt-parsed_name}",
         "CALITP_BUCKET__GTFS_RT_RAW"                           = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-rt-raw-v2_name}",
         "CALITP_BUCKET__GTFS_RT_VALIDATION"                    = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-rt-validation_name}",
+        "CALITP_BUCKET__GTFS_SCHEDULE_MANUAL"                  = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-schedule-manual_name}",
         "CALITP_BUCKET__GTFS_SCHEDULE_PARSED"                  = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-schedule-parsed_name}",
         "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"           = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-schedule-parsed-hourly_name}",
         "CALITP_BUCKET__GTFS_SCHEDULE_RAW"                     = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-schedule-raw-v2_name}",
