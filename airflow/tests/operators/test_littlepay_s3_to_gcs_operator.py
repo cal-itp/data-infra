@@ -30,6 +30,26 @@ class TestLittlepayS3ToGCSOperator:
         return S3Hook()
 
     @pytest.fixture
+    def source_path(self) -> str:
+        return "atn/v3/authorisations/202510241114_authorisations.psv"
+
+    @pytest.fixture
+    def destination_path(self) -> str:
+        return "authorisations/instance=atn/filename=202510241114_authorisations.psv/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.psv"
+
+    @pytest.fixture
+    def destination_search_prefix(self) -> str:
+        return "authorisations/instance=atn/filename=202510241114_authorisations.psv"
+
+    @pytest.fixture
+    def destination_search_glob(self) -> str:
+        return "**/202510241114_authorisations.psv"
+
+    @pytest.fixture
+    def report_path(self) -> str:
+        return "raw_littlepay_sync_job_result/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl"
+
+    @pytest.fixture
     def test_dag(self, execution_date: datetime) -> DAG:
         return DAG(
             "test_dag",
@@ -43,7 +63,14 @@ class TestLittlepayS3ToGCSOperator:
 
     @pytest.fixture
     def operator(
-        self, execution_date: datetime, test_dag: DAG
+        self,
+        execution_date: datetime,
+        test_dag: DAG,
+        source_path: str,
+        destination_path: str,
+        destination_search_prefix: str,
+        destination_search_glob: str,
+        report_path: str,
     ) -> LittlepayS3ToGCSOperator:
         return LittlepayS3ToGCSOperator(
             dag=test_dag,
@@ -54,12 +81,12 @@ class TestLittlepayS3ToGCSOperator:
             aws_conn_id="aws_default",
             gcp_conn_id="google_cloud_default",
             source_bucket="mock-littlepay-bucket",
-            source_path="atn/v3/authorisations/202510241114_authorisations.psv",
+            source_path=source_path,
             destination_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3"),
-            destination_path="authorisations/instance=atn/filename=202510241114_authorisations.psv/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.psv",
-            destination_search_prefix="authorisations/instance=atn/filename=202510241114_authorisations.psv",
-            destination_search_glob="**/202510241114_authorisations.psv",
-            report_path="raw_littlepay_sync_job_result/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl",
+            destination_path=destination_path,
+            destination_search_prefix=destination_search_prefix,
+            destination_search_glob=destination_search_glob,
+            report_path=report_path,
         )
 
     @mock_aws
@@ -71,13 +98,18 @@ class TestLittlepayS3ToGCSOperator:
         execution_date: datetime,
         gcs_hook: GCSHook,
         s3_hook: S3Hook,
+        source_path: str,
+        destination_search_prefix: str,
+        destination_search_glob: str,
+        destination_path: str,
+        report_path: str,
     ):
         old_files = gcs_hook.list(
             bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3").replace(
                 "gs://", ""
             ),
-            prefix="authorisations/instance=atn/filename=202510241114_authorisations.psv",
-            match_glob="**/202510241114_authorisations.psv",
+            prefix=destination_search_prefix,
+            match_glob=destination_search_glob,
         )
         for file in old_files:
             gcs_hook.delete(
@@ -95,12 +127,12 @@ class TestLittlepayS3ToGCSOperator:
         )
         s3_hook.load_file(
             filename=fixture_path,
-            key="atn/v3/authorisations/202510241114_authorisations.psv",
+            key=source_path,
             bucket_name="mock-littlepay-bucket",
         )
         s3_file = s3_hook.get_key(
             bucket_name="mock-littlepay-bucket",
-            key="atn/v3/authorisations/202510241114_authorisations.psv",
+            key=source_path,
         ).get()
 
         operator.run(
@@ -136,7 +168,7 @@ class TestLittlepayS3ToGCSOperator:
             bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3").replace(
                 "gs://", ""
             ),
-            object_name=xcom_value["destination_path"],
+            object_name=destination_path,
         )
         reader = csv.DictReader(
             StringIO(psv_result.decode("utf-8-sig")),
@@ -166,7 +198,7 @@ class TestLittlepayS3ToGCSOperator:
             bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3").replace(
                 "gs://", ""
             ),
-            object_name=xcom_value["destination_path"],
+            object_name=destination_path,
         )
         parsed_metadata = json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"])
         assert parsed_metadata == {
@@ -187,7 +219,7 @@ class TestLittlepayS3ToGCSOperator:
             bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3").replace(
                 "gs://", ""
             ),
-            object_name=xcom_value["report_path"],
+            object_name=report_path,
         )
         parsed_report = [json.loads(x) for x in report.splitlines()]
         assert parsed_report[0] == {
@@ -215,7 +247,7 @@ class TestLittlepayS3ToGCSOperator:
             bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3").replace(
                 "gs://", ""
             ),
-            object_name=xcom_value["report_path"],
+            object_name=report_path,
         )
         parsed_report_metadata = json.loads(
             report_metadata["PARTITIONED_ARTIFACT_METADATA"]
@@ -225,6 +257,32 @@ class TestLittlepayS3ToGCSOperator:
             "filename": "results_202510241114_authorisations.psv.jsonl",
             "instance": "atn",
         }
+
+    @pytest.fixture
+    def file_exists_source_path(self) -> str:
+        return "atn/v3/authorisations/202504291120_authorisations.psv"
+
+    @pytest.fixture
+    def file_exists_destination_path(self) -> str:
+        return (
+            "authorisations/instance=atn/filename=202504291120_authorisations.psv/ts=2025-06-01T00:00:00+00:00/202504291120_authorisations.psv",
+        )
+
+    @pytest.fixture
+    def file_exists_path(self) -> str:
+        return "authorisations/instance=atn/filename=202504291120_authorisations.psv/ts=2025-05-01T00:00:00+00:00/202504291120_authorisations.psv"
+
+    @pytest.fixture
+    def file_exists_destination_search_prefix(self) -> str:
+        return "authorisations/instance=atn/filename=202504291120_authorisations.psv"
+
+    @pytest.fixture
+    def file_exists_destination_search_glob(self) -> str:
+        return "**/202504291120_authorisations.psv"
+
+    @pytest.fixture
+    def file_exists_report_path(self) -> str:
+        return "raw_littlepay_sync_job_result/instance=atn/ts=2025-06-01T00:00:00+00:00/202504291120_authorisations.jsonl"
 
     @pytest.fixture
     def file_exists_dag(self, execution_date: datetime) -> DAG:
@@ -240,7 +298,14 @@ class TestLittlepayS3ToGCSOperator:
 
     @pytest.fixture
     def file_exists_operator(
-        self, execution_date: datetime, file_exists_dag: DAG
+        self,
+        execution_date: datetime,
+        file_exists_dag: DAG,
+        file_exists_source_path: str,
+        file_exists_destination_path: str,
+        file_exists_destination_search_prefix: str,
+        file_exists_destination_search_glob: str,
+        file_exists_report_path: str,
     ) -> LittlepayS3ToGCSOperator:
         return LittlepayS3ToGCSOperator(
             dag=file_exists_dag,
@@ -251,12 +316,12 @@ class TestLittlepayS3ToGCSOperator:
             aws_conn_id="aws_default",
             gcp_conn_id="google_cloud_default",
             source_bucket="mock-littlepay-bucket",
-            source_path="atn/v3/authorisations/202504291120_authorisations.psv",
+            source_path=file_exists_source_path,
             destination_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3"),
-            destination_path="authorisations/instance=atn/filename=202504291120_authorisations.psv/ts=2025-06-01T00:00:00+00:00/202504291120_authorisations.psv",
-            destination_search_prefix="authorisations/instance=atn/filename=202504291120_authorisations.psv",
-            destination_search_glob="**/202504291120_authorisations.psv",
-            report_path="raw_littlepay_sync_job_result/instance=atn/ts=2025-06-01T00:00:00+00:00/202504291120_authorisations.jsonl",
+            destination_path=file_exists_destination_path,
+            destination_search_prefix=file_exists_destination_search_prefix,
+            destination_search_glob=file_exists_destination_search_glob,
+            report_path=file_exists_report_path,
         )
 
     @mock_aws
@@ -268,6 +333,8 @@ class TestLittlepayS3ToGCSOperator:
         execution_date: datetime,
         gcs_hook: GCSHook,
         s3_hook: S3Hook,
+        file_exists_source_path: str,
+        file_exists_path: str,
     ):
         with freeze_time("2026-03-01T00:00:00"):
             s3_hook.create_bucket("mock-littlepay-bucket")
@@ -279,12 +346,12 @@ class TestLittlepayS3ToGCSOperator:
             )
             s3_hook.load_file(
                 filename=fixture_path,
-                key="atn/v3/authorisations/202504291120_authorisations.psv",
+                key=file_exists_source_path,
                 bucket_name="mock-littlepay-bucket",
             )
             s3_file = s3_hook.get_key(
                 bucket_name="mock-littlepay-bucket",
-                key="atn/v3/authorisations/202504291120_authorisations.psv",
+                key=file_exists_source_path,
             ).get()
 
         with open(fixture_path, "r") as fixture_file:
@@ -292,7 +359,7 @@ class TestLittlepayS3ToGCSOperator:
                 bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3").replace(
                     "gs://", ""
                 ),
-                object_name="authorisations/instance=atn/filename=202504291120_authorisations.psv/ts=2025-05-01T00:00:00+00:00/202504291120_authorisations.psv",
+                object_name=file_exists_path,
                 data=fixture_file.read(),
                 mime_type="binary/octet-stream",
                 gzip=False,
@@ -304,7 +371,7 @@ class TestLittlepayS3ToGCSOperator:
                             "ts": "2025-05-01T00:00:00+00:00",
                             "s3bucket": "mock-littlepay-bucket",
                             "s3object": {
-                                "Key": "atn/v3/authorisations/202504291120_authorisations.psv",
+                                "Key": file_exists_source_path,
                                 "LastModified": str(s3_file["LastModified"]),
                                 "ETag": s3_file["ETag"].replace('"', ""),
                                 "Size": s3_file["ContentLength"],
@@ -327,6 +394,30 @@ class TestLittlepayS3ToGCSOperator:
         assert xcom_value is None
 
     @pytest.fixture
+    def old_file_source_path(self) -> str:
+        return "atn/v3/authorisations/202504300000_authorisations.psv"
+
+    @pytest.fixture
+    def old_file_destination_path(self) -> str:
+        return "authorisations/instance=atn/filename=202504300000_authorisations.psv/ts=2025-06-01T00:00:00+00:00/202504300000_authorisations.psv"
+
+    @pytest.fixture
+    def old_file_path(self) -> str:
+        return "authorisations/instance=atn/filename=202504300000_authorisations.psv/ts=2025-05-01T00:00:00+00:00/202504300000_authorisations.psv"
+
+    @pytest.fixture
+    def old_file_destination_search_prefix(self) -> str:
+        return "authorisations/instance=atn/filename=202504300000_authorisations.psv"
+
+    @pytest.fixture
+    def old_file_destination_search_glob(self) -> str:
+        return "**/202504300000_authorisations.psv"
+
+    @pytest.fixture
+    def old_file_report_path(self) -> str:
+        return "raw_littlepay_sync_job_result/instance=atn/ts=2025-06-01T00:00:00+00:00/202504300000_authorisations.jsonl"
+
+    @pytest.fixture
     def old_file_dag(self, execution_date: datetime) -> DAG:
         return DAG(
             "test_old_file_dag",
@@ -340,7 +431,14 @@ class TestLittlepayS3ToGCSOperator:
 
     @pytest.fixture
     def old_file_operator(
-        self, execution_date: datetime, old_file_dag: DAG
+        self,
+        execution_date: datetime,
+        old_file_dag: DAG,
+        old_file_source_path: str,
+        old_file_destination_path: str,
+        old_file_destination_search_prefix: str,
+        old_file_destination_search_glob: str,
+        old_file_report_path: str,
     ) -> LittlepayS3ToGCSOperator:
         return LittlepayS3ToGCSOperator(
             dag=old_file_dag,
@@ -351,12 +449,12 @@ class TestLittlepayS3ToGCSOperator:
             aws_conn_id="aws_default",
             gcp_conn_id="google_cloud_default",
             source_bucket="mock-littlepay-bucket",
-            source_path="atn/v3/authorisations/202504300000_authorisations.psv",
+            source_path=old_file_source_path,
             destination_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3"),
-            destination_path="authorisations/instance=atn/filename=202504300000_authorisations.psv/ts=2025-06-01T00:00:00+00:00/202504300000_authorisations.psv",
-            destination_search_prefix="authorisations/instance=atn/filename=202504300000_authorisations.psv",
-            destination_search_glob="**/202504300000_authorisations.psv",
-            report_path="raw_littlepay_sync_job_result/instance=atn/ts=2025-06-01T00:00:00+00:00/202504300000_authorisations.jsonl",
+            destination_path=old_file_destination_path,
+            destination_search_prefix=old_file_destination_search_prefix,
+            destination_search_glob=old_file_destination_search_glob,
+            report_path=old_file_report_path,
         )
 
     @mock_aws
@@ -368,6 +466,10 @@ class TestLittlepayS3ToGCSOperator:
         execution_date: datetime,
         gcs_hook: GCSHook,
         s3_hook: S3Hook,
+        old_file_source_path: str,
+        old_file_path: str,
+        old_file_destination_path: str,
+        old_file_report_path: str,
     ):
         s3_hook.create_bucket("mock-littlepay-bucket")
         fixture_path = os.path.normpath(
@@ -378,12 +480,12 @@ class TestLittlepayS3ToGCSOperator:
         )
         s3_hook.load_file(
             filename=fixture_path,
-            key="atn/v3/authorisations/202504300000_authorisations.psv",
+            key=old_file_source_path,
             bucket_name="mock-littlepay-bucket",
         )
         s3_file = s3_hook.get_key(
             bucket_name="mock-littlepay-bucket",
-            key="atn/v3/authorisations/202504300000_authorisations.psv",
+            key=old_file_source_path,
         ).get()
 
         with open(fixture_path, "r") as fixture_file:
@@ -391,7 +493,7 @@ class TestLittlepayS3ToGCSOperator:
                 bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3").replace(
                     "gs://", ""
                 ),
-                object_name="authorisations/instance=atn/filename=202504300000_authorisations.psv/ts=2025-05-01T00:00:00+00:00/202504300000_authorisations.psv",
+                object_name=old_file_path,
                 data=fixture_file.read(),
                 mime_type="binary/octet-stream",
                 gzip=False,
@@ -403,7 +505,7 @@ class TestLittlepayS3ToGCSOperator:
                             "ts": "2025-05-01T00:00:00+00:00",
                             "s3bucket": "mock-littlepay-bucket",
                             "s3object": {
-                                "Key": "atn/v3/authorisations/202504300000_authorisations.psv",
+                                "Key": old_file_source_path,
                                 "LastModified": "2025-05-01 00:00:00+00:00",
                                 "ETag": s3_file["ETag"].replace('"', ""),
                                 "Size": s3_file["ContentLength"],
@@ -447,7 +549,7 @@ class TestLittlepayS3ToGCSOperator:
             bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3").replace(
                 "gs://", ""
             ),
-            object_name=xcom_value["destination_path"],
+            object_name=old_file_destination_path,
         )
         parsed_metadata = json.loads(metadata["PARTITIONED_ARTIFACT_METADATA"])
         assert parsed_metadata == {
@@ -468,7 +570,7 @@ class TestLittlepayS3ToGCSOperator:
             bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3").replace(
                 "gs://", ""
             ),
-            object_name=xcom_value["report_path"],
+            object_name=old_file_report_path,
         )
         parsed_report = [json.loads(x) for x in report.splitlines()]
         assert parsed_report[0] == {
@@ -502,7 +604,7 @@ class TestLittlepayS3ToGCSOperator:
             bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3").replace(
                 "gs://", ""
             ),
-            object_name=xcom_value["report_path"],
+            object_name=old_file_report_path,
         )
         parsed_report_metadata = json.loads(
             report_metadata["PARTITIONED_ARTIFACT_METADATA"]
