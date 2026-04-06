@@ -171,7 +171,11 @@ fct_create_expiring_gtfs_issues AS (
     aed.gtfs_dataset_record_id,
     aed.service_info.service_name AS service_name,
     aed.service_info.service_record_id AS service_record_id,
+<<<<<<< Updated upstream
     organization_name
+=======
+    aed.organization_name
+>>>>>>> Stashed changes
   FROM aggregated_expiring_datasets aed
   LEFT JOIN expiring_open_issues i
     ON aed.gtfs_dataset_source_record_id = i.gtfs_dataset_source_record_id
