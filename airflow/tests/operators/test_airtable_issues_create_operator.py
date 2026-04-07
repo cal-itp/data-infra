@@ -51,6 +51,7 @@ class TestAirtableIssuesCreateOperator:
                 "service_record_id": "rec_service_1",
                 "max_end_date": date(2026, 1, 15),
                 "expiration_status": "Expired",
+                "organization_name": "Organization A",
             },
             {
                 "gtfs_dataset_name": "Dataset B",
@@ -59,6 +60,7 @@ class TestAirtableIssuesCreateOperator:
                 "service_record_id": "rec_service_2",
                 "max_end_date": date(2026, 1, 30),
                 "expiration_status": "Expiring in Less Than 30 Days",
+                "organization_name": "Organization B",
             },
         ]
 
@@ -139,26 +141,22 @@ class TestAirtableIssuesCreateOperator:
 
         assert captured["records"] == [
             {
-                "fields": {
-                    "Issue Type": ["recXHbaInR8Uebp5D"],
-                    "GTFS Datasets": ["rec_dataset_1"],
-                    "Status": "Outreach",
-                    "Outreach Status": "Waiting on Customer Success",
-                    "Description": "The feed expired on 2026-01-15.",
-                    "Services": ["rec_service_1"],
-                    "Waiting Since": "2026-01-01",
-                }
+                "Issue Type": ["recXHbaInR8Uebp5D"],
+                "GTFS Datasets": ["rec_dataset_1"],
+                "Status": "Outreach",
+                "Outreach Status": "Waiting on Customer Success",
+                "Description": "The feed expired on 2026-01-15.",
+                "Services": ["rec_service_1"],
+                "Waiting Since": "2026-01-01",
             },
             {
-                "fields": {
-                    "Issue Type": ["recEmZkgNkfKgYe6N"],
-                    "GTFS Datasets": ["rec_dataset_2"],
-                    "Status": "Outreach",
-                    "Outreach Status": "Waiting on Customer Success",
-                    "Description": "The feed is about to expire on 2026-01-30.",
-                    "Services": ["rec_service_2"],
-                    "Waiting Since": "2026-01-01",
-                }
+                "Issue Type": ["recEmZkgNkfKgYe6N"],
+                "GTFS Datasets": ["rec_dataset_2"],
+                "Status": "Outreach",
+                "Outreach Status": "Waiting on Customer Success",
+                "Description": "The feed is about to expire on 2026-01-30.",
+                "Services": ["rec_service_2"],
+                "Waiting Since": "2026-01-01",
             },
         ]
 
@@ -169,6 +167,7 @@ class TestAirtableIssuesCreateOperator:
                 "service_name": "Service A",
                 "expiration_status": "Expired",
                 "max_end_date": "2026-01-15",
+                "organization_name": "Organization A",
             },
             {
                 "issue_number": 102,
@@ -176,5 +175,6 @@ class TestAirtableIssuesCreateOperator:
                 "service_name": "Service B",
                 "expiration_status": "Expiring in Less Than 30 Days",
                 "max_end_date": "2026-01-30",
+                "organization_name": "Organization B",
             },
         ]

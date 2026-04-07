@@ -82,6 +82,7 @@ class AirtableIssuesCreateOperator(BaseOperator):
                     "service_name": source_row["service_name"],
                     "expiration_status": source_row["expiration_status"],
                     "max_end_date": str(source_row["max_end_date"]),
+                    "organization_name": source_row["organization_name"],
                 }
             )
 
