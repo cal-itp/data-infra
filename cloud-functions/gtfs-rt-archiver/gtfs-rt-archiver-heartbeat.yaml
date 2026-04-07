@@ -1,0 +1,95 @@
+main:
+  params: [event]
+  steps:
+    - init:
+        assign:
+          - input: $${json.decode(base64.decode(event.data.message.data))}
+          - messages: []
+          - currentTime: $${sys.now()}
+          - currentMinute: $${math.floor(currentTime / 60) * 60}
+
+    - runQuery:
+        call: googleapis.bigquery.v2.jobs.query
+        args:
+          projectId: $${sys.get_env("GOOGLE_CLOUD_PROJECT_ID")}
+          body:
+            useLegacySql: false
+            useQueryCache: true
+            timeoutMs: 30000
+            maxResults: $${input.limit}
+            query:
+              SELECT
+              d.name, d.type, d.pipeline_url,
+              d.authorization_url_parameter_name,
+              d.url_secret_key_name,
+              d.authorization_header_parameter_name,
+              d.header_secret_key_name,
+              (
+              SELECT s.pipeline_url
+              FROM `staging.int_gtfs_datasets` AS s
+              WHERE d.schedule_to_use_for_rt_validation_gtfs_dataset_key = s.source_record_id
+              AND s._is_current
+              AND s.data_quality_pipeline
+              AND s.deprecated_date IS NULL
+              ) AS schedule_url_for_validation
+              FROM `staging.int_gtfs_datasets` as d
+              WHERE d._is_current
+              AND d.data_quality_pipeline
+              AND d.deprecated_date IS NULL
+              AND type IN ('service_alerts', 'trip_updates', 'vehicle_positions')
+        result: queryResult
+
+    - prepareMessages:
+        for:
+          value: row
+          in: $${queryResult.rows}
+          steps:
+            - prepareData:
+                assign:
+                  - data:
+                      extracted_at: $${time.format(currentTime)}
+                      name: $${row.f[0].v}
+                      feed_type: $${row.f[1].v}
+                      url: $${row.f[2].v}
+                      schedule_url_for_validation: $${row.f[7].v}
+                      auth_query_params: {}
+                      auth_headers: {}
+            - assignParams:
+                switch:
+                  - condition: $${row.f[3].v != null}
+                    steps:
+                      - setQueryParam:
+                          assign:
+                            - data.auth_query_params:
+                                $${row.f[3].v}: $${row.f[4].v}
+                  - condition: $${row.f[5].v != null}
+                    steps:
+                      - setHeader:
+                          assign:
+                            - data.auth_headers:
+                                $${row.f[5].v}: $${row.f[6].v}
+            - appendMessage:
+                assign:
+                  - message:
+                      data: $${base64.encode(json.encode(data))}
+                  - messages: $${list.concat(messages, message)}
+
+    - publishMessages:
+        parallel:
+          for:
+            value: batchTime
+            in:
+              - $${currentMinute + 60}
+              - $${currentMinute + 80}
+              - $${currentMinute + 100}
+            steps:
+              - sleep:
+                  call: sys.sleep_until
+                  args:
+                    time: $${time.format(batchTime)}
+              - publish:
+                  call: googleapis.pubsub.v1.projects.topics.publish
+                  args:
+                    topic: $${sys.get_env("GTFS_RT_ARCHIVER__TOPIC")}
+                    body:
+                      messages: $${messages}
