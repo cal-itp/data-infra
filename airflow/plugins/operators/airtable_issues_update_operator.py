@@ -67,6 +67,7 @@ class AirtableIssuesUpdateOperator(BaseOperator):
                 "gtfs_dataset_name": row.get("gtfs_dataset_name"),
                 "status": self.derive_status(row.get("outreach_status")),
                 "new_end_date": row.get("new_end_date"),
+                "service_name": row.get("service_name"),
             }
             for row in rows
         ]
