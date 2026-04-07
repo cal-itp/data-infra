@@ -69,18 +69,86 @@ class AirtableIssuesEmailOperator(BaseOperator):
             ]
         )
 
+    def get_issue_type(self, expiration_status: str) -> str:
+        if expiration_status == "Expired":
+            return "Expired Schedule Feed"
+        return "About to Expire Schedule Feed"
+
+    def is_mtc_511_agency(self, gtfs_dataset_name: str) -> str:
+        return "Yes" if gtfs_dataset_name.startswith("Bay Area 511") else "No"
+
+    def build_ticket_description(
+        self, expiration_status: str, max_end_date: str
+    ) -> str:
+        return f"The feed is {expiration_status} on {max_end_date}"
+
+    def build_individual_create_email_subject(self, row: dict[str, Any]) -> str:
+        return (
+            f"{row.get('gtfs_dataset_name', '')} - {row.get('expiration_status', '')}"
+        )
+
+    def build_individual_create_email_body(self, row: dict[str, Any]) -> str:
+        gtfs_dataset_name = row.get("gtfs_dataset_name", "")
+        expiration_status = row.get("expiration_status", "")
+        max_end_date = row.get("max_end_date", "")
+        organization_name = row.get("organization_name", "")
+
+        ticket_description = self.build_ticket_description(
+            expiration_status=expiration_status,
+            max_end_date=max_end_date,
+        )
+        issue_type = self.get_issue_type(expiration_status)
+        is_mtc_511 = self.is_mtc_511_agency(gtfs_dataset_name)
+
+        return f"""
+        <b>Ticket description:</b> {ticket_description}<br><br>
+        <b>Issue Type:</b> {issue_type}<br><br>
+        <b>Is this an MTC 511 agency?</b> {is_mtc_511}<br><br>
+        <b>Companies Associated records:</b> {organization_name}<br><br>
+        <b>Internal Support Ticket Subject:</b> GTFS Data Quality
+        """
+
+    def send_individual_create_emails(
+        self, created_email_rows: list[dict[str, Any]]
+    ) -> None:
+        recipient = "tdq@calitp.org"
+
+        for row in created_email_rows:
+            subject = self.build_individual_create_email_subject(row)
+            body = self.build_individual_create_email_body(row)
+
+            send_email(
+                to=recipient,
+                subject=subject,
+                html_content=body,
+            )
+
+            self.log.info(
+                "Sent individual create email for gtfs_dataset_name=%s",
+                row.get("gtfs_dataset_name", ""),
+            )
+
     def build_email_body(
         self,
         closed_email_rows: list[dict[str, Any]],
         closed_failed_batches: list[dict[str, Any]],
         created_email_rows: list[dict[str, Any]],
         created_failed_batches: list[dict[str, Any]],
+        individual_create_emails_sent: bool = False,
     ) -> str:
         closed_table_rows = self.build_closed_table_rows(closed_email_rows)
         created_table_rows = self.build_created_table_rows(created_email_rows)
 
         closed_failed_html = self.build_failed_html(closed_failed_batches)
         created_failed_html = self.build_failed_html(created_failed_batches)
+
+        # ✅ Polished HubSpot section
+        hubspot_section = ""
+        if individual_create_emails_sent:
+            hubspot_section = """
+            <b>✅ HubSpot Ticket Creation</b><br><br>
+            Corresponding tickets were submitted in HubSpot.<br><br>
+            """
 
         return f"""
         <b>✅ Successfully updated {len(closed_email_rows)} Airtable records.</b><br><br>
@@ -112,6 +180,8 @@ class AirtableIssuesEmailOperator(BaseOperator):
             {created_table_rows}
         </table><br><br>
 
+        {hubspot_section}
+
         <b>❌ Failed create batches:</b><br>
         {created_failed_html}
         """
@@ -137,11 +207,18 @@ class AirtableIssuesEmailOperator(BaseOperator):
                 "reason": "no_updated_or_created_rows",
             }
 
+        individual_create_emails_sent = False
+
+        if created_email_rows:
+            self.send_individual_create_emails(created_email_rows)
+            individual_create_emails_sent = True
+
         body = self.build_email_body(
             closed_email_rows=closed_email_rows,
             closed_failed_batches=closed_failed_batches,
             created_email_rows=created_email_rows,
             created_failed_batches=created_failed_batches,
+            individual_create_emails_sent=individual_create_emails_sent,
         )
 
         send_email(
@@ -150,7 +227,7 @@ class AirtableIssuesEmailOperator(BaseOperator):
             html_content=body,
         )
 
-        self.log.info("Email sent via Airflow send_email.")
+        self.log.info("Mass summary email sent via Airflow send_email.")
 
         return {
             "email_sent": True,
