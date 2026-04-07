@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from typing import Any, Sequence
 
 from airflow.models import BaseOperator
@@ -101,17 +102,19 @@ class AirtableIssuesEmailOperator(BaseOperator):
         is_mtc_511 = self.is_mtc_511_agency(gtfs_dataset_name)
 
         return f"""
-        <b>Ticket description:</b> {ticket_description}<br><br>
-        <b>Issue Type:</b> {issue_type}<br><br>
-        <b>Is this an MTC 511 agency?</b> {is_mtc_511}<br><br>
-        <b>Companies Associated records:</b> {organization_name}<br><br>
-        <b>Internal Support Ticket Subject:</b> GTFS Data Quality
+        <table>
+            <tr><td><b>Ticket description:</b></td><td>{ticket_description}</td></tr>
+            <tr><td><b>Issue Type:</b></td><td>{issue_type}</td></tr>
+            <tr><td><b>Is this an MTC 511 agency?</b></td><td>{is_mtc_511}</td></tr>
+            <tr><td><b>Companies Associated records:</b></td><td>{organization_name}</td></tr>
+            <tr><td><b>Internal Support Ticket Subject:</b></td><td>GTFS Data Quality</td></tr>
+        </table>
         """
 
     def send_individual_create_emails(
         self, created_email_rows: list[dict[str, Any]]
     ) -> None:
-        recipient = "tdq@calitp.org"
+        recipient = os.getenv("HUBSPOT_NOTIFICATION_EMAIL")
 
         for row in created_email_rows:
             subject = self.build_individual_create_email_subject(row)
@@ -151,22 +154,6 @@ class AirtableIssuesEmailOperator(BaseOperator):
             """
 
         return f"""
-        <b>✅ Successfully updated {len(closed_email_rows)} Airtable records.</b><br><br>
-        <b>Closed the following About to Expire Issues:</b><br>
-        <table border="1" cellspacing="0" cellpadding="5">
-            <tr>
-                <th>Issue Number</th>
-                <th>GTFS Dataset Name</th>
-                <th>Service Name</th>
-                <th>Status</th>
-                <th>New End Date</th>
-            </tr>
-            {closed_table_rows}
-        </table><br><br>
-
-        <b>❌ Failed update batches:</b><br>
-        {closed_failed_html}<br><br>
-
         <b>✅ Successfully created {len(created_email_rows)} Airtable records.</b><br><br>
         <b>Created the following About to Expire Issues:</b><br>
         <table border="1" cellspacing="0" cellpadding="5">
@@ -183,7 +170,23 @@ class AirtableIssuesEmailOperator(BaseOperator):
         {hubspot_section}
 
         <b>❌ Failed create batches:</b><br>
-        {created_failed_html}
+        {created_failed_html}<br><br>
+
+        <b>✅ Successfully updated {len(closed_email_rows)} Airtable records.</b><br><br>
+        <b>Closed the following About to Expire Issues:</b><br>
+        <table border="1" cellspacing="0" cellpadding="5">
+            <tr>
+                <th>Issue Number</th>
+                <th>GTFS Dataset Name</th>
+                <th>Service Name</th>
+                <th>Status</th>
+                <th>New End Date</th>
+            </tr>
+            {closed_table_rows}
+        </table><br><br>
+
+        <b>❌ Failed update batches:</b><br>
+        {closed_failed_html}
         """
 
     def execute(self, context: Context) -> dict[str, Any]:
