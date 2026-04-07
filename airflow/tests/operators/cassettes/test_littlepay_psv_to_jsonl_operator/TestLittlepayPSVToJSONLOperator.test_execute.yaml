@@ -215,7 +215,7 @@ interactions:
       message: OK
 - request:
     body: "--===============1729203768063896600==\r\ncontent-type: application/json;
-      charset=UTF-8\r\n\r\n{\"name\": \"parse_littlepay_job_result/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl\",
+      charset=UTF-8\r\n\r\n{\"name\": \"littlepay_parse_job_results/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl\",
       \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"filename\\\": \\\"results_202510241114_authorisations.psv.jsonl\\\",
       \\\"instance\\\": \\\"atn\\\", \\\"ts\\\": \\\"2025-06-01T00:00:00+00:00\\\"}\"},
       \"crc32c\": \"iR/TAA==\"}\r\n--===============1729203768063896600==\r\ncontent-type:
@@ -252,10 +252,10 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/parse_littlepay_job_result/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl/1775537087121280\",\n
-        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/parse_littlepay_job_result%2Finstance=atn%2Fts=2025-06-01T00:00:00%2B00:00%2F202510241114_authorisations.jsonl\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/parse_littlepay_job_result%2Finstance=atn%2Fts=2025-06-01T00:00:00%2B00:00%2F202510241114_authorisations.jsonl?generation=1775537087121280&alt=media\",\n
-        \ \"name\": \"parse_littlepay_job_result/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/littlepay_parse_job_results/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl/1775537087121280\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/littlepay_parse_job_results%2Finstance=atn%2Fts=2025-06-01T00:00:00%2B00:00%2F202510241114_authorisations.jsonl\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/littlepay_parse_job_results%2Finstance=atn%2Fts=2025-06-01T00:00:00%2B00:00%2F202510241114_authorisations.jsonl?generation=1775537087121280&alt=media\",\n
+        \ \"name\": \"littlepay_parse_job_results/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl\",\n
         \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1775537087121280\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
         \ \"storageClass\": \"STANDARD\",\n  \"size\": \"405\",\n  \"md5Hash\": \"XzH5zlEshvXuPCPOK6jreQ==\",\n
@@ -509,7 +509,7 @@ interactions:
       message: OK
 - request:
     body: "--===============6097712581739327618==\r\ncontent-type: application/json;
-      charset=UTF-8\r\n\r\n{\"name\": \"parse_littlepay_job_result/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl\",
+      charset=UTF-8\r\n\r\n{\"name\": \"littlepay_parse_job_results/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl\",
       \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"filename\\\": \\\"results_202510241114_authorisations.psv.jsonl\\\",
       \\\"instance\\\": \\\"atn\\\", \\\"ts\\\": \\\"2025-06-01T00:00:00+00:00\\\"}\"},
       \"crc32c\": \"iR/TAA==\"}\r\n--===============6097712581739327618==\r\ncontent-type:
@@ -546,10 +546,10 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/parse_littlepay_job_result/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl/1775537091573922\",\n
-        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/parse_littlepay_job_result%2Finstance=atn%2Fts=2025-06-01T00:00:00%2B00:00%2F202510241114_authorisations.jsonl\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/parse_littlepay_job_result%2Finstance=atn%2Fts=2025-06-01T00:00:00%2B00:00%2F202510241114_authorisations.jsonl?generation=1775537091573922&alt=media\",\n
-        \ \"name\": \"parse_littlepay_job_result/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/littlepay_parse_job_results/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl/1775537091573922\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/littlepay_parse_job_results%2Finstance=atn%2Fts=2025-06-01T00:00:00%2B00:00%2F202510241114_authorisations.jsonl\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/littlepay_parse_job_results%2Finstance=atn%2Fts=2025-06-01T00:00:00%2B00:00%2F202510241114_authorisations.jsonl?generation=1775537091573922&alt=media\",\n
+        \ \"name\": \"littlepay_parse_job_results/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl\",\n
         \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1775537091573922\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
         \ \"storageClass\": \"STANDARD\",\n  \"size\": \"405\",\n  \"md5Hash\": \"XzH5zlEshvXuPCPOK6jreQ==\",\n
@@ -731,7 +731,7 @@ interactions:
       x-upload-content-type:
       - application/json; charset=UTF-8
     method: GET
-    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/parse_littlepay_job_result%2Finstance%3Datn%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2F202510241114_authorisations.jsonl?alt=media
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/littlepay_parse_job_results%2Finstance%3Datn%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2F202510241114_authorisations.jsonl?alt=media
   response:
     body:
       string: '{"filename": "202510241114_authorisations.jsonl.gz", "extract": {"filename":
@@ -800,10 +800,10 @@ interactions:
       x-goog-user-project:
       - cal-itp-data-infra
     method: GET
-    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/parse_littlepay_job_result%2Finstance%3Datn%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2F202510241114_authorisations.jsonl?prettyPrint=false&projection=noAcl
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/littlepay_parse_job_results%2Finstance%3Datn%2Fts%3D2025-06-01T00%3A00%3A00%2B00%3A00%2F202510241114_authorisations.jsonl?prettyPrint=false&projection=noAcl
   response:
     body:
-      string: '{"kind":"storage#object","id":"calitp-staging-pytest/parse_littlepay_job_result/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl/1775537091573922","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/parse_littlepay_job_result%2Finstance=atn%2Fts=2025-06-01T00:00:00%2B00:00%2F202510241114_authorisations.jsonl","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/parse_littlepay_job_result%2Finstance=atn%2Fts=2025-06-01T00:00:00%2B00:00%2F202510241114_authorisations.jsonl?generation=1775537091573922&alt=media","name":"parse_littlepay_job_result/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl","bucket":"calitp-staging-pytest","generation":"1775537091573922","metageneration":"1","contentType":"application/jsonl","storageClass":"STANDARD","size":"405","md5Hash":"XzH5zlEshvXuPCPOK6jreQ==","crc32c":"iR/TAA==","etag":"CKLxg4332pMDEAE=","timeCreated":"2026-04-07T04:44:51.581Z","updated":"2026-04-07T04:44:51.581Z","timeStorageClassUpdated":"2026-04-07T04:44:51.581Z","timeFinalized":"2026-04-07T04:44:51.581Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/littlepay_parse_job_results/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl/1775537091573922","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/littlepay_parse_job_results%2Finstance=atn%2Fts=2025-06-01T00:00:00%2B00:00%2F202510241114_authorisations.jsonl","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/littlepay_parse_job_results%2Finstance=atn%2Fts=2025-06-01T00:00:00%2B00:00%2F202510241114_authorisations.jsonl?generation=1775537091573922&alt=media","name":"littlepay_parse_job_results/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl","bucket":"calitp-staging-pytest","generation":"1775537091573922","metageneration":"1","contentType":"application/jsonl","storageClass":"STANDARD","size":"405","md5Hash":"XzH5zlEshvXuPCPOK6jreQ==","crc32c":"iR/TAA==","etag":"CKLxg4332pMDEAE=","timeCreated":"2026-04-07T04:44:51.581Z","updated":"2026-04-07T04:44:51.581Z","timeStorageClassUpdated":"2026-04-07T04:44:51.581Z","timeFinalized":"2026-04-07T04:44:51.581Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":
         \"results_202510241114_authorisations.psv.jsonl\", \"instance\": \"atn\",
         \"ts\": \"2025-06-01T00:00:00+00:00\"}"}}'
     headers:
