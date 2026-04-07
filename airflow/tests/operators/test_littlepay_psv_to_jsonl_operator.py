@@ -30,7 +30,7 @@ class TestLittlepayPSVToJSONLOperator:
 
     @pytest.fixture
     def report_path(self) -> str:
-        return "parse_littlepay_job_result/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl"
+        return "littlepay_parse_job_results/instance=atn/ts=2025-06-01T00:00:00+00:00/202510241114_authorisations.jsonl"
 
     @pytest.fixture
     def test_dag(self, execution_date: datetime) -> DAG:

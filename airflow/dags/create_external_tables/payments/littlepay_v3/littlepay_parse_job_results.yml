@@ -1,0 +1,35 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__LITTLEPAY_PARSED_V3') }}"
+source_objects:
+  - "littlepay_parse_job_results/*.jsonl"
+destination_project_dataset_table: "external_littlepay_v3.littlepay_parse_job_results"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "littlepay_parse_job_results/{instance:STRING}/{ts:TIMESTAMP}/"
+schema_fields:
+  # For data security, do not show the bucket name or file path.
+  - name: filename
+    type: STRING
+  - name: extract
+    type: RECORD
+    fields:
+    - name: filename
+      type: STRING
+    - name: instance
+      type: STRING
+    - name: ts
+      type: TIMESTAMP
+    - name: s3object
+      type: RECORD
+      fields:
+        - name: ETag
+          type: STRING
+        - name: LastModified
+          type: TIMESTAMP
+        - name: Size
+          type: INTEGER
+        - name: StorageClass
+          type: STRING

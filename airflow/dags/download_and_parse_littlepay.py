@@ -151,7 +151,7 @@ def download_and_parse_littlepay():
                     trigger_rule=TriggerRule.ALL_DONE,
                     map_index_template="{{ task.filename }}",
                     destination_path="{{ task.entity }}/instance={{ task.provider }}/extract_filename={{ task.filename }}/ts={{ task.ts }}/{{ splitext(task.filename)[0] }}.jsonl.gz",
-                    report_path="parse_littlepay_job_result/instance={{ task.provider }}/ts={{ task.ts }}/results_{{ splitext(task.filename)[0] }}.jsonl",
+                    report_path="littlepay_parse_job_results/instance={{ task.provider }}/ts={{ task.ts }}/results_{{ splitext(task.filename)[0] }}.jsonl",
                     pool="littlepay_parse_pool",
                 ).expand_kwargs(
                     synced_files.output.map(
