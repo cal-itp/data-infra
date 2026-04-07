@@ -136,7 +136,7 @@ def download_and_parse_littlepay():
                     destination_search_prefix="{{ task.entity }}/instance={{ task.provider }}/filename={{ basename(task.source_path) }}",
                     destination_search_glob="**/{{ basename(task.source_path) }}",
                     destination_path="{{ task.entity }}/instance={{ task.provider }}/filename={{ basename(task.source_path) }}/ts={{ task.ts }}/{{ basename(task.source_path) }}",
-                    report_path="raw_littlepay_sync_job_result/instance={{ task.provider }}/ts={{ task.ts }}/results_{{ basename(task.source_path) }}.jsonl",
+                    report_path="raw_littlepay_sync_job_result/instance={{ task.provider }}/ts={{ task.ts }}/results_{{ splitext(basename(task.source_path))[0] }}.jsonl",
                     pool="littlepay_download_pool",
                 ).expand(source_path=source_paths.output)
 
@@ -150,9 +150,8 @@ def download_and_parse_littlepay():
                     ),
                     trigger_rule=TriggerRule.ALL_DONE,
                     map_index_template="{{ task.filename }}",
-                    source_path="{{ task.entity }}/instance={{ task.provider }}/filename={{ task.filename }}/ts={{ task.ts }}/{{ task.filename }}",
                     destination_path="{{ task.entity }}/instance={{ task.provider }}/extract_filename={{ task.filename }}/ts={{ task.ts }}/{{ splitext(task.filename)[0] }}.jsonl.gz",
-                    report_path="parse_littlepay_job_result/instance={{ task.provider }}/ts={{ task.ts }}/results_{{ basename(task.source_path) }}.jsonl",
+                    report_path="parse_littlepay_job_result/instance={{ task.provider }}/ts={{ task.ts }}/results_{{ splitext(task.filename)[0] }}.jsonl",
                     pool="littlepay_parse_pool",
                 ).expand_kwargs(
                     synced_files.output.map(
@@ -161,6 +160,7 @@ def download_and_parse_littlepay():
                             "provider": file["provider"],
                             "filename": file["filename"],
                             "ts": file["ts"],
+                            "source_path": file["destination_path"],
                         }
                     )
                 )
