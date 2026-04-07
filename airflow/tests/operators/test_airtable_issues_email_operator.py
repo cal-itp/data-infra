@@ -22,12 +22,14 @@ class TestAirtableIssuesEmailOperator:
                 {
                     "issue_number": "ISSUE-1",
                     "gtfs_dataset_name": "Dataset A",
+                    "service_name": "Service A",
                     "status": "Fixed - on its own",
                     "new_end_date": "2026-03-20",
                 },
                 {
                     "issue_number": "ISSUE-2",
                     "gtfs_dataset_name": "Dataset B",
+                    "service_name": "Service B",
                     "status": "Fixed - with Cal-ITP help",
                     "new_end_date": "2026-03-21",
                 },
@@ -80,6 +82,7 @@ class TestAirtableIssuesEmailOperator:
                 {
                     "issue_number": "ISSUE-1",
                     "gtfs_dataset_name": "Dataset A",
+                    "service_name": "Service A",
                     "status": "Fixed - on its own",
                     "new_end_date": "2026-03-20",
                 }
@@ -101,6 +104,7 @@ class TestAirtableIssuesEmailOperator:
         assert "Closed the following About to Expire Issues:" in body
         assert "ISSUE-1" in body
         assert "Dataset A" in body
+        assert "Service A" in body
         assert "Fixed - on its own" in body
 
         # Created section

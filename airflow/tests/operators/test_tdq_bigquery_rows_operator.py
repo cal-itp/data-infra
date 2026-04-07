@@ -31,18 +31,11 @@ class TestTDQBigQueryRowsOperator:
             gcp_conn_id="google_cloud_default",
             dataset_name="mart_transit_database",
             table_name="fct_close_expired_issues",
-            columns=[
-                "issue_number",
-                "issue_source_record_id",
-                "outreach_status",
-                "gtfs_dataset_name",
-                "new_end_date",
-            ],
             dag=test_dag,
         )
 
     @pytest.mark.vcr
-    def test_execute(
+    def test_execute_returns_list_of_expected_shape(
         self,
         test_dag: DAG,
         operator: TDQBigQueryRowsOperator,
@@ -57,6 +50,99 @@ class TestTDQBigQueryRowsOperator:
         task = test_dag.get_task("bq_close_expired_issues_candidates")
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
+
+        assert isinstance(xcom_value, list)
+
+        expected_keys = {
+            "issue_number",
+            "issue_source_record_id",
+            "outreach_status",
+            "gtfs_dataset_name",
+            "new_end_date",
+            "service_name",
+        }
+
+        for row in xcom_value:
+            assert isinstance(row, dict)
+            assert set(row.keys()) == expected_keys
+            assert row["issue_number"] is not None
+            assert row["issue_source_record_id"] is not None
+
+    def test_execute_maps_rows_correctly(self, test_dag: DAG, monkeypatch):
+        operator = TDQBigQueryRowsOperator(
+            task_id="bq_close_expired_issues_candidates",
+            gcp_conn_id="google_cloud_default",
+            dataset_name="mart_transit_database",
+            table_name="fct_close_expired_issues",
+            dag=test_dag,
+        )
+
+        mock_records = [
+            (
+                1078,
+                "rechtGSfdkkJZwDP4",
+                "Waiting on Customer Success",
+                "Bay Area 511 County Connection Schedule",
+                "2026-06-06",
+                "County Connection",
+            ),
+            (
+                1084,
+                "rec5BRnMbyZtBmVr0",
+                "Waiting on Transit Agency",
+                "Big Blue Bus Schedule",
+                "2026-08-08",
+                "Big Blue Bus",
+            ),
+        ]
+
+        mock_columns = [
+            "issue_number",
+            "issue_source_record_id",
+            "outreach_status",
+            "gtfs_dataset_name",
+            "new_end_date",
+            "service_name",
+        ]
+
+        class MockField:
+            def __init__(self, name):
+                self.name = name
+
+        class MockRow:
+            def __init__(self, values):
+                self._values = values
+
+            def values(self):
+                return self._values
+
+        class MockQueryResult:
+            def __init__(self, columns, records):
+                self.schema = [MockField(name) for name in columns]
+                self._records = [MockRow(record) for record in records]
+
+            def __iter__(self):
+                return iter(self._records)
+
+            def result(self):
+                return self
+
+        class MockClient:
+            def query(self, sql):
+                return MockQueryResult(mock_columns, mock_records)
+
+        class MockBigQueryHook:
+            def get_client(self):
+                return MockClient()
+
+        monkeypatch.setattr(
+            operator,
+            "bigquery_hook",
+            lambda: MockBigQueryHook(),
+        )
+
+        result = operator.execute(context={})
+
         expected = [
             {
                 "issue_number": 1078,
@@ -64,6 +150,7 @@ class TestTDQBigQueryRowsOperator:
                 "outreach_status": "Waiting on Customer Success",
                 "gtfs_dataset_name": "Bay Area 511 County Connection Schedule",
                 "new_end_date": "2026-06-06",
+                "service_name": "County Connection",
             },
             {
                 "issue_number": 1084,
@@ -71,24 +158,8 @@ class TestTDQBigQueryRowsOperator:
                 "outreach_status": "Waiting on Transit Agency",
                 "gtfs_dataset_name": "Big Blue Bus Schedule",
                 "new_end_date": "2026-08-08",
-            },
-            {
-                "issue_number": 1071,
-                "issue_source_record_id": "reckV7n1rPNpsSEVk",
-                "outreach_status": "Waiting on Transit Agency",
-                "gtfs_dataset_name": "Imperial Valley Transit Schedule",
-                "new_end_date": "2026-12-31",
-            },
-            {
-                "issue_number": 1091,
-                "issue_source_record_id": "recUUScFqcoCGvNzz",
-                "outreach_status": "Waiting on Customer Success",
-                "gtfs_dataset_name": "Bay Area 511 Sonoma-Marin Area Rail Transit Schedule",
-                "new_end_date": "2027-01-10",
+                "service_name": "Big Blue Bus",
             },
         ]
 
-        xcom_value_sorted = sorted(xcom_value, key=lambda row: row["issue_number"])
-        expected_sorted = sorted(expected, key=lambda row: row["issue_number"])
-
-        assert xcom_value_sorted == expected_sorted
+        assert result == expected

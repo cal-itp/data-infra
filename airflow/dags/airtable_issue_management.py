@@ -38,13 +38,13 @@ with DAG(
             retry_delay=timedelta(seconds=10),
             dataset_name="mart_transit_database",
             table_name="fct_close_expired_issues",
-            columns=[
-                "issue_number",
-                "issue_source_record_id",
-                "outreach_status",
-                "gtfs_dataset_name",
-                "new_end_date",
-            ],
+            # columns=[
+            #     "issue_number",
+            #     "issue_source_record_id",
+            #     "outreach_status",
+            #     "gtfs_dataset_name",
+            #     "new_end_date",
+            # ],
         )
 
         update_airtable_issues = AirtableIssuesUpdateOperator(
@@ -66,14 +66,14 @@ with DAG(
             retry_delay=timedelta(seconds=10),
             dataset_name="mart_transit_database",
             table_name="fct_create_expiring_gtfs_issues",
-            columns=[
-                "gtfs_dataset_name",
-                "gtfs_dataset_record_id",
-                "service_name",
-                "service_record_id",
-                "max_end_date",
-                "expiration_status",
-            ],
+            # columns=[
+            #     "gtfs_dataset_name",
+            #     "gtfs_dataset_record_id",
+            #     "service_name",
+            #     "service_record_id",
+            #     "max_end_date",
+            #     "expiration_status",
+            # ],
         )
 
         create_airtable_issues = AirtableIssuesCreateOperator(

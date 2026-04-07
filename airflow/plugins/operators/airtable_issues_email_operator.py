@@ -37,6 +37,7 @@ class AirtableIssuesEmailOperator(BaseOperator):
             table_rows += (
                 f"<tr><td>{row.get('issue_number', '')}</td>"
                 f"<td>{row.get('gtfs_dataset_name', '')}</td>"
+                f"<td>{row.get('service_name', '')}</td>"
                 f"<td>{row.get('status', '')}</td>"
                 f"<td>{row.get('new_end_date', '')}</td></tr>"
             )
@@ -88,6 +89,7 @@ class AirtableIssuesEmailOperator(BaseOperator):
             <tr>
                 <th>Issue Number</th>
                 <th>GTFS Dataset Name</th>
+                <th>Service Name</th>
                 <th>Status</th>
                 <th>New End Date</th>
             </tr>

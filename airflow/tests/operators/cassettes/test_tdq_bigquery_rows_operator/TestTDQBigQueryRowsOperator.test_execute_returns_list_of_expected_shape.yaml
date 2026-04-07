@@ -1,0 +1,358 @@
+interactions:
+- request:
+    body: '{"jobReference": {"jobId": "c8504aa5-99e4-4125-a9f6-e2620261a861", "projectId":
+      "cal-itp-data-infra-staging"}, "configuration": {"query": {"useLegacySql": false,
+      "query": "\n            SELECT *\n            FROM `mart_transit_database.fct_close_expired_issues`\n        "}}}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '275'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - gl-python/3.11.10 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      X-Goog-API-Client:
+      - gl-python/3.11.10 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: POST
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/jobs?prettyPrint=false
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/61WbXPaRhD+K4yaTx0DkkAgM5NpHaw0TIxxQW6ath7lpFvhS447RXfCdjL+7907
+        SRhip5Nkyhdg3+7Z3ed277PzgQnqTJyUrT9WUN799F6mzpEDmqxRqv+Kp+lrmI3Ozxeztxfz6JOm
+        f66fP0cLZrwywrtMF11KNOkykZekq9CTifWkUt0bUNrvZWHgDgkJusfHMOwOPT/okuN81AV/5Lv+
+        yCPhyMN4Cnh+xsQHjHqtdaEm/X6LqbeWcs2BFEz1MrnZyftbv1+U8j1kWvW/DqWPKaH+G2D8wmVG
+        NJPieYsegWVS5GxdlVbhTD479uy9H84/orP3WUVn0TTu/HwofblczDvvNqTUiS6JUEwnBmlKFPTy
+        TCcZlwoSuC1YCTRhSlWg3j2EQBwU8TBhUcQk5WAQNNnP/rsXxhmFCmrDJIVBMKDpKKDpGAJ/kI9o
+        QANvADmBFGvhpiTLvHCIftqcZL2IkAJcMqb+eBy6Q4+GNB+7ue8GYZjmJPewonnqDQbZMEupG2Tp
+        kAIhNiolgyAck9C5P3JuSqbhlKlCYg1sRZ03y1kcJfHy8nx6Ekd4alEyiWamtrPzOFqeTOPZH0ZR
+        KTiDNcnuVh+5M8kJV4Ahsb/xXYEFcX6/jJZvnVq0hBxKENn3FQoda6NvY21LGPTYUQaPx3iaYbsy
+        ZQ7PSqjbxjYGpDceB1j18NgLhqFjjUv9SDfyDPlA0Eca/DadkZrwF3ca1EUpM1AKDGwXNYf8vOAE
+        0f392RHExlm57qSzqHRR6fYWuy2IuTqEMD6uIXwpPzbUuCFML01eJ1scFW7PD2rZXFmB4+/bzMnt
+        oY0VWBssDn2I49WCNki4b2B9dgZ1hNDe0A1mAwdBGtl+nH2zNtTO7CGaJeh+Yp5FbaRtNO/ArMlt
+        36yOZsfadZXnHOqC23a1BX+kWBWM810XS8hkSdUScz2UvMEjNIhGWJCSoBefCQyjmkNNVhw00Iun
+        tIaclfkzXcwvziJ745SGQlmaNPtgGZ2cGnmVtirnmTexcykR1SaF8qjzzG8ESlZlBkkNMGEUVYOJ
+        rDQ2KrtO6vNQNpysda6SZhYlhpAoDSYKyi1D/0Ywmgi4SZB2xhIQhJ2d3zc6nav7o10udr48Ssbg
+        N0ANMAPDnIxG8aKTGMhrcN1E1vfk6v4KvbmsL4jvP5BpLqm5VC9mvzWjBw3NnN4gcvrk7UQdcCbA
+        Fhs4KVBlw4bj9lavDk4qsBI4my4F0y13dv1thaatu2OXlRBmbD94GFQ2MvJB26n7GNZXx8mD5sU+
+        P1P8g7BiBiWy/0nkGXYfXjHdTGrD4GYkU7vBasL90A57kg0H++qrzLC9RErCBoRu9ka9s9vZORO5
+        NPNTFlhR9snO7lN8ETGuvhTXKYC4JiarZIuJ4Ob61O4EUhScYckMGdW1RMz2gGQ/xL7Z1T0uD5sW
+        FqpsGNQUfIMITKZTU9XVwYKxWc/39ZcKCWyxWd2P7cL/q+C4twVuboqzTNl8F/GraJngiFktzg1z
+        bwtcUm0xLDU6VILqCKk712QLnek8ik96bX0eMy3HhxGPbiGrbK+ax1qtH7cLubK1sq1H+eniPDIa
+        fGuIjBWEJzgeTF1Qt5PhI5SRzZfvz3bpq/6ay5Tw/o0sP+QSR+CFlFz1qdTdjHTXcttvYvZfkvKa
+        0N6KcNiwX9GglxEMu61fHNPmgdAWCJ8M9VxZRjhWVnF06tzf/wspRbMbqwsAAA==
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 07 Apr 2026 01:04:51 GMT
+      ETag:
+      - tZTCbKeI6NNOIYPMEztdXg==
+      Server:
+      - ESF
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - X-Origin
+      - Referer
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gl-python/3.11.10 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      X-Goog-API-Client:
+      - gl-python/3.11.10 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: GET
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/c8504aa5-99e4-4125-a9f6-e2620261a861?location=us-west2&maxResults=0&prettyPrint=false
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/5WSXUvDMBSG/0u8XWCr23AFL/wYOhhD67wSKVn6tkbbpOacbIyx/246BUVE2FWS
+        N+9zPnKyE2/GFiIVK1O9B/jtSQW+7zYZKNRMcWmdJYieAKsqOjFfnerHq/ZhfZ1MRs19WK8XqM7P
+        o4P0Cxol0p0oDeqCRPq0E1Y1iJghCshtaFbw0crbtlNni+X0ZppFoXFFJywe5/OLy/lU7Hu/UHLB
+        a+Qe2vkiN8V3kIdlNlvc/B/DBfZQ+iUnVhzoOLjikvJCsSJwftCOwgl+bWLpx5MWmxy26HL/IK8v
+        ltO/uOd9T7y6VYYSHlajG0Tr3Ss0z7oZa1VLw63sOpHGll7J+BqVsZU4gJ+ms1F/qNRITiYYyuEg
+        GUk1KccSyTjpJ+OBOhsPor12WrFxNhKB5AbESSxcsGNVZ24TRy/64ut8uWXQnXcaRCi+bmK+K9e0
+        NWJnKfuAXqwv/p9bwyItVU3YfwC861+xnQIAAA==
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 07 Apr 2026 01:04:51 GMT
+      ETag:
+      - eLb3cUCpSvD295mQuvvNeg==
+      Server:
+      - ESF
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - X-Origin
+      - Referer
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gl-python/3.11.10 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      X-Goog-API-Client:
+      - gl-python/3.11.10 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: GET
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/c8504aa5-99e4-4125-a9f6-e2620261a861?fields=jobReference%2CtotalRows%2CpageToken%2Crows&formatOptions.useInt64Timestamp=True&location=us-west2&prettyPrint=false
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/yXLQQqEMAxA0btkbaAttlhvMFtvkKlRKqURm8GFePdxmO3n/Qs2eU+88ME1MYwX
+        7IdsnPQ1wwiJCmbdcSYlzHU5CJvSmusK3W/8o8GbnshjjNxjb51HiktAdsEZFywNwT68SCLNUp/j
+        0/Dkpg7uDlSUyiRne7qB+wv/oK0rkAAAAA==
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 07 Apr 2026 01:04:52 GMT
+      ETag:
+      - eLb3cUCpSvD295mQuvvNeg==
+      Server:
+      - ESF
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - X-Origin
+      - Referer
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"jobReference": {"jobId": "f525ca4a-3abe-4d6b-96ec-22544d839bcb", "projectId":
+      "cal-itp-data-infra-staging"}, "configuration": {"query": {"useLegacySql": false,
+      "query": "\n            SELECT *\n            FROM `mart_transit_database.fct_close_expired_issues`\n        "}}}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '275'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - gl-python/3.11.10 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      X-Goog-API-Client:
+      - gl-python/3.11.10 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: POST
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/jobs?prettyPrint=false
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/5VTbU/bMBD+K8j7NpGmzUuTVkIbL0HrgMJKYEyaVM72JRjcONgurEL89zlpKWyI
+        ieVTdM9zd889d34gN6LiZEioKG/nqBcfrhUlmwQtlC66OBhfpNn27df7czm42I8H5ejooNzacgzR
+        ZDGQnrC1x8GCJ6pCg2dcpqjK4dx492hs0CniIGYQgRcCRS/ifeoN+si8IIijiKfhgLKmo0FZHIrq
+        xlW9srY2Q99/0tQplSolQi1Mh6nZOu7fBX6t1TUya/y3pfhuJOO/R8YnqRhYoaqtJ/VOGFNVIcq5
+        bgEyfCBt7xc/5Ge18eI7zQ6z3Xzj45/R/cnx0cblDLSdWg2VEXbaKKVgsFMwO2VSGZzir1po5FNh
+        zBzN5XMJp4M7PaJqVeRAJTYKVtOP/r2LJtkFDS6JU4phHHLajzlNMA7Cos9jHvdCLABpN+h3KTDW
+        SyOXZ5tObRZUqsIuJDxIkrQb9XjKi6RbBN04TWkBRa8XxAXthSGLGOXdmNGII0BblUMYpwmk5HGT
+        3GthcU+YWjkPWkfJ98koz6b55Gy8u51nrmuthXK0xtvROM8m27v56LwB5gYPsQS2OL2VZFiANOhK
+        uv3mi9oZQr6dZZMfZBmaYIEaK/Z/RrnElvTOq306GJexPhnX3tWzwq2LmaY507hcm5g1IntJEjvX
+        00EY9fqkJWv7GksGzTus+CskjsNmM8qC3FlYNCdaMTQGG9ldh6zv823KM7IjpFyHGbAr/CIsGVo9
+        x+UYOMPKruxdnjZ5XE04b6drSQ7cOx5nzexueRUTNcipmdPGdIetY+5VC5j9/aCfXDR+KRUF6d8r
+        fVMozfBEKWl8rqzHwCvVnb+q6e+DvgLeOQWJM/HZEToMXNm75Qp3V45PEMzy0TLFG5GTzJ3IaZ7t
+        uSF+A5wfmi38BAAA
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 07 Apr 2026 01:04:53 GMT
+      ETag:
+      - yKNX8EAqJwVl9XF59gIMKg==
+      Server:
+      - ESF
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - X-Origin
+      - Referer
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gl-python/3.11.10 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      X-Goog-API-Client:
+      - gl-python/3.11.10 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: GET
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/f525ca4a-3abe-4d6b-96ec-22544d839bcb?location=us-west2&maxResults=0&prettyPrint=false
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/5WSXU/CMBSG/0u9pdGMjwgJF4AEiITIRC80Zunas1Hc2tlzCiGE/26HJBpjTLhq
+        +/Z9zkdPD+xdG8V6LNX5hwe3v8qBlvUmBvQFYVgqaxBYgwGJPDjvq/bkZfScd6bbgZ11qusu7FbL
+        fj84UK6hFKx3YJmGQiHrvR6YESUETCN6SIwvU3DBSvuqVmeL1XgyjoNQWlULi6f5fDCcj9mx8QtF
+        652ExIG0TiVafQd5XMWzxeT/GNaTAyHXCZIgj5fBOWWYKEECgZKTdhGO4LY6lH45aWCXgFF17h/k
+        3WA1/ot7OzbYxqYxZODASKgHUTm7AUmzesZSFFxTxetOuDaZEzy8Rq5Nzk7gyZS1o7YULcGbIgXe
+        Up2UdzsgeRS1Wy112+ymMg32wkpB2ppAeOQ7QIpC4YwsiSK2uzB6dsPO5+GeAB+clYAI6nwT8o1s
+        WRUQOuuR89AI9YX/M9X0dT5+Ao/NN5ScAgAA
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 07 Apr 2026 01:04:53 GMT
+      ETag:
+      - Kp5GZCVg6HvAoI6p/9ewTQ==
+      Server:
+      - ESF
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - X-Origin
+      - Referer
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gl-python/3.11.10 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      X-Goog-API-Client:
+      - gl-python/3.11.10 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      x-goog-user-project:
+      - cal-itp-data-infra
+    method: GET
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/f525ca4a-3abe-4d6b-96ec-22544d839bcb?fields=jobReference%2CtotalRows%2CpageToken%2Crows&formatOptions.useInt64Timestamp=True&location=us-west2&prettyPrint=false
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/x3LQQqEMAxA0btkbWCoVUZvMFtvkKapVEorNoML8e52Zvt5/4KtuEWCHJJZYL5g
+        P8omrB8PMzAljLqjJyWMORyEVWmNeYXuN/5RGMzAZAl7coLWjw6nURiNGaz1735y7BpPhUljye34
+        VjylqoG7Ay1KaSlnbf0F9wNq3arPkAAAAA==
+    headers:
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 07 Apr 2026 01:04:53 GMT
+      ETag:
+      - Kp5GZCVg6HvAoI6p/9ewTQ==
+      Server:
+      - ESF
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - X-Origin
+      - Referer
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+version: 1
