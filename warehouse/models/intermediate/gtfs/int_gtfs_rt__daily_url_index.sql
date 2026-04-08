@@ -22,6 +22,8 @@ int_gtfs_rt__daily_url_index AS (
     LEFT JOIN gtfs_download_configs
         ON configs._config_extract_ts = gtfs_download_configs.ts
     WHERE gtfs_download_configs.feed_type IN ("service_alerts", "vehicle_positions", "trip_updates")
+    -- for cases where there are multiple extracts in the same day
+    QUALIFY RANK() OVER (PARTITION BY configs.dt, base64_url ORDER BY _config_extract_ts DESC) = 1
 )
 
 SELECT * FROM int_gtfs_rt__daily_url_index
