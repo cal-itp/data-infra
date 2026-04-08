@@ -1,12 +1,17 @@
 {{
     config(
         materialized='incremental',
-        incremental_strategy='insert_overwrite',
+        incremental_strategy='microbatch',
+        event_time = 'dt',
+        batch_size = 'day',
+        begin=var('PROD_GTFS_RT_START'),
+        lookback=var('DBT_ALL_MICROBATCH_LOOKBACK_DAYS'),
         partition_by={
             'field': 'dt',
             'data_type': 'date',
             'granularity': 'day',
         },
+        full_refresh=false,
         cluster_by='base64_url',
     )
 }}
@@ -14,11 +19,10 @@
 WITH service_alerts AS (
     SELECT *
     FROM {{ ref('fct_service_alerts_messages_unnested') }}
-    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
-        -- TODO: support route_id/direction_id/start_time as a trip identifier
-        -- as of 2023-04-20, there are no cases of service alert messages where trip ID is not populated and trip.route ID is populated
-        -- so if trip_id is not populated we assume it's not a trip-level alert
-        AND trip_id IS NOT NULL
+    -- TODO: support route_id/direction_id/start_time as a trip identifier
+    -- as of 2023-04-20, there are no cases of service alert messages where trip ID is not populated and trip.route ID is populated
+    -- so if trip_id is not populated we assume it's not a trip-level alert
+    WHERE trip_id IS NOT NULL
 ),
 
 -- group by *both* the UTC date that data was scraped (dt) *and* calculated service date
