@@ -722,4 +722,8 @@ models:
             where: '__rt_sampled__'
   - name: int_gtfs_rt__vehicle_positions_trip_stop_day_map_grouping
     description: |
-      Temporary copy for microbatch testing.
+      This table groups vehicle positions messages by `dt` (UTC) and `service_date` (usually Pacific)
+      to enable:
+        1. Incremental materialization based on `dt` (to make efficient use of upstream partitions)
+        2. Downstream grouping by `service_date` alone (since that is the appropriate final grain for trip-based analysis)
+      See downstream `fct_vehicle_positions_stop_metrics` table for further documentation.
