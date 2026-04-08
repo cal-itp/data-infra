@@ -15,7 +15,7 @@ This guide walks you through onboarding a new transit agency that uses Littlepay
 Collect the following before starting:
 
 - [ ] Littlepay AWS access key (JSON format)
-- [ ] Participant ID (e.g., `mst`, `sbmtd`)
+- [ ] Participant ID (e.g., `mst`, `clean-air-express`)
 - [ ] S3 bucket name from Littlepay
 - [ ] Agency's GTFS dataset `source_record_id` from `dim_gtfs_datasets` (where `_is_current` is TRUE)
 - [ ] Agency's Organization `source_record_id` from `dim_organizations` (where `_is_current` is TRUE)
@@ -48,7 +48,7 @@ Example credentials:
         "UserName": "agency-automated",
         "AccessKeyId": "AAA111BBBB222CCC333",
         "Status": "Active",
-        "SecretAccessKey": "ghuq24jrbehgRG35Gerwg432DSFG",
+        "SecretAccessKey": "123abc123ABC321cba123abc123",
         "CreateDate": "manual"
     }
 }
@@ -58,19 +58,43 @@ You can use the above example when creating a new JSON key in Secret Manager, or
 
 ### 1.2 Create Secret in Secret Manager
 
-**Naming Convention:** `LITTLEPAY_AWS_IAM_<MERCHANT_ID>_ACCESS_KEY_FEED_V3`
+**Naming Convention:** `airflow-connections-aws_<participant-id>`
 
-- Use UPPERCASE
-- Replace hyphens with underscores in merchant_id
-- Example: `mst` → `LITTLEPAY_AWS_IAM_MST_ACCESS_KEY_FEED_V3`
+- Use lowercase
+- Use hyphens if needed
+
+Examples:
+
+- `mst` → `airflow-connections-aws_mst`
+- `clean-air-express` → `airflow-connections-aws_clean-air-express`
 
 **Via GCP Console:**
 
 1. Navigate to [Secret Manager](https://console.cloud.google.com/security/secret-manager?project=cal-itp-data-infra)
 2. Click "Create Secret"
-3. Name: `LITTLEPAY_AWS_IAM_<MERCHANT_ID>_ACCESS_KEY_FEED_V3`
-4. Secret value: Paste the entire JSON
-5. Click "Create Secret"
+3. Name: `airflow-connections-aws_<participant-id>`
+4. Secret value:
+
+```json
+{
+  "conn_type": "aws",
+  "login": "<AccessKeyId>",
+  "password": "<SecretAccessKey>"
+}
+```
+
+Replace the fields with the correct information, it should look like this example:
+
+```json
+{
+  "conn_type": "aws",
+  "login": "AAA111BBBB222CCC333",
+  "password": "123abc123ABC321cba123abc123"
+}
+```
+
+5. Select the location `us-west2` below the check mark `Manually manage locations for this secret`
+6. Click "Create Secret"
 
 ### 1.3 Verify AWS Access
 
@@ -99,15 +123,15 @@ The agency needs a dedicated service account for accessing their payments data w
 
 ### 2.1 Create Service Account via Terraform
 
-Create a new branch, ex: `payments-service-account-<agency-name>`
+Create a new branch, ex: `payments-service-account-<participant-id>`
 
 **Edit `iac/cal-itp-data-infra/iam/us/service_account.tf`:**
 
-Add a new service account resource (use existing entries as reference), replacing <agency> in the below fields with the appropriate agency name:
+Add a new service account resource (use existing entries as reference), replacing `<participant-id>` in the below fields with the appropriate agency name:
 
 ```hcl
-resource "google_service_account" "<agency>-payments-user" {
-  account_id = "<agency>-payments-user"
+resource "google_service_account" "<participant-id>-payments-user" {
+  account_id = "<participant-id>-payments-user"
   disabled   = "false"
   project    = "cal-itp-data-infra"
 }
@@ -115,11 +139,11 @@ resource "google_service_account" "<agency>-payments-user" {
 
 **Edit `iac/cal-itp-data-infra/iam/us/project_iam_member.tf`:**
 
-Add BigQuery user role binding, replacing <agency> in the below fields with the appropriate agency name:
+Add BigQuery user role binding, replacing `<participant-id>` in the below fields with the appropriate agency name:
 
 ```hcl
-resource "google_project_iam_member" "tfer--projects-002F-cal-itp-data-infra-002F-roles-002F-AgencyPaymentsServiceReaderserviceAccount-003A-<agency>-payments-user-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
-  member  = "serviceAccount:<agency>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com"
+resource "google_project_iam_member" "tfer--projects-002F-cal-itp-data-infra-002F-roles-002F-AgencyPaymentsServiceReaderserviceAccount-003A-<participant-id>-payments-user-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
+  member  = "serviceAccount:<participant-id>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com"
   project = "cal-itp-data-infra"
   role    = "projects/cal-itp-data-infra/roles/AgencyPaymentsServiceReader"
 }
@@ -134,7 +158,7 @@ Create a pull request, get it reviewed, and merge. Make sure Terraform Github Ac
 After the PR is merged and GitHub Actions succeed:
 
 1. Navigate to [IAM & Admin/ IAM](https://console.cloud.google.com/iam-admin/?project=cal-itp-data-infra)
-2. Verify `<agency>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com` exists and has role `Agency Payments Service Reader`
+2. Verify `<participant-id>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com` exists and has role `Agency Payments Service Reader`
 
 ### 2.4 Generate Service Account Key
 
@@ -148,44 +172,40 @@ After the PR is merged and GitHub Actions succeed:
 
 Store this file securely. You'll upload it to Metabase in a later step.
 
-## Step 3: Configure Data Sync
+## Step 3: Add Download and Parse Configuration
 
-### 3.1 Create Sync Configuration
-
-Create `airflow/dags/sync_littlepay_v3/<agency>.yml`:
-
-Use another agency's yml as the template for this DAG. The final DAG yml should look like this:
+To add a new Littlepay agency, include the following configuration in the `download_and_parse_littlepay` DAG located at `airflow/dags/download_and_parse_littlepay.py`:
 
 ```yaml
-operator: operators.LittlepayRawSyncV3
-instance: <agency>
-src_bucket: <littlepay-AWS-bucket-name>
-access_key_secret_name: LITTLEPAY_AWS_IAM_<agency>_ACCESS_KEY_FEED_V3
+"<participant-id>": {
+    "bucket": "<littlepay-AWS-bucket-name>",
+    "prefix": "<littlepay-AWS-prefix-path>",
+},
 ```
 
-Where `instance` and `src_bucket` are the values that we received from Littlepay, and `access_key_secret_name` is the name of the secret that we created in Step 1.2.
+Replace the fields with the correct information:
 
-**Notes:**
+- `<participant-id>` -> The agency provider name (same as `agency-name` or `merchant-id`). It must match the secret created in Step 1.
+- `<littlepay-AWS-bucket-name>` -> S3 bucket name from Littlepay.
+- `<littlepay-AWS-prefix-path>` -> Prefix path where the Littlepay files are located (it could be the same or different from the `participant-id`).
 
-- `instance` and `src_bucket` must match the values received from Littlepay
-- `access_key_secret_name` must match the secret created in Step 1
-
-### 3.2 Create Parse Configuration
-
-Create `airflow/dags/parse_littlepay_v3/<agency>.yml`:
-
-Use another agency's yml as the template for this DAG. The final DAG yml should look like this:
+The new config should look like these examples:
 
 ```yaml
-operator: operators.LittlepayToJSONLV3
-instance: <agency>
+LITTLEPAY_TRANSIT_PROVIDER_BUCKETS = {
+    ...
+    "clean-air-express": {
+        "bucket": "littlepay-datafeed-prod-cal-itp-5b3f9b20",
+        "prefix": "cal-itp/v3",
+    },
+    ...
+    "mst": {
+        "bucket": "littlepay-datafeed-prod-mst-5aa508d0",
+        "prefix": "mst/v3",
+    },
+    ...
+}
 ```
-
-Where `instance` is the value that we received from Littlepay.
-
-**Note:**
-
-- `instance` must match the value received from Littlepay
 
 ## 4. Add Entity Mapping
 
@@ -263,14 +283,14 @@ Find the `payments_littlepay_row_access_policy` macro and add a new entry, using
 ```sql
 {{ create_row_access_policy(
     filter_column = 'participant_id',
-    filter_value = '<littlepay_participant_id>',
-    principals = ['serviceAccount:<agency>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+    filter_value = '<littlepay-participant-id>',
+    principals = ['serviceAccount:<participant-id>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }};
 ```
 
 **Notes:**
 
-- The Littlepay `participant_id` above must match exactly what appears in the data
+- The Littlepay `<participant-id>` above must match exactly what appears in the data
 - The service account name within `principals` must exactly match the name of the service account created in step 2.
 
 **Reference PR:** [#4376](https://github.com/cal-itp/data-infra/pull/4376)
@@ -284,8 +304,8 @@ If the agency also uses Elavon, find the `payments_elavon_row_access_policy` mac
 ```sql
 {{ create_row_access_policy(
     filter_column = 'organization_name',
-    filter_value = '<elavon_organization_name>',
-    principals = ['serviceAccount:<agency>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+    filter_value = '<elavon-organization-name>',
+    principals = ['serviceAccount:<participant_id>-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }};
 ```
 
@@ -302,39 +322,31 @@ Update your PR, get it reviewed, and merge.
 
 After all PRs are merged, actions have succeeded, and relevant DAGs have run, verify data flows through the pipeline.
 
-### 6.1 Verify Sync DAG
+### 6.1 Verify download_and_parse_littlepay DAG
 
-Once the PR that contains your new sync task has been merged, and the time of the next scheduled DAG run has passed:
+Once the PR that contains your new config has been merged, and the time of the next scheduled DAG run has passed:
 
 1. Navigate to the Airflow UI
-2. Find `sync_littlepay_v3` DAG, click into it
+2. Find `download_and_parse_littlepay` DAG, click into it
 3. Find the new task that was created in your PR, and ensure that the run shows as a green 'success'.
 
 ### 6.2 Check Raw Data in GCS
 
 1. Navigate to Google Cloud Storage
-2. Select the bucket `calitp-payments-littlepay-raw-v3`
+2. Select the bucket `calitp-payments-littlepay-raw-v3` (check for the current bucket set on `CALITP_BUCKET__LITTLEPAY_RAW_V3` environment variable)
 3. Select any table directory from the list, ex: `micropayments/`
 4. Select the directory of the agency whose sync task you are verifying, ex: `instance=mst/`
 5. You should see at least one file within that directory, ex: `calitp-payments-littlepay-raw-v3/micropayments/instance=mst/filename=202505081110_micropayments.psv`
 
-### 6.3 Verify Parse DAG
-
-Once the PR that contains your new sync task has been merged, the time of the next scheduled sync DAG run has passed, and the time of the next scheduled parse DAG run has passed:
-
-1. Navigate to the Airflow UI
-2. Find `parse_littlepay_v3` DAG, click into it
-3. Find the new task that was created in your PR, and ensure that the run shows as a green 'success'.
-
-### 6.4 Check Parsed Data in GCS
+### 6.3 Check Parsed Data in GCS
 
 1. Navigate to Google Cloud Storage
-2. Select the bucket `calitp-payments-littlepay-parsed-v3`
+2. Select the bucket `calitp-payments-littlepay-parsed-v3` (check for the current bucket set on `CALITP_BUCKET__LITTLEPAY_PARSED_V3` environment variable)
 3. Select any table directory from the list, ex: `micropayments`
 4. Select the directory of the agency whose sync task you are verifying, ex: `instance=mst/`
 5. You should see at least one file within that directory, ex: `calitp-payments-littlepay-parsed-v3/micropayments/instance=mst/extract_filename=202504301116_micropayments.psv`
 
-### 6.5 Verify External Tables
+### 6.4 Verify External Tables
 
 In BigQuery, query:
 
@@ -344,18 +356,18 @@ FROM `cal-itp-data-infra.external_littlepay_v3.device_transactions`
 WHERE participant_id = '<littlepay-participant-id>'
 ```
 
-### 6.6 Verify dbt Transformations
+### 6.5 Verify dbt Transformations
 
 After the next scheduled run of the transform_warehouse DAG:
 
 ```sql
 -- Check staging table
-SELECT COUNT(*) 
+SELECT COUNT(*)
 FROM `cal-itp-data-infra.staging.stg_littlepay__micropayments_v3`
 WHERE participant_id = '<littlepay-participant-id>'
 
 -- Check mart table
-SELECT 
+SELECT
   COUNT(*) as total_transactions,
 FROM `cal-itp-data-infra.mart_payments.fct_payments_rides_v2`
 WHERE participant_id = '<littlepay-participant-id>'
@@ -371,17 +383,17 @@ After completing Littlepay onboarding:
 
 ## Troubleshooting
 
-### Sync DAG Fails with "Access Denied"
+### DAG Fails with "Access Denied"
 
-**Symptoms:** Sync DAG fails with AWS access denied error
+**Symptoms:** `download_and_parse_littlepay` DAG fails with AWS access denied error
 
 **Solutions:**
 
 - Verify secret name in YAML matches Secret Manager
 - Verify secret contents match what we received from Littlepay
-- Verify `instance` matches what we received from Littlepay
-- Verify `src_bucket` matches what we received from Littlepay
-- Check AWS credentials work in CLI: `aws s3 ls s3://<littlepay-bucket-name>/ --profile <Littlepay UserName>`
+- Verify `participant-id` matches with the `instance` received from Littlepay
+- Verify S3 bucket matches what we received from Littlepay
+- Check AWS credentials work in CLI: `aws s3 ls s3://<littlepay-AWS-bucket-name>/ --profile <Littlepay UserName>`
 
 ### No Data in External Tables
 
@@ -389,7 +401,7 @@ After completing Littlepay onboarding:
 
 **Solutions:**
 
-- Verify sync and parse DAGs ran successfully
+- Verify `download_and_parse_littlepay` DAGs ran successfully
 - Check files exist in the raw and parsed buckets
 
 ### No Data in Mart Tables
@@ -430,7 +442,7 @@ After completing Littlepay onboarding:
 | ------------------ | ------------------------------------------------------ | ----------------------------------------------- |
 | **Identifier**     | `participant_id` / `merchant_id`                       | `operator_id`                                   |
 | **Data Access**    | AWS S3 with IAM keys                                   | SFTP to GCS bucket                              |
-| **Sync DAG**       | `sync_littlepay_v3`                                    | None (data delivered directly to GCS)           |
+| **Sync DAG**       | `download_and_parse_littlepay`                         | None (data delivered directly to GCS)           |
 | **Data Refresh**   | Hourly                                                 | Daily                                           |
 | **Entity Mapping** | `payments_entity_mapping.csv`                          | `payments_entity_mapping_enghouse.csv`          |
 | **Mart Table**     | `fct_payments_rides_v2`                                | `fct_payments_rides_enghouse`                   |

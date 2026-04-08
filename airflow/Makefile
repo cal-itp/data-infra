@@ -24,7 +24,7 @@ stop:
 sync: $(WAREHOUSE_PATH)/target/manifest.json $(COMPOSER_ENVIRONMENT_PATH)
 	rsync -ar plugins/ $(COMPOSER_ENVIRONMENT_PATH)/plugins/
 	rsync -ar $(WAREHOUSE_PATH)/ $(COMPOSER_ENVIRONMENT_PATH)/data/warehouse/
-	cp -f requirements.txt $(COMPOSER_ENVIRONMENT_PATH)/requirements.txt
+	cp -f requirements-dev.txt $(COMPOSER_ENVIRONMENT_PATH)/requirements.txt
 	cp -f .development.env $(COMPOSER_ENVIRONMENT_PATH)/variables.env
 ifneq (,$(wildcard .env))
 	cat .env >> $(COMPOSER_ENVIRONMENT_PATH)/variables.env
@@ -74,6 +74,15 @@ pools:
 	uv run composer-dev run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set schedule_download_pool 4 ""
+	uv run composer-dev run-airflow-cmd \
+		$(COMPOSER_ENVIRONMENT_NAME) \
+		pools set littlepay_list_pool 4 ""
+	uv run composer-dev run-airflow-cmd \
+		$(COMPOSER_ENVIRONMENT_NAME) \
+		pools set littlepay_download_pool 4 ""
+	uv run composer-dev run-airflow-cmd \
+		$(COMPOSER_ENVIRONMENT_NAME) \
+		pools set littlepay_parse_pool 4 ""
 
 setup: $(COMPOSER_ENVIRONMENT_PATH)
 
