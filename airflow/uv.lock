@@ -1148,7 +1148,7 @@ requires-dist = [
     { name = "openpyxl", specifier = "==3.1.5" },
     { name = "pyairtable", specifier = "==2.2.1" },
     { name = "sentry-sdk", specifier = ">=2.44.0" },
-    { name = "typer", specifier = ">=0.4.1" },
+    { name = "typer", specifier = "==0.4.1" },
     { name = "urllib3", specifier = "<2.0.0" },
 ]
 
