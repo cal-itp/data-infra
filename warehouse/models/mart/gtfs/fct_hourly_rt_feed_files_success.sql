@@ -5,8 +5,7 @@ WITH
 int_gtfs_rt__daily_url_index AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__daily_url_index') }}
-    WHERE data_quality_pipeline
-        AND {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
+    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 fct_daily_rt_feed_files AS (
