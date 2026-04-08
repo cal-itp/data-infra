@@ -87,7 +87,7 @@ LITTLEPAY_ENTITIES = [
 @dag(
     # 12pm UTC (5am PDT/4am PST) every day
     schedule="0 12 * * *",
-    start_date=datetime(2026, 3, 1),
+    start_date=datetime(2026, 4, 1),
     catchup=False,
     tags=["payments", "littlepay"],
     default_args={
