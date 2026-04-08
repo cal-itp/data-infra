@@ -597,6 +597,15 @@ resource "google_project_iam_member" "ms-entra-id-DDS_Cloud_Admins" {
   project = "cal-itp-data-infra"
 }
 
+resource "google_project_iam_member" "ms-entra-id-DDS_Cloud_Owners" {
+  for_each = toset([
+    "roles/owner"
+  ])
+  role    = each.key
+  member  = "principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DDS_Cloud_Owners"
+  project = "cal-itp-data-infra"
+}
+
 # FIXME: if this exists after 8/1/2025, delete it and see if GitHub Actions fail
 resource "google_project_iam_member" "staging-github-actions-service-account" {
   role    = google_project_iam_custom_role.tfer--projects-002F-cal-itp-data-infra-002F-roles-002F-DataAnalyst.id
