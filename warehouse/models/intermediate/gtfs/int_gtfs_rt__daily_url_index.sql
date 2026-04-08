@@ -5,25 +5,23 @@ WITH int_gtfs_rt__distinct_download_configs AS (
     FROM {{ ref('int_gtfs_rt__distinct_download_configs') }}
 ),
 
-stg_transit_database__gtfs_datasets AS (
+gtfs_download_configs AS (
     SELECT *
-    FROM {{ ref('stg_transit_database__gtfs_datasets') }}
+    FROM {{ ref('dim_gtfs_download_configs') }}
 ),
 
 int_gtfs_rt__daily_url_index AS (
     SELECT
 
         configs.dt,
-        url_to_encode AS string_url,
-        base64_url,
-        type,
-        datasets.data_quality_pipeline
+        gtfs_download_configs.url AS string_url,
+        {{ to_url_safe_base64('gtfs_download_configs.url') }} AS base64_url,
+        gtfs_download_configs.feed_type AS type
 
     FROM int_gtfs_rt__distinct_download_configs AS configs
-    LEFT JOIN stg_transit_database__gtfs_datasets AS datasets
-        ON configs._config_extract_ts = datasets.ts
-    WHERE type IN ("service_alerts", "vehicle_positions", "trip_updates")
-    QUALIFY RANK() OVER (PARTITION BY configs.dt, url_to_encode, base64_url ORDER BY _config_extract_ts DESC) = 1
+    LEFT JOIN gtfs_download_configs
+        ON configs._config_extract_ts = gtfs_download_configs.ts
+    WHERE gtfs_download_configs.feed_type IN ("service_alerts", "vehicle_positions", "trip_updates")
 )
 
 SELECT * FROM int_gtfs_rt__daily_url_index
