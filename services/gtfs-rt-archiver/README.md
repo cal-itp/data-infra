@@ -1,6 +1,6 @@
 # GTFS-RT Archiver
 
-This is the [GTFS-RT](https://gtfs.org/realtime/) archiver logic.
+This is the [GTFS-RT](https://gtfs.org/realtime/) archiver.
 
 
 ## Architecture
@@ -8,14 +8,14 @@ This is the [GTFS-RT](https://gtfs.org/realtime/) archiver logic.
 The GTFS-RT Archiver consists of three parts running inside Google Cloud Provider:
 
 1. Scheduler: Runs every minute and triggers the Workflow
-2. Workflow: Fetches the latest Download Configuration and enqueues a Cloud Run Function for each line
-3. Cloud Run Function: Downloads a feed according to the Download Configuration line and stores it in Google Cloud Storage
+2. Workflow: Fetches the latest Download Configuration and enqueues a message for each line
+3. Cloud Run Worker Pool: Downloads a feed according to the Download Configuration line and stores it in Google Cloud Storage
 
 
 ## Deployment
 
 The Workflow is deployed via Terraform from the `gtfs-rt-archiver-heartbeat.yaml`.
-The Cloud Run Function is deployed from source to a bucket via Terraform.
+The Cloud Run Worker Pool is deployed from source to a bucket via Terraform.
 
 
 ## Development

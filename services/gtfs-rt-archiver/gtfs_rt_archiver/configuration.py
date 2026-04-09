@@ -135,11 +135,11 @@ class Configuration:
         }
 
     @staticmethod
-    def resolve(published_time: str, **settings: dict) -> Self:
+    def resolve(published_time: datetime, **settings: dict) -> Self:
         _, project_id = default()
         return Configuration(
             project_id=project_id,
             destination_bucket=os.environ["CALITP_BUCKET__GTFS_RT_RAW"],
-            published_time=datetime.fromisoformat(published_time),
+            published_time=published_time,
             **settings,
         )

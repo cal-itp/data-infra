@@ -11,7 +11,7 @@ from gtfs_rt_archiver.downloader import Downloader
 
 class TestArchiver:
     @pytest.fixture
-    def current_time(self) -> datetime:
+    def published_time(self) -> datetime:
         return datetime.fromisoformat("2026-04-01T00:01:23.45+00:00")
 
     @pytest.fixture
@@ -19,10 +19,9 @@ class TestArchiver:
         return "http://avl.yctd.org/RealTime/GTFS_ServiceAlerts.pb"
 
     @pytest.fixture
-    def data(self, current_time: datetime, url: str) -> dict:
+    def data(self, published_time: datetime, url: str) -> dict:
         return {
-            "published_time": "2026-04-01T00:01:23.45+00:00",
-            "current_time": current_time,
+            "published_time": published_time,
             "auth_headers": {},
             "auth_query_params": {},
             "extracted_at": "2026-04-01T00:00:00+00:00",
@@ -33,7 +32,7 @@ class TestArchiver:
         }
 
     @pytest.fixture
-    def configuration(self, current_time: datetime, data: dict) -> Configuration:
+    def configuration(self, data: dict) -> Configuration:
         return Configuration.resolve(**data)
 
     @pytest.fixture
