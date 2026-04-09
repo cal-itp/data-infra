@@ -1,10 +1,11 @@
 [project]
 name = "gtfs-rt-archiver"
 version = "0.1.0"
-description = "Add your description here"
+description = "Downloads GTFS-RT feeds and uploads them to Google Cloud Storage"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "google-cloud-pubsub>=2.37.0",
     "google-cloud-secret-manager>=2.26.0",
     "google-cloud-storage>=3.10.1",
 ]
@@ -19,4 +20,4 @@ dev = [
 
 [tool.pytest.ini_options]
 testpaths = "tests"
-env_files = [".env"]
+env_files = [".env.test"]

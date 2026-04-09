@@ -1,6 +1,6 @@
 locals {
-  source_path  = "${path.module}/../../../../cloud-functions/gtfs-rt-archiver"
-  archive_path = "${path.module}/build/gtfs-rt-archiver.zip"
+  source_path  = "${path.module}/../../../../services/gtfs-rt-archiver"
+  archive_path = "${path.module}/build/source.zip"
 }
 
 data "terraform_remote_state" "iam" {

@@ -1,69 +1,45 @@
-data "archive_file" "gtfs-rt-archiver" {
-  output_path = local.archive_path
-  source_dir  = local.source_path
-  type        = "zip"
-
-  excludes = [
-    "**/.env",
-    "**/.env.example",
-    "**/tests/**",
-    "**/.git/**",
-    "**/.gitignore",
-    "**/pyproject.toml",
-    "**/*.yaml",
-    "**/uv.lock",
-    "**/README.md",
-  ]
+resource "google_pubsub_topic" "gtfs-rt-archiver-staging" {
+  name    = "gtfs-rt-archiver-staging"
+  project = "cal-itp-data-infra-staging"
 }
 
-resource "google_storage_bucket_object" "gtfs-rt-archiver" {
-  name   = "gtfs-rt-archiver-${data.archive_file.gtfs-rt-archiver.output_sha512}.zip"
-  bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-rt-archiver_name
-  source = local.archive_path
+resource "google_pubsub_subscription" "gtfs-rt-archiver-staging" {
+  name  = "gtfs-rt-archiver-staging"
+  topic = google_pubsub_topic.gtfs-rt-archiver-staging.id
 
-  content_type = "application/zip"
-  depends_on   = [data.archive_file.gtfs-rt-archiver]
+  ack_deadline_seconds       = 20
+  message_retention_duration = "600s"
 
-  provisioner "local-exec" {
-    when    = create
-    command = "rm ${data.archive_file.gtfs-rt-archiver.output_path}"
+  expiration_policy {
+    ttl = "86400s"
   }
 }
 
-resource "google_cloudfunctions2_function" "gtfs-rt-archiver" {
-  name     = "gtfs-rt-archiver"
-  location = "us-west2"
+resource "google_cloud_run_v2_worker_pool" "gtfs-rt-archiver-staging" {
+  name                = "gtfs-rt-archiver-staging"
+  location            = "us-west2"
+  deletion_protection = false
 
-  depends_on = [google_storage_bucket_object.gtfs-rt-archiver]
-
-  service_config {
-    available_memory = "256M"
-    ingress_settings = "ALLOW_INTERNAL_ONLY"
-
-    all_traffic_on_latest_revision = true
-    service_account_email          = data.terraform_remote_state.iam.outputs.google_service_account_gtfs-rt-archiver_email
-
-    environment_variables = {
-      CALITP_BUCKET__GTFS_RT_RAW = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-rt-raw-v2_name}"
-    }
+  instance_splits {
+    type    = "INSTANCE_SPLIT_ALLOCATION_TYPE_LATEST"
+    percent = 100
   }
 
-  build_config {
-    runtime     = "python311"
-    entry_point = "process_cloud_event"
+  template {
+    service_account = data.terraform_remote_state.iam.outputs.google_service_account_gtfs-rt-archiver_email
 
-    source {
-      storage_source {
-        bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-rt-archiver_name
-        object = "gtfs-rt-archiver-${data.archive_file.gtfs-rt-archiver.output_sha512}.zip"
+    containers {
+      image = "us-west2-docker.pkg.dev/cal-itp-data-infra-staging/ghcr/cal-itp/data-infra/gtfs-rt-archiver-v5:staging"
+
+      env {
+        name  = "CALITP_BUCKET__GTFS_RT_RAW"
+        value = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-rt-raw-v2_name
+      }
+
+      env {
+        name  = "GTFS_RT_ARCHIVER__SUBSCRIPTION"
+        value = google_pubsub_subscription.gtfs-rt-archiver-staging.id
       }
     }
-  }
-
-  event_trigger {
-    trigger_region = "us-west2"
-    event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
-    pubsub_topic   = google_pubsub_topic.gtfs-rt-archiver.id
-    retry_policy   = "RETRY_POLICY_DO_NOT_RETRY"
   }
 }
