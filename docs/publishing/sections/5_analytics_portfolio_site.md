@@ -11,21 +11,19 @@ In order to publish to analysis.dds.dot.ca.gov, you need to create two different
 - A README.md.
 - A YML.
 
-### README.md
+### README
 
 Create a `README.md` file in the repo where your work lies. This also forms the landing page of your website.
 
-- Your file should <b>always</b> be titled as `README.md`. No other variants such as `README_gtfs.md` or `read me.md` or ` README.md` are allowed. The portfolio can only take a `README.md` when generating the landing page of your website.
-- The `README.md` is the first thing the audience will see when they visit your website. Therefore, this page should contain content such as the goal of your work, the methodology you used, relevant links, and more. [Here](https://github.com/cal-itp/data-analyses/blob/main/portfolio/template_README.md) is a template for you to populate.
-- If you do accidentally create a `README.md` file with extra strings, you can fix this by taking the following steps:
-  - `git rm portfolio/my_analysis/README_accidentally_named_something_else.md`
-  - `rm portfolio/my_analysis/_build/html/README_accidentally_named_something.html`. We use `rm` because \_build/html folder is not checked into GitHub
-  - `python portfolio/portfolio.py build my_report --no-execute-papermill --deploy` to rerun the portfolio to incorporate only the new changes to your `README.md` if the other pages are correct.
-- Need a node graph to illustrate where your data comes from and how it's processed? Try mermaid ([documentation here](https://mermaid.js.org/intro/)). See published [GTFS Digest](https://gtfs-digest--cal-itp-data-analyses.netlify.app/readme) for a current example.
+The `README.md` is the first thing the audience will see when they visit your website. Therefore, this page should contain content such as the goal of your work, the methodology you used, relevant links, and more. [Here](https://github.com/cal-itp/data-analyses/blob/main/portfolio/template_README.md) is a template for you to populate.
+
+Need a node graph to illustrate where your data comes from and how it's processed? Try mermaid ([documentation here](https://mermaid.js.org/intro/)).
+
+See [GTFS Digest](https://github.com/cal-itp/data-analyses/blob/main/gtfs_digest/mermaid.md) for a current example.
 
 ### YML
 
-Each `.yml` file creates a new site on the Portfolio's Index Page, so every project needs its own file. DLA Grant Analysis, SB125 Route Illustrations, and Active Transportation Program all have their own `.yml` file.
+Each `.yml` file creates a new site on the Portfolio's Index Page, so every project needs its own file.
 
 All the `.yml` files live here at [data-analyses/portfolio/sites](https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites). Navigate to this folder to create the .yml file.
 
@@ -39,9 +37,11 @@ Here's how to create a `yml` file:
 
 - The structure of your `.yml` file depends on the type of your analysis:
 
+  You can automate making a `.yml` file using a script, [example here](https://github.com/cal-itp/data-analyses/blob/main/gtfs_digest/deploy_portfolio_yaml.py).
+
   - If you have one parameterized notebook with **one parameter**:
 
-    - Example: [dla.yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/dla.yml)
+    Example: [\_param_analyses_test.yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/_param_analyses_test.yml)
 
     ```
     title: My Analyses
@@ -49,23 +49,19 @@ Here's how to create a `yml` file:
     readme: ./my-analyses/README.md
     notebook: ./my-analyses/my-notebook.ipynb
     parts:
-       - caption: Introduction
-       - chapters:
-         - params:
-              district_parameter: 1
-              district_title: District 1
-         - params:
-              district_parameter: 2
-              district_title: District 2
-        and so on...
+      - chapters:
         - params:
-              district_parameter: 12
-              district_title: District 12
+            district_parameter: 1
+         - params:
+            district_parameter: 2
+    and so on...
+         - params:
+            district_parameter: 12
     ```
 
-  - If you have a parameterized notebook with **multiple parameters**:
+  - If you have one parameterized notebook with **one parameter** and **grouped chapters**:
 
-    - Example: [rt.yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/rt.yml). You can also automate making a `.yml` file using a script, [example here](https://github.com/cal-itp/data-analyses/blob/main/gtfs_digest/deploy_portfolio_yaml.py).
+    Examples: [\_group_and_params_analyses_test.yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/_group_and_params_analyses_test.yml) and [rt.yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/rt.yml)
 
     ```
     title: My Analyses
@@ -73,40 +69,37 @@ Here's how to create a `yml` file:
     readme: ./my-analyses/README.md
     notebook: ./my-analyses/my-notebook.ipynb
     parts:
-    - chapters:
       - caption: County Name
-        params:
-          parameter1_county_name
-        sections:
-        - city: parameter2_city_name
-        - city: parameter2_city_name
+        chapters:
+        - params:
+            city: parameter2_city_name
+        - params:
+            city: parameter2_city_name
     ```
 
-  - If you have an individual notebook with **no parameters**:
+  - If you have notebooks with **no parameters**:
 
-    - Example: [quarterly_performance_metrics.yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/quarterly_performance_metrics.yml).
+    Examples: [\_basic_analyses_test.yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/_basic_analyses_test.yml) and [quarterly_performance_metrics.yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/quarterly_performance_metrics.yml)
 
     ```
     title: My Analyses
     directory: ./my-analyses/
     readme: ./my-analyses/README.md
     parts:
-    - caption: Introduction
-    - chapters:
-      - notebook: ./my-analyses/notebook_1.ipynb
-      - notebook: ./my-analyses/notebook_2.ipynb
+      - chapters:
+        - notebook: ./my-analyses/notebook_1.ipynb
+        - notebook: ./my-analyses/notebook_2.ipynb
     ```
 
   - If you have multiple parameterized notebooks with **the same parameters**:
 
-    - Example: [rt_parallel.yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/rt_parallel.yml)
+    Example: [rt_parallel.yml](https://github.com/cal-itp/data-analyses/blob/main/portfolio/rt_parallel.yml)
 
     ```
     title: My Analyses
     directory: ./my-analyses/
     readme: ./my-analyses/README.md
     parts:
-    - caption: District Name
     - chapters:
       - caption: Parameter 1
         params:
