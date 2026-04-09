@@ -54,7 +54,7 @@ class Downloader:
     def get(self) -> None:
         session: Session = Session()
         prepped_request = session.prepare_request(self.request())
-        response = session.send(prepped_request, allow_redirects=True)
+        response = session.send(prepped_request, allow_redirects=True, timeout=10)
         try:
             response.raise_for_status()
         except Exception as e:
