@@ -71,26 +71,23 @@ expiring_datasets AS (
     dwe.gtfs_dataset_source_record_id,
     dwe.max_end_date,
     dwe.expiration_status,
-    ARRAY_AGG(
-      STRUCT(
-        dp.service_name,
-        dp.service_source_record_id,
-        dp.organization_name
-      )
-      ORDER BY dp.service_source_record_id
-      LIMIT 1
-    )[OFFSET(0)] AS service_info
+    dp.service_name,
+    dp.service_source_record_id,
+    dp.organization_name
   FROM datasets_with_expiration dwe
   INNER JOIN {{ ref('dim_provider_gtfs_data') }} dp
     ON dwe.gtfs_dataset_key = dp.schedule_gtfs_dataset_key
   WHERE dwe.expiration_status != 'OK'
     AND dp._is_current = TRUE
     AND dp.public_customer_facing_or_regional_subfeed_fixed_route
-  GROUP BY
-    dwe.name,
-    dwe.gtfs_dataset_source_record_id,
-    dwe.max_end_date,
-    dwe.expiration_status
+  QUALIFY ROW_NUMBER() OVER (
+    PARTITION BY
+      dwe.name,
+      dwe.gtfs_dataset_source_record_id,
+      dwe.max_end_date,
+      dwe.expiration_status
+    ORDER BY dp.service_source_record_id
+  ) = 1
 ),
 
 airtable_services_latest AS (
@@ -121,14 +118,14 @@ expiring_datasets_with_airtable_ids AS (
     ed.gtfs_dataset_source_record_id,
     ed.max_end_date,
     ed.expiration_status,
-    ed.service_info.service_name AS service_name,
-    ed.service_info.service_source_record_id AS service_source_record_id,
-    ed.service_info.organization_name AS organization_name,
+    ed.service_name,
+    ed.service_source_record_id,
+    ed.organization_name,
     s.id AS service_record_id,
     d.id AS gtfs_dataset_record_id
   FROM expiring_datasets ed
   INNER JOIN airtable_services_latest s
-    ON ed.service_info.service_source_record_id = s.source_record_id
+    ON ed.service_source_record_id = s.source_record_id
   INNER JOIN airtable_datasets_latest d
     ON ed.gtfs_dataset_source_record_id = d.source_record_id
 ),
