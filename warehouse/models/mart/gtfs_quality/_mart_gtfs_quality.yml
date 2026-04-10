@@ -584,7 +584,7 @@ models:
       - name: change_status
       - name: n
 
-  - name: fct_daily_vehicle_positions_message_age_summary
+  - name: fct_daily_vehicle_positions_latency_statistics
     description: |
       Table summarizing the age in seconds of various message components by RT URL by date.
       Terms:
