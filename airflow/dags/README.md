@@ -196,13 +196,145 @@
 
 ## airtable_issue_management
 
-   This DAG automates the lifecycle management of Transit Data Quality (TDQ) expired GTFS issues.
-   It performs the following tasks:
-   1. Queries BigQuery for expired or soon-to-expire GTFS issues that should be closed
-   2. Updates the corresponding records in Airtable to mark them as resolved
-   3. Sends an HTML email summarizing the updates
-   4. Logs any failed update batches for troubleshooting
+This DAG automates the lifecycle management of Transit Data Quality (TDQ) issues related to GTFS feed expiration. It handles both:
 
+- closing issues that are no longer relevant  
+- creating new issues for feeds that require attention  
+
+This helps keep Airtable synchronized with the current state of GTFS data quality.
+
+
+### Workflows Overview
+
+   The DAG consists of two main workflows executed in parallel.
+
+
+### 1. Close Expired Issues (`close_expired_issues`)
+
+   This workflow identifies Airtable issues that should be closed and updates them accordingly.
+
+   - Reads candidate records from dbt model `fct_close_expired_issues`.
+
+         Data source:
+            fct_close_expired_issues
+
+   - Identifies GTFS datasets where:
+      * the feed is no longer expired or no longer within the expiration window  
+      * an open Airtable issue still exists  
+
+   - Updates corresponding Airtable records:
+      * Marks issues as resolved  
+      * Performs batch updates for efficiency  
+
+
+### 2. Create Expiring Issues (`create_expiring_issues`)
+
+   This workflow identifies GTFS datasets that require new Airtable issues.
+
+   - Reads candidate records from dbt model `fct_create_expiring_gtfs_issues`.
+
+         Data source:
+            fct_create_expiring_gtfs_issues
+
+   - Identifies GTFS datasets where:
+      * the feed is expired or expiring within 30 days  
+      * no open Airtable issue currently exists  
+
+   - Creates new Airtable records:
+      * Applies standardized fields (Issue Type, Status, Outreach Status, etc.)  
+      * Associates GTFS datasets and services  
+      * Populates description and tracking fields  
+
+
+### 3. Sends Summary Email
+
+   This workflow sends a consolidated HTML email summarizing the results of both workflows.
+
+   - Includes:
+      * Number of records updated (closed issues)  
+      * Number of records created (new issues)  
+      * Tables listing affected records  
+      * Any failed batch operations  
+
+   - Additional behavior:
+      * When new issues are created, individual emails are sent per record  
+      * A HubSpot notification section is included in the summary email  
+
+
+### DAG Structure
+
+   Uses LatestOnlyOperator to ensure only the most recent scheduled run executes.
+
+   Workflow structure:
+
+      latest_only
+         close_expired_issues
+            ├── bq_close_expired_issues_candidates
+            └── update_airtable_issues
+
+         create_expiring_issues
+            ├── bq_create_expiring_issues_candidates
+            └── create_airtable_issues
+
+      close_expired_issues + create_expiring_issues
+         └── send_airtable_issue_email
+
+
+### Scheduling
+
+   - Runs weekly in Composer  
+   - Designed for recurring monitoring and maintenance of GTFS data quality  
+
+
+### Design Notes
+
+   - Uses custom operators and hooks for:
+      * BigQuery reads  
+      * Airtable updates and creates  
+      * Email notifications  
+
+   - Separates:
+      * data retrieval (BigQuery)  
+      * business logic (operators)  
+      * side effects (Airtable and email)  
+
+   - Consolidates notifications into a single email to avoid alert fatigue  
+
+
+### Troubleshooting
+
+   No email sent:
+      - Check whether both workflows returned zero rows  
+      - Email is skipped when there are no updates or creations  
+
+   Missing Airtable updates or creations:
+      - Verify dbt models:
+         * `fct_close_expired_issues`  
+         * `fct_create_expiring_gtfs_issues`  
+      - Confirm dataset and table names in operator configuration  
+
+   Partial failures (batch errors):
+      - Review the failed batch section in the email  
+      - Check Airflow logs for the corresponding task  
+
+   Individual emails not sent:
+      - Ensure `HUBSPOT_NOTIFICATION_EMAIL` is set  
+      - Verify that new records were actually created  
+
+
+### When to Use This DAG Pattern
+
+   This DAG is a good example of when Airflow is appropriate:
+
+   - Recurring, scheduled workflows  
+   - Multi-step pipelines with dependencies  
+   - External system integration across BigQuery, Airtable, and email  
+   - Workflows that require monitoring, logging, and retry behavior  
+
+   Simpler approaches (such as notebooks or scripts) may be more appropriate for:
+   - one-off analyses  
+   - exploratory workflows  
+   - tasks that do not require scheduling or orchestration  
 
 ## Testing DAGs
 
