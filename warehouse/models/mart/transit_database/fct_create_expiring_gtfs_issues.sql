@@ -80,6 +80,14 @@ expiring_datasets AS (
   WHERE dwe.expiration_status != 'OK'
     AND dp._is_current = TRUE
     AND dp.public_customer_facing_or_regional_subfeed_fixed_route
+  QUALIFY ROW_NUMBER() OVER (
+    PARTITION BY
+      dwe.name,
+      dwe.gtfs_dataset_source_record_id,
+      dwe.max_end_date,
+      dwe.expiration_status
+    ORDER BY dp.service_source_record_id
+  ) = 1
 ),
 
 airtable_services_latest AS (
@@ -112,40 +120,14 @@ expiring_datasets_with_airtable_ids AS (
     ed.expiration_status,
     ed.service_name,
     ed.service_source_record_id,
+    ed.organization_name,
     s.id AS service_record_id,
-    d.id AS gtfs_dataset_record_id,
-    ed.organization_name
+    d.id AS gtfs_dataset_record_id
   FROM expiring_datasets ed
   INNER JOIN airtable_services_latest s
     ON ed.service_source_record_id = s.source_record_id
   INNER JOIN airtable_datasets_latest d
     ON ed.gtfs_dataset_source_record_id = d.source_record_id
-),
-
-aggregated_expiring_datasets AS (
-  SELECT
-    name,
-    gtfs_dataset_source_record_id,
-    max_end_date,
-    expiration_status,
-    gtfs_dataset_record_id,
-    organization_name,
-    ARRAY_AGG(
-      STRUCT(
-        service_name,
-        service_record_id
-      )
-      ORDER BY service_record_id
-      LIMIT 1
-    )[OFFSET(0)] AS service_info
-  FROM expiring_datasets_with_airtable_ids
-  GROUP BY
-    name,
-    gtfs_dataset_source_record_id,
-    max_end_date,
-    expiration_status,
-    gtfs_dataset_record_id,
-    organization_name
 ),
 
 expiring_open_issues AS (
@@ -165,16 +147,16 @@ expiring_open_issues AS (
 
 fct_create_expiring_gtfs_issues AS (
   SELECT
-    aed.name AS gtfs_dataset_name,
-    aed.max_end_date,
-    aed.expiration_status,
-    aed.gtfs_dataset_record_id,
-    aed.service_info.service_name AS service_name,
-    aed.service_info.service_record_id AS service_record_id,
-    aed.organization_name
-  FROM aggregated_expiring_datasets aed
+    edwai.name AS gtfs_dataset_name,
+    edwai.max_end_date,
+    edwai.expiration_status,
+    edwai.gtfs_dataset_record_id,
+    edwai.service_name,
+    edwai.service_record_id,
+    edwai.organization_name
+  FROM expiring_datasets_with_airtable_ids edwai
   LEFT JOIN expiring_open_issues i
-    ON aed.gtfs_dataset_source_record_id = i.gtfs_dataset_source_record_id
+    ON edwai.gtfs_dataset_source_record_id = i.gtfs_dataset_source_record_id
   WHERE i.issue_number IS NULL
 )
 
