@@ -8,7 +8,7 @@ WITH guideline_index AS (
 
 vp_message_ages AS (
     SELECT *
-    FROM {{ ref('fct_daily_vehicle_positions_message_age_summary') }}
+    FROM {{ ref('fct_daily_vehicle_positions_latency_statistics') }}
 ),
 
 check_start AS (
