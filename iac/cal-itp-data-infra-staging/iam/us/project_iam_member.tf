@@ -10,18 +10,6 @@ resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-dataViewers
   role    = "roles/bigquery.dataViewer"
 }
 
-resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-dataViewerserviceAccount-003A-metabase-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
-  member  = "serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com"
-  project = "cal-itp-data-infra-staging"
-  role    = "roles/bigquery.dataViewer"
-}
-
-resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-dataViewerserviceAccount-003A-metabase-0040-cal-itp-data-infra-staging-002E-iam-002E-gserviceaccount-002E-com" {
-  member  = "serviceAccount:metabase@cal-itp-data-infra-staging.iam.gserviceaccount.com"
-  project = "cal-itp-data-infra-staging"
-  role    = "roles/bigquery.dataViewer"
-}
-
 resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-jobUserserviceAccount-003A-calitp-py-ci-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
   member  = "serviceAccount:calitp-py-ci@cal-itp-data-infra.iam.gserviceaccount.com"
   project = "cal-itp-data-infra-staging"
@@ -32,30 +20,6 @@ resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-jobUserserv
   member  = "serviceAccount:github-actions-services-accoun@cal-itp-data-infra.iam.gserviceaccount.com"
   project = "cal-itp-data-infra-staging"
   role    = "roles/bigquery.jobUser"
-}
-
-resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-jobUserserviceAccount-003A-metabase-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
-  member  = "serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com"
-  project = "cal-itp-data-infra-staging"
-  role    = "roles/bigquery.jobUser"
-}
-
-resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-jobUserserviceAccount-003A-metabase-0040-cal-itp-data-infra-staging-002E-iam-002E-gserviceaccount-002E-com" {
-  member  = "serviceAccount:metabase@cal-itp-data-infra-staging.iam.gserviceaccount.com"
-  project = "cal-itp-data-infra-staging"
-  role    = "roles/bigquery.jobUser"
-}
-
-resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-metadataViewerserviceAccount-003A-metabase-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
-  member  = "serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com"
-  project = "cal-itp-data-infra-staging"
-  role    = "roles/bigquery.metadataViewer"
-}
-
-resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-metadataViewerserviceAccount-003A-metabase-0040-cal-itp-data-infra-staging-002E-iam-002E-gserviceaccount-002E-com" {
-  member  = "serviceAccount:metabase@cal-itp-data-infra-staging.iam.gserviceaccount.com"
-  project = "cal-itp-data-infra-staging"
-  role    = "roles/bigquery.metadataViewer"
 }
 
 resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-readSessionUserserviceAccount-003A-github-actions-services-accoun-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
@@ -166,18 +130,6 @@ resource "google_project_iam_member" "tfer--roles-002F-storage-002E-objectAdmins
   role    = "roles/storage.objectAdmin"
 }
 
-resource "google_project_iam_member" "tfer--roles-002F-storage-002E-objectViewerserviceAccount-003A-metabase-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
-  member  = "serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com"
-  project = "cal-itp-data-infra-staging"
-  role    = "roles/storage.objectViewer"
-}
-
-resource "google_project_iam_member" "tfer--roles-002F-storage-002E-objectViewerserviceAccount-003A-metabase-0040-cal-itp-data-infra-staging-002E-iam-002E-gserviceaccount-002E-com" {
-  member  = "serviceAccount:metabase@cal-itp-data-infra-staging.iam.gserviceaccount.com"
-  project = "cal-itp-data-infra-staging"
-  role    = "roles/storage.objectViewer"
-}
-
 resource "google_project_iam_member" "github-actions-terraform" {
   for_each = toset([
     "roles/bigquery.dataOwner",
@@ -241,14 +193,62 @@ resource "google_project_iam_member" "metabase-service-account" {
   for_each = toset([
     "roles/cloudsql.client",
     "roles/secretmanager.secretAccessor",
-    "roles/bigquery.dataViewer",
+    # "roles/bigquery.dataViewer",
     "roles/bigquery.jobUser",
-    "roles/bigquery.metadataViewer"
+    # "roles/bigquery.metadataViewer"
   ])
   role    = each.key
   member  = "serviceAccount:${google_service_account.metabase-service-account.email}"
   project = "cal-itp-data-infra-staging"
 }
+
+# resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-dataViewerserviceAccount-003A-metabase-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
+#   member  = "serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com"
+#   project = "cal-itp-data-infra-staging"
+#   role    = "roles/bigquery.dataViewer"
+# }
+
+# resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-dataViewerserviceAccount-003A-metabase-0040-cal-itp-data-infra-staging-002E-iam-002E-gserviceaccount-002E-com" {
+#   member  = "serviceAccount:metabase@cal-itp-data-infra-staging.iam.gserviceaccount.com"
+#   project = "cal-itp-data-infra-staging"
+#   role    = "roles/bigquery.dataViewer"
+# }
+
+# resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-jobUserserviceAccount-003A-metabase-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
+#   member  = "serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com"
+#   project = "cal-itp-data-infra-staging"
+#   role    = "roles/bigquery.jobUser"
+# }
+
+# resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-jobUserserviceAccount-003A-metabase-0040-cal-itp-data-infra-staging-002E-iam-002E-gserviceaccount-002E-com" {
+#   member  = "serviceAccount:metabase@cal-itp-data-infra-staging.iam.gserviceaccount.com"
+#   project = "cal-itp-data-infra-staging"
+#   role    = "roles/bigquery.jobUser"
+# }
+
+# resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-metadataViewerserviceAccount-003A-metabase-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
+#   member  = "serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com"
+#   project = "cal-itp-data-infra-staging"
+#   role    = "roles/bigquery.metadataViewer"
+# }
+
+# resource "google_project_iam_member" "tfer--roles-002F-bigquery-002E-metadataViewerserviceAccount-003A-metabase-0040-cal-itp-data-infra-staging-002E-iam-002E-gserviceaccount-002E-com" {
+#   member  = "serviceAccount:metabase@cal-itp-data-infra-staging.iam.gserviceaccount.com"
+#   project = "cal-itp-data-infra-staging"
+#   role    = "roles/bigquery.metadataViewer"
+# }
+
+# resource "google_project_iam_member" "tfer--roles-002F-storage-002E-objectViewerserviceAccount-003A-metabase-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
+#   member  = "serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com"
+#   project = "cal-itp-data-infra-staging"
+#   role    = "roles/storage.objectViewer"
+# }
+
+# resource "google_project_iam_member" "tfer--roles-002F-storage-002E-objectViewerserviceAccount-003A-metabase-0040-cal-itp-data-infra-staging-002E-iam-002E-gserviceaccount-002E-com" {
+#   member  = "serviceAccount:metabase@cal-itp-data-infra-staging.iam.gserviceaccount.com"
+#   project = "cal-itp-data-infra-staging"
+#   role    = "roles/storage.objectViewer"
+# }
 
 resource "google_project_iam_member" "composer-service-account" {
   for_each = toset([
@@ -266,7 +266,7 @@ resource "google_project_iam_member" "composer-service-account" {
   project = "cal-itp-data-infra-staging"
 }
 
-resource "google_project_iam_member" "gtfs-rt-archiver-service-account" {
+resource "google_project_iam_member" "gtfs-rt-archiver" {
   for_each = toset([
     "roles/storage.objectUser",
     "roles/bigquery.dataViewer",
@@ -277,7 +277,7 @@ resource "google_project_iam_member" "gtfs-rt-archiver-service-account" {
     "roles/iam.serviceAccountTokenCreator"
   ])
   role    = each.key
-  member  = "serviceAccount:${google_service_account.gtfs-rt-archiver-service-account.email}"
+  member  = "serviceAccount:${google_service_account.gtfs-rt-archiver.email}"
   project = "cal-itp-data-infra-staging"
 }
 

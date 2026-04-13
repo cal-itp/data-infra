@@ -1,7 +1,9 @@
 resource "google_project_iam_custom_role" "tfer--projects-002F-cal-itp-data-infra-002F-roles-002F-AgencyPaymentsServiceReader" {
   description = "Created on: 2022-08-29 Based on: BigQuery Data Viewer, BigQuery Job User, BigQuery Metadata Viewer"
   permissions = ["bigquery.config.get",
+    # Get metadata and access controls for the dataset. Viewing permissions in the console also requires the bigquery.datasets.getIamPolicy permission.
     "bigquery.datasets.get",
+    # Required by the console to grant the user permission to get a dataset's access controls. Fails open. The console also requires the bigquery.datasets.get permission to view the dataset.
     "bigquery.datasets.getIamPolicy",
     "bigquery.jobs.create",
     "bigquery.models.export",
