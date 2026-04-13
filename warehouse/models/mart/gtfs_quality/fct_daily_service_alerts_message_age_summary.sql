@@ -12,19 +12,12 @@ WITH service_alerts_ages AS (
     SELECT DISTINCT
         dt,
         base64_url,
+        _extract_ts,
+        gtfs_dataset_key,
+        gtfs_dataset_name,
         _header_message_age,
     FROM {{ ref('fct_service_alerts_messages') }}
     WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
-),
-
--- these values are repeated because one row in the source table is one service_alerts message so the header is identical for all messages on a given request
--- select distinct to deduplicate these to the overall message level to make summary statistics more meaningful
-distinct_headers AS (
-    SELECT DISTINCT
-        dt,
-        base64_url,
-        _header_message_age,
-    FROM service_alerts_ages
 ),
 
 header_age_percentiles AS (
@@ -36,7 +29,7 @@ header_age_percentiles AS (
         PERCENTILE_CONT(_header_message_age, .75) OVER(PARTITION BY dt, base64_url) AS p75_header_message_age,
         PERCENTILE_CONT(_header_message_age, .90) OVER(PARTITION BY dt, base64_url) AS p90_header_message_age,
         PERCENTILE_CONT(_header_message_age, .99) OVER(PARTITION BY dt, base64_url) AS p99_header_message_age
-    FROM distinct_headers
+    FROM service_alerts_ages
 ),
 
 fct_daily_service_alerts_message_age_summary AS (
@@ -44,6 +37,8 @@ fct_daily_service_alerts_message_age_summary AS (
         {{ dbt_utils.generate_surrogate_key(['dt', 'base64_url']) }} AS key,
         dt,
         base64_url,
+        gtfs_dataset_key,
+        gtfs_dataset_name,
         median_header_message_age,
         p25_header_message_age,
         p75_header_message_age,
@@ -53,7 +48,7 @@ fct_daily_service_alerts_message_age_summary AS (
         MIN(_header_message_age) AS min_header_message_age,
         AVG(_header_message_age) AS avg_header_message_age,
     FROM header_age_percentiles
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 )
 
 SELECT * FROM fct_daily_service_alerts_message_age_summary
