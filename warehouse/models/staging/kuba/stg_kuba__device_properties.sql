@@ -1,3 +1,5 @@
+{{ config(event_time='ts') }}
+
 WITH external_kuba AS (
     {{ get_latest_dense_rank(
         external_table = source('external_kuba', 'device_properties'),

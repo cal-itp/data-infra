@@ -1,12 +1,17 @@
 {{
     config(
         materialized='incremental',
-        incremental_strategy='insert_overwrite',
-        partition_by = {
-            'field': 'dt',
-            'data_type': 'date',
+        incremental_strategy='microbatch',
+        event_time = 'ts',
+        batch_size = 'day',
+        begin=var('KUBA_DEVICE_START'),
+        lookback=var('DBT_DAILY_MICROBATCH_LOOKBACK_DAYS'),
+        partition_by={
+            'field': 'ts',
+            'data_type': 'timestamp',
             'granularity': 'day',
         },
+        full_refresh=false,
     )
 }}
 
@@ -83,7 +88,6 @@ WITH fct_kuba__device_properties AS(
            dt,
            ts
       FROM {{ ref('stg_kuba__device_properties') }}
-     WHERE {{ incremental_where(default_start_var='KUBA_DEVICE_START') | trim }}
 )
 
 SELECT * FROM fct_kuba__device_properties
