@@ -9,33 +9,29 @@
 ) }}
 
 WITH vehicle_positions_ages AS (
-    SELECT DISTINCT
+    SELECT
         dt,
+        _extract_ts,
         gtfs_dataset_key,
+        gtfs_dataset_name,
         _header_message_age,
-        _vehicle_message_age,
-        _vehicle_message_age_vs_header
+        _vehicle_message_age
     FROM {{ ref('fct_vehicle_positions_messages') }}
     WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
--- these values are repeated because one row in the source table is one vehicle message so the header is identical for all messages on a given request
--- select distinct to deduplicate these to the overall message level to make summary statistics more meaningful
-
 vendor_vehicle_positions_ages AS (
-    SELECT DISTINCT
+    SELECT
         dt,
+        _extract_ts,
         organization_name,
         organization_key,
-        _header_message_age,
-        _vehicle_message_age,
-        _vehicle_message_age_vs_header
+        _vehicle_message_age
     FROM vehicle_positions_ages AS VPA
     INNER JOIN {{ ref('bridge_organizations_x_gtfs_datasets_produced') }} AS BOGD
         ON VPA.gtfs_dataset_key = BOGD.gtfs_dataset_key
         AND dt BETWEEN DATE(_valid_from) AND DATE(_valid_to)
 ),
-
 
 vehicle_age_percentiles AS (
     SELECT
