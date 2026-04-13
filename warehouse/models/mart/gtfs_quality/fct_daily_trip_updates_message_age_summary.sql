@@ -1,12 +1,19 @@
-{{ config(
-    materialized='incremental',
-    incremental_strategy='insert_overwrite',
-    partition_by = {
-        'field': 'dt',
-        'data_type': 'date',
-        'granularity': 'day',
-    },
-) }}
+{{
+    config(
+        materialized='incremental',
+        incremental_strategy='microbatch',
+        event_time = 'dt',
+        batch_size = 'day',
+        begin=var('PROD_GTFS_RT_START'),
+        lookback=var('DBT_ALL_MICROBATCH_LOOKBACK_DAYS'),
+        partition_by={
+            'field': 'dt',
+            'data_type': 'date',
+            'granularity': 'day',
+        },
+        full_refresh=false,
+    )
+}}
 
 WITH trip_updates_ages AS (
     SELECT
