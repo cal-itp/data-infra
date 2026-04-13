@@ -66,11 +66,11 @@ resource "google_service_account" "composer-service-account" {
   project      = "cal-itp-data-infra-staging"
 }
 
-resource "google_service_account" "gtfs-rt-archiver-service-account" {
-  account_id   = "gtfs-rt-service-account"
+resource "google_service_account" "gtfs-rt-archiver" {
+  account_id   = "gtfs-rt-archiver"
   description  = "Service account for the GTFS-RT archiver"
   disabled     = "false"
-  display_name = "workflow"
+  display_name = "gtfs-rt-archiver"
   project      = "cal-itp-data-infra-staging"
 }
 
