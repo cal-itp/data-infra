@@ -11,14 +11,14 @@
 }}
 
 WITH vehicle_positions_ages AS (
-    SELECT DISTINCT
+    SELECT
         dt,
         gtfs_dataset_key,
         gtfs_dataset_name,
+        _extract_ts,
         trip_id IS NOT NULL AS with_trip,
         _header_message_age,
-        _vehicle_message_age,
-        _vehicle_message_age_vs_header
+        _vehicle_message_age
     FROM {{ ref('fct_vehicle_positions_messages') }}
     WHERE {{ incremental_where(default_start_var = 'PROD_GTFS_RT_START') }}
 ),
