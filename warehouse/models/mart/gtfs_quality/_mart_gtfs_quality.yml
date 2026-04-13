@@ -611,6 +611,7 @@ models:
   - name: fct_daily_vendor_vehicle_positions_message_age_summary
     description: |
       Table summarizing the age in seconds of various message components by vendor by date.
+      Subject to [#3512](https://github.com/cal-itp/data-infra/issues/3512) until April 2026; calculation logic changed without backill.
       Terms:
       - For definitions of the underlying `header_message_age`, `vehicle_message_age`, and `vehice_message_age_vs_header`
         values, see `fct_vehicle_positions_messages`. In particular, note that a negative value indicates that the
@@ -635,6 +636,7 @@ models:
   - name: fct_daily_trip_updates_message_age_summary
     description: |
       Table summarizing the age in seconds of various message components by RT URL by date.
+      Subject to [#3512](https://github.com/cal-itp/data-infra/issues/3512) until April 2026; calculation logic changed without backill.
       Terms:
       - For definitions of the underlying `header_message_age`, `trip_update_message_age`, and `trip_update_message_age_vs_header`
         values, see `fct_trip_updates_messages`. In particular, note that a negative value indicates that the
@@ -648,6 +650,7 @@ models:
   - name: fct_daily_service_alerts_message_age_summary
     description: |
       Table summarizing the age in seconds of various message components by RT URL by date.
+      Subject to [#3512](https://github.com/cal-itp/data-infra/issues/3512) until April 2026; calculation logic changed without backill.
       Terms:
       - For definitions of the underlying `header_message_age` see `fct_service_alerts_messages`. In particular, note that a negative value indicates that the
         referenced item happened *after* the item it's being compared to; i.e., a negative `header_message_age` indicates
