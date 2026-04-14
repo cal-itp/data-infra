@@ -12,6 +12,7 @@
             'granularity': 'day',
         },
         full_refresh=false,
+        on_schema_change='sync_all_columns'
     )
 }}
 
