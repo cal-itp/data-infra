@@ -1,3 +1,5 @@
+{{ config(event_time='ts') }}
+
 WITH external_fare_leg_rules AS (
     SELECT *
     FROM {{ source('external_gtfs_schedule', 'fare_leg_rules') }}

@@ -101,8 +101,6 @@ models:
       what was in effect on January 2.
       This table should be used to understand "versions" of constituent data like
       routes, trips, etc.
-    config:
-      event_time: _valid_from
     tests:
       - dbt_utils.mutually_exclusive_ranges:
           arguments:
@@ -859,8 +857,6 @@ models:
       Each row is a cleaned row from a trips.txt file.
       Definitions for the original GTFS fields are available at:
       https://gtfs.org/reference/static#tripstxt.
-    config:
-      event_time: _feed_valid_from
     columns:
       - *schedule_dim_pk
       - *schedule_dim_gtfs_key_with_dupe_flag

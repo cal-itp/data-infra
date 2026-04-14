@@ -1,5 +1,6 @@
 {{ config(
     materialized='incremental',
+    event_time='dt',
     incremental_strategy='insert_overwrite',
     partition_by = {
         'field': 'dt',

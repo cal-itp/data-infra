@@ -141,8 +141,6 @@ models:
     description: |
       Cleaned GTFS schedule agency data.
       See https://gtfs.org/reference/static#agencytxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -166,8 +164,6 @@ models:
     description: |
       Cleaned GTFS schedule area data.
       See https://gtfs.org/schedule/reference/#areastxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -179,8 +175,6 @@ models:
     description: |
       Cleaned GTFS schedule attribution data.
       See https://gtfs.org/reference/static#attributionstxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -210,8 +204,6 @@ models:
     description: |
       Cleaned GTFS schedule fare attribute data.
       See https://gtfs.org/reference/static#fare_attributestxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -233,8 +225,6 @@ models:
     description: |
       Cleaned GTFS schedule fare leg rule data.
       See https://gtfs.org/schedule/reference/#fare_leg_rulestxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -252,8 +242,6 @@ models:
     description: |
       Cleaned GTFS schedule fare media data.
       See https://gtfs.org/schedule/reference/#fare_mediatxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -267,8 +255,6 @@ models:
     description: |
       Cleaned GTFS schedule fare products data.
       See https://gtfs.org/schedule/reference/#fare_productstxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -286,8 +272,6 @@ models:
     description: |
       Cleaned GTFS schedule fare rules data.
       See https://gtfs.org/reference/static#fare_rulestxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -305,8 +289,6 @@ models:
     description: |
       Cleaned GTFS schedule fare transfer rules data.
       See https://gtfs.org/schedule/reference/#fare_transfer_rulestxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -328,8 +310,6 @@ models:
     description: |
       Cleaned GTFS schedule feed info data.
       See https://gtfs.org/reference/static#feed_infotxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -355,8 +335,6 @@ models:
     description: |
       Cleaned GTFS schedule frequency data.
       See https://gtfs.org/reference/static#frequenciestxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -374,8 +352,6 @@ models:
     description: |
       Cleaned GTFS schedule level data.
       See https://gtfs.org/reference/static#levelstxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -386,8 +362,6 @@ models:
       - name: level_name
         description: '{{ doc("gtfs_levels__level_name") }}'
   - name: stg_gtfs_schedule__pathways
-    config:
-      event_time: ts
     description: |
       Cleaned GTFS schedule pathway data.
       See https://gtfs.org/reference/static#pathwaystxt for specification.
@@ -422,8 +396,6 @@ models:
     description: |
       Cleaned GTFS schedule route data.
       See https://gtfs.org/schedule/reference/#routestxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -455,8 +427,6 @@ models:
     description: |
       Cleaned GTFS schedule shape data.
       See https://gtfs.org/reference/static#shapestxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -485,8 +455,6 @@ models:
     description: |
       Cleaned GTFS schedule stop area data.
       See https://gtfs.org/schedule/reference/#stop_areastxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -498,8 +466,6 @@ models:
     description: |
       Cleaned GTFS schedule stop data.
       See https://gtfs.org/reference/static#stopstxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -551,8 +517,6 @@ models:
     description: |
       Cleaned GTFS schedule transfer data.
       See https://gtfs.org/reference/static#transferstxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -572,8 +536,6 @@ models:
     description: |
       Cleaned GTFS schedule translation data.
       See https://gtfs.org/reference/static#translationstxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -595,8 +557,6 @@ models:
     description: |
       Cleaned GTFS schedule trip data.
       See https://gtfs.org/schedule/reference/#tripstxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -628,8 +588,6 @@ models:
     description: |
       Cleaned GTFS schedule calendar data.
       See https://gtfs.org/schedule/reference/#calendartxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -657,8 +615,6 @@ models:
     description: |
       Cleaned GTFS schedule calendar_dates data.
       See https://gtfs.org/schedule/reference/#calendar_datestxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts
@@ -672,8 +628,6 @@ models:
     description: |
       Cleaned GTFS schedule stop_times data.
       See https://gtfs.org/schedule/reference/#calendar_datestxt for specification.
-    config:
-      event_time: ts
     columns:
       - name: base64_url
       - name: ts

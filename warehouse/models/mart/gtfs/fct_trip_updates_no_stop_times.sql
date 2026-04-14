@@ -2,6 +2,7 @@
     config(
         materialized='incremental',
         incremental_strategy='insert_overwrite',
+        event_time='dt',
         partition_by = {
             'field': 'dt',
             'data_type': 'date',

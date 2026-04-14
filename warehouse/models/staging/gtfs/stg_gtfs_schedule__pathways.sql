@@ -1,3 +1,5 @@
+{{ config(event_time='ts') }}
+
 WITH external_pathways AS (
     SELECT *
     FROM {{ source('external_gtfs_schedule', 'pathways') }}

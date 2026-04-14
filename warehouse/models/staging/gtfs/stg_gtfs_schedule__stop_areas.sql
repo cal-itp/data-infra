@@ -1,3 +1,5 @@
+{{ config(event_time='ts') }}
+
 WITH external_stop_areas AS (
     SELECT *
     FROM {{ source('external_gtfs_schedule', 'stop_areas') }}

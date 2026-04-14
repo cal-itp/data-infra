@@ -612,8 +612,6 @@ models:
   - name: fct_stop_time_updates
     description: |
       Unnested and de-duped stop time updates.
-    config:
-      event_time: dt
     columns:
       - name: key
         tests: *almost_unique_rt_key_tests
@@ -762,8 +760,6 @@ models:
       Due to data size, this table **must** be queried with a date filter
       (like `WHERE dt = 'YYYY-MM-DD'`).
       Hour filters will also further improve performance.
-    config:
-      event_time: dt
     columns:
       - name: key
         description: |
@@ -1026,8 +1022,6 @@ models:
       Due to data size, this table **must** be queried with a date filter
       (like `WHERE dt = 'YYYY-MM-DD'`).
       Hour filters will also further improve performance.
-    config:
-      event_time: dt
     columns:
       - name: key
         description: |
@@ -1094,8 +1088,6 @@ models:
       distinct.)
       See: https://gtfs.org/realtime/reference/#message-alert for
       field definitions.
-    config:
-      event_time: dt
     tests:
       - dbt_utils.expression_is_true:
           arguments:
@@ -1792,8 +1784,6 @@ models:
     description: |
       Incrementally materialize trip update messages without stop times;
       this reduces the data size by about 90%.
-    config:
-      event_time: dt
     columns:
       - name: key
         tests: *almost_unique_rt_key_tests

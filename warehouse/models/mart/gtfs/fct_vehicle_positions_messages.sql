@@ -1,3 +1,5 @@
+{{ config(event_time='dt') }}
+
 WITH stg_gtfs_rt__vehicle_positions AS (
     SELECT *
     FROM {{ ref('stg_gtfs_rt__vehicle_positions') }}
