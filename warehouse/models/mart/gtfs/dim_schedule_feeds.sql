@@ -1,4 +1,4 @@
-{{ config(materialized='table') }}
+{{ config(materialized='table', event_time='_valid_from') }}
 
 {%- set timestamps = dbt_utils.get_column_values(
         table = ref('int_gtfs_schedule__joined_feed_outcomes'),

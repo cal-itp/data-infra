@@ -1,3 +1,5 @@
+{{ config(event_time='dt') }}
+
 WITH fct_trip_updates_messages AS (
     SELECT * FROM {{ ref('fct_trip_updates_messages') }}
     -- TODO: these have duplicate rows down to the stop level, maybe should exclude

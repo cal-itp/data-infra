@@ -1,3 +1,5 @@
+{{ config(event_time='ts') }}
+
 WITH external_calendar AS (
     SELECT *
     FROM {{ source('external_gtfs_schedule', 'calendar') }}
