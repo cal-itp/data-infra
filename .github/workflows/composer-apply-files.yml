@@ -7,7 +7,6 @@ on:
       - 'staging/**'
     paths:
       - 'airflow/**'
-      - 'warehouse/**'
 
 jobs:
   airflow-changes:
