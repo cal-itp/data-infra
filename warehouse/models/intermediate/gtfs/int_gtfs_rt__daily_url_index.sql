@@ -1,4 +1,4 @@
-{{ config(materialized='table') }}
+{{ config(materialized='table', event_time='dt') }}
 
 WITH int_gtfs_rt__distinct_download_configs AS (
     SELECT *
