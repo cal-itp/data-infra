@@ -149,14 +149,6 @@ jobs:
         working-directory: warehouse
         run: gsutil cp gs://${{ env.DBT_ARTIFACTS_BUCKET }}/latest/*.json ./target/latest/
 
-      - name: List local target folder
-        working-directory: warehouse/target
-        run: ls
-
-      - name: List local latest folder
-        working-directory: warehouse/target/latest
-        run: ls
-
       - name: Setup Continuous Machine Learning tools
         uses: iterative/setup-cml@v2
 
