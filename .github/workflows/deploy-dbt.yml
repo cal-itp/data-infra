@@ -415,7 +415,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [airflow-changes]
 
-    if: ${{ !contains(github.ref, 'refs/heads/staging') && (needs.airflow-changes.outputs.staging == '[]' || needs.airflow-changes.outputs.staging == '') }}
+    if: ${{ github.ref != 'refs/heads/main' && !contains(github.ref, 'refs/heads/staging') && (needs.airflow-changes.outputs.staging == '[]' || needs.airflow-changes.outputs.staging == '') }}
 
     permissions:
       contents: read
@@ -446,7 +446,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [airflow-changes]
 
-    if: ${{ needs.airflow-changes.outputs.production == '[]' || needs.airflow-changes.outputs.production == '' }}
+    if: ${{ github.ref != 'refs/heads/main' && (needs.airflow-changes.outputs.production == '[]' || needs.airflow-changes.outputs.production == '') }}
 
     permissions:
       contents: read
