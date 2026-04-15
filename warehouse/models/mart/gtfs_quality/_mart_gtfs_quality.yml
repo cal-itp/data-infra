@@ -10,34 +10,34 @@ models:
       is filled in so there is always a count of notices per day
       per feed, even if that count is zero; null counts indicate
       a lack of validation for that feed on that day.
-    tests:
+    data_tests:
       - dbt_utils.expression_is_true:
           arguments:
             expression: 'validated_extracts = validation_successes + validation_exceptions'
     columns:
       - &key
         name: key
-        tests: &primary_key_tests
+        data_tests: &primary_key_tests
           - unique
           - not_null
         meta: &pk_meta
           metabase.semantic_type: type/PK
       - &date
         name: date
-        tests:
+        data_tests:
           - not_null
       - name: code
-        tests:
+        data_tests:
           - not_null
       - name: description
         description: A plain language description of the issue indicated by the code
-        tests:
+        data_tests:
           - not_null
       - name: is_critical
-        tests:
+        data_tests:
           - not_null
       - name: parsed_files
-        tests:
+        data_tests:
           - dbt_utils.not_null_proportion:
               arguments:
                 at_least: 0.99
@@ -45,7 +45,7 @@ models:
               arguments:
                 expression: '<= 4320'
       - name: validated_extracts
-        tests:
+        data_tests:
           - dbt_utils.not_null_proportion:
               arguments:
                 at_least: 0.99
@@ -53,7 +53,7 @@ models:
               arguments:
                 expression: '<= 4320'
       - name: validation_successes
-        tests:
+        data_tests:
           - dbt_utils.not_null_proportion:
               arguments:
                 at_least: 0.99
@@ -61,7 +61,7 @@ models:
               arguments:
                 expression: '<= 4320'
       - name: validation_exceptions
-        tests:
+        data_tests:
           - dbt_utils.not_null_proportion:
               arguments:
                 at_least: 0.99
@@ -79,7 +79,7 @@ models:
     columns:
       - *key
       - name: date
-        tests:
+        data_tests:
           - not_null
           # These tests ensure we only display notices during
           # the "range" of validator versions.
@@ -119,7 +119,7 @@ models:
                 where: validation_validator_version = 'v7.1.0'
       - &schedule_feed_key
         name: feed_key
-        tests:
+        data_tests:
           - not_null
           - relationships:
               arguments:
@@ -127,10 +127,10 @@ models:
                 field: key
       - &base64_url
         name: base64_url
-        tests:
+        data_tests:
           - not_null
       - name: outcome_extract_dt
-        tests:
+        data_tests:
           - dbt_utils.expression_is_true:
               arguments:
                 # outcomes only count for the outcomes's date and onwards
@@ -140,7 +140,7 @@ models:
         description: |
           The version of the GTFS schedule canonical validator that these notices are from.
           See version and release history at https://github.com/MobilityData/gtfs-validator/releases.
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -151,19 +151,19 @@ models:
           Code from the GTFS schedule canonical validator.
           See https://github.com/MobilityData/gtfs-validator/blob/master/RULES.md for
           documentation of individual codes.
-        tests:
+        data_tests:
           - not_null
       - name: severity
-        tests:
+        data_tests:
           - not_null
       - name: validation_success
-        tests:
+        data_tests:
           - dbt_utils.not_null_proportion:
               arguments:
                 at_least: 0.99
       - name: validation_exception
       - name: total_notices
-        tests:
+        data_tests:
           - dbt_utils.not_null_proportion:
               arguments:
                 at_least: 0.99
@@ -173,7 +173,7 @@ models:
       Contains the actually implemented checks, i.e. checks that
       show up in the underlying daily checks model. Tested against
       the "intended checks" to verify checks are actually implemented.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -224,18 +224,18 @@ models:
           Array of schedule_feed_key values for schedule feed versions included in this organization's assessment.
       - &check
         name: check
-        tests:
+        data_tests:
           - not_null
       - &status
         name: status
-        tests:
+        data_tests:
           - not_null
       - name: feature
       - &is_manual
         name: is_manual
         description: |
           Boolean flag for whether the associated check was performed by hand (via Airtable) or automatically.
-        tests:
+        data_tests:
           - not_null
       - &reports_order
         name: reports_order
@@ -299,7 +299,7 @@ models:
         description:
           Foreign key to `dim_schedule_feeds`.
           This may be null if the unzip operation failed.
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_schedule_feeds')
@@ -309,13 +309,13 @@ models:
           The original full file path to this file in the zipfile.
           This may include directory names that were part of
           the zipfile's original internal structure.
-        tests:
+        data_tests:
           - not_null
       - name: original_filename
         description: |
           The file name portion of the original file path
           (i.e., directories have been stripped away.)
-        tests:
+        data_tests:
           - not_null
       - name: gtfs_filename
         description: |
@@ -340,14 +340,14 @@ models:
           If not `parse_success`, the exception that was encountered when
           converting this file to JSONL.
       - name: base64_url
-        tests:
+        data_tests:
           - not_null
       - name: string_url
         description: |
           Human readable string URL.
           Will not contain authorization parameters.
       - name: gtfs_dataset_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_gtfs_datasets')
@@ -387,7 +387,7 @@ models:
       - name: organization_itp_id
       - name: organization_source_record_id
       - name: organization_key
-        tests:
+        data_tests:
           - not_null
           - relationships:
               arguments:
@@ -499,13 +499,13 @@ models:
         name: publish_date
         description: |
           See `idx_monthly_reports_site` table; intended to be used to join this data with the index.
-        tests:
+        data_tests:
           - not_null
       - *schedule_validator_code
       - name: severity
       - *schedule_validation_validator_version
       - name: human_readable_description
-        tests:
+        data_tests:
           - not_null
   - name: fct_monthly_reports_site_organization_file_checks
     description: |
@@ -594,7 +594,7 @@ models:
         that the `header_timestamp` was later than `_extract_ts`.
       - `pX` refers to a percentile, so `p25` refers to 25th percentile.
       - `avg` refers to the mean.
-    tests: &message_age_summary_tests
+    data_tests: &message_age_summary_tests
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -602,10 +602,10 @@ models:
               - base64_url
     columns: &message_age_summary_cols
       - name: dt
-        tests:
+        data_tests:
           - not_null
       - name: base64_url
-        tests:
+        data_tests:
           - not_null
 
   - name: fct_daily_trip_updates_message_age_summary
@@ -619,7 +619,7 @@ models:
         that the `header_timestamp` was later than `_extract_ts`.
       - `pX` refers to a percentile, so `p25` refers to 25th percentile.
       - `avg` refers to the mean.
-    tests: *message_age_summary_tests
+    data_tests: *message_age_summary_tests
     columns: *message_age_summary_cols
 
   - name: fct_daily_service_alerts_message_age_summary
@@ -632,7 +632,7 @@ models:
         that the `header_timestamp` was later than `_extract_ts`.
       - `pX` refers to a percentile, so `p25` refers to 25th percentile.
       - `avg` refers to the mean.
-    tests: *message_age_summary_tests
+    data_tests: *message_age_summary_tests
     columns: *message_age_summary_cols
 
   - name: fct_monthly_reports_site_organization_gtfs_vendors

@@ -32,7 +32,7 @@ models:
       - name: relative_difference
         description: The relative change in a participant's ridership count as compared to the previous day
   - name: v2_payments_reliability_monthly_unlabeled_routes
-    tests:
+    data_tests:
       - dbt_utils.expression_is_true:
           arguments:
             expression: "n_all_rides >= (n_route_z_rides + n_null_rides)"
@@ -54,7 +54,7 @@ models:
       - name: recency_rank
         description: Used to identify a month's recency (for help with filtering)
   - name: v2_payments_reliability_weekly_unlabeled_routes
-    tests:
+    data_tests:
       - dbt_utils.expression_is_true:
           arguments:
             expression: "n_all_rides >= (n_route_z_rides + n_null_rides)"
@@ -76,7 +76,7 @@ models:
       - name: recency_rank
         description: Used to identify a month's recency (for help with filtering)
   - name: v2_payments_reliability_weekly_unlabeled_routes_enghouse
-    tests:
+    data_tests:
       - dbt_utils.expression_is_true:
           arguments:
             expression: "n_all_rides >= total_unlabeled_rides"

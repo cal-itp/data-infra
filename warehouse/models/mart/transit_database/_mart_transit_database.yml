@@ -3,7 +3,7 @@ version: 2
 models:
   - name: dim_components
     description: '{{ doc("components_table") }}'
-    tests: &mutually_exclusive_ranges
+    data_tests: &mutually_exclusive_ranges
       - dbt_utils.mutually_exclusive_ranges:
           arguments:
             lower_bound_column: _valid_from
@@ -13,7 +13,7 @@ models:
     columns:
       - &key
         name: key
-        tests:
+        data_tests:
           - not_null
           - unique
         meta:
@@ -40,14 +40,14 @@ models:
           this will always be True.
   - name: dim_contracts
     description: '{{ doc("contracts_table") }}'
-    tests: *mutually_exclusive_ranges
+    data_tests: *mutually_exclusive_ranges
     columns:
       - *key
       - name: contract_holder_organization_key
         description: |
           Unversioned Airtable record ID for contract holder organization; versioned bridge
           table to come later.
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_organizations')
@@ -56,7 +56,7 @@ models:
         description: |
           Unversioned Airtable record ID for contract vendor organization; versioned bridge
           table to come later.
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_organizations')
@@ -70,7 +70,7 @@ models:
       - *is_current_placeholder
   - name: dim_data_schemas
     description: '{{ doc("data_schemas_table") }}'
-    tests: *mutually_exclusive_ranges
+    data_tests: *mutually_exclusive_ranges
     columns:
       - *key
       - *valid_from_placeholder
@@ -78,7 +78,7 @@ models:
       - *is_current_placeholder
   - name: dim_organizations
     description: '{{ doc("organizations_table") }}'
-    tests: *mutually_exclusive_ranges
+    data_tests: *mutually_exclusive_ranges
     columns:
       - *key
       - &org_ntd_id
@@ -189,7 +189,7 @@ models:
             Council of Governments
   - name: dim_services
     description: '{{ doc("services_table") }}'
-    tests: *mutually_exclusive_ranges
+    data_tests: *mutually_exclusive_ranges
     columns:
       - *key
       - name: name
@@ -269,7 +269,7 @@ models:
       - *valid_to_actual
       - *is_current_actual
   - name: dim_products
-    tests: *mutually_exclusive_ranges
+    data_tests: *mutually_exclusive_ranges
     description: '{{ doc("products_table") }}'
     columns:
       - *key
@@ -284,7 +284,7 @@ models:
       - *valid_to_placeholder
       - *is_current_placeholder
   - name: dim_properties_and_features
-    tests: *mutually_exclusive_ranges
+    data_tests: *mutually_exclusive_ranges
     columns:
       - *key
       - *valid_from_placeholder
@@ -294,11 +294,11 @@ models:
     description: |
       Attachment links to images of contracts.
       One contract can have multiple attachments.
-    tests: *mutually_exclusive_ranges
+    data_tests: *mutually_exclusive_ranges
     columns:
       - *key
       - name: contract_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_contracts')
@@ -308,7 +308,7 @@ models:
       - *is_current_placeholder
   - name: dim_gtfs_datasets
     description: '{{ doc("gtfs_datasets_table") }}'
-    tests: *mutually_exclusive_ranges
+    data_tests: *mutually_exclusive_ranges
     columns:
       - *key
       - name: type
@@ -358,13 +358,13 @@ models:
       - *is_current_actual
   - name: dim_gtfs_service_data
     description: '{{ doc("gtfs_service_data_table") }}'
-    tests: *mutually_exclusive_ranges
+    data_tests: *mutually_exclusive_ranges
     columns:
       - *key
       - name: service_key
         description: |
           Service record key for this service / dataset relationship.
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_services')
@@ -372,7 +372,7 @@ models:
       - name: gtfs_dataset_key
         description: |
           GTFS dataset record key for this service / dataset relationship.
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_gtfs_datasets')
@@ -393,7 +393,7 @@ models:
       - name:  fares_v2_status
         # self relationship test breaks metabase connector: https://github.com/JarvusInnovations/dbt-metabase/blob/master/dbtmetabase/parsers/dbt_manifest.py#L202
         # TODO: make an aliased version of the relationship test
-        # tests:
+        # data_tests:
         #   - relationships:
         #       arguments:
         #         to: ref('dim_gtfs_service_data')
@@ -403,7 +403,7 @@ models:
       - *is_current_actual
   - name: dim_fare_systems
     description: '{{ doc("fare_systems_table") }}'
-    tests: *mutually_exclusive_ranges
+    data_tests: *mutually_exclusive_ranges
     columns:
       - *key
       - *valid_from_placeholder
@@ -414,25 +414,25 @@ models:
     columns:
       - *key
       - name: component_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_components')
                 field: key
       - name: product_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_products')
                 field: key
       - name: service_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_services')
                 field: key
       - name: product_vendor_organization_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_organizations')
@@ -460,7 +460,7 @@ models:
       Currently, this is not a genuinely historical table because component and product data is current-only.
       Versioning columns are provided for future schema consistency.
       Joins via this table can result in fanout.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -468,13 +468,13 @@ models:
               - product_key
     columns:
       - name: component_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_components')
                 field: key
       - name: product_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_products')
@@ -497,7 +497,7 @@ models:
     columns:
       - *key
       - name: service_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_services')
@@ -508,7 +508,7 @@ models:
           #       config:
           #         where: gtfs_service_data_customer_facing
       - name: schedule_gtfs_dataset_key
-        tests:
+        data_tests:
           - &ref_gtfs_datasets_key
             relationships:
               arguments:
@@ -521,16 +521,16 @@ models:
         description: |
           If "Yes", this service should be considered "assessed" by Cal-ITP for the reports site.
       - name: service_alerts_gtfs_dataset_key
-        tests:
+        data_tests:
           - *ref_gtfs_datasets_key
       - name: vehicle_positions_gtfs_dataset_key
-        tests:
+        data_tests:
           - *ref_gtfs_datasets_key
       - name: trip_updates_gtfs_dataset_key
-        tests:
+        data_tests:
           - *ref_gtfs_datasets_key
       - name: organization_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_organizations')
@@ -601,7 +601,7 @@ models:
       - name: agency_name
         description: The name of the TA as specified in NTD.
       - <<: *org_ntd_id
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: hq_city
@@ -634,7 +634,7 @@ models:
       Currently, this is not a genuinely historical table because component and properties and features data is current-only.
       Versioning columns are provided for future schema consistency.
       Joins via this table can result in fanout.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -642,13 +642,13 @@ models:
               - property_feature_key
     columns:
       - name: component_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_components')
                 field: key
       - name: property_feature_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_properties_and_features')
@@ -662,7 +662,7 @@ models:
       Currently, this is not a genuinely historical table because data schema and product data is current-only.
       Versioning columns are provided for future schema consistency.
       Joins via this table can result in fanout.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -670,13 +670,13 @@ models:
               - product_key
     columns:
       - name: data_schema_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_data_schemas')
                 field: key
       - name: product_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_products')
@@ -690,7 +690,7 @@ models:
       Currently, this is not a genuinely historical table because data schema and product data is current-only.
       Versioning columns are provided for future schema consistency.
       Joins via this table can result in fanout.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -698,13 +698,13 @@ models:
               - product_key
     columns:
       - name: data_schema_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_data_schemas')
                 field: key
       - name: product_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_products')
@@ -716,7 +716,7 @@ models:
       the given mobility service.
       This is a versioned, many-to-many relationship.
       Joins via this table can result in fanout.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -724,13 +724,13 @@ models:
               - service_key
     columns:
       - name: organization_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_organizations')
                 field: key
       - name: service_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_services')
@@ -741,7 +741,7 @@ models:
       (map between two organization records.)
       This is a versioned, many-to-many relationship.
       Joins via this table can result in fanout.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -749,13 +749,13 @@ models:
               - parent_organization_key
     columns:
       - name: organization_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_organizations')
                 field: key
       - name: parent_organization_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_organizations')
@@ -767,7 +767,7 @@ models:
       (map between two service records.)
       This is a versioned, many-to-many relationship.
       Joins via this table can result in fanout.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -775,13 +775,13 @@ models:
               - paratransit_for_service_key
     columns:
       - name: service_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_services')
                 field: key
       - name: paratransit_for_service_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_services')
@@ -794,7 +794,7 @@ models:
       For the organization that manages the service represented in a dataset, see dim_provider_gtfs_data.
       This is a versioned, many-to-many relationship.
       Joins via this table can result in fanout.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -802,13 +802,13 @@ models:
               - gtfs_dataset_key
     columns:
       - name: organization_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_organizations')
                 field: key
       - name: gtfs_dataset_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_gtfs_datasets')
@@ -824,7 +824,7 @@ models:
       Organizations that have been deleted will not have their funding programs present in
       this table.
       Joins via this table can result in fanout.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -832,13 +832,13 @@ models:
               - funding_program_key
     columns:
       - name: organization_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_organizations')
                 field: key
       - name: funding_program_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_funding_programs')
@@ -855,7 +855,7 @@ models:
       Services that have been deleted will not have their fare systems present in
       this table.
       Joins via this table can result in fanout.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -863,13 +863,13 @@ models:
               - service_key
     columns:
       - name: fare_system_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_fare_systems')
                 field: key
       - name: service_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_services')
@@ -880,7 +880,7 @@ models:
       Relationship indicates that contract covers the given component.
       This is a versioned, many-to-many relationship.
       Joins via this table can result in fanout.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -888,13 +888,13 @@ models:
               - component_key
     columns:
       - name: contract_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_contracts')
                 field: key
       - name: component_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_components')
@@ -905,7 +905,7 @@ models:
       Relationship indicates that contract covers the given service.
       This is a versioned, many-to-many relationship.
       Joins via this table can result in fanout.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -913,13 +913,13 @@ models:
               - service_key
     columns:
       - name: contract_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_contracts')
                 field: key
       - name: service_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_services')
@@ -932,7 +932,7 @@ models:
       While an RT dataset can only use one schedule at a time, because the records are versioned independently,
       a given `gtfs_dataset_key` can appear multiple times in this table with different versions of its accompanying schedule.
       Thus, joins via this table can result in fanout if they don't limit to validity on a specific date.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -940,14 +940,14 @@ models:
               - schedule_to_use_for_rt_validation_gtfs_dataset_key
     columns:
       - name: gtfs_dataset_key
-        tests:
+        data_tests:
           - dbt_utils.relationships_where:
               arguments:
                 to: ref('dim_gtfs_datasets')
                 field: key
                 to_condition: "type != 'schedule'"
       - name: schedule_to_use_for_rt_validation_gtfs_dataset_key
-        tests:
+        data_tests:
           - dbt_utils.relationships_where:
               arguments:
                 to: ref('dim_gtfs_datasets')
@@ -959,7 +959,7 @@ models:
       modes records.
       This is a versioned relationship, with one service having one primary mode.
       Joins via this table can result in fanout because of versioning.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -967,13 +967,13 @@ models:
               - mode_key
     columns:
       - name: service_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_services')
                 field: key
       - name: mode_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_modes')

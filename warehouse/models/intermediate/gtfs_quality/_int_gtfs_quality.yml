@@ -5,7 +5,7 @@ models:
   # "Final" combined guideline checks table
   - name: int_gtfs_quality__guideline_checks_long
     description: '{{ doc("int_gtfs_quality__guideline_checks_long") }}'
-    tests:
+    data_tests:
       - dbt_utils.expression_is_true:
           arguments:
             expression: 'status != {{ guidelines_to_be_assessed_status() }}'
@@ -13,14 +13,14 @@ models:
     #TODO: use these anchors below
       - &key
         name: key
-        tests: &primary_key_tests
+        data_tests: &primary_key_tests
           - unique
           - not_null
         meta: &pk_meta
           metabase.semantic_type: type/PK
       - &date
         name: date
-        tests:
+        data_tests:
           - not_null
       - name: organization_name
         description: |
@@ -58,7 +58,7 @@ models:
           Foreign key to `dim_schedule_feeds`.
       - &check
         name: check
-        tests:
+        data_tests:
           - not_null
           # This is a useful test but dbt-metabase fails since
           # Metabase does not sync the staging schema
@@ -67,13 +67,13 @@ models:
           #     to: ref('stg_gtfs_quality__intended_checks')
           #     field: check
       - name: status
-        tests:
+        data_tests:
           - not_null
       - name: feature
       - name: is_manual
         description: |
           Boolean flag for whether the associated check was performed by hand (via Airtable) or automatically.
-        tests:
+        data_tests:
           - not_null
       - name: reports_order
         description: |
@@ -86,7 +86,7 @@ models:
       Daily index of all potentially assessed entities with all possible checks.
       Index against which individual checks are meant to be defined.
       All entity-related columns are inherited from `int_gtfs_quality__daily_assessment_candidate_entities`.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -101,7 +101,7 @@ models:
       Unioned, incremental table of RT validation outcomes.
     columns:
       - name: key
-        tests:
+        data_tests:
           - not_null
           - unique
 
@@ -110,7 +110,7 @@ models:
       List of codes and their severity in the GTFS validator.
       TODO: this will need additional work when we deploy
       a new GTFS validator version.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -124,20 +124,20 @@ models:
       at some point used within the GTFS data pipeline.)
     columns:
       - name: key
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: code
-        tests:
+        data_tests:
           - not_null
       - name: human_readable_description
-        tests:
+        data_tests:
           - not_null
       - name: version
-        tests:
+        data_tests:
           - not_null
       - name: severity
-        tests:
+        data_tests:
           - not_null
 
   - name: int_gtfs_quality__naive_organization_service_dataset_full_join
@@ -162,7 +162,7 @@ models:
       to represent this service)
 
       Entities that fail any of the criteria will *not* be included as `assessed` for the given date.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -173,7 +173,7 @@ models:
         description: |
           Synthetic key from `organization_key`, `service_key`, `gtfs_service_data_key`, `gtfs_dataset_key`,
           and `schedule_feed_key`.
-        tests:
+        data_tests:
           - not_null
       - name: date
         description: |
@@ -250,7 +250,7 @@ models:
       so that if this organization/dataset relationship is customer facing or assessed
       for any service, the entire relationship is marked as customer facing or assessed
       in this table.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -261,7 +261,7 @@ models:
   - name: int_gtfs_quality__feed_version_history
     description: |
       Describes attributes of the previous and following versions of each feed.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -274,7 +274,7 @@ models:
   - name: int_gtfs_quality__outcome_validator_versions
     description: |
       Unique observed validator versions for each extract.
-    tests:
+    data_tests:
     - dbt_utils.unique_combination_of_columns:
         arguments:
           combination_of_columns:
@@ -286,7 +286,7 @@ models:
     description: |
       Summary of a schedule feed's stops and stop times by trip and (calendar) service, to support the GTFS guideline
       check about sufficient lead time for schedule updates.
-    tests:
+    data_tests:
     - dbt_utils.unique_combination_of_columns:
         arguments:
           combination_of_columns:

@@ -8,7 +8,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, and `mode`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_capital_expenditures_time_series_other
@@ -18,7 +18,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, and `mode`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_capital_expenditures_time_series_rolling_stock
@@ -28,7 +28,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, and `mode`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_capital_expenditures_time_series_total
@@ -38,7 +38,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, and `mode`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_operating_and_capital_funding_time_series_capital_federal
@@ -48,7 +48,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_operating_and_capital_funding_time_series_capital_local
@@ -58,7 +58,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_operating_and_capital_funding_time_series_capital_other
@@ -68,7 +68,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_operating_and_capital_funding_time_series_capital_state
@@ -78,7 +78,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_operating_and_capital_funding_time_series_capital_total
@@ -88,7 +88,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_operating_and_capital_funding_time_series_operating_federal
@@ -98,7 +98,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_operating_and_capital_funding_time_series_operating_local
@@ -108,7 +108,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_operating_and_capital_funding_time_series_operating_other
@@ -118,7 +118,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_operating_and_capital_funding_time_series_operating_state
@@ -128,7 +128,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_operating_and_capital_funding_time_series_operating_total
@@ -138,7 +138,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_operating_and_capital_funding_time_series_summary_total
@@ -149,7 +149,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_operating_and_capital_funding_time_series_decommissioned_operatingother
@@ -159,7 +159,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_drm
@@ -169,7 +169,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_fares
@@ -179,7 +179,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_opexp_ga
@@ -189,7 +189,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_opexp_nvm
@@ -199,7 +199,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_opexp_total
@@ -209,7 +209,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_opexp_vm
@@ -219,7 +219,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_opexp_vo
@@ -229,7 +229,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_pmt
@@ -239,7 +239,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_upt
@@ -249,7 +249,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_voms
@@ -259,7 +259,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_vrh
@@ -269,7 +269,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_service_data_and_operating_expenses_time_series_by_mode_vrm
@@ -279,6 +279,6 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        tests:
+        data_tests:
           - not_null
           - unique

@@ -14,7 +14,7 @@ models:
     description: |
       Each row is an individual row from an individual download (snapshot) of the
       Contracts table in Airtable.
-    tests:
+    data_tests:
       - dbt_utils.equal_rowcount:
           arguments:
             compare_model: ref('base_tts_contracts_idmap')
@@ -33,7 +33,7 @@ models:
       Each row is an individual row from an individual download (snapshot) of the
       Service Components table in Airtable.
       IDs have been translated from the Transit Technology Service base to the California Transit base.
-    tests:
+    data_tests:
       - dbt_utils.equal_rowcount:
           arguments:
             compare_model: ref('base_tts_service_components_idmap')

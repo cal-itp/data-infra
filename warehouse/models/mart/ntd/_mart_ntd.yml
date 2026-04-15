@@ -3,13 +3,13 @@ version: 2
 x-common-fields:
   - &key
     name: key
-    tests:
+    data_tests:
       - not_null
       - unique
   - &ntd_id
     name: ntd_id
     description: '{{ doc("ntd_id") }}'
-    tests:
+    data_tests:
       - not_null
   - &agency
     name: agency
@@ -302,7 +302,7 @@ models:
       and then choose which year to look up.
 
       Use _is_current to find the latest version for each set of year, ntd_id, and state_parent_ntd_id.
-    tests:
+    data_tests:
       - dbt_utils.mutually_exclusive_ranges:
           arguments:
             lower_bound_column: _valid_from
@@ -313,18 +313,18 @@ models:
       - *key
       - <<: *report_year
         name: year
-        tests:
+        data_tests:
           - not_null
       - *ntd_id
       - name: _valid_from
-        tests:
+        data_tests:
           - not_null
       - name: _valid_to
-        tests:
+        data_tests:
           - not_null
       - name: _is_current
         description: Indicates the latest report version for each year, ntd_id, and state_parent_ntd_id.
-        tests:
+        data_tests:
           - not_null
       - *state_parent_ntd_id
       - *agency_name
@@ -380,7 +380,7 @@ models:
         description: |
           The table that originated the funding source information.
           The options are: `federal`, `state`, and `local`.
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -472,7 +472,7 @@ models:
           Local and State funding sources reported by agencies that do not report funding sources in specific categories because they have reduced reporting requirements.
           *ONLY for Local and State Funding Sources (funding_source IN ("local", "state"))
       - <<: *report_year
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -503,7 +503,7 @@ models:
     columns:
       - *key
       - <<: *report_year
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -550,7 +550,7 @@ models:
     columns:
       - *key
       - <<: *report_year
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -563,7 +563,7 @@ models:
       - *mode
       - *mode_name
       - <<: *time_period
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values: ["Average Weekday - AM Peak", "Average Weekday - Midday", "Average Weekday - PM Peak", "Average Weekday - Other", "Average Typical Weekday", "Average Typical Saturday", "Average Typical Sunday"]
@@ -656,7 +656,7 @@ models:
     columns:
       - *key
       - <<: *report_year
-        tests:
+        data_tests:
           - not_null
           - accepted_values:
               arguments:
@@ -672,7 +672,7 @@ models:
         description: |
           The time period for which data was collected.
           This table displays only "Annual Total".
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values: ["Annual Total"]

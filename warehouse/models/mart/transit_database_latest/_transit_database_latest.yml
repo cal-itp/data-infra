@@ -25,7 +25,7 @@ models:
         description: |
           GTFS data type ("schedule", "trip_updates",
           "vehicle_positions", or "service_alerts")
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values: ["trip_updates", "vehicle_positions", "service_alerts"]
@@ -62,7 +62,7 @@ models:
         description: |
           Base64-encoded URL of the GTFS schedule feed associated with the row, only
           filled with a value for rows representing non-schedule-type feeds
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values: [NULL]

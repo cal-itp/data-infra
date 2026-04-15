@@ -6,7 +6,7 @@ models:
     columns:
       - &rt_key
         name: key
-        tests:
+        data_tests:
           - not_null:
               arguments:
                 where: date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)

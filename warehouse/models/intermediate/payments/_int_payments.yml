@@ -11,12 +11,12 @@ models:
       that all rows dropped do in fact have a duplicate and no authorisations are lost.)
     columns:
       - name: request_type
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values: ['AUTHORISATION', 'DEBT_RECOVERY_AUTHCHECK', 'DEBT_RECOVERY_REVERSAL', 'CARD_CHECK']
       - name: aggregation_id
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('int_payments__latest_authorisations_by_aggregation')
@@ -38,11 +38,11 @@ models:
           ID of the aggregation being summarized. An aggregation can contain or be associated with multiple
           micropayment, authorisation, and settlement events. It represents the unit at which settlement occurs
           (so multiple settlement events only occur for a single aggregation if there are refunds against the original settlement.)
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: currency_code
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values: [840]
@@ -54,7 +54,7 @@ models:
   - name: int_payments__settlements_to_aggregations
     description: |
       This model contains Littlepay settlements aggregated to the `aggregation_id + retrieval_reference_number` level.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -69,7 +69,7 @@ models:
     columns:
       - *aggregation_pk
       - name: retrieval_reference_number
-        tests:
+        data_tests:
           - not_null
           - unique
       - &participant_id
@@ -83,7 +83,7 @@ models:
         description: '{{ doc("lp_settlement_latest_update_timestamp") }}'
       - name: net_settled_amount_dollars
         description: '{{ doc("lp_net_settled_amount_dollars") }}'
-        tests:
+        data_tests:
           - dbt_utils.accepted_range:
               arguments:
                 min_value: 0
@@ -101,7 +101,7 @@ models:
   - name: int_payments__micropayments_to_aggregations
     description: |
       Littlepay micropayments grouped to the aggregation (`aggregation_id`) level.
-    tests:
+    data_tests:
       - dbt_utils.expression_is_true:
           arguments:
             expression: "total_nominal_amount_dollars >= net_micropayment_amount_dollars"
@@ -289,7 +289,7 @@ models:
     description: |
       Summarizing micropayment information across the source micropayment,
       any applied adjustments (ex. fare capping), and any associated refunds.
-    tests:
+    data_tests:
       - dbt_utils.expression_is_true:
           arguments:
             expression: "micropayment_refund_amount <= charge_amount"
@@ -298,7 +298,7 @@ models:
       - &micropayment_id
         name: micropayment_id
         description: '{{ doc("lp_micropayment_id") }}'
-        tests:
+        data_tests:
           - not_null
           - unique:
               arguments:
@@ -353,7 +353,7 @@ models:
       - *micropayment_id
       - name: littlepay_transaction_id
         description: '{{ doc("lp_paired_first_transaction_id") }}'
-        tests:
+        data_tests:
           - not_null
           # refunds cause duplicates; ignore them here
           - unique:
@@ -430,7 +430,7 @@ models:
       erroneous micropayment records.
       It also annotates micropayment device transactions with the type and charge type
       of the associated micropayment to assist in later modeling.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -442,7 +442,7 @@ models:
       - *participant_id
       - name: littlepay_transaction_id
         description: '{{ doc("lp_littlepay_transaction_id") }}'
-        tests:
+        data_tests:
           - not_null
           - unique:
               arguments:
@@ -508,7 +508,7 @@ models:
       Derived from customer_funding_source records.
       funding_source_vault_id values can appear across multiple participants, so this
       table is unique at the funding_source_vault_id + participant_id level.
-    tests:
+    data_tests:
       - dbt_utils.mutually_exclusive_ranges:
           arguments:
             lower_bound_column: calitp_valid_at
@@ -523,7 +523,7 @@ models:
               - funding_source_id
     columns:
       - name: funding_source_id
-        tests:
+        data_tests:
           - not_null
       - name: customer_id
         description: '{{ doc("customer_funding_source_customer_id") }}'
@@ -555,7 +555,7 @@ models:
       should only have one principal_customer_id.
       customer_id values can appear across multiple participants, so this
       table is unique at the customer_id + participant_id level.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -564,11 +564,11 @@ models:
     columns:
       - name: customer_id
         description: '{{ doc("customer_funding_source_customer_id") }}'
-        tests:
+        data_tests:
           - not_null
       - name: principal_customer_id
         description: '{{ doc("customer_funding_source_principal_customer_id") }}'
-        tests:
+        data_tests:
           - not_null
       - name: earliest_tap
 
@@ -759,7 +759,7 @@ models:
       - *participant_id
       - name: aggregation_id
         description: '{{ doc("lp_aggregation_id") }}'
-        tests:
+        data_tests:
         - unique_proportion:
             arguments:
               at_least: 0.999

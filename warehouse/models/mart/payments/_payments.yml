@@ -7,14 +7,14 @@ models:
     columns:
       - name: micropayment_id
         description: '{{ doc("lp_micropayment_id") }}'
-        tests:
+        data_tests:
           - not_null
           - unique_proportion:
               arguments:
                 at_least: 0.999
       - name: aggregation_id
         description: '{{ doc("lp_aggregation_id") }}'
-        tests:
+        data_tests:
           - not_null
           - relationships:
               arguments:
@@ -22,7 +22,7 @@ models:
                 field: aggregation_id
       - name: littlepay_transaction_id
         description: '{{ doc("lp_paired_first_transaction_id") }}'
-        tests:
+        data_tests:
           - dbt_utils.not_null_proportion:
               arguments:
                 at_least: 0.998
@@ -179,7 +179,7 @@ models:
           The last day of the month of the aggregation_datetime in Pacific Time (involves conversion of aggregation_datetime to Pacific Time).
           This column is primarily for use in BI tooling to support consistent dates across activity types.
           Aggregation activity happens throughout the month.
-        tests:
+        data_tests:
           - not_null
       - name: end_of_month_date_utc
         description: |
@@ -187,12 +187,12 @@ models:
           This column preserves the end of month date value for the original UTC date as received by Littlepay, however,
           `end_of_month_date_pacific` is primarily used in BI tooling instead to support consistent dates across activity types.
           Aggregation activity happens throughout the month.
-        tests:
+        data_tests:
           - not_null
       - name: aggregation_id
         description: |
           Aggregation ID that uniquely identifies this aggregation.
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: aggregation_datetime
@@ -311,7 +311,7 @@ models:
           The last day of the month of the aggregation_datetime in Pacific Time (involves conversion of aggregation_datetime to Pacific Time).
           This column is primarily for use in BI tooling to support consistent dates across activity types.
           Aggregation activity happens throughout the month.
-        tests:
+        data_tests:
           - not_null
       - name: end_of_month_date_utc
         description: |
@@ -319,12 +319,12 @@ models:
           This column preserves the end of month date value for the original UTC date as received by Littlepay, however,
           `end_of_month_date_pacific` is primarily used in BI tooling instead to support consistent dates across activity types.
           Aggregation activity happens throughout the month.
-        tests:
+        data_tests:
           - not_null
       - name: aggregation_id
         description: |
           Aggregation ID that uniquely identifies this aggregation.
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: aggregation_datetime
@@ -427,7 +427,7 @@ models:
       - *participant_id
       - name: aggregation_id
         description: '{{ doc("lp_aggregation_id") }}'
-        tests:
+        data_tests:
             - relationships:
                 arguments:
                   to: ref('fct_payments_aggregations')
@@ -446,7 +446,7 @@ models:
         description: Settlement amount in dollars. Negative for credit (refund) settlements.
       - name: retrieval_reference_number
         description: '{{ doc("lp_retrieval_reference_number") }}'
-        tests:
+        data_tests:
             - relationships:
                 arguments:
                   to: ref('fct_payments_aggregations')
@@ -482,7 +482,7 @@ models:
           This column is primarily for use in BI tooling to support consistent dates across activity types.
           Billing activity generally occurs only once per month, at the end of the month, while deposit
           activity happens throughout the month.
-        tests:
+        data_tests:
           - not_null
       - &elavon_lp_participant_id
         name: littlepay_participant_id
@@ -614,7 +614,7 @@ models:
         name: trn_ref_num
         description: |
           Elavon system assigned transaction reference tag
-        tests:
+        data_tests:
           - unique
       - &settlement_method
         name: settlement_method
