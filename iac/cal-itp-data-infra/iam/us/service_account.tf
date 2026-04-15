@@ -296,6 +296,18 @@ resource "google_service_account" "slorta-payments-user" {
   project    = "cal-itp-data-infra"
 }
 
+resource "google_service_account" "raba-payments-user" {
+  account_id = "raba-payments-user"
+  disabled   = "false"
+  project    = "cal-itp-data-infra"
+}
+
+resource "google_service_account" "camarillo-payments-user" {
+  account_id = "camarillo-payments-user"
+  disabled   = "false"
+  project    = "cal-itp-data-infra"
+}
+
 resource "google_service_account" "enghouse-sftp-service-account" {
   account_id   = "enghouse-sftp-service-account"
   description  = "Service account for enghouse sftp server"
