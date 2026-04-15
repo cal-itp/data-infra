@@ -335,6 +335,7 @@ class TestLittlepayS3ToGCSOperator:
         s3_hook: S3Hook,
         file_exists_source_path: str,
         file_exists_path: str,
+        capsys,
     ):
         with freeze_time("2026-03-01T00:00:00"):
             s3_hook.create_bucket("mock-littlepay-bucket")
@@ -392,6 +393,9 @@ class TestLittlepayS3ToGCSOperator:
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
         assert xcom_value is None
+
+        captured = capsys.readouterr()
+        assert "INFO - File already downloaded." in captured.out
 
     @pytest.fixture
     def old_file_source_path(self) -> str:
@@ -614,3 +618,189 @@ class TestLittlepayS3ToGCSOperator:
             "filename": "results_202504300000_authorisations.psv.jsonl",
             "instance": "atn",
         }
+
+    @pytest.fixture
+    def invalid_entity_source_path(self) -> str:
+        return "atn/v3/something/202504291120_something.psv"
+
+    @pytest.fixture
+    def invalid_entity_destination_path(self) -> str:
+        return (
+            "something/instance=atn/filename=202504291120_something.psv/ts=2025-06-01T00:00:00+00:00/202504291120_something.psv",
+        )
+
+    @pytest.fixture
+    def invalid_entity_path(self) -> str:
+        return "something/instance=atn/filename=202504291120_something.psv/ts=2025-05-01T00:00:00+00:00/202504291120_something.psv"
+
+    @pytest.fixture
+    def invalid_entity_destination_search_prefix(self) -> str:
+        return "something/instance=atn/filename=202504291120_something.psv"
+
+    @pytest.fixture
+    def invalid_entity_destination_search_glob(self) -> str:
+        return "**/202504291120_something.psv"
+
+    @pytest.fixture
+    def invalid_entity_report_path(self) -> str:
+        return "raw_littlepay_sync_job_result/instance=atn/ts=2025-06-01T00:00:00+00:00/202504291120_something.jsonl"
+
+    @pytest.fixture
+    def invalid_entity_dag(self, execution_date: datetime) -> DAG:
+        return DAG(
+            "test_invalid_entity_dag",
+            default_args={
+                "owner": "airflow",
+                "start_date": execution_date,
+                "end_date": execution_date + relativedelta(months=+1),
+            },
+            schedule=relativedelta(months=+1),
+        )
+
+    @pytest.fixture
+    def invalid_entity_operator(
+        self,
+        execution_date: datetime,
+        invalid_entity_dag: DAG,
+        invalid_entity_source_path: str,
+        invalid_entity_destination_path: str,
+        invalid_entity_destination_search_prefix: str,
+        invalid_entity_destination_search_glob: str,
+        invalid_entity_report_path: str,
+    ) -> LittlepayS3ToGCSOperator:
+        return LittlepayS3ToGCSOperator(
+            dag=invalid_entity_dag,
+            task_id="invalid_entity_littlepay_s3_to_gcs",
+            ts=execution_date.isoformat(),
+            provider="atn",
+            entity="something",
+            aws_conn_id="aws_default",
+            gcp_conn_id="google_cloud_default",
+            source_bucket="mock-littlepay-bucket",
+            source_path=invalid_entity_source_path,
+            destination_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3"),
+            destination_path=invalid_entity_destination_path,
+            destination_search_prefix=invalid_entity_destination_search_prefix,
+            destination_search_glob=invalid_entity_destination_search_glob,
+            report_path=invalid_entity_report_path,
+        )
+
+    @mock_aws
+    @pytest.mark.vcr
+    def test_execute_invalid_entity(
+        self,
+        invalid_entity_dag: DAG,
+        invalid_entity_operator: LittlepayS3ToGCSOperator,
+        execution_date: datetime,
+        gcs_hook: GCSHook,
+        s3_hook: S3Hook,
+        invalid_entity_source_path: str,
+        invalid_entity_path: str,
+        capsys,
+    ):
+        invalid_entity_operator.run(
+            start_date=execution_date,
+            end_date=execution_date + timedelta(days=1),
+            ignore_first_depends_on_past=True,
+        )
+
+        task = invalid_entity_dag.get_task("invalid_entity_littlepay_s3_to_gcs")
+        task_instance = TaskInstance(task, execution_date=execution_date)
+        xcom_value = task_instance.xcom_pull()
+        assert xcom_value is None
+
+        captured = capsys.readouterr()
+        assert "WARNING - Entity is not in the list." in captured.out
+
+    @pytest.fixture
+    def invalid_file_type_source_path(self) -> str:
+        return "atn/v3/authorisations/202504291120_authorisations.txt"
+
+    @pytest.fixture
+    def invalid_file_type_destination_path(self) -> str:
+        return (
+            "authorisations/instance=atn/filename=202504291120_authorisations.txt/ts=2025-06-01T00:00:00+00:00/202504291120_authorisations.txt",
+        )
+
+    @pytest.fixture
+    def invalid_file_type_path(self) -> str:
+        return "authorisations/instance=atn/filename=202504291120_authorisations.txt/ts=2025-05-01T00:00:00+00:00/202504291120_authorisations.txt"
+
+    @pytest.fixture
+    def invalid_file_type_destination_search_prefix(self) -> str:
+        return "authorisations/instance=atn/filename=202504291120_authorisations.txt"
+
+    @pytest.fixture
+    def invalid_file_type_destination_search_glob(self) -> str:
+        return "**/202504291120_authorisations.txt"
+
+    @pytest.fixture
+    def invalid_file_type_report_path(self) -> str:
+        return "raw_littlepay_sync_job_result/instance=atn/ts=2025-06-01T00:00:00+00:00/202504291120_authorisations.jsonl"
+
+    @pytest.fixture
+    def invalid_file_type_dag(self, execution_date: datetime) -> DAG:
+        return DAG(
+            "test_invalid_file_type_dag",
+            default_args={
+                "owner": "airflow",
+                "start_date": execution_date,
+                "end_date": execution_date + relativedelta(months=+1),
+            },
+            schedule=relativedelta(months=+1),
+        )
+
+    @pytest.fixture
+    def invalid_file_type_operator(
+        self,
+        execution_date: datetime,
+        invalid_file_type_dag: DAG,
+        invalid_file_type_source_path: str,
+        invalid_file_type_destination_path: str,
+        invalid_file_type_destination_search_prefix: str,
+        invalid_file_type_destination_search_glob: str,
+        invalid_file_type_report_path: str,
+    ) -> LittlepayS3ToGCSOperator:
+        return LittlepayS3ToGCSOperator(
+            dag=invalid_file_type_dag,
+            task_id="invalid_file_type_littlepay_s3_to_gcs",
+            ts=execution_date.isoformat(),
+            provider="atn",
+            entity="authorisations",
+            aws_conn_id="aws_default",
+            gcp_conn_id="google_cloud_default",
+            source_bucket="mock-littlepay-bucket",
+            source_path=invalid_file_type_source_path,
+            destination_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3"),
+            destination_path=invalid_file_type_destination_path,
+            destination_search_prefix=invalid_file_type_destination_search_prefix,
+            destination_search_glob=invalid_file_type_destination_search_glob,
+            report_path=invalid_file_type_report_path,
+        )
+
+    @mock_aws
+    @pytest.mark.vcr
+    def test_execute_invalid_file_type(
+        self,
+        invalid_file_type_dag: DAG,
+        invalid_file_type_operator: LittlepayS3ToGCSOperator,
+        execution_date: datetime,
+        gcs_hook: GCSHook,
+        s3_hook: S3Hook,
+        invalid_file_type_source_path: str,
+        invalid_file_type_path: str,
+        capsys,
+    ):
+        invalid_file_type_operator.run(
+            start_date=execution_date,
+            end_date=execution_date + timedelta(days=1),
+            ignore_first_depends_on_past=True,
+        )
+
+        task = invalid_file_type_dag.get_task("invalid_file_type_littlepay_s3_to_gcs")
+        task_instance = TaskInstance(task, execution_date=execution_date)
+        xcom_value = task_instance.xcom_pull()
+        assert xcom_value is None
+
+        captured = capsys.readouterr()
+        assert "WARNING - File is not a psv type." in captured.out

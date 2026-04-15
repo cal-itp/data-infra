@@ -1,4 +1,5 @@
 import json
+import logging
 import os
 from typing import Self, Sequence
 
@@ -7,6 +8,20 @@ from airflow.models import BaseOperator
 from airflow.models.taskinstance import Context
 from airflow.providers.amazon.aws.hooks.s3 import S3Hook
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
+
+LITTLEPAY_ENTITIES = [
+    "authorisations",
+    "customer-funding-sources",
+    "device-transaction-purchases",
+    "device-transactions",
+    "micropayment-adjustments",
+    "micropayment-device-transactions",
+    "micropayments",
+    "products",
+    "refunds",
+    "settlements",
+    "terminal-device-transactions",
+]
 
 
 class PriorArtifact:
@@ -159,7 +174,14 @@ class LittlepayS3ToGCSOperator(BaseOperator):
         )
 
     def execute(self, context: Context) -> dict:
-        if self.exists():
+        if self.entity not in LITTLEPAY_ENTITIES:
+            logging.warning("Entity is not in the list.")
+            raise AirflowSkipException
+        elif not self.filename().endswith(".psv"):
+            logging.warning("File is not a psv type.")
+            raise AirflowSkipException
+        elif self.exists():
+            logging.info("File already downloaded.")
             raise AirflowSkipException
 
         self.gcs_hook().upload(
