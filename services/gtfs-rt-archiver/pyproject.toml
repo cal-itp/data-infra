@@ -5,6 +5,7 @@ description = "Downloads GTFS-RT feeds and uploads them to Google Cloud Storage"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "google-cloud-logging>=3.15.0",
     "google-cloud-pubsub>=2.37.0",
     "google-cloud-secret-manager>=2.26.0",
     "google-cloud-storage>=3.10.1",
