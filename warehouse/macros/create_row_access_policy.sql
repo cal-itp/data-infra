@@ -206,6 +206,18 @@ filter using (
 ) }};
 
 {{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = 'Redding Area Bus Authority',
+    principals = ['serviceAccount:raba-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = 'City of Camarillo',
+    principals = ['serviceAccount:camarillo-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
     principals = [
         'serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
         'serviceAccount:metabase-payments-team@cal-itp-data-infra.iam.gserviceaccount.com',
@@ -226,6 +238,18 @@ filter using (
     filter_column = 'operator_id',
     filter_value = '253',
     principals = ['serviceAccount:vctc-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'operator_id',
+    filter_value = '278',
+    principals = ['serviceAccount:raba-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'operator_id',
+    filter_value = '277',
+    principals = ['serviceAccount:camarillo-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }};
 
 {{ create_row_access_policy(
