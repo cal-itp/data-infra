@@ -152,7 +152,7 @@ jobs:
               echo "The following exposures are downstream of models changed in this PR:"
               echo ""
               echo "$exposures" | while IFS= read -r exp; do
-                echo "- \`${exp}\`"
+                echo "- [\`${exp}\`](https://dbt-docs.dds.dot.ca.gov/#!/exposure/exposure.calitp_warehouse.${exp})"
               done
             else
               echo "_No exposures are impacted by the changes in this PR._"
