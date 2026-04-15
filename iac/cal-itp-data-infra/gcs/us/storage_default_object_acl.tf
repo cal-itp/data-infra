@@ -245,10 +245,6 @@ resource "google_storage_default_object_acl" "tfer--test-calitp-airtable" {
   bucket = "test-calitp-airtable"
 }
 
-resource "google_storage_default_object_acl" "tfer--test-calitp-dbt-artifacts" {
-  bucket = "test-calitp-dbt-artifacts"
-}
-
 resource "google_storage_default_object_acl" "tfer--test-calitp-dbt-python-models" {
   bucket = "test-calitp-dbt-python-models"
 }

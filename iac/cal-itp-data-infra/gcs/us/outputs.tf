@@ -238,10 +238,6 @@ output "google_storage_bucket_acl_tfer--test-calitp-airtable_id" {
   value = google_storage_bucket_acl.tfer--test-calitp-airtable.id
 }
 
-output "google_storage_bucket_acl_tfer--test-calitp-dbt-artifacts_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-dbt-artifacts.id
-}
-
 output "google_storage_bucket_acl_tfer--test-calitp-dbt-python-models_id" {
   value = google_storage_bucket_acl.tfer--test-calitp-dbt-python-models.id
 }
@@ -624,10 +620,6 @@ output "google_storage_bucket_iam_binding_tfer--test-calitp-aggregator-scraper_i
 
 output "google_storage_bucket_iam_binding_tfer--test-calitp-airtable_id" {
   value = google_storage_bucket_iam_binding.tfer--test-calitp-airtable.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-dbt-artifacts_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-dbt-artifacts.id
 }
 
 output "google_storage_bucket_iam_binding_tfer--test-calitp-dbt-python-models_id" {
@@ -1022,10 +1014,6 @@ output "google_storage_bucket_iam_member_tfer--test-calitp-airtable_id" {
   value = google_storage_bucket_iam_member.tfer--test-calitp-airtable.id
 }
 
-output "google_storage_bucket_iam_member_tfer--test-calitp-dbt-artifacts_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-dbt-artifacts.id
-}
-
 output "google_storage_bucket_iam_member_tfer--test-calitp-dbt-python-models_id" {
   value = google_storage_bucket_iam_member.tfer--test-calitp-dbt-python-models.id
 }
@@ -1416,10 +1404,6 @@ output "google_storage_bucket_iam_policy_tfer--test-calitp-aggregator-scraper_id
 
 output "google_storage_bucket_iam_policy_tfer--test-calitp-airtable_id" {
   value = google_storage_bucket_iam_policy.tfer--test-calitp-airtable.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-dbt-artifacts_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-dbt-artifacts.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--test-calitp-dbt-python-models_id" {
@@ -2062,14 +2046,6 @@ output "google_storage_bucket_tfer--test-calitp-airtable_self_link" {
   value = google_storage_bucket.tfer--test-calitp-airtable.self_link
 }
 
-output "google_storage_bucket_tfer--test-calitp-dbt-artifacts_name" {
-  value = google_storage_bucket.tfer--test-calitp-dbt-artifacts.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-dbt-artifacts_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-dbt-artifacts.self_link
-}
-
 output "google_storage_bucket_tfer--test-calitp-dbt-python-models_name" {
   value = google_storage_bucket.tfer--test-calitp-dbt-python-models.name
 }
@@ -2600,10 +2576,6 @@ output "google_storage_default_object_acl_tfer--test-calitp-aggregator-scraper_i
 
 output "google_storage_default_object_acl_tfer--test-calitp-airtable_id" {
   value = google_storage_default_object_acl.tfer--test-calitp-airtable.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-dbt-artifacts_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-dbt-artifacts.id
 }
 
 output "google_storage_default_object_acl_tfer--test-calitp-dbt-python-models_id" {
