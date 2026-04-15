@@ -47,6 +47,6 @@ dim_shapes AS (
         _line_number,
         feed_timezone,
     FROM make_dim
-)
+) -- TODO: Remove me after verifying change detected
 
 SELECT * FROM dim_shapes
