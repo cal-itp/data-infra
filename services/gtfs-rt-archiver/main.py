@@ -5,14 +5,13 @@ from concurrent.futures import TimeoutError
 from datetime import datetime
 
 from google.cloud import pubsub_v1
+import google.cloud.logging as google_logging
+
 from gtfs_rt_archiver.archiver import Archiver
 from gtfs_rt_archiver.configuration import Configuration
 from gtfs_rt_archiver.downloader import Downloader
 
-logging.basicConfig(
-    format="%(asctime)s - %(levelname)s - %(message)s",
-)
-
+logger = logging.getLogger(__name__)
 
 class StreamingPullHandler:
     @staticmethod
@@ -40,15 +39,16 @@ class StreamingPullHandler:
 
     def callback(self):
         try:
-            logging.info(f"{self.configuration().url} - processing {self.message.data}")
+            logger.info(f"{self.configuration().url} - processing {self.message.data}")
             self.archiver().save(result=self.downloader().get())
-            self.message.ack()
         except Exception as e:
-            self.message.nack()
-            logging.error(f"{self.configuration().url} - {e}")
+            logger.error(f"{self.configuration().url} - {e}")
+        self.message.ack()
 
 
 if __name__ == "__main__":
+    google_logging.Client().setup_logging()
+
     subscriber = pubsub_v1.SubscriberClient()
 
     streaming_pull_future = subscriber.subscribe(
