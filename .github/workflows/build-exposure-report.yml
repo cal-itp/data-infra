@@ -138,20 +138,41 @@ jobs:
         if: ${{ steps.changed-models.outputs.any_changed == 'true' }}
         working-directory: warehouse
         run: |
-          list=$(uv run dbt ls \
-            --select "${{ steps.changed-models.outputs.all_changed_files }}+" \
+          models="${{ steps.changed-models.outputs.all_changed_files }}"
+          exposures=$(uv run dbt ls \
+            --select "${models}+" \
             --resource-type exposure \
             --output name \
-            --quiet | tr '\n' ' ')
-          echo "list=$list" >> $GITHUB_OUTPUT
+            --quiet)
+
+          {
+            echo "## Impacted Exposures"
+            echo ""
+            if [ -n "$exposures" ]; then
+              echo "The following exposures are downstream of models changed in this PR:"
+              echo ""
+              echo "$exposures" | while IFS= read -r exp; do
+                echo "- \`${exp}\`"
+              done
+            else
+              echo "_No exposures are impacted by the changes in this PR._"
+            fi
+            echo ""
+            echo "### Changed models"
+            echo ""
+            echo "$models" | sed 's/+ /\n/g' | while IFS= read -r model; do
+              echo "- \`${model}\`"
+            done
+            echo ""
+            echo "> If any impacted exposures are unexpected, verify that your changes do not unintentionally affect downstream consumers."
+          } > "$RUNNER_TEMP/exposure-comment.md"
 
       - name: Post comment
+        if: ${{ steps.changed-models.outputs.any_changed == 'true' }}
         uses: peter-evans/create-or-update-comment@v4
         with:
           issue-number: ${{ github.event.number }}
-          body: |
-            **Impacted exposures**:
-            ${{ steps.exposures.outputs.list != '' && steps.exposures.outputs.list || '_None_' }}
+          body-path: ${{ runner.temp }}/exposure-comment.md
 
   upload_latest_artifacts:
     name: Upload to latest dbt artifacts folder (Staging)
