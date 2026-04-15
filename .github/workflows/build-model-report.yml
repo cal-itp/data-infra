@@ -36,7 +36,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Authenticate Google Service Account
         uses: google-github-actions/auth@v2
@@ -103,7 +103,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download compilation artifacts
         uses: actions/download-artifact@v4
@@ -148,14 +148,6 @@ jobs:
       - name: Download latest artifacts from production dbt docs
         working-directory: warehouse
         run: gsutil cp gs://${{ env.DBT_ARTIFACTS_BUCKET }}/latest/*.json ./target/latest/
-
-      - name: List local target folder
-        working-directory: warehouse/target
-        run: ls
-
-      - name: List local latest folder
-        working-directory: warehouse/target/latest
-        run: ls
 
       - name: Setup Continuous Machine Learning tools
         uses: iterative/setup-cml@v2

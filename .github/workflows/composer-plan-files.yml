@@ -4,7 +4,6 @@ on:
   pull_request:
     paths:
       - 'airflow/**'
-      - 'warehouse/**'
 
 jobs:
   airflow-changes:
@@ -18,7 +17,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -49,7 +48,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -82,7 +81,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - uses: google-github-actions/auth@v2
         with:
@@ -112,7 +111,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - uses: google-github-actions/auth@v2
         with:
@@ -142,7 +141,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - uses: google-github-actions/auth@v2
         with:
@@ -172,7 +171,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - uses: google-github-actions/auth@v2
         with:

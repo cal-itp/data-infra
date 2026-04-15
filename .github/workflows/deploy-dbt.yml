@@ -34,6 +34,7 @@ jobs:
   compile:
     name: Compile dbt
     runs-on: ubuntu-latest
+    needs: [dbt-changed]
 
     permissions:
       contents: read
@@ -41,7 +42,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Authenticate Google Service Account
         uses: google-github-actions/auth@v2
@@ -77,6 +78,26 @@ jobs:
         working-directory: warehouse
         run: uv run dbt debug --target ${{ env.DBT_TARGET }}
 
+      - name: List changed and downstream models
+        if: ${{ needs.dbt-changed.outputs.has-changed == 'true' }}
+        working-directory: warehouse
+        run: uv run dbt list --select "${{ needs.dbt-changed.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --resource-type=model
+
+      - name: Run seeds
+        if: ${{ needs.dbt-changed.outputs.has-changed-seeds == 'true' }}
+        working-directory: warehouse
+        run: uv run dbt seed --select "${{ needs.dbt-changed.outputs.changed-seeds }}" --target ${{ env.DBT_TARGET }}
+
+      - name: Full-Refresh changed models
+        if: ${{ needs.dbt-changed.outputs.has-changed == 'true' }}
+        working-directory: warehouse
+        run: uv run dbt run --select "${{ needs.dbt-changed.outputs.changed-models }}" --target ${{ env.DBT_TARGET }} --full-refresh
+
+      - name: Run downstream models
+        if: ${{ needs.dbt-changed.outputs.has-changed == 'true' }}
+        working-directory: warehouse
+        run: uv run dbt run --select "${{ needs.dbt-changed.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --exclude "${{ needs.dbt-changed.outputs.changed-models }}"
+
       - name: Compile dbt
         working-directory: warehouse
         run: uv run dbt compile --target ${{ env.DBT_TARGET }}
@@ -107,7 +128,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
@@ -142,10 +163,10 @@ jobs:
         run: |
           echo "List changed files: $CHANGED_FILES"
 
-  models:
-    name: Run dbt Models
+  metabase:
+    name: Sync Metabase
     runs-on: ubuntu-latest
-    needs: [compile, dbt-changed]
+    needs: [dbt-changed, compile]
 
     if: ${{ needs.dbt-changed.outputs.has-changed == 'true' }}
 
@@ -155,78 +176,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Download compilation artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dbt
-          path: warehouse/target
-
-      - name: Authenticate Google Service Account
-        uses: google-github-actions/auth@v2
-        with:
-          create_credentials_file: 'true'
-          project_id: ${{ env.PROJECT_ID }}
-          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ env.SERVICE_ACCOUNT }}
-
-      - name: Setup GCloud utilities
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Setup Graphviz
-        uses: ts-graphviz/setup-graphviz@v2
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v7
-        with:
-          enable-cache: true
-          cache-python: true
-          working-directory: warehouse
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install the project
-        working-directory: warehouse
-        run: uv sync --locked --all-extras --dev
-
-      - name: Install dbt dependencies
-        working-directory: warehouse
-        run: uv run dbt deps
-
-      - name: Print dbt environment
-        working-directory: warehouse
-        run: uv run dbt debug --target ${{ env.DBT_TARGET }}
-
-      - name: List changed and downstream models
-        working-directory: warehouse
-        run: uv run dbt list --select "${{ needs.dbt-changed.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --resource-type=model
-
-      - name: Run seeds
-        if: ${{ needs.dbt-changed.outputs.has-changed-seeds == 'true' }}
-        working-directory: warehouse
-        run: uv run dbt seed --select "${{ needs.dbt-changed.outputs.changed-seeds }}" --target ${{ env.DBT_TARGET }}
-
-      - name: Full-Refresh changed models
-        working-directory: warehouse
-        run: uv run dbt run --select "${{ needs.dbt-changed.outputs.changed-models }}" --target ${{ env.DBT_TARGET }} --full-refresh
-
-      - name: Run downstream models
-        working-directory: warehouse
-        run: uv run dbt run --select "${{ needs.dbt-changed.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --exclude "${{ needs.dbt-changed.outputs.changed-models }}"
-
-  metabase:
-    name: Sync Metabase
-    runs-on: ubuntu-latest
-
-    needs: [models]
-
-    permissions:
-      contents: read
-      id-token: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Download compilation artifacts
         uses: actions/download-artifact@v4
@@ -428,3 +378,155 @@ jobs:
           destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/index.html/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
           headers: |-
             content-type: text/html; charset=utf-8
+
+  airflow-changes:
+    name: Detect Airflow Terraform changes
+    runs-on: ubuntu-latest
+    needs: [upload_dbt_docs]
+
+    outputs:
+      staging: ${{ steps.staging-changes.outputs.all_changed_files }}
+      production: ${{ steps.production-changes.outputs.all_changed_files }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Staging Changes
+        uses: tj-actions/changed-files@v46
+        id: staging-changes
+        with:
+          matrix: true
+          dir_names: true
+          files: 'iac/cal-itp-data-infra-staging/airflow/**/*.tf'
+
+      - name: Production Changes
+        uses: tj-actions/changed-files@v46
+        id: production-changes
+        with:
+          matrix: true
+          dir_names: true
+          files: 'iac/cal-itp-data-infra/airflow/**/*.tf'
+
+  plan-changes-airflow-staging:
+    name: Staging Plan for Airflow Changes
+    runs-on: ubuntu-latest
+    needs: [airflow-changes]
+
+    if: ${{ !contains(github.ref, 'refs/heads/staging') && (needs.airflow-changes.outputs.staging == '[]' || needs.airflow-changes.outputs.staging == '') }}
+
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: cal-itp-data-infra-staging
+          workload_identity_provider: 'projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra'
+          service_account: 'github-actions-terraform@cal-itp-data-infra-staging.iam.gserviceaccount.com'
+
+      - name: Terraform Plan
+        uses: dflook/terraform-plan@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          add_github_comment: changes-only
+          path: iac/cal-itp-data-infra-staging/airflow/us
+
+  plan-changes-airflow-production:
+    name: Production Plan for Airflow Changes
+    runs-on: ubuntu-latest
+    needs: [airflow-changes]
+
+    if: ${{ needs.airflow-changes.outputs.production == '[]' || needs.airflow-changes.outputs.production == '' }}
+
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: cal-itp-data-infra
+          workload_identity_provider: 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions/providers/data-infra'
+          service_account: 'github-actions-terraform@cal-itp-data-infra.iam.gserviceaccount.com'
+
+      - name: Terraform Plan
+        uses: dflook/terraform-plan@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          add_github_comment: changes-only
+          path: iac/cal-itp-data-infra/airflow/us
+
+  apply-changes-airflow-staging:
+    name: Staging Apply Airflow Changes
+    runs-on: ubuntu-latest
+    needs: [airflow-changes]
+
+    if: ${{ (github.ref == 'refs/heads/main' || contains(github.ref, 'refs/heads/staging')) && (needs.airflow-changes.outputs.staging == '[]' || needs.airflow-changes.outputs.staging == '') }}
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: cal-itp-data-infra-staging
+          workload_identity_provider: 'projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra'
+          service_account: 'github-actions-terraform@cal-itp-data-infra-staging.iam.gserviceaccount.com'
+
+      - name: Terraform Apply
+        uses: dflook/terraform-apply@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path: iac/cal-itp-data-infra-staging/airflow/us
+          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
+
+  apply-changes-airflow-production:
+    name: Production Apply Airflow Changes
+    runs-on: ubuntu-latest
+    needs: [airflow-changes]
+
+    if: ${{ github.ref == 'refs/heads/main' && (needs.airflow-changes.outputs.production == '[]' || needs.airflow-changes.outputs.production == '') }}
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: cal-itp-data-infra
+          workload_identity_provider: 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions/providers/data-infra'
+          service_account: 'github-actions-terraform@cal-itp-data-infra.iam.gserviceaccount.com'
+
+      - name: Terraform Apply
+        uses: dflook/terraform-apply@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path: iac/cal-itp-data-infra/airflow/us
