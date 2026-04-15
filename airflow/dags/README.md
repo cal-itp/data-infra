@@ -17,7 +17,7 @@
 |  2:00 PM    | 6:00 AM              | 7:00 AM              | [dbt_all](#dbt_all)                                                                                                              | Monday and Thursday |
 |  2:00 PM    | 6:00 AM              | 7:00 AM              | [dbt_daily](#dbt_daily)                                                                                                          | Sunday, Tuesday, Wednesday, Friday, and Saturday |
 |  2:00 PM    | 6:00 AM              | 6:00 AM              | [airtable_issue_management](#airtable_issue_management)                                                                          | Fridays    |
-|  -          | -                    | -                    | [dbt_manual](#dbt_manual)<br>[download_gtfs_schedule_v2](./download_gtfs_schedule_v2)<br>                                        | Runs Only Manually |
+|  -          | -                    | -                    | [dbt_manual](#dbt_manual)                                                                                                        | Runs Only Manually |
 
 ## dbt_all
 
@@ -85,7 +85,7 @@
 
    - Runs [**GCSDownloadConfigFilterOperator**](airflow/plugins/operators/gcs_download_config_filter_operator.py) to filter for schedule datasets from the previous step.
 
-   - Runs [**DownloadConfigToGCSOperator**](airflow/plugins/operators/download_config_to_gcs_operator.py) and [**DownloadConfigHook**](airflow/plugins/hooks/download_config_hook.py) replacing [download_gtfs_schedule_v2 DAG](airflow/dags/download_gtfs_schedule_v2).
+   - Runs [**DownloadConfigToGCSOperator**](airflow/plugins/operators/download_config_to_gcs_operator.py) and [**DownloadConfigHook**](airflow/plugins/hooks/download_config_hook.py).
 
 > [!NOTE]
 > This process will try to download files from `Manual Download Bucket` first
