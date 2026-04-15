@@ -1,13 +1,17 @@
 {{
     config(
         materialized='incremental',
-        incremental_strategy='insert_overwrite',
-        event_time='dt',
+        incremental_strategy='microbatch',
+        event_time = 'dt',
+        batch_size = 'day',
+        begin=var('PROD_GTFS_RT_START'),
+        lookback=var('DBT_ALL_MICROBATCH_LOOKBACK_DAYS'),
         partition_by = {
             'field': 'dt',
             'data_type': 'date',
             'granularity': 'day',
         },
+        full_refresh=false,
         cluster_by='base64_url',
         on_schema_change='append_new_columns'
     )
