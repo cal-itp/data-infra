@@ -8,7 +8,7 @@
 |  3:00 AM    | 7 PM<br>previous day | 8 PM<br>previous day | [download_parse_and_validate_gtfs](#download_parse_and_validate_gtfs)                                                            | Every Day  |
 |  4:00 AM    | 8 PM<br>previous day | 9 PM<br>previous day | [scrape_state_geoportal](./scrape_state_geoportal)                                                                               | 1st Day of the month |
 |  9:00 AM    | 1:00 AM              | 2:00 AM              | [sync_ntd_data_api](./sync_ntd_data_api)                                                                                         | Wednesdays |
-| 10:00 AM    | 2:00 AM              | 3:00 AM              | [ntd_report_from_blackcat](./ntd_report_from_blackcat)<br>[download_and_parse_ntd_xlsx](#download_and_parse_ntd_xlsx)<br>[sync_ntd_data_xlsx](./sync_ntd_data_xlsx)| Mondays    |
+| 10:00 AM    | 2:00 AM              | 3:00 AM              | [ntd_report_from_blackcat](./ntd_report_from_blackcat)<br>[download_and_parse_ntd_xlsx](#download_and_parse_ntd_xlsx)            | Mondays    |
 | 11:00 AM    | 3:00 AM              | 4:00 AM              | [create_external_tables](./create_external_tables)                                                                               | Every Day  |
 | 12:00 PM    | 4:00 AM              | 5:00 AM              | [download_and_parse_littlepay](#download_and_parse_littlepay)                                                                    | Every Day  |
 |             | Every Hour           |                      | [sync_littlepay_v3](./sync_littlepay_v3)                                                                                         | Every Day  |
@@ -46,9 +46,6 @@
 
 
 ## download_and_parse_ntd_xlsx
-
-> [!NOTE]
-> This DAG replaces [sync_ntd_data_xlsx](./sync_ntd_data_xlsx)
 
    This DAG downloads NTD excel files (xslx) from `Federal Transit Administration` website and converts into BigQuery-readable gzipped JSONL files.
 
