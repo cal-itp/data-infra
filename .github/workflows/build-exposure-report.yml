@@ -1,15 +1,15 @@
-name: Build dbt Model Report
+name: Build Impacted Exposure Report
 
 on:
   push:
     branches:
       - main
     paths:
-      - .github/workflows/build-model-report.yml
+      - .github/workflows/build-exposure-report.yml
       - 'warehouse/**'
   pull_request:
     paths:
-      - .github/workflows/build-model-report.yml
+      - .github/workflows/build-exposure-report.yml
       - 'warehouse/**'
 
 concurrency:
@@ -37,20 +37,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-
-      - name: Authenticate Google Service Account
-        uses: google-github-actions/auth@v2
-        with:
-          create_credentials_file: 'true'
-          project_id: ${{ env.PROJECT_ID }}
-          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ env.SERVICE_ACCOUNT }}
-
-      - name: Setup GCloud utilities
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Setup Graphviz
-        uses: ts-graphviz/setup-graphviz@v2
 
       - name: Install uv
         uses: astral-sh/setup-uv@v7
@@ -89,8 +75,8 @@ jobs:
             warehouse/target/*.json
             warehouse/target/*.msgpack
 
-  visualize:
-    name: Model Visualization
+  exposures:
+    name: List Impacted Exposures
     needs: [compile]
     runs-on: ubuntu-latest
 
@@ -111,19 +97,6 @@ jobs:
           name: dbt
           path: warehouse/target
 
-      - name: Authenticate Google Service Account
-        uses: google-github-actions/auth@v2
-        with:
-          create_credentials_file: 'true'
-          project_id: ${{ env.PROJECT_ID }}
-          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ env.SERVICE_ACCOUNT }}
-
-      - name: Setup GCloud utilities
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Setup Graphviz
-        uses: ts-graphviz/setup-graphviz@v2
 
       - name: Install uv
         uses: astral-sh/setup-uv@v7
@@ -158,13 +131,32 @@ jobs:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: uv run python scripts/visualize.py ci-report --latest-dir='./target/latest/'
 
-      - name: Archive CI report
-        uses: actions/upload-artifact@v4
+
+      - name: List changed models
+        uses: tj-actions/changed-files@v46
+        id: changed-models
         with:
-          name: ci-report
-          path: |
-            warehouse/target/report.md
-            warehouse/target/dag.png
+          path: warehouse
+          separator: "+ "
+          files: models/**/*.sql
+
+      - name: Find impacted exposures
+        id: exposures
+        if: ${{ steps.changed-models.outputs.any_changed == 'true' }}
+        working-directory: warehouse
+        run: |
+          EXPOSURES=$(uv run dbt ls \
+            --select "${{ steps.changed-models.outputs.all_changed_files }}+" \
+            --resource-type exposure \
+            --output name
+
+      - name: Post comment
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.number }}
+          body: |
+            **Impacted exposures**:
+            ${{ steps.exposures.outputs.list != '' && steps.exposures.outputs.list || '_None_' }}
 
       - name: Create GitHub comment
         id: report-comment
@@ -173,21 +165,6 @@ jobs:
         env:
           REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: cml comment update target/report.md
-
-      - uses: peter-evans/find-comment@v3
-        if: ${{ steps.report-comment.outcome == 'failure' }}
-        id: fc
-        with:
-          issue-number: ${{ github.event.number }}
-          body-includes: "Warehouse report"
-
-      - uses: peter-evans/create-or-update-comment@v4
-        if: ${{ steps.report-comment.outcome == 'failure' }}
-        with:
-          comment-id: ${{ steps.fc.outputs.comment-id }}
-          issue-number: ${{ github.event.number }}
-          body: "Warehouse report: Failed to add ci-report to a comment. Review the ci-report in the [Summary](https://github.com/cal-itp/data-infra/actions/runs/${{ github.run_id }})."
-          edit-mode: replace
 
   upload_latest_artifacts:
     name: Upload to latest dbt artifacts folder (Staging)
