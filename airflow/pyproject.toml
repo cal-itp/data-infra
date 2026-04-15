@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.11.6"
 dependencies = [
     "apache-airflow==2.10.5",
+    "apache-airflow-providers-amazon>=9.17.0",
     "apache-airflow-providers-cncf-kubernetes==10.1.0",
     "apache-airflow-providers-google==15.1.0",
     "astronomer-cosmos==1.9.0",
@@ -26,8 +27,10 @@ dependencies = [
 [dependency-groups]
 dev = [
     "ipdb>=0.13.13",
+    "moto[s3]>=5.1.21",
     "pytest>=9.0.2",
     "pytest-dotenv>=0.5.2",
+    "pytest-freezegun>=0.4.2",
     "pytest-recording>=0.13.4",
     "vcrpy>=8.0.0",
 ]

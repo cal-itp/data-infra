@@ -3,20 +3,21 @@
 | Time_in_UTC | Time_in_PST          | Time_in_PDT          | DAG                                                                                                                              | Schedule   |
 |   :---:     | :---:                | :---:                |:---                                                                                                                              | :---:      |
 |  0:00 AM    | 4 PM<br>previous day | 5 PM<br>previous day | [publish_gtfs](#publish_gtfs)                                                                                                    | Mondays    |
-|  0:00 AM    | 4 PM<br>previous day | 5 PM<br>previous day | [sync_elavon](./sync_elavon)(<br>[sync_kuba](./sync_kuba)<br>[scrape_feed_aggregators](./scrape_feed_aggregators)<br>[copy_production_to_staging](./copy_production_to_staging) | Every day  |
+|  0:00 AM    | 4 PM<br>previous day | 5 PM<br>previous day | [sync_elavon](./sync_elavon)<br>[sync_kuba](./sync_kuba)<br>[scrape_feed_aggregators](./scrape_feed_aggregators)<br>[copy_production_to_staging](./copy_production_to_staging) | Every day  |
 |  2:00 AM    | 6 PM<br>previous day | 7 PM<br>previous day | [airtable_loader_v2](./airtable_loader_v2)<br>[parse_elavon](./parse_elavon)                                                     | Every Day  |
 |  3:00 AM    | 7 PM<br>previous day | 8 PM<br>previous day | [download_parse_and_validate_gtfs](#download_parse_and_validate_gtfs)                                                            | Every Day  |
 |  4:00 AM    | 8 PM<br>previous day | 9 PM<br>previous day | [scrape_state_geoportal](./scrape_state_geoportal)                                                                               | 1st Day of the month |
 |  9:00 AM    | 1:00 AM              | 2:00 AM              | [sync_ntd_data_api](./sync_ntd_data_api)                                                                                         | Wednesdays |
 | 10:00 AM    | 2:00 AM              | 3:00 AM              | [ntd_report_from_blackcat](./ntd_report_from_blackcat)<br>[download_and_parse_ntd_xlsx](#download_and_parse_ntd_xlsx)<br>[sync_ntd_data_xlsx](./sync_ntd_data_xlsx)| Mondays    |
 | 11:00 AM    | 3:00 AM              | 4:00 AM              | [create_external_tables](./create_external_tables)                                                                               | Every Day  |
+| 12:00 PM    | 4:00 AM              | 5:00 AM              | [download_and_parse_littlepay](#download_and_parse_littlepay)                                                                    | Every Day  |
 |             | Every Hour           |                      | [sync_littlepay_v3](./sync_littlepay_v3)                                                                                         | Every Day  |
 |             | Every<br>Hour:30 min                       || [parse_littlepay_v3](./parse_littlepay_v3)                                                                                       | Every Day  |
 |             | Every<br>Hour:15 min                       || [parse_and_validate_rt](#parse_and_validate_rt)                                                                                  | Every Day  |
 |  2:00 PM    | 6:00 AM              | 7:00 AM              | [dbt_all](#dbt_all)                                                                                                              | Monday and Thursday |
 |  2:00 PM    | 6:00 AM              | 7:00 AM              | [dbt_daily](#dbt_daily)                                                                                                          | Sunday, Tuesday, Wednesday, Friday, and Saturday |
+|  2:00 PM    | 6:00 AM              | 6:00 AM              | [airtable_issue_management](#airtable_issue_management)                                                                          | Fridays    |
 |  -          | -                    | -                    | [dbt_manual](#dbt_manual)<br>[download_gtfs_schedule_v2](./download_gtfs_schedule_v2)<br>[unzip_and_validate_gtfs_schedule_hourly](./unzip_and_validate_gtfs_schedule_hourly)| Runs Only Manually |
-| 2:00 PM     | 6:00 AM              | 6:00 AM              | [airtable_issue_management](#airtable_issue_management)                                                                  | Fridays    |
 
 ## dbt_all
 
@@ -31,6 +32,17 @@
 ## dbt_manual
 
    Runs specific dbt models as needed. It needs to be triggered manually.
+
+
+## download_and_parse_littlepay
+> [!NOTE]
+> This DAG replaces [sync_littlepay_v3](./sync_littlepay_v3) and [parse_littlepay_v3](./parse_littlepay_v3).
+
+   This DAG orchestrates the syncing and parsing of raw Littlepay feed v3 data.
+
+   The data is usually available in the S3 bucket at 12 PM UTC (4 AM PST / 5 AM PDT).
+
+   See more information about Littlepay in [Cal-ITP Payments Data Ecosystem Documentation](https://github.com/cal-itp/data-infra/tree/main/runbooks/workflow/payments).
 
 
 ## download_and_parse_ntd_xlsx

@@ -10,6 +10,7 @@ sources:
       - name: customer_funding_sources
       - name: device_transaction_purchases
       - name: device_transactions
+      - name: littlepay_parse_job_results
       - name: micropayment_adjustments
       - name: micropayment_device_transactions
       - name: micropayments
