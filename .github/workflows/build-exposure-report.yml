@@ -138,11 +138,12 @@ jobs:
         if: ${{ steps.changed-models.outputs.any_changed == 'true' }}
         working-directory: warehouse
         run: |
-          echo "list=$(uv run dbt ls \
+          list=$(uv run dbt ls \
             --select "${{ steps.changed-models.outputs.all_changed_files }}+" \
             --resource-type exposure \
             --output name \
-            --quiet)" >> $GITHUB_OUTPUT
+            --quiet | tr '\n' ' ')
+          echo "list=$list" >> $GITHUB_OUTPUT
 
       - name: Post comment
         uses: peter-evans/create-or-update-comment@v4
