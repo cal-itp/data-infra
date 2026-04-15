@@ -370,12 +370,6 @@ resource "google_storage_bucket_iam_binding" "tfer--test-calitp-airtable" {
   role    = "roles/storage.legacyObjectReader"
 }
 
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-dbt-artifacts" {
-  bucket  = "b/test-calitp-dbt-artifacts"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketOwner"
-}
-
 resource "google_storage_bucket_iam_binding" "tfer--test-calitp-dbt-python-models" {
   bucket  = "b/test-calitp-dbt-python-models"
   members = ["projectViewer:cal-itp-data-infra"]
