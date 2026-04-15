@@ -82,18 +82,6 @@ resource "google_storage_bucket_iam_member" "tfer--calitp-dbt-python-models" {
   role   = "roles/storage.legacyObjectOwner"
 }
 
-resource "google_storage_bucket_iam_member" "tfer--calitp-elavon-parsed" {
-  bucket = "b/calitp-elavon-parsed"
-  member = "projectEditor:cal-itp-data-infra"
-  role   = "roles/storage.legacyObjectOwner"
-}
-
-resource "google_storage_bucket_iam_member" "tfer--calitp-elavon-raw" {
-  bucket = "b/calitp-elavon-raw"
-  member = "projectEditor:cal-itp-data-infra"
-  role   = "roles/storage.legacyObjectOwner"
-}
-
 resource "google_storage_bucket_iam_member" "tfer--calitp-gtfs-download-config" {
   bucket = "b/calitp-gtfs-download-config"
   member = "projectEditor:cal-itp-data-infra"
@@ -380,24 +368,6 @@ resource "google_storage_bucket_iam_member" "tfer--test-calitp-dbt-python-models
   bucket = "b/test-calitp-dbt-python-models"
   member = "projectEditor:cal-itp-data-infra"
   role   = "roles/storage.legacyObjectOwner"
-}
-
-resource "google_storage_bucket_iam_member" "tfer--test-calitp-elavon" {
-  bucket = "b/test-calitp-elavon"
-  member = "projectViewer:cal-itp-data-infra"
-  role   = "roles/storage.legacyObjectReader"
-}
-
-resource "google_storage_bucket_iam_member" "tfer--test-calitp-elavon-parsed" {
-  bucket = "b/test-calitp-elavon-parsed"
-  member = "projectEditor:cal-itp-data-infra"
-  role   = "roles/storage.legacyObjectOwner"
-}
-
-resource "google_storage_bucket_iam_member" "tfer--test-calitp-elavon-raw" {
-  bucket = "b/test-calitp-elavon-raw"
-  member = "projectViewer:cal-itp-data-infra"
-  role   = "roles/storage.legacyBucketReader"
 }
 
 resource "google_storage_bucket_iam_member" "tfer--test-calitp-gtfs-config" {

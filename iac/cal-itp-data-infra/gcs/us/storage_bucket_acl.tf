@@ -54,14 +54,6 @@ resource "google_storage_bucket_acl" "tfer--calitp-dbt-python-models" {
   bucket = "calitp-dbt-python-models"
 }
 
-resource "google_storage_bucket_acl" "tfer--calitp-elavon-parsed" {
-  bucket = "calitp-elavon-parsed"
-}
-
-resource "google_storage_bucket_acl" "tfer--calitp-elavon-raw" {
-  bucket = "calitp-elavon-raw"
-}
-
 resource "google_storage_bucket_acl" "tfer--calitp-gtfs-download-config" {
   bucket = "calitp-gtfs-download-config"
 }
@@ -244,18 +236,6 @@ resource "google_storage_bucket_acl" "tfer--test-calitp-dbt-artifacts" {
 
 resource "google_storage_bucket_acl" "tfer--test-calitp-dbt-python-models" {
   bucket = "test-calitp-dbt-python-models"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-elavon" {
-  bucket = "test-calitp-elavon"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-elavon-parsed" {
-  bucket = "test-calitp-elavon-parsed"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-elavon-raw" {
-  bucket = "test-calitp-elavon-raw"
 }
 
 resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-config" {

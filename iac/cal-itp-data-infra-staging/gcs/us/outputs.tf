@@ -150,14 +150,6 @@ output "google_storage_bucket_calitp-staging-analysis-output-models_name" {
   value = google_storage_bucket.calitp-staging["calitp-staging-analysis-output-models"].name
 }
 
-output "google_storage_bucket_calitp-staging-elavon-parsed_name" {
-  value = google_storage_bucket.calitp-staging["calitp-staging-elavon-parsed"].name
-}
-
-output "google_storage_bucket_calitp-staging-elavon-raw_name" {
-  value = google_storage_bucket.calitp-staging["calitp-staging-elavon-raw"].name
-}
-
 output "google_storage_bucket_calitp-staging-gtfs-download-config_name" {
   value = google_storage_bucket.calitp-staging["calitp-staging-gtfs-download-config"].name
 }
