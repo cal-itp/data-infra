@@ -53,7 +53,3 @@ for key in data.keys():
 df = pd.DataFrame(result)
 df.to_csv('gtfs_schedule_validator_rule_details_v5_0_0.csv', index=False)
 ```
-
-Here is a command to test once you have appropriate gtfs zip files in the test bucket:
-
-`docker compose run airflow tasks test unzip_and_validate_gtfs_schedule_hourly validate_gtfs_schedule YYYY-MM-DDTHH:MM:SS`
