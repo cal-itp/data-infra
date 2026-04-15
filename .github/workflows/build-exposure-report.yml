@@ -141,7 +141,8 @@ jobs:
           echo "list=$(uv run dbt ls \
             --select "${{ steps.changed-models.outputs.all_changed_files }}+" \
             --resource-type exposure \
-            --output name)" >> $GITHUB_OUTPUT
+            --output name \
+            --quiet)" >> $GITHUB_OUTPUT
 
       - name: Post comment
         uses: peter-evans/create-or-update-comment@v4
