@@ -22,7 +22,6 @@ env:
   WORKLOAD_IDENTITY_PROVIDER: ${{ github.ref == 'refs/heads/main' && 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions/providers/data-infra' || 'projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra' }}
   PROJECT_ID: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
   DBT_TARGET: ${{ github.ref == 'refs/heads/main' && 'prod' || 'staging' }}
-  DBT_ARTIFACTS_BUCKET: ${{ github.ref == 'refs/heads/main' && 'calitp-dbt-artifacts' || 'calitp-staging-dbt-artifacts' }}
   DBT_DOCS_BUCKET: ${{ github.ref == 'refs/heads/main' && 'calitp-dbt-docs' || 'calitp-staging-dbt-docs' }}
   CALITP_BUCKET__PUBLISH: ${{ github.ref == 'refs/heads/main' && 'calitp-publish' || 'calitp-staging-publish' }}
   GOOGLE_CLOUD_PROJECT: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
@@ -282,102 +281,6 @@ jobs:
           destination: ${{ env.DBT_DOCS_BUCKET }}
           headers: |-
             content-type: application/vnd.msgpack
-
-  upload_dbt_artifacts:
-    name: Upload to dbt artifacts bucket
-    needs: [compile]
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      id-token: write
-
-    steps:
-      - name: Download compilation artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: dbt
-          path: warehouse/target
-
-      - name: Authenticate Google Service Account
-        uses: google-github-actions/auth@v2
-        with:
-          create_credentials_file: 'true'
-          project_id: ${{ env.PROJECT_ID }}
-          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ env.SERVICE_ACCOUNT }}
-
-      - name: Setup GCloud utilities
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Get current timestamp
-        uses: josStorer/get-current-time@v2
-        id: current-time
-        with:
-          format: "YYYY-MM-DDTHH:mm:ss.SSSSSS+00:00"
-          timezone: "UTC"
-
-      - name: Get current date
-        uses: josStorer/get-current-time@v2
-        id: current-date
-        with:
-          format: "YYYY-MM-DD"
-          timezone: "UTC"
-
-      - name: Upload catalog.json
-        uses: google-github-actions/upload-cloud-storage@v2
-        with:
-          path: './warehouse/target/'
-          glob: 'catalog.json'
-          parent: false
-          process_gcloudignore: false
-          destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/catalog.json/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
-          headers: |-
-            content-type: application/json
-
-      - name: Upload manifest.json
-        uses: google-github-actions/upload-cloud-storage@v2
-        with:
-          path: './warehouse/target/'
-          glob: 'manifest.json'
-          parent: false
-          process_gcloudignore: false
-          destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/manifest.json/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
-          headers: |-
-            content-type: application/json
-
-      - name: Upload partial_parse.msgpack
-        uses: google-github-actions/upload-cloud-storage@v2
-        with:
-          path: './warehouse/target/'
-          glob: 'partial_parse.msgpack'
-          parent: false
-          process_gcloudignore: false
-          destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/partial_parse.msgpack/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
-          headers: |-
-            content-type: application/vnd.msgpack
-
-      - name: Upload run_results.json
-        uses: google-github-actions/upload-cloud-storage@v2
-        with:
-          path: './warehouse/target/'
-          glob: 'run_results.json'
-          parent: false
-          process_gcloudignore: false
-          destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/run_results.json/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
-          headers: |-
-            content-type: application/json
-
-      - name: Upload index.html
-        uses: google-github-actions/upload-cloud-storage@v2
-        with:
-          path: './warehouse/target/'
-          glob: 'index.html'
-          parent: false
-          process_gcloudignore: false
-          destination: "${{ env.DBT_ARTIFACTS_BUCKET }}/index.html/dt=${{ steps.current-date.outputs.formattedTime }}/ts=${{ steps.current-time.outputs.formattedTime }}/"
-          headers: |-
-            content-type: text/html; charset=utf-8
 
   airflow-changes:
     name: Detect Airflow Terraform changes
