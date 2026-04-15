@@ -1,3 +1,5 @@
+{{ config(event_time='dt') }}
+
 WITH messages AS (
     SELECT *
     FROM {{ ref('fct_service_alerts_messages') }}
