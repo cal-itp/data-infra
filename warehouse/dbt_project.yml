@@ -23,7 +23,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 vars:
   surrogate_key_treat_nulls_as_empty_strings: true # enable legacy behavior for dbt_utils surrogate keys, i.e. coalesce nulls to empty strings
-  GTFS_SCHEDULE_START: '2021-04-16'
+  GTFS_SCHEDULE_START: "{{ '2021-04-16' if target.name == 'prod' else (modules.datetime.datetime.now() - modules.datetime.timedelta(days=7)).strftime('%Y-%m-%d') }}"
   PROD_GTFS_RT_START: "{{ '2022-09-15' if target.name == 'prod' else (modules.datetime.datetime.now() - modules.datetime.timedelta(days=7)).strftime('%Y-%m-%d') }}"
   KUBA_DEVICE_START: '2025-08-11'
   INCREMENTAL_MAX_DT: ''
