@@ -29,7 +29,7 @@ resource "google_cloud_run_v2_worker_pool" "gtfs-rt-archiver-staging" {
     service_account = data.terraform_remote_state.iam.outputs.google_service_account_gtfs-rt-archiver_email
 
     containers {
-      image = "us-west2-docker.pkg.dev/cal-itp-data-infra-staging/ghcr/cal-itp/data-infra/gtfs-rt-archiver-v5:staging"
+      image = "us-west2-docker.pkg.dev/cal-itp-data-infra-staging/ghcr/cal-itp/data-infra/gtfs-rt-archiver-v5:${data.external.git.result.sha}"
 
       env {
         name  = "CALITP_BUCKET__GTFS_RT_RAW"
