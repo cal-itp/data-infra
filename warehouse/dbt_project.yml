@@ -29,8 +29,8 @@ vars:
   INCREMENTAL_MAX_DT: ''
   DBT_ALL_MICROBATCH_LOOKBACK_DAYS: 5
   DBT_DAILY_MICROBATCH_LOOKBACK_DAYS: 1
-  DBT_START_DATE: '' # placeholder to use as start data range on incremental models
-  DBT_END_DATE: '' # placeholder to use as end data range on incremental models
+  DBT_INCREMENTAL_START_DATE: '' # placeholder to use as start data range on incremental models
+  DBT_INCREMENTAL_END_DATE: '' # placeholder to use as end data range on incremental models
   'dbt_date:time_zone': 'America/Los_Angeles'
   GOOGLE_CLOUD_PROJECT: cal-itp-data-infra-staging # you can override with GOOGLE_CLOUD_PROJECT env var rather than constantly using --vars
   CALITP_BUCKET__PUBLISH: "gs://calitp-staging-publish" # you can override with CALITP_BUCKET__PUBLISH env var rather than constantly using --vars

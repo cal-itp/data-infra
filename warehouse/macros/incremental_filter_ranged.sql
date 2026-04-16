@@ -3,11 +3,11 @@
     {# first, set min and max dates for the range #}
     {%- if is_incremental() -%}
 
-        {%- if env_var('DBT_EVENT_TIME_START') -%}
-            {%- set min_dt = env_var('DBT_EVENT_TIME_START') %}
+        {%- if var('DBT_INCREMENTAL_START_DATE','') != '' -%}
+            {%- set min_dt = var('DBT_INCREMENTAL_START_DATE') %}
             '{{ min_dt }}'
         {%- else -%}
-            {%- set min_dt = 'date_sub(current_date(), interval' + default_lookback + ' ' + lookback_unit + ')' %}
+            {%- set min_dt = 'date_sub(current_date(), interval ' + default_lookback|string + ' ' + lookback_unit + ')' %}
             {{ min_dt }}
         {%- endif -%}
 
@@ -26,8 +26,8 @@
 
     {%- if is_incremental() -%}
 
-        {%- if env_var('DBT_EVENT_TIME_END') -%}
-            {%- set max_dt = env_var('DBT_EVENT_TIME_END') %}
+        {%- if var('DBT_INCREMENTAL_END_DATE','') != '' -%}
+            {%- set max_dt = var('DBT_INCREMENTAL_END_DATE') %}
             '{{ max_dt }}'
         {%- else -%}
             {%- set max_dt = 'current_date()' %}
