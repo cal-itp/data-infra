@@ -2,4 +2,6 @@ version: 2
 
 models:
   - name: dim_littlepay_sync_job_results
-    description: Summary of Sync Littlepay Files
+    description: Summary of Downloaded Littlepay Files
+  - name: dim_littlepay_parse_job_results
+    description: Summary of Parsed Littlepay Files
