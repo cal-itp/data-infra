@@ -6,11 +6,11 @@ on:
       - main
     paths:
       - .github/workflows/gtfs-rt-archiver.yml
-      - 'services/gtfs-rt-archiver/**'
+      - services/gtfs-rt-archiver/**
   pull_request:
     paths:
       - .github/workflows/gtfs-rt-archiver.yml
-      - 'services/gtfs-rt-archiver/**'
+      - services/gtfs-rt-archiver/**
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}-gtfs-rt-archiver
@@ -48,7 +48,7 @@ jobs:
           service_account: ${{ env.SERVICE_ACCOUNT }}
 
       - name: Setup GCloud utilities
-        uses: google-github-actions/setup-gcloud@v2
+        uses: google-github-actions/setup-gcloud@v3
         with:
           project_id: ${{ env.PROJECT_ID }}
 
@@ -94,6 +94,6 @@ jobs:
         with:
           context: services/gtfs-rt-archiver
           push: true
-          tags: ghcr.io/${{ github.repository }}/gtfs-rt-archiver-v5:${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
+          tags: ghcr.io/${{ github.repository }}/gtfs-rt-archiver-v5:${{ github.ref == 'refs/heads/main' && github.sha || github.event.pull_request.head.sha }}
           cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/gtfs-rt-archiver-v5:${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
           cache-to: type=inline
