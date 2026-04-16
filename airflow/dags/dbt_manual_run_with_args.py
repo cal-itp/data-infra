@@ -22,19 +22,19 @@ def _build_run_args(
     select, exclude, full_refresh, threads, event_time_start, event_time_end
 ):
     # Rendered at task execution time via user_defined_macros, not at DAG parse time.
-    parts = ["--threads", str(threads)]
-
-    if select.strip():
-        parts += ["--select"] + select.strip().split()
-    if exclude.strip():
-        parts += ["--exclude"] + exclude.strip().split()
+    flags = {
+        "--select": select,
+        "--exclude": exclude,
+        "--threads": str(threads),
+        "--event-time-start": event_time_start,
+        "--event-time-end": event_time_end,
+    }
+    parts = []
+    for flag, value in flags.items():
+        if value and str(value).strip():
+            parts += [flag] + str(value).strip().split()
     if full_refresh:
-        parts += ["--full-refresh"]
-    if event_time_start.strip():
-        parts += ["--event-time-start", event_time_start.strip()]
-    if event_time_end.strip():
-        parts += ["--event-time-end", event_time_end.strip()]
-
+        parts.append("--full-refresh")
     return " ".join(parts)
 
 
@@ -50,7 +50,7 @@ with DAG(
     params={
         "select": Param(
             default="",
-            type="string",
+            type=["null", "string"],
             description=(
                 "dbt --select expression. Space-separate multiple selectors. "
                 "Examples: 'models/mart/gtfs', '+fct_stop_time_metrics', "
@@ -59,7 +59,7 @@ with DAG(
         ),
         "exclude": Param(
             default="",
-            type="string",
+            type=["null", "string"],
             description="dbt --exclude expression. Space-separate multiple selectors.",
         ),
         "full_refresh": Param(
@@ -76,7 +76,7 @@ with DAG(
         ),
         "event_time_start": Param(
             default="",
-            type="string",
+            type=["null", "string"],
             description=(
                 "Microbatch --event-time-start (inclusive). "
                 "Formats: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS. "
@@ -85,7 +85,7 @@ with DAG(
         ),
         "event_time_end": Param(
             default="",
-            type="string",
+            type=["null", "string"],
             description=(
                 "Microbatch --event-time-end (exclusive). "
                 "Formats: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS. "
