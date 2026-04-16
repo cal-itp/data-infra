@@ -44,7 +44,7 @@ WITH fct_benefits_events_raw AS (
     -- https://github.com/cal-itp/benefits/pull/2402
     COALESCE(
       {{ json_extract_column('event_properties', 'enrollment_method', no_alias = true) }},
-      "digital"
+      "self_service"
     ) AS event_properties_enrollment_method,
     {{ json_extract_column('event_properties', 'error.name') }},
     {{ json_extract_column('event_properties', 'error.status') }},
@@ -90,7 +90,7 @@ WITH fct_benefits_events_raw AS (
     -- https://github.com/cal-itp/benefits/pull/2402
     COALESCE(
       {{ json_extract_column('user_properties', 'enrollment_method', no_alias = true) }},
-      "digital"
+      "self_service"
     ) AS user_properties_enrollment_method,
     {{ json_extract_column('user_properties', 'initial_referrer') }},
     {{ json_extract_column('user_properties', 'initial_referring_domain') }},
@@ -163,7 +163,11 @@ fct_benefits_events AS (
     END AS event_properties_eligibility_verifier,
     event_properties_enrollment_flows,
     event_properties_enrollment_group,
-    event_properties_enrollment_method,
+    CASE
+      WHEN event_properties_enrollment_method = "digital"
+        THEN "self_service"
+      ELSE event_properties_enrollment_method
+    END AS event_properties_enrollment_method,
     event_properties_error_name,
     event_properties_error_status,
     event_properties_error_sub,
@@ -248,7 +252,11 @@ fct_benefits_events AS (
       ELSE user_properties_eligibility_verifier
     END AS user_properties_eligibility_verifier,
     user_properties_enrollment_flows,
-    user_properties_enrollment_method,
+    CASE
+      WHEN user_properties_enrollment_method = "digital"
+        THEN "self_service"
+      ELSE user_properties_enrollment_method
+    END AS user_properties_enrollment_method,
     user_properties_initial_referrer,
     user_properties_initial_referring_domain,
     user_properties_referrer,
