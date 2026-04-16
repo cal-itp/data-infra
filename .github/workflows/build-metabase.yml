@@ -56,7 +56,7 @@ jobs:
     name: Build staging image
     runs-on: ubuntu-latest
     needs: [changes]
-    if: ${{ needs.changes.outputs.staging != '[]' || needs.changes.outputs.staging != '' }}
+    if: ${{ needs.changes.outputs.staging != '[]' && needs.changes.outputs.staging != '' }}
 
     permissions:
       contents: read
