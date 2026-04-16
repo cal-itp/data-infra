@@ -18,7 +18,9 @@ from airflow.operators.latest_only import LatestOnlyOperator
 DBT_TARGET = os.environ.get("DBT_TARGET")
 
 
-def _build_run_args(select, exclude, full_refresh, threads, event_time_start, event_time_end):
+def _build_run_args(
+    select, exclude, full_refresh, threads, event_time_start, event_time_end
+):
     # Rendered at task execution time via user_defined_macros, not at DAG parse time.
     parts = ["--threads", str(threads)]
 
@@ -27,7 +29,7 @@ def _build_run_args(select, exclude, full_refresh, threads, event_time_start, ev
     if exclude.strip():
         parts += ["--exclude"] + exclude.strip().split()
     if full_refresh:
-        parts+= ["--full-refresh"]
+        parts += ["--full-refresh"]
     if event_time_start.strip():
         parts += ["--event-time-start", event_time_start.strip()]
     if event_time_end.strip():
