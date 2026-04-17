@@ -1,7 +1,7 @@
 import json
 import os
 import traceback
-from concurrent.futures import TimeoutError
+from concurrent.futures import ThreadPoolExecutor, TimeoutError
 
 from google.cloud import pubsub_v1
 from gtfs_rt_archiver.archiver import Archiver
@@ -34,13 +34,39 @@ class GtfsRtArchiver:
         return Archiver(configuration=self.configuration())
 
     def run(self):
-        logger.info(f"{self.message.message_id} - {self.configuration().url}")
+        logger.info(
+            json.dumps(
+                {
+                    "severity": "Default",
+                    "message": "Started",
+                    "url": self.configuration().url,
+                    "message_id": self.message.message_id,
+                }
+            )
+        )
         try:
             self.archiver().save(result=self.downloader().get())
-            logger.info(f"{self.message.message_id} - Processed")
+            logger.info(
+                json.dumps(
+                    {
+                        "severity": "Default",
+                        "message": "Finished",
+                        "url": self.configuration().url,
+                        "message_id": self.message.message_id,
+                    }
+                )
+            )
         except Exception as e:
             logger.error(
-                f"{self.message.message_id} - Caught error {e}\n{traceback.format_exc()}"
+                json.dumps(
+                    {
+                        "severity": "Error",
+                        "message": f"{e}",
+                        "url": self.configuration().url,
+                        "message_id": self.message.message_id,
+                        "traceback": traceback.format_exc(),
+                    }
+                )
             )
         self.message.ack()
 
@@ -48,8 +74,16 @@ class GtfsRtArchiver:
 if __name__ == "__main__":
     subscriber = pubsub_v1.SubscriberClient()
 
+    scheduler = pubsub_v1.subscriber.scheduler.ThreadScheduler(
+        executor=ThreadPoolExecutor(
+            max_workers=int(os.environ.get("THREAD_POOL_SIZE", "50"))
+        )
+    )
+
     streaming_pull_future = subscriber.subscribe(
-        os.environ["GTFS_RT_ARCHIVER__SUBSCRIPTION"], callback=GtfsRtArchiver.callback
+        os.environ["GTFS_RT_ARCHIVER__SUBSCRIPTION"],
+        callback=GtfsRtArchiver.callback,
+        scheduler=scheduler,
     )
 
     with subscriber:
