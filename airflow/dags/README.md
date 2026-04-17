@@ -8,7 +8,7 @@
 |  3:00 AM    | 7 PM<br>previous day | 8 PM<br>previous day | [download_parse_and_validate_gtfs](#download_parse_and_validate_gtfs)                                                            | Every Day  |
 |  4:00 AM    | 8 PM<br>previous day | 9 PM<br>previous day | [scrape_state_geoportal](./scrape_state_geoportal)                                                                               | 1st Day of the month |
 |  9:00 AM    | 1:00 AM              | 2:00 AM              | [sync_ntd_data_api](./sync_ntd_data_api)                                                                                         | Wednesdays |
-| 10:00 AM    | 2:00 AM              | 3:00 AM              | [ntd_report_from_blackcat](./ntd_report_from_blackcat)<br>[download_and_parse_ntd_xlsx](#download_and_parse_ntd_xlsx)<br>[sync_ntd_data_xlsx](./sync_ntd_data_xlsx)| Mondays    |
+| 10:00 AM    | 2:00 AM              | 3:00 AM              | [ntd_report_from_blackcat](./ntd_report_from_blackcat)<br>[download_and_parse_ntd_xlsx](#download_and_parse_ntd_xlsx)            | Mondays    |
 | 11:00 AM    | 3:00 AM              | 4:00 AM              | [create_external_tables](./create_external_tables)                                                                               | Every Day  |
 | 12:00 PM    | 4:00 AM              | 5:00 AM              | [download_and_parse_littlepay](#download_and_parse_littlepay)                                                                    | Every Day  |
 |             | Every Hour           |                      | [sync_littlepay_v3](./sync_littlepay_v3)                                                                                         | Every Day  |
@@ -17,7 +17,7 @@
 |  2:00 PM    | 6:00 AM              | 7:00 AM              | [dbt_all](#dbt_all)                                                                                                              | Monday and Thursday |
 |  2:00 PM    | 6:00 AM              | 7:00 AM              | [dbt_daily](#dbt_daily)                                                                                                          | Sunday, Tuesday, Wednesday, Friday, and Saturday |
 |  2:00 PM    | 6:00 AM              | 6:00 AM              | [airtable_issue_management](#airtable_issue_management)                                                                          | Fridays    |
-|  -          | -                    | -                    | [dbt_manual](#dbt_manual)<br>[download_gtfs_schedule_v2](./download_gtfs_schedule_v2)<br>[unzip_and_validate_gtfs_schedule_hourly](./unzip_and_validate_gtfs_schedule_hourly)| Runs Only Manually |
+|  -          | -                    | -                    | [dbt_manual](#dbt_manual)                                                                                                        | Runs Only Manually |
 
 ## dbt_all
 
@@ -46,9 +46,6 @@
 
 
 ## download_and_parse_ntd_xlsx
-
-> [!NOTE]
-> This DAG replaces [sync_ntd_data_xlsx](./sync_ntd_data_xlsx)
 
    This DAG downloads NTD excel files (xslx) from `Federal Transit Administration` website and converts into BigQuery-readable gzipped JSONL files.
 
@@ -85,7 +82,7 @@
 
    - Runs [**GCSDownloadConfigFilterOperator**](airflow/plugins/operators/gcs_download_config_filter_operator.py) to filter for schedule datasets from the previous step.
 
-   - Runs [**DownloadConfigToGCSOperator**](airflow/plugins/operators/download_config_to_gcs_operator.py) and [**DownloadConfigHook**](airflow/plugins/hooks/download_config_hook.py) replacing [download_gtfs_schedule_v2 DAG](airflow/dags/download_gtfs_schedule_v2).
+   - Runs [**DownloadConfigToGCSOperator**](airflow/plugins/operators/download_config_to_gcs_operator.py) and [**DownloadConfigHook**](airflow/plugins/hooks/download_config_hook.py).
 
 > [!NOTE]
 > This process will try to download files from `Manual Download Bucket` first
@@ -116,7 +113,7 @@
 
 ### 3. Validates files
 
-   Runs [**ValidateGTFSToGCSOperator**](airflow/plugins/operators/validate_gtfs_to_gcs_operator.py) and [**GTFSValidatorHook**](airflow/plugins/hooks/gtfs_validator_hook.py) replacing [unzip_and_validate_gtfs_schedule_hourly.validate_gtfs_schedule](airflow/dags/unzip_and_validate_gtfs_schedule_hourly/validate_gtfs_schedule.yml).
+   Runs [**ValidateGTFSToGCSOperator**](airflow/plugins/operators/validate_gtfs_to_gcs_operator.py) and [**GTFSValidatorHook**](airflow/plugins/hooks/gtfs_validator_hook.py).
 
    - Validates zip files downloaded on `download_gtfs` DAG.
 
@@ -137,7 +134,7 @@
 
 #### 4.1. Unzips Dataset Files
 
-   Runs [**UnzipGTFSToGCSOperator**](airflow/plugins/operators/unzip_gtfs_to_gcs_operator.py) and [**GTFSUnzipHook**](airflow/plugins/hooks/gtfs_unzip_hook.py) replacing [unzip_and_validate_gtfs_schedule_hourly.unzip_gtfs_schedule](airflow/dags/unzip_and_validate_gtfs_schedule_hourly/unzip_gtfs_schedule.py).
+   Runs [**UnzipGTFSToGCSOperator**](airflow/plugins/operators/unzip_gtfs_to_gcs_operator.py) and [**GTFSUnzipHook**](airflow/plugins/hooks/gtfs_unzip_hook.py).
 
    - Unzips downloaded files from `download_gtfs` DAG.
 
@@ -181,7 +178,7 @@
 
 #### 4.2. Converts files to external tables format (jsonl)
 
-   Runs [**GTFSCSVToJSONLOperator**](airflow/plugins/operators/gtfs_csv_to_jsonl_operator.py) replacing [unzip_and_validate_gtfs_schedule_hourly.convert_to_json](airflow/dags/unzip_and_validate_gtfs_schedule_hourly/convert_to_json).
+   Runs [**GTFSCSVToJSONLOperator**](airflow/plugins/operators/gtfs_csv_to_jsonl_operator.py).
 
    - Converts each csv file from each dataset to jsonl.
 
@@ -210,8 +207,8 @@
 
 This DAG automates the lifecycle management of Transit Data Quality (TDQ) issues related to GTFS feed expiration. It handles both:
 
-- closing issues that are no longer relevant  
-- creating new issues for feeds that require attention  
+- closing issues that are no longer relevant
+- creating new issues for feeds that require attention
 
 This helps keep Airtable synchronized with the current state of GTFS data quality.
 
@@ -231,12 +228,12 @@ This helps keep Airtable synchronized with the current state of GTFS data qualit
             fct_close_expired_issues
 
    - Identifies GTFS datasets where:
-      * the feed is no longer expired or no longer within the expiration window  
-      * an open Airtable issue still exists  
+      * the feed is no longer expired or no longer within the expiration window
+      * an open Airtable issue still exists
 
    - Updates corresponding Airtable records:
-      * Marks issues as resolved  
-      * Performs batch updates for efficiency  
+      * Marks issues as resolved
+      * Performs batch updates for efficiency
 
 
 ### 2. Create Expiring Issues (`create_expiring_issues`)
@@ -249,13 +246,13 @@ This helps keep Airtable synchronized with the current state of GTFS data qualit
             fct_create_expiring_gtfs_issues
 
    - Identifies GTFS datasets where:
-      * the feed is expired or expiring within 30 days  
-      * no open Airtable issue currently exists  
+      * the feed is expired or expiring within 30 days
+      * no open Airtable issue currently exists
 
    - Creates new Airtable records:
-      * Applies standardized fields (Issue Type, Status, Outreach Status, etc.)  
-      * Associates GTFS datasets and services  
-      * Populates description and tracking fields  
+      * Applies standardized fields (Issue Type, Status, Outreach Status, etc.)
+      * Associates GTFS datasets and services
+      * Populates description and tracking fields
 
 
 ### 3. Sends Summary Email
@@ -263,14 +260,14 @@ This helps keep Airtable synchronized with the current state of GTFS data qualit
    This workflow sends a consolidated HTML email summarizing the results of both workflows.
 
    - Includes:
-      * Number of records updated (closed issues)  
-      * Number of records created (new issues)  
-      * Tables listing affected records  
-      * Any failed batch operations  
+      * Number of records updated (closed issues)
+      * Number of records created (new issues)
+      * Tables listing affected records
+      * Any failed batch operations
 
    - Additional behavior:
-      * When new issues are created, individual emails are sent per record  
-      * A HubSpot notification section is included in the summary email  
+      * When new issues are created, individual emails are sent per record
+      * A HubSpot notification section is included in the summary email
 
 
 ### DAG Structure
@@ -294,59 +291,59 @@ This helps keep Airtable synchronized with the current state of GTFS data qualit
 
 ### Scheduling
 
-   - Runs weekly in Composer  
-   - Designed for recurring monitoring and maintenance of GTFS data quality  
+   - Runs weekly in Composer
+   - Designed for recurring monitoring and maintenance of GTFS data quality
 
 
 ### Design Notes
 
    - Uses custom operators and hooks for:
-      * BigQuery reads  
-      * Airtable updates and creates  
-      * Email notifications  
+      * BigQuery reads
+      * Airtable updates and creates
+      * Email notifications
 
    - Separates:
-      * data retrieval (BigQuery)  
-      * business logic (operators)  
-      * side effects (Airtable and email)  
+      * data retrieval (BigQuery)
+      * business logic (operators)
+      * side effects (Airtable and email)
 
-   - Consolidates notifications into a single email to avoid alert fatigue  
+   - Consolidates notifications into a single email to avoid alert fatigue
 
 
 ### Troubleshooting
 
    No email sent:
-      - Check whether both workflows returned zero rows  
-      - Email is skipped when there are no updates or creations  
+      - Check whether both workflows returned zero rows
+      - Email is skipped when there are no updates or creations
 
    Missing Airtable updates or creations:
       - Verify dbt models:
-         * `fct_close_expired_issues`  
-         * `fct_create_expiring_gtfs_issues`  
-      - Confirm dataset and table names in operator configuration  
+         * `fct_close_expired_issues`
+         * `fct_create_expiring_gtfs_issues`
+      - Confirm dataset and table names in operator configuration
 
    Partial failures (batch errors):
-      - Review the failed batch section in the email  
-      - Check Airflow logs for the corresponding task  
+      - Review the failed batch section in the email
+      - Check Airflow logs for the corresponding task
 
    Individual emails not sent:
-      - Ensure `HUBSPOT_NOTIFICATION_EMAIL` is set  
-      - Verify that new records were actually created  
+      - Ensure `HUBSPOT_NOTIFICATION_EMAIL` is set
+      - Verify that new records were actually created
 
 
 ### When to Use This DAG Pattern
 
    This DAG is a good example of when Airflow is appropriate:
 
-   - Recurring, scheduled workflows  
-   - Multi-step pipelines with dependencies  
-   - External system integration across BigQuery, Airtable, and email  
-   - Workflows that require monitoring, logging, and retry behavior  
+   - Recurring, scheduled workflows
+   - Multi-step pipelines with dependencies
+   - External system integration across BigQuery, Airtable, and email
+   - Workflows that require monitoring, logging, and retry behavior
 
    Simpler approaches (such as notebooks or scripts) may be more appropriate for:
-   - one-off analyses  
-   - exploratory workflows  
-   - tasks that do not require scheduling or orchestration  
+   - one-off analyses
+   - exploratory workflows
+   - tasks that do not require scheduling or orchestration
 
 ## Testing DAGs
 
