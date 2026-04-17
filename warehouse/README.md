@@ -255,13 +255,13 @@ We make heavy use of [incremental models](https://docs.getdbt.com/docs/build/inc
         SELECT *
           FROM incremental_model_name
       -  WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
-      +  WHERE dt BETWEEN '{{ var("DBT_START_DATE") }}' AND '{{ var("DBT_END_DATE") }}'
+      +  WHERE dt BETWEEN '{{ var("DBT_INCREMENTAL_START_DATE") }}' AND '{{ var("DBT_INCREMENTAL_END_DATE") }}'
       ```
 
    2. Compile your model to make sure it has the expected date range.
 
       ```bash
-      $ uv run dbt compile -s <<incremental_model_name>> --vars '{DBT_START_DATE: 2025-01-02, DBT_END_DATE: 2025-01-31}'
+      $ uv run dbt compile -s <<incremental_model_name>> --vars '{DBT_INCREMENTAL_START_DATE: 2025-01-02, DBT_INCREMENTAL_END_DATE: 2025-01-31}'
       ```
 
       It should return a SQL code like this:
@@ -277,7 +277,7 @@ We make heavy use of [incremental models](https://docs.getdbt.com/docs/build/inc
    3. Run your model.
 
       ```bash
-      $ uv run dbt run -s <<incremental_model_name>> --vars '{DBT_START_DATE: 2025-01-02, DBT_END_DATE: 2025-01-31}'
+      $ uv run dbt run -s <<incremental_model_name>> --vars '{DBT_INCREMENTAL_START_DATE: 2025-01-02, DBT_INCREMENTAL_END_DATE: 2025-01-31}'
       ```
 
 - If you need to compile or run models in Staging instead of in your personally-named schema, you need to include the configuration in your `~/.dbt/profiles.yml` and add the `--target staging` flag in your command.
