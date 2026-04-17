@@ -1,7 +1,7 @@
 {{
     config(
         materialized='incremental',
-        unique_key = 'key',
+        incremental_strategy = 'insert_overwrite',
         partition_by = {
             'field': 'service_date',
             'data_type': 'date',
@@ -21,10 +21,9 @@ WITH fct_scheduled_trips AS (
         contains_warning_duplicate_trip_primary_key,
         contains_warning_missing_foreign_key_stop_id
     FROM {{ ref('fct_scheduled_trips') }}
-    WHERE {{ incremental_where(default_start_var='GTFS_SCHEDULE_START',
-                               this_dt_column='service_date',
-                               filter_dt_column='service_date',
-                               dev_lookback_days = None) }}
+    WHERE service_date
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_MICROBATCH_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_SCHEDULE_START")) }}
+            AND {{ ranged_incremental_max_date() }}
 ),
 
 dim_stops AS (
