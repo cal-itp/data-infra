@@ -1,5 +1,11 @@
+import os
+
 from gtfs_rt_archiver.configuration import Configuration
 from requests import Request, Response, Session
+
+cert_ca_path = os.path.join(
+    os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "cert.ca"
+)
 
 
 class Result:
@@ -54,7 +60,9 @@ class Downloader:
     def get(self) -> None:
         session: Session = Session()
         prepped_request = session.prepare_request(self.request())
-        response = session.send(prepped_request, allow_redirects=True, timeout=10)
+        response = session.send(
+            prepped_request, allow_redirects=True, timeout=5, verify=cert_ca_path
+        )
         try:
             response.raise_for_status()
         except Exception as e:
