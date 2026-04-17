@@ -37,11 +37,14 @@ class GtfsRtArchiver:
 
     def run(self):
         try:
+            logger.debug(dir(self.message))
+            logger.debug(self.message)
             logger.info(f"{self.configuration().url} - processing {self.message.data}")
             self.archiver().save(result=self.downloader().get())
         except Exception as e:
-            logger.error(f"{self.configuration().url} - {e}")
-            logger.error(traceback.format_exc())
+            logger.error(
+                f"{self.configuration().url} - Caught error {e}\n{traceback.format_exc()}"
+            )
         self.message.ack()
 
 
