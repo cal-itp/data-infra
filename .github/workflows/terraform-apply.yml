@@ -48,6 +48,18 @@ jobs:
           dir_names: true
           files: 'iac/cal-itp-data-infra/**/*.tf'
 
+      - name: Print Staging changed files
+        env:
+          CHANGED_FILES: ${{ steps.staging-changes.outputs.all_changed_files }}
+        run: |
+          echo "List Staging changed files: $CHANGED_FILES"
+
+      - name: Print Production changed files
+        env:
+          CHANGED_FILES: ${{ steps.production-changes.outputs.all_changed_files }}
+        run: |
+          echo "List Production changed files: $CHANGED_FILES"
+
   staging:
     name: Staging
     needs: [targets]
