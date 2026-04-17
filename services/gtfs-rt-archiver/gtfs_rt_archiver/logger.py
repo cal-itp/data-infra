@@ -1,6 +1,8 @@
 import logging
 import sys
 
+import google.cloud.logging
+
 
 class LogLevelFilter(logging.Filter):
     def filter(self, rec):
@@ -19,3 +21,6 @@ stderr_handler = logging.StreamHandler()
 stderr_handler.setLevel(logging.WARNING)
 
 logger.addHandler(stderr_handler)
+
+client = google.cloud.logging.Client()
+client.setup_logging()
