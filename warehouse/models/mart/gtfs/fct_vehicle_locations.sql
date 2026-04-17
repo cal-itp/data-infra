@@ -1,12 +1,17 @@
 {{
     config(
         materialized='incremental',
-        incremental_strategy='insert_overwrite',
+        incremental_strategy='microbatch',
+        event_time = 'dt',
+        batch_size = 'day',
+        begin=var('PROD_GTFS_RT_START'),
+        lookback=var('DBT_ALL_MICROBATCH_LOOKBACK_DAYS'),
         partition_by = {
             'field': 'dt',
             'data_type': 'date',
             'granularity': 'day',
         },
+        full_refresh=false,
         cluster_by=['dt', 'base64_url'],
         on_schema_change='append_new_columns'
     )
@@ -16,7 +21,6 @@ WITH fct_vehicle_positions_messages AS (
     SELECT *,
         COALESCE(vehicle_timestamp, header_timestamp) AS location_timestamp
     FROM {{ ref('fct_vehicle_positions_messages') }}
-    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 vp_trips AS (

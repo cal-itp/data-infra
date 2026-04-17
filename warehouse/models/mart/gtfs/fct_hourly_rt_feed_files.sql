@@ -1,11 +1,24 @@
-{{ config(materialized='incremental', unique_key = 'key') }}
+{{ config(
+    materialized='incremental',
+    incremental_strategy='microbatch',
+    event_time = 'dt',
+    batch_size = 'day',
+    begin=var('PROD_GTFS_RT_START'),
+    lookback=var('DBT_ALL_MICROBATCH_LOOKBACK_DAYS'),
+    partition_by = {
+        'field': 'dt',
+        'data_type': 'date',
+        'granularity': 'day',
+    },
+    full_refresh=false,
+)
+}}
 
 WITH
 
 int_gtfs_rt__daily_url_index AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__daily_url_index') }}
-    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 fct_daily_rt_feed_files AS (
@@ -16,7 +29,6 @@ fct_daily_rt_feed_files AS (
 parse_outcomes AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__unioned_parse_outcomes') }}
-    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 daily_totals AS (

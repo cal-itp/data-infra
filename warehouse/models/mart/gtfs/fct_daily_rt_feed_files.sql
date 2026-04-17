@@ -1,4 +1,17 @@
-{{ config(materialized='incremental', unique_key = 'key') }}
+{{ config(
+    materialized='incremental',
+    incremental_strategy='microbatch',
+    event_time = 'date',
+    batch_size = 'day',
+    begin=var('PROD_GTFS_RT_START'),
+    lookback=var('DBT_ALL_MICROBATCH_LOOKBACK_DAYS'),
+    partition_by = {
+        'field': 'date',
+        'data_type': 'date',
+        'granularity': 'day',
+    },
+    full_refresh=false,
+) }}
 
 WITH int_transit_database__urls_to_gtfs_datasets AS (
     SELECT *
