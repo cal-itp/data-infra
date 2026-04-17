@@ -2,42 +2,30 @@
 
     {# first, set min and max dates for the range #}
     {%- if is_incremental() -%}
-
+        {# if it's an incremental run, respect the DBT_INCREMENTAL_START_DATE dbt var if set #}
+        {# and otherwise use the default lookback window #}
         {%- if var('DBT_INCREMENTAL_START_DATE','') != '' -%}
-            {%- set min_dt = var('DBT_INCREMENTAL_START_DATE') %}
-            '{{ min_dt }}'
+            {# in quotes because this should be a date like 2026-04-01 #}
+            '{{ var("DBT_INCREMENTAL_START_DATE") }}'
         {%- else -%}
-            {%- set min_dt = 'date_sub(current_date(), interval ' + default_lookback|string + ' ' + lookback_unit + ')' %}
-            {{ min_dt }}
+            date_sub(current_date(), interval {{ default_lookback|string }} {{ lookback_unit }})
         {%- endif -%}
 
     {%- else  -%}
-        {# if not incremental, just set min to dataset start #}
-        {%- set min_dt = data_earliest_start %}
-        '{{ min_dt }}'
+        {# if not incremental, just set min to data start date #}
+        '{{ data_earliest_start }}'
 
     {%- endif -%}
-
-
-
 {%- endmacro %}
 
 {%- macro ranged_incremental_max_date() -%}
-
-    {%- if is_incremental() -%}
-
-        {%- if var('DBT_INCREMENTAL_END_DATE','') != '' -%}
-            {%- set max_dt = var('DBT_INCREMENTAL_END_DATE') %}
-            '{{ max_dt }}'
-        {%- else -%}
-            {%- set max_dt = 'current_date()' %}
-            {{ max_dt }}
-        {%- endif -%}
-
-    {%- else  -%}
-        {# if not incremental, just set max to today #}
-        {%- set max_dt = 'current_date()' %}
-        {{ max_dt }}
+    {# if it's an incremental run, respect the DBT_INCREMENTAL_END_DATE dbt var if set #}
+    {%- if is_incremental() and var('DBT_INCREMENTAL_END_DATE','') != '' -%}
+        {# in quotes because this should be a date like 2026-04-01 #}
+        '{{ var("DBT_INCREMENTAL_END_DATE") }}'
+    {%- else -%}
+        {# if not incremental or variable not set, just set max to today #}
+        current_date()
     {%- endif -%}
 
 {%- endmacro %}
