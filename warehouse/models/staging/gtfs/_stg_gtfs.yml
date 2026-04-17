@@ -3,7 +3,7 @@ version: 2
 models:
   - name: stg_gtfs_schedule__download_outcomes
     description: Outcomes from download attempts of GTFS schedule data.
-    tests:
+    data_tests:
       - &schedule_outcome_uniqueness
         dbt_utils.unique_combination_of_columns:
           arguments:
@@ -25,7 +25,7 @@ models:
       - name: ts
   - name: stg_gtfs_schedule__unzip_outcomes
     description: Outcomes from unzip attempts on downloaded GTFS schedule data.
-    tests:
+    data_tests:
       - *schedule_outcome_uniqueness
     columns:
       - name: dt
@@ -45,7 +45,7 @@ models:
       - name: ts
   - name: stg_gtfs_schedule__file_parse_outcomes
     description: Outcomes from parse (.txt --> .jsonl conversion) attempts on files within GTFS feeds.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:

@@ -141,7 +141,7 @@ models:
       - name: trn_aci
       - name: card_scheme_ref
       - name: trn_ref_num
-        tests:
+        data_tests:
           - unique
       - name: settlement_method
       - name: currency_code
@@ -191,7 +191,7 @@ models:
       - name: trn_aci
       - name: card_scheme_ref
       - name: trn_ref_num
-        tests:
+        data_tests:
           - unique
       - name: settlement_method
       - name: currency_code
@@ -241,7 +241,7 @@ models:
       - name: trn_aci
       - name: card_scheme_ref
       - name: trn_ref_num
-        tests:
+        data_tests:
           - unique
       - name: settlement_method
       - name: currency_code

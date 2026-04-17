@@ -12,7 +12,7 @@ models:
     description: |
       Setting up the RR-20 data for comparing fare revenues to previous year
       NOTE: This model uses dynamic variables for "this_year" and "last_year" which are based on the timestamp that this run started.
-    # tests:
+    # data_tests:
     #   - dbt_utils.expression_is_true:
     #       arguments:
     #         expression: 'status != {{ guidelines_to_be_assessed_status() }}'

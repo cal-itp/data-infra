@@ -8,7 +8,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_asset_inventory_time_series_ada_fleet
@@ -18,7 +18,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_asset_inventory_time_series_avg_fleet_age
@@ -28,7 +28,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_asset_inventory_time_series_avg_seating_capacity
@@ -38,7 +38,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        tests:
+        data_tests:
           - not_null
           - unique
   - name: fct_asset_inventory_time_series_avg_standing_capacity
@@ -48,6 +48,6 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        tests:
+        data_tests:
           - not_null
           - unique

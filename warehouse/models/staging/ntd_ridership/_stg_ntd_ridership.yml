@@ -4,7 +4,7 @@ x-common-fields:
   - &ntd_id
     name: ntd_id
     description: '{{ doc("ntd_id") }}'
-    tests:
+    data_tests:
       - not_null
   - &legacy_ntd_id
     name: legacy_ntd_id

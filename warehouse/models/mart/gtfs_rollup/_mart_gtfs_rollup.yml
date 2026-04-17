@@ -8,7 +8,7 @@ x-common-fields:
   - &feed_key
     name: feed_key
     description: '{{ doc("gtfs_schedule_feed_key") }}'
-    tests:
+    data_tests:
       - not_null
       - relationships:
           arguments:

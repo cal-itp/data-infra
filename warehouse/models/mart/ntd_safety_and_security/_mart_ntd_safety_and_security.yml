@@ -6,7 +6,7 @@ models:
     columns:
       - name: key
         description: Synthetic primary key constructed from ntd_id, year, and incident_number
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: ntd_id
@@ -223,7 +223,7 @@ models:
     columns:
       - name: key
         description: Synthetic primary key constructed from ntd_id, year, and incident_number
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: ntd_id
@@ -505,7 +505,7 @@ models:
     columns:
       - name: key
         description: Synthetic primary key constructed from ntd_id, year, month, mode, and type_of_service
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: ntd_id
@@ -655,7 +655,7 @@ models:
     columns:
       - name: key
         description: Synthetic primary key constructed from ntdid, yr, mo, modecd, typeofservicecd, eventtype, and location
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: ntd_id

@@ -10,7 +10,7 @@ x-common-fields:
   - &feed_key
     name: feed_key
     description: '{{ doc("gtfs_schedule_feed_key") }}'
-    tests:
+    data_tests:
       - not_null
       - relationships:
           arguments:
@@ -26,7 +26,7 @@ x-common-fields:
     name: gtfs_dataset_key
     description: &gtfs_dataset_key_desc |
       '{{ doc("gtfs_schedule_gtfs_dataset_key") }}'
-    tests:
+    data_tests:
       - not_null:
           arguments:
             config:
@@ -45,7 +45,7 @@ x-common-fields:
     name: gtfs_dataset_key
     description: |
       Foreign key to the associated GTFS dataset record.
-    tests:
+    data_tests:
       - not_null:
           arguments:
             config:
@@ -68,7 +68,7 @@ x-common-fields:
   - &gtfs_dataset_key
     name: gtfs_dataset_key
     description: *gtfs_dataset_key_desc
-    tests:
+    data_tests:
       - dbt_utils.not_null_proportion:
           arguments:
             # TODO: raise back to .999 after some time getting new data -
@@ -87,7 +87,7 @@ x-common-fields:
   - &gtfs_rt_schedule_dataset_key
     name: schedule_gtfs_dataset_key
     description: '{{ doc("column_rt_schedule_dataset_key") }}'
-    tests:
+    data_tests:
       - relationships:
           arguments:
             to: ref('dim_gtfs_datasets')
@@ -100,7 +100,7 @@ x-common-fields:
   - &gtfs_rt_schedule_feed_key
     name: schedule_feed_key
     description: '{{ doc("column_rt_schedule_feed_key") }}'
-    tests:
+    data_tests:
       - relationships:
           arguments:
             to: ref('dim_schedule_feeds')
@@ -125,7 +125,7 @@ x-common-fields:
       - service date
       - trip_id
       - iteration number, which attempts to normalize trip start times
-    tests:
+    data_tests:
       - not_null
       - unique_proportion:
           arguments:
@@ -134,7 +134,7 @@ x-common-fields:
     name: key
     description: |
       Composite of calculated service date, URL, trip ID, and trip start time.
-    tests:
+    data_tests:
       - not_null
       - unique_proportion:
           arguments:
@@ -497,7 +497,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `date` and `feed_key`.
-        tests: &primary_key_tests
+        data_tests: &primary_key_tests
           - unique
           - not_null
       - name: date
@@ -516,9 +516,9 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `base64_url` and `ts`.
-        tests: *primary_key_tests
+        data_tests: *primary_key_tests
       - <<: *feed_key
-        tests:
+        data_tests:
           - not_null:
               arguments:
                 config:
@@ -564,7 +564,7 @@ models:
         description: |
           Synthetic primary key constructed from `base64_url`, `extract_ts`,
           entity `id`, `vehicle_id`, and `trip_id`.
-        tests: &almost_unique_rt_key_tests
+        data_tests: &almost_unique_rt_key_tests
           - unique_proportion:
               arguments:
                 at_least: 0.999
@@ -614,7 +614,7 @@ models:
       Unnested and de-duped stop time updates.
     columns:
       - name: key
-        tests: *almost_unique_rt_key_tests
+        data_tests: *almost_unique_rt_key_tests
       - *gtfs_dataset_key_errorif_sampled
       - *gtfs_rt_dt
       - *gtfs_rt_hour
@@ -679,7 +679,7 @@ models:
           Synthetic primary key constructed from `service_date`, `base64_url`,
           `location_timestamp`, `vehicle_id`, `vehicle_label`,
           `trip_id`, and `trip_start_time`.
-        tests: *almost_unique_rt_key_tests
+        data_tests: *almost_unique_rt_key_tests
       - name: gtfs_dataset_key
         description: *gtfs_dataset_key_desc
       - *gtfs_rt_dt
@@ -712,7 +712,7 @@ models:
       - *rt_vehicle_license_plate
       - *rt_vehicle_wheelchair_accessible
       - <<: *rt_trip_id
-        tests:
+        data_tests:
           - not_null:
               arguments:
                 config:
@@ -765,7 +765,7 @@ models:
         description: |
           Synthetic primary key constructed from `base64_url`, `extract_ts`,
           entity `id`, `vehicle_id`, and `trip_id`.
-        tests: *almost_unique_rt_key_tests
+        data_tests: *almost_unique_rt_key_tests
       - *gtfs_dataset_key_errorif_sampled
       - *gtfs_rt_dt
       - *gtfs_rt_hour
@@ -819,34 +819,34 @@ models:
       Each row is a date / URL pair with a summary of data aggregation outcomes.
     columns:
     - name: key
-      tests: *primary_key_tests
+      data_tests: *primary_key_tests
     - name: date
       description: Date that data was downloaded.
     - <<: *base64_url
-      tests:
+      data_tests:
         - not_null
     - *feed_type
     - name: parse_success_file_count
       description: |
         Count of files successfully parsed. Target is 4,320 (one file every
         20 seconds.)
-      tests:
+      data_tests:
         - not_null
     - name: parse_failure_file_count
       description: Count of files where parsing failed, but a file was present.
-      tests:
+      data_tests:
         - not_null
     - *gtfs_dataset_key
     - name: schedule_to_use_for_rt_validation_gtfs_dataset_key
       description: '{{ doc("column_rt_schedule_dataset_key") }}'
-      tests:
+      data_tests:
           - relationships:
               arguments:
                 to: ref('dim_gtfs_datasets')
                 field: key
     - name: schedule_feed_key
       description: '{{ doc("column_rt_schedule_feed_key") }}'
-      tests:
+      data_tests:
           - relationships:
               arguments:
                 to: ref('dim_schedule_feeds')
@@ -860,7 +860,7 @@ models:
       Service summary is based on `fct_scheduled_trips`, grouped to the feed
       level (a feed with no trips in `fct_scheduled_trips` will have 0s here for
       the summary columns.)
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -927,7 +927,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `dt` and `base64_url`.
-        tests: *primary_key_tests
+        data_tests: *primary_key_tests
       - name: dt
         description: |
           Date on which the download attempt was made.
@@ -973,7 +973,7 @@ models:
       - name: key
         description: |
           Synthetic primary key constructed from `dt` and `base64_url`.
-        tests: *primary_key_tests
+        data_tests: *primary_key_tests
       - name: dt
         description: |
           Date on which the download attempt was made.
@@ -1027,7 +1027,7 @@ models:
         description: |
           Synthetic primary key constructed from `base64_url`, `extract_ts`,
           entity `id`.
-        tests: &rt_primary_key_tests
+        data_tests: &rt_primary_key_tests
           - unique:
               arguments:
                 where: '__rt_sampled__'
@@ -1088,7 +1088,7 @@ models:
       distinct.)
       See: https://gtfs.org/realtime/reference/#message-alert for
       field definitions.
-    tests:
+    data_tests:
       - dbt_utils.expression_is_true:
           arguments:
             expression: "active_period_start <= active_period_end"
@@ -1098,11 +1098,11 @@ models:
         description: |
           Synthetic primary key constructed from `service_alerts_message_key`
           along with the active period and informed entities.
-        tests: *rt_primary_key_tests
+        data_tests: *rt_primary_key_tests
       - name: service_alert_message_key
         description: |
           The primary key for the message in `fct_service_alerts_messages`.
-        tests:
+        data_tests:
           - not_null:
               arguments:
                 config:
@@ -1200,7 +1200,7 @@ models:
         description: |
           Synthetic primary key constructed from `active_date`,
           `base64_url`, `id`, entity selectors, and alert active period.
-        tests:
+        data_tests:
           - unique_proportion:
               arguments:
                 at_least: 0.999
@@ -1260,7 +1260,7 @@ models:
         description: |
           Synthetic primary key constructed from `activity_date`, `shape_id`,
           and `shape_array_key`.
-        tests:
+        data_tests:
           - unique:
               arguments:
                 where: "not contains_warning_duplicate_trip_primary_key"
@@ -1331,7 +1331,7 @@ models:
         description: |
           Synthetic primary key constructed from `stop_arrival_date_pacific` and
           `stop_key`.
-        tests:
+        data_tests:
           - unique:
               arguments:
                 where: "not contains_warning_duplicate_trip_primary_key AND not contains_warning_duplicate_stop_times_primary_key AND not contains_warning_duplicate_stop_primary_key"
@@ -1448,7 +1448,7 @@ models:
           Treat these rows with caution.
       - name: stop_key
         description: Foreign key to the `dim_stops` table.
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_stops')
@@ -1504,7 +1504,7 @@ models:
           feed.
           This field is provided for convenience and should not be used as a
           join key.
-        tests:
+        data_tests:
           - not_null:
               arguments:
                 config:
@@ -1516,7 +1516,7 @@ models:
           positions feed.
           This field is provided for convenience and should not be used as a
           join key.
-        tests:
+        data_tests:
           - not_null:
               arguments:
                 config:
@@ -1556,7 +1556,7 @@ models:
       # foreign keys
       - name: tu_gtfs_dataset_key
         description: *gtfs_dataset_key_desc
-        tests:
+        data_tests:
           - dbt_utils.relationships_where:
               arguments:
                 to: ref('dim_gtfs_datasets')
@@ -1566,7 +1566,7 @@ models:
         name: tu_base64_url
       - name: vp_gtfs_dataset_key
         description: *gtfs_dataset_key_desc
-        tests:
+        data_tests:
           - dbt_utils.relationships_where:
               arguments:
                 to: ref('dim_gtfs_datasets')
@@ -1574,7 +1574,7 @@ models:
                 to_condition: "type = 'vehicle_positions'"
       - name: schedule_gtfs_dataset_key
         description: *gtfs_dataset_key_desc
-        tests:
+        data_tests:
           - dbt_utils.relationships_where:
               arguments:
                 to: ref('dim_gtfs_datasets')
@@ -1786,7 +1786,7 @@ models:
       this reduces the data size by about 90%.
     columns:
       - name: key
-        tests: *almost_unique_rt_key_tests
+        data_tests: *almost_unique_rt_key_tests
       - *gtfs_dataset_key_errorif_sampled
       - *gtfs_rt_dt
       - *gtfs_rt_hour
@@ -1852,7 +1852,7 @@ models:
     # as of May 2023 this test would fail because we have Flex feeds that use incorrect column names so both fields are null
     columns:
       - name: key
-        tests:
+        data_tests:
           - unique:
               arguments:
                 where: "not contains_warning_duplicate_trip_primary_key"
@@ -1893,7 +1893,7 @@ models:
           trip has service on this date.
       - name: trip_key
         description: Foreign key to dim_trips.
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_trips')
@@ -1907,7 +1907,7 @@ models:
       - name: block_id
         description: '{{ doc("gtfs_trips__block_id") }}'
       - <<: *trip_instance_key
-        tests:
+        data_tests:
           - not_null
           - unique:
               arguments:
@@ -1915,7 +1915,7 @@ models:
                   where: "not contains_warning_duplicate_trip_primary_key"
       - name: route_key
         description: Foreign key to dim_routes.
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_routes')
@@ -1944,7 +1944,7 @@ models:
         description: '{{ doc("gtfs_routes__continuous_drop_off") }}'
       - name: shape_array_key
         description: Foreign key to dim_shapes_arrays.
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_shapes_arrays')
@@ -2217,7 +2217,7 @@ models:
       applies to that trip.
       So, for example, if there is a service alert for Route A on a given date,
       this table will *not* include all trips on Route A for that date.
-    tests:
+    data_tests:
       - &warn_rt_trip_hours_past_midnight_no_start_date
         dbt_utils.expression_is_true:
           arguments:
@@ -2315,12 +2315,12 @@ models:
       `trip_instance_key` and `key` values, specifically they can occur on days
       where the URL or time zone for a given  feed change because of how the keys
       are generated upstream.
-    tests:
+    data_tests:
       - *warn_rt_trip_hours_past_midnight_no_start_date
     columns:
       - *rt_trip_summary_key
       - <<: *trip_instance_key
-        tests:
+        data_tests:
           - not_null
           - unique_proportion:
               arguments:
@@ -2425,12 +2425,12 @@ models:
       `trip_instance_key` and `key` values, specifically they can occur on days
       where the URL or time zone for a given feed change because of how the keys
       are generated upstream.
-    tests:
+    data_tests:
       - *warn_rt_trip_hours_past_midnight_no_start_date
     columns:
       - *rt_trip_summary_key
       - <<: *trip_instance_key
-        tests:
+        data_tests:
           - not_null
           - unique_proportion:
               arguments:

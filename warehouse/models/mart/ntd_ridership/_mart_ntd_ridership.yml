@@ -60,7 +60,7 @@ models:
       - name: key
         description: |
           Surrogate key generated from ntd_id, mode, tos, period_month, and period_year.
-        tests:
+        data_tests:
           - not_null
           - unique
       - *ntd_id

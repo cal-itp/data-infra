@@ -5,7 +5,7 @@ models:
     description: |
       Index model listing all intended-to-have-been-implemented
       GTFS guideline checks.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -16,16 +16,17 @@ models:
             combination_of_columns:
               - reports_order
               - feature
-          where: 'reports_order IS NOT null'
+          config:
+            where: 'reports_order IS NOT null'
     columns:
       - name: check
-        tests:
+        data_tests:
           - not_null
       - name: feature
-        tests:
+        data_tests:
           - not_null
       - name: entity
-        tests:
+        data_tests:
           - not_null
 
   - name: stg_gtfs_quality__rt_validation_code_descriptions
@@ -33,14 +34,14 @@ models:
       Metadata for codes that come from the GTFS RT validator.
     columns:
       - name: code
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: description
-        tests:
+        data_tests:
           - not_null
       - name: is_critical
-        tests:
+        data_tests:
           - not_null
 
   - name: stg_gtfs_rt__service_alerts_validation_notices
@@ -50,7 +51,7 @@ models:
     columns:
       - &rt_key
         name: key
-        tests:
+        data_tests:
           - not_null:
               arguments:
                 where: '__rt_sampled__'
@@ -124,7 +125,7 @@ models:
       validator against GTFS Schedule zipfiles; not the actual
       output notices, but the "execution" results i.e. did we get
       output written to GCS.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -144,7 +145,7 @@ models:
       - name: extract_ts
 
   - name: stg_gtfs_quality__scraped_urls
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -156,7 +157,7 @@ models:
       - name: dt
       - name: ts
       - name: aggregator
-        tests:
+        data_tests:
           - accepted_values:
               arguments:
                 values:
@@ -168,7 +169,7 @@ models:
           for detecting fanout, etc.
       - name: name
       - name: feed_url_str
-        tests:
+        data_tests:
           - not_null
       - name: feed_type
       - name: raw_record

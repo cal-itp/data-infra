@@ -11,11 +11,11 @@ seeds:
     columns:
       - name: location_name
         description: On location in the O/D pair
-        tests:
+        data_tests:
           - unique
       - name: off_location_name
         description: Off location in the O/D pair
-        tests:
+        data_tests:
           - unique
       - name: distance_miles
         description: Distance in miles between location_name and off_location_name.
@@ -30,7 +30,7 @@ seeds:
     columns:
       - name: ntd_mode_abbreviation
         description: The two letter abbreviation mode
-        tests:
+        data_tests:
           - unique
       - name: ntd_mode_full_name
         description: The mode's full name
@@ -45,20 +45,20 @@ seeds:
         description: Unversioned key to dim_gtfs_datasets natural key from Airtable.
       - name: littlepay_participant_id
         description: Littlepay-assigned Participant ID.
-        tests:
+        data_tests:
           - unique
       - name: elavon_customer_name
         description: Elavon-assigned Customer Name.
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: _in_use_from
         description: Start date from which this mapping is valid (inclusive). Used to handle cases where the same littlepay_participant_id maps to different elavon customer_name and customer_id over time.
-        tests:
+        data_tests:
           - not_null
       - name: _in_use_until
         description: End date until which this mapping is valid (inclusive). Used to handle cases where the same littlepay_participant_id maps to different elavon customer_name and customer_id over time.
-        tests:
+        data_tests:
           - not_null
 
   - name: payments_entity_mapping_enghouse
@@ -75,20 +75,20 @@ seeds:
         description: To-do.
       - name: enghouse_operator_id
         description: Enghouse-assigned operator ID.
-        tests:
+        data_tests:
           - unique
       - name: elavon_customer_name
         description: Elavon-assigned Customer Name.
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: _in_use_from
         description: Start date from which this mapping is valid (inclusive). Used to handle cases where the same enghouse_operator_id maps to different elavon customer_name and customer_id over time.
-        tests:
+        data_tests:
           - not_null
       - name: _in_use_until
         description: End date until which this mapping is valid (inclusive). Used to handle cases where the same enghouse_operator_id maps to different elavon customer_name and customer_id over time.
-        tests:
+        data_tests:
           - not_null
 
   - name: gtfs_rt_validation_code_descriptions
@@ -101,7 +101,7 @@ seeds:
         dataset: gtfs_quality
     columns:
       - name: code
-        tests:
+        data_tests:
           - not_null
           - unique
 
@@ -116,7 +116,7 @@ seeds:
         dataset: gtfs_quality
     columns:
       - name: name
-        tests:
+        data_tests:
           - not_null
           - unique
 
@@ -131,17 +131,17 @@ seeds:
         dataset: gtfs_quality
     columns:
       - name: code
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: human_readable_description
-        tests:
+        data_tests:
           - not_null
       - name: version
-        tests:
+        data_tests:
           - not_null
       - name: severity
-        tests:
+        data_tests:
           - not_null
 
   - name: gtfs_schedule_validator_rule_details_v3_1_1
@@ -155,17 +155,17 @@ seeds:
         dataset: gtfs_quality
     columns:
       - name: code
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: human_readable_description
-        tests:
+        data_tests:
           - not_null
       - name: version
-        tests:
+        data_tests:
           - not_null
       - name: severity
-        tests:
+        data_tests:
           - not_null
 
   - name: gtfs_schedule_validator_rule_details_v4_0_0
@@ -179,17 +179,17 @@ seeds:
         dataset: gtfs_quality
     columns:
       - name: code
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: human_readable_description
-        tests:
+        data_tests:
           - not_null
       - name: version
-        tests:
+        data_tests:
           - not_null
       - name: severity
-        tests:
+        data_tests:
           - not_null
 
   - name: gtfs_schedule_validator_rule_details_v4_1_0
@@ -203,17 +203,17 @@ seeds:
         dataset: gtfs_quality
     columns:
       - name: code
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: human_readable_description
-        tests:
+        data_tests:
           - not_null
       - name: version
-        tests:
+        data_tests:
           - not_null
       - name: severity
-        tests:
+        data_tests:
           - not_null
 
   - name: gtfs_schedule_validator_rule_details_v4_2_0
@@ -227,17 +227,17 @@ seeds:
         dataset: gtfs_quality
     columns:
       - name: code
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: human_readable_description
-        tests:
+        data_tests:
           - not_null
       - name: version
-        tests:
+        data_tests:
           - not_null
       - name: severity
-        tests:
+        data_tests:
           - not_null
 
   - name: gtfs_schedule_validator_rule_details_v5_0_0
@@ -251,17 +251,17 @@ seeds:
         dataset: gtfs_quality
     columns:
       - name: code
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: human_readable_description
-        tests:
+        data_tests:
           - not_null
       - name: version
-        tests:
+        data_tests:
           - not_null
       - name: severity
-        tests:
+        data_tests:
           - not_null
 
   - name: gtfs_schedule_validator_rule_details_v7_1_0
@@ -275,17 +275,17 @@ seeds:
         dataset: gtfs_quality
     columns:
       - name: code
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: human_readable_description
-        tests:
+        data_tests:
           - not_null
       - name: version
-        tests:
+        data_tests:
           - not_null
       - name: severity
-        tests:
+        data_tests:
           - not_null
 
   - name: _deprecated__ntd_agency_to_organization
@@ -310,7 +310,7 @@ seeds:
       labels:
         domain: seeds
         dataset: transit_database
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -318,17 +318,17 @@ seeds:
               - organization_name
     columns:
       - name: ntd_id
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: legacy_ntd_id
-        tests:
+        data_tests:
           - unique
       - name: organization_record_id
-        tests:
+        data_tests:
           - unique
       - name: organization_name
-        tests:
+        data_tests:
           - unique
 
   - name: transit_facilities
@@ -342,28 +342,28 @@ seeds:
     columns:
       - name: id
         description: "Unique identifier for the transit facility feature."
-        tests:
+        data_tests:
           - not_null
           - unique
       - name: agency_name
         description: "Agency name that manages the facility."
-        tests:
+        data_tests:
           - not_null
       - name: facility_id
         description: "Id of the transit center."
-        tests:
+        data_tests:
           - not_null
       - name: facility_name
         description: "Name of the transit facility."
-        tests:
+        data_tests:
           - not_null
       - name: facility_type
         description: "Type of the facility."
-        tests:
+        data_tests:
           - not_null
       - name: ntd_id
         description: "NTD id of the facility."
-        tests:
+        data_tests:
           - not_null
       - name: geojson_geometry
         description: "GeoJSON string representation of the transit facility's location."
@@ -381,17 +381,17 @@ seeds:
     columns:
       - name: gtfs_dataset_name
         description: The GTFS schedule name from dim_gtfs_datasets
-        tests:
+        data_tests:
           - not_null
       - name: route_id
         description: GTFS trips route_id value
-        tests:
+        data_tests:
           - not_null
       - name: direction_id
         description: GTFS trips direction_id value (0 or 1)
-        tests:
+        data_tests:
           - not_null
       - name: shape_id
         description: Derived shape_id based on combination of route_id and direction_id.
-        tests:
+        data_tests:
           - not_null

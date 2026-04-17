@@ -6,7 +6,7 @@ models:
     description: |
       Version of `stg_transit_database__service_components` with all
       service, product, and component keys unnested.
-    tests:
+    data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
@@ -38,7 +38,7 @@ models:
       the January 1 download from www.calitp.org/gtfs.zip will still be mapped to GTFS dataset record `123`,
       even though it was downloaded outside the record's validity window, to facilitate some assignment of the
       GTFS feed data to organizations, services, etc.
-    tests:
+    data_tests:
       - dbt_utils.mutually_exclusive_ranges:
           arguments:
             lower_bound_column: _valid_from
@@ -47,10 +47,10 @@ models:
             gaps: required
     columns:
       - name: base64_url
-        tests:
+        data_tests:
           - not_null
       - name: gtfs_dataset_key
-        tests:
+        data_tests:
           - relationships:
               arguments:
                 to: ref('dim_gtfs_datasets')
