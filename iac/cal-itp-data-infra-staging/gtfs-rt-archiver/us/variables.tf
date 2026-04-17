@@ -13,6 +13,11 @@ data "external" "git" {
   ]
 }
 
+variable "git_sha" {
+  type    = string
+  default = null
+}
+
 data "terraform_remote_state" "iam" {
   backend = "gcs"
 

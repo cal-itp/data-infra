@@ -92,6 +92,8 @@ jobs:
         with:
           add_github_comment: changes-only
           path: ${{ matrix.path }}
+          variables: |
+            git_sha = "${{ github.ref == 'refs/heads/main' && github.sha || github.event.pull_request.head.sha }}"
 
   production:
     name: Production
@@ -143,3 +145,5 @@ jobs:
         with:
           add_github_comment: changes-only
           path: ${{ matrix.path }}
+          variables: |
+            git_sha = "${{ github.ref == 'refs/heads/main' && github.sha || github.event.pull_request.head.sha }}"
