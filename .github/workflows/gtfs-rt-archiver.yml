@@ -97,3 +97,57 @@ jobs:
           tags: ghcr.io/${{ github.repository }}/gtfs-rt-archiver-v5:${{ github.ref == 'refs/heads/main' && github.sha || github.event.pull_request.head.sha }}
           cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/gtfs-rt-archiver-v5:${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
           cache-to: type=inline
+
+  changes:
+    name: Detect changes
+
+    runs-on: ubuntu-latest
+
+    outputs:
+      staging: ${{ steps.staging-changes.outputs.all_changed_files }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Staging Changes
+        uses: tj-actions/changed-files@v46
+        id: staging-changes
+        with:
+          matrix: true
+          dir_names: true
+          files: 'iac/cal-itp-data-infra-staging/gtfs-rt-archiver/**/*.tf'
+
+  staging:
+    name: Staging
+    runs-on: ubuntu-latest
+    needs: [changes]
+    if: ${{ needs.changes.outputs.staging == '[]' || needs.changes.outputs.staging == '' }}
+
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: cal-itp-data-infra-staging
+          workload_identity_provider: 'projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra'
+          service_account: 'github-actions-terraform@cal-itp-data-infra-staging.iam.gserviceaccount.com'
+
+      - name: Terraform Plan
+        uses: dflook/terraform-plan@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          add_github_comment: changes-only
+          path: iac/cal-itp-data-infra-staging/gtfs-rt-archiver/us
+          variables: |
+            git_sha = "${{ github.ref == 'refs/heads/main' && github.sha || github.event.pull_request.head.sha }}"
