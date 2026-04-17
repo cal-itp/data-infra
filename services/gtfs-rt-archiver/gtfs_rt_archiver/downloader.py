@@ -6,6 +6,12 @@ from requests import Request, Response, Session
 cert_ca_path = os.path.join(
     os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "cert.ca"
 )
+request_connect_timeout = int(
+    os.environ.get("REQUEST_CONNECT_TIMEOUT", os.environ.get("REQUEST_TIMEOUT", "5"))
+)
+request_read_timeout = int(
+    os.environ.get("REQUEST_READ_TIMEOUT", os.environ.get("REQUEST_TIMEOUT", "5"))
+)
 
 
 class Result:
@@ -61,7 +67,10 @@ class Downloader:
         session: Session = Session()
         prepped_request = session.prepare_request(self.request())
         response = session.send(
-            prepped_request, allow_redirects=True, timeout=5, verify=cert_ca_path
+            prepped_request,
+            allow_redirects=True,
+            timeout=(request_connect_timeout, request_read_timeout),
+            verify=cert_ca_path,
         )
         try:
             response.raise_for_status()
