@@ -1,0 +1,73 @@
+name: Plan Terraform for Warehouse changes
+
+on:
+  workflow_run:
+    workflows: [Deploy dbt]
+    types: [completed]
+    branches-ignore:
+      - 'main'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+jobs:
+  airflow-staging:
+    name: Staging Airflow
+    runs-on: ubuntu-latest
+
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: cal-itp-data-infra-staging
+          workload_identity_provider: 'projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra'
+          service_account: 'github-actions-terraform@cal-itp-data-infra-staging.iam.gserviceaccount.com'
+
+      - name: Terraform Plan
+        uses: dflook/terraform-plan@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          add_github_comment: changes-only
+          path: iac/cal-itp-data-infra-staging/airflow/us
+
+  airflow-production:
+    name: Production Airflow
+    runs-on: ubuntu-latest
+
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: cal-itp-data-infra
+          workload_identity_provider: 'projects/1005246706141/locations/global/workloadIdentityPools/github-actions/providers/data-infra'
+          service_account: 'github-actions-terraform@cal-itp-data-infra.iam.gserviceaccount.com'
+
+      - name: Terraform Plan
+        uses: dflook/terraform-plan@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          add_github_comment: changes-only
+          path: iac/cal-itp-data-infra/airflow/us
