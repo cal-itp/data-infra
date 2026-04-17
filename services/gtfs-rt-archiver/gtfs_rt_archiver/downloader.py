@@ -68,7 +68,6 @@ class Downloader:
             prepped_request,
             allow_redirects=True,
             timeout=(request_connect_timeout, request_read_timeout),
-            verify=cert_ca_path,
         )
         response.raise_for_status()
         return Result(configuration=self.configuration, response=response)
