@@ -19,11 +19,9 @@ class Result:
         self,
         configuration: Configuration,
         response: Response = None,
-        exception: str = None,
     ) -> None:
         self.configuration: Configuration = configuration
         self.response: Response = response
-        self.exception: str = exception
 
     def code(self) -> int | None:
         if self.response is not None:
@@ -72,8 +70,5 @@ class Downloader:
             timeout=(request_connect_timeout, request_read_timeout),
             verify=cert_ca_path,
         )
-        try:
-            response.raise_for_status()
-        except Exception as e:
-            return Result(configuration=self.configuration, exception=e)
+        response.raise_for_status()
         return Result(configuration=self.configuration, response=response)
