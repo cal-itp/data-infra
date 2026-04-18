@@ -76,7 +76,7 @@ if __name__ == "__main__":
 
     scheduler = pubsub_v1.subscriber.scheduler.ThreadScheduler(
         executor=ThreadPoolExecutor(
-            max_workers=int(os.environ.get("THREAD_POOL_SIZE", "50"))
+            max_workers=int(os.environ.get("THREAD_POOL_SIZE", "100"))
         )
     )
 
