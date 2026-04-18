@@ -17,7 +17,7 @@ class MockSecret:
 
 class TestConfiguration:
     @pytest.fixture
-    def published_time(self) -> datetime:
+    def publish_time(self) -> datetime:
         return datetime.fromisoformat("2026-04-01T00:01:20.45+00:00")
 
     @pytest.fixture
@@ -29,9 +29,9 @@ class TestConfiguration:
         return "http://example.com"
 
     @pytest.fixture
-    def data(self, published_time: datetime, current_time: datetime, url: str) -> dict:
+    def data(self, publish_time: datetime, current_time: datetime, url: str) -> dict:
         return {
-            "published_time": published_time,
+            "publish_time": publish_time,
             "current_time": current_time,
             "auth_headers": {},
             "auth_query_params": {},
@@ -44,10 +44,10 @@ class TestConfiguration:
 
     @pytest.fixture
     def secret_headers_data(
-        self, published_time: datetime, current_time: datetime, url: str
+        self, publish_time: datetime, current_time: datetime, url: str
     ) -> dict:
         return {
-            "published_time": published_time,
+            "publish_time": publish_time,
             "current_time": current_time,
             "auth_headers": {"authorization": "API_KEY"},
             "auth_query_params": {},
@@ -60,10 +60,10 @@ class TestConfiguration:
 
     @pytest.fixture
     def secret_query_params_data(
-        self, published_time: datetime, current_time: datetime, url: str
+        self, publish_time: datetime, current_time: datetime, url: str
     ) -> dict:
         return {
-            "published_time": published_time,
+            "publish_time": publish_time,
             "current_time": current_time,
             "auth_headers": {},
             "auth_query_params": {"api_key": "API_KEY"},

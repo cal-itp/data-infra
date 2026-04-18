@@ -67,37 +67,6 @@ jobs:
       - name: Run Pytest
         run: uv run pytest
 
-  docker:
-    name: Build image
-    runs-on: ubuntu-latest
-    needs: [test]
-
-    permissions:
-      contents: read
-      packages: write
-      attestations: write
-      id-token: write
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Login to GitHub Repository
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and Push
-        uses: docker/build-push-action@v6
-        with:
-          context: services/gtfs-rt-archiver
-          push: true
-          tags: ghcr.io/${{ github.repository }}/gtfs-rt-archiver-v5:${{ github.ref == 'refs/heads/main' && github.sha || github.event.pull_request.head.sha }}
-          cache-from: type=registry,ref=ghcr.io/${{ github.repository }}/gtfs-rt-archiver-v5:${{ github.ref == 'refs/heads/main' && 'production' || 'staging' }}
-          cache-to: type=inline
-
   targets:
     name: Find targets
     runs-on: ubuntu-latest
@@ -119,7 +88,7 @@ jobs:
 
   staging:
     name: Staging
-    needs: [docker, targets]
+    needs: [targets]
     if: ${{ needs.targets.outputs.staging == '[]' || needs.targets.outputs.staging == '' }}
     runs-on: ubuntu-latest
 

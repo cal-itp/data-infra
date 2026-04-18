@@ -51,7 +51,7 @@ class Configuration:
         self,
         project_id: str,
         destination_bucket: str,
-        published_time: datetime,
+        publish_time: datetime,
         auth_headers: dict,
         auth_query_params: dict,
         extracted_at: str,
@@ -64,7 +64,7 @@ class Configuration:
     ) -> None:
         self.project_id: str = project_id
         self.destination_bucket: str = destination_bucket
-        self.published_time: datetime = published_time
+        self.publish_time: datetime = publish_time
         self.auth_headers: dict = auth_headers
         self.auth_query_params: dict = auth_query_params
         self.extracted_at: datetime = datetime.fromisoformat(extracted_at)
@@ -83,16 +83,14 @@ class Configuration:
         return self.name == other.name and self.extracted_at == other.extracted_at
 
     def dt(self) -> str:
-        return self.published_time.date().isoformat()
+        return self.publish_time.date().isoformat()
 
     def hour(self) -> str:
-        return self.published_time.replace(
-            minute=0, second=0, microsecond=0
-        ).isoformat()
+        return self.publish_time.replace(minute=0, second=0, microsecond=0).isoformat()
 
     def ts(self) -> str:
-        seconds = math.floor(self.published_time.second / 20) * 20
-        return self.published_time.replace(microsecond=0, second=seconds).isoformat()
+        seconds = math.floor(self.publish_time.second / 20) * 20
+        return self.publish_time.replace(microsecond=0, second=seconds).isoformat()
 
     def base64_url(self) -> str:
         return urlsafe_b64encode(self.url.encode()).decode()
@@ -135,11 +133,11 @@ class Configuration:
         }
 
     @staticmethod
-    def resolve(published_time: datetime, **settings: dict) -> Self:
+    def resolve(publish_time: datetime, **settings: dict) -> Self:
         _, project_id = default()
         return Configuration(
             project_id=project_id,
             destination_bucket=os.environ["CALITP_BUCKET__GTFS_RT_RAW"],
-            published_time=published_time,
+            publish_time=publish_time,
             **settings,
         )
