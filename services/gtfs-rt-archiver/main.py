@@ -41,7 +41,7 @@ class GtfsRtArchiver:
                     "message": f"Started {self.configuration().url}",
                     "url": self.configuration().url,
                     "message_id": self.message.message_id,
-                    "published_time": self.message.publish_time,
+                    "publish_time": self.message.publish_time.isoformat(),
                 }
             )
         )
@@ -54,7 +54,7 @@ class GtfsRtArchiver:
                         "message": f"Finished {self.configuration().url}",
                         "url": self.configuration().url,
                         "message_id": self.message.message_id,
-                        "published_time": self.message.publish_time,
+                        "publish_time": self.message.publish_time.isoformat(),
                     }
                 )
             )
@@ -67,7 +67,7 @@ class GtfsRtArchiver:
                         "url": self.configuration().url,
                         "message_id": self.message.message_id,
                         "traceback": traceback.format_exc(),
-                        "published_time": self.message.publish_time,
+                        "publish_time": self.message.publish_time.isoformat(),
                     }
                 )
             )
@@ -79,7 +79,7 @@ if __name__ == "__main__":
 
     scheduler = pubsub_v1.subscriber.scheduler.ThreadScheduler(
         executor=ThreadPoolExecutor(
-            max_workers=int(os.environ.get("THREAD_POOL_SIZE", "100"))
+            max_workers=int(os.environ.get("THREAD_POOL_SIZE", "150"))
         )
     )
 
