@@ -38,7 +38,7 @@ class GtfsRtArchiver:
             json.dumps(
                 {
                     "severity": "Default",
-                    "message": "Started",
+                    "message": f"Started {self.configuration().url}",
                     "url": self.configuration().url,
                     "message_id": self.message.message_id,
                 }
@@ -50,7 +50,7 @@ class GtfsRtArchiver:
                 json.dumps(
                     {
                         "severity": "Default",
-                        "message": "Finished",
+                        "message": f"Finished {self.configuration().url}",
                         "url": self.configuration().url,
                         "message_id": self.message.message_id,
                     }
@@ -61,7 +61,7 @@ class GtfsRtArchiver:
                 json.dumps(
                     {
                         "severity": "Error",
-                        "message": f"{e}",
+                        "message": f"Failed {self.configuration().url} - {e}",
                         "url": self.configuration().url,
                         "message_id": self.message.message_id,
                         "traceback": traceback.format_exc(),
