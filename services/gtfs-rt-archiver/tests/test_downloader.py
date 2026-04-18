@@ -18,7 +18,7 @@ class TestDownloader:
     @pytest.fixture
     def data(self, current_time: datetime, url: str) -> dict:
         return {
-            "published_time": "2026-04-01T00:01:23.45+00:00",
+            "publish_time": "2026-04-01T00:01:23.45+00:00",
             "current_time": current_time,
             "auth_headers": {},
             "auth_query_params": {},

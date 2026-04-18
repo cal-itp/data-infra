@@ -63,4 +63,4 @@ RUN --mount=type=cache,target=/root/.cache \
     --no-dev \
     --frozen
 
-CMD ["uv", "run",  "--no-sync", "main.py"]
+CMD ["uv", "run",  "--no-sync", "subscriber.py"]
