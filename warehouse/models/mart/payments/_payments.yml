@@ -78,6 +78,8 @@ models:
         description: '{{ doc("lp_product_description") }}'
       - name: product_type
         description: '{{ doc("lp_product_type") }}'
+      - name: activation_type
+        description: '{{ doc("lp_activation_type") }}'
       - name: route_id
         description: '{{ doc("lp_paired_transaction_route_id") }}'
       - name: route_long_name
