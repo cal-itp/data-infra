@@ -471,7 +471,7 @@
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#shared-utils">shared utils</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#in-terminal">In terminal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#in-notebook">In notebook</a></li>
 </ul>
 </li>
@@ -551,7 +551,7 @@
                   
   <section class="tex2jax_ignore mathjax_ignore" id="useful-python-libraries">
 <span id="python-libraries"></span><h1>Useful Python Libraries<a class="headerlink" href="#useful-python-libraries" title="Link to this heading">#</a></h1>
-<p>The following libraries are available and recommended for use by Cal-ITP data analysts. Our JupyterHub environment comes with all of these installed already, except for <code class="docutils literal notranslate"><span class="pre">calitp-data-infra</span></code>. A full list of the packages included in the system image that underpins our JupyterHub environment can be found (and updated when needed) <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/images/jupyter-singleuser/pyproject.toml">here</a>.</p>
+<p>The following libraries are available and recommended for use by Cal-ITP data analysts. Dependencies are managed in the <a class="reference external" href="https://github.com/cal-itp/data-analyses">data-analyses</a> repo using a <a class="reference external" href="https://docs.astral.sh/uv/concepts/workspaces/">uv workspace</a>. Running <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">sync</span></code> from the <code class="docutils literal notranslate"><span class="pre">data-analyses/</span></code> root installs everything into a local <code class="docutils literal notranslate"><span class="pre">.venv</span></code>, which the “Pyproject Local” Jupyter kernel uses automatically.</p>
 <section id="table-of-contents">
 <h2>Table of Contents<a class="headerlink" href="#table-of-contents" title="Link to this heading">#</a></h2>
 <ol class="arabic simple">
@@ -572,26 +572,15 @@
 </section>
 <section id="shared-utils">
 <span id="id1"></span><h2>shared utils<a class="headerlink" href="#shared-utils" title="Link to this heading">#</a></h2>
-<p>A set of shared utility functions can also be installed, similarly to any Python library. The <code class="docutils literal notranslate"><span class="pre">shared_utils</span></code> are stored in two places: <a class="reference external" href="https://github.com/cal-itp/data-analyses/shared_utils">here</a> in <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code>, which houses functions that are more likely to be updated. Shared functions that are updated less frequently are housed <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis">here</a> in the <code class="docutils literal notranslate"><span class="pre">calitp_data_analysis</span></code> package in <code class="docutils literal notranslate"><span class="pre">data-infra</span></code>. Generalized functions for analysis are added as collaborative work evolves so we aren’t constantly reinventing the wheel.</p>
-<section id="in-terminal">
-<h3>In terminal<a class="headerlink" href="#in-terminal" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>Navigate to the package folder: <code class="docutils literal notranslate"><span class="pre">cd</span> <span class="pre">data-analyses/_shared_utils</span></code></p></li>
-<li><p>Use the make command to run through conda install and pip install: <code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">setup_env</span></code></p>
-<ul>
-<li><p>Note: you may need to select Kernel -&gt; Restart Kernel from the top menu after make setup_env in order to successfully import shared_utils</p></li>
-</ul>
-</li>
-<li><p>Alternative: add an <code class="docutils literal notranslate"><span class="pre">alias</span></code> to your <code class="docutils literal notranslate"><span class="pre">.bash_profile</span></code>:</p>
-<ul>
-<li><p>In terminal use <code class="docutils literal notranslate"><span class="pre">cd</span></code> to navigate to the home directory (not a repository)</p></li>
-<li><p>Type <code class="docutils literal notranslate"><span class="pre">nano</span> <span class="pre">.bash_profile</span></code> to open the .bash_profile in a text editor</p></li>
-<li><p>Add a line at end: <code class="docutils literal notranslate"><span class="pre">alias</span> <span class="pre">go='cd</span> <span class="pre">~/data-analyses/portfolio</span> <span class="pre">&amp;&amp;</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span> <span class="pre">&amp;&amp;</span> <span class="pre">cd</span> <span class="pre">../_shared_utils</span> <span class="pre">&amp;&amp;</span> <span class="pre">make</span> <span class="pre">setup_env</span> <span class="pre">&amp;&amp;</span> <span class="pre">cd</span> <span class="pre">..'</span></code></p></li>
-<li><p>Exit with Ctrl+X, hit yes, then hit enter at the filename prompt</p></li>
-<li><p>Restart your server; you can check your changes with <code class="docutils literal notranslate"><span class="pre">cat</span> <span class="pre">.bash_profile</span></code></p></li>
-</ul>
-</li>
-</ul>
+<p>A set of shared utility functions used across analysis projects. Both <code class="docutils literal notranslate"><span class="pre">shared_utils</span></code> and <code class="docutils literal notranslate"><span class="pre">calitp_data_analysis</span></code> live in the <a class="reference external" href="https://github.com/cal-itp/data-analyses">data-analyses</a> repo as workspace members. They are installed automatically when you run <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">sync</span></code> from the workspace root.</p>
+<section id="setup">
+<h3>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h3>
+<p>From a JupyterHub terminal (or locally):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>~/data-analyses
+uv<span class="w"> </span>sync
+</pre></div>
+</div>
+<p>This installs <code class="docutils literal notranslate"><span class="pre">shared_utils</span></code>, <code class="docutils literal notranslate"><span class="pre">calitp_data_analysis</span></code>, and all baseline dependencies into <code class="docutils literal notranslate"><span class="pre">.venv</span></code>. Select the <strong>“Pyproject Local”</strong> kernel in JupyterLab to use this environment.</p>
 </section>
 <section id="in-notebook">
 <h3>In notebook<a class="headerlink" href="#in-notebook" title="Link to this heading">#</a></h3>
@@ -605,7 +594,7 @@
 </section>
 <section id="calitp-data-analysis">
 <span id="id2"></span><h2>calitp-data-analysis<a class="headerlink" href="#calitp-data-analysis" title="Link to this heading">#</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">calitp-data-analysis</span></code> is an internal library of utility functions used to access our warehouse data for analysis purposes.</p>
+<p><code class="docutils literal notranslate"><span class="pre">calitp-data-analysis</span></code> is an internal library of utility functions used to access our warehouse data for analysis purposes. It lives in <code class="docutils literal notranslate"><span class="pre">data-analyses/calitp-data-analysis/</span></code> as a uv workspace member and is installed automatically by <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">sync</span></code>.</p>
 <section id="import-tbls">
 <h3>import tbls<a class="headerlink" href="#import-tbls" title="Link to this heading">#</a></h3>
 <p><strong>DEPRECATED:</strong> <code class="docutils literal notranslate"><span class="pre">tbls</span></code> will be removed after <code class="docutils literal notranslate"><span class="pre">calitp_data_analysis</span></code> version 2025.8.10. Instead of <code class="docutils literal notranslate"><span class="pre">AutoTable</span></code> or the <code class="docutils literal notranslate"><span class="pre">tbls</span></code>
@@ -741,9 +730,9 @@ a query builder that has multiple usecases, you should probably use <a class="re
     </tr>
     <tr>
       <th>3</th>
-      <td>7502627b67b072c596356671d4c7a0e1</td>
-      <td>7502627b67b072c596356671d4c7a0e1</td>
-      <td>3d45be48f365528f39b757283fa1fdc6</td>
+      <td>b63515e5a4da9aeacfd36b85cc4ca42c</td>
+      <td>b63515e5a4da9aeacfd36b85cc4ca42c</td>
+      <td>ab159738f2929e515b7c4ac647238148</td>
       <td>1</td>
       <td>Golden Empire Transit District</td>
       <td>http://www.getbus.org/</td>
@@ -753,16 +742,16 @@ a query builder that has multiple usecases, you should probably use <a class="re
       <td>None</td>
       <td>None</td>
       <td>aHR0cDovL2V0YS5nZXRidXMub3JnL3J0dC9wdWJsaWMvdX...</td>
-      <td>2026-01-09</td>
-      <td>2026-01-09 00:00:00+00:00</td>
+      <td>2026-02-12</td>
+      <td>2026-02-12 03:00:00.971922+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>adbcbaa44ebc8e9e6ef3bda18ec770c4</td>
-      <td>adbcbaa44ebc8e9e6ef3bda18ec770c4</td>
-      <td>53af1f254b2c62731c8bdc632eddc819</td>
+      <td>9309c476bcf544d526a4ae568e17852b</td>
+      <td>9309c476bcf544d526a4ae568e17852b</td>
+      <td>433540dc67834e8453ebe6bca5530a44</td>
       <td>1</td>
       <td>Golden Empire Transit District</td>
       <td>http://www.getbus.org/</td>
@@ -772,8 +761,8 @@ a query builder that has multiple usecases, you should probably use <a class="re
       <td>None</td>
       <td>None</td>
       <td>aHR0cDovL2V0YS5nZXRidXMub3JnL3J0dC9wdWJsaWMvdX...</td>
-      <td>2026-01-11</td>
-      <td>2026-01-11 00:00:00+00:00</td>
+      <td>2026-01-19</td>
+      <td>2026-01-19 03:00:00+00:00</td>
       <td>1</td>
       <td>America/Los_Angeles</td>
     </tr>
@@ -1161,52 +1150,22 @@ For example:</p>
 </section>
 <section id="add-new-packages">
 <span id="id19"></span><h2>Add New Packages<a class="headerlink" href="#add-new-packages" title="Link to this heading">#</a></h2>
-<p>While most Python packages an analyst uses come in JupyterHub, there may be additional packages you’ll want to use in your analysis.</p>
-<ul class="simple">
-<li><p>Install <a class="reference internal" href="#shared-utils">shared utility functions</a>,</p></li>
-<li><p>Change directory into the project task’s subfolder and add <code class="docutils literal notranslate"><span class="pre">requirements.txt</span></code> and/or <code class="docutils literal notranslate"><span class="pre">conda-requirements.txt</span></code></p></li>
-<li><p>Run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">requirements.txt</span></code> and/or <code class="docutils literal notranslate"><span class="pre">conda</span> <span class="pre">install</span> <span class="pre">--yes</span> <span class="pre">-c</span> <span class="pre">conda-forge</span> <span class="pre">--file</span> <span class="pre">conda-requirements.txt</span></code></p></li>
-</ul>
+<p>Most packages an analyst needs are already in the workspace baseline (installed by <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">sync</span></code>). If your project needs an additional package:</p>
+<ol class="arabic simple">
+<li><p><strong>Workspace-wide dep</strong> (useful to many projects): add it to the <code class="docutils literal notranslate"><span class="pre">[project]</span> <span class="pre">dependencies</span></code> in <code class="docutils literal notranslate"><span class="pre">data-analyses/pyproject.toml</span></code>, then run <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">lock</span> <span class="pre">&amp;&amp;</span> <span class="pre">uv</span> <span class="pre">sync</span></code>.</p></li>
+<li><p><strong>Project-specific dep</strong>: add a <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> in your project’s subdirectory (see <code class="docutils literal notranslate"><span class="pre">portfolio/pyproject.toml</span></code> for an example), add the project as a workspace member, and run <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">lock</span> <span class="pre">&amp;&amp;</span> <span class="pre">uv</span> <span class="pre">sync</span></code>.</p></li>
+</ol>
+<p>Commit the updated <code class="docutils literal notranslate"><span class="pre">uv.lock</span></code> alongside your changes so teammates get the same versions.</p>
 </section>
 <section id="updating-calitp-data-analysis">
 <span id="id20"></span><h2>Updating calitp-data-analysis<a class="headerlink" href="#updating-calitp-data-analysis" title="Link to this heading">#</a></h2>
-<p><code class="docutils literal notranslate"><span class="pre">calitp-data-analysis</span></code> is a <a class="reference external" href="https://pypi.org/project/calitp-data-analysis/">package</a> that lives <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis">here</a> in the <code class="docutils literal notranslate"><span class="pre">data-infra</span></code> repo. Follow the steps below update to the package.</p>
-<p><b>Steps </b></p>
-<p>Adapted from <a class="reference external" href="https://cal-itp.slack.com/archives/C02KH3DGZL7/p1694470040574809">this</a> and <a class="reference external" href="https://cal-itp.slack.com/archives/C02KH3DGZL7/p1707252389227829">this Slack thread</a>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">calitp-data-analysis</span></code> now lives in the <a class="reference external" href="https://github.com/cal-itp/data-analyses/tree/main/calitp-data-analysis">data-analyses</a> repo as a uv workspace member. To update it:</p>
 <ol class="arabic simple">
-<li><p>Make the changes you want in the <code class="docutils literal notranslate"><span class="pre">calitp-data-analysis</span></code> folder inside <code class="docutils literal notranslate"><span class="pre">packages</span></code> <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis">here</a>. If you are only changing package metadata (author information, package description, etc.) without changing the function of the package itself, that information lives in <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> rather than in the <code class="docutils literal notranslate"><span class="pre">calitp-data-analysis</span></code> subfolder.</p>
-<ul class="simple">
-<li><p>If you are adding a new function that relies on a package that isn’t already a dependency, run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">add</span> <span class="pre">&lt;package</span> <span class="pre">name&gt;</span></code> after changing directories to <code class="docutils literal notranslate"><span class="pre">data-infra/packages/calitp_data_analysis</span></code>. Check this <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/images/jupyter-singleuser/pyproject.toml">Jupyter image file</a> for the version number associated with the package, because you should specify the version.</p></li>
-<li><p>For example, your function relies on <code class="docutils literal notranslate"><span class="pre">dask</span></code>. In the Jupyter image file, the version is <code class="docutils literal notranslate"><span class="pre">dask</span> <span class="pre">=</span> <span class="pre">&quot;~2022.8&quot;</span></code> so run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">add</span> <span class="pre">dask==~2022.8</span></code> in the terminal.</p></li>
-<li><p>You may also have run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">install</span> <span class="pre">mypy</span></code>. <code class="docutils literal notranslate"><span class="pre">mypy</span></code> is a package that audits Python files for information related to data types, and you can <a class="reference external" href="https://mypy-lang.org/">read more about it here</a>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">mypy</span></code> is a package that audits Python files for information related to data types, and you can <a class="reference external" href="https://mypy-lang.org/">read more about it here</a>. <code class="docutils literal notranslate"><span class="pre">mypy</span></code> is one of the standard development dependencies for the <code class="docutils literal notranslate"><span class="pre">calitp-data-analysis</span> <span class="pre">package</span></code>, defined in the <code class="docutils literal notranslate"><span class="pre">pyproject.toml</span></code> file for the package, so to install it you can run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">install</span></code> in <code class="docutils literal notranslate"><span class="pre">packages/calitp-data-analysis/</span></code> (which will also install the other package dependencies). To use <code class="docutils literal notranslate"><span class="pre">mypy</span></code>, run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">mypy</span> <span class="pre">[file</span> <span class="pre">or</span> <span class="pre">directory</span> <span class="pre">name</span> <span class="pre">you're</span> <span class="pre">interested</span> <span class="pre">in</span> <span class="pre">checking]</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">mypy</span></code> is generally run in CI when a PR is opened, as part of build tasks. You can see it called <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/.github/workflows/build-calitp-data-analysis.yml#L40">here</a> for this package in <code class="docutils literal notranslate"><span class="pre">build-calitp-data-analysis.yml</span></code>. Within the PR, the “Test, visualize, and build calitp-data-analysis” CI workflow will fail if problems are found.</p></li>
-<li><p>More helpful hints for <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/README.md#mypy">passing mypy in our repo</a>.</p></li>
-</ul>
-</li>
-<li><p>Each time you update the package, you must also update the version number. We use dates to reflect which version we are on. Update the version in <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/packages/calitp-data-analysis/pyproject.toml#L3">pyproject.toml</a> that lives in <code class="docutils literal notranslate"><span class="pre">calitp-data-analysis</span></code> to either today’s date or a future date.</p></li>
-<li><p>Open a new pull request and make sure the new version date appears on the <a class="reference external" href="https://test.pypi.org/project/calitp-data-analysis/">test version page</a>.</p>
-<ul class="simple">
-<li><p>The new version date may not show up on the test page due to errors. Check the GitHub Action page of your pull request to see the errors that have occurred.</p></li>
-<li><p>If you run into the error message like this, <code class="docutils literal notranslate"><span class="pre">error:</span> <span class="pre">Skipping</span> <span class="pre">analyzing</span> <span class="pre">&quot;dask_geopandas&quot;:</span> <span class="pre">module</span> <span class="pre">is</span> <span class="pre">installed,</span> <span class="pre">but</span> <span class="pre">missing</span> <span class="pre">library</span> <span class="pre">stubs</span> <span class="pre">or</span> <span class="pre">py.typed</span> <span class="pre">marker</span>&#160; <span class="pre">[import]</span></code> go to your <code class="docutils literal notranslate"><span class="pre">.py</span></code> file and add <code class="docutils literal notranslate"><span class="pre">#</span> <span class="pre">type:</span> <span class="pre">ignore</span></code> behind the package import.</p></li>
-<li><p>To fix the error above, change <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">dask_geopandas</span> <span class="pre">as</span> <span class="pre">dg</span></code> to <code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">dask_geopandas</span> <span class="pre">as</span> <span class="pre">dg</span>&#160; <span class="pre">#</span> <span class="pre">type:</span> <span class="pre">ignore</span></code>.</p></li>
-<li><p>It is encouraged to make changes in a set of smaller commits. For example, add all the necessary packages with <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">run</span> <span class="pre">&lt;package</span></code> first, fix any issues flagged by <code class="docutils literal notranslate"><span class="pre">mypy</span></code>, and finally address any additional issues.</p></li>
-</ul>
-</li>
-<li><p>Merge the PR. Once it is merged in, the <a class="reference external" href="https://pypi.org/project/calitp-data-analysis/">actual package</a> will display the new version number. To make sure everything works as expected, run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">calitp-data-analysis==&lt;new</span> <span class="pre">version</span> <span class="pre">here&gt;</span></code> in a cell of Jupyter notebook and import a package (or two) such as <code class="docutils literal notranslate"><span class="pre">from</span> <span class="pre">calitp_data_analysis</span> <span class="pre">import</span> <span class="pre">styleguide</span></code>.</p></li>
-<li><p>Update the new version number in the <code class="docutils literal notranslate"><span class="pre">data-infra</span></code> repository <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/images/dask/requirements.txt#L30">here</a>, <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/images/jupyter-singleuser/pyproject.toml#L48">here</a>, <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/docs/requirements.txt">here</a>, and anywhere else you find a reference to the old version of the package. You’ll also want to do the same for any other Cal-ITP repositories that reference the <code class="docutils literal notranslate"><span class="pre">calitp-data-analysis</span></code> package.</p>
-<ul class="simple">
-<li><p>When yu update the <a class="reference external" href="https://github.com/cal-itp/data-infra/blob/main/images/jupyter-singleuser/pyproject.toml#L48">jupyter-singleuser toml</a>, make sure to run <code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">add</span> <span class="pre">calitp-data-analysis==&lt;new</span> <span class="pre">version</span> <span class="pre">here&gt;</span></code> and commit the updated <code class="docutils literal notranslate"><span class="pre">poetry.lock</span></code> file.</p></li>
-<li><p>As of writing, the only other repository that references to the package version is <a class="reference external" href="https://github.com/cal-itp/reports">reports</a>.</p></li>
-</ul>
-</li>
+<li><p>Edit the source code in <code class="docutils literal notranslate"><span class="pre">data-analyses/calitp-data-analysis/calitp_data_analysis/</span></code>.</p></li>
+<li><p>If you’re adding a new dependency, add it to <code class="docutils literal notranslate"><span class="pre">calitp-data-analysis/pyproject.toml</span></code> and run <code class="docutils literal notranslate"><span class="pre">uv</span> <span class="pre">lock</span></code> from the workspace root.</p></li>
+<li><p>Open a PR in the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> repo. Your changes take effect for all workspace users after merge — no PyPI publish step needed.</p></li>
 </ol>
-<p><b>Resources</b></p>
-<ul class="simple">
-<li><p><a class="reference external" href="https://github.com/cal-itp/data-analyses/issues/870">Issue #870</a></p></li>
-<li><p><a class="reference external" href="https://github.com/cal-itp/data-infra/pull/2944">Pull Request #2994</a></p></li>
-<li><p><a class="reference external" href="https://cal-itp.slack.com/archives/C02KH3DGZL7/p1694470040574809">Slack thread</a></p></li>
-</ul>
+<p>The <a class="reference external" href="https://pypi.org/project/calitp-data-analysis/">PyPI package</a> is frozen at its last published version for external consumers (e.g. <code class="docutils literal notranslate"><span class="pre">reports</span></code>). It does not need to be updated for internal use.</p>
 </section>
 <section id="appendix-calitp-data-infra">
 <span id="appendix"></span><h2>Appendix: calitp-data-infra<a class="headerlink" href="#appendix-calitp-data-infra" title="Link to this heading">#</a></h2>
@@ -1283,7 +1242,7 @@ For example:</p>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#shared-utils">shared utils</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#in-terminal">In terminal</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#in-notebook">In notebook</a></li>
 </ul>
 </li>
