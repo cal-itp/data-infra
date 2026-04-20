@@ -105,6 +105,7 @@ fct_payments_rides_v2 AS (
         products.product_code,
         products.product_description,
         products.product_type,
+        products.activation_type,
 
         -- Common transaction info
         routes.route_long_name,
