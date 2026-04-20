@@ -28,9 +28,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v6
 
       - name: Staging Changes
         uses: tj-actions/changed-files@v46
@@ -65,7 +63,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Authenticate Google Service Account
         uses: google-github-actions/auth@v2
@@ -75,15 +73,20 @@ jobs:
           workload_identity_provider: ${{ env.STAGING_WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ env.STAGING_SERVICE_ACCOUNT }}
 
-      - uses: google-github-actions/setup-gcloud@v2
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v3
 
       - name: Terraform Apply
         uses: dflook/terraform-apply@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TERRAFORM_PRE_RUN: |
+            git config --global --add safe.directory $GITHUB_WORKSPACE
         with:
           path: ${{ matrix.path }}
           auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
+          variables: |
+            git_sha = "${{ github.ref == 'refs/heads/main' && github.sha || github.event.pull_request.head.sha }}"
 
   production:
     name: Production
@@ -102,7 +105,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Authenticate Google Service Account
         uses: google-github-actions/auth@v2
@@ -112,11 +115,16 @@ jobs:
           workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
           service_account: ${{ env.SERVICE_ACCOUNT }}
 
-      - uses: google-github-actions/setup-gcloud@v2
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v3
 
       - name: Terraform Apply
         uses: dflook/terraform-apply@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TERRAFORM_PRE_RUN: |
+            git config --global --add safe.directory $GITHUB_WORKSPACE
         with:
           path: ${{ matrix.path }}
+          variables: |
+            git_sha = "${{ github.ref == 'refs/heads/main' && github.sha || github.event.pull_request.head.sha }}"

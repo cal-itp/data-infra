@@ -1,0 +1,129 @@
+name: GTFS-RT Archiver
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/gtfs-rt-archiver.yml
+      - services/gtfs-rt-archiver/**
+  pull_request:
+    paths:
+      - .github/workflows/gtfs-rt-archiver.yml
+      - services/gtfs-rt-archiver/**
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-gtfs-rt-archiver
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+
+env:
+  PYTHON_VERSION: '3.11'
+  UV_VERSION: '0.11.5'
+  SERVICE_ACCOUNT: github-actions-service-account@cal-itp-data-infra-staging.iam.gserviceaccount.com
+  WORKLOAD_IDENTITY_PROVIDER: projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra
+  PROJECT_ID: cal-itp-data-infra-staging
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    defaults:
+      run:
+        working-directory: services/gtfs-rt-archiver
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: true
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v3
+        with:
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          version:  ${{ env.UV_VERSION }}
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+          cache-python: true
+          working-directory: services/gtfs-rt-archiver
+
+      - name: Install the project
+        run: uv sync --locked --all-extras --dev
+
+      - name: Run Pytest
+        run: uv run pytest
+
+  targets:
+    name: Find targets
+    runs-on: ubuntu-latest
+
+    outputs:
+      staging: ${{ steps.staging-changes.outputs.all_changed_files }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Staging Changes
+        uses: tj-actions/changed-files@v46
+        id: staging-changes
+        with:
+          matrix: true
+          dir_names: true
+          files: 'iac/cal-itp-data-infra-staging/**/*.tf'
+
+  staging:
+    name: Staging
+    needs: [targets]
+    if: ${{ needs.targets.outputs.staging == '[]' || needs.targets.outputs.staging == '' }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      id-token: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        path: ${{ fromJson(needs.targets.outputs.staging) }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: true
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v3
+
+      - name: Terraform Apply
+        uses: dflook/terraform-apply@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TERRAFORM_PRE_RUN: |
+            git config --global --add safe.directory $GITHUB_WORKSPACE
+        with:
+          path: ${{ matrix.path }}
+          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
+          variables: |
+            git_sha = "${{ github.ref == 'refs/heads/main' && github.sha || github.event.pull_request.head.sha }}"

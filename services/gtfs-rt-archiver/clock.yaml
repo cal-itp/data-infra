@@ -1,0 +1,32 @@
+main:
+  params: [event]
+  steps:
+    - init:
+        assign:
+          - currentTime: $${sys.now()}
+          - currentMinute: $${math.floor(currentTime / 60) * 60}
+
+    - publishMessages:
+        parallel:
+          for:
+            value: batchTime
+            in:
+              - $${currentMinute + 60} # one minute later
+              - $${currentMinute + 80} # one minute twenty seconds later
+              - $${currentMinute + 100} # one minute fourty seconds later
+            steps:
+              - init:
+                  assign:
+                    - data:
+                        batch_at: $${time.format(batchTime)}
+              - sleep:
+                  call: sys.sleep_until
+                  args:
+                    time: $${time.format(batchTime - 20)}
+              - publish:
+                  call: googleapis.pubsub.v1.projects.topics.publish
+                  args:
+                    topic: $${sys.get_env("CALITP_TOPIC__GTFS_RT_ARCHIVER_HEARTBEAT")}
+                    body:
+                      messages:
+                        - data: $${base64.encode(json.encode(data))}
