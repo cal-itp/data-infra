@@ -136,6 +136,10 @@ fct_payments_aggregations AS (
         debit_amount AS settlement_debit_amount,
         credit_amount AS settlement_credit_amount,
         debit_amount > 0 AS contains_nonzero_sales,
+        CASE
+            WHEN aggregation_is_settled IS NOT NULL THEN aggregation_is_settled
+            WHEN NOT has_settlement THEN FALSE
+        END AS aggregation_is_settled_new,
         aggregation_is_settled,
         debit_is_settled,
         credit_is_settled,
