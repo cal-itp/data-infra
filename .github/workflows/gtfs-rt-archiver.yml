@@ -125,5 +125,3 @@ jobs:
         with:
           path: ${{ matrix.path }}
           auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
-          variables: |
-            git_sha = "${{ github.ref == 'refs/heads/main' && github.sha || github.event.pull_request.head.sha }}"
