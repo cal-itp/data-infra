@@ -1,18 +1,22 @@
 {{ config(
     materialized='incremental',
-    event_time='dt',
-    incremental_strategy='insert_overwrite',
+    incremental_strategy='microbatch',
+    event_time = 'dt',
+    batch_size = 'day',
+    begin=var('PROD_GTFS_RT_START'),
+    lookback=var('DBT_ALL_MICROBATCH_LOOKBACK_DAYS'),
     partition_by = {
         'field': 'dt',
         'data_type': 'date',
         'granularity': 'day',
     },
-    cluster_by = 'base64_url'
-) }}
+    full_refresh=false,
+    cluster_by='base64_url'
+)
+}}
 
 WITH int_gtfs_rt__service_alerts_fully_unnested AS (
     SELECT * FROM {{ ref('int_gtfs_rt__service_alerts_fully_unnested') }}
-    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
 ),
 
 select_english AS (
