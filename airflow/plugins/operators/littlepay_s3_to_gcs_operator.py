@@ -147,8 +147,8 @@ class LittlepayS3ToGCSOperator(BaseOperator):
             "s3bucket": self.source_bucket_name(),
             "s3object": {
                 "Key": self.source_path,
-                "LastModified": str(self.source_object()["LastModified"]),
-                "ETag": self.source_object()["ETag"].replace('"', ""),
+                "LastModified": self.source_object()["LastModified"].isoformat(),
+                "ETag": self.source_object()["ETag"].replace('"', '"'),
                 "Size": self.source_object()["ContentLength"],
                 "StorageClass": self.source_object().get("StorageClass"),
             },
@@ -167,9 +167,9 @@ class LittlepayS3ToGCSOperator(BaseOperator):
     def exists(self) -> bool:
         return (
             self.prior_artifact().s3object_metadata() is not None
-            and str(self.source_object()["LastModified"])
+            and self.source_object()["LastModified"].isoformat()
             == self.prior_artifact().s3object_metadata().get("LastModified")
-            and self.source_object()["ETag"].replace('"', "")
+            and self.source_object()["ETag"]
             == self.prior_artifact().s3object_metadata().get("ETag")
         )
 
