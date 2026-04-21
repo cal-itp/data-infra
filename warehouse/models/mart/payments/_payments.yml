@@ -1,5 +1,20 @@
 version: 2
 
+x-common-fields:
+# elavon fields
+  - &purch_id
+    name: purch_id
+    description: |
+      Merchant identifier on the purchase (Car Rental Agreement, Hotel Folio, Order/Invoice number, or Other ID) sent to the card issuer
+  - &payment_date
+    name: payment_date
+    description: |
+      Date the Elavon system created and transmitted the Fund Event
+  - &settlement_date
+    name: settlement_date
+    description: |
+      The calendar day the transaction was batched and electronically deposited by Elavon
+
 models:
   - name: fct_payments_rides_v2
     description: |
@@ -222,6 +237,21 @@ models:
         description: |
           Retrieval reference number for the settlement of this aggregation.
           This field can be used to map to Elavon data.
+      - <<: *purch_id
+        name: elavon_purch_id
+      - <<: *payment_date
+        name: elavon_payment_date
+      - <<: *settlement_date
+        name: elavon_settlement_date
+      - name: elavon_net_amount
+        description: >
+          Sum of Elavon amount.
+      - name: elavon_sales
+        description: >
+          Sum of Elavon amount when amount > 0.
+      - name: elavon_refunds
+        description: >
+          Sum of Elavon amount when amount < 0.
       - name: net_micropayment_amount_dollars
         description: '{{ doc("lp_net_micropayment_amount_dollars") }}'
       - name: total_micropayment_nominal_amount_dollars
@@ -386,10 +416,7 @@ models:
         name: payment_reference
         description: |
           Unique number assigned to every "Fund Event" (ACH Payment/Withdrawal, Wire Transfer, Invoice)
-      - &payment_date
-        name: payment_date
-        description: |
-          Date the Elavon system created and transmitted the Fund Event
+      - *payment_date
       - &account_number
         name: account_number
         description: |
@@ -478,10 +505,7 @@ models:
         name: transaction_date
         description: |
           The calendar day the transaction was processed
-      - &settlement_date
-        name: settlement_date
-        description: |
-          The calendar day the transaction was batched and electronically deposited
+      - *settlement_date
       - &authorization_code
         name: authorization_code
         description: |
@@ -534,10 +558,7 @@ models:
         name: mer_ref
         description: |
           Unique Customer Defined field- Numeric Only
-      - &purch_id
-        name: purch_id
-        description: |
-          Merchant identifier on the purchase (Car Rental Agreement, Hotel Folio, Order/Invoice number, or Other ID) sent to the card issuer
+      - *purch_id
       - &cust_cod
         name: cust_cod
         description: |
