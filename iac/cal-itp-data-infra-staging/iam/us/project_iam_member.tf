@@ -255,8 +255,8 @@ resource "google_project_iam_member" "composer-service-account" {
     "roles/bigquery.dataOwner",
     "roles/bigquery.jobUser",
     "roles/cloudbuild.builds.viewer",
-    "roles/composer.ServiceAgentV2Ext",
     "roles/composer.serviceAgent",
+    "roles/composer.ServiceAgentV2Ext",
     "roles/composer.worker",
     "roles/secretmanager.secretAccessor",
     "roles/secretmanager.viewer"
@@ -266,18 +266,20 @@ resource "google_project_iam_member" "composer-service-account" {
   project = "cal-itp-data-infra-staging"
 }
 
-resource "google_project_iam_member" "gtfs-rt-archiver-service-account" {
+resource "google_project_iam_member" "gtfs-rt-archiver" {
   for_each = toset([
-    "roles/storage.objectUser",
     "roles/bigquery.dataViewer",
     "roles/bigquery.jobUser",
+    "roles/iam.serviceAccountTokenCreator",
+    "roles/logging.logWriter",
     "roles/pubsub.publisher",
+    "roles/pubsub.subscriber",
     "roles/secretmanager.secretAccessor",
-    "roles/workflows.invoker",
-    "roles/iam.serviceAccountTokenCreator"
+    "roles/storage.objectUser",
+    "roles/workflows.invoker"
   ])
   role    = each.key
-  member  = "serviceAccount:${google_service_account.gtfs-rt-archiver-service-account.email}"
+  member  = "serviceAccount:${google_service_account.gtfs-rt-archiver.email}"
   project = "cal-itp-data-infra-staging"
 }
 
