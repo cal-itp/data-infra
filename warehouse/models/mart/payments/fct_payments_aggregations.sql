@@ -23,6 +23,8 @@ settlements AS (
 refunds AS (
     SELECT *
     FROM {{ ref('int_payments__refunds_to_aggregations') }}
+    -- there are some historic records where aggregation_id is null which results in nulls in this table
+    WHERE aggregation_id IS NOT NULL
 ),
 
 payments_entity_mapping AS (
