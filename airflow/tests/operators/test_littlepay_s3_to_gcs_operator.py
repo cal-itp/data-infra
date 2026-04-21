@@ -208,7 +208,7 @@ class TestLittlepayS3ToGCSOperator:
             "s3object": {
                 "Key": "atn/v3/authorisations/202510241114_authorisations.psv",
                 "LastModified": parsed_metadata["s3object"]["LastModified"],
-                "ETag": s3_file["ETag"].replace('"', ""),
+                "ETag": s3_file["ETag"],
                 "Size": s3_file["ContentLength"],
                 "StorageClass": None,
             },
@@ -231,7 +231,7 @@ class TestLittlepayS3ToGCSOperator:
                 "instance": "atn",
                 "s3bucket": "mock-littlepay-bucket",
                 "s3object": {
-                    "ETag": "5d46e84b9c9fa3cc87e4916c452c4de8",
+                    "ETag": '"5d46e84b9c9fa3cc87e4916c452c4de8"',
                     "Key": "atn/v3/authorisations/202510241114_authorisations.psv",
                     "LastModified": parsed_report[0]["extract"]["s3object"][
                         "LastModified"
@@ -373,8 +373,8 @@ class TestLittlepayS3ToGCSOperator:
                             "s3bucket": "mock-littlepay-bucket",
                             "s3object": {
                                 "Key": file_exists_source_path,
-                                "LastModified": str(s3_file["LastModified"]),
-                                "ETag": s3_file["ETag"].replace('"', ""),
+                                "LastModified": s3_file["LastModified"].isoformat(),
+                                "ETag": s3_file["ETag"],
                                 "Size": s3_file["ContentLength"],
                                 "StorageClass": None,
                             },
@@ -510,10 +510,10 @@ class TestLittlepayS3ToGCSOperator:
                             "s3bucket": "mock-littlepay-bucket",
                             "s3object": {
                                 "Key": old_file_source_path,
-                                "LastModified": "2025-05-01 00:00:00+00:00",
-                                "ETag": s3_file["ETag"].replace('"', ""),
+                                "LastModified": "2025-05-01T00:00:00+00:00",
+                                "ETag": s3_file["ETag"],
                                 "Size": s3_file["ContentLength"],
-                                "StorageClass": None,
+                                "StorageClass": "STANDARD",
                             },
                         }
                     )
@@ -563,7 +563,7 @@ class TestLittlepayS3ToGCSOperator:
             "s3object": {
                 "Key": "atn/v3/authorisations/202504300000_authorisations.psv",
                 "LastModified": parsed_metadata["s3object"]["LastModified"],
-                "ETag": s3_file["ETag"].replace('"', ""),
+                "ETag": s3_file["ETag"],
                 "Size": s3_file["ContentLength"],
                 "StorageClass": None,
             },
@@ -582,9 +582,9 @@ class TestLittlepayS3ToGCSOperator:
             "prior": {
                 "Key": "atn/v3/authorisations/202504300000_authorisations.psv",
                 "LastModified": parsed_report[0]["prior"]["LastModified"],
-                "ETag": s3_file["ETag"].replace('"', ""),
+                "ETag": s3_file["ETag"],
                 "Size": s3_file["ContentLength"],
-                "StorageClass": None,
+                "StorageClass": "STANDARD",
             },
             "exception": None,
             "extract": {
@@ -596,7 +596,7 @@ class TestLittlepayS3ToGCSOperator:
                     "LastModified": parsed_report[0]["extract"]["s3object"][
                         "LastModified"
                     ],
-                    "ETag": s3_file["ETag"].replace('"', ""),
+                    "ETag": s3_file["ETag"],
                     "Size": s3_file["ContentLength"],
                     "StorageClass": None,
                 },
