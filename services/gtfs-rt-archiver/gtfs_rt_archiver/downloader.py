@@ -19,7 +19,6 @@ class HostnameIgnoringHTTPSAdapter(HTTPAdapter):
         super().__init__(*args, **kwargs)
 
     def init_poolmanager(self, *args, **kwargs) -> None:
-        print(f"cafile={self.cafile} {os.path.isfile(self.cafile)}")
         if os.path.isfile(self.cafile):
             context = ssl.create_default_context(cafile=self.cafile)
             kwargs["assert_hostname"] = False
