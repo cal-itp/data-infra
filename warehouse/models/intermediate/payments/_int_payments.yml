@@ -112,6 +112,8 @@ models:
         description: '{{ doc("lp_net_micropayment_amount_dollars") }}'
       - name: total_nominal_amount_dollars
         description: '{{ doc("lp_total_nominal_amount_dollars") }}'
+      - name: total_sales
+        description: '{{ doc("lp_total_sales") }}'
       - name: latest_transaction_time
         description: '{{ doc("lp_mp_latest_transaction_time") }}'
       - name: num_micropayments
