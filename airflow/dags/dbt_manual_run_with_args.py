@@ -1,4 +1,5 @@
 import os
+import shlex
 from datetime import datetime
 
 from dags import log_failure_to_slack
@@ -19,7 +20,7 @@ DBT_TARGET = os.environ.get("DBT_TARGET")
 
 
 def _build_run_args(
-    select, exclude, full_refresh, threads, event_time_start, event_time_end
+    select, exclude, full_refresh, threads, event_time_start, event_time_end, vars
 ):
     # Rendered at task execution time via user_defined_macros, not at DAG parse time.
     flags = {
@@ -32,9 +33,12 @@ def _build_run_args(
     parts = []
     for flag, value in flags.items():
         if value and str(value).strip():
-            parts += [flag] + str(value).strip().split()
+            tokens = shlex.split(str(value))
+            parts += [flag] + [shlex.quote(t) for t in tokens]
     if full_refresh:
         parts.append("--full-refresh")
+    if vars and str(vars).strip():
+        parts += ["--vars", shlex.quote(str(vars).strip())]
     return " ".join(parts)
 
 
@@ -92,6 +96,14 @@ with DAG(
                 "Leave blank to run through the current time."
             ),
         ),
+        "vars": Param(
+            default="",
+            type=["null", "string"],
+            description=(
+                "dbt --vars expression as a YAML/JSON dict string. "
+                "Example: '{my_var: my_value, other_var: 123}'."
+            ),
+        ),
     },
     default_args={
         "email": os.getenv("CALITP_NOTIFY_EMAIL"),
@@ -117,7 +129,8 @@ with DAG(
             f" --target {DBT_TARGET}"
             " {{ build_run_args(params.select, params.exclude,"
             " params.full_refresh, params.threads,"
-            " params.event_time_start, params.event_time_end) }}"
+            " params.event_time_start, params.event_time_end,"
+            " params.vars) }}"
         ),
         on_failure_callback=log_group_failure_to_slack,
         retries=0,
