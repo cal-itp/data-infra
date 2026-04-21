@@ -23,8 +23,6 @@ schema_fields:
     type: STRING
   - name: Masked_Pan
     type: STRING
-  - name: Expiry
-    type: STRING
   - name: Server_date
     type: STRING
   - name: Terminal_date

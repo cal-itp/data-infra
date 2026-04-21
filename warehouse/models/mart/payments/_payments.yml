@@ -891,7 +891,6 @@ models:
       - name: terminal
       - name: token
       - name: masked_pan
-      - name: expiry
       - name: server_date
       - name: terminal_date
       - name: tx_number
