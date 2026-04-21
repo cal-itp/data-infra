@@ -165,9 +165,11 @@ Null if no refund for this micropayment.
 {% enddocs %}
 
 {% docs lp_aggregation_refund_amount %}
-Total refunded amount associated with this aggregation.
-(The aggregation may contain more than one micropayment.)
+Total refund amount in dollars associated with this aggregation.
+Note that this includes refunds in all approval statuses, so may include rejected refunds.
+To see final settled refund amount, must compare with settlements data.
 {% enddocs %}
+
 
 -------------------------------- SETTLEMENTS TABLE --------------------------------
 
