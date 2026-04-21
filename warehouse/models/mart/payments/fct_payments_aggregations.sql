@@ -20,6 +20,11 @@ settlements AS (
     FROM {{ ref('int_payments__settlements_to_aggregations') }}
 ),
 
+refunds AS (
+    SELECT *
+    FROM {{ ref('int_payments__refunds_to_aggregations') }}
+),
+
 payments_entity_mapping AS (
     SELECT
         * EXCEPT(littlepay_participant_id),
@@ -50,8 +55,6 @@ elavon_info AS (
     purch_id
 ),
 
--- TODO: add refunds
-
 join_payments AS (
     SELECT
         COALESCE(micropayments.aggregation_id, authorisations.aggregation_id, settlements.aggregation_id) AS aggregation_id,
@@ -60,9 +63,11 @@ join_payments AS (
         micropayments.aggregation_id IS NOT NULL AS has_micropayment,
         authorisations.aggregation_id IS NOT NULL AS has_authorisation,
         settlements.aggregation_id IS NOT NULL AS has_settlement,
+        refunds.aggregation_id IS NOT NULL AS has_refund,
         micropayments.* EXCEPT(aggregation_id, participant_id),
         authorisations.* EXCEPT(aggregation_id, participant_id, retrieval_reference_number),
         settlements.* EXCEPT(aggregation_id, participant_id, retrieval_reference_number),
+        refunds.* EXCEPT(aggregation_id, participant_id, retrieval_reference_number),
         authorisations.retrieval_reference_number AS authorisation_retrieval_reference_number,
         settlements.retrieval_reference_number AS settlement_retrieval_reference_number,
         customers.principal_customer_id,
@@ -71,6 +76,7 @@ join_payments AS (
     FROM micropayments
     FULL OUTER JOIN authorisations USING (aggregation_id)
     FULL OUTER JOIN settlements USING (aggregation_id)
+    FULL OUTER JOIN refunds USING (aggregation_id)
     LEFT JOIN customers USING (aggregation_id)
 ),
 
@@ -110,11 +116,13 @@ fct_payments_aggregations AS (
         has_micropayment,
         has_authorisation,
         has_settlement,
+        has_refund,
         aggregation_datetime,
         authorisation_retrieval_reference_number,
         settlement_retrieval_reference_number,
         net_micropayment_amount_dollars,
         total_nominal_amount_dollars AS total_micropayment_nominal_amount_dollars,
+        total_refund_activity_amount_dollars,
         latest_transaction_time AS latest_micropayment_transaction_datetime,
         TIMESTAMP(DATETIME(latest_transaction_time, "America/Los_Angeles")) AS latest_micropayment_transaction_datetime_pacific,
         num_micropayments,

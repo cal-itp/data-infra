@@ -212,6 +212,9 @@ models:
           If "true", there is at least one settlement in the settlements source data with this aggregation ID.
           Settlement is the final step in the payment workflow, so some aggregations may be missing
           settlements simply because they are not processed yet.
+      - name: has_refund
+        description: |
+          If "true", there is at least one refund in the refund or micropayment source data with this aggregation ID.
       - name: authorisation_retrieval_reference_number
         description: |
           Retrieval reference number for the most recent authorisation of this aggregation.
@@ -223,6 +226,8 @@ models:
         description: '{{ doc("lp_net_micropayment_amount_dollars") }}'
       - name: total_micropayment_nominal_amount_dollars
         description: '{{ doc("lp_total_nominal_amount_dollars") }}'
+      - name: total_refund_activity_amount_dollars
+        description: '{{ doc("lp_aggregation_refund_amount") }}'
       - name: latest_micropayment_transaction_datetime
         description: '{{ doc("lp_mp_latest_transaction_time") }}'
       - name: num_micropayments
