@@ -150,8 +150,7 @@ fct_payments_aggregations AS (
         CASE
             WHEN aggregation_is_settled IS NOT NULL THEN aggregation_is_settled
             WHEN NOT has_settlement THEN FALSE
-        END AS aggregation_is_settled_new,
-        aggregation_is_settled,
+        END AS aggregation_is_settled,
         debit_is_settled,
         credit_is_settled,
         CASE
