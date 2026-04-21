@@ -226,6 +226,8 @@ models:
         description: '{{ doc("lp_net_micropayment_amount_dollars") }}'
       - name: total_micropayment_nominal_amount_dollars
         description: '{{ doc("lp_total_nominal_amount_dollars") }}'
+      - name: total_sales
+        description: '{{ doc("lp_total_sales") }}'
       - name: total_refund_activity_amount_dollars
         description: '{{ doc("lp_aggregation_refund_amount") }}'
       - name: latest_micropayment_transaction_datetime

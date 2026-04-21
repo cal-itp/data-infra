@@ -124,6 +124,7 @@ fct_payments_aggregations AS (
         settlement_retrieval_reference_number,
         net_micropayment_amount_dollars,
         total_nominal_amount_dollars AS total_micropayment_nominal_amount_dollars,
+        total_sales,
         total_refund_activity_amount_dollars,
         latest_transaction_time AS latest_micropayment_transaction_datetime,
         TIMESTAMP(DATETIME(latest_transaction_time, "America/Los_Angeles")) AS latest_micropayment_transaction_datetime_pacific,

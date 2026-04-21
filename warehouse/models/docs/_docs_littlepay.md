@@ -170,6 +170,11 @@ Note that this includes refunds in all approval statuses, so may include rejecte
 To see final settled refund amount, must compare with settlements data.
 {% enddocs %}
 
+{% docs lp_total_sales %}
+Sum of positive charge_amount values for micropayments in this aggregation, i.e., total of
+charge_amount values ignoring micropayment refunds.
+{% enddocs %}
+
 
 -------------------------------- SETTLEMENTS TABLE --------------------------------
 

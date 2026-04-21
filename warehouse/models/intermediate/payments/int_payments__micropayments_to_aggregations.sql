@@ -21,6 +21,12 @@ int_payments__micropayments_to_aggregations AS (
         participant_id,
         aggregation_id,
         SUM(charge_amount) AS net_micropayment_amount_dollars,
+        SUM(
+            CASE
+                WHEN charge_amount > 0 THEN charge_amount
+                ELSE 0
+            END
+        ) AS total_sales,
         SUM(COALESCE(nominal_amount,0)) AS total_nominal_amount_dollars,
         MAX(transaction_time) AS latest_transaction_time,
         COUNT(DISTINCT micropayment_id) AS num_micropayments,
