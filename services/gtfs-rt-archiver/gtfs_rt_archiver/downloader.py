@@ -1,17 +1,29 @@
 import os
+import ssl
+from urllib.parse import urlparse
 
 from gtfs_rt_archiver.configuration import Configuration
 from requests import Request, Response, Session
+from requests.adapters import HTTPAdapter
+from requests.packages.urllib3.poolmanager import PoolManager
 
-cert_ca_path = os.path.join(
-    os.path.dirname(os.path.dirname(os.path.realpath(__file__))), "cert.ca"
+CERTIFICATE_PATH = os.path.join(
+    os.path.dirname(os.path.dirname(__file__)), "certificates"
 )
-request_connect_timeout = int(
-    os.environ.get("REQUEST_CONNECT_TIMEOUT", os.environ.get("REQUEST_TIMEOUT", "5"))
-)
-request_read_timeout = int(
-    os.environ.get("REQUEST_READ_TIMEOUT", os.environ.get("REQUEST_TIMEOUT", "5"))
-)
+
+
+class HostnameIgnoringHTTPSAdapter(HTTPAdapter):
+    def __init__(self, cafile: str, *args, **kwargs) -> None:
+        self.cafile: str = cafile
+        super().__init__(*args, **kwargs)
+
+    def init_poolmanager(self, *args, **kwargs) -> None:
+        print(f"cafile={self.cafile} {os.path.isfile(self.cafile)}")
+        if os.path.isfile(self.cafile):
+            context = ssl.create_default_context(cafile=self.cafile)
+            kwargs["assert_hostname"] = False
+            kwargs["ssl_context"] = context
+        self.poolmanager = PoolManager(*args, **kwargs)
 
 
 class Result:
@@ -50,8 +62,11 @@ class Result:
 
 
 class Downloader:
-    def __init__(self, configuration: Configuration) -> None:
+    def __init__(
+        self, configuration: Configuration, certificate_path: str = CERTIFICATE_PATH
+    ) -> None:
         self.configuration: Configuration = configuration
+        self.certificate_path: str = certificate_path
 
     def request(self) -> Request:
         return Request(
@@ -61,13 +76,35 @@ class Downloader:
             headers=self.configuration.headers(),
         )
 
+    def hostname(self) -> str:
+        return urlparse(self.configuration.url).netloc
+
+    def cafile(self) -> str:
+        return os.path.join(self.certificate_path, f"{self.hostname()}.pem")
+
+    def options(self) -> dict:
+        return {
+            "allow_redirects": True,
+            "timeout": (
+                int(
+                    os.environ.get(
+                        "REQUEST_CONNECT_TIMEOUT",
+                        os.environ.get("REQUEST_TIMEOUT", "5"),
+                    )
+                ),
+                int(
+                    os.environ.get(
+                        "REQUEST_READ_TIMEOUT", os.environ.get("REQUEST_TIMEOUT", "5")
+                    )
+                ),
+            ),
+        }
+
     def get(self) -> None:
         session: Session = Session()
+        adapter: HTTPAdapter = HostnameIgnoringHTTPSAdapter(cafile=self.cafile())
+        session.mount("https://", adapter)
         prepped_request = session.prepare_request(self.request())
-        response = session.send(
-            prepped_request,
-            allow_redirects=True,
-            timeout=(request_connect_timeout, request_read_timeout),
-        )
+        response = session.send(prepped_request, **self.options())
         response.raise_for_status()
         return Result(configuration=self.configuration, response=response)
