@@ -6,9 +6,11 @@
         {# and otherwise use the default lookback window #}
         {%- if var('DBT_INCREMENTAL_START_DATE','') != '' -%}
             {# in quotes because this should be a date like 2026-04-01 #}
-            '{{ var("DBT_INCREMENTAL_START_DATE") }}'
+            {# never try to pull data earlier than data_earliest_start #}
+            greatest(date('{{ data_earliest_start }}'), date('{{ var("DBT_INCREMENTAL_START_DATE") }}'))
         {%- else -%}
-            date_sub(current_date(), interval {{ default_lookback|string }} {{ lookback_unit }})
+            {# never try to pull data earlier than data_earliest_start #}
+            greatest(date('{{ data_earliest_start }}'), date_sub(current_date(), interval {{ default_lookback|string }} {{ lookback_unit }}))
         {%- endif -%}
 
     {%- else  -%}
