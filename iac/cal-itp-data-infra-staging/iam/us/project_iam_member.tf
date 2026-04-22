@@ -276,7 +276,8 @@ resource "google_project_iam_member" "gtfs-rt-archiver" {
     "roles/pubsub.subscriber",
     "roles/secretmanager.secretAccessor",
     "roles/storage.objectUser",
-    "roles/workflows.invoker"
+    "roles/workflows.invoker",
+    "roles/run.invoker"
   ])
   role    = each.key
   member  = "serviceAccount:${google_service_account.gtfs-rt-archiver.email}"

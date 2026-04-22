@@ -59,6 +59,8 @@ resource "google_cloudfunctions2_function" "gtfs-rt-archiver-heartbeat" {
     runtime     = "python311"
     entry_point = "process_clock_event"
 
+    automatic_update_policy {}
+
     source {
       storage_source {
         bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-rt-archiver_name
@@ -68,10 +70,11 @@ resource "google_cloudfunctions2_function" "gtfs-rt-archiver-heartbeat" {
   }
 
   event_trigger {
-    trigger_region = "us-west2"
-    event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
-    pubsub_topic   = google_pubsub_topic.gtfs-rt-archiver-staging-heartbeat.id
-    retry_policy   = "RETRY_POLICY_RETRY"
+    trigger_region        = "us-west2"
+    event_type            = "google.cloud.pubsub.topic.v1.messagePublished"
+    pubsub_topic          = google_pubsub_topic.gtfs-rt-archiver-staging-heartbeat.id
+    retry_policy          = "RETRY_POLICY_RETRY"
+    service_account_email = data.terraform_remote_state.iam.outputs.google_service_account_gtfs-rt-archiver_email
   }
 }
 
@@ -82,15 +85,19 @@ resource "google_cloudfunctions2_function" "gtfs-rt-archiver" {
   depends_on = [google_storage_bucket_object.gtfs-rt-archiver]
 
   service_config {
+    available_cpu    = "167m"
     available_memory = "256M"
     ingress_settings = "ALLOW_INTERNAL_ONLY"
+
+    max_instance_count               = 160
+    max_instance_request_concurrency = 1
 
     all_traffic_on_latest_revision = true
     service_account_email          = data.terraform_remote_state.iam.outputs.google_service_account_gtfs-rt-archiver_email
 
     environment_variables = {
       CALITP_BUCKET__GTFS_RT_RAW = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-rt-raw-v2_name}"
-      REQUEST_CONNECT_TIMEOUT    = 5
+      REQUEST_CONNECT_TIMEOUT    = 1
       REQUEST_READ_TIMEOUT       = 5
     }
   }
@@ -98,6 +105,8 @@ resource "google_cloudfunctions2_function" "gtfs-rt-archiver" {
   build_config {
     runtime     = "python311"
     entry_point = "process_heartbeat_event"
+
+    automatic_update_policy {}
 
     source {
       storage_source {
@@ -108,9 +117,10 @@ resource "google_cloudfunctions2_function" "gtfs-rt-archiver" {
   }
 
   event_trigger {
-    trigger_region = "us-west2"
-    event_type     = "google.cloud.pubsub.topic.v1.messagePublished"
-    pubsub_topic   = google_pubsub_topic.gtfs-rt-archiver-staging.id
-    retry_policy   = "RETRY_POLICY_RETRY"
+    trigger_region        = "us-west2"
+    event_type            = "google.cloud.pubsub.topic.v1.messagePublished"
+    pubsub_topic          = google_pubsub_topic.gtfs-rt-archiver-staging.id
+    retry_policy          = "RETRY_POLICY_RETRY"
+    service_account_email = data.terraform_remote_state.iam.outputs.google_service_account_gtfs-rt-archiver_email
   }
 }

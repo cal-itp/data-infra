@@ -59,10 +59,9 @@ class Service:
                 json.dumps(
                     {
                         "severity": "Error",
-                        "message": f"Failed {self.configuration().url} - {e}",
+                        "message": f"Failed {self.configuration().url} - {e}\n{traceback.format_exc()}",
                         "url": self.configuration().url,
                         "message_id": self.message_id,
-                        "traceback": traceback.format_exc(),
                         "publish_time": self.publish_time.isoformat(),
                     }
                 )
