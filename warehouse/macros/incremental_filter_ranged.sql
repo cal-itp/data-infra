@@ -1,6 +1,4 @@
 {%- macro ranged_incremental_min_date(default_lookback, data_earliest_start, lookback_unit = 'day') -%}
-
-    {# first, set min and max dates for the range #}
     {%- if is_incremental() -%}
         {# if it's an incremental run, respect the DBT_INCREMENTAL_START_DATE dbt var if set #}
         {# and otherwise use the default lookback window #}
@@ -15,6 +13,7 @@
 
     {%- else  -%}
         {# if not incremental, just set min to data start date #}
+        {# in quotes because this should be a date like 2026-04-01 #}
         '{{ data_earliest_start }}'
 
     {%- endif -%}
