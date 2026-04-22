@@ -24,7 +24,6 @@ WITH service_alerts_ages AS (
         gtfs_dataset_name,
         _header_message_age,
     FROM {{ ref('fct_service_alerts_messages') }}
-    WHERE {{ incremental_where(default_start_var='GTFS_RT_START') }}
 ),
 
 header_age_percentiles AS (

@@ -26,7 +26,6 @@ WITH trip_updates_ages AS (
         _header_message_age,
         _trip_update_message_age
     FROM {{ ref('fct_trip_updates_no_stop_times') }}
-    WHERE {{ incremental_where(default_start_var='GTFS_RT_START') }}
 ),
 
 -- these values are repeated because one row in the source table is one trip_updates message so the header is identical for all messages on a given request
