@@ -36,7 +36,6 @@ validation_map AS (
 parse_outcomes AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__unioned_parse_outcomes') }}
-    WHERE {{ incremental_where(default_start_var='GTFS_RT_START', this_dt_column = 'date') }}
 ),
 
 grouped_parse_outcomes AS (
