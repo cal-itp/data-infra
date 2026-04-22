@@ -61,9 +61,10 @@ macros:
       Returns a minimum (earliest) date to use when constructing where clauses on upstream parents of incremental models.
       Logic is:
         * If incremental:
-            * If DBT_INCREMENTAL_START_DATE dbt variable is set, return that value. Variable should take the form of a date like 'YYYY-MM-DD'.
-            * If variable is not set, return SQL defining a lookback interval configured by the `default_lookback` and `lookback_unit` parameters.
+            * If DBT_INCREMENTAL_START_DATE dbt variable is set, return the greater (later, more recent date) between `data_earliest_start` and the variable value. The variable should take the form of a date like 'YYYY-MM-DD'.
+            * If variable is not set, return SQL defining the greater (later, more recent date) between `data_earliest_start` and a lookback interval configured by the `default_lookback` and `lookback_unit` parameters.
         * If not incremental (full-refresh): Return `data_earliest_start` parameter value.
+      This will never return a value earlier than `data_earliest_start`.
     arguments:
       - name: default_lookback
         type: integer
