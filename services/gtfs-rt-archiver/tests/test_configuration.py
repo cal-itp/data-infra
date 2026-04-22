@@ -40,6 +40,7 @@ class TestConfiguration:
             "name": "Example",
             "schedule_url_for_validation": "http://example.com/gtfs.zip",
             "url": url,
+            "computed": False,
         }
 
     @pytest.fixture
@@ -56,6 +57,7 @@ class TestConfiguration:
             "name": "Example",
             "schedule_url_for_validation": "http://example.com/gtfs.zip",
             "url": url,
+            "computed": False,
         }
 
     @pytest.fixture
@@ -72,6 +74,7 @@ class TestConfiguration:
             "name": "Example",
             "schedule_url_for_validation": "http://example.com/gtfs.zip",
             "url": url,
+            "computed": False,
         }
 
     @pytest.fixture
@@ -147,4 +150,5 @@ class TestConfiguration:
             "schedule_url_for_validation": "http://example.com/gtfs.zip",
             "auth_query_params": {},
             "auth_headers": {},
+            "computed": False,
         }

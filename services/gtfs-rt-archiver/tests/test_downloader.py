@@ -32,6 +32,7 @@ class TestDownloader:
             "name": "Example",
             "schedule_url_for_validation": "http://www.yolobus.com/GTFS/google_transit.zip",
             "url": url,
+            "computed": False,
         }
 
     @pytest.fixture
@@ -46,6 +47,7 @@ class TestDownloader:
             "name": "Example",
             "schedule_url_for_validation": "https://example.com/google_transit.zip",
             "url": "https://uctransit.info/gtfs-rt/vehiclepositions",
+            "computed": False,
         }
 
     @pytest.fixture
