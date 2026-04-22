@@ -628,3 +628,21 @@ resource "google_project_iam_member" "metabase-service-account" {
   member  = "serviceAccount:${google_service_account.metabase-service-account.email}"
   project = "cal-itp-data-infra"
 }
+
+resource "google_project_iam_member" "gtfs-rt-archiver" {
+  for_each = toset([
+    "roles/bigquery.dataViewer",
+    "roles/bigquery.jobUser",
+    "roles/iam.serviceAccountTokenCreator",
+    "roles/logging.logWriter",
+    "roles/pubsub.publisher",
+    "roles/pubsub.subscriber",
+    "roles/secretmanager.secretAccessor",
+    "roles/storage.objectUser",
+    "roles/workflows.invoker",
+    "roles/run.invoker"
+  ])
+  role    = each.key
+  member  = "serviceAccount:${google_service_account.gtfs-rt-archiver.email}"
+  project = "cal-itp-data-infra-staging"
+}

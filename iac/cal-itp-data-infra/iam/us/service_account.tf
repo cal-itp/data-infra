@@ -272,6 +272,14 @@ resource "google_service_account" "metabase-service-account" {
   project      = "cal-itp-data-infra"
 }
 
+resource "google_service_account" "gtfs-rt-archiver" {
+  account_id   = "gtfs-rt-archiver"
+  description  = "Service account for the GTFS-RT archiver"
+  disabled     = "false"
+  display_name = "gtfs-rt-archiver"
+  project      = "cal-itp-data-infra"
+}
+
 resource "google_service_account" "vctc-payments-user" {
   account_id = "vctc-payments-user"
   disabled   = "false"
