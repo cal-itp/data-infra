@@ -6,7 +6,9 @@
             'field': 'service_date',
             'data_type': 'date',
             'granularity': 'day'
-        }, cluster_by=['service_date', 'base64_url']
+        },
+    cluster_by=['service_date', 'base64_url'],
+    full_refresh=false
     )
 }}
 
