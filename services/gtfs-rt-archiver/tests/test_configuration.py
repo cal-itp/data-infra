@@ -116,14 +116,13 @@ class TestConfiguration:
     def test_base64_encodes_url(self, configuration: Configuration) -> None:
         assert configuration.base64_url() == "aHR0cDovL2V4YW1wbGUuY29t"
 
-    def test_builds_destination_path(self, configuration: Configuration) -> None:
-        assert configuration.destination_path() == os.path.join(
+    def test_builds_destination_prefix(self, configuration: Configuration) -> None:
+        assert configuration.destination_prefix() == os.path.join(
             "vehicle_positions",
             "dt=2026-04-01",
             "hour=2026-04-01T00:00:00+00:00",
             "ts=2026-04-01T00:01:20+00:00",
             "base64_url=aHR0cDovL2V4YW1wbGUuY29t",
-            "feed",
         )
 
     def test_empty_headers(self, configuration: Configuration) -> None:

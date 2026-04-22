@@ -1,5 +1,6 @@
 import os
 import ssl
+from email.message import Message
 from urllib.parse import urlparse
 
 from gtfs_rt_archiver.configuration import Configuration
@@ -36,24 +37,33 @@ class Result:
         self.response: Response = response
 
     def code(self) -> int | None:
-        if self.response is not None:
-            return self.response.status_code
+        return self.response.status_code
 
     def headers(self) -> dict:
-        if self.response is not None:
-            return dict(self.response.headers)
+        return dict(self.response.headers)
 
     def content(self) -> str:
-        if self.response is not None:
-            return self.response.content
+        return self.response.content
 
     def mime_type(self) -> str:
-        if self.response is not None:
-            return self.response.headers.get("Content-Type", "application/octet-stream")
+        return self.response.headers.get("Content-Type", "application/octet-stream")
+
+    def attachment_filename(self) -> str:
+        msg = Message()
+        msg["content-disposition"] = self.headers().get(
+            "Content-Disposition", "attachment"
+        )
+        return msg.get_filename()
+
+    def filename(self) -> str:
+        filename = self.attachment_filename()
+        if not filename:
+            filename = "feed"
+        return filename
 
     def metadata(self) -> dict:
         return {
-            "filename": "feed",
+            "filename": self.filename(),
             "ts": self.configuration.ts(),
             "config": self.configuration.json(),
             "response_code": self.code(),

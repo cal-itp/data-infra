@@ -25,7 +25,6 @@ class TestDownloader:
     def data(self, current_time: datetime, url: str) -> dict:
         return {
             "publish_time": "2026-04-01T00:01:23.45+00:00",
-            "current_time": current_time,
             "auth_headers": {},
             "auth_query_params": {},
             "extracted_at": "2026-04-01T00:00:00+00:00",
@@ -86,3 +85,7 @@ class TestDownloader:
         feed = gtfs_realtime_pb2.FeedMessage()
         feed.ParseFromString(downloader.get().content())
         assert len(feed.entity) > 0
+
+    @pytest.mark.vcr
+    def test_downloader_calculates_filename(self, downloader: Downloader) -> None:
+        assert downloader.get().filename() == "feed"
