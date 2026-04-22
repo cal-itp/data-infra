@@ -14,12 +14,9 @@
 WITH fct_stop_time_metrics AS (
     SELECT *
     FROM {{ ref('fct_stop_time_metrics') }}
-    WHERE {{ incremental_where(
-        default_start_var='GTFS_RT_START',
-        this_dt_column='service_date',
-        filter_dt_column='service_date',
-    )
-    }}
+    WHERE service_date
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_MICROBATCH_LOOKBACK_DAYS"), data_earliest_start="2025-12-01") }}
+            AND {{ ranged_incremental_max_date() }}
 ),
 
 stop_metrics AS (
