@@ -59,6 +59,7 @@ class Configuration:
         name: str,
         schedule_url_for_validation: str,
         url: str,
+        computed: bool,
         secret_resolver: Type = Secret,
         **extras,
     ) -> None:
@@ -72,6 +73,7 @@ class Configuration:
         self.name: str = name
         self.schedule_url_for_validation: str = schedule_url_for_validation
         self.url: str = url
+        self.computed: bool = computed
         self.secret_resolver: Type = secret_resolver
         if extras:
             logging.warning(f"Unsupported keys {list(extras.keys())}")
@@ -95,14 +97,13 @@ class Configuration:
     def base64_url(self) -> str:
         return urlsafe_b64encode(self.url.encode()).decode()
 
-    def destination_path(self) -> str:
+    def destination_prefix(self) -> str:
         return os.path.join(
             self.feed_type,
             f"dt={self.dt()}",
             f"hour={self.hour()}",
             f"ts={self.ts()}",
             f"base64_url={self.base64_url()}",
-            "feed",
         )
 
     def headers(self) -> dict:
@@ -130,6 +131,7 @@ class Configuration:
             "schedule_url_for_validation": self.schedule_url_for_validation,
             "auth_query_params": self.auth_query_params,
             "auth_headers": self.auth_headers,
+            "computed": self.computed,
         }
 
     @staticmethod

@@ -29,6 +29,7 @@ class TestArchiver:
             "name": "Example",
             "schedule_url_for_validation": "http://www.yolobus.com/GTFS/google_transit.zip",
             "url": url,
+            "computed": False,
         }
 
     @pytest.fixture
