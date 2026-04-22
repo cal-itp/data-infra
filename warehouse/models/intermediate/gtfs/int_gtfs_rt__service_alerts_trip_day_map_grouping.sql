@@ -4,7 +4,7 @@
         incremental_strategy='microbatch',
         event_time = 'dt',
         batch_size = 'day',
-        begin=var('PROD_GTFS_RT_START'),
+        begin=var('GTFS_RT_START'),
         lookback=var('DBT_ALL_MICROBATCH_LOOKBACK_DAYS'),
         partition_by={
             'field': 'dt',

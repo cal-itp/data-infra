@@ -4,7 +4,7 @@
         incremental_strategy='microbatch',
         event_time = 'dt',
         batch_size = 'day',
-        begin=var('PROD_GTFS_RT_START'),
+        begin=var('GTFS_RT_START'),
         lookback=var('DBT_ALL_MICROBATCH_LOOKBACK_DAYS'),
         partition_by={
             'field': 'dt',
@@ -26,7 +26,7 @@ WITH trip_updates_ages AS (
         _header_message_age,
         _trip_update_message_age
     FROM {{ ref('fct_trip_updates_no_stop_times') }}
-    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
+    WHERE {{ incremental_where(default_start_var='GTFS_RT_START') }}
 ),
 
 -- these values are repeated because one row in the source table is one trip_updates message so the header is identical for all messages on a given request

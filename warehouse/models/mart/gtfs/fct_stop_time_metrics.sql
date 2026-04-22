@@ -14,7 +14,7 @@ WITH int_tu_trip_stop AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__trip_updates_trip_stop_day_map_grouping') }}
     WHERE {{ incremental_where(
-        default_start_var='PROD_GTFS_RT_START',
+        default_start_var='GTFS_RT_START',
         this_dt_column="service_date",
         filter_dt_column="dt"
     ) }} AND dt >= "2025-12-01"

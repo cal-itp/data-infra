@@ -74,7 +74,7 @@ macros:
         type: date
         description: >
           Earliest date for which data should be pulled (universal start date for the data.)
-          Can reference a dbt variable like `var("GTFS_SCHEDULE_START")` or `var("PROD_GTFS_RT_START")`.
+          Can reference a dbt variable like `var("GTFS_SCHEDULE_START")` or `var("GTFS_RT_START")`.
       - name: lookback_unit
         type: int
         description: >

@@ -15,7 +15,7 @@
 WITH trip_updates AS( --noqa: ST03
     SELECT *
     FROM {{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }}
-    WHERE service_date >= DATE_SUB("{{ incremental_max_date(default_start_var='PROD_GTFS_RT_START',
+    WHERE service_date >= DATE_SUB("{{ incremental_max_date(default_start_var='GTFS_RT_START',
                 this_dt_column='service_date', filter_dt_column='service_date') | trim }}", INTERVAL 2 DAY)
  ),
 

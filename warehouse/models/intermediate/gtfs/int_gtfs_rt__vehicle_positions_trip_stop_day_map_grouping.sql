@@ -64,7 +64,7 @@ int_vp_trips AS (
         trip_id,
     FROM {{ ref('int_gtfs_rt__vehicle_positions_trip_day_map_grouping') }}
     WHERE {{ incremental_where(
-        default_start_var='PROD_GTFS_RT_START',
+        default_start_var='GTFS_RT_START',
         this_dt_column='dt',
         filter_dt_column='dt')
     }}
@@ -91,7 +91,7 @@ vehicle_locations AS (
 
     FROM {{ ref('fct_vehicle_locations') }}
     WHERE {{ incremental_where(
-        default_start_var='PROD_GTFS_RT_START',
+        default_start_var='GTFS_RT_START',
         this_dt_column='dt',
         filter_dt_column='dt')
     }}

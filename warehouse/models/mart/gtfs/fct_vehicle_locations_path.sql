@@ -15,7 +15,7 @@ WITH fct_vehicle_locations AS (
     SELECT *
     FROM {{ ref('fct_vehicle_locations') }}
     WHERE {{ incremental_where(
-        default_start_var='PROD_GTFS_RT_START',
+        default_start_var='GTFS_RT_START',
         this_dt_column = 'service_date',
         filter_dt_column = 'service_date') }}
 ),

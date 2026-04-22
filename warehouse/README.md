@@ -254,7 +254,7 @@ We make heavy use of [incremental models](https://docs.getdbt.com/docs/build/inc
       +++ b/warehouse/models/.../incremental_model_name.sql
         SELECT *
           FROM incremental_model_name
-      -  WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START') }}
+      -  WHERE {{ incremental_where(default_start_var='GTFS_RT_START') }}
       +  WHERE dt BETWEEN '{{ var("DBT_INCREMENTAL_START_DATE") }}' AND '{{ var("DBT_INCREMENTAL_END_DATE") }}'
       ```
 
