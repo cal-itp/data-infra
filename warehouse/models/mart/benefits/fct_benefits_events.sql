@@ -1,4 +1,5 @@
-{{ config(materialized='table') }}
+{{ config(materialized = 'table',
+    post_hook="{{ benefits_row_access_policy() }}") }}
 
 WITH fct_benefits_events_raw AS (
   -- fct_benefits_events_raw extracts JSON columns and
