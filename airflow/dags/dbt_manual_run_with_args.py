@@ -76,7 +76,7 @@ with DAG(
             type="integer",
             minimum=1,
             maximum=16,
-            description="Number of dbt threads.",
+            description="Number of threads to run with.",
         ),
         "event_time_start": Param(
             default="",
