@@ -613,9 +613,7 @@ models:
       - &trn_ref_num
         name: trn_ref_num
         description: |
-          Elavon system assigned transaction reference tag
-        data_tests:
-          - unique
+          Elavon system assigned transaction reference tag. May not be unique for deposit or billing transactions.
       - &settlement_method
         name: settlement_method
         description: |
