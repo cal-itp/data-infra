@@ -115,7 +115,7 @@ with DAG(
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
 
     dbt_manual_with_args = BashOperator(
-        task_id="dbt_manual_run",
+        task_id="dbt_manual_run_with_args",
         bash_command=(
             "dbt deps"
             " --project-dir /home/airflow/gcs/data/warehouse"
