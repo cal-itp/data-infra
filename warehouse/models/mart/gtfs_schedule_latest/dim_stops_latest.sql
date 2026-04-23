@@ -13,10 +13,8 @@ stg_state_geoportal__state_highway_network_stops AS (
 
 
 buffer_geometry_table AS (
-    -- merge overlapping SHN segment buffers into a single multipolygon so that
-    -- stops sitting in overlap zones (interchanges, concurrencies) match once
-    -- instead of fanning out per overlapping segment. 30.48 = 100ft.
-    SELECT ST_UNION_AGG(ST_BUFFER(wkt_coordinates, 30.48)) AS buffer_geometry
+    -- 30.48 = 100ft
+    SELECT ST_BUFFER(wkt_coordinates, 30.48) AS buffer_geometry
     FROM stg_state_geoportal__state_highway_network_stops
 ),
 
@@ -27,11 +25,18 @@ current_stops AS (
     FROM dim_stops_latest
 ),
 
+-- semi-join: each stop is returned at most once regardless of how many SHN
+-- buffers overlap it (interchanges, concurrencies). Replaces the prior
+-- cross-join + DISTINCT hotfix and avoids ST_UNION_AGG on every build.
 stops_on_shn AS (
     SELECT current_stops._gtfs_key
-    FROM buffer_geometry_table, current_stops
-    WHERE ST_DWITHIN(
-            buffer_geometry_table.buffer_geometry, current_stops.pt_geom, 0)
+    FROM current_stops
+    WHERE EXISTS (
+        SELECT 1
+        FROM buffer_geometry_table
+        WHERE ST_DWITHIN(
+                buffer_geometry_table.buffer_geometry, current_stops.pt_geom, 0)
+    )
 ),
 
 dim_stops_latest_with_shn_boolean AS (
