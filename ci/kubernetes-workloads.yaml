@@ -39,13 +39,6 @@ calitp:
       helm_chart: kubernetes/apps/charts/loki
       helm_values:
         - kubernetes/apps/values/loki-prod.yaml
-    - name: metabase
-      driver: helm
-      namespace: metabase
-      helm_name: metabase
-      helm_chart: kubernetes/apps/charts/metabase
-      helm_values:
-        - kubernetes/apps/values/metabase.yaml
     - name: postgresql-backup-grafana
       driver: helm
       namespace: monitoring-grafana
@@ -56,17 +49,6 @@ calitp:
       secrets:
         - monitoring-grafana_database-backup
         - monitoring-grafana_grafana-postgresql
-    - name: postgresql-backup-metabase
-      driver: helm
-      namespace: metabase
-      helm_name: postgresql-backup
-      helm_chart: kubernetes/apps/charts/postgresql-backup
-      helm_values:
-        - kubernetes/apps/values/postgresql-backup-metabase.yaml
-        - kubernetes/apps/values/postgresql-backup-metabase-prod.yaml
-      secrets:
-        - metabase_database-backup
-        - metabase_gcs-upload-svcacct
     - name: postgresql-backup-sentry
       driver: helm
       namespace: sentry
@@ -117,21 +99,3 @@ calitp:
       kustomize_dir: kubernetes/apps/overlays/gtfs-rt-archiver-v3-test
       secrets:
         - gtfs-rt-v3-test_gtfs-feed-secrets
-    - name: metabase-test
-      driver: helm
-      namespace: metabase-test
-      helm_name: metabase-test
-      helm_chart: kubernetes/apps/charts/metabase
-      helm_values:
-        - kubernetes/apps/values/metabase-test.yaml
-    - name: postgresql-backup-metabase-test
-      driver: helm
-      namespace: metabase-test
-      helm_name: postgresql-backup
-      helm_chart: kubernetes/apps/charts/postgresql-backup
-      helm_values:
-        - kubernetes/apps/values/postgresql-backup-metabase.yaml
-        - kubernetes/apps/values/postgresql-backup-metabase-test.yaml
-      secrets:
-        - metabase-test_database-backup
-        - metabase-test_gcs-upload-svcacct
