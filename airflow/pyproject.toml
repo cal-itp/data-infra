@@ -21,7 +21,7 @@ dependencies = [
     "pyairtable==2.2.1",
     "sentry-sdk>=2.44.0",
     "typer==0.4.1",
-    "urllib3>=2.0.0",
+    "urllib3<2.0.0",
 ]
 
 [dependency-groups]
