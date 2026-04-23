@@ -70,7 +70,8 @@ add_keys_drop_full_dupes AS (
         *,
         -- generate keys now that input columns have been trimmed & cast and files deduped
         {{ dbt_utils.generate_surrogate_key(['littlepay_export_ts', '_line_number', 'instance']) }} AS _key,
-        product_id AS _payments_key,
+        -- there isn't really a unique key in this file because it's a slowly changing dimension
+        {{ dbt_utils.generate_surrogate_key(['product_id', 'littlepay_export_ts']) }} AS _payments_key,
     FROM clean_columns
     {{ qualify_dedupe_full_duplicate_lp_rows() }}
 ),

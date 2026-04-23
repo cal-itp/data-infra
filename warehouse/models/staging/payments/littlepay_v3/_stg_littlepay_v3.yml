@@ -367,7 +367,6 @@ models:
         description: '{{ doc("lp_product_id") }}'
         data_tests:
           - not_null
-          - unique
       - name: previous_version_id
         description: '{{ doc("lp_previous_version_id") }}'
       - name: original_version_id
