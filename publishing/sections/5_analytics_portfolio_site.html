@@ -470,18 +470,11 @@
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#file-setup">File Setup</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#readme-md">README.md</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#readme">README</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#yml">YML</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-and-deploying-your-report">Building and Deploying your Report</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-your-report">Build your Report</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deploy-your-report">Deploy your Report</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#other-specifications">Other Specifications</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-to-the-makefile">Adding to the Makefile</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#redeploying-portfolio-refresh-index-page">Redeploying Portfolio/ Refresh Index Page</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-and-deploying-your-report">Building and Deploying your Report</a></li>
 </ul>
             </nav>
         </div>
@@ -498,30 +491,17 @@
 <p>Now that your notebook(s) are portfolio-ready, it’s time to publish your work to the portfolio!</p>
 <section id="file-setup">
 <h2>File Setup<a class="headerlink" href="#file-setup" title="Link to this heading">#</a></h2>
-<p>In order to publish to <a class="reference external" href="http://analysis.dds.dot.ca.gov">analysis.dds.dot.ca.gov</a>, you need to create two different files.</p>
-<ul class="simple">
-<li><p>A <a class="reference external" href="http://README.md">README.md</a>.</p></li>
-<li><p>A YML.</p></li>
-</ul>
-<section id="readme-md">
-<h3><a class="reference external" href="http://README.md">README.md</a><a class="headerlink" href="#readme-md" title="Link to this heading">#</a></h3>
+<p>In order to publish to <a class="reference external" href="http://analysis.dds.dot.ca.gov">analysis.dds.dot.ca.gov</a>, you need to create two different files:</p>
+<section id="readme">
+<h3>README<a class="headerlink" href="#readme" title="Link to this heading">#</a></h3>
 <p>Create a <code class="docutils literal notranslate"><span class="pre">README.md</span></code> file in the repo where your work lies. This also forms the landing page of your website.</p>
-<ul class="simple">
-<li><p>Your file should <b>always</b> be titled as <code class="docutils literal notranslate"><span class="pre">README.md</span></code>. No other variants such as <code class="docutils literal notranslate"><span class="pre">README_gtfs.md</span></code> or <code class="docutils literal notranslate"><span class="pre">read</span> <span class="pre">me.md</span></code> or <code class="docutils literal notranslate"> <span class="pre">README.md</span></code> are allowed. The portfolio can only take a <code class="docutils literal notranslate"><span class="pre">README.md</span></code> when generating the landing page of your website.</p></li>
-<li><p>The <code class="docutils literal notranslate"><span class="pre">README.md</span></code> is the first thing the audience will see when they visit your website. Therefore, this page should contain content such as the goal of your work, the methodology you used, relevant links, and more. <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/portfolio/template_README.md">Here</a> is a template for you to populate.</p></li>
-<li><p>If you do accidentally create a <code class="docutils literal notranslate"><span class="pre">README.md</span></code> file with extra strings, you can fix this by taking the following steps:</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rm</span> <span class="pre">portfolio/my_analysis/README_accidentally_named_something_else.md</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">portfolio/my_analysis/_build/html/README_accidentally_named_something.html</span></code>. We use <code class="docutils literal notranslate"><span class="pre">rm</span></code> because _build/html folder is not checked into GitHub</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">portfolio/portfolio.py</span> <span class="pre">build</span> <span class="pre">my_report</span> <span class="pre">--no-execute-papermill</span> <span class="pre">--deploy</span></code> to rerun the portfolio to incorporate only the new changes to your <code class="docutils literal notranslate"><span class="pre">README.md</span></code> if the other pages are correct.</p></li>
-</ul>
-</li>
-<li><p>Need a node graph to illustrate where your data comes from and how it’s processed? Try mermaid (<a class="reference external" href="https://mermaid.js.org/intro/">documentation here</a>). See published <a class="reference external" href="https://gtfs-digest--cal-itp-data-analyses.netlify.app/readme">GTFS Digest</a> for a current example.</p></li>
-</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">README.md</span></code> is the first thing the audience will see when they visit your website. Therefore, this page should contain content such as the goal of your work, the methodology you used, relevant links, and more. <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/portfolio/template_README.md">Here</a> is a template for you to populate.</p>
+<p>Need a node graph to illustrate where your data comes from and how it’s processed? Try mermaid (<a class="reference external" href="https://mermaid.js.org/intro/">documentation here</a>).</p>
+<p>See <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/gtfs_digest/mermaid.md">GTFS Digest</a> for a current example.</p>
 </section>
 <section id="yml">
 <h3>YML<a class="headerlink" href="#yml" title="Link to this heading">#</a></h3>
-<p>Each <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file creates a new site on the Portfolio’s Index Page, so every project needs its own file. DLA Grant Analysis, SB125 Route Illustrations, and Active Transportation Program all have their own <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file.</p>
+<p>Each <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file creates a new site on the Portfolio’s Index Page, so every project needs its own file.</p>
 <p>All the <code class="docutils literal notranslate"><span class="pre">.yml</span></code> files live here at <a class="reference external" href="https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites">data-analyses/portfolio/sites</a>. Navigate to this folder to create the .yml file.</p>
 <p>Here’s how to create a <code class="docutils literal notranslate"><span class="pre">yml</span></code> file:</p>
 <ul>
@@ -529,74 +509,60 @@
 <li><p>Name your <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file. For now we will use <code class="docutils literal notranslate"><span class="pre">my_report.yml</span></code> as an example.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">.yml</span></code> file should contain the title, directory, <a class="reference external" href="http://README.md">README.md</a> path and notebook path.</p></li>
 <li><p>The structure of your <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file depends on the type of your analysis:</p>
+<p>You can automate making a <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file using a script, <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/gtfs_digest/deploy_portfolio_yaml.py">example here</a>.</p>
 <ul>
 <li><p>If you have one parameterized notebook with <strong>one parameter</strong>:</p>
-<ul class="simple">
-<li><p>Example: <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/dla.yml">dla.yml</a></p></li>
-</ul>
+<p>Example: <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/_param_analyses_test.yml">_param_analyses_test.yml</a></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">title</span><span class="p">:</span> <span class="n">My</span> <span class="n">Analyses</span>
 <span class="n">directory</span><span class="p">:</span> <span class="o">./</span><span class="n">my</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span>
 <span class="n">readme</span><span class="p">:</span> <span class="o">./</span><span class="n">my</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span><span class="n">README</span><span class="o">.</span><span class="n">md</span>
 <span class="n">notebook</span><span class="p">:</span> <span class="o">./</span><span class="n">my</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span><span class="n">my</span><span class="o">-</span><span class="n">notebook</span><span class="o">.</span><span class="n">ipynb</span>
 <span class="n">parts</span><span class="p">:</span>
-   <span class="o">-</span> <span class="n">caption</span><span class="p">:</span> <span class="n">Introduction</span>
-   <span class="o">-</span> <span class="n">chapters</span><span class="p">:</span>
-     <span class="o">-</span> <span class="n">params</span><span class="p">:</span>
-          <span class="n">district_parameter</span><span class="p">:</span> <span class="mi">1</span>
-          <span class="n">district_title</span><span class="p">:</span> <span class="n">District</span> <span class="mi">1</span>
-     <span class="o">-</span> <span class="n">params</span><span class="p">:</span>
-          <span class="n">district_parameter</span><span class="p">:</span> <span class="mi">2</span>
-          <span class="n">district_title</span><span class="p">:</span> <span class="n">District</span> <span class="mi">2</span>
-    <span class="ow">and</span> <span class="n">so</span> <span class="n">on</span><span class="o">...</span>
+  <span class="o">-</span> <span class="n">chapters</span><span class="p">:</span>
     <span class="o">-</span> <span class="n">params</span><span class="p">:</span>
-          <span class="n">district_parameter</span><span class="p">:</span> <span class="mi">12</span>
-          <span class="n">district_title</span><span class="p">:</span> <span class="n">District</span> <span class="mi">12</span>
+        <span class="n">district_parameter</span><span class="p">:</span> <span class="mi">1</span>
+     <span class="o">-</span> <span class="n">params</span><span class="p">:</span>
+        <span class="n">district_parameter</span><span class="p">:</span> <span class="mi">2</span>
+<span class="ow">and</span> <span class="n">so</span> <span class="n">on</span><span class="o">...</span>
+     <span class="o">-</span> <span class="n">params</span><span class="p">:</span>
+        <span class="n">district_parameter</span><span class="p">:</span> <span class="mi">12</span>
 </pre></div>
 </div>
 </li>
-<li><p>If you have a parameterized notebook with <strong>multiple parameters</strong>:</p>
-<ul class="simple">
-<li><p>Example: <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/rt.yml">rt.yml</a>. You can also automate making a <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file using a script, <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/gtfs_digest/deploy_portfolio_yaml.py">example here</a>.</p></li>
-</ul>
+<li><p>If you have one parameterized notebook with <strong>one parameter</strong> and <strong>grouped chapters</strong>:</p>
+<p>Examples: <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/_group_and_params_analyses_test.yml">_group_and_params_analyses_test.yml</a></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">title</span><span class="p">:</span> <span class="n">My</span> <span class="n">Analyses</span>
 <span class="n">directory</span><span class="p">:</span> <span class="o">./</span><span class="n">my</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span>
 <span class="n">readme</span><span class="p">:</span> <span class="o">./</span><span class="n">my</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span><span class="n">README</span><span class="o">.</span><span class="n">md</span>
 <span class="n">notebook</span><span class="p">:</span> <span class="o">./</span><span class="n">my</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span><span class="n">my</span><span class="o">-</span><span class="n">notebook</span><span class="o">.</span><span class="n">ipynb</span>
 <span class="n">parts</span><span class="p">:</span>
-<span class="o">-</span> <span class="n">chapters</span><span class="p">:</span>
   <span class="o">-</span> <span class="n">caption</span><span class="p">:</span> <span class="n">County</span> <span class="n">Name</span>
-    <span class="n">params</span><span class="p">:</span>
-      <span class="n">parameter1_county_name</span>
-    <span class="n">sections</span><span class="p">:</span>
-    <span class="o">-</span> <span class="n">city</span><span class="p">:</span> <span class="n">parameter2_city_name</span>
-    <span class="o">-</span> <span class="n">city</span><span class="p">:</span> <span class="n">parameter2_city_name</span>
+    <span class="n">chapters</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">params</span><span class="p">:</span>
+        <span class="n">city</span><span class="p">:</span> <span class="n">parameter2_city_name</span>
+    <span class="o">-</span> <span class="n">params</span><span class="p">:</span>
+        <span class="n">city</span><span class="p">:</span> <span class="n">parameter2_city_name</span>
 </pre></div>
 </div>
 </li>
-<li><p>If you have an individual notebook with <strong>no parameters</strong>:</p>
-<ul class="simple">
-<li><p>Example: <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/quarterly_performance_metrics.yml">quarterly_performance_metrics.yml</a>.</p></li>
-</ul>
+<li><p>If you have notebooks with <strong>no parameters</strong>:</p>
+<p>Examples: <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/_basic_analyses_test.yml">_basic_analyses_test.yml</a></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">title</span><span class="p">:</span> <span class="n">My</span> <span class="n">Analyses</span>
 <span class="n">directory</span><span class="p">:</span> <span class="o">./</span><span class="n">my</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span>
 <span class="n">readme</span><span class="p">:</span> <span class="o">./</span><span class="n">my</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span><span class="n">README</span><span class="o">.</span><span class="n">md</span>
 <span class="n">parts</span><span class="p">:</span>
-<span class="o">-</span> <span class="n">caption</span><span class="p">:</span> <span class="n">Introduction</span>
-<span class="o">-</span> <span class="n">chapters</span><span class="p">:</span>
-  <span class="o">-</span> <span class="n">notebook</span><span class="p">:</span> <span class="o">./</span><span class="n">my</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span><span class="n">notebook_1</span><span class="o">.</span><span class="n">ipynb</span>
-  <span class="o">-</span> <span class="n">notebook</span><span class="p">:</span> <span class="o">./</span><span class="n">my</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span><span class="n">notebook_2</span><span class="o">.</span><span class="n">ipynb</span>
+  <span class="o">-</span> <span class="n">chapters</span><span class="p">:</span>
+    <span class="o">-</span> <span class="n">notebook</span><span class="p">:</span> <span class="o">./</span><span class="n">my</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span><span class="n">notebook_1</span><span class="o">.</span><span class="n">ipynb</span>
+    <span class="o">-</span> <span class="n">notebook</span><span class="p">:</span> <span class="o">./</span><span class="n">my</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span><span class="n">notebook_2</span><span class="o">.</span><span class="n">ipynb</span>
 </pre></div>
 </div>
 </li>
 <li><p>If you have multiple parameterized notebooks with <strong>the same parameters</strong>:</p>
-<ul class="simple">
-<li><p>Example: <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/portfolio/rt_parallel.yml">rt_parallel.yml</a></p></li>
-</ul>
+<p>Example: <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/portfolio/sites/_section_analyses_test.yml">_section_analyses_test.yml</a></p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">title</span><span class="p">:</span> <span class="n">My</span> <span class="n">Analyses</span>
 <span class="n">directory</span><span class="p">:</span> <span class="o">./</span><span class="n">my</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span>
 <span class="n">readme</span><span class="p">:</span> <span class="o">./</span><span class="n">my</span><span class="o">-</span><span class="n">analyses</span><span class="o">/</span><span class="n">README</span><span class="o">.</span><span class="n">md</span>
 <span class="n">parts</span><span class="p">:</span>
-<span class="o">-</span> <span class="n">caption</span><span class="p">:</span> <span class="n">District</span> <span class="n">Name</span>
 <span class="o">-</span> <span class="n">chapters</span><span class="p">:</span>
   <span class="o">-</span> <span class="n">caption</span><span class="p">:</span> <span class="n">Parameter</span> <span class="mi">1</span>
     <span class="n">params</span><span class="p">:</span>
@@ -619,107 +585,7 @@
 <section id="building-and-deploying-your-report">
 <h2>Building and Deploying your Report<a class="headerlink" href="#building-and-deploying-your-report" title="Link to this heading">#</a></h2>
 <p>After your Jupyter Notebook (refer to the previous section), <code class="docutils literal notranslate"><span class="pre">README.md</span></code>, and <code class="docutils literal notranslate"><span class="pre">.yml</span></code> files are setup properly, it’s time to deploy your work to the Portfolio!</p>
-<section id="build-your-report">
-<h3>Build your Report<a class="headerlink" href="#build-your-report" title="Link to this heading">#</a></h3>
-<p><strong>Note:</strong> The build command must be run from the root of the repo at <code class="docutils literal notranslate"><span class="pre">~/data-analyses</span></code>!</p>
-<ol class="arabic simple">
-<li><p>Navigate back to the <code class="docutils literal notranslate"><span class="pre">~/data-analyses</span></code> and install the portfolio requirements with
-<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-r</span> <span class="pre">portfolio/requirements.txt</span></code></p></li>
-<li><p>Run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">portfolio/portfolio.py</span> <span class="pre">build</span> <span class="pre">my_report</span></code> to build your report</p>
-<ul class="simple">
-<li><p><strong>Note:</strong> <code class="docutils literal notranslate"><span class="pre">my_report.yml</span></code> will be replaced by the name of your <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file in <a class="reference external" href="https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites">data-analyses/portfolio/sites</a>.</p></li>
-<li><p>Your build will be located in: <code class="docutils literal notranslate"><span class="pre">data-analyses/portfolio/my_report/_build/html/index.html</span></code></p></li>
-</ul>
-</li>
-<li><p>Add the files using <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code> and commit your progress!</p></li>
-</ol>
-</section>
-<section id="deploy-your-report">
-<h3>Deploy your Report<a class="headerlink" href="#deploy-your-report" title="Link to this heading">#</a></h3>
-<ol class="arabic simple">
-<li><p>Make sure you are in the root of the data-analyses repo: <code class="docutils literal notranslate"><span class="pre">~/data-analyses</span></code>.</p></li>
-<li><p>Run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">portfolio/portfolio.py</span> <span class="pre">build</span> <span class="pre">my_report</span> <span class="pre">--deploy</span></code>.</p>
-<ul class="simple">
-<li><p>By running <code class="docutils literal notranslate"><span class="pre">--deploy</span></code>, you are deploying the changes to display in the Analytics Portfolio.</p></li>
-<li><p><strong>Note:</strong> The <code class="docutils literal notranslate"><span class="pre">my_report</span></code> will be replaced by the name of your <code class="docutils literal notranslate"><span class="pre">.yml</span></code> file in <a class="reference external" href="https://github.com/cal-itp/data-analyses/tree/main/portfolio/sites">data-analyses/portfolio/sites</a>.</p></li>
-<li><p>If you have already deployed but want to make changes to the README, run: <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">portfolio/portfolio.py</span> <span class="pre">build</span> <span class="pre">my_report</span> <span class="pre">--no-execute-papermill</span> <span class="pre">--deploy</span></code></p>
-<ul>
-<li><p>Running this is helpful for larger outputs or if you are updating the README.</p></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>Once this runs, you can check the preview link at the bottom of the output. It should look something like:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">–no-deploy</span></code>: <code class="docutils literal notranslate"><span class="pre">file:///home/jovyan/data-analyses/portfolio/my_report/_build/html/index.html</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">–deploy</span></code>: <code class="docutils literal notranslate"><span class="pre">Website</span> <span class="pre">Draft</span> <span class="pre">URL:</span> <span class="pre">https://my-report--cal-itp-data-analyses.netlify.app</span></code></p></li>
-</ul>
-</li>
-<li><p>Add the files using <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code> and commit!</p></li>
-<li><p>Your notebook should now be displayed in the <a class="reference external" href="https://analysis.dds.dot.ca.gov/">Data and Digital Services Portfolio</a></p>
-<ul class="simple">
-<li><p>If your work isn’t showing up on the Index page above, run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">portfolio/portfolio.py</span> <span class="pre">index</span> <span class="pre">--deploy</span> <span class="pre">--prod</span></code> to add it.</p></li>
-</ul>
-</li>
-</ol>
-<p>Note: A new GitHub Action now automatically updates the index whenever a PR modifying the <code class="docutils literal notranslate"><span class="pre">portfolio</span> <span class="pre">folder</span></code> is merged.</p>
-</section>
-<section id="other-specifications">
-<h3>Other Specifications<a class="headerlink" href="#other-specifications" title="Link to this heading">#</a></h3>
-<ul class="simple">
-<li><p>You also have the option to specify after the initial <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">portfolio/portfolio.py</span> <span class="pre">build</span> <span class="pre">my_report</span> <span class="pre">[specification</span> <span class="pre">goes</span> <span class="pre">here]</span></code> command: run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">portfolio/portfolio.py</span> <span class="pre">build</span> <span class="pre">--help</span></code> to see the following options:</p>
-<ul>
-<li><p><code class="docutils literal notranslate"><span class="pre">--deploy</span> <span class="pre">/</span> <span class="pre">--no-deploy</span></code></p>
-<ul>
-<li><p>deploy this component to netlify.</p></li>
-</ul>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--prepare-only</span> <span class="pre">/</span> <span class="pre">--no-prepare-only</span></code></p>
-<ul>
-<li><p>Pass-through flag to papermill; if true, papermill will not actually execute cells.</p></li>
-</ul>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--execute-papermill</span> <span class="pre">/</span> <span class="pre">--no-execute-papermill</span></code></p>
-<ul>
-<li><p>If false, will skip calls to papermill</p></li>
-<li><p>For example, if only the <code class="docutils literal notranslate"><span class="pre">README.md</span></code> is updated but the notebooks have remained the same, you would run
-<code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">portfolio/portfolio.py</span> <span class="pre">build</span> <span class="pre">my_report</span> <span class="pre">--no-execute-papermill</span> <span class="pre">--deploy</span></code>.</p></li>
-</ul>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--no-stderr</span> <span class="pre">/</span> <span class="pre">--no-no-stderr</span></code></p>
-<ul>
-<li><p>If true, will clear stderr stream for cell outputs</p></li>
-</ul>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--continue-on-error</span> <span class="pre">/</span> <span class="pre">--no-continue-on-error</span></code></p>
-<ul>
-<li><p>Default: no-continue-on-error</p></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</section>
-<section id="adding-to-the-makefile">
-<h3>Adding to the Makefile<a class="headerlink" href="#adding-to-the-makefile" title="Link to this heading">#</a></h3>
-<p>Another and more efficient way to write to the Analytics Portfolio is to use the Makefile and run
-<code class="docutils literal notranslate"><span class="pre">make</span> <span class="pre">build_my_report</span> <span class="pre">-f</span> <span class="pre">Makefile</span></code> in the <code class="docutils literal notranslate"><span class="pre">data-analyses</span></code> repo.</p>
-<p>Here’s an example makefile in <a class="reference external" href="https://github.com/cal-itp/data-analyses/blob/main/Makefile"><code class="docutils literal notranslate"><span class="pre">cal-itp/data-analyses</span></code></a>:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">build_my_reports</span><span class="p">:</span>
-    <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">r</span> <span class="n">portfolio</span><span class="o">/</span><span class="n">requirements</span><span class="o">.</span><span class="n">txt</span>
-    <span class="n">git</span> <span class="n">rm</span> <span class="n">portfolio</span><span class="o">/</span><span class="n">my_report</span><span class="o">/</span> <span class="o">-</span><span class="n">rf</span>
-    <span class="n">python</span> <span class="n">portfolio</span><span class="o">/</span><span class="n">portfolio</span><span class="o">.</span><span class="n">py</span> <span class="n">build</span> <span class="n">my_report</span> <span class="o">--</span><span class="n">deploy</span>
-    <span class="n">git</span> <span class="n">add</span> <span class="n">portfolio</span><span class="o">/</span><span class="n">my_report</span><span class="o">/</span><span class="n">district_</span><span class="o">*/</span> <span class="n">portfolio</span><span class="o">/</span><span class="n">my_report</span><span class="o">/*.</span><span class="n">yml</span> <span class="n">portfolio</span><span class="o">/</span><span class="n">my_report</span><span class="o">/*.</span><span class="n">md</span>
-    <span class="n">git</span> <span class="n">add</span> <span class="n">portfolio</span><span class="o">/</span><span class="n">sites</span><span class="o">/</span><span class="n">my_report</span><span class="o">.</span><span class="n">yml</span>
-</pre></div>
-</div>
-</section>
-<section id="redeploying-portfolio-refresh-index-page">
-<h3>Redeploying Portfolio/ Refresh Index Page<a class="headerlink" href="#redeploying-portfolio-refresh-index-page" title="Link to this heading">#</a></h3>
-<p>When redeploying your portfolio with new content and there’s an old version with existing files or content on your portfolio site or in your local environment, it’s important to clean up the old files before adding new content.</p>
-<p>Use python <code class="docutils literal notranslate"><span class="pre">portfolio/portfolio.py</span> <span class="pre">clean</span> <span class="pre">my_report</span></code> before deploying your report to remove the local folders that are not checked in.
-Swap out the <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">add</span></code> and <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">rm</span></code> steps. If using <code class="docutils literal notranslate"><span class="pre">gcsfs</span></code>, we can use the <code class="docutils literal notranslate"><span class="pre">fs.put</span></code> and <code class="docutils literal notranslate"><span class="pre">fs.rm</span></code> to cache the parameterized notebooks and built HTML files for JupyterBook.</p>
-</section>
+<p>Follow the instructions on <a class="reference external" href="https://github.com/cal-itp/data-analyses/tree/main/portfolio">data-analyses repo</a>.</p>
 </section>
 </section>
 
@@ -790,18 +656,11 @@ Swap out the <code class="docutils literal notranslate"><span class="pre">git</s
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#file-setup">File Setup</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#readme-md">README.md</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#readme">README</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#yml">YML</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-and-deploying-your-report">Building and Deploying your Report</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#build-your-report">Build your Report</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deploy-your-report">Deploy your Report</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#other-specifications">Other Specifications</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#adding-to-the-makefile">Adding to the Makefile</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#redeploying-portfolio-refresh-index-page">Redeploying Portfolio/ Refresh Index Page</a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#building-and-deploying-your-report">Building and Deploying your Report</a></li>
 </ul>
   </nav></div>
 
