@@ -25,9 +25,8 @@ current_stops AS (
     FROM dim_stops_latest
 ),
 
--- semi-join: each stop is returned at most once regardless of how many SHN
--- buffers overlap it (interchanges, concurrencies). Replaces the prior
--- cross-join + DISTINCT hotfix and avoids ST_UNION_AGG on every build.
+-- EXISTS yields each stop at most once even when overlapping SHN buffers match
+-- it multiple times (one stop can be in multiple buffers if line segments are small)
 stops_on_shn AS (
     SELECT current_stops._gtfs_key
     FROM current_stops
@@ -35,21 +34,18 @@ stops_on_shn AS (
         SELECT 1
         FROM buffer_geometry_table
         WHERE ST_DWITHIN(
-                buffer_geometry_table.buffer_geometry, current_stops.pt_geom, 0)
+            buffer_geometry_table.buffer_geometry, current_stops.pt_geom, 0
+        )
     )
 ),
 
 dim_stops_latest_with_shn_boolean AS (
-
-SELECT
-    dim_stops_latest.*,
-    IF(stops_on_shn._gtfs_key IS NOT NULL, TRUE, FALSE) AS on_state_highway_network
-FROM
-    dim_stops_latest
-LEFT JOIN
-    stops_on_shn
-ON
-    dim_stops_latest._gtfs_key = stops_on_shn._gtfs_key
+    SELECT
+        dim_stops_latest.*,
+        IF(stops_on_shn._gtfs_key IS NOT NULL, TRUE, FALSE) AS on_state_highway_network
+    FROM dim_stops_latest
+    LEFT JOIN stops_on_shn
+        ON dim_stops_latest._gtfs_key = stops_on_shn._gtfs_key
 )
 
 SELECT * FROM dim_stops_latest_with_shn_boolean
