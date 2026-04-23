@@ -95,7 +95,7 @@ class GTFSCSVConverter:
     def __init__(
         self,
         filename: str,
-        data: bytes,
+        data: str,
         extracted_file: dict,
         extract_config: dict,
     ) -> None:
@@ -207,7 +207,7 @@ class GTFSCSVToJSONLOperator(BaseOperator):
             output.append(
                 GTFSCSVConverter(
                     filename=extracted_filename,
-                    data=source.decode(),
+                    data=source.decode("utf-8-sig"),
                     extracted_file=extracted_file,
                     extract_config=extract_config,
                 )
