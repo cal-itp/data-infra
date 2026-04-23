@@ -22,10 +22,18 @@ This workflow builds a visual comment about model changes and uploads latest dbt
 
 ## composer-plan-files.yml
 
+> [!NOTE]
+> This workflow creates plans to show DAG changes.
+> If there are also changes to `iac/.../airflow/` or `iac/.../composer/` files, only the [terraform-plan.yml](#terraform-plan.yml) workflow will create the plan.
+
 When creating a PR that changes any file in the `airflow` directory, this workflow runs `Terraform plan` to create a comment with an execution plan to preview the changes that will be made to Production and Staging Airflow DAGs.
 
 
 ## composer-apply-files.yml
+
+> [!NOTE]
+> This workflow applies DAG changes.
+> If there are also changes to `iac/.../airflow/` or `iac/.../composer/` files, only the [terraform-apply.yml](#terraform-apply.yml) workflow will execute the plan.
 
 When merging a PR into the `main` branch with changes to any file in the `airflow` directory, this workflow runs `Terraform apply` to execute the actions proposed in the `Terraform plan` to Production and Staging Airflow DAGs.
 
@@ -51,7 +59,15 @@ This workflow builds a static website from the Svelte app and deploys it to Netl
 
 ## deploy-dbt.yml
 
-This workflow compiles dbt models and docs, syncs Metabase, and uploads dbt artifacts.
+> [!NOTE]
+> This workflow applies Warehouse (dbt models and dbt artifacts) changes.
+> If there are also changes to `iac/.../airflow/` files, only the [terraform-apply.yml](#terraform-apply.yml) workflow will execute the plan.
+
+This workflow compiles dbt models and docs, syncs Metabase, and uploads dbt artifacts to update [dbt docs site](https://dbt-docs.dds.dot.ca.gov) and Airflow.
+
+When merging a PR into the `main` branch with changes to dbt models, this workflow will update warehouse and dbt artifact files using `Terraform Apply`.
+
+For more details, check [iac/cal-itp-data-infra/airflow/us/variables.tf](https://github.com/cal-itp/data-infra/blob/main/iac/cal-itp-data-infra/airflow/us/variables.tf).
 
 
 ## deploy-kubernetes.yml

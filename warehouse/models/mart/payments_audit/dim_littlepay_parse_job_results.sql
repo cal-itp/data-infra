@@ -2,7 +2,7 @@
 
 # For data security, do not show the bucket name or file path.
 
-WITH dim_littlepay_sync_job_results AS (
+WITH dim_littlepay_parse_job_results AS (
     SELECT
         {{ trim_make_empty_string_null('instance') }} AS instance,
         {{ trim_make_empty_string_null('filename') }} AS filename,
@@ -17,4 +17,4 @@ WITH dim_littlepay_sync_job_results AS (
     FROM {{ source('external_littlepay_v3', 'littlepay_parse_job_results') }}
 )
 
-SELECT * FROM dim_littlepay_sync_job_results
+SELECT * FROM dim_littlepay_parse_job_results
