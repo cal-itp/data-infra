@@ -30,6 +30,54 @@ env:
   DBT_DOCS_URL: ${{ github.ref == 'refs/heads/main' && 'https://dbt-docs.dds.dot.ca.gov' || 'https://dbt-docs-staging.dds.dot.ca.gov' }}
 
 jobs:
+  dbt-changed:
+    name: Detect dbt model and seed changes
+    runs-on: ubuntu-latest
+
+    outputs:
+      has-changed: ${{ steps.changed-downstream.outputs.any_changed }}
+      has-changed-seeds: ${{ steps.changed-seeds.outputs.any_changed }}
+      changed-models: ${{ steps.changed-models.outputs.all_changed_files }}
+      changed-seeds: ${{ steps.changed-seeds.outputs.all_changed_files }}
+      changed-downstream: "${{ steps.changed-downstream.outputs.all_changed_files }}+"
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: List changed models
+        uses: tj-actions/changed-files@v46
+        id: changed-models
+        with:
+          path: warehouse
+          files: models/**/*.sql
+
+      - name: List changed seeds
+        uses: tj-actions/changed-files@v46
+        id: changed-seeds
+        with:
+          path: warehouse
+          files: seeds/*.csv
+
+      - name: List changed models and seeds with plus sign
+        uses: tj-actions/changed-files@v46
+        id: changed-downstream
+        with:
+          path: warehouse
+          separator: "+ "
+          files: |
+            models/**/*.sql
+            seeds/*.csv
+
+      - name: Print changed files
+        if: ${{ steps.changed-downstream.outputs.any_changed == 'true' }}
+        env:
+          CHANGED_FILES: "${{ steps.changed-downstream.outputs.all_changed_files }}+"
+        run: |
+          echo "List changed files: $CHANGED_FILES"
+
   compile:
     name: Compile dbt
     runs-on: ubuntu-latest
@@ -113,54 +161,6 @@ jobs:
             warehouse/target/*.html
             warehouse/target/*.json
             warehouse/target/*.msgpack
-
-  dbt-changed:
-    name: Detect dbt model and seed changes
-    runs-on: ubuntu-latest
-
-    outputs:
-      has-changed: ${{ steps.changed-downstream.outputs.any_changed }}
-      has-changed-seeds: ${{ steps.changed-seeds.outputs.any_changed }}
-      changed-models: ${{ steps.changed-models.outputs.all_changed_files }}
-      changed-seeds: ${{ steps.changed-seeds.outputs.all_changed_files }}
-      changed-downstream: "${{ steps.changed-downstream.outputs.all_changed_files }}+"
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: List changed models
-        uses: tj-actions/changed-files@v46
-        id: changed-models
-        with:
-          path: warehouse
-          files: models/**/*.sql
-
-      - name: List changed seeds
-        uses: tj-actions/changed-files@v46
-        id: changed-seeds
-        with:
-          path: warehouse
-          files: seeds/*.csv
-
-      - name: List changed models and seeds with plus sign
-        uses: tj-actions/changed-files@v46
-        id: changed-downstream
-        with:
-          path: warehouse
-          separator: "+ "
-          files: |
-            models/**/*.sql
-            seeds/*.csv
-
-      - name: Print changed files
-        if: ${{ steps.changed-downstream.outputs.any_changed == 'true' }}
-        env:
-          CHANGED_FILES: "${{ steps.changed-downstream.outputs.all_changed_files }}+"
-        run: |
-          echo "List changed files: $CHANGED_FILES"
 
   metabase:
     name: Sync Metabase
