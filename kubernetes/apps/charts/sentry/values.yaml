@@ -122,6 +122,17 @@ sentry:
       repository: bitnamilegacy/kafka
     logRetentionHours: 72 # 3 days, the default is 7
     numPartitions: 12
+    # Tolerate long log recovery after unclean shutdowns. Without this,
+    # the liveness probe (~40s budget) kills kafka mid-recovery, producing
+    # more unflushed segments and a death spiral. The startupProbe runs
+    # only during startup; once it succeeds, liveness takes over with
+    # normal timing. Gives ~20min startup window before liveness kicks in.
+    startupProbe:
+      enabled: true
+      initialDelaySeconds: 30
+      periodSeconds: 10
+      timeoutSeconds: 5
+      failureThreshold: 120
     kraft:
       enabled: false
     zookeeper:
