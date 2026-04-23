@@ -55,3 +55,35 @@ macros:
           The maximum number of days of history that will ever be read in in a non-prod
           environment.
           Default value is 7 (days).
+
+  - name: ranged_incremental_min_date
+    description: >
+      Returns a minimum (earliest) date to use when constructing where clauses on upstream parents of incremental models.
+      Logic is:
+        * If incremental:
+            * If DBT_INCREMENTAL_START_DATE dbt variable is set, return the greater (later, more recent date) between `data_earliest_start` and the variable value. The variable should take the form of a date like 'YYYY-MM-DD'.
+            * If variable is not set, return SQL defining the greater (later, more recent date) between `data_earliest_start` and a lookback interval configured by the `default_lookback` and `lookback_unit` parameters.
+        * If not incremental (full-refresh): Return `data_earliest_start` parameter value.
+      This will never return a value earlier than `data_earliest_start`.
+    arguments:
+      - name: default_lookback
+        type: integer
+        description: >
+          Number of `lookback_unit` time intervals to look back for a standard incremental run.
+          For example, if this is set to 5 and `lookback_unit = day`, on 2026-04-17, this would return 2026-04-12.
+      - name: data_earliest_start
+        type: date
+        description: >
+          Earliest date for which data should be pulled (universal start date for the data.)
+          Can reference a dbt variable like `var("GTFS_SCHEDULE_START")` or `var("GTFS_RT_START")`.
+      - name: lookback_unit
+        type: int
+        description: >
+          The time interval unit for `default_lookback`. Defaults to `day`.
+          Must be a date part supported by BigQuery `date_sub` function ([see docs](https://docs.cloud.google.com/bigquery/docs/reference/standard-sql/date_functions#date_sub).)
+  - name: ranged_incremental_max_date
+    description: >
+      Returns a maximum (latest) date to use when constructing ranged date filter where clauses on upstream parents of incremental models.
+      Logic is:
+        * If incremental and DBT_INCREMENTAL_END_DATE dbt variable is set, return that value. Variable should take the form of a date like 'YYYY-MM-DD'.
+        * Else, return SQL for current date, which will return the UTC date at time of execution.

@@ -6,14 +6,18 @@
             'field': 'service_date',
             'data_type': 'date',
             'granularity': 'day'
-        }, cluster_by=['service_date', 'base64_url']
+        },
+        cluster_by=['service_date', 'base64_url'],
+        full_refresh=false
     )
 }}
 
 WITH fct_stop_time_metrics AS (
     SELECT *
     FROM {{ ref('fct_stop_time_metrics') }}
-    WHERE service_date >= "2025-12-01"
+    WHERE service_date
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_MICROBATCH_LOOKBACK_DAYS"), data_earliest_start="2025-12-01") }}
+            AND {{ ranged_incremental_max_date() }}
 ),
 
 trip_metrics AS (

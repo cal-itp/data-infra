@@ -15,8 +15,9 @@
 WITH trip_updates AS( --noqa: ST03
     SELECT *
     FROM {{ ref('int_gtfs_rt__trip_updates_trip_day_map_grouping') }}
-    WHERE service_date >= DATE_SUB("{{ incremental_max_date(default_start_var='PROD_GTFS_RT_START',
-                this_dt_column='service_date', filter_dt_column='service_date') | trim }}", INTERVAL 2 DAY)
+    WHERE service_date
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_MICROBATCH_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_START")) }}
+            AND {{ ranged_incremental_max_date() }}
  ),
 
  base_fct AS (

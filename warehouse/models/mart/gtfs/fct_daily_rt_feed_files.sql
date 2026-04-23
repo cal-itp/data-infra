@@ -3,7 +3,7 @@
     incremental_strategy='microbatch',
     event_time = 'date',
     batch_size = 'day',
-    begin=var('PROD_GTFS_RT_START'),
+    begin=var('GTFS_RT_START'),
     lookback=var('DBT_ALL_MICROBATCH_LOOKBACK_DAYS'),
     partition_by = {
         'field': 'date',
@@ -36,7 +36,6 @@ validation_map AS (
 parse_outcomes AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__unioned_parse_outcomes') }}
-    WHERE {{ incremental_where(default_start_var='PROD_GTFS_RT_START', this_dt_column = 'date') }}
 ),
 
 grouped_parse_outcomes AS (

@@ -40,20 +40,20 @@ stops AS (
         pt_geom,
 
     FROM {{ ref('fct_daily_scheduled_stops') }}
-    WHERE {{ incremental_where(
-        default_start_var='GTFS_SCHEDULE_START',
-        this_dt_column='service_date',
-        filter_dt_column='service_date')
-    }}
+    WHERE service_date
+        -- do microbatch lookback + 1 to account for 1-day offset between UTC and Pacific dates
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_MICROBATCH_LOOKBACK_DAYS")+1, data_earliest_start=var("GTFS_RT_START")) }}
+            AND {{ ranged_incremental_max_date() }}
 ),
 
 daily_rt_feeds AS (
     SELECT DISTINCT
         schedule_feed_key,
         base64_url AS vp_base64_url,
-    FROM {{ ref('fct_daily_rt_feed_files') }} AS t1
-    WHERE t1.date >= DATE_SUB(CURRENT_DATE(), INTERVAL 30 DAY) AND feed_type = "vehicle_positions"
-    -- write the where filter this way, because the column is called date, not working with incremental_where macro
+    FROM {{ ref('fct_daily_rt_feed_files') }}
+    WHERE `date`
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_MICROBATCH_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_START")) }}
+            AND {{ ranged_incremental_max_date() }}
 ),
 
 int_vp_trips AS (
@@ -63,11 +63,9 @@ int_vp_trips AS (
         base64_url,
         trip_id,
     FROM {{ ref('int_gtfs_rt__vehicle_positions_trip_day_map_grouping') }}
-    WHERE {{ incremental_where(
-        default_start_var='PROD_GTFS_RT_START',
-        this_dt_column='dt',
-        filter_dt_column='dt')
-    }}
+    WHERE dt
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_MICROBATCH_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_START")) }}
+            AND {{ ranged_incremental_max_date() }}
 ),
 
 vp_trips AS (
@@ -90,11 +88,9 @@ vehicle_locations AS (
         location
 
     FROM {{ ref('fct_vehicle_locations') }}
-    WHERE {{ incremental_where(
-        default_start_var='PROD_GTFS_RT_START',
-        this_dt_column='dt',
-        filter_dt_column='dt')
-    }}
+    WHERE dt
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_MICROBATCH_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_SCHEDULE_START")) }}
+            AND {{ ranged_incremental_max_date() }}
 ),
 
 schedule_joins AS (
