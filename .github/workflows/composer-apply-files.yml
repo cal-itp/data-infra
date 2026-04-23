@@ -75,6 +75,8 @@ jobs:
     name: Staging Airflow
     runs-on: ubuntu-latest
     needs: [airflow-changes]
+
+    # If there are changes to airflow iac files `terraform-apply` workflow will take care
     if: ${{ needs.airflow-changes.outputs.staging == '[]' || needs.airflow-changes.outputs.staging == '' }}
 
     permissions:
@@ -104,6 +106,8 @@ jobs:
     name: Staging Composer
     runs-on: ubuntu-latest
     needs: [composer-changes]
+
+    # If there are changes to composer iac files `terraform-apply` workflow will take care
     if: ${{ needs.composer-changes.outputs.staging == '[]' || needs.composer-changes.outputs.staging == '' }}
 
     permissions:
@@ -133,6 +137,8 @@ jobs:
     name: Production Airflow
     runs-on: ubuntu-latest
     needs: [airflow-changes]
+
+    # If there are changes to airflow iac files `terraform-apply` workflow will take care
     if: ${{ github.ref == 'refs/heads/main' && (needs.airflow-changes.outputs.production == '[]' || needs.airflow-changes.outputs.production == '') }}
 
     permissions:
@@ -161,6 +167,8 @@ jobs:
     name: Production Composer
     runs-on: ubuntu-latest
     needs: [composer-changes]
+
+    # If there are changes to composer iac files `terraform-apply` workflow will take care
     if: ${{ github.ref == 'refs/heads/main' && (needs.composer-changes.outputs.production == '[]' || needs.composer-changes.outputs.production == '') }}
 
     permissions:
