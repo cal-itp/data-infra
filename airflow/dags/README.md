@@ -85,7 +85,7 @@
    - Runs [**DownloadConfigToGCSOperator**](airflow/plugins/operators/download_config_to_gcs_operator.py) and [**DownloadConfigHook**](airflow/plugins/hooks/download_config_hook.py) replacing [download_gtfs_schedule_v2 DAG](airflow/dags/download_gtfs_schedule_v2).
 
 > [!NOTE]
-> This process will try to download files from `Manual Download Bucket` first
+> This process will try to download files from the URL first then from `Manual Download Bucket` if the URL fails
 
    + Downloads a zip file for each schedule dataset.
       * Adds default headers
@@ -102,6 +102,7 @@
 
 
    To add manually downloaded zip files:
+
    1. Go to [download_parse_and_validate_gtfs](https://b15efed84aa34881b71da3b8fa87acd6-dot-us-west2.composer.byoid.googleusercontent.com/dags/download_parse_and_validate_gtfs/grid) DAG
    2. Click on `download_config_to_gcs` task, then `Mapped Tasks` tab
    3. Click on the dataset that you want to add a zip file
@@ -207,8 +208,8 @@
 
 This DAG automates the lifecycle management of Transit Data Quality (TDQ) issues related to GTFS feed expiration. It handles both:
 
-- closing issues that are no longer relevant  
-- creating new issues for feeds that require attention  
+- closing issues that are no longer relevant
+- creating new issues for feeds that require attention
 
 This helps keep Airtable synchronized with the current state of GTFS data quality.
 
@@ -228,12 +229,12 @@ This helps keep Airtable synchronized with the current state of GTFS data qualit
             fct_close_expired_issues
 
    - Identifies GTFS datasets where:
-      * the feed is no longer expired or no longer within the expiration window  
-      * an open Airtable issue still exists  
+      * the feed is no longer expired or no longer within the expiration window
+      * an open Airtable issue still exists
 
    - Updates corresponding Airtable records:
-      * Marks issues as resolved  
-      * Performs batch updates for efficiency  
+      * Marks issues as resolved
+      * Performs batch updates for efficiency
 
 
 ### 2. Create Expiring Issues (`create_expiring_issues`)
@@ -246,13 +247,13 @@ This helps keep Airtable synchronized with the current state of GTFS data qualit
             fct_create_expiring_gtfs_issues
 
    - Identifies GTFS datasets where:
-      * the feed is expired or expiring within 30 days  
-      * no open Airtable issue currently exists  
+      * the feed is expired or expiring within 30 days
+      * no open Airtable issue currently exists
 
    - Creates new Airtable records:
-      * Applies standardized fields (Issue Type, Status, Outreach Status, etc.)  
-      * Associates GTFS datasets and services  
-      * Populates description and tracking fields  
+      * Applies standardized fields (Issue Type, Status, Outreach Status, etc.)
+      * Associates GTFS datasets and services
+      * Populates description and tracking fields
 
 
 ### 3. Sends Summary Email
@@ -260,14 +261,14 @@ This helps keep Airtable synchronized with the current state of GTFS data qualit
    This workflow sends a consolidated HTML email summarizing the results of both workflows.
 
    - Includes:
-      * Number of records updated (closed issues)  
-      * Number of records created (new issues)  
-      * Tables listing affected records  
-      * Any failed batch operations  
+      * Number of records updated (closed issues)
+      * Number of records created (new issues)
+      * Tables listing affected records
+      * Any failed batch operations
 
    - Additional behavior:
-      * When new issues are created, individual emails are sent per record  
-      * A HubSpot notification section is included in the summary email  
+      * When new issues are created, individual emails are sent per record
+      * A HubSpot notification section is included in the summary email
 
 
 ### DAG Structure
@@ -291,59 +292,59 @@ This helps keep Airtable synchronized with the current state of GTFS data qualit
 
 ### Scheduling
 
-   - Runs weekly in Composer  
-   - Designed for recurring monitoring and maintenance of GTFS data quality  
+   - Runs weekly in Composer
+   - Designed for recurring monitoring and maintenance of GTFS data quality
 
 
 ### Design Notes
 
    - Uses custom operators and hooks for:
-      * BigQuery reads  
-      * Airtable updates and creates  
-      * Email notifications  
+      * BigQuery reads
+      * Airtable updates and creates
+      * Email notifications
 
    - Separates:
-      * data retrieval (BigQuery)  
-      * business logic (operators)  
-      * side effects (Airtable and email)  
+      * data retrieval (BigQuery)
+      * business logic (operators)
+      * side effects (Airtable and email)
 
-   - Consolidates notifications into a single email to avoid alert fatigue  
+   - Consolidates notifications into a single email to avoid alert fatigue
 
 
 ### Troubleshooting
 
    No email sent:
-      - Check whether both workflows returned zero rows  
-      - Email is skipped when there are no updates or creations  
+      - Check whether both workflows returned zero rows
+      - Email is skipped when there are no updates or creations
 
    Missing Airtable updates or creations:
       - Verify dbt models:
-         * `fct_close_expired_issues`  
-         * `fct_create_expiring_gtfs_issues`  
-      - Confirm dataset and table names in operator configuration  
+         * `fct_close_expired_issues`
+         * `fct_create_expiring_gtfs_issues`
+      - Confirm dataset and table names in operator configuration
 
    Partial failures (batch errors):
-      - Review the failed batch section in the email  
-      - Check Airflow logs for the corresponding task  
+      - Review the failed batch section in the email
+      - Check Airflow logs for the corresponding task
 
    Individual emails not sent:
-      - Ensure `HUBSPOT_NOTIFICATION_EMAIL` is set  
-      - Verify that new records were actually created  
+      - Ensure `HUBSPOT_NOTIFICATION_EMAIL` is set
+      - Verify that new records were actually created
 
 
 ### When to Use This DAG Pattern
 
    This DAG is a good example of when Airflow is appropriate:
 
-   - Recurring, scheduled workflows  
-   - Multi-step pipelines with dependencies  
-   - External system integration across BigQuery, Airtable, and email  
-   - Workflows that require monitoring, logging, and retry behavior  
+   - Recurring, scheduled workflows
+   - Multi-step pipelines with dependencies
+   - External system integration across BigQuery, Airtable, and email
+   - Workflows that require monitoring, logging, and retry behavior
 
    Simpler approaches (such as notebooks or scripts) may be more appropriate for:
-   - one-off analyses  
-   - exploratory workflows  
-   - tasks that do not require scheduling or orchestration  
+   - one-off analyses
+   - exploratory workflows
+   - tasks that do not require scheduling or orchestration
 
 ## Testing DAGs
 
