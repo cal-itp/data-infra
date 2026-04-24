@@ -104,9 +104,10 @@ with DAG(
         "vars": Param(
             default="",
             type=["null", "string"],
+            format="multiline",
             description=(
-                "dbt --vars expression as a YAML/JSON dict string. "
-                "Example: '{my_var: my_value, other_var: 123}'."
+                "dbt --vars expression as a YAML/JSON dict string. Note that you do not need to enclose in quotes."
+                "Example: {DBT_INCREMENTAL_START_DATE: '2026-04-20', DBT_INCREMENTAL_END_DATE: '2026-04-21'}."
             ),
         ),
     },
