@@ -61,7 +61,7 @@ stg_enghouse__ticket_results AS (
         agency,
         dt,
         _content_hash
-    FROM deduplicated
+    FROM clean_columns
 )
 
 SELECT * FROM stg_enghouse__ticket_results
