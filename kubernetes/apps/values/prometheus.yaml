@@ -12,10 +12,19 @@ server:
   persistentVolume:
     size: 100Gi
 
+  # Steady-state memory usage is ~3-4Gi, but WAL replay after a restart
+  # can spike to 10Gi+ as Prometheus reconstructs its in-memory index
+  # from the write-ahead log. Without a memory limit, BestEffort scheduling
+  # and node memory pressure were OOM-killing the pod mid-replay, producing
+  # a crash loop: the pod would die part-way through replay, which made the
+  # next replay start from a larger WAL state, which needed more memory,
+  # which got OOM-killed sooner, etc.
   resources:
     requests:
       cpu: 500m
-      memory: 3Gi
+      memory: 8Gi
+    limits:
+      memory: 20Gi
 
 alertmanager:
   strategy:
