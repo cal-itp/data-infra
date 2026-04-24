@@ -50,4 +50,3 @@ dim_shapes AS (
 )
 
 SELECT * FROM dim_shapes
--- comment to test exposure/dag rendering
