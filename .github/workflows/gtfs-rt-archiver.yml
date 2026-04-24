@@ -82,24 +82,18 @@ jobs:
         uses: tj-actions/changed-files@v46
         id: staging-changes
         with:
-          matrix: true
           dir_names: true
-          files: 'iac/cal-itp-data-infra-staging/**/*.tf'
+          files: 'iac/cal-itp-data-infra-staging/gtfs-rt-archiver/us/*.tf'
 
   staging:
     name: Staging
     needs: [targets]
-    if: ${{ needs.targets.outputs.staging == '[]' || needs.targets.outputs.staging == '' }}
+    if: ${{ (github.ref == 'refs/heads/main' || contains(github.ref, 'refs/heads/staging')) && (needs.targets.outputs.staging == '[]' || needs.targets.outputs.staging == '') }}
     runs-on: ubuntu-latest
 
     permissions:
       contents: read
       id-token: write
-
-    strategy:
-      fail-fast: false
-      matrix:
-        path: ${{ fromJson(needs.targets.outputs.staging) }}
 
     steps:
       - name: Checkout
@@ -123,5 +117,5 @@ jobs:
           TERRAFORM_PRE_RUN: |
             git config --global --add safe.directory $GITHUB_WORKSPACE
         with:
-          path: ${{ matrix.path }}
+          path: iac/cal-itp-data-infra-staging/gtfs-rt-archiver/us
           auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
