@@ -116,7 +116,6 @@ with DAG(
             description_md=(
                 "dbt `--vars` expression as a YAML or JSON dict. "
                 "You do not need to wrap your entire input in quotes.\n\n"
-                "```\n"
                 "**YAML block (multi-line):**\n"
                 "```\n"
                 "DBT_INCREMENTAL_START_DATE: '2026-04-20'\n"
