@@ -26,23 +26,7 @@ clean_columns AS (
             'ticket_code', 'additional_infos']) }} AS _content_hash
     FROM source
 ),
-
-deduplicated AS (
-    SELECT * FROM (
-        SELECT
-            *,
-            ROW_NUMBER() OVER (
-                PARTITION BY _content_hash
-                ORDER BY
-                    CASE WHEN start_dttm IS NOT NULL THEN 0 ELSE 1 END ASC,
-                    CASE WHEN end_dttm IS NOT NULL THEN 0 ELSE 1 END ASC,
-                    CASE WHEN created_dttm IS NOT NULL THEN 0 ELSE 1 END ASC
-            ) AS row_num
-        FROM clean_columns
-    )
-    WHERE row_num = 1
-),
-
+-- Note: there are duplicates at this layer that we clean up in an int_ model
 stg_enghouse__ticket_results AS (
     SELECT
         operator_id,
@@ -63,7 +47,7 @@ stg_enghouse__ticket_results AS (
         ticket_code,
         additional_infos,
         _content_hash
-    FROM deduplicated
+    FROM clean_columns
 )
 
 SELECT * FROM stg_enghouse__ticket_results
