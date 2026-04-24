@@ -38,7 +38,12 @@ def _build_run_args(
     if full_refresh:
         parts.append("--full-refresh")
     if vars and str(vars).strip():
-        parts += ["--vars", shlex.quote(str(vars).strip())]
+        v = str(vars).strip()
+        if (v.startswith('"') and v.endswith('"')) or (
+            v.startswith("'") and v.endswith("'")
+        ):
+            v = v[1:-1]
+        parts += ["--vars", shlex.quote(v)]
     return " ".join(parts)
 
 
