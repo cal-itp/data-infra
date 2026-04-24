@@ -1,7 +1,17 @@
 {{
     config(
         materialized='incremental',
-        unique_key = 'key',
+        incremental_strategy='microbatch',
+        event_time = '_feed_valid_from',
+        batch_size = 'day',
+        begin=var('GTFS_SCHEDULE_START'),
+        lookback=var('DBT_ALL_MICROBATCH_LOOKBACK_DAYS'),
+        partition_by={
+            'field': '_feed_valid_from',
+            'data_type': 'timestamp',
+            'granularity': 'day',
+        },
+        full_refresh=false,
         cluster_by='feed_key',
     )
 }}
@@ -10,11 +20,6 @@ WITH dim_stop_times AS (
     SELECT
         *
     FROM {{ ref('dim_stop_times') }}
-    WHERE {{ incremental_where(default_start_var='GTFS_SCHEDULE_START',
-                               this_dt_column='_feed_valid_from',
-                               filter_dt_column='_feed_valid_from',
-                               dev_lookback_days = None)
-    }}
 ),
 
 
