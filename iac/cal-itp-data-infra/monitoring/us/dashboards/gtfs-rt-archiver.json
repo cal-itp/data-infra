@@ -51,8 +51,8 @@
             "thresholds": [],
             "timeSeriesQuery": {
               "outputFullDuration": false,
-              "prometheusQuery": "airtable_configuration_age != 0",
-              "unitOverride": ""
+              "prometheusQuery": "airtable_configuration_age / 3600 != 0",
+              "unitOverride": "h"
             }
           }
         }
