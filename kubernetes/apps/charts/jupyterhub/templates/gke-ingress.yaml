@@ -1,0 +1,24 @@
+# Second Ingress serving JupyterHub via GKE's built-in gce controller
+# (in parallel with the upstream chart's nginx-backed Ingress). Scoped
+# to the test hostname only during the staged migration off ingress-nginx
+# — prod notebooks.calitp.org continues flowing through nginx until
+# we're satisfied with the GKE Ingress behavior.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jupyterhub-gce
+  annotations:
+    networking.gke.io/managed-certificates: jupyterhub-managed-cert
+spec:
+  ingressClassName: gce
+  rules:
+    - host: hubtest.k8s.calitp.jarv.us
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: proxy-public
+                port:
+                  name: http
