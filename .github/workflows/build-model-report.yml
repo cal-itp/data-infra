@@ -1,15 +1,15 @@
-name: Build Impacted Exposure Report
+name: Build dbt Model Report
 
 on:
   push:
     branches:
       - main
     paths:
-      - .github/workflows/build-exposure-report.yml
+      - .github/workflows/build-model-report.yml
       - 'warehouse/**'
   pull_request:
     paths:
-      - .github/workflows/build-exposure-report.yml
+      - .github/workflows/build-model-report.yml
       - 'warehouse/**'
 
 concurrency:
@@ -86,8 +86,8 @@ jobs:
             warehouse/target/*.json
             warehouse/target/*.msgpack
 
-  exposures:
-    name: List Impacted Exposures
+  visualize:
+    name: Model Visualization
     needs: [compile]
     runs-on: ubuntu-latest
 
@@ -95,6 +95,7 @@ jobs:
 
     permissions:
       contents: read
+      id-token: write
       pull-requests: write
 
     steps:
@@ -108,6 +109,20 @@ jobs:
         with:
           name: dbt
           path: warehouse/target
+
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v2
 
       - name: Install uv
         uses: astral-sh/setup-uv@v7
@@ -124,6 +139,54 @@ jobs:
       - name: Install dbt dependencies
         working-directory: warehouse
         run: uv run dbt deps
+
+      - name: Create Latest folder
+        working-directory: warehouse/target
+        run: mkdir latest
+
+      - name: Download latest artifacts from production dbt docs
+        working-directory: warehouse
+        run: gsutil cp gs://${{ env.DBT_ARTIFACTS_BUCKET }}/latest/*.json ./target/latest/
+
+      - name: Setup Continuous Machine Learning tools
+        uses: iterative/setup-cml@v2
+
+      - name: Create CI report
+        working-directory: warehouse
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: uv run python scripts/visualize.py ci-report --latest-dir='./target/latest/'
+
+      - name: Archive CI report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-report
+          path: |
+            warehouse/target/report.md
+            warehouse/target/dag.png
+
+      - name: Create GitHub comment
+        id: report-comment
+        working-directory: warehouse
+        continue-on-error: true
+        env:
+          REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: cml comment update target/report.md
+
+      - uses: peter-evans/find-comment@v3
+        if: ${{ steps.report-comment.outcome == 'failure' }}
+        id: fc
+        with:
+          issue-number: ${{ github.event.number }}
+          body-includes: "Warehouse report"
+
+      - uses: peter-evans/create-or-update-comment@v4
+        if: ${{ steps.report-comment.outcome == 'failure' }}
+        with:
+          comment-id: ${{ steps.fc.outputs.comment-id }}
+          issue-number: ${{ github.event.number }}
+          body: "Warehouse report: Failed to add ci-report to a comment. Review the ci-report in the [Summary](https://github.com/cal-itp/data-infra/actions/runs/${{ github.run_id }})."
+          edit-mode: replace
 
       - name: List changed models
         uses: tj-actions/changed-files@v46
@@ -167,7 +230,7 @@ jobs:
             echo "> If any impacted exposures are unexpected, verify that your changes do not unintentionally affect downstream consumers."
           } > "$RUNNER_TEMP/exposure-comment.md"
 
-      - name: Post comment
+      - name: Post exposures comment
         if: ${{ steps.changed-models.outputs.any_changed == 'true' }}
         uses: peter-evans/create-or-update-comment@v4
         with:
