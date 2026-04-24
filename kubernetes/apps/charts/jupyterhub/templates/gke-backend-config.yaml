@@ -1,0 +1,13 @@
+apiVersion: cloud.google.com/v1
+kind: BackendConfig
+metadata:
+  name: jupyterhub-backend
+spec:
+  # Long notebook cells + WebSocket kernel sessions. Default 30s kills
+  # anything that takes longer than a trivial HTTP request.
+  timeoutSec: 86400
+  connectionDraining:
+    drainingTimeoutSec: 60
+  healthCheck:
+    requestPath: /hub/health
+    type: HTTP

@@ -1,0 +1,7 @@
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: jupyterhub-managed-cert
+spec:
+  domains:
+    - hubtest.k8s.calitp.jarv.us
