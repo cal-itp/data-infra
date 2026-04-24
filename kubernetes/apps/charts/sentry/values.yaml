@@ -8,15 +8,53 @@ sentry:
     enabled: true
     image:
       repository: bitnamilegacy/redis
-    replica:
-      replicaCount: 1
+    master:
+      # Master had no resource spec (BestEffort QoS), making it a first
+      # eviction candidate under node memory pressure. RDB snapshots are
+      # ~2.6Gi so the limit needs headroom above steady state.
       resources:
         requests:
-          cpu: 2
-          memory: 2Gi
+          cpu: 1
+          memory: 3Gi
         limits:
           cpu: 2
+          memory: 5Gi
+    replica:
+      replicaCount: 1
+      # Default probes ping BOTH local AND master via
+      # ping_liveness_local_and_master.sh, so the replica kills itself
+      # whenever master briefly blips. Each kill triggers a full RDB resync
+      # (~30s) during which sentry-relay can't read project state and
+      # returns 502s. Override to check local only.
+      customLivenessProbe:
+        exec:
+          command:
+            - sh
+            - -c
+            - /health/ping_liveness_local.sh 5
+        initialDelaySeconds: 20
+        periodSeconds: 5
+        timeoutSeconds: 6
+        failureThreshold: 5
+        successThreshold: 1
+      customReadinessProbe:
+        exec:
+          command:
+            - sh
+            - -c
+            - /health/ping_readiness_local.sh 1
+        initialDelaySeconds: 20
+        periodSeconds: 5
+        timeoutSeconds: 2
+        failureThreshold: 5
+        successThreshold: 1
+      resources:
+        requests:
+          cpu: 1
           memory: 3Gi
+        limits:
+          cpu: 2
+          memory: 5Gi
 
   postgresql:
     enabled: true
