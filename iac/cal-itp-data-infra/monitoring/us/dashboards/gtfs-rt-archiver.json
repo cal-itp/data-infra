@@ -126,14 +126,14 @@
               {
                 "breakdowns": [],
                 "dimensions": [],
-                "legendTemplate": "delay",
+                "legendTemplate": "upload",
                 "measures": [],
                 "plotType": "STACKED_AREA",
                 "sort": [],
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
                   "outputFullDuration": false,
-                  "prometheusQuery": "histogram_quantile(0.9, sum(rate(fetch_processing_delay_seconds_bucket[2m])) by (le))",
+                  "prometheusQuery": "histogram_quantile(0.9, sum(rate(fetch_uploading_time_seconds_bucket[2m])) by (le))",
                   "unitOverride": ""
                 }
               },
@@ -154,14 +154,14 @@
               {
                 "breakdowns": [],
                 "dimensions": [],
-                "legendTemplate": "upload",
+                "legendTemplate": "delay",
                 "measures": [],
                 "plotType": "STACKED_AREA",
                 "sort": [],
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
                   "outputFullDuration": false,
-                  "prometheusQuery": "histogram_quantile(0.9, sum(rate(fetch_uploading_time_seconds_bucket[2m])) by (le))",
+                  "prometheusQuery": "histogram_quantile(0.9, sum(rate(fetch_processing_delay_seconds_bucket[2m])) by (le))",
                   "unitOverride": ""
                 }
               }
@@ -183,14 +183,14 @@
               {
                 "breakdowns": [],
                 "dimensions": [],
-                "legendTemplate": "delay",
+                "legendTemplate": "upload",
                 "measures": [],
                 "plotType": "STACKED_AREA",
                 "sort": [],
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
                   "outputFullDuration": false,
-                  "prometheusQuery": "histogram_quantile(0.99, sum(rate(fetch_processing_delay_seconds_bucket[2m])) by (le))",
+                  "prometheusQuery": "histogram_quantile(0.99, sum(rate(fetch_uploading_time_seconds_bucket[2m])) by (le))",
                   "unitOverride": ""
                 }
               },
@@ -211,14 +211,14 @@
               {
                 "breakdowns": [],
                 "dimensions": [],
-                "legendTemplate": "upload",
+                "legendTemplate": "delay",
                 "measures": [],
                 "plotType": "STACKED_AREA",
                 "sort": [],
                 "targetAxis": "Y1",
                 "timeSeriesQuery": {
                   "outputFullDuration": false,
-                  "prometheusQuery": "histogram_quantile(0.99, sum(rate(fetch_uploading_time_seconds_bucket[2m])) by (le))",
+                  "prometheusQuery": "histogram_quantile(0.99, sum(rate(fetch_processing_delay_seconds_bucket[2m])) by (le))",
                   "unitOverride": ""
                 }
               }
