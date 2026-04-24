@@ -2,4 +2,5 @@ resources:
 - archiver-app-vars.yaml
 - gtfs-rt-archiver-consumer.yaml
 - gtfs-rt-archiver-ticker.yaml
+- podmonitoring.yaml
 - redis.yaml
