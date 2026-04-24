@@ -1,0 +1,15 @@
+apiVersion: monitoring.googleapis.com/v1
+kind: PodMonitoring
+metadata:
+  name: gtfs-rt-archiver
+spec:
+  selector:
+    matchExpressions:
+      - key: name
+        operator: In
+        values:
+          - gtfs-rt-archiver-consumer
+          - gtfs-rt-archiver-ticker
+  endpoints:
+    - port: 9102
+      interval: 30s
