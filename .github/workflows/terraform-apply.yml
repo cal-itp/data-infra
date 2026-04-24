@@ -96,7 +96,7 @@ jobs:
             git config --global --add safe.directory $GITHUB_WORKSPACE
         with:
           path: ${{ matrix.path }}
-          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
+          auto_approve: 'true'
 
   production:
     name: Production
@@ -136,3 +136,4 @@ jobs:
             git config --global --add safe.directory $GITHUB_WORKSPACE
         with:
           path: ${{ matrix.path }}
+          auto_approve: 'true'
