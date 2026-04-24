@@ -15,13 +15,13 @@ resource "google_composer_environment" "calitp-composer" {
     workloads_config {
       scheduler {
         cpu        = 2
-        memory_gb  = 2
+        memory_gb  = 4
         storage_gb = 1
-        count      = 1
+        count      = 2
       }
       web_server {
-        cpu        = 1
-        memory_gb  = 2
+        cpu        = 2
+        memory_gb  = 4
         storage_gb = 1
       }
       worker {
@@ -43,7 +43,10 @@ resource "google_composer_environment" "calitp-composer" {
         core-dag_file_processor_timeout            = 1200
         core-dagbag_import_timeout                 = 600
         core-dags_are_paused_at_creation           = true
+        core-max_active_runs_per_dag               = 128
+        core-max_active_tasks_per_dag              = 128
         core-max_templated_field_length            = 25000
+        core-parallelism                           = 0
         cosmos-use_dataset_airflow3_uri_standard   = true
         email-email_backend                        = "airflow.utils.email.send_email_smtp"
         email-email_conn_id                        = "smtp_postmark"
