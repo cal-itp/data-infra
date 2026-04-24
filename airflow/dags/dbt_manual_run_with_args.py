@@ -60,44 +60,52 @@ with DAG(
         "select": Param(
             default="",
             type=["null", "string"],
-            description=(
-                "dbt --select expression. Space-separate multiple selectors. "
-                "Examples: 'models/mart/gtfs', '+fct_stop_time_metrics', "
-                "'+fct_scheduled_trips fct_monthly_routes+'."
+            description_md=(
+                "dbt `--select` expression. Space-separate multiple selectors.\n\n"
+                "**Examples:**\n"
+                "- `models/mart/gtfs`\n"
+                "- `+fct_stop_time_metrics`\n"
+                "- `+fct_scheduled_trips fct_monthly_routes+`"
             ),
         ),
         "exclude": Param(
             default="",
             type=["null", "string"],
-            description="dbt --exclude expression. Space-separate multiple selectors.",
+            description_md=(
+                "dbt `--exclude` expression. Space-separate multiple selectors."
+            ),
         ),
         "full_refresh": Param(
             default=False,
             type="boolean",
-            description="Pass --full-refresh to dbt.",
+            description_md="Pass `--full-refresh` to dbt.",
         ),
         "threads": Param(
             default=4,
             type="integer",
             minimum=1,
             maximum=16,
-            description="Number of threads to run with.",
+            description_md="Number of threads to run with.",
         ),
         "event_time_start": Param(
             default="",
             type=["null", "string"],
-            description=(
-                "Microbatch --event-time-start (inclusive). "
-                "Formats: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS. "
+            description_md=(
+                "Microbatch `--event-time-start` (inclusive).\n\n"
+                "**Formats:**\n"
+                "- `YYYY-MM-DD`\n"
+                "- `YYYY-MM-DDTHH:MM:SS`\n\n"
                 "Leave blank to use dbt's default begin date."
             ),
         ),
         "event_time_end": Param(
             default="",
             type=["null", "string"],
-            description=(
-                "Microbatch --event-time-end (exclusive). "
-                "Formats: YYYY-MM-DD or YYYY-MM-DDTHH:MM:SS. "
+            description_md=(
+                "Microbatch `--event-time-end` (exclusive).\n\n"
+                "**Formats:**\n"
+                "- `YYYY-MM-DD`\n"
+                "- `YYYY-MM-DDTHH:MM:SS`\n\n"
                 "Leave blank to run through the current time."
             ),
         ),
@@ -105,9 +113,20 @@ with DAG(
             default="",
             type=["null", "string"],
             format="multiline",
-            description=(
-                "dbt --vars expression as a YAML/JSON dict string. Note that you do not need to enclose in quotes."
-                "Example: {DBT_INCREMENTAL_START_DATE: '2026-04-20', DBT_INCREMENTAL_END_DATE: '2026-04-21'}."
+            description_md=(
+                "dbt `--vars` expression as a YAML or JSON dict. "
+                "You do not need to wrap your entire input in quotes.\n\n"
+                "```\n"
+                "**YAML block (multi-line):**\n"
+                "```\n"
+                "DBT_INCREMENTAL_START_DATE: '2026-04-20'\n"
+                "DBT_INCREMENTAL_END_DATE: '2026-04-21'\n"
+                "```\n"
+                "**JSON:**\n"
+                "```\n"
+                '{"DBT_INCREMENTAL_START_DATE": "2026-04-20", '
+                '"DBT_INCREMENTAL_END_DATE": "2026-04-21"}\n'
+                "```"
             ),
         ),
     },
