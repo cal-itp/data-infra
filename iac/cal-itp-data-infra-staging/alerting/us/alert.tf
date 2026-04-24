@@ -1,7 +1,7 @@
 resource "google_monitoring_alert_policy" "alert_policy" {
   display_name          = "Burn rate on 99% 10s Latency for GTFS-RT Archiver"
   combiner              = "OR"
-  notification_channels = [google_monitoring_notification_channel.calitp-meta.id, google_monitoring_notification_channel.gcp-monitoring.id]
+  notification_channels = [google_monitoring_notification_channel.calitp-slack-gcp-monitoring.id]
 
   conditions {
     display_name = "Burn rate on 99% 10s Latency for GTFS-RT Archiver"
