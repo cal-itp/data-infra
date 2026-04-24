@@ -31,6 +31,103 @@ env:
   DBT_DOCS_URL: ${{ github.ref == 'refs/heads/main' && 'https://dbt-docs.dds.dot.ca.gov' || 'https://dbt-docs-staging.dds.dot.ca.gov' }}
 
 jobs:
+  setup:
+    name: Prepare dbt environment
+    runs-on: ubuntu-latest
+
+    steps:
+      - &checkout
+        name: Checkout
+        uses: actions/checkout@v6
+
+      - &install-uv
+        name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          working-directory: warehouse
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+          cache-python: true
+
+      - &cache-dbt-setup
+        name: Cache venv and dbt packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            warehouse/.venv
+            warehouse/dbt_packages
+          key: dbt-setup-${{ runner.os }}-py${{ env.PYTHON_VERSION }}-${{ hashFiles('warehouse/uv.lock', 'warehouse/packages.yml') }}
+
+      - &install-project
+        name: Install the project
+        working-directory: warehouse
+        run: uv sync --locked --all-extras --dev
+
+      - &dbt-deps
+        name: Install dbt dependencies
+        working-directory: warehouse
+        run: uv run dbt deps
+
+  compile:
+    name: Compile dbt
+    runs-on: ubuntu-latest
+    needs: [setup, dbt-changed]
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - *checkout
+
+      - &auth
+        name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - &setup-gcloud
+        name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
+
+      - &setup-graphviz
+        name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v2
+
+      - *install-uv
+      - *cache-dbt-setup
+      - *install-project
+      - *dbt-deps
+
+      - name: Print dbt environment
+        working-directory: warehouse
+        run: uv run dbt debug --target ${{ env.DBT_TARGET }}
+
+      - name: List changed and downstream models
+        if: ${{ needs.dbt-changed.outputs.has-changed == 'true' }}
+        working-directory: warehouse
+        run: uv run dbt list --select "${{ needs.dbt-changed.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --resource-type=model
+
+      - name: Compile dbt
+        working-directory: warehouse
+        run: uv run dbt compile --target ${{ env.DBT_TARGET }}
+
+      - name: Generate dbt documentation
+        working-directory: warehouse
+        run: uv run dbt docs generate --target ${{ env.DBT_TARGET }} --no-compile
+
+      - name: Archive compilation artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: dbt
+          path: |
+            warehouse/target/*.html
+            warehouse/target/*.json
+            warehouse/target/*.msgpack
+
   dbt-changed:
     name: Detect dbt model and seed changes
     runs-on: ubuntu-latest
@@ -79,57 +176,23 @@ jobs:
         run: |
           echo "List changed files: $CHANGED_FILES"
 
-  compile:
-    name: Compile dbt
+  dbt-run:
     runs-on: ubuntu-latest
-    needs: [dbt-changed]
+    needs: [setup, dbt-changed]
 
     permissions:
       contents: read
       id-token: write
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-
-      - name: Authenticate Google Service Account
-        uses: google-github-actions/auth@v2
-        with:
-          create_credentials_file: 'true'
-          project_id: ${{ env.PROJECT_ID }}
-          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ env.SERVICE_ACCOUNT }}
-
-      - name: Setup GCloud utilities
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Setup Graphviz
-        uses: ts-graphviz/setup-graphviz@v2
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v7
-        with:
-          working-directory: warehouse
-          python-version: ${{ env.PYTHON_VERSION }}
-          enable-cache: true
-          cache-python: true
-
-      - name: Install the project
-        working-directory: warehouse
-        run: uv sync --locked --all-extras --dev
-
-      - name: Install dbt dependencies
-        working-directory: warehouse
-        run: uv run dbt deps
-
-      - name: Print dbt environment
-        working-directory: warehouse
-        run: uv run dbt debug --target ${{ env.DBT_TARGET }}
-
-      - name: List changed and downstream models
-        if: ${{ needs.dbt-changed.outputs.has-changed == 'true' }}
-        working-directory: warehouse
-        run: uv run dbt list --select "${{ needs.dbt-changed.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --resource-type=model
+      - *checkout
+      - *auth
+      - *setup-gcloud
+      - *setup-graphviz
+      - *install-uv
+      - *cache-dbt-setup
+      - *install-project
+      - *dbt-deps
 
       - name: Run seeds
         if: ${{ needs.dbt-changed.outputs.has-changed-seeds == 'true' }}
@@ -146,35 +209,17 @@ jobs:
         working-directory: warehouse
         run: uv run dbt run --select "${{ needs.dbt-changed.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --exclude "${{ needs.dbt-changed.outputs.changed-models }}"
 
-      - name: Compile dbt
-        working-directory: warehouse
-        run: uv run dbt compile --target ${{ env.DBT_TARGET }}
-
-      - name: Generate dbt documentation
-        working-directory: warehouse
-        run: uv run dbt docs generate --target ${{ env.DBT_TARGET }} --no-compile
-
-      - name: Archive compilation artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: dbt
-          path: |
-            warehouse/target/*.html
-            warehouse/target/*.json
-            warehouse/target/*.msgpack
-
   metabase:
     name: Sync Metabase
     runs-on: ubuntu-latest
-    needs: [dbt-changed, compile]
+    needs: [setup, dbt-changed, compile]
 
     permissions:
       contents: read
       id-token: write
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
+      - *checkout
 
       - name: Download compilation artifacts
         uses: actions/download-artifact@v4
@@ -182,35 +227,13 @@ jobs:
           name: dbt
           path: warehouse/target
 
-      - name: Authenticate Google Service Account
-        uses: google-github-actions/auth@v2
-        with:
-          create_credentials_file: 'true'
-          project_id: ${{ env.PROJECT_ID }}
-          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ env.SERVICE_ACCOUNT }}
-
-      - name: Setup GCloud utilities
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Setup Graphviz
-        uses: ts-graphviz/setup-graphviz@v2
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v7
-        with:
-          enable-cache: true
-          cache-python: true
-          working-directory: warehouse
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - name: Install the project
-        working-directory: warehouse
-        run: uv sync --locked --all-extras --dev
-
-      - name: Install dbt dependencies
-        working-directory: warehouse
-        run: uv run dbt deps
+      - *auth
+      - *setup-gcloud
+      - *setup-graphviz
+      - *install-uv
+      - *cache-dbt-setup
+      - *install-project
+      - *dbt-deps
 
       - name: Print dbt environment
         working-directory: warehouse
@@ -387,25 +410,12 @@ jobs:
           dir_names: true
           files: 'iac/cal-itp-data-infra/airflow/**/*.tf'
 
-      - name: Print Staging changed files
-        env:
-          CHANGED_FILES: ${{ steps.staging-changes.outputs.all_changed_files }}
-        run: |
-          echo "List Staging changed files: $CHANGED_FILES"
-
-      - name: Print Production changed files
-        env:
-          CHANGED_FILES: ${{ steps.production-changes.outputs.all_changed_files }}
-        run: |
-          echo "List Production changed files: $CHANGED_FILES"
-
   plan-changes-airflow-staging:
     name: Staging Plan for Airflow Changes
     runs-on: ubuntu-latest
     needs: [airflow-changes]
 
-    # If there are changes to airflow iac files `terraform-plan` workflow will take care
-    if: ${{ github.ref != 'refs/heads/main' && (needs.airflow-changes.outputs.staging == '[]' || needs.airflow-changes.outputs.staging == '') }}
+    if: ${{ github.ref != 'refs/heads/main' && !contains(github.ref, 'refs/heads/staging') && (needs.airflow-changes.outputs.staging == '[]' || needs.airflow-changes.outputs.staging == '') }}
 
     permissions:
       contents: read
@@ -436,7 +446,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [airflow-changes]
 
-    # If there are changes to airflow iac files `terraform-plan` workflow will take care
     if: ${{ github.ref != 'refs/heads/main' && (needs.airflow-changes.outputs.production == '[]' || needs.airflow-changes.outputs.production == '') }}
 
     permissions:
@@ -468,7 +477,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [airflow-changes]
 
-    # If there are changes to airflow iac files `terraform-apply` workflow will take care
     if: ${{ (github.ref == 'refs/heads/main' || contains(github.ref, 'refs/heads/staging')) && (needs.airflow-changes.outputs.staging == '[]' || needs.airflow-changes.outputs.staging == '') }}
 
     permissions:
@@ -492,14 +500,13 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: iac/cal-itp-data-infra-staging/airflow/us
-          auto_approve: 'true'
+          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
 
   apply-changes-airflow-production:
     name: Production Apply Airflow Changes
     runs-on: ubuntu-latest
     needs: [airflow-changes]
 
-    # If there are changes to airflow iac files `terraform-apply` workflow will take care
     if: ${{ github.ref == 'refs/heads/main' && (needs.airflow-changes.outputs.production == '[]' || needs.airflow-changes.outputs.production == '') }}
 
     permissions:
@@ -523,4 +530,3 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: iac/cal-itp-data-infra/airflow/us
-          auto_approve: 'true'
