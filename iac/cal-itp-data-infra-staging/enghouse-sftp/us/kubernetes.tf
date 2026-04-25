@@ -1,9 +1,10 @@
-resource "kubernetes_secret" "enghouse-sftp-hostkeys" {
-  type = "Opaque"
+resource "kubernetes_secret_v1" "enghouse-sftp-hostkeys" {
+  type                           = "Opaque"
+  wait_for_service_account_token = true
 
   metadata {
-    name      = "enghouse-sftp-hostkeys"
     namespace = "default"
+    name      = "enghouse-sftp-hostkeys"
   }
 
   data = {
@@ -12,12 +13,13 @@ resource "kubernetes_secret" "enghouse-sftp-hostkeys" {
   }
 }
 
-resource "kubernetes_secret" "enghouse-sftp-authorizedkey" {
-  type = "Opaque"
+resource "kubernetes_secret_v1" "enghouse-sftp-authorizedkey" {
+  type                           = "Opaque"
+  wait_for_service_account_token = true
 
   metadata {
-    name      = "enghouse-sftp-authorizedkey"
     namespace = "default"
+    name      = "enghouse-sftp-authorizedkey"
   }
 
   data = {
@@ -25,9 +27,10 @@ resource "kubernetes_secret" "enghouse-sftp-authorizedkey" {
   }
 }
 
-resource "kubernetes_service_account" "sftp-pod-service-account" {
+resource "kubernetes_service_account_v1" "sftp-pod-service-account" {
   metadata {
-    name = "sftp-pod-service-account"
+    namespace = "default"
+    name      = "sftp-pod-service-account"
 
     annotations = {
       "iam.gke.io/gcp-service-account" = data.terraform_remote_state.iam.outputs.google_service_account_sftp-pod-service-account_email
@@ -35,14 +38,17 @@ resource "kubernetes_service_account" "sftp-pod-service-account" {
   }
 }
 
-resource "kubernetes_deployment" "enghouse-sftp" {
+resource "kubernetes_deployment_v1" "enghouse-sftp" {
   metadata {
-    name = "enghouse-sftp-deployment"
+    namespace = "default"
+    name      = "enghouse-sftp-deployment"
 
     labels = {
       app = "enghouse-sftp"
     }
   }
+
+  wait_for_rollout = true
 
   spec {
     replicas = 1
@@ -65,7 +71,14 @@ resource "kubernetes_deployment" "enghouse-sftp" {
       }
 
       spec {
-        service_account_name = kubernetes_service_account.sftp-pod-service-account.metadata.0.name
+        service_account_name = kubernetes_service_account_v1.sftp-pod-service-account.metadata.0.name
+
+        toleration {
+          effect   = "NoSchedule"
+          key      = "kubernetes.io/arch"
+          operator = "Equal"
+          value    = "amd64"
+        }
 
         volume {
           name = "gcs-volume"
@@ -94,9 +107,29 @@ resource "kubernetes_deployment" "enghouse-sftp" {
           }
         }
 
+        security_context {
+          supplemental_groups = []
+
+          seccomp_profile {
+            type = "RuntimeDefault"
+          }
+        }
+
         container {
           name  = "sftp-server"
           image = "alpine"
+
+          security_context {
+            allow_privilege_escalation = false
+            privileged                 = false
+            read_only_root_filesystem  = false
+            run_as_non_root            = false
+
+            capabilities {
+              add  = []
+              drop = ["NET_RAW"]
+            }
+          }
 
           env {
             name  = "SFTP_USER"
@@ -157,21 +190,25 @@ resource "kubernetes_deployment" "enghouse-sftp" {
   }
 }
 
-resource "kubernetes_service" "enghouse-sftp" {
+resource "kubernetes_service_v1" "enghouse-sftp" {
   metadata {
-    name = "enghouse-sftp"
+    namespace = "default"
+    name      = "enghouse-sftp"
   }
 
+  wait_for_load_balancer = true
+
   spec {
+    type             = "LoadBalancer"
+    load_balancer_ip = data.terraform_remote_state.networks.outputs.google_compute_address_enghouse-sftp-address_ip
+
     selector = {
-      app = kubernetes_deployment.enghouse-sftp.metadata.0.labels.app
+      app = kubernetes_deployment_v1.enghouse-sftp.metadata.0.labels.app
     }
+
     port {
       port        = 22
       target_port = 22
     }
-
-    type             = "LoadBalancer"
-    load_balancer_ip = data.terraform_remote_state.networks.outputs.google_compute_address_enghouse-sftp-address_ip
   }
 }

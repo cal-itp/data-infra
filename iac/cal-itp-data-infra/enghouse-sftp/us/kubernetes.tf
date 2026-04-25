@@ -1,4 +1,3 @@
-
 locals {
   sftp_user = "enghouse"
 }
@@ -15,12 +14,13 @@ data "google_secret_manager_secret_version" "enghouse-sftp-authorizedkey" {
   secret = "enghouse-sftp-authorizedkey"
 }
 
-resource "kubernetes_secret" "enghouse-sftp-hostkeys" {
+resource "kubernetes_secret_v1" "enghouse-sftp-hostkeys" {
+  type = "Opaque"
+
   metadata {
     name      = "enghouse-sftp-hostkeys"
     namespace = "default"
   }
-  type = "Opaque"
 
   data = {
     "id_rsa"     = data.google_secret_manager_secret_version.enghouse-sftp-private-key.secret_data
@@ -28,12 +28,13 @@ resource "kubernetes_secret" "enghouse-sftp-hostkeys" {
   }
 }
 
-resource "kubernetes_secret" "enghouse-sftp-authorizedkey" {
+resource "kubernetes_secret_v1" "enghouse-sftp-authorizedkey" {
+  type = "Opaque"
+
   metadata {
     name      = "enghouse-sftp-authorizedkey"
     namespace = "default"
   }
-  type = "Opaque"
 
   data = {
     "authorized_keys" = data.google_secret_manager_secret_version.enghouse-sftp-authorizedkey.secret_data
