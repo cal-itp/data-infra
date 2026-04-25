@@ -46,10 +46,20 @@ class TestAirtableIssuesUpdateOperator:
         return [
             {
                 "issue_source_record_id": "rec1",
+                "issue_number": 1,
+                "issue_type_name": "About to Expire Schedule Feed",
+                "gtfs_dataset_name": "Dataset 1",
+                "new_end_date": "2026-05-01",
+                "service_name": "Service 1",
                 "outreach_status": "Waiting on Customer Success",
             },
             {
                 "issue_source_record_id": "rec2",
+                "issue_number": 2,
+                "issue_type_name": "GTFS Realtime Completeness Problem",
+                "gtfs_dataset_name": "Dataset 2",
+                "rt_completeness_percentage": "87.26",
+                "service_name": "Service 2",
                 "outreach_status": "Waiting on Transit Agency",
             },
         ]
@@ -115,6 +125,27 @@ class TestAirtableIssuesUpdateOperator:
         assert result["updated_count"] == 2
         assert result["updated_record_ids"] == ["rec1", "rec2"]
         assert result["failed_batches"] == []
+
+        assert result["email_rows"] == [
+            {
+                "issue_number": 1,
+                "issue_type_name": "About to Expire Schedule Feed",
+                "gtfs_dataset_name": "Dataset 1",
+                "status": "Fixed - on its own",
+                "new_end_date": "2026-05-01",
+                "rt_completeness_percentage": "NA",
+                "service_name": "Service 1",
+            },
+            {
+                "issue_number": 2,
+                "issue_type_name": "GTFS Realtime Completeness Problem",
+                "gtfs_dataset_name": "Dataset 2",
+                "status": "Fixed - with Cal-ITP help",
+                "new_end_date": "NA",
+                "rt_completeness_percentage": "87.26",
+                "service_name": "Service 2",
+            },
+        ]
 
         assert captured["records"] == [
             {

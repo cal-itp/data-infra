@@ -61,16 +61,30 @@ class AirtableIssuesUpdateOperator(BaseOperator):
         ]
 
     def build_email_rows(self, rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
-        return [
-            {
+        email_rows = []
+
+        for row in rows:
+            issue_type_name = row.get("issue_type_name")
+            email_row = {
                 "issue_number": row.get("issue_number"),
+                "issue_type_name": issue_type_name,
                 "gtfs_dataset_name": row.get("gtfs_dataset_name"),
                 "status": self.derive_status(row.get("outreach_status")),
-                "new_end_date": row.get("new_end_date"),
+                "new_end_date": "NA",
+                "rt_completeness_percentage": "NA",
                 "service_name": row.get("service_name"),
             }
-            for row in rows
-        ]
+
+            if issue_type_name == "GTFS Realtime Completeness Problem":
+                email_row["rt_completeness_percentage"] = row.get(
+                    "rt_completeness_percentage"
+                )
+            else:
+                email_row["new_end_date"] = row.get("new_end_date")
+
+            email_rows.append(email_row)
+
+        return email_rows
 
     def execute(self, context: Context) -> dict[str, Any]:
         del context

@@ -12,15 +12,17 @@ class AirtableIssuesEmailOperator(BaseOperator):
     template_fields: Sequence[str] = (
         "to_emails",
         "subject",
-        "update_result",
-        "create_result",
+        "expiring_update_result",
+        "expiring_create_result",
+        "rt_update_result",
     )
 
     def __init__(
         self,
         to_emails: list[str] | str,
-        update_result: dict[str, Any],
-        create_result: dict[str, Any],
+        expiring_update_result: dict[str, Any],
+        expiring_create_result: dict[str, Any],
+        rt_update_result: dict[str, Any],
         subject: str = "[Airflow] Airtable Issue Management",
         **kwargs,
     ) -> None:
@@ -28,19 +30,24 @@ class AirtableIssuesEmailOperator(BaseOperator):
 
         self.to_emails = to_emails
         self.subject = subject
-        self.update_result = update_result
-        self.create_result = create_result
+        self.expiring_update_result = expiring_update_result
+        self.expiring_create_result = expiring_create_result
+        self.rt_update_result = rt_update_result
 
     def build_closed_table_rows(self, email_rows: list[dict[str, Any]]) -> str:
         table_rows = ""
 
         for row in email_rows:
+            rt = row.get("rt_completeness_percentage")
+            rt_display = f"{rt}%" if rt != "NA" else rt
             table_rows += (
                 f"<tr><td>{row.get('issue_number', '')}</td>"
+                f"<td>{row.get('issue_type_name', '')}</td>"
                 f"<td>{row.get('gtfs_dataset_name', '')}</td>"
                 f"<td>{row.get('service_name', '')}</td>"
                 f"<td>{row.get('status', '')}</td>"
-                f"<td>{row.get('new_end_date', '')}</td></tr>"
+                f"<td>{row.get('new_end_date', '')}</td>"
+                f"<td>{rt_display}</td></tr>"
             )
 
         return table_rows
@@ -60,9 +67,6 @@ class AirtableIssuesEmailOperator(BaseOperator):
         return table_rows
 
     def build_failed_html(self, failed_batches: list[dict[str, Any]]) -> str:
-        if not failed_batches:
-            return "None"
-
         return "<br>".join(
             [
                 f"Batch {batch['batch_num']}: {batch['error']}"
@@ -137,91 +141,111 @@ class AirtableIssuesEmailOperator(BaseOperator):
         closed_failed_batches: list[dict[str, Any]],
         created_email_rows: list[dict[str, Any]],
         created_failed_batches: list[dict[str, Any]],
-        individual_create_emails_sent: bool = False,
     ) -> str:
-        closed_table_rows = self.build_closed_table_rows(closed_email_rows)
-        created_table_rows = self.build_created_table_rows(created_email_rows)
+        sections = []
 
-        closed_failed_html = self.build_failed_html(closed_failed_batches)
-        created_failed_html = self.build_failed_html(created_failed_batches)
+        if created_email_rows:
+            created_table_rows = self.build_created_table_rows(created_email_rows)
 
-        # ✅ Polished HubSpot section
-        hubspot_section = ""
-        if individual_create_emails_sent:
-            hubspot_section = """
-            <b>✅ HubSpot Ticket Creation</b><br><br>
-            Corresponding tickets were submitted in HubSpot.<br><br>
-            """
+            sections.append(
+                f"""
+                <b>Successfully created {len(created_email_rows)} About to Expire Issues in Airtable and HubSpot.</b><br>
+                <table border="1" cellspacing="0" cellpadding="5">
+                    <tr>
+                        <th>Issue Number</th>
+                        <th>GTFS Dataset Name</th>
+                        <th>Service Name</th>
+                        <th>Expiration Status</th>
+                        <th>Max End Date</th>
+                    </tr>
+                    {created_table_rows}
+                </table><br><br>
 
-        return f"""
-        <b>✅ Successfully created {len(created_email_rows)} Airtable records.</b><br><br>
-        <b>Created the following About to Expire Issues:</b><br>
-        <table border="1" cellspacing="0" cellpadding="5">
-            <tr>
-                <th>Issue Number</th>
-                <th>GTFS Dataset Name</th>
-                <th>Service Name</th>
-                <th>Expiration Status</th>
-                <th>Max End Date</th>
-            </tr>
-            {created_table_rows}
-        </table><br><br>
+                """
+            )
 
-        {hubspot_section}
+        if created_failed_batches:
+            sections.append(
+                f"""
+                <b>❌ Failed create batches:</b><br>
+                {self.build_failed_html(created_failed_batches)}
+                """
+            )
 
-        <b>❌ Failed create batches:</b><br>
-        {created_failed_html}<br><br>
+        if closed_email_rows:
+            closed_table_rows = self.build_closed_table_rows(closed_email_rows)
 
-        <b>✅ Successfully updated {len(closed_email_rows)} Airtable records.</b><br><br>
-        <b>Closed the following About to Expire Issues:</b><br>
-        <table border="1" cellspacing="0" cellpadding="5">
-            <tr>
-                <th>Issue Number</th>
-                <th>GTFS Dataset Name</th>
-                <th>Service Name</th>
-                <th>Status</th>
-                <th>New End Date</th>
-            </tr>
-            {closed_table_rows}
-        </table><br><br>
+            sections.append(
+                f"""
+                <b>Successfully closed {len(closed_email_rows)} Airtable records.</b><br>
+                <table border="1" cellspacing="0" cellpadding="5">
+                    <tr>
+                        <th>Issue</th>
+                        <th>Issue Type</th>
+                        <th>GTFS Dataset Name</th>
+                        <th>Service Name</th>
+                        <th>Status</th>
+                        <th>End Date</th>
+                        <th>RT Completeness</th>
+                    </tr>
+                    {closed_table_rows}
+                </table>
+                """
+            )
 
-        <b>❌ Failed update batches:</b><br>
-        {closed_failed_html}
-        """
+        if closed_failed_batches:
+            sections.append(
+                f"""
+                <b>❌ Failed update batches:</b><br>
+                {self.build_failed_html(closed_failed_batches)}
+                """
+            )
+
+        return "<br><br>".join(sections)
 
     def execute(self, context: Context) -> dict[str, Any]:
         del context
 
-        update_result = self.update_result or {}
-        create_result = self.create_result or {}
+        expiring_update_result = self.expiring_update_result or {}
+        rt_update_result = self.rt_update_result or {}
+        create_result = self.expiring_create_result or {}
 
-        closed_email_rows = update_result.get("email_rows", [])
-        closed_failed_batches = update_result.get("failed_batches", [])
-        updated_record_ids = update_result.get("updated_record_ids", [])
+        closed_email_rows = expiring_update_result.get(
+            "email_rows", []
+        ) + rt_update_result.get("email_rows", [])
+
+        closed_failed_batches = expiring_update_result.get(
+            "failed_batches", []
+        ) + rt_update_result.get("failed_batches", [])
+
+        updated_record_ids = expiring_update_result.get(
+            "updated_record_ids", []
+        ) + rt_update_result.get("updated_record_ids", [])
 
         created_email_rows = create_result.get("email_rows", [])
         created_failed_batches = create_result.get("failed_batches", [])
         created_record_ids = create_result.get("created_record_ids", [])
 
-        if not closed_email_rows and not created_email_rows:
+        if (
+            not closed_email_rows
+            and not created_email_rows
+            and not closed_failed_batches
+            and not created_failed_batches
+        ):
             self.log.info("No updated or created rows. Email not sent.")
             return {
                 "email_sent": False,
                 "reason": "no_updated_or_created_rows",
             }
 
-        individual_create_emails_sent = False
-
         if created_email_rows:
             self.send_individual_create_emails(created_email_rows)
-            individual_create_emails_sent = True
 
         body = self.build_email_body(
             closed_email_rows=closed_email_rows,
             closed_failed_batches=closed_failed_batches,
             created_email_rows=created_email_rows,
             created_failed_batches=created_failed_batches,
-            individual_create_emails_sent=individual_create_emails_sent,
         )
 
         send_email(
