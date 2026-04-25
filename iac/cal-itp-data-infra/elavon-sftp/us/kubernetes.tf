@@ -1,4 +1,4 @@
-resource "kubernetes_secret" "elavon-sftp-hostkeys" {
+resource "kubernetes_secret_v1" "elavon-sftp-hostkeys" {
   type = "Opaque"
 
   metadata {
@@ -12,7 +12,7 @@ resource "kubernetes_secret" "elavon-sftp-hostkeys" {
   }
 }
 
-resource "kubernetes_secret" "elavon-sftp-authorizedkey" {
+resource "kubernetes_secret_v1" "elavon-sftp-authorizedkey" {
   type = "Opaque"
 
   metadata {

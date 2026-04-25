@@ -29,6 +29,15 @@ data "terraform_remote_state" "iam" {
   }
 }
 
+data "terraform_remote_state" "networks" {
+  backend = "gcs"
+
+  config = {
+    bucket = "calitp-staging-gcp-components-tfstate"
+    prefix = "cal-itp-data-infra-staging/networks"
+  }
+}
+
 data "google_secret_manager_secret_version" "elavon-sftp-public-key" {
   secret = "elavon-sftp-public-key"
 }
