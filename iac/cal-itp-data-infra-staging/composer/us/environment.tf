@@ -17,7 +17,7 @@ resource "google_composer_environment" "calitp-staging-composer" {
         cpu        = 2
         memory_gb  = 2
         storage_gb = 1
-        count      = 2
+        count      = 1
       }
       web_server {
         cpu        = 2
@@ -26,7 +26,7 @@ resource "google_composer_environment" "calitp-staging-composer" {
       }
       worker {
         cpu        = 4
-        memory_gb  = 8
+        memory_gb  = 13
         storage_gb = 1
         min_count  = 1
         max_count  = 8
@@ -39,13 +39,13 @@ resource "google_composer_environment" "calitp-staging-composer" {
       image_version = "composer-2.15.2-airflow-2.10.5"
 
       airflow_config_overrides = {
+        celery-worker_concurrency                  = 4
         core-dag_file_processor_timeout            = 1200
         core-dagbag_import_timeout                 = 600
         core-dags_are_paused_at_creation           = true
         core-max_active_runs_per_dag               = 128
         core-max_active_tasks_per_dag              = 128
         core-max_templated_field_length            = 25000
-        core-parallelism                           = 0
         cosmos-use_dataset_airflow3_uri_standard   = true
         email-email_backend                        = "airflow.utils.email.send_email_smtp"
         email-email_conn_id                        = "smtp_postmark"
