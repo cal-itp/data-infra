@@ -5,6 +5,7 @@ WITH filtered_issues AS (
     source_record_id AS issue_source_record_id,
     gtfs_dataset_source_record_id,
     gtfs_dataset_name,
+    issue_type_name,
     outreach_status,
     service_name,
     issue__ AS issue_number
@@ -83,6 +84,7 @@ SELECT
   issue_source_record_id,
   outreach_status,
   gtfs_dataset_name,
+  issue_type_name,
   service_name, -- Was requested by Associate Transportation Planner
   new_end_date
 FROM fct_close_expired_issues

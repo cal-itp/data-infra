@@ -31,62 +31,90 @@ with DAG(
         depends_on_past=False,
     )
 
-    with TaskGroup("close_expired_issues") as close_expired_issues:
-        close_expired_issue_candidates = TDQBigQueryRowsOperator(
-            task_id="bq_close_expired_issues_candidates",
+    with TaskGroup("expiring_issues_close") as expiring_issues_close:
+        get_expiring_issues_close_candidates = TDQBigQueryRowsOperator(
+            task_id="get_expiring_issues_close_candidates",
             retries=1,
             retry_delay=timedelta(seconds=10),
             dataset_name="mart_transit_database",
             table_name="fct_close_expired_issues",
-            # columns=[
-            #     "issue_number",
-            #     "issue_source_record_id",
-            #     "outreach_status",
-            #     "gtfs_dataset_name",
-            #     "new_end_date",
-            # ],
         )
 
-        update_airtable_issues = AirtableIssuesUpdateOperator(
-            task_id="update_airtable_issues",
+        update_airtable_expiring_issues = AirtableIssuesUpdateOperator(
+            task_id="update_airtable_expiring_issues",
             retries=1,
             retry_delay=timedelta(seconds=10),
             airtable_conn_id="airtable_issue_management",
             air_base_id="appmBGOFTvsDv4jdJ",
             air_table_name=dag.default_args["air_table_name"],
-            rows=XComArg(close_expired_issue_candidates),
+            rows=XComArg(get_expiring_issues_close_candidates),
         )
 
-        close_expired_issue_candidates >> update_airtable_issues
+        get_expiring_issues_close_candidates >> update_airtable_expiring_issues
 
-    with TaskGroup("create_expiring_issues") as create_expiring_issues:
-        create_expiring_issue_candidates = TDQBigQueryRowsOperator(
-            task_id="bq_create_expiring_issues_candidates",
+    with TaskGroup("expiring_issues_create") as expiring_issues_create:
+        get_expiring_issues_create_candidates = TDQBigQueryRowsOperator(
+            task_id="get_expiring_issues_create_candidates",
             retries=1,
             retry_delay=timedelta(seconds=10),
             dataset_name="mart_transit_database",
             table_name="fct_create_expiring_gtfs_issues",
-            # columns=[
-            #     "gtfs_dataset_name",
-            #     "gtfs_dataset_record_id",
-            #     "service_name",
-            #     "service_record_id",
-            #     "max_end_date",
-            #     "expiration_status",
-            # ],
         )
 
-        create_airtable_issues = AirtableIssuesCreateOperator(
-            task_id="create_airtable_issues",
+        create_airtable_expiring_issues = AirtableIssuesCreateOperator(
+            task_id="create_airtable_expiring_issues",
             retries=1,
             retry_delay=timedelta(seconds=10),
             airtable_conn_id="airtable_issue_management",
             air_base_id="appmBGOFTvsDv4jdJ",
             air_table_name=dag.default_args["air_table_name"],
-            rows=XComArg(create_expiring_issue_candidates),
+            rows=XComArg(get_expiring_issues_create_candidates),
         )
 
-        create_expiring_issue_candidates >> create_airtable_issues
+        get_expiring_issues_create_candidates >> create_airtable_expiring_issues
+
+    with TaskGroup("rt_completeness_issues_close") as rt_completeness_issues_close:
+        get_rt_completeness_close_candidates = TDQBigQueryRowsOperator(
+            task_id="get_rt_completeness_close_candidates",
+            retries=1,
+            retry_delay=timedelta(seconds=10),
+            dataset_name="mart_transit_database",
+            table_name="fct_close_rt_completeness_issues",
+        )
+
+        update_airtable_rt_completeness_issues = AirtableIssuesUpdateOperator(
+            task_id="update_airtable_rt_completeness_issues",
+            retries=1,
+            retry_delay=timedelta(seconds=10),
+            airtable_conn_id="airtable_issue_management",
+            air_base_id="appmBGOFTvsDv4jdJ",
+            air_table_name=dag.default_args["air_table_name"],
+            rows=XComArg(get_rt_completeness_close_candidates),
+        )
+
+        get_rt_completeness_close_candidates >> update_airtable_rt_completeness_issues
+
+    # Future Task:
+    # with TaskGroup("rt_completeness_issues_create") as rt_completeness_issues_create:
+    #     get_rt_completeness_create_candidates = TDQBigQueryRowsOperator(
+    #         task_id="get_rt_completeness_create_candidates",
+    #         retries=1,
+    #         retry_delay=timedelta(seconds=10),
+    #         dataset_name="mart_transit_database",
+    #         table_name="fct_create_rt_completeness_issues",  # example name
+    #     )
+
+    #     create_airtable_rt_completeness_issues = AirtableIssuesCreateOperator(
+    #         task_id="create_airtable_rt_completeness_issues",
+    #         retries=1,
+    #         retry_delay=timedelta(seconds=10),
+    #         airtable_conn_id="airtable_issue_management",
+    #         air_base_id="appmBGOFTvsDv4jdJ",
+    #         air_table_name=dag.default_args["air_table_name"],
+    #         rows=XComArg(get_rt_completeness_create_candidates),
+    #     )
+
+    #     get_rt_completeness_create_candidates >> create_airtable_rt_completeness_issues
 
     send_airtable_issue_email = AirtableIssuesEmailOperator(
         task_id="send_airtable_issue_email",
@@ -94,9 +122,22 @@ with DAG(
         retry_delay=timedelta(seconds=10),
         to_emails=dag.default_args["email"],
         subject="[Airflow] Airtable Issue Management",
-        update_result=XComArg(update_airtable_issues),
-        create_result=XComArg(create_airtable_issues),
+        expiring_update_result=XComArg(update_airtable_expiring_issues),
+        expiring_create_result=XComArg(create_airtable_expiring_issues),
+        rt_update_result=XComArg(update_airtable_rt_completeness_issues),
+        # rt_create_result=XComArg(create_airtable_rt_completeness_issues),
     )
 
-    latest_only >> [close_expired_issues, create_expiring_issues]
-    [close_expired_issues, create_expiring_issues] >> send_airtable_issue_email
+    latest_only >> [
+        expiring_issues_close,
+        expiring_issues_create,
+        rt_completeness_issues_close,
+        # rt_completeness_issues_create,
+    ]
+
+    [
+        expiring_issues_close,
+        expiring_issues_create,
+        rt_completeness_issues_close,
+        # rt_completeness_issues_create,
+    ] >> send_airtable_issue_email
