@@ -770,10 +770,11 @@ models:
 
   - name: int_payments__enghouse_ticket_results_deduped
     description: |
-      Deduplicates stg_enghouse__ticket_results on `_content_hash`. Among rows sharing the
-      same content hash, keeps the row with the most fields populated (non-null
-      `start_dttm`, then `end_dttm`, then `created_dttm`).
-      Columns have the same meanings as in the upstream staging model.
+      Deduplicates stg_enghouse__ticket_results on `_content_hash` by taking the
+      `MIN` of `created_dttm`, `start_dttm`, `end_dttm`, and `clearing_id` across
+      rows sharing a hash, so these columns may be a combination of values from
+      multiple input rows. All other columns are part of the hash and identical
+      across the group. Columns have the same meanings as in the upstream staging model.
     columns:
       - name: operator_id
       - name: id
