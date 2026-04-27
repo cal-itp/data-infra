@@ -44,7 +44,7 @@ dedupe_and_keys AS (
         *,
         -- generate keys now that input columns have been trimmed & cast
         {{ dbt_utils.generate_surrogate_key(['littlepay_export_ts', '_line_number', 'instance']) }} AS _key,
-        {{ dbt_utils.generate_surrogate_key(['settlement_id']) }} AS _payments_key
+        {{ dbt_utils.generate_surrogate_key(['settlement_id', 'settlement_status']) }} AS _payments_key
     FROM clean_columns
     {{ qualify_dedupe_full_duplicate_lp_rows() }}
 ),
