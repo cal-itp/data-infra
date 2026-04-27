@@ -295,6 +295,8 @@ models:
       - dbt_utils.expression_is_true:
           arguments:
             expression: "micropayment_refund_amount <= charge_amount"
+          config:
+            error_if: '>50'
     columns:
       - *participant_id
       - &micropayment_id
