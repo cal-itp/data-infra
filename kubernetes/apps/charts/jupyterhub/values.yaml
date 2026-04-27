@@ -118,5 +118,12 @@ jupyterhub:
   proxy:
     service:
       type: ClusterIP
+      annotations:
+        # Enable container-native load balancing so the GKE Ingress
+        # routes directly to pods via NEG instead of through kube-proxy.
+        cloud.google.com/neg: '{"ingress": true}'
+        # Attach our BackendConfig so the GCLB uses our long timeout
+        # and the JupyterHub-specific health check path.
+        cloud.google.com/backend-config: '{"default": "jupyterhub-backend"}'
 debug:
   enabled: true
