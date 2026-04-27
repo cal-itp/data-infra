@@ -49,9 +49,6 @@ jobs:
       - name: Setup GCloud utilities
         uses: google-github-actions/setup-gcloud@v2
 
-      - name: Setup Graphviz
-        uses: ts-graphviz/setup-graphviz@v2
-
       - name: Install uv
         uses: astral-sh/setup-uv@v7
         with:
@@ -104,6 +101,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
 
       - name: Download compilation artifacts
         uses: actions/download-artifact@v4
@@ -188,6 +187,55 @@ jobs:
           issue-number: ${{ github.event.number }}
           body: "Warehouse report: Failed to add ci-report to a comment. Review the ci-report in the [Summary](https://github.com/cal-itp/data-infra/actions/runs/${{ github.run_id }})."
           edit-mode: replace
+
+      - name: List changed models
+        uses: tj-actions/changed-files@v46
+        id: changed-models
+        with:
+          path: warehouse
+          separator: "+ "
+          files: models/**/*.sql
+
+      - name: Find impacted exposures
+        id: exposures
+        if: ${{ steps.changed-models.outputs.any_changed == 'true' }}
+        working-directory: warehouse
+        run: |
+          models="${{ steps.changed-models.outputs.all_changed_files }}"
+          exposures=$(uv run dbt ls \
+            --select "${models}+" \
+            --resource-type exposure \
+            --output name \
+            --quiet)
+
+          {
+            echo "## Impacted Exposures"
+            echo ""
+            if [ -n "$exposures" ]; then
+              echo "The following exposures are downstream of models changed in this PR:"
+              echo ""
+              echo "$exposures" | while IFS= read -r exp; do
+                echo "- [\`${exp}\`](https://dbt-docs.dds.dot.ca.gov/#!/exposure/exposure.calitp_warehouse.${exp})"
+              done
+            else
+              echo "_No exposures are impacted by the changes in this PR._"
+            fi
+            echo ""
+            echo "### Changed models"
+            echo ""
+            echo "$models" | sed 's/+ /\n/g' | while IFS= read -r model; do
+              echo "- \`${model}\`"
+            done
+            echo ""
+            echo "> If any impacted exposures are unexpected, verify that your changes do not unintentionally affect downstream consumers."
+          } > "$RUNNER_TEMP/exposure-comment.md"
+
+      - name: Post exposures comment
+        if: ${{ steps.changed-models.outputs.any_changed == 'true' }}
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          issue-number: ${{ github.event.number }}
+          body-path: ${{ runner.temp }}/exposure-comment.md
 
   upload_latest_artifacts:
     name: Upload to latest dbt artifacts folder (Staging)
