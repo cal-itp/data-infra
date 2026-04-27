@@ -1,6 +1,6 @@
 output "kubernetes_service_elavon-sftp_load_balancer_status" {
-  depends_on = [kubernetes_service.elavon-sftp]
-  value      = kubernetes_service.elavon-sftp.status
+  depends_on = [kubernetes_service_v1.elavon-sftp]
+  value      = kubernetes_service_v1.elavon-sftp.status
 }
 
 output "kubernetes_service_elavon-sftp_username" {
