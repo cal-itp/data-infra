@@ -1,9 +1,10 @@
 resource "kubernetes_secret_v1" "elavon-sftp-hostkeys" {
-  type = "Opaque"
+  type                           = "Opaque"
+  wait_for_service_account_token = true
 
   metadata {
-    name      = "elavon-sftp-hostkeys"
     namespace = "default"
+    name      = "elavon-sftp-hostkeys"
   }
 
   data = {
@@ -13,11 +14,12 @@ resource "kubernetes_secret_v1" "elavon-sftp-hostkeys" {
 }
 
 resource "kubernetes_secret_v1" "elavon-sftp-authorizedkey" {
-  type = "Opaque"
+  type                           = "Opaque"
+  wait_for_service_account_token = true
 
   metadata {
-    name      = "elavon-sftp-authorizedkey"
     namespace = "default"
+    name      = "elavon-sftp-authorizedkey"
   }
 
   data = {
@@ -25,9 +27,10 @@ resource "kubernetes_secret_v1" "elavon-sftp-authorizedkey" {
   }
 }
 
-resource "kubernetes_service_account" "elavon-sftp-service-account" {
+resource "kubernetes_service_account_v1" "elavon-sftp-service-account" {
   metadata {
-    name = "elavon-sftp-service-account"
+    namespace = "default"
+    name      = "elavon-sftp-service-account"
 
     annotations = {
       "iam.gke.io/gcp-service-account" = data.terraform_remote_state.iam.outputs.google_service_account_elavon-sftp-service-account_email
@@ -35,9 +38,10 @@ resource "kubernetes_service_account" "elavon-sftp-service-account" {
   }
 }
 
-resource "kubernetes_deployment" "elavon-sftp" {
+resource "kubernetes_deployment_v1" "elavon-sftp" {
   metadata {
-    name = "elavon-sftp-deployment"
+    namespace = "default"
+    name      = "elavon-sftp-deployment"
 
     labels = {
       app = "elavon-sftp"
@@ -65,7 +69,22 @@ resource "kubernetes_deployment" "elavon-sftp" {
       }
 
       spec {
-        service_account_name = kubernetes_service_account.elavon-sftp-service-account.metadata.0.name
+        service_account_name = kubernetes_service_account_v1.elavon-sftp-service-account.metadata.0.name
+
+        toleration {
+          effect   = "NoSchedule"
+          key      = "kubernetes.io/arch"
+          operator = "Equal"
+          value    = "amd64"
+        }
+
+        security_context {
+          supplemental_groups = []
+
+          seccomp_profile {
+            type = "RuntimeDefault"
+          }
+        }
 
         volume {
           name = "gcs-volume"
@@ -97,6 +116,18 @@ resource "kubernetes_deployment" "elavon-sftp" {
         container {
           name  = "sftp-server"
           image = "alpine"
+
+          security_context {
+            allow_privilege_escalation = false
+            privileged                 = false
+            read_only_root_filesystem  = false
+            run_as_non_root            = false
+
+            capabilities {
+              add  = []
+              drop = ["NET_RAW"]
+            }
+          }
 
           env {
             name  = "SFTP_USER"
@@ -157,21 +188,25 @@ resource "kubernetes_deployment" "elavon-sftp" {
   }
 }
 
-resource "kubernetes_service" "elavon-sftp" {
+resource "kubernetes_service_v1" "elavon-sftp" {
+  wait_for_load_balancer = true
+
   metadata {
-    name = "elavon-sftp"
+    namespace = "default"
+    name      = "elavon-sftp"
   }
 
   spec {
+    type             = "LoadBalancer"
+    load_balancer_ip = data.terraform_remote_state.networks.outputs.google_compute_address_elavon-sftp-address_ip
+
     selector = {
-      app = kubernetes_deployment.elavon-sftp.metadata.0.labels.app
+      app = kubernetes_deployment_v1.elavon-sftp.metadata.0.labels.app
     }
+
     port {
       port        = 22
       target_port = 22
     }
-
-    type             = "LoadBalancer"
-    load_balancer_ip = data.terraform_remote_state.networks.outputs.google_compute_address_elavon-sftp-address_ip
   }
 }
