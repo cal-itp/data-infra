@@ -1,5 +1,20 @@
 version: 2
 
+x-common-fields:
+# elavon fields
+  - &purch_id
+    name: purch_id
+    description: |
+      Merchant identifier on the purchase (Car Rental Agreement, Hotel Folio, Order/Invoice number, or Other ID) sent to the card issuer
+  - &payment_date
+    name: payment_date
+    description: |
+      Date the Elavon system created and transmitted the Fund Event
+  - &settlement_date
+    name: settlement_date
+    description: |
+      The calendar day the transaction was batched and electronically deposited by Elavon
+
 models:
   - name: fct_payments_rides_v2
     description: |
@@ -155,9 +170,8 @@ models:
       - name: distance_miles
         description: The distance between location_name and off_location_name (in miles)
 
-  - name: fct_payments_aggregations_reconciliation
+  - name: fct_payments_aggregations
     description: |
-      [This is a copy for testing reconciliation workflow enhancements]
       Each row in this table is an "aggregation".
       An "aggregation" is a group of micropayment/transactions processed (authorised and settled) together.
       This table summarizes information about aggregations which can be used to reconcile
@@ -215,6 +229,9 @@ models:
           If "true", there is at least one settlement in the settlements source data with this aggregation ID.
           Settlement is the final step in the payment workflow, so some aggregations may be missing
           settlements simply because they are not processed yet.
+      - name: has_refund
+        description: |
+          If "true", there is at least one refund in the refund or micropayment source data with this aggregation ID.
       - name: authorisation_retrieval_reference_number
         description: |
           Retrieval reference number for the most recent authorisation of this aggregation.
@@ -222,10 +239,29 @@ models:
         description: |
           Retrieval reference number for the settlement of this aggregation.
           This field can be used to map to Elavon data.
+      - <<: *purch_id
+        name: elavon_purch_id
+      - <<: *payment_date
+        name: elavon_payment_date
+      - <<: *settlement_date
+        name: elavon_settlement_date
+      - name: elavon_net_amount
+        description: >
+          Sum of Elavon amount.
+      - name: elavon_sales
+        description: >
+          Sum of Elavon amount when amount > 0.
+      - name: elavon_refunds
+        description: >
+          Sum of Elavon amount when amount < 0.
       - name: net_micropayment_amount_dollars
         description: '{{ doc("lp_net_micropayment_amount_dollars") }}'
       - name: total_micropayment_nominal_amount_dollars
         description: '{{ doc("lp_total_nominal_amount_dollars") }}'
+      - name: total_sales
+        description: '{{ doc("lp_total_sales") }}'
+      - name: total_refund_activity_amount_dollars
+        description: '{{ doc("lp_aggregation_refund_amount") }}'
       - name: latest_micropayment_transaction_datetime
         description: '{{ doc("lp_mp_latest_transaction_time") }}'
       - name: num_micropayments
@@ -295,120 +331,6 @@ models:
       - name: reconciliation_category
         description: |
           Category for reconciliation purposes (whether the aggregation is settled and whether it has an Elavon match.)
-
-  - name: fct_payments_aggregations
-    description: |
-      Each row in this table is an "aggregation".
-      An "aggregation" is a group of micropayment/transactions processed (authorised and settled) together.
-      This table summarizes information about aggregations which can be used to reconcile
-      payments information with other sources.
-      Note: This table does not currently include information from the refunds source data, but it does contain refund information
-      present in the micropayments and settlements source data.
-    columns:
-      - *participant_id
-      - *organization_name
-      - *organization_source_record_id
-      - name: end_of_month_date_pacific
-        description: |
-          The last day of the month of the aggregation_datetime in Pacific Time (involves conversion of aggregation_datetime to Pacific Time).
-          This column is primarily for use in BI tooling to support consistent dates across activity types.
-          Aggregation activity happens throughout the month.
-        data_tests:
-          - not_null
-      - name: end_of_month_date_utc
-        description: |
-          The last day of the month of the aggregation_datetime in UTC.
-          This column preserves the end of month date value for the original UTC date as received by Littlepay, however,
-          `end_of_month_date_pacific` is primarily used in BI tooling instead to support consistent dates across activity types.
-          Aggregation activity happens throughout the month.
-        data_tests:
-          - not_null
-      - name: aggregation_id
-        description: |
-          Aggregation ID that uniquely identifies this aggregation.
-        data_tests:
-          - not_null
-          - unique
-      - name: aggregation_datetime
-        description: |
-          Datetime of settlement if present, otherwise falls back to authorisation, otherwise falls back to micropayment.
-          This can be used to represent the most recent update for the aggregation.
-      - name: has_micropayment
-        description: |
-          If "true", there is at least one micropayment in the micropayments source data with this aggregation ID.
-          Essentially all aggregations should have a micropayment because the micropayment is the first step
-          in the payment workflow.
-      - name: has_authorisation
-        description: |
-          If "true", there is at least one authorisation in the authorisations source data with this aggregation ID.
-          Authorisation is the second step in the payment workflow after the micropayment occurs.
-      - name: has_settlement
-        description: |
-          If "true", there is at least one settlement in the settlements source data with this aggregation ID.
-          Settlement is the final step in the payment workflow, so some aggregations may be missing
-          settlements simply because they are not processed yet.
-      - name: authorisation_retrieval_reference_number
-        description: |
-          Retrieval reference number for the most recent authorisation of this aggregation.
-      - name: settlement_retrieval_reference_number
-        description: |
-          Retrieval reference number for the settlement of this aggregation.
-          This field can be used to map to Elavon data.
-      - name: net_micropayment_amount_dollars
-        description: '{{ doc("lp_net_micropayment_amount_dollars") }}'
-      - name: total_micropayment_nominal_amount_dollars
-        description: '{{ doc("lp_total_nominal_amount_dollars") }}'
-      - name: latest_micropayment_transaction_datetime
-        description: '{{ doc("lp_mp_latest_transaction_time") }}'
-      - name: num_micropayments
-        description: '{{ doc("lp_num_micropayments") }}'
-      - name: contains_pre_settlement_refund
-        description: '{{ doc("lp_contains_pre_settlement_refund") }}'
-      - name: contains_variable_fare
-        description: '{{ doc("lp_contains_variable_fare") }}'
-      - name: contains_flat_fare
-        description: '{{ doc("lp_contains_flat_fare") }}'
-      - name: contains_pending_charge
-        description: '{{ doc("lp_contains_pending_charge") }}'
-      - name: contains_adjusted_micropayment
-        description: '{{ doc("lp_contains_adjusted_micropayment") }}'
-      - name: latest_authorisation_request_type
-        description: |
-          Request type of the most recent authorisation associated with this aggregation.
-      - name: authorisation_transaction_amount
-        description: |
-          Transaction amount of the most recent authorisation associated with this aggregation.
-          Note that `CARD_CHECK` authorisations may have transaction amount of 0 even if the transaction being authorised will
-          ultimately have a larger transaction amount.
-      - name: latest_authorisation_status
-        description: |
-          Status of the most recent authorisation associated with this aggregation.
-      - name: final_authorisation_has_null_status
-        description: |
-          Indicates the existence of another authorisation record, not represented directly here,
-          which occured after the "latest" authorisation in an aggregation but had a null status.
-      - name: latest_authorisation_update_datetime
-        description: |
-          `authorisation_date_time_utc` of the most recent authorisation associated with this aggregation.
-          This is a UTC datetime.
-      - name: settlement_contains_imputed_type
-        description: '{{ doc("lp_settlement_contains_imputed_type") }}'
-      - name: latest_settlement_update_datetime
-        description: '{{ doc("lp_settlement_latest_update_timestamp") }}'
-      - name: net_settled_amount_dollars
-        description: '{{ doc("lp_net_settled_amount_dollars") }}'
-      - name: settlement_contains_refund
-        description: '{{ doc("lp_settlement_contains_refund") }}'
-      - name: settlement_debit_amount
-        description: '{{ doc("lp_settlement_debit_amount") }}'
-      - name: settlement_credit_amount
-        description: '{{ doc("lp_settlement_credit_amount") }}'
-      - name: aggregation_is_settled
-        description: '{{ doc("lp_aggregation_is_settled") }}'
-      - name: debit_is_settled
-        description: '{{ doc("lp_debit_is_settled") }}'
-      - name: credit_is_settled
-        description: '{{ doc("lp_credit_is_settled") }}'
 
   - name: fct_payments_settlements
     description: Littlepay settlements (completed transactions.)
@@ -496,10 +418,7 @@ models:
         name: payment_reference
         description: |
           Unique number assigned to every "Fund Event" (ACH Payment/Withdrawal, Wire Transfer, Invoice)
-      - &payment_date
-        name: payment_date
-        description: |
-          Date the Elavon system created and transmitted the Fund Event
+      - *payment_date
       - &account_number
         name: account_number
         description: |
@@ -588,10 +507,7 @@ models:
         name: transaction_date
         description: |
           The calendar day the transaction was processed
-      - &settlement_date
-        name: settlement_date
-        description: |
-          The calendar day the transaction was batched and electronically deposited
+      - *settlement_date
       - &authorization_code
         name: authorization_code
         description: |
@@ -644,10 +560,7 @@ models:
         name: mer_ref
         description: |
           Unique Customer Defined field- Numeric Only
-      - &purch_id
-        name: purch_id
-        description: |
-          Merchant identifier on the purchase (Car Rental Agreement, Hotel Folio, Order/Invoice number, or Other ID) sent to the card issuer
+      - *purch_id
       - &cust_cod
         name: cust_cod
         description: |

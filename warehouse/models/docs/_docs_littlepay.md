@@ -144,22 +144,19 @@ i.e., these values represent costs for the participant (agency).
 
 {% docs lp_aggregation_is_settled %}
 Boolean indicating whether all settlements in this aggregation have `settlement_status = SETTLED`.
-`settlement_status` is only available for all agencies starting on November 28, 2023 so
-this field does not account for activity before that date and aggregations that only contain activity before that date have nulls in this field. If `false`, there was a settlement present that has a `settlement_status` other than `SETTLED` (i.e., `PENDING`, `REJECTED`, or `FAILED`.)
 
-When this column appears in models where not all aggregations have settlements at all, this field is also null for aggregations
-that don't have any settlements. So, this field can be null if there are no settlements or if all settlement activity occurred before November 28, 2023.
+If `false`, there was a settlement present that has a `settlement_status` other than `SETTLED` (i.e., `PENDING`, `REJECTED`, or `FAILED`) *or* the given aggregation does not have settlement information (yet).
+
+ This field is null for transactions before November 28, 2023, when `settlement_status` was not yet available.
 {% enddocs %}
 
 {% docs lp_debit_is_settled %}
-Same as `aggregation_is_settled` but only includes the aggregation's debit (fare payment) settlements.
+Similar to `aggregation_is_settled` but only includes the aggregation's debit (fare payment) settlements. This will be null (rather than false) if the given aggregation does not have settlement information yet.
 {% enddocs %}
 
 {% docs lp_credit_is_settled %}
-Same as `aggregation_is_settled` but only includes the aggregation's credit (refund) settlements.
-If there is no credit activity for the aggregation, this field is null.
-(So, a null in this field can mean either that there was no credit activity at all or that all credit
-activity was prior to November 28, 2023.)
+Similar to `aggregation_is_settled` but only includes the aggregation's credit (refund) settlements.
+This will be null (rather than false) if the given aggregation does not have settlement information yet.
 {% enddocs %}
 
 {% docs lp_micropayment_refund_amount %}
@@ -168,9 +165,16 @@ Null if no refund for this micropayment.
 {% enddocs %}
 
 {% docs lp_aggregation_refund_amount %}
-Total refunded amount associated with this aggregation.
-(The aggregation may contain more than one micropayment.)
+Total refund amount in dollars associated with this aggregation.
+Note that this includes refunds in all approval statuses, so may include rejected refunds.
+To see final settled refund amount, must compare with settlements data.
 {% enddocs %}
+
+{% docs lp_total_sales %}
+Sum of positive charge_amount values for micropayments in this aggregation, i.e., total of
+charge_amount values ignoring micropayment refunds.
+{% enddocs %}
+
 
 -------------------------------- SETTLEMENTS TABLE --------------------------------
 
