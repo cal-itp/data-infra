@@ -10,6 +10,7 @@ from freezegun import freeze_time
 from moto import mock_aws
 from operators.littlepay_s3_to_gcs_operator import LittlepayS3ToGCSOperator
 
+from airflow.exceptions import AirflowException
 from airflow.models.dag import DAG
 from airflow.models.taskinstance import TaskInstance
 from airflow.providers.amazon.aws.hooks.s3 import S3Hook
@@ -625,9 +626,7 @@ class TestLittlepayS3ToGCSOperator:
 
     @pytest.fixture
     def invalid_entity_destination_path(self) -> str:
-        return (
-            "something/instance=atn/filename=202504291120_something.psv/ts=2025-06-01T00:00:00+00:00/202504291120_something.psv",
-        )
+        return "something/instance=atn/filename=202504291120_something.psv/ts=2025-06-01T00:00:00+00:00/202504291120_something.psv"
 
     @pytest.fixture
     def invalid_entity_path(self) -> str:
@@ -695,22 +694,56 @@ class TestLittlepayS3ToGCSOperator:
         gcs_hook: GCSHook,
         s3_hook: S3Hook,
         invalid_entity_source_path: str,
+        invalid_entity_destination_path: str,
+        invalid_entity_report_path: str,
         invalid_entity_path: str,
-        capsys,
     ):
-        invalid_entity_operator.run(
-            start_date=execution_date,
-            end_date=execution_date + timedelta(days=1),
-            ignore_first_depends_on_past=True,
-        )
+        with pytest.raises(AirflowException) as exception:
+            invalid_entity_operator.run(
+                start_date=execution_date,
+                end_date=execution_date + timedelta(days=1),
+                ignore_first_depends_on_past=True,
+            )
+        assert "File 'something' is not on the list." in str(exception.value)
 
         task = invalid_entity_dag.get_task("invalid_entity_littlepay_s3_to_gcs")
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
         assert xcom_value is None
 
-        captured = capsys.readouterr()
-        assert "WARNING - Entity is not in the list." in captured.out
+        destination_file = gcs_hook.exists(
+            bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3").replace(
+                "gs://", ""
+            ),
+            object_name=invalid_entity_destination_path,
+        )
+        assert not destination_file
+
+        report = gcs_hook.download(
+            bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3").replace(
+                "gs://", ""
+            ),
+            object_name=invalid_entity_report_path,
+        )
+        parsed_report = [json.loads(x) for x in report.splitlines()]
+        assert parsed_report[0] == {
+            "success": False,
+            "prior": {},
+            "exception": "File 'something' is not on the list.",
+            "extract": {
+                "filename": "202504291120_something.psv",
+                "instance": "atn",
+                "s3bucket": "mock-littlepay-bucket",
+                "s3object": {
+                    "Key": "atn/v3/something/202504291120_something.psv",
+                    "LastModified": None,
+                    "ETag": None,
+                    "Size": None,
+                    "StorageClass": None,
+                },
+                "ts": "2025-06-01T00:00:00+00:00",
+            },
+        }
 
     @pytest.fixture
     def invalid_file_type_source_path(self) -> str:
@@ -718,9 +751,7 @@ class TestLittlepayS3ToGCSOperator:
 
     @pytest.fixture
     def invalid_file_type_destination_path(self) -> str:
-        return (
-            "authorisations/instance=atn/filename=202504291120_authorisations.txt/ts=2025-06-01T00:00:00+00:00/202504291120_authorisations.txt",
-        )
+        return "authorisations/instance=atn/filename=202504291120_authorisations.txt/ts=2025-06-01T00:00:00+00:00/202504291120_authorisations.txt"
 
     @pytest.fixture
     def invalid_file_type_path(self) -> str:
@@ -788,13 +819,18 @@ class TestLittlepayS3ToGCSOperator:
         gcs_hook: GCSHook,
         s3_hook: S3Hook,
         invalid_file_type_source_path: str,
+        invalid_file_type_destination_path: str,
+        invalid_file_type_report_path: str,
         invalid_file_type_path: str,
-        capsys,
     ):
-        invalid_file_type_operator.run(
-            start_date=execution_date,
-            end_date=execution_date + timedelta(days=1),
-            ignore_first_depends_on_past=True,
+        with pytest.raises(AirflowException) as exception:
+            invalid_file_type_operator.run(
+                start_date=execution_date,
+                end_date=execution_date + timedelta(days=1),
+                ignore_first_depends_on_past=True,
+            )
+        assert "File '202504291120_authorisations.txt' is not a psv type." in str(
+            exception.value
         )
 
         task = invalid_file_type_dag.get_task("invalid_file_type_littlepay_s3_to_gcs")
@@ -802,5 +838,199 @@ class TestLittlepayS3ToGCSOperator:
         xcom_value = task_instance.xcom_pull()
         assert xcom_value is None
 
-        captured = capsys.readouterr()
-        assert "WARNING - File is not a psv type." in captured.out
+        destination_file = gcs_hook.exists(
+            bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3").replace(
+                "gs://", ""
+            ),
+            object_name=invalid_file_type_destination_path,
+        )
+        assert not destination_file
+
+        report = gcs_hook.download(
+            bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3").replace(
+                "gs://", ""
+            ),
+            object_name=invalid_file_type_report_path,
+        )
+        parsed_report = [json.loads(x) for x in report.splitlines()]
+        assert parsed_report[0] == {
+            "success": False,
+            "prior": {},
+            "exception": "File '202504291120_authorisations.txt' is not a psv type.",
+            "extract": {
+                "filename": "202504291120_authorisations.txt",
+                "instance": "atn",
+                "s3bucket": "mock-littlepay-bucket",
+                "s3object": {
+                    "Key": "atn/v3/authorisations/202504291120_authorisations.txt",
+                    "LastModified": None,
+                    "ETag": None,
+                    "Size": None,
+                    "StorageClass": None,
+                },
+                "ts": "2025-06-01T00:00:00+00:00",
+            },
+        }
+
+    @pytest.fixture
+    def not_found_source_path(self) -> str:
+        return "atn/v3/authorisations/202504291120_authorisations.psv"
+
+    @pytest.fixture
+    def not_found_destination_path(self) -> str:
+        return "authorisations/instance=atn/filename=202504291120_authorisations.psv/ts=2025-06-01T00:00:00+00:00/202504291120_authorisations.psv"
+
+    @pytest.fixture
+    def not_found_path(self) -> str:
+        return "authorisations/instance=atn/filename=202504291120_authorisations.psv/ts=2025-05-01T00:00:00+00:00/202504291120_authorisations.psv"
+
+    @pytest.fixture
+    def not_found_destination_search_prefix(self) -> str:
+        return "authorisations/instance=atn/filename=202504291120_authorisations.psv"
+
+    @pytest.fixture
+    def not_found_destination_search_glob(self) -> str:
+        return "**/202504291120_authorisations.psv"
+
+    @pytest.fixture
+    def not_found_report_path(self) -> str:
+        return "raw_littlepay_sync_job_result/instance=atn/ts=2025-06-01T00:00:00+00:00/202504291120_authorisations.jsonl"
+
+    @pytest.fixture
+    def not_found_dag(self, execution_date: datetime) -> DAG:
+        return DAG(
+            "test_not_found_dag",
+            default_args={
+                "owner": "airflow",
+                "start_date": execution_date,
+                "end_date": execution_date + relativedelta(months=+1),
+            },
+            schedule=relativedelta(months=+1),
+        )
+
+    @pytest.fixture
+    def not_found_operator(
+        self,
+        execution_date: datetime,
+        not_found_dag: DAG,
+        not_found_source_path: str,
+        not_found_destination_path: str,
+        not_found_destination_search_prefix: str,
+        not_found_destination_search_glob: str,
+        not_found_report_path: str,
+    ) -> LittlepayS3ToGCSOperator:
+        return LittlepayS3ToGCSOperator(
+            dag=not_found_dag,
+            task_id="not_found_littlepay_s3_to_gcs",
+            ts=execution_date.isoformat(),
+            provider="atn",
+            entity="authorisations",
+            aws_conn_id="aws_default",
+            gcp_conn_id="google_cloud_default",
+            source_bucket="mock-littlepay-bucket",
+            source_path=not_found_source_path,
+            destination_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3"),
+            destination_path=not_found_destination_path,
+            destination_search_prefix=not_found_destination_search_prefix,
+            destination_search_glob=not_found_destination_search_glob,
+            report_path=not_found_report_path,
+        )
+
+    @mock_aws
+    @pytest.mark.vcr
+    def test_execute_not_found(
+        self,
+        not_found_dag: DAG,
+        not_found_operator: LittlepayS3ToGCSOperator,
+        execution_date: datetime,
+        gcs_hook: GCSHook,
+        s3_hook: S3Hook,
+        not_found_source_path: str,
+        not_found_destination_path: str,
+        not_found_report_path: str,
+        not_found_path: str,
+    ):
+        s3_hook.create_bucket("mock-littlepay-bucket")
+        fixture_path = os.path.normpath(
+            os.path.join(
+                os.path.dirname(os.path.realpath(__file__)),
+                "../fixtures/littlepay-stub.psv",
+            )
+        )
+
+        with open(fixture_path, "r") as fixture_file:
+            gcs_hook.upload(
+                bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3").replace(
+                    "gs://", ""
+                ),
+                object_name=not_found_destination_path,
+                data=fixture_file.read(),
+                mime_type="binary/octet-stream",
+                gzip=False,
+                metadata={
+                    "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                        {
+                            "filename": "202504291120_authorisations.psv",
+                            "instance": "atn",
+                            "ts": "2025-05-01T00:00:00+00:00",
+                            "s3bucket": "mock-littlepay-bucket",
+                            "s3object": {
+                                "Key": "atn/v3/authorisations/202504291120_authorisations.psv",
+                                "LastModified": "2026-03-01T00:00:00+00:00",
+                                "ETag": '"5d46e84b9c9fa3cc87e4916c452c4de8"',
+                                "Size": 429,
+                                "StorageClass": None,
+                            },
+                        }
+                    )
+                },
+            )
+
+        with pytest.raises(AirflowException) as exception:
+            not_found_operator.run(
+                start_date=execution_date,
+                end_date=execution_date + timedelta(days=1),
+                ignore_first_depends_on_past=True,
+            )
+
+        assert (
+            "An error occurred (404) when calling the HeadObject operation: Not Found"
+            in str(exception.value)
+        )
+
+        task = not_found_dag.get_task("not_found_littlepay_s3_to_gcs")
+        task_instance = TaskInstance(task, execution_date=execution_date)
+        xcom_value = task_instance.xcom_pull()
+        assert xcom_value is None
+
+        report = gcs_hook.download(
+            bucket_name=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3").replace(
+                "gs://", ""
+            ),
+            object_name=not_found_report_path,
+        )
+        parsed_report = [json.loads(x) for x in report.splitlines()]
+        assert parsed_report[0] == {
+            "success": False,
+            "prior": {
+                "Key": "atn/v3/authorisations/202504291120_authorisations.psv",
+                "LastModified": "2026-03-01T00:00:00+00:00",
+                "ETag": '"5d46e84b9c9fa3cc87e4916c452c4de8"',
+                "Size": 429,
+                "StorageClass": None,
+            },
+            "exception": "An error occurred (404) when calling the HeadObject operation: Not Found",
+            "extract": {
+                "filename": "202504291120_authorisations.psv",
+                "instance": "atn",
+                "s3bucket": "mock-littlepay-bucket",
+                "s3object": {
+                    "Key": "atn/v3/authorisations/202504291120_authorisations.psv",
+                    "LastModified": None,
+                    "ETag": None,
+                    "Size": None,
+                    "StorageClass": None,
+                },
+                "ts": "2025-06-01T00:00:00+00:00",
+            },
+        }
