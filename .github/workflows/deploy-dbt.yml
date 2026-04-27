@@ -69,7 +69,7 @@ jobs:
         run: uv run dbt deps
 
   compile:
-    name: Compile dbt
+    name: Compile dbt and generate artifacts
     runs-on: ubuntu-latest
     needs: [setup, dbt-changed]
 
@@ -177,6 +177,7 @@ jobs:
           echo "List changed files: $CHANGED_FILES"
 
   dbt-run:
+    name: Run dbt changed models in warehouse
     runs-on: ubuntu-latest
     needs: [setup, dbt-changed]
 
