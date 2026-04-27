@@ -1,0 +1,271 @@
+{
+  "displayName": "GTFS RT Archiver",
+  "dashboardFilters": [
+    {
+      "filterType": "RESOURCE_LABEL",
+      "labelKey": "namespace",
+      "stringValue": "gtfs-rt-v3",
+      "templateVariable": "namespace"
+    }
+  ],
+  "description": "GTFS-RT archiver performance metrics. Backed by Google Managed Service for Prometheus; scraped via PodMonitoring in kubernetes/apps/manifests/gtfs-rt-archiver-v3/podmonitoring.yaml. Managed by terraform at iac/cal-itp-data-infra/monitoring/us/.",
+  "mosaicLayout": {
+    "columns": 24,
+    "tiles": [
+      {
+        "height": 8,
+        "width": 8,
+        "widget": {
+          "title": "Huey Task Successes",
+          "id": "",
+          "scorecard": {
+            "breakdowns": [],
+            "dimensions": [],
+            "measures": [],
+            "sparkChartView": {
+              "sparkChartType": "SPARK_LINE"
+            },
+            "thresholds": [],
+            "timeSeriesQuery": {
+              "outputFullDuration": false,
+              "prometheusQuery": "sum(rate(huey_task_signals_total{signal=\"complete\"}[2m])) * 20",
+              "unitOverride": ""
+            }
+          }
+        }
+      },
+      {
+        "xPos": 8,
+        "height": 8,
+        "width": 8,
+        "widget": {
+          "title": "Airtable Configuration Age",
+          "id": "",
+          "scorecard": {
+            "breakdowns": [],
+            "dimensions": [],
+            "measures": [],
+            "sparkChartView": {
+              "sparkChartType": "SPARK_LINE"
+            },
+            "thresholds": [],
+            "timeSeriesQuery": {
+              "outputFullDuration": false,
+              "prometheusQuery": "airtable_configuration_age / 3600 != 0",
+              "unitOverride": "h"
+            }
+          }
+        }
+      },
+      {
+        "xPos": 16,
+        "height": 8,
+        "width": 8,
+        "widget": {
+          "title": "Huey Task Signals",
+          "id": "",
+          "xyChart": {
+            "dataSets": [
+              {
+                "breakdowns": [],
+                "dimensions": [],
+                "legendTemplate": "${labels.signal} ${labels.exc_type}",
+                "measures": [],
+                "plotType": "LINE",
+                "sort": [],
+                "targetAxis": "Y1",
+                "timeSeriesQuery": {
+                  "outputFullDuration": false,
+                  "prometheusQuery": "sum by (signal, exc_type) (rate(huey_task_signals_total{signal!=\"executing\"}[2m])) * 20 != 0",
+                  "unitOverride": ""
+                }
+              }
+            ],
+            "thresholds": []
+          }
+        }
+      },
+      {
+        "yPos": 8,
+        "height": 8,
+        "width": 8,
+        "widget": {
+          "title": "Throughput",
+          "id": "",
+          "xyChart": {
+            "dataSets": [
+              {
+                "breakdowns": [],
+                "dimensions": [],
+                "legendTemplate": "${labels.record_feed_type}",
+                "measures": [],
+                "plotType": "STACKED_AREA",
+                "sort": [],
+                "targetAxis": "Y1",
+                "timeSeriesQuery": {
+                  "outputFullDuration": false,
+                  "prometheusQuery": "sum by(record_feed_type) (rate(fetch_processed_bytes_total[2m]))",
+                  "unitOverride": ""
+                }
+              }
+            ],
+            "thresholds": []
+          }
+        }
+      },
+      {
+        "yPos": 8,
+        "xPos": 8,
+        "height": 8,
+        "width": 8,
+        "widget": {
+          "title": "p90s",
+          "id": "",
+          "xyChart": {
+            "dataSets": [
+              {
+                "breakdowns": [],
+                "dimensions": [],
+                "legendTemplate": "upload",
+                "measures": [],
+                "plotType": "STACKED_AREA",
+                "sort": [],
+                "targetAxis": "Y1",
+                "timeSeriesQuery": {
+                  "outputFullDuration": false,
+                  "prometheusQuery": "histogram_quantile(0.9, sum(rate(fetch_uploading_time_seconds_bucket[2m])) by (le))",
+                  "unitOverride": ""
+                }
+              },
+              {
+                "breakdowns": [],
+                "dimensions": [],
+                "legendTemplate": "download",
+                "measures": [],
+                "plotType": "STACKED_AREA",
+                "sort": [],
+                "targetAxis": "Y1",
+                "timeSeriesQuery": {
+                  "outputFullDuration": false,
+                  "prometheusQuery": "histogram_quantile(0.9, sum(rate(fetch_downloading_time_seconds_bucket[2m])) by (le))",
+                  "unitOverride": ""
+                }
+              },
+              {
+                "breakdowns": [],
+                "dimensions": [],
+                "legendTemplate": "delay",
+                "measures": [],
+                "plotType": "STACKED_AREA",
+                "sort": [],
+                "targetAxis": "Y1",
+                "timeSeriesQuery": {
+                  "outputFullDuration": false,
+                  "prometheusQuery": "histogram_quantile(0.9, sum(rate(fetch_processing_delay_seconds_bucket[2m])) by (le))",
+                  "unitOverride": ""
+                }
+              }
+            ],
+            "thresholds": []
+          }
+        }
+      },
+      {
+        "yPos": 8,
+        "xPos": 16,
+        "height": 8,
+        "width": 8,
+        "widget": {
+          "title": "p99s",
+          "id": "",
+          "xyChart": {
+            "dataSets": [
+              {
+                "breakdowns": [],
+                "dimensions": [],
+                "legendTemplate": "upload",
+                "measures": [],
+                "plotType": "STACKED_AREA",
+                "sort": [],
+                "targetAxis": "Y1",
+                "timeSeriesQuery": {
+                  "outputFullDuration": false,
+                  "prometheusQuery": "histogram_quantile(0.99, sum(rate(fetch_uploading_time_seconds_bucket[2m])) by (le))",
+                  "unitOverride": ""
+                }
+              },
+              {
+                "breakdowns": [],
+                "dimensions": [],
+                "legendTemplate": "download",
+                "measures": [],
+                "plotType": "STACKED_AREA",
+                "sort": [],
+                "targetAxis": "Y1",
+                "timeSeriesQuery": {
+                  "outputFullDuration": false,
+                  "prometheusQuery": "histogram_quantile(0.99, sum(rate(fetch_downloading_time_seconds_bucket[2m])) by (le))",
+                  "unitOverride": ""
+                }
+              },
+              {
+                "breakdowns": [],
+                "dimensions": [],
+                "legendTemplate": "delay",
+                "measures": [],
+                "plotType": "STACKED_AREA",
+                "sort": [],
+                "targetAxis": "Y1",
+                "timeSeriesQuery": {
+                  "outputFullDuration": false,
+                  "prometheusQuery": "histogram_quantile(0.99, sum(rate(fetch_processing_delay_seconds_bucket[2m])) by (le))",
+                  "unitOverride": ""
+                }
+              }
+            ],
+            "thresholds": []
+          }
+        }
+      },
+      {
+        "yPos": 16,
+        "xPos": 0,
+        "height": 8,
+        "width": 8,
+        "widget": {
+          "title": "HTTP Errors",
+          "logsPanel": {
+            "filter": "resource.type=\"k8s_container\"\nresource.labels.cluster_name=\"data-infra-apps\"\njsonPayload.event=\"unexpected HTTP response code from feed request\"",
+            "resourceNames": []
+          }
+        }
+      },
+      {
+        "yPos": 16,
+        "xPos": 8,
+        "height": 8,
+        "width": 8,
+        "widget": {
+          "title": "Non-HTTP Request Errors",
+          "logsPanel": {
+            "filter": "resource.type=\"k8s_container\"\nresource.labels.cluster_name=\"data-infra-apps\"\njsonPayload.event=\"request exception occurred from feed request\"",
+            "resourceNames": []
+          }
+        }
+      },
+      {
+        "yPos": 16,
+        "xPos": 16,
+        "height": 8,
+        "width": 8,
+        "widget": {
+          "title": "Non-Fetch Errors",
+          "logsPanel": {
+            "filter": "resource.type=\"k8s_container\"\nresource.labels.cluster_name=\"data-infra-apps\"\njsonPayload.event=\"other non-request exception occurred during download_feed\"",
+            "resourceNames": []
+          }
+        }
+      }
+    ]
+  }
+}

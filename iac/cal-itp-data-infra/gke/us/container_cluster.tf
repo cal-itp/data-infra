@@ -55,6 +55,10 @@ resource "google_container_cluster" "tfer--data-infra-apps" {
 
   monitoring_config {
     enable_components = ["SYSTEM_COMPONENTS"]
+
+    managed_prometheus {
+      enabled = "true"
+    }
   }
 
   monitoring_service = "monitoring.googleapis.com/kubernetes"
