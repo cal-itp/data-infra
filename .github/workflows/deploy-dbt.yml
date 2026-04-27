@@ -255,32 +255,37 @@ jobs:
 
           sync_metabase_metadata() {
             local db="$1"
+            shift
             echo "::group::dbt-metabase sync — ${db}"
             uv run dbt-metabase models -v \
               --manifest-path=target/manifest.json \
               --skip-sources \
-              --exclude-schemas=staging,payments \
               --docs-url="${DBT_DOCS_URL}" \
               --metabase-url="${METABASE_URL}" \
               --metabase-database="${db}" \
-              --metabase-api-key="${METABASE_API_KEY}"
+              --metabase-api-key="${METABASE_API_KEY}" \
+              "$@"
             echo "::endgroup::"
           }
 
           failed=0
 
-          # Central warehouse connection — preserves prior behavior.
-          if ! sync_metabase_metadata "${METABASE_DESTINATION_DATABASE}"; then
+          # Central warehouse connection — broad sync, exclude internal schemas.
+          if ! sync_metabase_metadata "${METABASE_DESTINATION_DATABASE}" \
+               --exclude-schemas=staging,payments; then
             failed=1
             echo "::warning::dbt-metabase sync failed for '${METABASE_DESTINATION_DATABASE}'"
           fi
 
-          # Per-agency Payments connections — partial-tolerant so one agency
-          # outage doesn't block the rest.
+          # Per-agency Payments connections — restrict to the schemas exposed
+          # via dataset_filters_patterns on those connections (mart_payments,
+          # mart_benefits per the create-metabase-dashboards runbook). Loop is
+          # partial-tolerant so one agency's outage doesn't block the rest.
           if [ -n "${PAYMENTS_DBS}" ]; then
             while IFS= read -r db; do
               [ -z "${db}" ] && continue
-              if ! sync_metabase_metadata "${db}"; then
+              if ! sync_metabase_metadata "${db}" \
+                   --include-schemas=mart_payments,mart_benefits; then
                 failed=1
                 echo "::warning::dbt-metabase sync failed for '${db}'"
               fi
