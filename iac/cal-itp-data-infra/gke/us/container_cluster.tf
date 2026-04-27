@@ -116,13 +116,12 @@ resource "google_container_cluster" "airflow-jobs" {
 }
 
 resource "google_container_cluster" "sftp-endpoints" {
-
   name     = "sftp-endpoints"
   location = "us-west2"
   project  = "cal-itp-data-infra"
 
   enable_autopilot    = true
-  deletion_protection = false
+  deletion_protection = true
   network             = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
 
   secret_manager_config {
@@ -136,6 +135,14 @@ resource "google_container_cluster" "sftp-endpoints" {
   node_config {
     workload_metadata_config {
       mode = "GKE_METADATA"
+    }
+
+    reservation_affinity {
+      consume_reservation_type = "NO_RESERVATION"
+    }
+
+    gvnic {
+      enabled = true
     }
   }
 
