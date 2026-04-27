@@ -1,46 +1,50 @@
-resource "kubernetes_secret" "enghouse-sftp-hostkeys" {
-  type = "Opaque"
+resource "kubernetes_secret_v1" "elavon-sftp-hostkeys" {
+  type                           = "Opaque"
+  wait_for_service_account_token = true
 
   metadata {
-    name      = "enghouse-sftp-hostkeys"
     namespace = "default"
+    name      = "elavon-sftp-hostkeys"
   }
 
   data = {
-    "id_rsa"     = data.google_secret_manager_secret_version.enghouse-sftp-private-key.secret_data
-    "id_rsa.pub" = data.google_secret_manager_secret_version.enghouse-sftp-public-key.secret_data
+    "id_rsa"     = data.google_secret_manager_secret_version.elavon-sftp-private-key.secret_data
+    "id_rsa.pub" = data.google_secret_manager_secret_version.elavon-sftp-public-key.secret_data
   }
 }
 
-resource "kubernetes_secret" "enghouse-sftp-authorizedkey" {
-  type = "Opaque"
+resource "kubernetes_secret_v1" "elavon-sftp-authorizedkey" {
+  type                           = "Opaque"
+  wait_for_service_account_token = true
 
   metadata {
-    name      = "enghouse-sftp-authorizedkey"
     namespace = "default"
+    name      = "elavon-sftp-authorizedkey"
   }
 
   data = {
-    "authorized_keys" = data.google_secret_manager_secret_version.enghouse-sftp-authorizedkey.secret_data
+    "authorized_keys" = data.google_secret_manager_secret_version.elavon-sftp-authorizedkey.secret_data
   }
 }
 
-resource "kubernetes_service_account" "sftp-pod-service-account" {
+resource "kubernetes_service_account_v1" "elavon-sftp-service-account" {
   metadata {
-    name = "sftp-pod-service-account"
+    namespace = "default"
+    name      = "elavon-sftp-service-account"
 
     annotations = {
-      "iam.gke.io/gcp-service-account" = data.terraform_remote_state.iam.outputs.google_service_account_sftp-pod-service-account_email
+      "iam.gke.io/gcp-service-account" = data.terraform_remote_state.iam.outputs.google_service_account_elavon-sftp-service-account_email
     }
   }
 }
 
-resource "kubernetes_deployment" "enghouse-sftp" {
+resource "kubernetes_deployment_v1" "elavon-sftp" {
   metadata {
-    name = "enghouse-sftp-deployment"
+    namespace = "default"
+    name      = "elavon-sftp-deployment"
 
     labels = {
-      app = "enghouse-sftp"
+      app = "elavon-sftp"
     }
   }
 
@@ -49,14 +53,14 @@ resource "kubernetes_deployment" "enghouse-sftp" {
 
     selector {
       match_labels = {
-        app = "enghouse-sftp"
+        app = "elavon-sftp"
       }
     }
 
     template {
       metadata {
         labels = {
-          app = "enghouse-sftp"
+          app = "elavon-sftp"
         }
 
         annotations = {
@@ -65,14 +69,29 @@ resource "kubernetes_deployment" "enghouse-sftp" {
       }
 
       spec {
-        service_account_name = kubernetes_service_account.sftp-pod-service-account.metadata.0.name
+        service_account_name = kubernetes_service_account_v1.elavon-sftp-service-account.metadata.0.name
+
+        toleration {
+          effect   = "NoSchedule"
+          key      = "kubernetes.io/arch"
+          operator = "Equal"
+          value    = "amd64"
+        }
+
+        security_context {
+          supplemental_groups = []
+
+          seccomp_profile {
+            type = "RuntimeDefault"
+          }
+        }
 
         volume {
           name = "gcs-volume"
           csi {
             driver = "gcsfuse.csi.storage.gke.io"
             volume_attributes = {
-              bucketName   = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-enghouse-raw_name
+              bucketName   = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-elavon-raw-v2_name
               mountOptions = "uid=2222,gid=2222,file-mode=777,dir-mode=777"
             }
           }
@@ -81,7 +100,7 @@ resource "kubernetes_deployment" "enghouse-sftp" {
         volume {
           name = "sftp-hostkeys"
           secret {
-            secret_name  = "enghouse-sftp-hostkeys"
+            secret_name  = "elavon-sftp-hostkeys"
             default_mode = "0600"
           }
         }
@@ -89,7 +108,7 @@ resource "kubernetes_deployment" "enghouse-sftp" {
         volume {
           name = "sftp-authorizedkey"
           secret {
-            secret_name  = "enghouse-sftp-authorizedkey"
+            secret_name  = "elavon-sftp-authorizedkey"
             default_mode = "0600"
           }
         }
@@ -97,6 +116,18 @@ resource "kubernetes_deployment" "enghouse-sftp" {
         container {
           name  = "sftp-server"
           image = "alpine"
+
+          security_context {
+            allow_privilege_escalation = false
+            privileged                 = false
+            read_only_root_filesystem  = false
+            run_as_non_root            = false
+
+            capabilities {
+              add  = []
+              drop = ["NET_RAW"]
+            }
+          }
 
           env {
             name  = "SFTP_USER"
@@ -131,7 +162,7 @@ resource "kubernetes_deployment" "enghouse-sftp" {
             apk add openssl openssh openssh-server
             addgroup -g 2222 sftpusers
             adduser -u 2222 -S -G sftpusers -s /sbin/nologin -D -H ${local.sftp_user}
-            echo '${local.sftp_user}:enghousesftpuserpassword' | chpasswd
+            echo '${local.sftp_user}:elavonsftpuserpassword' | chpasswd
 
             mkdir -p /home/${local.sftp_user}/.ssh
             cp /tmp/ssh-keys/authorized_keys /home/${local.sftp_user}/.ssh/authorized_keys
@@ -157,21 +188,25 @@ resource "kubernetes_deployment" "enghouse-sftp" {
   }
 }
 
-resource "kubernetes_service" "enghouse-sftp" {
+resource "kubernetes_service_v1" "elavon-sftp" {
+  wait_for_load_balancer = true
+
   metadata {
-    name = "enghouse-sftp"
+    namespace = "default"
+    name      = "elavon-sftp"
   }
 
   spec {
+    type             = "LoadBalancer"
+    load_balancer_ip = data.terraform_remote_state.networks.outputs.google_compute_address_elavon-sftp-address_ip
+
     selector = {
-      app = kubernetes_deployment.enghouse-sftp.metadata.0.labels.app
+      app = kubernetes_deployment_v1.elavon-sftp.metadata.0.labels.app
     }
+
     port {
       port        = 22
       target_port = 22
     }
-
-    type             = "LoadBalancer"
-    load_balancer_ip = data.terraform_remote_state.networks.outputs.google_compute_address_enghouse-sftp-address_ip
   }
 }
