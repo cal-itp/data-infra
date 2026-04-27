@@ -1,25 +1,10 @@
-locals {
-  sftp_user = "enghouse"
-}
-
-data "google_secret_manager_secret_version" "enghouse-sftp-public-key" {
-  secret = "enghouse-sftp-public-key"
-}
-
-data "google_secret_manager_secret_version" "enghouse-sftp-private-key" {
-  secret = "enghouse-sftp-private-key"
-}
-
-data "google_secret_manager_secret_version" "enghouse-sftp-authorizedkey" {
-  secret = "enghouse-sftp-authorizedkey"
-}
-
 resource "kubernetes_secret_v1" "enghouse-sftp-hostkeys" {
-  type = "Opaque"
+  type                           = "Opaque"
+  wait_for_service_account_token = true
 
   metadata {
-    name      = "enghouse-sftp-hostkeys"
     namespace = "default"
+    name      = "enghouse-sftp-hostkeys"
   }
 
   data = {
@@ -29,11 +14,12 @@ resource "kubernetes_secret_v1" "enghouse-sftp-hostkeys" {
 }
 
 resource "kubernetes_secret_v1" "enghouse-sftp-authorizedkey" {
-  type = "Opaque"
+  type                           = "Opaque"
+  wait_for_service_account_token = true
 
   metadata {
-    name      = "enghouse-sftp-authorizedkey"
     namespace = "default"
+    name      = "enghouse-sftp-authorizedkey"
   }
 
   data = {
@@ -41,61 +27,136 @@ resource "kubernetes_secret_v1" "enghouse-sftp-authorizedkey" {
   }
 }
 
-resource "kubernetes_service_account" "enghouse-sftp-service-account" {
+resource "kubernetes_service_account_v1" "enghouse-sftp-service-account" {
   metadata {
-    name = "enghouse-sftp-service-account"
+    namespace = "default"
+    name      = "enghouse-sftp-service-account"
+
     annotations = {
       "iam.gke.io/gcp-service-account" = data.terraform_remote_state.iam.outputs.google_service_account_enghouse-sftp-service-account_email
     }
   }
 }
 
-resource "kubernetes_deployment" "enghouse-sftp" {
+resource "kubernetes_deployment_v1" "enghouse-sftp" {
+  wait_for_rollout = true
+
   metadata {
-    name = "enghouse-sftp-deployment"
+    namespace = "default"
+    name      = "enghouse-sftp-deployment"
+
     labels = {
       app = "enghouse-sftp"
     }
+
+    annotations = {
+      "autopilot.gke.io/resource-adjustment" = jsonencode(
+        {
+          computeClassAtAdmission = "Default"
+          input = {
+            containers = [
+              {
+                name = "sftp-server"
+              },
+            ]
+          }
+          modified = true
+          output = {
+            containers = [
+              {
+                limits = {
+                  ephemeral-storage = "1Gi"
+                }
+                name = "sftp-server"
+                requests = {
+                  cpu               = "500m"
+                  ephemeral-storage = "1Gi"
+                  memory            = "2Gi"
+                }
+              },
+            ]
+          }
+        }
+      )
+    }
   }
+
   spec {
     replicas = 1
+
     selector {
       match_labels = {
         app = "enghouse-sftp"
       }
     }
+
     template {
       metadata {
         labels = {
           app = "enghouse-sftp"
         }
+
         annotations = {
           "gke-gcsfuse/volumes" = "true"
         }
       }
 
       spec {
+        service_account_name = kubernetes_service_account_v1.enghouse-sftp-service-account.metadata.0.name
+
+        toleration {
+          effect   = "NoSchedule"
+          key      = "kubernetes.io/arch"
+          operator = "Equal"
+          value    = "amd64"
+        }
+
+        security_context {
+          supplemental_groups = []
+
+          seccomp_profile {
+            type = "RuntimeDefault"
+          }
+        }
+
         container {
           name  = "sftp-server"
           image = "alpine"
+
+          security_context {
+            allow_privilege_escalation = false
+            privileged                 = false
+            read_only_root_filesystem  = false
+            run_as_non_root            = false
+
+            capabilities {
+              add  = []
+              drop = ["NET_RAW"]
+            }
+          }
+
           port {
             container_port = 22
           }
+
           volume_mount {
             name       = "gcs-volume"
             mount_path = "/home/${local.sftp_user}/data"
             read_only  = false
           }
+
           volume_mount {
             name       = "sftp-hostkeys"
             mount_path = "/etc/ssh/hostkey"
             read_only  = true
           }
+
           volume_mount {
             name       = "sftp-authorizedkey"
             mount_path = "/tmp/ssh-keys"
             read_only  = true
           }
+
           env {
             name  = "SFTP_USER"
             value = local.sftp_user
@@ -127,60 +188,68 @@ resource "kubernetes_deployment" "enghouse-sftp" {
             /usr/sbin/sshd -D -e
             EOT
           ]
-          # liveness_probe {
-          #   tcp_socket {
-          #     port = 22
-          #   }
-          #   initial_delay_seconds = 180
-          #   period_seconds        = 30
-          # }
         }
 
         volume {
           name = "gcs-volume"
+
           csi {
-            driver = "gcsfuse.csi.storage.gke.io"
+            read_only = false
+            driver    = "gcsfuse.csi.storage.gke.io"
+
             volume_attributes = {
               bucketName   = data.terraform_remote_state.gcs.outputs.google_storage_bucket_cal-itp-data-infra-enghouse-raw_name
               mountOptions = "uid=2222,gid=2222,file-mode=777,dir-mode=777"
             }
           }
         }
+
         volume {
           name = "sftp-hostkeys"
+
           secret {
+            optional     = false
             secret_name  = "enghouse-sftp-hostkeys"
             default_mode = "0600"
           }
         }
+
         volume {
           name = "sftp-authorizedkey"
+
           secret {
+            optional     = false
             secret_name  = "enghouse-sftp-authorizedkey"
             default_mode = "0600"
           }
         }
-        service_account_name = kubernetes_service_account.enghouse-sftp-service-account.metadata.0.name
-        # Ensure this has GCS permissions to access data bucket
       }
     }
   }
 }
 
-resource "kubernetes_service" "enghouse-sftp" {
+resource "kubernetes_service_v1" "enghouse-sftp" {
+  wait_for_load_balancer = true
+
   metadata {
-    name = "enghouse-sftp"
-  }
-  spec {
-    selector = {
-      app = kubernetes_deployment.enghouse-sftp.metadata.0.labels.app
+    namespace = "default"
+    name      = "enghouse-sftp"
+    annotations = {
+      "cloud.google.com/neg" = jsonencode({ ingress = true })
     }
+  }
+
+  spec {
+    type             = "LoadBalancer"
+    load_balancer_ip = data.terraform_remote_state.networks.outputs.google_compute_address_enghouse-sftp-address_ip
+
+    selector = {
+      app = kubernetes_deployment_v1.enghouse-sftp.metadata.0.labels.app
+    }
+
     port {
       port        = 22
       target_port = 22
     }
-
-    type             = "LoadBalancer"
-    load_balancer_ip = data.terraform_remote_state.networks.outputs.google_compute_address_enghouse-sftp-address_ip
   }
 }
