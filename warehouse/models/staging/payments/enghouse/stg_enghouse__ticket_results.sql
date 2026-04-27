@@ -21,22 +21,12 @@ clean_columns AS (
         SAFE_CAST(end_dttm AS TIMESTAMP) AS end_dttm,
         {{ trim_make_empty_string_null('ticket_code') }} AS ticket_code,
         {{ trim_make_empty_string_null('additional_infos') }} AS additional_infos,
-        {{ dbt_utils.generate_surrogate_key(['operator_id', 'id', 'ticket_id', 'station_name', 'amount', 'clearing_id',
-            'reason', 'tap_id', 'ticket_type', 'created_dttm', 'line', 'start_station', 'end_station', 'start_dttm',
-            'end_dttm', 'ticket_code', 'additional_infos']) }} AS _content_hash
+        {{ dbt_utils.generate_surrogate_key(['operator_id', 'id', 'ticket_id', 'station_name', 'amount',
+            'reason', 'tap_id', 'ticket_type', 'line', 'start_station', 'end_station',
+            'ticket_code', 'additional_infos']) }} AS _content_hash
     FROM source
 ),
-
-deduplicated AS (
-    SELECT * FROM (
-        SELECT
-            *,
-            ROW_NUMBER() OVER (PARTITION BY _content_hash ORDER BY (SELECT NULL)) AS row_num
-        FROM clean_columns
-    )
-    WHERE row_num = 1
-),
-
+-- Note: there are duplicates at this layer that we clean up in an int_ model
 stg_enghouse__ticket_results AS (
     SELECT
         operator_id,
@@ -57,7 +47,7 @@ stg_enghouse__ticket_results AS (
         ticket_code,
         additional_infos,
         _content_hash
-    FROM deduplicated
+    FROM clean_columns
 )
 
 SELECT * FROM stg_enghouse__ticket_results

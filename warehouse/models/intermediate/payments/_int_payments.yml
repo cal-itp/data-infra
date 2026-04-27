@@ -767,3 +767,32 @@ models:
         description: '{{ doc("customer_funding_source_principal_customer_id") }}'
       - *bin
       - *card_scheme
+
+  - name: int_payments__enghouse_ticket_results_deduped
+    description: |
+      Deduplicates stg_enghouse__ticket_results on `_content_hash`. Among rows sharing the
+      same content hash, keeps the row with the most fields populated (non-null
+      `start_dttm`, then `end_dttm`, then `created_dttm`).
+      Columns have the same meanings as in the upstream staging model.
+    columns:
+      - name: operator_id
+      - name: id
+      - name: ticket_id
+      - name: station_name
+      - name: amount
+      - name: clearing_id
+      - name: reason
+      - name: tap_id
+      - name: ticket_type
+      - name: created_dttm
+      - name: line
+      - name: start_station
+      - name: end_station
+      - name: start_dttm
+      - name: end_dttm
+      - name: ticket_code
+      - name: additional_infos
+      - name: _content_hash
+        data_tests:
+          - unique
+          - not_null
