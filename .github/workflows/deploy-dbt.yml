@@ -71,7 +71,7 @@ jobs:
   compile:
     name: Compile dbt and generate artifacts
     runs-on: ubuntu-latest
-    needs: [setup, dbt-changed]
+    needs: [setup]
 
     permissions:
       contents: read
@@ -105,11 +105,6 @@ jobs:
       - name: Print dbt environment
         working-directory: warehouse
         run: uv run dbt debug --target ${{ env.DBT_TARGET }}
-
-      - name: List changed and downstream models
-        if: ${{ needs.dbt-changed.outputs.has-changed == 'true' }}
-        working-directory: warehouse
-        run: uv run dbt list --select "${{ needs.dbt-changed.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --resource-type=model
 
       - name: Compile dbt
         working-directory: warehouse
