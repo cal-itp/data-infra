@@ -1,36 +1,22 @@
 """
 Goal: use a DAG to take `mart_gtfs.fct_vehicle_locations` -> 
 use movingpandas / Python to add trajectory -> 
-results are configured external table, usable in downstream dbt model `mart_gtfs.fct_vehicle_locations_path`.
+results are configured external table, would become `fct_vehicle_locations_path`
 
 1. Be able to grab a week for `mart_gtfs.fct_vehicle_locations` for each DAG run,
 save it into a hive-partitioned GCS bucket. 
 Laurie: we have to have Airflow job to define partitions in explicit way.
   - [ ] use 1 bucket (make sure naming convention is correct)
   - [ ] ask MoV to use Terraform to set up
-  - [ ] add `fct_vehicle_locations` in chunks, 1 week at a time, filter on dt, only necessary columns, saved to hive-partitioned GCS.
-        save as gzipped jsonl? 
-        BUCKET/fct_vehicle_locations/dt=2026-01-01; 
-        BUCKET/fct_vehicle_locations/dt=2026-01-02; is this how partitions look like? 
-
-2. Add a Python script that models the vehicle location trajectory (use movingpandas).
-Laurie: script would operate on each partition at a time, so every dt
-- [ ] movingpandas chunk - read in json, save results as gzipped jsonl 
-- [ ] I need to double check results are what's expected / use it downstream and make sure
-- [ ] movingpandas results also come out in chunks, 1 week at a time, saved to hive-partitioned GCS. 
-      vehicle_locations_trajectory (? clear enough name?)
-        BUCKET/vehicle_locations_trajectory/dt=2026-01-01; 
-        BUCKET/vehicle_locations_trajectory/dt=2026-01-02; is this how partitions look like? 
-
-3. Configure the results in BUCKET/vehicle_locations_trajectory/dt=* to be external table
+  - [ ] 1st query: add `fct_vehicle_locations` in chunks, 1 week at a time, filter on dt (or can we do service_date)? 
+  - [ ] 2nd query: do a query on `fct_vehicle_locations` in chunks + group by daily trip - this is what's in fct_vehicle_locations_path already
+  - [ ] enrich with movingpandas - saved to hive-partitioned GCS.
+       save as gzipped jsonl? 
+	   can this be partitioned on service_date?
+        
+2. Configure the results in BUCKET/vehicle_locations_trajectory/dt=* to be external table - becomes fct_vehicle_locations_path (but with more columns)
 - [ ] use the create_external_table DAG
-- [ ] set the partitions (dt), clusters, 
-- [ ] test that I can see it, use the 2 sources together in `fct_vehicle_locations_path` 
-
-Airflow operators to use as examples: 
-- bigquery_to_download_config_operator (selects subset of columns) 
-- tdq_bigquery_rows_operator (selects a BQ table and returns it) 
-- DAG: create_external_table - no current examples, we've moved much away 
+- [ ] set the partitions (service_date), clusters
 """
 import json
 import os
@@ -41,7 +27,7 @@ from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.bigquery import BigQueryHook
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
-class BigQueryToPartitionedGCSOperator(BaseOperator):
+class BigQueryVehicleLocationsToTrajectory(BaseOperator):
     template_fields: Sequence[str] = (
         "ts",
         "dataset_name",
