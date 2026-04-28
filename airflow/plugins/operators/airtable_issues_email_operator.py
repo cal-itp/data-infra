@@ -67,6 +67,9 @@ class AirtableIssuesEmailOperator(BaseOperator):
         return table_rows
 
     def build_failed_html(self, failed_batches: list[dict[str, Any]]) -> str:
+        if not failed_batches:
+            return "None"
+
         return "<br>".join(
             [
                 f"Batch {batch['batch_num']}: {batch['error']}"
@@ -149,7 +152,7 @@ class AirtableIssuesEmailOperator(BaseOperator):
 
             sections.append(
                 f"""
-                <b>Successfully created {len(created_email_rows)} About to Expire Issues in Airtable and HubSpot.</b><br>
+                <br><b>✅ Successfully created the following About to Expire Issues in Airtable:</b><br>
                 <table border="1" cellspacing="0" cellpadding="5">
                     <tr>
                         <th>Issue Number</th>
@@ -161,12 +164,9 @@ class AirtableIssuesEmailOperator(BaseOperator):
                     {created_table_rows}
                 </table><br><br>
 
-                """
-            )
+                <b>✅ HubSpot Ticket Creation</b><br>
+                Corresponding tickets were submitted in HubSpot.<br><br>
 
-        if created_failed_batches:
-            sections.append(
-                f"""
                 <b>❌ Failed create batches:</b><br>
                 {self.build_failed_html(created_failed_batches)}
                 """
@@ -177,7 +177,7 @@ class AirtableIssuesEmailOperator(BaseOperator):
 
             sections.append(
                 f"""
-                <b>Successfully closed {len(closed_email_rows)} Airtable records.</b><br>
+                <br><b>✅ Successfully closed the following Airtable issues:</b><br>
                 <table border="1" cellspacing="0" cellpadding="5">
                     <tr>
                         <th>Issue</th>
@@ -189,13 +189,8 @@ class AirtableIssuesEmailOperator(BaseOperator):
                         <th>RT Completeness</th>
                     </tr>
                     {closed_table_rows}
-                </table>
-                """
-            )
+                </table><br><br>
 
-        if closed_failed_batches:
-            sections.append(
-                f"""
                 <b>❌ Failed update batches:</b><br>
                 {self.build_failed_html(closed_failed_batches)}
                 """

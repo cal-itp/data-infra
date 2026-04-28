@@ -124,7 +124,7 @@ class TestAirtableIssuesEmailOperator:
             created_failed_batches=[{"batch_num": 4, "error": "Create failure"}],
         )
 
-        assert "Successfully closed 2 Airtable records." in body
+        assert "✅ Successfully closed the following Airtable issues:" in body
         assert "ISSUE-1" in body
         assert "Dataset A" in body
         assert "Service A" in body
@@ -133,7 +133,7 @@ class TestAirtableIssuesEmailOperator:
         assert "87.5%" in body
 
         assert (
-            "Successfully created 1 About to Expire Issues in Airtable and HubSpot."
+            "✅ Successfully created the following About to Expire Issues in Airtable:"
             in body
         )
         assert "ISSUE-3" in body
@@ -213,11 +213,12 @@ class TestAirtableIssuesEmailOperator:
         summary_email = sent_emails[-1]
         assert summary_email["to"] == ["airtable-issue-alerts@dot.ca.gov"]
         assert (
-            "Successfully created 2 About to Expire Issues in Airtable and HubSpot."
+            "✅ Successfully created the following About to Expire Issues in Airtable:"
             in summary_email["html_content"]
         )
         assert (
-            "Successfully closed 2 Airtable records." in summary_email["html_content"]
+            "✅ Successfully closed the following Airtable issues:"
+            in summary_email["html_content"]
         )
         assert "87.5%" in summary_email["html_content"]
 
