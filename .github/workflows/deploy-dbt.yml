@@ -375,6 +375,22 @@ jobs:
           headers: |-
             content-type: application/vnd.msgpack
 
+  cleanup-dbt-artifact:
+    name: Delete intermediate dbt artifact
+    runs-on: ubuntu-latest
+    needs: [metabase, upload_dbt_docs]
+    if: always()
+
+    permissions:
+      actions: write
+
+    steps:
+      - name: Delete dbt artifact
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: dbt
+          failOnError: false
+
   airflow-changes:
     name: Detect Airflow Terraform changes
     runs-on: ubuntu-latest
