@@ -1,0 +1,77 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__GTFS_VEHICLE_LOCATIONS') }}"
+source_objects:
+  - "vehicle_locations_trajectory/*.jsonl.gz"
+destination_project_dataset_table: "mart_gtfs.fct_vehicle_locations_path"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  source_uri_prefix: "vehicle_locations_trajectory/{dt:DATE}/{base64_url:STRING}/" # is there a base64_url setup? what do partitions look like?
+schema_fields:
+  - name: service_date
+    mode: NULLABLE
+    type: DATE
+  - name: gtfs_dataset_key
+    mode: NULLABLE
+    type: STRING
+  - name: gtfs_dataset_key
+    mode: NULLABLE
+    type: STRING
+  - name: base64_url
+    mode: NULLABLE
+    type: STRING
+  - name: gtfs_dataset_name
+    mode: NULLABLE
+    type: STRING
+  - name: schedule_gtfs_dataset_key
+    mode: NULLABLE
+    type: STRING
+  - name: schedule_base64_url
+    mode: NULLABLE
+    type: STRING
+  - name: schedule_name
+    mode: NULLABLE
+    type: STRING
+  - name: schedule_feed_key
+    mode: NULLABLE
+    type: STRING
+  - name: trip_id
+    mode: NULLABLE
+    type: STRING
+  - name: trip_instance_key
+    mode: NULLABLE
+    type: STRING
+  - name: pt_array
+    mode: REPEATED
+    type: GEOGRAPHY
+  - name: location_timestamp_utc
+    mode: REPEATED
+    type: DATETIME
+  - name: location_timestamp_pacific
+    mode: REPEATED
+    type: DATETIME
+  - name: pacific_seconds
+    mode: REPEATED
+    type: INTEGER
+  - name: n_vp
+    mode: NULLABLE
+    type: INTEGER
+  - name: distance_meters
+    mode: REPEATED
+    type: FLOAT
+  - name: timedelta_seconds
+    mode: REPEATED
+    type: INTEGER
+  - name: speed_mph
+    mode: REPEATED
+    type: FLOAT
+  - name: acceleration_mph_per_sec
+    mode: REPEATED
+    type: FLOAT
+  - name: angular_difference
+    mode: REPEATED
+    type: FLOAT
+  - name: direction
+    mode: REPEATED
+    type: FLOAT
