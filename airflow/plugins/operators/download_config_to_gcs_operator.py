@@ -217,6 +217,7 @@ class DownloadConfigToGCSOperator(BaseOperator):
             self.destination_path,
             self.download().filename(),
         )
+        download_type = "Source URL"
 
         if self.download().success():
             self.gcs_hook().upload(
@@ -240,6 +241,7 @@ class DownloadConfigToGCSOperator(BaseOperator):
             )
             extract = self.manual_download().extract()
             exception = None
+            download_type = "Manual Download"
             self.gcs_hook().upload(
                 bucket_name=self.destination_name(),
                 object_name=schedule_feed_path,
@@ -256,6 +258,7 @@ class DownloadConfigToGCSOperator(BaseOperator):
             "exception": exception,
             "config": self.download_config,
             "extract": extract,
+            "download_type": download_type,
         }
 
         self.gcs_hook().upload(
