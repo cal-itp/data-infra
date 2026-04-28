@@ -8,18 +8,22 @@ save it into a hive-partitioned GCS bucket.
 Laurie: we have to have Airflow job to define partitions in explicit way.
   - [ ] use 1 bucket (make sure naming convention is correct)
   - [ ] ask MoV to use Terraform to set up
-  - [ ] 1st query: add `fct_vehicle_locations` in chunks, 1 week at a time, filter on dt (or can we do service_date)? 
-  - [ ] 2nd query: do a query on `fct_vehicle_locations` in chunks + group by daily trip - this is what's in fct_vehicle_locations_path already
-  - [ ] enrich with movingpandas - saved to hive-partitioned GCS.
+  - [x] 1st query: add `fct_vehicle_locations` in chunks, 1 week at a time, filter on dt (or can we do service_date)? 
+  - [x] 2nd query: do a query on `fct_vehicle_locations` in chunks + group by daily trip - this is what's in fct_vehicle_locations_path already
+  - [x] enrich with movingpandas 
+  - [ ] saved to hive-partitioned GCS.
        save as gzipped jsonl? 
 	   can this be partitioned on service_date?
         
 2. Configure the results in BUCKET/vehicle_locations_trajectory/dt=* to be external table - becomes fct_vehicle_locations_path (but with more columns)
-- [ ] use the create_external_table DAG
+- [x] use the create_external_table DAG
 - [ ] set the partitions (service_date), clusters
 """
+
+
 import json
 import os
+from datetime import datetime, timedelta, timezone
 from typing import Sequence
 
 from airflow.models import BaseOperator
@@ -29,7 +33,6 @@ from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 class BigQueryVehicleLocationsToTrajectory(BaseOperator):
     template_fields: Sequence[str] = (
-        "ts",
         "dataset_name",
         "table_name",
         "destination_bucket",
@@ -42,9 +45,8 @@ class BigQueryVehicleLocationsToTrajectory(BaseOperator):
         self,
         dataset_name: str,
         table_name: str,
-        ts: str,
         destination_bucket: str,
-        destination_path: str,
+        destination_path: str = "vehicle_trajectory",
         columns: list[str] = [
             "key",
             "service_date",
@@ -62,7 +64,6 @@ class BigQueryVehicleLocationsToTrajectory(BaseOperator):
 
         self._gcs_hook = None
         self._big_query_hook = None
-        self.ts: str = ts
         self.dataset_name = dataset_name
         self.table_name = table_name
         self.destination_bucket = destination_bucket
@@ -70,7 +71,7 @@ class BigQueryVehicleLocationsToTrajectory(BaseOperator):
         self.columns = columns
         self.gcp_conn_id = gcp_conn_id
         # does start_date and end_date get defined here to be used in sql?
-
+	
     def destination_name(self) -> str:
         return self.destination_bucket.replace("gs://", "")
 
@@ -85,27 +86,37 @@ class BigQueryVehicleLocationsToTrajectory(BaseOperator):
             gcp_conn_id=self.gcp_conn_id, location=self.location(), use_legacy_sql=False
         )
 
-    def rows(self, start_service_date, end_service_date) -> pd.DataFrame:
-		"""
-		Select from fct_vehicle_locations (partiitoned on dt). A parent of it uses
-		int_gtfs_rt__vehicle_positions_trip_day_map_grouping, which already
-		converts dt to service_date, so querying by service_date here should be reasonable.
-		"""
+	def yesterday(self) -> str: 
+		return datetime.now(timezone.utc).date() - timedelta(1) 
+	
+	def one_week_ago(self) -> str:
+		# add another buffer of 1 day, instead of 8 days ago, use 9 days ago
+		return datetime.now(timezone.utc).date() - timedelta(9) 
 		
-		selected_columns = ", ".join(self.columns) if self.columns else "*"
-		
-		return self.bigquery_hook().get_df(
+    def rows(self, one_week_ago, yesterday) -> pd.DataFrame:
+		"""
+		Select from fct_vehicle_locations (partitioned on dt). 
+		Parent of fct_vehicle_locations uses the intermediate table that converts dt to service_date,
+		so we can use service_date here? 
+		(TODO: confirm service_date over dt use for query).
+		"""
+        selected_columns = ", ".join(self.columns) if self.columns else "*"
+
+        return self.bigquery_hook().get_df(
 			sql=f"""
-            	SELECT {selected_columns}
+            	SELECT 
+					{selected_columns},
+					DATETIME(location_timestamp, "America/Los_Angeles") AS location_timestamp_pacific
             	FROM `{self.dataset_name}.{self.table_name}`
-            	WHERE service_date >= DATE('{start_service_date}') AND service_date <= DATE('{end_service_date}')
+            	WHERE service_date >= DATE('{one_week_ago}') AND service_date <= DATE('{yesterday}')
         	""",
 			df_type="pandas"
 		)
     
-	def rows_grouped_by_trip(self, start_service_date, end_service_date) -> pd.DataFrame:
+    def rows_grouped_by_trip(self, one_week_ago, yesterday) -> pd.DataFrame:
 		"""
-		Other trip-level rows to save as arrays
+		Other trip-level rows to save as arrays.
+		How would .partial and .expand be used to write this?
 		"""
 		
         return self.bigquery_hook().get_df(
@@ -144,19 +155,26 @@ class BigQueryVehicleLocationsToTrajectory(BaseOperator):
 	        		) AS pacific_seconds,
 					COUNT(*) AS n_vp,
 	            FROM `{self.dataset_name}.{self.table_name}`
-	            WHERE service_date >= DATE('{start_service_date}') AND service_date <= DATE('{end_service_date}')
+	            WHERE service_date >= DATE('{one_week_ago}') AND service_date <= DATE('{yesterday}')
 				GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 	        """,
 			df_type="pandas"
 		)
 		
-	def enrich_rows_with_movingpandas(df: pd.DataFrame) -> pd.DataFrame:
+	def enrich_with_movingpandas_columns(df: pd.DataFrame) -> pd.DataFrame:
 		"""
-		Use movingpandas TrajectoryCollection to add all the deltas (distance, time, acceleration, direction)
-		we can add.
-		TrajectoryCollection keeps these new columns, but drops a lot in the process.
-		Group by trip and save all the columns as arrays.
-		Get the other trip-related columns we want in another query.
+		Convert df into a movingpandas TrajectoryCollection.
+		Needs a path grouping column (trip_instance_key), object identifier (vp's key), 
+		x, y coordinates as numeric columns,
+		and timestamp column that is not UTC.
+
+		Results will keep traj_id_col, obj_id_col, + columns that are added. 
+		x, y coordinates and timestamp are dropped within the TrajectoryCollection.
+		
+		Using UTC location_timestamp gave this:
+		TimeZoneWarning: Time zone information dropped from trajectory. All dates and times will use local time. 
+		This is applied by doing df.tz_localize(None). 
+		To use UTC or a different time zone, convert and drop time zone information prior to trajectory creation.
 		"""
 		tc = mpd.TrajectoryCollection(
             df, 
@@ -164,7 +182,7 @@ class BigQueryVehicleLocationsToTrajectory(BaseOperator):
             obj_id_col = "key", 
             x = "position_longitude", 
             y = "position_latitude", 
-            t = "location_timestamp"
+            t = "location_timestamp_pacific" 
         )
 	    tc.add_distance(overwrite=True, name="distance_meters", units="m")
 	    tc.add_timedelta(overwrite=True)
@@ -196,9 +214,7 @@ class BigQueryVehicleLocationsToTrajectory(BaseOperator):
 			"angular_difference", "direction",
 		]
 
-		# movingpandas returns sorted df, so we can group and create trip-grain arrays here.
-		# the length of these arrays = n_vp, because movingpandas inserts a NaN as first item in array 
-		# (1st vp has no prior pt to calculate delta against)
+		# movingpandas should be returning a sorted df anyway?
 		result_wide_df = (
 			result
 			.groupby(["service_date", "base64_url", "trip_instance_key"], dropna=False)
@@ -212,7 +228,7 @@ class BigQueryVehicleLocationsToTrajectory(BaseOperator):
 
 	def process_vehicle_trajectory(self) -> pd.DataFrame:
 		vp_trip_df = self.rows_grouped_by_trip()
-		movingpandas_df = self.rows().enrich_rows_with_movingpandas()
+		movingpandas_df = self.rows().enrich_with_movingpandas_columns()
 
 		vp_trajectory_by_trip = pd.merge(
 			vp_trip_df,
@@ -227,8 +243,8 @@ class BigQueryVehicleLocationsToTrajectory(BaseOperator):
         return {
             "PARTITIONED_ARTIFACT_METADATA": json.dumps(
                 {
-                    "filename": "configs.jsonl.gz",
-                    "ts": self.ts,
+                    "filename": "trajectories.jsonl.gz", # TODO: confirm if filepath looks like BUCKET/destination_path/dt=/trajectories.jsonl.gz
+                    "dt": self.dt, # TODO: how to get right partition by dt or service_date? 
                 }
             )
         }
