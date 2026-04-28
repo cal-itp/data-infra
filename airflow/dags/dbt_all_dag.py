@@ -3,8 +3,7 @@ from datetime import datetime
 
 from cosmos import DbtTaskGroup, ProfileConfig, ProjectConfig, RenderConfig
 from cosmos.constants import TestBehavior
-from dags import log_failure_to_slack
-from src.dag_utils import log_group_failure_to_slack
+from dags import email_on_failure, log_failure_to_slack
 
 from airflow import DAG
 from airflow.operators.latest_only import LatestOnlyOperator
@@ -20,7 +19,7 @@ with DAG(
     catchup=False,
     default_args={
         "email": os.getenv("CALITP_NOTIFY_EMAIL"),
-        "email_on_failure": True,
+        "email_on_failure": email_on_failure(),
         "email_on_retry": False,
         "on_failure_callback": log_failure_to_slack,
     },
@@ -53,7 +52,6 @@ with DAG(
             "install_deps": True,
         },
         default_args={
-            "on_failure_callback": log_group_failure_to_slack,
             "retries": 1,
         },
     )

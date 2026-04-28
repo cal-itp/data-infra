@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from dags import log_failure_to_slack
+from dags import email_on_failure, log_failure_to_slack
 from operators.gcs_to_gtfs_rt_command_operator import GCSToGTFSRTCommandOperator
 
 from airflow import DAG, XComArg
@@ -16,7 +16,7 @@ with DAG(
     catchup=True,
     default_args={
         "email": os.getenv("CALITP_NOTIFY_EMAIL"),
-        "email_on_failure": True,
+        "email_on_failure": email_on_failure(),
         "email_on_retry": False,
         "on_failure_callback": log_failure_to_slack,
     },

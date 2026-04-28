@@ -3,8 +3,7 @@ from datetime import datetime
 
 from cosmos import DbtTaskGroup, ProfileConfig, ProjectConfig, RenderConfig
 from cosmos.constants import TestBehavior
-from dags import log_failure_to_slack
-from src.dag_utils import log_group_failure_to_slack
+from dags import email_on_failure, log_failure_to_slack
 
 from airflow import DAG
 from airflow.operators.latest_only import LatestOnlyOperator
@@ -24,11 +23,6 @@ profile_config = ProfileConfig(
     profiles_yml_filepath="/home/airflow/gcs/data/warehouse/profiles.yml",
 )
 
-default_args = {
-    "on_failure_callback": log_group_failure_to_slack,
-    "retries": 1,
-}
-
 with DAG(
     dag_id="dbt_daily",
     tags=["dbt", "daily"],
@@ -38,7 +32,7 @@ with DAG(
     catchup=False,
     default_args={
         "email": os.getenv("CALITP_NOTIFY_EMAIL"),
-        "email_on_failure": True,
+        "email_on_failure": email_on_failure(),
         "email_on_retry": False,
         "on_failure_callback": log_failure_to_slack,
     },
@@ -58,7 +52,9 @@ with DAG(
         operator_args={
             "install_deps": True,
         },
-        default_args=default_args,
+        default_args={
+            "retries": 1,
+        },
     )
 
     dbt_benefits = DbtTaskGroup(
@@ -74,7 +70,9 @@ with DAG(
         operator_args={
             "install_deps": True,
         },
-        default_args=default_args,
+        default_args={
+            "retries": 1,
+        },
     )
 
     dbt_gtfs = DbtTaskGroup(
@@ -92,7 +90,9 @@ with DAG(
         operator_args={
             "install_deps": True,
         },
-        default_args=default_args,
+        default_args={
+            "retries": 1,
+        },
     )
 
     dbt_kuba = DbtTaskGroup(
@@ -109,7 +109,9 @@ with DAG(
         operator_args={
             "install_deps": True,
         },
-        default_args=default_args,
+        default_args={
+            "retries": 1,
+        },
     )
 
     dbt_payments = DbtTaskGroup(
@@ -128,7 +130,9 @@ with DAG(
         operator_args={
             "install_deps": True,
         },
-        default_args=default_args,
+        default_args={
+            "retries": 1,
+        },
     )
 
     latest_only >> [dbt_audit, dbt_benefits, dbt_kuba]

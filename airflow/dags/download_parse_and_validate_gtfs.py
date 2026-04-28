@@ -2,7 +2,7 @@ import os
 from base64 import urlsafe_b64encode
 from datetime import datetime, timedelta
 
-from dags import log_failure_to_slack
+from dags import email_on_failure, log_failure_to_slack
 from operators.bigquery_to_download_config_operator import (
     BigQueryToDownloadConfigOperator,
 )
@@ -65,7 +65,7 @@ def gcs_branch(bucket_name, object_name, present, missing):
     user_defined_macros={"urlsafe_b64encode": urlsafe_b64encode},
     default_args={
         "email": os.getenv("CALITP_NOTIFY_EMAIL"),
-        "email_on_failure": True,
+        "email_on_failure": email_on_failure(),
         "email_on_retry": False,
         "on_failure_callback": log_failure_to_slack,
     },
