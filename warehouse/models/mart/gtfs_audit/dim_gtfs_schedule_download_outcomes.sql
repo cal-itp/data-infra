@@ -6,6 +6,7 @@ WITH dim_gtfs_schedule_download_outcomes AS (
            ts,
            success,
            exception,
+           download_type,
            backfilled,
            config.extracted_at AS config_extracted_at,
            config.name AS config_name,

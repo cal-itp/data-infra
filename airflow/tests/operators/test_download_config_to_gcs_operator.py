@@ -118,6 +118,7 @@ class TestDownloadConfigToGCSOperator:
                 "backfilled": False,
                 "config": download_config,
                 "exception": None,
+                "download_type": "Source URL",
                 "extract": {
                     "filename": "gtfs.zip",
                     "ts": "2025-06-02T00:00:00+00:00",
@@ -169,6 +170,7 @@ class TestDownloadConfigToGCSOperator:
         assert result == {
             "success": True,
             "exception": None,
+            "download_type": "Source URL",
             "config": {
                 "auth_headers": {},
                 "auth_query_params": {},
@@ -278,7 +280,7 @@ class TestDownloadConfigToGCSOperator:
             ),
             destination_bucket=os.environ.get("CALITP_BUCKET__GTFS_SCHEDULE_RAW"),
             destination_path=file_as_basename_destination_path,
-            results_path=file_as_basename_base64_url,
+            results_path=file_as_basename_results_path,
             dag=file_as_basename_dag,
         )
 
@@ -318,6 +320,7 @@ class TestDownloadConfigToGCSOperator:
                 "backfilled": False,
                 "config": file_as_basename_download_config,
                 "exception": None,
+                "download_type": "Source URL",
                 "extract": {
                     "filename": "google_transit.zip",
                     "ts": "2025-06-02T00:00:00+00:00",
@@ -359,6 +362,7 @@ class TestDownloadConfigToGCSOperator:
         assert result == {
             "success": True,
             "exception": None,
+            "download_type": "Source URL",
             "config": file_as_basename_download_config,
             "extract": {
                 "filename": "google_transit.zip",
@@ -439,7 +443,7 @@ class TestDownloadConfigToGCSOperator:
         file_as_response_basename_results_path: str,
     ) -> DownloadConfigToGCSOperator:
         return DownloadConfigToGCSOperator(
-            task_id="gtfs_download_config_to_gcs_basename",
+            task_id="gtfs_download_config_to_gcs_response_basename",
             gcp_conn_id="google_cloud_default",
             dt=execution_date.strftime("%Y-%m-%d"),
             ts=execution_date.isoformat(),
@@ -476,7 +480,7 @@ class TestDownloadConfigToGCSOperator:
         )
 
         task = file_as_response_basename_dag.get_task(
-            "gtfs_download_config_to_gcs_basename"
+            "gtfs_download_config_to_gcs_response_basename"
         )
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
@@ -495,6 +499,7 @@ class TestDownloadConfigToGCSOperator:
                 "backfilled": False,
                 "config": file_as_response_basename_download_config,
                 "exception": None,
+                "download_type": "Source URL",
                 "extract": {
                     "filename": "export-2024-03-21T05-16-52.zip",
                     "ts": "2025-06-02T00:00:00+00:00",
@@ -536,6 +541,7 @@ class TestDownloadConfigToGCSOperator:
         assert result == {
             "success": True,
             "exception": None,
+            "download_type": "Source URL",
             "config": file_as_response_basename_download_config,
             "extract": {
                 "filename": "export-2024-03-21T05-16-52.zip",
@@ -753,6 +759,7 @@ class TestDownloadConfigToGCSOperator:
                 "backfilled": False,
                 "config": manual_download_config,
                 "exception": None,
+                "download_type": "Manual Download",
                 "extract": {
                     "filename": "gtfs.zip",
                     "ts": "2025-06-02T00:00:00+00:00",
@@ -795,6 +802,7 @@ class TestDownloadConfigToGCSOperator:
         assert result == {
             "success": True,
             "exception": None,
+            "download_type": "Manual Download",
             "config": manual_download_config,
             "extract": {
                 "filename": "gtfs.zip",
