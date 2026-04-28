@@ -42,7 +42,7 @@ stops AS (
     FROM {{ ref('fct_daily_scheduled_stops') }}
     WHERE service_date
         -- do microbatch lookback + 1 to account for 1-day offset between UTC and Pacific dates
-        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_MICROBATCH_LOOKBACK_DAYS")+1, data_earliest_start=var("GTFS_RT_START")) }}
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS")+1, data_earliest_start=var("GTFS_RT_START")) }}
             AND {{ ranged_incremental_max_date() }}
 ),
 
@@ -52,7 +52,7 @@ daily_rt_feeds AS (
         base64_url AS vp_base64_url,
     FROM {{ ref('fct_daily_rt_feed_files') }}
     WHERE `date`
-        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_MICROBATCH_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_START")) }}
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_START")) }}
             AND {{ ranged_incremental_max_date() }}
 ),
 
@@ -64,7 +64,7 @@ int_vp_trips AS (
         trip_id,
     FROM {{ ref('int_gtfs_rt__vehicle_positions_trip_day_map_grouping') }}
     WHERE dt
-        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_MICROBATCH_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_START")) }}
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_START")) }}
             AND {{ ranged_incremental_max_date() }}
 ),
 
@@ -89,7 +89,7 @@ vehicle_locations AS (
 
     FROM {{ ref('fct_vehicle_locations') }}
     WHERE dt
-        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_MICROBATCH_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_SCHEDULE_START")) }}
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_SCHEDULE_START")) }}
             AND {{ ranged_incremental_max_date() }}
 ),
 

@@ -4,7 +4,7 @@
     event_time = 'date',
     batch_size = 'day',
     begin=var('GTFS_RT_START'),
-    lookback=var('DBT_ALL_MICROBATCH_LOOKBACK_DAYS'),
+    lookback=var('DBT_ALL_INCREMENTAL_LOOKBACK_DAYS'),
     partition_by = {
         'field': 'date',
         'data_type': 'date',
