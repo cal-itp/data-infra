@@ -244,29 +244,34 @@ In a development environment, if you want to access additional history for an in
 
     These settings will ignore/override the global start date for microbatch models and run regardless of what is set in the global start date. 
 
-    - For non-microbatch models, you can pass the `
+    - For non-microbatch models, you can pass the `DBT_INCREMENTAL_START_DATE` and `DBT_INCREMENTAL_END_DATE` variables, like this: 
+
+    ```
+    uv run dbt run -s [your model] --vars '{DBT_INCREMENTAL_START_DATE: "2025-01-01", DBT_INCREMENTAL_END_DATE: "2025-01-02", [START DATE VARIABLE]: "2025-01-01"}'
+    ``` 
+    **For these models, you must ensure that an early enough global start date is provided, because the macro won't run data before the global start date.**
+
+Putting these together, you can run a combination of microbatch and non-microbatch models by providing the same configs in both variables and providing an appropriate start date:
+
+```
+uv run dbt run -s [your models and/or selector logic] --event-time-start '2025-01-01' --event-time-end '2025-01-02' --vars '{DBT_INCREMENTAL_START_DATE: "2025-01-01", DBT_INCREMENTAL_END_DATE: "2025-01-02", [START DATE VARIABLE]: "2025-01-01"}'
+``` 
 
 - If you need to compile or run models in Staging instead of in your personally-named schema, you need to include the configuration in your `~/.dbt/profiles.yml` and add the `--target staging` flag in your command.
 
    ```bash
-   $ uv run dbt compile -s <<incremental_model_name>> --target staging --vars 'INCREMENTAL_MAX_DT: 2025-07-08'
+   $ uv run dbt [run/compile] -s [incremental_model_name] --target staging --event-time-start '2025-01-01' --event-time-end '2025-01-02' --vars '{DBT_INCREMENTAL_START_DATE: "2025-01-01", DBT_INCREMENTAL_END_DATE: "2025-01-02", [START DATE VARIABLE]: "2025-01-01"}'
    ```
+
+   **Note that at time of writing, `dbt compile` does not actually show compiled event time batches for microbatch models. See [dbt-core#12592](https://github.com/dbt-labs/dbt-core/issues/12592).**
 
 #### In production 
 
 **In production**, avoid using `--full-refresh` for larger incremental models. BigQuery does not have enough resources to run a full-refresh in some of GTFS RT tables, but you can rebuild data (if needed) in batches for specific ranges.
 
-> [!CAUTION]
->
-> Be extremely careful when executing commands in the production environment. Please ensure all variables are correctly configured before proceeding.
+To re-run data in production, use the `dbt_manual_run_with_args` Airflow DAG. This DAG lets you pass relevant configuration while storing run information in Airflow and guaranteeing that you will run against the correct production target. 
 
-To change models in Production, you need to include the configuration in your `~/.dbt/profiles.yml` and add `--target prod` flag in your command.
-You also need to specify the source of your external tables. So when compiling or running models in production use `GOOGLE_CLOUD_PROJECT: cal-itp-data-infra` or you may get less or no data as result.
-
-```bash
-$ uv run dbt compile -s <<incremental_model_name>> --target prod --vars '{GOOGLE_CLOUD_PROJECT: cal-itp-data-infra, INCREMENTAL_MAX_DT: 2025-07-02}'
-```
-
+To run, open the DAG and click the "play" button icon in the upper right and select `Trigger DAG w/ config`. This will open a configuration screen where you can enter your information. You can enter dbt model selection logic, variables, etc. 
 
 ## Setting up the project on your local machine
 
