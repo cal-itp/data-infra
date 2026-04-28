@@ -171,7 +171,7 @@ Once you have performed the setup above, you are good to go run
    This command executes compiled SQL model files in the warehouse. The default target is `dev` that points to `cal-itp-data-infra-staging` project.
 
    During development, you can specify [selections](https://docs.getdbt.com/reference/node-selection/syntax) (via the `-s` or `--select` flags) to run only a subset of models, otherwise this will run _all_ the tables.
-   By default, your very first `run` is a [full refresh](https://docs.getdbt.com/reference/commands/run#refresh-incremental-models) but you'll need to pass the `--full-refresh` flag in the future if you want to change the schema of incremental tables, or "backfill" existing rows with new logic.
+   By default, your very first `run` is a [full refresh](https://docs.getdbt.com/reference/commands/run#refresh-incremental-models) but you'll need to pass the `--full-refresh` flag (or an appropriate `--event-time-start` / `--event-time-end` range) in the future if you want to change the schema of incremental tables, or "backfill" existing rows with new logic.
 
 > [!NOTE]
 > In general, it is a good idea to run `seed` and `run --full-refresh` if you think your local environment is substantially outdated (for example, if you haven't worked on dbt models in a few weeks but want to create or modify a model). We have macros in the project that prevent a non-production "full refresh" from actually processing all possible data.
@@ -214,71 +214,37 @@ Some additional helpful commands:
 
 We make heavy use of [incremental models](https://docs.getdbt.com/docs/build/incremental-models) in the Cal-ITP warehouse since we have large data volumes, but that data arrives in a relatively consistent pattern (i.e. temporal).
 
-**In development**, there is a maximum lookback defined for incremental runs (`dev_lookback_days`). The purpose of this is to handle situations where a developer may not have executed a model for a period of time. It's easy to handle full refreshes with a maximum lookback; we simply template in `N days ago` rather than the "true" start of the data for full refreshes. However, we also template in `MAX(N days ago, max DT of existing table)` for developer incremental runs; otherwise, going a month without executing a model would mean that a naive incremental implementation would then read in that full month of data. This means that your development environment can end up with gaps of data; if you've gone a month without executing a model, and then you execute a regular `run` that reads in the past `N` (7 currently) days of data, you will have a ~23 day gap. If this gap is unacceptable, you can resolve this in one of two ways.
+#### Incremental date settings
 
-- If you are able to develop and test with only recent data, execute a `--full-refresh` on your model(s) and all parents. This will drop the existing tables and re-build them with the last 7 days of data.
+The amount of history that will be run in a given dbt execution is controlled by a combination of three settings:
 
-- If you need historical data for your analysis, copy the production table with `CREATE TABLE <your_schema>.<tablename> COPY <production_schema>.<tablename>`; copies are free in BigQuery so this is substantially cheaper than fully building the model yourself.
+* **Global start dates**: These are the dates that will be used the first time an incremental model is run or if `--full-refresh` is specified and enabled for the given model. In `dbt_project.yaml`, we set global start dates for data sources using the variables `GTFS_SCHEDULE_START`, `GTFS_RT_START`, `KUBA_DEVICE_START`. For GTFS data, these dates are set to only 7 days in the past in non-production environments to limit how much history will be run. See below for more information on options for running different amounts of history in development vs. production environments.
+    * `--full-refresh` note: It is best practice that microbatch incremental models have `full-refresh` set to `false` in their individual model configuration. Therefore they may not full refresh even if the flag is passed. Instead, use `--event-time-start` and `--event-time-end` for historical backfills on microbatch models. 
+    * Microbatch note: `--event-time-start` and `--event-time-end` will override this for microbatch models, meaning that if an event time start/end before the dataset start are explicitly passed to a microbatch model, that model will try to run those earlier historical dates. 
 
-- If you need to change the date of which your incremental model is running, you can include the date using the `INCREMENTAL_MAX_DT` variable.
+* **Lookback range**: Most of our incremental models use a fixed lookback period, meaning that on a standard incremental run they will run a set number of days of history. This lookback window is configured using the `DBT_ALL_INCREMENTAL_LOOKBACK_DAYS` and `DBT_DAILY_INCREMENTAL_LOOKBACK_DAYS` dbt variables, defined by default in `dbt_project.yaml`. Which variable a given model uses depends on whether the model runs in the `dbt all` or `dbt daily` Airflow DAG. 
 
-   Follow this example replacing the `<<incremental_model_name>>` and `2025-07-08` date with the relevant model name and date for your specific case.
+* **Specified date range**: The standard lookback period can be overridden by using  configurations to define a date range to refresh. These configurations take two forms:
+   * For **microbatch** incremental models, define a date range using the `--event-time-start` and `--event-time-end` dbt arguments. 
+   * For **non-microbatch** incremental models, use the `DBT_INCREMENTAL_START_DATE` and `DBT_INCREMENTAL_END_DATE` dbt variables. 
+   * These two configurations (`event time start/end` and `DBT incremental start/end date`) can be passed together if you want to handle microbatch and non-microbatch models in the same run. 
 
-   1. Compile the model with the date you need.
+#### In development environment
 
-      ```bash
-      $ uv run dbt compile -s <<incremental_model_name>> --vars 'INCREMENTAL_MAX_DT: 2025-07-08'
-      ```
+In a development environment, if you want to access additional history for an incremental model, there are multiple options and considerations:
 
-   2. Inspect the code generated by the command to confirm if the date was replaced.
+- You can copy the production table with `CREATE TABLE <your_schema>.<tablename> COPY <production_schema>.<tablename>`; copies are free in BigQuery so this is substantially cheaper than fully building the model yourself. This will give you a full copy of the production table in your development schema to work with.
 
-      ```
-      Compiled node 'incremental_model_name' is:
+- If you need to rebuild specific date ranges, first check whether the model you care about is microbatch or not.
+    - For microbatch models, you can pass the `--event-time-start` and `--event-time-end` arguments to reprocess a historical date range. Both arguments are required. For example: 
 
-       SELECT *
-         FROM incremental_model_name
-        WHERE dt >= '2025-07-08'
-      ```
-   3. Run the model in the warehouse.
+    ```
+    uv run dbt run -s [your model] --event-time-start '2025-01-01' --event-time-end '2025-01-02'
+    ``` 
 
-      ```bash
-      $ uv run dbt run -s <<incremental_model_name>> --vars 'INCREMENTAL_MAX_DT: 2025-07-08'
-      ```
+    These settings will ignore/override the global start date for microbatch models and run regardless of what is set in the global start date. 
 
-- If you need to rebuild specific date ranges:
-
-   1. If your model uses the [incremental_where](https://dbt-docs.dds.dot.ca.gov/#!/macro/macro.calitp_warehouse.incremental_where) macro, you need to replace your local file TEMPORARILY by a date range.
-
-      ```diff
-      --- a/warehouse/models/.../incremental_model_name.sql
-      +++ b/warehouse/models/.../incremental_model_name.sql
-        SELECT *
-          FROM incremental_model_name
-      -  WHERE {{ incremental_where(default_start_var='GTFS_RT_START') }}
-      +  WHERE dt BETWEEN '{{ var("DBT_INCREMENTAL_START_DATE") }}' AND '{{ var("DBT_INCREMENTAL_END_DATE") }}'
-      ```
-
-   2. Compile your model to make sure it has the expected date range.
-
-      ```bash
-      $ uv run dbt compile -s <<incremental_model_name>> --vars '{DBT_INCREMENTAL_START_DATE: 2025-01-02, DBT_INCREMENTAL_END_DATE: 2025-01-31}'
-      ```
-
-      It should return a SQL code like this:
-
-      ```
-      Compiled node 'incremental_model_name' is:
-
-      SELECT *
-        FROM incremental_model_name
-       WHERE dt BETWEEN '2025-01-02' AND '2025-01-31'
-      ```
-
-   3. Run your model.
-
-      ```bash
-      $ uv run dbt run -s <<incremental_model_name>> --vars '{DBT_INCREMENTAL_START_DATE: 2025-01-02, DBT_INCREMENTAL_END_DATE: 2025-01-31}'
-      ```
+    - For non-microbatch models, you can pass the `
 
 - If you need to compile or run models in Staging instead of in your personally-named schema, you need to include the configuration in your `~/.dbt/profiles.yml` and add the `--target staging` flag in your command.
 
@@ -286,6 +252,7 @@ We make heavy use of [incremental models](https://docs.getdbt.com/docs/build/inc
    $ uv run dbt compile -s <<incremental_model_name>> --target staging --vars 'INCREMENTAL_MAX_DT: 2025-07-08'
    ```
 
+#### In production 
 
 **In production**, avoid using `--full-refresh` for larger incremental models. BigQuery does not have enough resources to run a full-refresh in some of GTFS RT tables, but you can rebuild data (if needed) in batches for specific ranges.
 
