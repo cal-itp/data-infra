@@ -46,7 +46,6 @@ resource "google_composer_environment" "calitp-composer" {
         core-max_active_runs_per_dag               = 128
         core-max_active_tasks_per_dag              = 128
         core-max_templated_field_length            = 25000
-        core-parallelism                           = 0
         cosmos-use_dataset_airflow3_uri_standard   = true
         email-email_backend                        = "airflow.utils.email.send_email_smtp"
         email-email_conn_id                        = "smtp_postmark"
