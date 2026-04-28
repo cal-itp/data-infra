@@ -9,6 +9,7 @@ import airflow  # noqa
 # pointed at #alerts-data-infra as of 2024-02-05
 CALITP_SLACK_URL = os.environ.get("CALITP_SLACK_URL")
 CALITP_NOTIFY_EMAIL = os.environ.get("CALITP_NOTIFY_EMAIL")
+AIRFLOW_EXECUTOR = os.environ.get("AIRFLOW__CORE__EXECUTOR")
 
 # DAG Directories =============================================================
 
@@ -25,24 +26,35 @@ for child in dag_parent_dir.iterdir():
 # DAG Generation ==============================================================
 
 
+def email_on_failure() -> bool:
+    if AIRFLOW_EXECUTOR == "LocalExecutor":
+        return False
+
+    return True
+
+
 def log_failure_to_slack(context):
     if not CALITP_SLACK_URL:
-        print("Skipping email to slack channel. No CALITP_SLACK_URL in environment")
+        print("Skipping message to slack channel. No CALITP_SLACK_URL in environment.")
+    elif AIRFLOW_EXECUTOR == "LocalExecutor":
+        print("Skipping message to slack channel. Local Development.")
     else:
         try:
             ti = context["ti"]
             message = f"""
             Task Failed: {ti.dag_id}.{ti.task_id}
             Execution Date: {ti.execution_date}
+            Run: {ti.run_id}
             Try {ti.try_number} of {ti.max_tries}
 
             <{ti.log_url}| Check Log >
             """  # noqa: E221, E222
 
             requests.post(CALITP_SLACK_URL, json={"text": message})
-
+            print(f"Slack notification sent: {message}")
         except Exception as e:
             # This is very broad but we want to try to log _any_ exception to slack
+            print(f"Slack notification failed: {type(e)}")
             requests.post(
                 CALITP_SLACK_URL, json={"text": f"failed to log {type(e)} to slack"}
             )

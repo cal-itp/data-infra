@@ -1,7 +1,7 @@
 import os
 from datetime import datetime, timedelta
 
-from dags import log_failure_to_slack
+from dags import email_on_failure, log_failure_to_slack
 from operators.ntd_xlsx_list_tabs_operator import NTDXLSXListTabsOperator
 from operators.ntd_xlsx_to_gcs_operator import NTDXLSXToGCSOperator
 from operators.ntd_xlsx_to_jsonl_operator import NTDXLSXToJSONLOperator
@@ -73,7 +73,7 @@ with DAG(
     tags=["ntd"],
     default_args={
         "email": os.getenv("CALITP_NOTIFY_EMAIL"),
-        "email_on_failure": True,
+        "email_on_failure": email_on_failure(),
         "email_on_retry": False,
         "on_failure_callback": log_failure_to_slack,
     },

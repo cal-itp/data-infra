@@ -1,7 +1,7 @@
 import os
 from datetime import datetime, timedelta
 
-from dags import log_failure_to_slack
+from dags import email_on_failure, log_failure_to_slack
 from operators.littlepay_psv_to_jsonl_operator import LittlepayPSVToJSONLOperator
 from operators.littlepay_s3_to_gcs_operator import LittlepayS3ToGCSOperator
 
@@ -78,7 +78,7 @@ LITTLEPAY_TRANSIT_PROVIDER_CONFIG = {
     tags=["payments", "littlepay"],
     default_args={
         "email": os.getenv("CALITP_NOTIFY_EMAIL"),
-        "email_on_failure": True,
+        "email_on_failure": email_on_failure(),
         "email_on_retry": False,
         "on_failure_callback": log_failure_to_slack,
     },

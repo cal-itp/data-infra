@@ -2,8 +2,7 @@ import os
 import shlex
 from datetime import datetime
 
-from dags import log_failure_to_slack
-from src.dag_utils import log_group_failure_to_slack
+from dags import email_on_failure, log_failure_to_slack
 
 from airflow import DAG
 from airflow.models.param import Param
@@ -131,7 +130,7 @@ with DAG(
     },
     default_args={
         "email": os.getenv("CALITP_NOTIFY_EMAIL"),
-        "email_on_failure": True,
+        "email_on_failure": email_on_failure(),
         "email_on_retry": False,
         "on_failure_callback": log_failure_to_slack,
     },
@@ -156,7 +155,6 @@ with DAG(
             " params.event_time_start, params.event_time_end,"
             " params.vars) }}"
         ),
-        on_failure_callback=log_group_failure_to_slack,
         retries=0,
     )
 

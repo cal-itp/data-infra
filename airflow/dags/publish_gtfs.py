@@ -1,7 +1,7 @@
 import os
 from datetime import datetime
 
-from dags import log_failure_to_slack
+from dags import email_on_failure, log_failure_to_slack
 from operators.dbt_bigquery_to_gcs_operator import DBTBigQueryToGCSOperator
 from operators.dbt_manifest_to_dictionary_operator import (
     DBTManifestToDictionaryOperator,
@@ -22,7 +22,7 @@ with DAG(
     catchup=False,
     default_args={
         "email": os.getenv("CALITP_NOTIFY_EMAIL"),
-        "email_on_failure": True,
+        "email_on_failure": email_on_failure(),
         "email_on_retry": False,
         "on_failure_callback": log_failure_to_slack,
     },
