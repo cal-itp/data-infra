@@ -1,35 +1,36 @@
 operator: operators.ExternalTable
-bucket: "{{ env_var('CALITP_BUCKET__ENGHOUSE_RAW') }}"
-post_hook: |
-  SELECT *
-  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_enghouse.pay_windows
-  LIMIT 1;
+bucket: "{{ env_var('CALITP_BUCKET__ENGHOUSE_PARSED') }}"
 source_objects:
-  - "pw/*.csv"
+  - "pw/*/*.jsonl.gz"
 destination_project_dataset_table: "external_enghouse.pay_windows"
-source_format: CSV
+source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
-field_delimiter: ";"
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "pw/{agency:STRING}/dt={dt:DATE}/"
 schema_fields:
-  - name: ID
+  - name: id
     type: STRING
-  - name: Token
+  - name: token
     type: STRING
-  - name: Amount_Settled
+  - name: amount_settled
     type: STRING
-  - name: Amount_To_Settle
+  - name: amount_to_settle
     type: STRING
-  - name: Debt_Settled
+  - name: debt_settled
     type: STRING
-  - name: Stage
+  - name: stage
     type: STRING
-  - name: Payment_reference
+  - name: payment_reference
     type: STRING
-  - name: Terminal_Id
+  - name: terminal_id
     type: STRING
-  - name: Open_Date
+  - name: open_date
     type: STRING
-  - name: Close_Date
+  - name: close_date
     type: STRING
-  - name: Operator_Id
+  - name: operator_id
+    type: STRING
+  - name: _line_number
     type: STRING
