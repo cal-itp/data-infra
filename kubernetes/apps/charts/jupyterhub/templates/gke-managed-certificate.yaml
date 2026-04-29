@@ -4,4 +4,4 @@ metadata:
   name: jupyterhub-managed-cert
 spec:
   domains:
-    - hubtest.k8s.calitp.jarv.us
+    - jupyterhub.dds.dot.ca.gov
