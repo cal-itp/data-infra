@@ -89,7 +89,7 @@ resource "google_cloudfunctions2_function" "gtfs-rt-archiver" {
     available_memory = "256M"
     ingress_settings = "ALLOW_INTERNAL_ONLY"
 
-    max_instance_count               = 160
+    max_instance_count               = 300
     max_instance_request_concurrency = 1
 
     all_traffic_on_latest_revision = true
@@ -98,7 +98,7 @@ resource "google_cloudfunctions2_function" "gtfs-rt-archiver" {
     environment_variables = {
       CALITP_BUCKET__GTFS_RT_RAW = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-rt-raw-v2_name}"
       REQUEST_CONNECT_TIMEOUT    = 1
-      REQUEST_READ_TIMEOUT       = 5
+      REQUEST_READ_TIMEOUT       = 30
     }
   }
 
