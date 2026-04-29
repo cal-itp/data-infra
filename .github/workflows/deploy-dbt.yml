@@ -139,7 +139,7 @@ jobs:
       - name: Full-Refresh changed models
         if: ${{ needs.dbt-changed.outputs.has-changed == 'true' }}
         working-directory: warehouse
-        run: uv run dbt run --select "${{ needs.dbt-changed.outputs.changed-models }}" --target ${{ env.DBT_TARGET }} --full-refresh
+        run: uv run dbt run --select "${{ needs.dbt-changed.outputs.changed-models }}" --target ${{ env.DBT_TARGET }}
 
       - name: Run downstream models
         if: ${{ needs.dbt-changed.outputs.has-changed == 'true' }}
