@@ -1,0 +1,15 @@
+description: "Parse Enghouse semicolon-delimited CSV files into JSONL"
+schedule_interval: "0 9 * * *"
+tags:
+  - enghouse
+  - payments
+default_args:
+    owner: airflow
+    depends_on_past: False
+    start_date: "2026-04-29"
+    catchup: False
+    email_on_failure: True
+    email_on_retry: False
+    retries: 1
+    retry_delay: !timedelta 'minutes: 5'
+latest_only: False
