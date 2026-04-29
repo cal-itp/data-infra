@@ -187,7 +187,7 @@ Some additional helpful commands:
 
 - `uv run dbt test`
 
-   This command runs data tests defined on models, sources, seeds, and unit tests defined on SQL models.
+   This command runs data tests defined on models, sources, seeds, and unit tests defined on SQL models. Many tests in the warehouse are disabled pending investigation & prioritization -- to turn on a specific test during development, you can set the [`config.enabled` flag](https://docs.getdbt.com/reference/resource-configs/enabled) on that test to true -- this is done in the YAML or SQL file where the test is defined, or you can turn on tests for an entire directory of models by changing the flag in `dbt_project.yaml` under the `data-tests` key. 
 
    You can specify [selections](https://docs.getdbt.com/reference/node-selection/syntax) (via the `-s` or `--select` flags) to test only a specific model.
 
@@ -271,7 +271,7 @@ uv run dbt run -s [your models and/or selector logic] --event-time-start '2025-0
 
 To re-run data in production, use the `dbt_manual_run_with_args` Airflow DAG. This DAG lets you pass relevant configuration while storing run information in Airflow and guaranteeing that you will run against the correct production target. 
 
-To run, open the DAG and click the "play" button icon in the upper right and select `Trigger DAG w/ config`. This will open a configuration screen where you can enter your information. You can enter dbt model selection logic, variables, etc. 
+To run, open the DAG and click the "play" button icon in the upper right and select `Trigger DAG w/ config`. This will open a configuration screen where you can enter your information. You can enter dbt model selection logic, variables, etc. Use the `select` box for the [dbt node selection syntax](https://docs.getdbt.com/reference/node-selection/syntax?version=1.12), exclude for exclusions, `event-time-start` / `event-time-end` for those arguments, and the `vars` entry box for any dbt variables you want to pass. 
 
 ## Setting up the project on your local machine
 
