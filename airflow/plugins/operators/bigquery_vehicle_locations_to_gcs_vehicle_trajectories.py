@@ -8,19 +8,17 @@ save it into a hive-partitioned GCS bucket.
 Laurie: we have to have Airflow job to define partitions in explicit way.
   - [ ] use 1 bucket (make sure naming convention is correct)
   - [ ] ask MoV to use Terraform to set up
-  - [x] 1st query: add `fct_vehicle_locations` in chunks, 1 week at a time, filter on dt (or can we do service_date)? 
-  - [x] 2nd query: do a query on `fct_vehicle_locations` in chunks + group by daily trip - this is what's in fct_vehicle_locations_path already
+  - [x] 1st query: add `fct_vehicle_locations` to query 1 service_date at a time
+  - [x] 2nd query: do a query on `fct_vehicle_locations` for 1 service_date + group by daily trip - this is what's in fct_vehicle_locations_path already
   - [x] enrich with movingpandas 
   - [ ] saved to hive-partitioned GCS.
        save as gzipped jsonl? 
-	   can this be partitioned on service_date?
+	   can be partitioned on service_date
         
-2. Configure the results in BUCKET/vehicle_locations_trajectory/dt=* to be external table - becomes fct_vehicle_locations_path (but with more columns)
+2. Configure the results in BUCKET/vehicle_locations_trajectory/service_date=* to be external table - becomes fct_vehicle_locations_path (but with more columns)
 - [x] use the create_external_table DAG
 - [ ] set the partitions (service_date), clusters
 """
-
-
 import json
 import os
 from datetime import datetime, timedelta, timezone
@@ -45,6 +43,7 @@ class BigQueryVehicleLocationsToTrajectory(BaseOperator):
         self,
         dataset_name: str,
         table_name: str,
+		one_service_date: str,
         destination_bucket: str,
         destination_path: str = "vehicle_trajectory",
         columns: list[str] = [
@@ -66,11 +65,11 @@ class BigQueryVehicleLocationsToTrajectory(BaseOperator):
         self._big_query_hook = None
         self.dataset_name = dataset_name
         self.table_name = table_name
+		self.one_service_date = one_service_date
         self.destination_bucket = destination_bucket
         self.destination_path = destination_path
         self.columns = columns
         self.gcp_conn_id = gcp_conn_id
-        # does start_date and end_date get defined here to be used in sql?
 	
     def destination_name(self) -> str:
         return self.destination_bucket.replace("gs://", "")
@@ -85,20 +84,11 @@ class BigQueryVehicleLocationsToTrajectory(BaseOperator):
         return BigQueryHook(
             gcp_conn_id=self.gcp_conn_id, location=self.location(), use_legacy_sql=False
         )
-
-	def yesterday(self) -> str: 
-		return datetime.now(timezone.utc).date() - timedelta(1) 
-	
-	def one_week_ago(self) -> str:
-		# add another buffer of 1 day, instead of 8 days ago, use 9 days ago
-		return datetime.now(timezone.utc).date() - timedelta(9) 
 		
-    def rows(self, one_week_ago, yesterday) -> pd.DataFrame:
+    def rows(self, one_service_date) -> pd.DataFrame:
 		"""
-		Select from fct_vehicle_locations (partitioned on dt). 
-		Parent of fct_vehicle_locations uses the intermediate table that converts dt to service_date,
-		so we can use service_date here? 
-		(TODO: confirm service_date over dt use for query).
+		Select from fct_vehicle_locations (though partiitoned on dt, can use service_date). 
+		https://airflow.apache.org/docs/apache-airflow-providers-common-sql/stable/dataframes.html
 		"""
         selected_columns = ", ".join(self.columns) if self.columns else "*"
 
@@ -108,12 +98,12 @@ class BigQueryVehicleLocationsToTrajectory(BaseOperator):
 					{selected_columns},
 					DATETIME(location_timestamp, "America/Los_Angeles") AS location_timestamp_pacific
             	FROM `{self.dataset_name}.{self.table_name}`
-            	WHERE service_date >= DATE('{one_week_ago}') AND service_date <= DATE('{yesterday}')
+            	WHERE service_date = %s 
         	""",
-			df_type="pandas"
+			df_type="pandas", parameters=[one_service_date]
 		)
     
-    def rows_grouped_by_trip(self, one_week_ago, yesterday) -> pd.DataFrame:
+    def rows_grouped_by_trip(self, one_service_date) -> pd.DataFrame:
 		"""
 		Other trip-level rows to save as arrays.
 		How would .partial and .expand be used to write this?
@@ -155,10 +145,10 @@ class BigQueryVehicleLocationsToTrajectory(BaseOperator):
 	        		) AS pacific_seconds,
 					COUNT(*) AS n_vp,
 	            FROM `{self.dataset_name}.{self.table_name}`
-	            WHERE service_date >= DATE('{one_week_ago}') AND service_date <= DATE('{yesterday}')
+	            WHERE service_date = %s 
 				GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 	        """,
-			df_type="pandas"
+			df_type="pandas", parameters=[one_service_date]
 		)
 		
 	def enrich_with_movingpandas_columns(df: pd.DataFrame) -> pd.DataFrame:
@@ -243,8 +233,8 @@ class BigQueryVehicleLocationsToTrajectory(BaseOperator):
         return {
             "PARTITIONED_ARTIFACT_METADATA": json.dumps(
                 {
-                    "filename": "trajectories.jsonl.gz", # TODO: confirm if filepath looks like BUCKET/destination_path/dt=/trajectories.jsonl.gz
-                    "dt": self.dt, # TODO: how to get right partition by dt or service_date? 
+                    "filename": "trajectories.jsonl.gz",
+                    "service_date": self.one_service_date,
                 }
             )
         }
