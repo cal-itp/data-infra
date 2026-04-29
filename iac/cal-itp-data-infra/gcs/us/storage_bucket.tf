@@ -2120,6 +2120,18 @@ resource "google_storage_bucket" "calitp-enghouse-raw" {
   uniform_bucket_level_access = "true"
 }
 
+resource "google_storage_bucket" "calitp-enghouse-parsed" {
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  location                    = "US-WEST2"
+  name                        = "calitp-enghouse-parsed"
+  project                     = "cal-itp-data-infra"
+  public_access_prevention    = "enforced"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
 # TODO: Delete once is totally replaced by calitp-enghouse-raw
 resource "google_storage_bucket" "cal-itp-data-infra-enghouse-raw" {
   default_event_based_hold    = "false"

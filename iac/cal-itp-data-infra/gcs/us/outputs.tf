@@ -2882,6 +2882,10 @@ output "google_storage_bucket_calitp-enghouse-raw_name" {
   value = google_storage_bucket.calitp-enghouse-raw.name
 }
 
+output "google_storage_bucket_calitp-enghouse-parsed_name" {
+  value = google_storage_bucket.calitp-enghouse-parsed.name
+}
+
 output "google_storage_bucket_calitp-elavon-raw-v2_name" {
   value = google_storage_bucket.calitp-elavon-raw-v2.name
 }

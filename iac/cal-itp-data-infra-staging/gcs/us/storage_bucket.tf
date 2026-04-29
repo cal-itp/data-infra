@@ -174,6 +174,18 @@ resource "google_storage_bucket" "calitp-staging-enghouse-raw" {
   uniform_bucket_level_access = "true"
 }
 
+resource "google_storage_bucket" "calitp-staging-enghouse-parsed" {
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  location                    = "US-WEST2"
+  name                        = "calitp-staging-enghouse-parsed"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "enforced"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
 # TODO: Delete once is totally replaced by calitp-staging-enghouse-raw
 resource "google_storage_bucket" "cal-itp-data-infra-enghouse-raw" {
   default_event_based_hold    = "false"
