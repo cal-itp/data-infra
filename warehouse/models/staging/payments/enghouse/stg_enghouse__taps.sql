@@ -26,7 +26,7 @@ clean_columns AS (
         SAFE_CAST(Fare_Value AS INT64) AS fare_value,
         {{ trim_make_empty_string_null('Fare_Description') }} AS fare_description,
         {{ trim_make_empty_string_null('Fare_Linked_Id') }} AS fare_linked_id,
-        {{ trim_make_empty_string_null('gps_longitude') }} AS gps_longitude,
+        {{ trim_make_empty_string_null('ID') }} AS gps_longitude,
         SAFE_CAST(Gps_Latitude AS NUMERIC) AS gps_latitude,
         SAFE_CAST(Gps_Altitude AS NUMERIC) AS gps_altitude,
         SAFE_CAST(Vehicle_Public_Number AS INT64) AS vehicle_public_number,
@@ -48,7 +48,7 @@ clean_columns AS (
         {{ dbt_utils.generate_surrogate_key([ 'Operator_Id', 'tap_id', 'mapping_terminal_id', 'mapping_merchant_id', 'terminal', 'token',
             'masked_pan', 'server_date', 'terminal_date', 'tx_number', 'tx_status', 'payment_reference',
             'terminal_spdh_code', 'denylist_version', 'transit_data', 'currency', 'par', 'Fare_Mode', 'Fare_Type', 'Fare_Value',
-            'Fare_Description', 'Fare_Linked_Id', 'gps_longitude', 'Gps_Latitude', 'Gps_Altitude', 'Vehicle_Public_Number', 'Vehicle_Name',
+            'Fare_Description', 'Fare_Linked_Id', 'ID', 'Gps_Latitude', 'Gps_Altitude', 'Vehicle_Public_Number', 'Vehicle_Name',
             'Stop_Id', 'Stop_Name', 'Platform_Id', 'Platform_Name', 'Zone_Id', 'Zone_Name', 'Line_Public_Number', 'Line_Name',
             'Line_Direction', 'Trip_Public_Number', 'Trip_Name', 'Service_Public_Number', 'Service_Name', 'Driver_ID']) }} AS _content_hash
     FROM source
