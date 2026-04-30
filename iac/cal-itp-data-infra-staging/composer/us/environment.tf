@@ -20,7 +20,7 @@ resource "google_composer_environment" "calitp-staging-composer" {
         count      = 1
       }
       web_server {
-        cpu        = 2
+        cpu        = 4
         memory_gb  = 4
         storage_gb = 1
       }
