@@ -80,9 +80,9 @@ Both Littlepay and Elavon sync DAGs are **"now" type DAGs** - they sync whatever
 
 **Enghouse parse DAG (`parse_enghouse`):**
 
-- Date-tied — each DAG run processes only files whose embedded filename date matches the Airflow execution date
-- Catchup is enabled, so missed runs will backfill automatically
-- To re-parse a specific date: delete the relevant file(s) from `gs://calitp-enghouse-parsed/` for that date, then clear and re-run that date's Airflow task
+- Scan-all — each run processes all files in the raw bucket, skipping any already present in the parsed bucket
+- Late or re-delivered files are automatically picked up on the next run
+- To re-parse a specific file: delete it from `gs://calitp-enghouse-parsed/` and re-trigger the DAG
 
 ### Common Misconceptions
 
