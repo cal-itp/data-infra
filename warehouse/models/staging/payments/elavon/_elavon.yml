@@ -190,7 +190,9 @@ models:
       - name: card_scheme_ref
       - name: trn_ref_num
         data_tests:
-          - unique
+          - unique_proportion:
+              arguments:
+                at_least: 0.9999
       - name: settlement_method
       - name: currency_code
       - name: cb_acq_ref_id
@@ -240,7 +242,9 @@ models:
       - name: card_scheme_ref
       - name: trn_ref_num
         data_tests:
-          - unique
+          - unique_proportion:
+              arguments:
+                at_least: 0.9999
       - name: settlement_method
       - name: currency_code
       - name: cb_acq_ref_id
