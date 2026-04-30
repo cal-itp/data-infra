@@ -13,6 +13,12 @@ The GTFS-RT Archiver consists of three parts running inside Google Cloud Provide
 
 The Clock and Heartbeat communicate via Google Pub/Sub.
 
+Google Cloud Provider APIs required:
+
+* Workflows
+* Cloud Run
+* Eventarc
+
 
 ## Deployment
 
