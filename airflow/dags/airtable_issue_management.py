@@ -2,6 +2,7 @@ import os
 from datetime import datetime, timedelta
 
 import pendulum
+from dags import email_on_failure, log_failure_to_slack
 from operators.airtable_issues_create_operator import AirtableIssuesCreateOperator
 from operators.airtable_issues_email_operator import AirtableIssuesEmailOperator
 from operators.airtable_issues_update_operator import AirtableIssuesUpdateOperator
@@ -23,6 +24,9 @@ with DAG(
     catchup=False,
     default_args={
         "email": [os.getenv("AIRTABLE_ISSUE_MANAGEMENT_EMAIL")],
+        "email_on_failure": email_on_failure(),
+        "email_on_retry": False,
+        "on_failure_callback": log_failure_to_slack,
         "air_table_name": os.getenv("TRANSIT_DATA_QUALITY_ISSUES"),
     },
 ) as dag:
@@ -128,16 +132,13 @@ with DAG(
         # rt_create_result=XComArg(create_airtable_rt_completeness_issues),
     )
 
-    latest_only >> [
-        expiring_issues_close,
-        expiring_issues_create,
-        rt_completeness_issues_close,
-        # rt_completeness_issues_create,
-    ]
-
-    [
-        expiring_issues_close,
-        expiring_issues_create,
-        rt_completeness_issues_close,
-        # rt_completeness_issues_create,
-    ] >> send_airtable_issue_email
+    (
+        latest_only
+        >> [
+            expiring_issues_close,
+            expiring_issues_create,
+            rt_completeness_issues_close,
+            # rt_completeness_issues_create,
+        ]
+        >> send_airtable_issue_email
+    )
