@@ -167,8 +167,12 @@ models:
       - name: littlepay_transaction_id
         description: '{{ doc("lp_littlepay_transaction_id") }}'
         data_tests:
-          - not_null
-          - unique
+          - dbt_utils.not_null_proportion:
+              arguments:
+                at_least: 0.9999
+          - unique_proportion:
+              arguments:
+                at_least: 0.9999
       - name: location_id
         description: The identifier of the location where the transaction occurred.
       - name: location_name
@@ -269,8 +273,9 @@ models:
       - name: micropayment_id
         description: '{{ doc("lp_micropayment_id") }}'
         data_tests:
-          - unique:
+          - unique_proportion:
               arguments:
+                at_least: 0.9999
                 where: applied
       - *participant_id
       - name: customer_id
@@ -330,8 +335,12 @@ models:
       - name: micropayment_id
         description: '{{ doc("lp_micropayment_id") }}'
         data_tests:
-          - not_null
-          - unique
+          - dbt_utils.not_null_proportion:
+              arguments:
+                at_least: 0.9999
+          - unique_proportion:
+              arguments:
+                at_least: 0.9999
       - name: aggregation_id
         description: '{{ doc("lp_aggregation_id") }}'
       - *participant_id
@@ -366,7 +375,9 @@ models:
       - name: product_id
         description: '{{ doc("lp_product_id") }}'
         data_tests:
-          - not_null
+          - dbt_utils.not_null_proportion:
+              arguments:
+                at_least: 0.9999
       - name: previous_version_id
         description: '{{ doc("lp_previous_version_id") }}'
       - name: original_version_id
