@@ -128,14 +128,6 @@ resource "google_service_account" "tfer--111041565629350650664" {
   project    = "cal-itp-data-infra"
 }
 
-resource "google_service_account" "tfer--111080371999374643299" {
-  account_id   = "gtfs-rt-archiver-test"
-  description  = "Access to the gtfs-data-test bucket"
-  disabled     = "false"
-  display_name = "gtfs-rt-archiver-test"
-  project      = "cal-itp-data-infra"
-}
-
 resource "google_service_account" "tfer--111148370496926482871" {
   account_id = "jyoung-cal-itp"
   disabled   = "false"
@@ -221,14 +213,6 @@ resource "google_service_account" "tfer--117710413824821071161" {
   account_id   = "amplitude-export"
   disabled     = "false"
   display_name = "amplitude-export"
-  project      = "cal-itp-data-infra"
-}
-
-resource "google_service_account" "tfer--117956330948086473326" {
-  account_id   = "gtfs-rt-archiver"
-  description  = "Service to upload GTFS-RT feeds to storage bucket"
-  disabled     = "false"
-  display_name = "gtfs-rt-archiver"
   project      = "cal-itp-data-infra"
 }
 
