@@ -4,7 +4,7 @@ WITH source AS (
 
 clean_columns AS (
     SELECT
-        {{ trim_make_empty_string_null('OperatorId') }} AS operator_id,
+        {{ trim_make_empty_string_null('operatorid') }} AS operator_id,
         {{ trim_make_empty_string_null('id') }} AS id,
         {{ trim_make_empty_string_null('operation') }} AS operation,
         SAFE_CAST(terminal_id AS INT64) AS terminal_id,
@@ -25,7 +25,7 @@ clean_columns AS (
         {{ trim_make_empty_string_null('brand') }} AS brand,
         agency,
         dt,
-        {{ dbt_utils.generate_surrogate_key(['OperatorId', 'id', 'operation', 'terminal_id', 'mapping_terminal_id', 'mapping_merchant_id',
+        {{ dbt_utils.generate_surrogate_key(['operatorid', 'id', 'operation', 'terminal_id', 'mapping_terminal_id', 'mapping_merchant_id',
             'timestamp', 'amount', 'payment_reference', 'spdh_response', 'response_type', 'response_message', 'token', 'issuer_response',
             'core_response', 'rrn', 'authorization_code', 'par', 'brand']) }} AS _content_hash
     FROM source
