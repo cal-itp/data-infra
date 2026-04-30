@@ -48,7 +48,7 @@ resource "google_workflows_workflow" "gtfs-rt-archiver-clock" {
 }
 
 resource "google_cloud_scheduler_job" "gtfs-rt-archiver-clock" {
-  paused      = true
+  paused      = false
   name        = "gtfs-rt-archiver-clock"
   description = "GTFS-RT Archiver Heartbeat"
   region      = "us-west2"
