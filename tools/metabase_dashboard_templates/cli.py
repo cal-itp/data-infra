@@ -67,6 +67,7 @@ yaml.safe_dump, then post-processes the text to swap each sentinel
 from __future__ import annotations
 
 import json
+from pathlib import Path
 from typing import Any, Callable
 
 import click
@@ -263,6 +264,9 @@ def _placeholder(idx: int) -> str:
 def jinjaify(
     dashboard: dict,
     fetch_metadata: Callable[[int], dict],
+    *,
+    templatize_name: bool = True,
+    substitutions: list[tuple[str, str]] | None = None,
 ) -> tuple[dict, dict[int, str]]:
     """Walk a dashboard, replacing instance-specific ids with placeholder
     strings.  Returns (mutated_dashboard, {placeholder_index: jinja_expr}).
@@ -272,6 +276,16 @@ def jinjaify(
       collection_id           -> {{ collection_id }}
       table_id / source-table -> {{ get_table_id(database_id, "schema.table") }}
       MBQL field-ref ints     -> {{ get_field_id(database_id, "schema.table", "column") }}
+
+    If `templatize_name` is True (default), also replaces the top-level
+    dashboard `name` with `{{ dashboard_name }}`.  This is the common case
+    for branching a canonical template into a new agency's space; pass
+    False for migration-style 1:1 copies.
+
+    `substitutions` is an optional list of (literal, varname) pairs.  Each
+    occurrence of `literal` in any string value (not key) is replaced with
+    `{{ varname }}`.  Useful for parameterizing agency-specific text in
+    card names, descriptions, and virtual dashcard headings.
 
     Raises ClickException if more than one source database OR more than one
     source collection is encountered; this prototype assumes a single
@@ -287,6 +301,12 @@ def jinjaify(
         counter[0] += 1
         placeholders[idx] = expr
         return _placeholder(idx)
+
+    # Pre-walk: templatize the top-level dashboard name.  Done before the
+    # walk so the placeholder is a string by the time the walk recurses
+    # past it (the walk only touches ints, so the placeholder is inert).
+    if templatize_name and isinstance(dashboard.get("name"), str):
+        dashboard["name"] = alloc("dashboard_name")
 
     metadata_cache: dict[int, dict] = {}
 
@@ -348,6 +368,7 @@ def jinjaify(
         node: Any,
         db_id: int | None,
         viz_table: tuple[str, str] | None = None,
+        inside_viz: bool = False,
     ) -> None:
         if isinstance(node, dict):
             local = db_id
@@ -422,7 +443,14 @@ def jinjaify(
                 child_viz_table = (
                     local_viz_table if k == "visualization_settings" else viz_table
                 )
-                walk(v, local, child_viz_table)
+                # inside_viz is sticky once set: any descendant of a
+                # visualization_settings block is treated as viz, even
+                # without a known viz_table.  Without this, dashcard-level
+                # visualization_settings (where viz_table can't be inferred
+                # from the dashcard itself) hits the strict path and
+                # hard-fails on stale ids that Metabase tolerates at runtime.
+                child_inside_viz = inside_viz or k == "visualization_settings"
+                walk(v, local, child_viz_table, child_inside_viz)
         elif isinstance(node, list):
             if (
                 len(node) >= 2
@@ -430,15 +458,17 @@ def jinjaify(
                 and db_id is not None
                 and any(isinstance(node[p], int) for p in (1, 2) if p < len(node))
             ):
-                if viz_table is not None:
+                if inside_viz:
                     # Inside visualization_settings without a named-column
-                    # parent (rare; the `name`-bearing parent dict above
-                    # would have already handled it).  Be lenient.
+                    # parent (the `name`-bearing parent dict above would
+                    # have already handled it when viz_table is known).
+                    # Be lenient -- Metabase resolves these by name at
+                    # render time and tolerates stale ids.
                     resolve_viz_field_ref(node, db_id, viz_table, None)
                 else:
                     resolve_field_ref(node, db_id)
             for item in node:
-                walk(item, db_id, viz_table)
+                walk(item, db_id, viz_table, inside_viz)
 
     walk(dashboard, None)
 
@@ -456,6 +486,39 @@ def jinjaify(
             "Edit the source dashboard so all cards share one collection, or extend "
             "this script to emit numbered collection_id_1, collection_id_2, ..."
         )
+
+    # Post-walk: apply user-supplied literal->variable substitutions across
+    # every string value in the dashboard.  Each substitution allocates one
+    # placeholder, reused for every match.  Longer literals are applied
+    # first so overlapping prefixes (e.g. "MST" inside "MST Authority")
+    # bind to the more-specific match.
+    if substitutions:
+        sub_phs: list[tuple[str, str]] = []  # (literal, placeholder)
+        for literal, varname in substitutions:
+            sub_phs.append((literal, alloc(varname)))
+        sub_phs.sort(key=lambda lp: -len(lp[0]))
+
+        def replace_in_strings(node: Any) -> None:
+            if isinstance(node, dict):
+                for k, v in list(node.items()):
+                    if isinstance(v, str):
+                        for literal, ph in sub_phs:
+                            if literal in v:
+                                v = v.replace(literal, ph)
+                        node[k] = v
+                    else:
+                        replace_in_strings(v)
+            elif isinstance(node, list):
+                for i, v in enumerate(node):
+                    if isinstance(v, str):
+                        for literal, ph in sub_phs:
+                            if literal in v:
+                                v = v.replace(literal, ph)
+                        node[i] = v
+                    else:
+                        replace_in_strings(v)
+
+        replace_in_strings(dashboard)
 
     return dashboard, placeholders
 
@@ -707,15 +770,52 @@ def cli(ctx: click.Context, metabase_url: str, metabase_api_key: str) -> None:
     required=True,
     help="Output path.  Use '-' to write to stdout.",
 )
+@click.option(
+    "--templatize-name/--no-templatize-name",
+    default=True,
+    show_default=True,
+    help="If set, replace the top-level dashboard name with "
+    "{{ dashboard_name }} so each agency apply can pass its own. "
+    "Use --no-templatize-name for migration-style 1:1 copies.",
+)
+@click.option(
+    "--substitution",
+    "substitutions",
+    multiple=True,
+    metavar="LITERAL=VARNAME",
+    help="Replace literal text with a Jinja variable in every string field. "
+    "Repeatable.  Example: --substitution 'MST=agency_short' replaces "
+    "every 'MST' in card names, headings, and descriptions with "
+    "{{ agency_short }} in the template.",
+)
 @click.pass_context
 def cmd_dashboard_to_template(
     ctx: click.Context,
     dashboard_id: int,
     template_file: str,
+    templatize_name: bool,
+    substitutions: tuple[str, ...],
 ) -> None:
     """Export a dashboard to a Jinja-templated YAML file."""
     session: requests.Session = ctx.obj["session"]
     base_url: str = ctx.obj["base_url"]
+
+    parsed_subs: list[tuple[str, str]] = []
+    for s in substitutions:
+        if "=" not in s:
+            raise click.ClickException(
+                f"--substitution must be LITERAL=VARNAME; got {s!r}"
+            )
+        literal, varname = s.split("=", 1)
+        if not literal:
+            raise click.ClickException(
+                f"--substitution LITERAL must be non-empty; got {s!r}"
+            )
+        if not varname.isidentifier():
+            raise click.ClickException(
+                f"--substitution VARNAME must be a valid identifier; got {varname!r}"
+            )
+        parsed_subs.append((literal, varname))
 
     dashboard = fetch_dashboard(session, base_url, dashboard_id)
     cleaned = strip_dashboard_for_template(dashboard)
@@ -723,12 +823,18 @@ def cmd_dashboard_to_template(
     def fetch_meta(db_id: int) -> dict:
         return fetch_database_metadata(session, base_url, db_id)
 
-    cleaned, placeholders = jinjaify(cleaned, fetch_meta)
+    cleaned, placeholders = jinjaify(
+        cleaned,
+        fetch_meta,
+        templatize_name=templatize_name,
+        substitutions=parsed_subs,
+    )
     text = emit_template_yaml(cleaned, placeholders)
 
     if template_file == "-":
         click.echo(text, nl=False)
     else:
+        Path(template_file).parent.mkdir(parents=True, exist_ok=True)
         with open(template_file, "w") as f:
             f.write(text)
         click.echo(

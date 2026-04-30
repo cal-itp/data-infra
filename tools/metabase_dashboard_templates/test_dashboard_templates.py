@@ -738,6 +738,204 @@ class TestJinjaify:
         # Both the dashboard-level and card-level collection_id should be templated.
         assert text.count("collection_id: {{ collection_id }}") == 2
 
+    def test_dashcard_viz_settings_with_stale_field_id_does_not_raise(
+        self, src_lookup
+    ):
+        # Dashcard-level visualization_settings can carry stale field ids
+        # (column dropped or DB connection rebuilt).  Metabase tolerates
+        # these at runtime; the export should warn-and-leave instead of
+        # hard-failing.  Regression for staging dashboard 11 (#4825).
+        d = {
+            "name": "D",
+            "dashcards": [
+                {
+                    "row": 0,
+                    "col": 0,
+                    "size_x": 1,
+                    "size_y": 1,
+                    # Dashcard-level viz settings -- viz_table can't be
+                    # inferred from the dashcard itself, so the lenient
+                    # path has to kick in via inside_viz tracking.
+                    "visualization_settings": {
+                        "table.columns": [
+                            {
+                                "name": "Some Column",
+                                "fieldRef": ["field", 99999, {}],
+                            }
+                        ]
+                    },
+                    "card": {
+                        "name": "C",
+                        "display": "table",
+                        "database_id": 2,
+                        "dataset_query": {
+                            "database": 2,
+                            "stages": [{"source-table": 14}],
+                        },
+                    },
+                }
+            ],
+        }
+        cleaned, ph = jinjaify(copy.deepcopy(d), src_lookup)
+        text = emit_template_yaml(cleaned, ph)
+        # Stale id passes through to the rendered template as a raw int
+        # (Metabase will name-match at runtime, same as in the source).
+        assert "99999" in text
+
+    def test_dashboard_name_auto_templatized_by_default(self, src_lookup):
+        d = {
+            "name": "MST Payments",
+            "dashcards": [],
+        }
+        text = self._walk_for_jinja_text(d, src_lookup)
+        assert "name: {{ dashboard_name }}" in text
+        assert "MST Payments" not in text
+
+    def test_no_templatize_name_preserves_literal(self, src_lookup):
+        d = {"name": "MST Payments", "dashcards": []}
+        cleaned, ph = jinjaify(
+            copy.deepcopy(d), src_lookup, templatize_name=False
+        )
+        text = emit_template_yaml(cleaned, ph)
+        assert "name: MST Payments" in text
+        assert "{{ dashboard_name }}" not in text
+
+    def test_dashboard_without_name_does_not_emit_dashboard_name_var(
+        self, src_lookup
+    ):
+        # Templatize-name is opportunistic: no top-level name -> no var.
+        d = {"dashcards": []}
+        text = self._walk_for_jinja_text(d, src_lookup)
+        assert "{{ dashboard_name }}" not in text
+
+    def test_card_level_name_not_touched_by_templatize_name(self, src_lookup):
+        # Only the dashboard's top-level name is templatized; cards keep theirs.
+        d = {
+            "name": "Top",
+            "dashcards": [
+                {
+                    "row": 0,
+                    "col": 0,
+                    "size_x": 1,
+                    "size_y": 1,
+                    "card": {
+                        "name": "Card name stays literal",
+                        "display": "bar",
+                        "database_id": 2,
+                        "dataset_query": {"database": 2, "stages": []},
+                    },
+                }
+            ],
+        }
+        text = self._walk_for_jinja_text(d, src_lookup)
+        assert "name: Card name stays literal" in text
+
+    def test_substitution_replaces_literal_in_string_values(self, src_lookup):
+        d = {
+            "name": "Top",
+            "description": "MST overview",
+            "dashcards": [
+                {
+                    "row": 0,
+                    "col": 0,
+                    "size_x": 1,
+                    "size_y": 1,
+                    "visualization_settings": {
+                        "virtual_card": {"display": "heading"},
+                        "text": "MST Payments",
+                    },
+                },
+            ],
+        }
+        cleaned, ph = jinjaify(
+            copy.deepcopy(d),
+            src_lookup,
+            substitutions=[("MST", "agency_short")],
+        )
+        text = emit_template_yaml(cleaned, ph)
+        assert "description: {{ agency_short }} overview" in text
+        assert "text: {{ agency_short }} Payments" in text
+        assert "MST" not in text
+
+    def test_substitution_does_not_match_in_dict_keys(self, src_lookup):
+        # If a dashboard's metadata happens to use the literal as a key
+        # (e.g. visualization_settings entries keyed by user labels), the
+        # key should NOT be substituted -- only string values.
+        d = {
+            "name": "Top",
+            "dashcards": [
+                {
+                    "row": 0,
+                    "col": 0,
+                    "size_x": 1,
+                    "size_y": 1,
+                    "visualization_settings": {
+                        "MST_label_column": {"text": "MST data"},
+                    },
+                }
+            ],
+        }
+        cleaned, ph = jinjaify(
+            copy.deepcopy(d),
+            src_lookup,
+            substitutions=[("MST", "agency_short")],
+        )
+        text = emit_template_yaml(cleaned, ph)
+        # Key untouched.
+        assert "MST_label_column" in text
+        # Value substituted.
+        assert "{{ agency_short }} data" in text
+
+    def test_substitution_longer_literal_takes_priority(self, src_lookup):
+        # When two literals overlap (one is a prefix or substring of the
+        # other), the longer one should bind to its match before the
+        # shorter one consumes it.
+        d = {
+            "name": "Top",
+            "description": "Mendocino Transit Authority - Mendocino zone",
+            "dashcards": [],
+        }
+        cleaned, ph = jinjaify(
+            copy.deepcopy(d),
+            src_lookup,
+            substitutions=[
+                ("Mendocino", "agency_short"),
+                ("Mendocino Transit Authority", "agency_long"),
+            ],
+        )
+        text = emit_template_yaml(cleaned, ph)
+        # Long-form match wins where both could apply; remainder uses short.
+        assert "{{ agency_long }} - {{ agency_short }} zone" in text
+
+    def test_substitution_renders_through_full_pipeline(
+        self, src_lookup, tgt_lookup
+    ):
+        # End-to-end: export with substitutions, render with context, the
+        # rendered values land in the right places.
+        d = {
+            "name": "Top",
+            "description": "MST overview",
+            "dashcards": [],
+        }
+        cleaned, ph = jinjaify(
+            copy.deepcopy(d),
+            src_lookup,
+            substitutions=[("MST", "agency_short")],
+        )
+        text = emit_template_yaml(cleaned, ph)
+        env = make_jinja_env(tgt_lookup)
+        rendered = render_template_text(
+            text,
+            {
+                "database_id": 3,
+                "dashboard_name": "Foothill Payments",
+                "agency_short": "Foothill",
+            },
+            env,
+        )
+        assert rendered["name"] == "Foothill Payments"
+        assert rendered["description"] == "Foothill overview"
+
     def test_multiple_source_collections_raises(self, src_lookup):
         d = {
             "collection_id": 145,
@@ -939,7 +1137,12 @@ class TestRenderTemplateText:
         text = emit_template_yaml(d, ph)
         # Apply against DB 3
         env = make_jinja_env(tgt_lookup)
-        rendered = render_template_text(text, {"database_id": 3}, env)
+        rendered = render_template_text(
+            text,
+            {"database_id": 3, "dashboard_name": "Roundtrip - Foothill"},
+            env,
+        )
+        assert rendered["name"] == "Roundtrip - Foothill"
         card = rendered["dashcards"][0]["card"]
         assert card["database_id"] == 3
         assert card["table_id"] == 325
@@ -1241,7 +1444,7 @@ class TestCliSmoke:
                 "--template-file",
                 str(tpl),
                 "--template-context",
-                '{"database_id": 3}',
+                '{"database_id": 3, "dashboard_name": "Tpl-test"}',
                 "--dry-run",
             ],
         )
@@ -1252,3 +1455,44 @@ class TestCliSmoke:
         card = spec["dashcards"][0]["card"]
         assert card["database_id"] == 3
         assert card["table_id"] == 325
+
+    @pytest.mark.parametrize(
+        "bad,error_match",
+        [
+            ("MST", "LITERAL=VARNAME"),  # missing =
+            ("=agency_short", "non-empty"),  # empty literal
+            ("MST=123agency", "valid identifier"),  # invalid varname
+            ("MST=agency-short", "valid identifier"),  # hyphen in varname
+        ],
+    )
+    def test_dashboard_to_template_rejects_bad_substitutions(
+        self,
+        monkeypatch,
+        tmp_path,
+        bad,
+        error_match,
+    ):
+        import tools.metabase_dashboard_templates.cli as mod
+
+        monkeypatch.setattr(mod, "make_session", lambda key: MagicMock())
+        # The substitution validation runs before the network calls, so we
+        # don't even need a fake fetch_dashboard.
+        runner = CliRunner()
+        result = runner.invoke(
+            cli,
+            [
+                "--metabase-url",
+                "https://m.example",
+                "--metabase-api-key",
+                "x",
+                "dashboard-to-template",
+                "--dashboard-id",
+                "1",
+                "--template-file",
+                str(tmp_path / "out.yml"),
+                "--substitution",
+                bad,
+            ],
+        )
+        assert result.exit_code != 0
+        assert error_match in result.output
