@@ -358,6 +358,17 @@ def jinjaify(
                     local = node[k]
                     seen_source_dbs.add(local)
                     node[k] = alloc("database_id")
+            # If this dict carries a `card` child (i.e. it's a dashcard) but
+            # no own database key, inherit db_id from `card.dataset_query` so
+            # siblings of `card` -- notably `parameter_mappings` -- get their
+            # field refs substituted too.
+            if local is None and isinstance(node.get("card"), dict):
+                ds = node["card"].get("dataset_query")
+                if isinstance(ds, dict):
+                    for k in ("database", "database_id"):
+                        if isinstance(ds.get(k), int):
+                            local = ds[k]
+                            break
             # Capture this dict's table for descendants (in particular
             # visualization_settings, which uses `name` to refer to columns
             # of this table).  We do this before the second pass so the
@@ -564,13 +575,20 @@ def build_dashcard_for_put(
     neg_id: int,
     new_card_id: int | None,
 ) -> dict:
+    pmappings = source_dc.get("parameter_mappings") or []
+    # In Metabase's data model, parameter_mappings[].card_id always points
+    # at the dashcard's own card; the source-dashboard id no longer applies
+    # once we've created a fresh card on the target.  Without this rewrite,
+    # Metabase silently drops the mappings and filters appear unwired.
+    if new_card_id is not None and pmappings:
+        pmappings = [{**pm, "card_id": new_card_id} for pm in pmappings]
     out = {
         "id": neg_id,
         "row": source_dc["row"],
         "col": source_dc["col"],
         "size_x": source_dc["size_x"],
         "size_y": source_dc["size_y"],
-        "parameter_mappings": source_dc.get("parameter_mappings") or [],
+        "parameter_mappings": pmappings,
         "visualization_settings": source_dc.get("visualization_settings") or {},
         "series": source_dc.get("series") or [],
     }

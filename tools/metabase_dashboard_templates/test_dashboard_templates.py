@@ -306,6 +306,55 @@ class TestBuildDashcardForPut:
         assert out["visualization_settings"] == {}
         assert out["series"] == []
 
+    def test_parameter_mappings_card_id_rewritten_to_new_card_id(self):
+        # parameter_mappings[].card_id from the source dashboard is meaningless
+        # against the new dashboard (cards have fresh ids); rewrite to point at
+        # this dashcard's own freshly-created card.  Regression for the
+        # "filters not connected" symptom in #4825.
+        src = {
+            "row": 0,
+            "col": 0,
+            "size_x": 1,
+            "size_y": 1,
+            "parameter_mappings": [
+                {
+                    "parameter_id": "abc",
+                    "card_id": 604,
+                    "target": ["dimension", ["field", 8256]],
+                },
+                {
+                    "parameter_id": "def",
+                    "card_id": 604,
+                    "target": ["dimension", ["field", 8257]],
+                },
+            ],
+        }
+        out = build_dashcard_for_put(src, neg_id=-1, new_card_id=42)
+        for pm in out["parameter_mappings"]:
+            assert pm["card_id"] == 42
+        # Source dict not mutated.
+        assert src["parameter_mappings"][0]["card_id"] == 604
+        # Other fields preserved.
+        assert out["parameter_mappings"][0]["parameter_id"] == "abc"
+        assert out["parameter_mappings"][0]["target"] == [
+            "dimension",
+            ["field", 8256],
+        ]
+
+    def test_parameter_mappings_untouched_when_no_new_card_id(self):
+        # Virtual dashcards have new_card_id=None.  They shouldn't carry
+        # parameter_mappings in practice, but if they do we don't want to
+        # clobber card_id with None.
+        src = {
+            "row": 0,
+            "col": 0,
+            "size_x": 1,
+            "size_y": 1,
+            "parameter_mappings": [{"parameter_id": "abc", "card_id": 999}],
+        }
+        out = build_dashcard_for_put(src, neg_id=-1, new_card_id=None)
+        assert out["parameter_mappings"][0]["card_id"] == 999
+
 
 # --------------------------------------------------------------------------- #
 # build_card_payload()
@@ -629,6 +678,41 @@ class TestJinjaify:
         }
         with pytest.raises(Exception, match="multiple source databases"):
             jinjaify(d, lookup)
+
+    def test_field_refs_in_parameter_mappings_target_are_substituted(
+        self, src_lookup
+    ):
+        # parameter_mappings is a sibling of `card` at the dashcard level, so
+        # without inheriting db_id from card.dataset_query.database, field-refs
+        # inside parameter_mappings.target would be left as raw ints.  Regression
+        # test for the broken-filter symptom seen in #4825.
+        d = {
+            "dashcards": [
+                {
+                    "row": 0,
+                    "col": 0,
+                    "size_x": 1,
+                    "size_y": 1,
+                    "parameter_mappings": [
+                        {
+                            "parameter_id": "abc123",
+                            "card_id": 999,
+                            "target": ["dimension", ["field", 76, {}]],
+                        }
+                    ],
+                    "card": {
+                        "name": "C",
+                        "display": "bar",
+                        "database_id": 2,
+                        "dataset_query": {"database": 2, "stages": []},
+                    },
+                }
+            ]
+        }
+        text = self._walk_for_jinja_text(d, src_lookup)
+        assert (
+            'get_field_id(database_id, "mart_gtfs.dim_agency", "agency_name")' in text
+        )
 
     def test_collection_id_replaced_at_card_and_dashboard_level(self, src_lookup):
         d = {
@@ -983,6 +1067,43 @@ class TestApplyDashboardCreate:
         assert real["id"] < 0
         virtual = [d for d in dcs if "card_id" not in d][0]
         assert virtual["visualization_settings"]["virtual_card"]["display"] == "heading"
+
+    def test_parameter_mappings_card_id_rewritten_through_apply(self):
+        # End-to-end: source-side parameter_mappings.card_id flows through
+        # apply_dashboard and lands as the freshly-minted card's id in the
+        # PUT body.
+        spec = {
+            "name": "Created",
+            "dashcards": [
+                {
+                    "row": 0,
+                    "col": 0,
+                    "size_x": 12,
+                    "size_y": 6,
+                    "parameter_mappings": [
+                        {
+                            "parameter_id": "p1",
+                            "card_id": 604,
+                            "target": ["dimension", ["field", 8256]],
+                        },
+                    ],
+                    "visualization_settings": {},
+                    "card": {
+                        "name": "Q",
+                        "display": "bar",
+                        "database_id": 3,
+                        "visualization_settings": {},
+                        "dataset_query": {"database": 3, "stages": []},
+                    },
+                },
+            ],
+        }
+        sess, calls = _make_fake_session(card_ids=(501,))
+        apply_dashboard(sess, "https://m.example", spec, existing_dashboard_id=None)
+        _, put_body = calls["puts"][0]
+        dc = put_body["dashcards"][0]
+        assert dc["card_id"] == 501
+        assert dc["parameter_mappings"][0]["card_id"] == 501
 
     def test_missing_top_level_name_raises(self):
         spec = {"description": "no name", "dashcards": []}
