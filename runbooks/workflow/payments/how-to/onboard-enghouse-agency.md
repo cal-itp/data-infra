@@ -51,9 +51,10 @@ Enghouse delivers data daily via SFTP server directly to our GCS bucket. This di
 
 **Implementation Details:**
 
-- Data is delivered directly to `gs://calitp-enghouse-raw/` via SFTP
+- Data is delivered directly to `gs://cal-itp-data-infra-enghouse-raw/` via SFTP
 - No sync DAG is needed (data arrives directly in GCS)
-- External tables read from `gs://calitp-enghouse-raw/`
+- A daily parse DAG (`parse_enghouse`) converts the raw semicolon-delimited CSV files to JSONL.GZ in `gs://calitp-enghouse-parsed/`
+- External tables read from `gs://calitp-enghouse-parsed/` (the parsed bucket)
 - Data refresh: Daily
 
 **For New Agency Onboarding:**
@@ -324,6 +325,7 @@ After completing Littlepay onboarding:
 | **Identifier**     | `participant_id` / `merchant_id`                       | `operator_id`                                   |
 | **Data Access**    | AWS S3 with IAM keys                                   | SFTP to GCS bucket                              |
 | **Sync DAG**       | `sync_littlepay_v3`                                    | None (data delivered directly to GCS)           |
+| **Parse DAG**      | N/A                                                    | `parse_enghouse` (CSV→JSONL, runs at 09:00 UTC) |
 | **Data Refresh**   | Hourly                                                 | Daily                                           |
 | **Entity Mapping** | `payments_entity_mapping.csv`                          | `payments_entity_mapping_enghouse.csv`          |
 | **Mart Table**     | `fct_payments_rides_v2`                                | `fct_payments_rides_enghouse`                   |

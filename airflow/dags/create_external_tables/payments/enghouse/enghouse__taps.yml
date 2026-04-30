@@ -1,95 +1,98 @@
 operator: operators.ExternalTable
-bucket: "{{ env_var('CALITP_BUCKET__ENGHOUSE_RAW') }}"
-post_hook: |
-  SELECT *
-  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_enghouse.taps
-  LIMIT 1;
+bucket: "{{ env_var('CALITP_BUCKET__ENGHOUSE_PARSED') }}"
 source_objects:
-  - "tap/*.csv"
+  - "tap/*.jsonl.gz"
 destination_project_dataset_table: "external_enghouse.taps"
-source_format: CSV
+source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
-field_delimiter: ";"
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "tap/{agency:STRING}/{dt:DATE}/"
 schema_fields:
-  - name: Tap_ID
+  - name: tap_id
     type: STRING
-  - name: Mapping_Terminal_ID
+  - name: mapping_terminal_id
     type: STRING
-  - name: Mapping_Merchant_ID
+  - name: mapping_merchant_id
     type: STRING
   - name: terminal
     type: STRING
-  - name: Token
+  - name: token
     type: STRING
-  - name: Masked_Pan
+  - name: masked_pan
     type: STRING
-  - name: Server_date
+  - name: expiry
     type: STRING
-  - name: Terminal_date
+  - name: server_date
     type: STRING
-  - name: Tx_number
+  - name: terminal_date
     type: STRING
-  - name: Tx_status
+  - name: tx_number
     type: STRING
-  - name: Payment_Reference
+  - name: tx_status
     type: STRING
-  - name: Operator_Id
+  - name: payment_reference
     type: STRING
-  - name: Terminal_SPDH_code
+  - name: operator_id
     type: STRING
-  - name: Denylist_version
+  - name: terminal_spdh_code
     type: STRING
-  - name: Transit_data
+  - name: denylist_version
     type: STRING
-  - name: Currency
+  - name: transit_data
     type: STRING
-  - name: Par
+  - name: currency
     type: STRING
-  - name: Fare_Mode
+  - name: par
     type: STRING
-  - name: Fare_Type
+  - name: fare_mode
     type: STRING
-  - name: Fare_Value
+  - name: fare_type
     type: STRING
-  - name: Fare_Description
+  - name: fare_value
     type: STRING
-  - name: Fare_Linked_Id
+  - name: fare_description
     type: STRING
-  - name: ID
+  - name: fare_linked_id
     type: STRING
-  - name: Gps_Latitude
+  - name: gps_longitude
     type: STRING
-  - name: Gps_Altitude
+  - name: gps_latitude
     type: STRING
-  - name: Vehicle_Public_Number
+  - name: gps_altitude
     type: STRING
-  - name: Vehicle_Name
+  - name: vehicle_public_number
     type: STRING
-  - name: Stop_Id
+  - name: vehicle_name
     type: STRING
-  - name: Stop_Name
+  - name: stop_id
     type: STRING
-  - name: Platform_Id
+  - name: stop_name
     type: STRING
-  - name: Platform_Name
+  - name: platform_id
     type: STRING
-  - name: Zone_Id
+  - name: platform_name
     type: STRING
-  - name: Zone_Name
+  - name: zone_id
     type: STRING
-  - name: Line_Public_Number
+  - name: zone_name
     type: STRING
-  - name: Line_Name
+  - name: line_public_number
     type: STRING
-  - name: Line_Direction
+  - name: line_name
     type: STRING
-  - name: Trip_Public_Number
+  - name: line_direction
     type: STRING
-  - name: Trip_Name
+  - name: trip_public_number
     type: STRING
-  - name: Service_Public_Number
+  - name: trip_name
     type: STRING
-  - name: Service_Name
+  - name: service_public_number
     type: STRING
-  - name: Driver_ID
+  - name: service_name
+    type: STRING
+  - name: driver_id
+    type: STRING
+  - name: _line_number
     type: STRING

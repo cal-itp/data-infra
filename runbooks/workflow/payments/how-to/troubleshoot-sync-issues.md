@@ -78,6 +78,12 @@ Both Littlepay and Elavon sync DAGs are **"now" type DAGs** - they sync whatever
 - Process whatever is in the raw GCS buckets
 - Idempotent - can be safely rerun without creating duplicates
 
+**Enghouse parse DAG (`parse_enghouse`):**
+
+- Scan-all — each run processes all files in the raw bucket, skipping any already present in the parsed bucket
+- Late or re-delivered files are automatically picked up on the next run
+- To re-parse a specific file: delete it from `gs://calitp-enghouse-parsed/` and re-trigger the DAG
+
 ### Common Misconceptions
 
 **❌ "If I rerun, I'll get duplicate data"**

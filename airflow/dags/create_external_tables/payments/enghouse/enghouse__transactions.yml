@@ -1,51 +1,52 @@
 operator: operators.ExternalTable
-bucket: "{{ env_var('CALITP_BUCKET__ENGHOUSE_RAW') }}"
-post_hook: |
-  SELECT *
-  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_enghouse.transactions
-  LIMIT 1;
+bucket: "{{ env_var('CALITP_BUCKET__ENGHOUSE_PARSED') }}"
 source_objects:
-  - "tx/*.csv"
+  - "tx/*.jsonl.gz"
 destination_project_dataset_table: "external_enghouse.transactions"
-source_format: CSV
+source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
-field_delimiter: ";"
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "tx/{agency:STRING}/{dt:DATE}/"
 schema_fields:
-  - name: ID
+  - name: id
     type: STRING
-  - name: Operation
+  - name: operation
     type: STRING
-  - name: Terminal_ID
+  - name: terminal_id
     type: STRING
-  - name: Mapping_Terminal_ID
+  - name: mapping_terminal_id
     type: STRING
-  - name: Mapping_Merchant_ID
+  - name: mapping_merchant_id
     type: STRING
   - name: timestamp
     type: STRING
-  - name: Amount
+  - name: amount
     type: STRING
-  - name: Payment_Reference
+  - name: payment_reference
     type: STRING
-  - name: Spdh_Response
+  - name: spdh_response
     type: STRING
-  - name: Response_Type
+  - name: response_type
     type: STRING
-  - name: Response_Message
+  - name: response_message
     type: STRING
   - name: token
     type: STRING
-  - name: Issuer_Response
+  - name: issuer_response
     type: STRING
-  - name: Core_Response
+  - name: core_response
     type: STRING
-  - name: Rrn
+  - name: rrn
     type: STRING
-  - name: Authorization_Code
+  - name: authorization_code
     type: STRING
-  - name: Par
+  - name: par
     type: STRING
-  - name: Brand
+  - name: brand
     type: STRING
-  - name: OperatorId
+  - name: operatorid
+    type: STRING
+  - name: _line_number
     type: STRING
