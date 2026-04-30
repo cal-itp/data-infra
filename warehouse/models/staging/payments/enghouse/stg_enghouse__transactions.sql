@@ -23,6 +23,8 @@ clean_columns AS (
         {{ trim_make_empty_string_null('authorization_code') }} AS authorization_code,
         {{ trim_make_empty_string_null('par') }} AS par,
         {{ trim_make_empty_string_null('brand') }} AS brand,
+        agency,
+        dt,
         {{ dbt_utils.generate_surrogate_key(['OperatorId', 'id', 'operation', 'terminal_id', 'mapping_terminal_id', 'mapping_merchant_id',
             'timestamp', 'amount', 'payment_reference', 'spdh_response', 'response_type', 'response_message', 'token', 'issuer_response',
             'core_response', 'rrn', 'authorization_code', 'par', 'brand']) }} AS _content_hash
@@ -33,7 +35,7 @@ deduplicated AS (
     SELECT * FROM (
         SELECT
             *,
-            ROW_NUMBER() OVER (PARTITION BY _content_hash ORDER BY (SELECT NULL)) AS row_num
+            ROW_NUMBER() OVER (PARTITION BY _content_hash ORDER BY dt ASC) AS row_num
         FROM clean_columns
     )
     WHERE row_num = 1
@@ -60,6 +62,8 @@ stg_enghouse__transactions AS (
         authorization_code,
         par,
         brand,
+        agency,
+        dt,
         _content_hash
     FROM deduplicated
 )
