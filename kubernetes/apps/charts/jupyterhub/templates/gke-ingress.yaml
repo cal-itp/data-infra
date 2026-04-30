@@ -4,6 +4,7 @@ metadata:
   name: jupyterhub-gce
   annotations:
     networking.gke.io/managed-certificates: jupyterhub-managed-cert
+    networking.gke.io/v1beta1.FrontendConfig: jupyterhub-frontend
 spec:
   ingressClassName: gce
   rules:
