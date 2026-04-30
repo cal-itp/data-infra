@@ -51,10 +51,12 @@ def _to_jsonl_gz(rows: list) -> bytes:
 class EnghouseCSVToJSONLOperator(BaseOperator):
     """
     Converts Enghouse semicolon-delimited CSV files in the raw GCS bucket to
-    JSONL.GZ in the parsed bucket. Runs over all entities and all agencies.
+    JSONL.GZ in the parsed bucket. Runs over all entities and all agencies,
+    processing only files whose embedded date matches the Airflow execution date.
 
-    Files already present in the parsed bucket are skipped, making this safe
-    to re-run for backfills or retries.
+    Files already present in the parsed bucket are skipped. To re-parse a
+    specific date, delete the corresponding file(s) from the parsed bucket and
+    clear/re-run that date's Airflow task.
 
     Column names are normalised by BigQueryCleaner (lowercased, non-word
     characters replaced with underscores) so that the downstream BigQuery
@@ -83,7 +85,7 @@ class EnghouseCSVToJSONLOperator(BaseOperator):
         return ENGHOUSE_PARSED_BUCKET.replace("gs://", "")
 
     def execute(self, context: Context) -> dict:
-        execution_date = context["ds"]  # YYYY-MM-DD fallback if filename has no date
+        execution_date = context["ds"]  # YYYY-MM-DD
         stats = {"processed": 0, "skipped": 0, "errors": 0}
 
         for entity in ENTITIES:
@@ -107,6 +109,17 @@ class EnghouseCSVToJSONLOperator(BaseOperator):
 
                 _, agency, filename = parts
                 date = _date_from_filename(filename, execution_date)
+
+                if date != execution_date:
+                    self.log.debug(
+                        "Skipping %s (file date %s != execution date %s)",
+                        path,
+                        date,
+                        execution_date,
+                    )
+                    stats["skipped"] += 1
+                    continue
+
                 stem = os.path.splitext(filename)[0]
                 dest_path = f"{entity}/agency={agency}/dt={date}/{stem}.jsonl.gz"
 
