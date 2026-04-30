@@ -3,7 +3,7 @@ name: New Payments Agency Onboarding
 about: Use this template to kick off onboarding a new open-loop payments agency
 title: New Payments Agency Onboarding - [Agency Name]
 labels: project-payments
-assignees: [charlie-costanzo, mrtopsyt]
+assignees: [mrtopsyt, csuyat-dot, amandaha8]
 ---
 
 ## Agency Information
@@ -14,11 +14,11 @@ assignees: [charlie-costanzo, mrtopsyt]
 
 **GTFS Feed Name / Identifier**:
 
-- \[add feed name as it appears in the transit database\]
+- \[add feed name as it appears in the transit database - find it in the "Name" column under "gtfs datasets" in Airtable\]
 
 **Organization Name** _(as it appears in the transit database)_:
 
-- \[add organization name\]
+- \[add organization name - find it in the "Name" column under "organizations" in Airtable \]
 
 **Fare Processor Vendor**:
 
@@ -67,3 +67,11 @@ ______________________________________________________________________
 ### Notes
 
 _Any additional context or open questions?_
+
+______________________________________________________________________
+
+### Definition of Done
+
+- [ ] Entity mapping, service account, row access policy have been set up for the agency
+- [ ] A database has been created in Metabase and permissions have been assigned appropriatley
+- [ ] Analysts have been notified and an issue has been created in data-analyses to create dashboards
