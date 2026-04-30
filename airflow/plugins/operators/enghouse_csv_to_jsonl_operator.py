@@ -17,7 +17,7 @@ ENGHOUSE_PARSED_BUCKET = os.getenv("CALITP_BUCKET__ENGHOUSE_PARSED")
 
 # Semicolon-delimited files delivered by Enghouse via SFTP
 # Raw path structure:  {entity}/{agency}/{filename}.csv
-# Parsed path structure: {entity}/{agency}/dt={date}/{filename_stem}.jsonl.gz
+# Parsed path structure: {entity}/agency={agency}/dt={date}/{filename_stem}.jsonl.gz
 ENTITIES = ["tap", "tx", "tr", "pw"]
 
 _DATE_RE = re.compile(r"(\d{4}-\d{2}-\d{2})")
@@ -108,7 +108,7 @@ class EnghouseCSVToJSONLOperator(BaseOperator):
                 _, agency, filename = parts
                 date = _date_from_filename(filename, execution_date)
                 stem = os.path.splitext(filename)[0]
-                dest_path = f"{entity}/{agency}/dt={date}/{stem}.jsonl.gz"
+                dest_path = f"{entity}/agency={agency}/dt={date}/{stem}.jsonl.gz"
 
                 if self._hook().exists(
                     bucket_name=self._parsed_bucket(),

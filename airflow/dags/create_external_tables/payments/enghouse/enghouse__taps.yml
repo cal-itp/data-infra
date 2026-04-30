@@ -1,14 +1,14 @@
 operator: operators.ExternalTable
 bucket: "{{ env_var('CALITP_BUCKET__ENGHOUSE_PARSED') }}"
 source_objects:
-  - "tap/*/*.jsonl.gz"
+  - "tap/*.jsonl.gz"
 destination_project_dataset_table: "external_enghouse.taps"
 source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
 hive_options:
   mode: CUSTOM
   require_partition_filter: false
-  source_uri_prefix: "tap/{agency:STRING}/dt={dt:DATE}/"
+  source_uri_prefix: "tap/{agency:STRING}/{dt:DATE}/"
 schema_fields:
   - name: tap_id
     type: STRING
