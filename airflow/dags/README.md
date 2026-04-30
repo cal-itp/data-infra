@@ -7,6 +7,7 @@
 |  2:00 AM    | 6 PM<br>previous day | 7 PM<br>previous day | [airtable_loader_v2](./airtable_loader_v2)<br>[parse_elavon](./parse_elavon)                                                     | Every Day  |
 |  3:00 AM    | 7 PM<br>previous day | 8 PM<br>previous day | [download_parse_and_validate_gtfs](#download_parse_and_validate_gtfs)                                                            | Every Day  |
 |  4:00 AM    | 8 PM<br>previous day | 9 PM<br>previous day | [scrape_state_geoportal](./scrape_state_geoportal)                                                                               | 1st Day of the month |
+|  9:00 AM    | 1:00 AM              | 2:00 AM              | [parse_enghouse](./parse_enghouse)                                                                                               | Every Day  |
 |  9:00 AM    | 1:00 AM              | 2:00 AM              | [sync_ntd_data_api](./sync_ntd_data_api)                                                                                         | Wednesdays |
 | 10:00 AM    | 2:00 AM              | 3:00 AM              | [ntd_report_from_blackcat](./ntd_report_from_blackcat)<br>[download_and_parse_ntd_xlsx](#download_and_parse_ntd_xlsx)            | Mondays    |
 | 11:00 AM    | 3:00 AM              | 4:00 AM              | [create_external_tables](./create_external_tables)                                                                               | Every Day  |
