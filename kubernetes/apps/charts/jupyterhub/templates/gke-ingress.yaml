@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: jupyterhub-gce
+  annotations:
+    networking.gke.io/managed-certificates: jupyterhub-managed-cert
+spec:
+  ingressClassName: gce
+  rules:
+    - host: jupyterhub.dds.dot.ca.gov
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: proxy-public
+                port:
+                  name: http
