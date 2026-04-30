@@ -14,7 +14,7 @@ models:
         data_tests:
           - accepted_values:
               arguments:
-                values: ['AUTHORISATION', 'DEBT_RECOVERY_AUTHCHECK', 'DEBT_RECOVERY_REVERSAL', 'CARD_CHECK']
+                values: ['AUTHORISATION', 'DEBT_RECOVERY_AUTHCHECK', 'DEBT_RECOVERY_REVERSAL', 'CARD_CHECK', 'Reversal']
       - name: aggregation_id
         data_tests:
           - relationships:
@@ -88,6 +88,8 @@ models:
               arguments:
                 min_value: 0
                 inclusive: true
+                error_if: ">10"
+                warn_if: ">0"
       - name: debit_amount
         description: '{{ doc("lp_settlement_debit_amount") }}'
       - name: credit_amount
