@@ -26,7 +26,8 @@ env:
   CALITP_BUCKET__PUBLISH: ${{ github.ref == 'refs/heads/main' && 'calitp-publish' || 'calitp-staging-publish' }}
   GOOGLE_CLOUD_PROJECT: ${{ github.ref == 'refs/heads/main' && 'cal-itp-data-infra' || 'cal-itp-data-infra-staging' }}
   METABASE_DESTINATION_DATABASE: ${{ github.ref == 'refs/heads/main' && 'Data Marts (formerly Warehouse Views)' || '(Internal) Staging Warehouse Views' }}
-  METABASE_URL: 'https://metabase.dds.dot.ca.gov'
+  METABASE_URL: ${{ github.ref == 'refs/heads/main' && 'https://metabase.dds.dot.ca.gov' || 'https://metabase-staging.dds.dot.ca.gov' }}
+  METABASE_API_KEY: ${{ github.ref == 'refs/heads/main' && secrets.METABASE_API_KEY || secrets.METABASE_STAGING_API_KEY }}
   DBT_DOCS_URL: ${{ github.ref == 'refs/heads/main' && 'https://dbt-docs.dds.dot.ca.gov' || 'https://dbt-docs-staging.dds.dot.ca.gov' }}
 
 jobs:
@@ -167,8 +168,6 @@ jobs:
     runs-on: ubuntu-latest
     needs: [dbt-changed, compile]
 
-    if: ${{ needs.dbt-changed.outputs.has-changed == 'true' }}
-
     permissions:
       contents: read
       id-token: write
@@ -217,9 +216,84 @@ jobs:
         working-directory: warehouse
         run: uv run dbt debug --target ${{ env.DBT_TARGET }}
 
+      - name: Discover Payments Metabase databases
+        id: payments-databases
+        run: |
+          set -euo pipefail
+
+          # Each agency has its own Metabase database connection named
+          # "Payments - <Agency Name>" (per the create-metabase-dashboards
+          # runbook). Column-level docs from dbt have to land on every one
+          # of those connections, not just the central warehouse connection,
+          # so this step enumerates them via the Metabase API.
+          PAYMENTS_DBS=$(curl -fsS \
+            -H "x-api-key: ${METABASE_API_KEY}" \
+            "${METABASE_URL}/api/database" \
+            | jq -r '.data[] | select(.name | startswith("Payments - ")) | .name')
+
+          if [ -z "${PAYMENTS_DBS}" ]; then
+            echo "No 'Payments - *' databases found. Will sync only the central database."
+          else
+            echo "Discovered Payments databases:"
+            printf '  - %s\n' ${PAYMENTS_DBS}
+          fi
+
+          {
+            echo "names<<EOF"
+            echo "${PAYMENTS_DBS}"
+            echo "EOF"
+          } >> "${GITHUB_OUTPUT}"
+
       - name: Synchronize Metabase
         working-directory: warehouse
-        run: uv run dbt-metabase models -v --manifest-path=target/manifest.json --skip-sources --exclude-schemas=staging,payments,mart_payments --docs-url="${{ env.DBT_DOCS_URL }}" --metabase-url="${{ env.METABASE_URL }}" --metabase-database="${{ env.METABASE_DESTINATION_DATABASE }}" --metabase-api-key="${{ secrets.METABASE_API_KEY}}"
+        env:
+          PAYMENTS_DBS: ${{ steps.payments-databases.outputs.names }}
+        run: |
+          set -euo pipefail
+
+          sync_metabase_metadata() {
+            local db="$1"
+            shift
+            echo "::group::dbt-metabase sync — ${db}"
+            uv run dbt-metabase models -v \
+              --manifest-path=target/manifest.json \
+              --skip-sources \
+              --docs-url="${DBT_DOCS_URL}" \
+              --metabase-url="${METABASE_URL}" \
+              --metabase-database="${db}" \
+              --metabase-api-key="${METABASE_API_KEY}" \
+              "$@"
+            echo "::endgroup::"
+          }
+
+          failed=0
+
+          # Central warehouse connection — broad sync, exclude internal schemas.
+          if ! sync_metabase_metadata "${METABASE_DESTINATION_DATABASE}" \
+               --exclude-schemas=staging,payments; then
+            failed=1
+            echo "::warning::dbt-metabase sync failed for '${METABASE_DESTINATION_DATABASE}'"
+          fi
+
+          # Per-agency Payments connections — restrict to the schemas exposed
+          # via dataset_filters_patterns on those connections (mart_payments,
+          # mart_benefits per the create-metabase-dashboards runbook). Loop is
+          # partial-tolerant so one agency's outage doesn't block the rest.
+          if [ -n "${PAYMENTS_DBS}" ]; then
+            while IFS= read -r db; do
+              [ -z "${db}" ] && continue
+              if ! sync_metabase_metadata "${db}" \
+                   --include-schemas=mart_payments,mart_benefits; then
+                failed=1
+                echo "::warning::dbt-metabase sync failed for '${db}'"
+              fi
+            done <<< "${PAYMENTS_DBS}"
+          fi
+
+          if [ "${failed}" -ne 0 ]; then
+            echo "::error::One or more dbt-metabase syncs failed"
+            exit 1
+          fi
 
   upload_dbt_docs:
     name: Upload to dbt-docs site
