@@ -256,7 +256,26 @@ This helps keep Airtable synchronized with the current state of GTFS data qualit
       * Populates description and tracking fields
 
 
-### 3. Sends Summary Email
+### 3. Close RT Completeness Issues (`rt_completeness_issues_close`)
+
+This workflow identifies GTFS Realtime Completeness issues that should be closed.
+
+- Reads candidate records from dbt model `fct_close_rt_completeness_issues`.
+
+      Data source:
+         fct_close_rt_completeness_issues
+
+- Identifies GTFS datasets where:
+   * realtime completeness has improved above threshold
+   * an open Airtable issue still exists
+
+- Updates corresponding Airtable records:
+   * Marks issues as resolved
+   * Includes RT completeness percentage in reporting
+   * Performs batch updates for efficiency
+
+
+### 4. Sends Summary Email
 
    This workflow sends a consolidated HTML email summarizing the results of both workflows.
 
@@ -285,6 +304,10 @@ This helps keep Airtable synchronized with the current state of GTFS data qualit
          create_expiring_issues
             ├── bq_create_expiring_issues_candidates
             └── create_airtable_issues
+
+          rt_completeness_issues_close
+             ├── get_rt_completeness_close_candidates
+             └── update_airtable_rt_completeness_issues
 
       close_expired_issues + create_expiring_issues
          └── send_airtable_issue_email
@@ -321,6 +344,7 @@ This helps keep Airtable synchronized with the current state of GTFS data qualit
       - Verify dbt models:
          * `fct_close_expired_issues`
          * `fct_create_expiring_gtfs_issues`
+         * `fct_close_rt_completeness_issues`
       - Confirm dataset and table names in operator configuration
 
    Partial failures (batch errors):
