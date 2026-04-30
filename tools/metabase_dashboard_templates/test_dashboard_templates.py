@@ -1245,7 +1245,7 @@ class TestApplyDashboardCreate:
             ],
         }
         sess, calls = _make_fake_session()
-        apply_dashboard(sess, "https://m.example", spec, existing_dashboard_id=None)
+        apply_dashboard(sess, "https://m.example", spec)
 
         # 1 card POST (virtual heading skipped).
         card_posts = [c for c in calls["posts"] if c[0].endswith("/api/card")]
@@ -1302,7 +1302,7 @@ class TestApplyDashboardCreate:
             ],
         }
         sess, calls = _make_fake_session(card_ids=(501,))
-        apply_dashboard(sess, "https://m.example", spec, existing_dashboard_id=None)
+        apply_dashboard(sess, "https://m.example", spec)
         _, put_body = calls["puts"][0]
         dc = put_body["dashcards"][0]
         assert dc["card_id"] == 501
@@ -1312,7 +1312,7 @@ class TestApplyDashboardCreate:
         spec = {"description": "no name", "dashcards": []}
         sess, _ = _make_fake_session()
         with pytest.raises(Exception, match="name"):
-            apply_dashboard(sess, "https://m.example", spec, existing_dashboard_id=None)
+            apply_dashboard(sess, "https://m.example", spec)
 
     def test_non_virtual_dashcard_without_card_block_raises(self):
         spec = {
@@ -1321,47 +1321,7 @@ class TestApplyDashboardCreate:
         }
         sess, _ = _make_fake_session()
         with pytest.raises(Exception, match="card"):
-            apply_dashboard(sess, "https://m.example", spec, existing_dashboard_id=None)
-
-
-class TestApplyDashboardUpdate:
-    def test_update_skips_dashboard_post_and_puts_to_existing_id(self):
-        spec = {
-            "name": "Updated",
-            "description": "new desc",
-            "dashcards": [
-                {
-                    "row": 0,
-                    "col": 0,
-                    "size_x": 1,
-                    "size_y": 1,
-                    "card": {
-                        "name": "Q2",
-                        "display": "table",
-                        "database_id": 3,
-                        "visualization_settings": {},
-                        "dataset_query": {"database": 3, "stages": []},
-                    },
-                }
-            ],
-        }
-        sess, calls = _make_fake_session()
-        apply_dashboard(sess, "https://m.example", spec, existing_dashboard_id=42)
-
-        # POST should be the new card only -- no /api/dashboard/ POST in update mode.
-        post_urls = [u for u, _ in calls["posts"]]
-        assert any(u.endswith("/api/card") for u in post_urls)
-        assert not any(u.endswith("/api/dashboard/") for u in post_urls)
-
-        # PUT goes to the existing dashboard id.
-        assert len(calls["puts"]) == 1
-        put_url, put_body = calls["puts"][0]
-        assert put_url.endswith("/api/dashboard/42")
-        # Top-level fields from the template are forwarded.
-        assert put_body["name"] == "Updated"
-        assert put_body["description"] == "new desc"
-        # dashcards is full-replace.
-        assert len(put_body["dashcards"]) == 1
+            apply_dashboard(sess, "https://m.example", spec)
 
 
 # --------------------------------------------------------------------------- #
@@ -1496,3 +1456,4 @@ class TestCliSmoke:
         )
         assert result.exit_code != 0
         assert error_match in result.output
+
