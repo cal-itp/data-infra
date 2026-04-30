@@ -11,7 +11,7 @@ Two subcommands:
 
   template-to-dashboard
     Render a Jinja-templated YAML file with a user-supplied context
-    and create (or update) a Metabase dashboard from the result.
+    and create a new Metabase dashboard from the result.
 
 A template file is a Jinja2-templated YAML document.  At render time the
 context is expected to provide `database_id` (the target Metabase database
@@ -35,11 +35,6 @@ Usage examples
       --metabase-api-key "$MB_API_KEY" \
       --template-file dashboard_9.yml \
       --template-context '{"database_id": 3, "collection_id": 22}'
-
-  # Same, but update an existing dashboard instead of creating a new one
-  python tools/metabase_dashboard_templates/cli.py template-to-dashboard \
-      ... --template-context '{"database_id": 3, "collection_id": 22}' \
-      --dashboard-id 42
 
 Implementation notes
 --------------------
@@ -664,15 +659,14 @@ def apply_dashboard(
     session: requests.Session,
     base_url: str,
     spec: dict,
-    *,
-    existing_dashboard_id: int | None,
 ) -> dict:
-    """Create or update a dashboard from a fully-rendered template spec.
+    """Create a new dashboard from a fully-rendered template spec.
 
-    UPDATE semantics: dashcards[] is a full replace (PUT replaces, not
-    merges).  Top-level fields present in the spec are overwritten on the
-    target; absent fields are left alone.  Cards from previous renders
-    are not deleted -- they stay in their collection as orphans.
+    Always creates fresh -- in-place update of an existing dashboard was
+    removed because the destructive PUT pattern (full dashcards replace,
+    plus orphan cards left in the collection) made it too easy to clobber
+    a deployed agency dashboard.  Re-apply the template against a fresh
+    collection if you need a do-over.
     """
     spec = strip(spec, STRIP_DASHBOARD_KEYS)
     dashcards = spec.pop("dashcards", []) or []
@@ -701,23 +695,19 @@ def apply_dashboard(
         created_card_ids.append(c["id"])
         click.echo(f"  created card {c['id']}: {c['name']!r}")
 
-    # Step 3: dashboard shell -- POST (create) or stay-with-existing (update).
-    if existing_dashboard_id is None:
-        post_body = {
-            k: spec[k] for k in POST_DASHBOARD_KEYS if k in spec and spec[k] is not None
-        }
-        if "name" not in post_body:
-            raise click.ClickException("template is missing a top-level `name`")
-        r = session.post(f"{base_url}/api/dashboard/", json=post_body)
-        r.raise_for_status()
-        dashboard = r.json()
-        dashboard_id = dashboard["id"]
-        click.echo(f"  created dashboard {dashboard_id}: {dashboard['name']!r}")
-    else:
-        dashboard_id = existing_dashboard_id
-        click.echo(f"  updating existing dashboard {dashboard_id}")
+    # Step 3: POST dashboard shell.
+    post_body = {
+        k: spec[k] for k in POST_DASHBOARD_KEYS if k in spec and spec[k] is not None
+    }
+    if "name" not in post_body:
+        raise click.ClickException("template is missing a top-level `name`")
+    r = session.post(f"{base_url}/api/dashboard/", json=post_body)
+    r.raise_for_status()
+    dashboard = r.json()
+    dashboard_id = dashboard["id"]
+    click.echo(f"  created dashboard {dashboard_id}: {dashboard['name']!r}")
 
-    # Step 4: PUT /api/dashboard/{id} with template's top-level fields + dashcards.
+    # Step 4: PUT /api/dashboard/{id} to attach dashcards.
     dashcards_put = [
         build_dashcard_for_put(
             src_dc,
@@ -856,12 +846,6 @@ def cmd_dashboard_to_template(
     help='JSON object passed to Jinja (e.g. \'{"database_id": 3, "collection_id": 22}\').',
 )
 @click.option(
-    "--dashboard-id",
-    type=int,
-    default=None,
-    help="If set, update this existing dashboard instead of creating a new one.",
-)
-@click.option(
     "--dry-run",
     is_flag=True,
     help="Render the template and print the resulting dashboard spec without writing.",
@@ -871,10 +855,9 @@ def cmd_template_to_dashboard(
     ctx: click.Context,
     template_file: str,
     template_context: str,
-    dashboard_id: int | None,
     dry_run: bool,
 ) -> None:
-    """Render a template and create or update a dashboard from it."""
+    """Render a template and create a new dashboard from it."""
     session: requests.Session = ctx.obj["session"]
     base_url: str = ctx.obj["base_url"]
 
@@ -898,12 +881,7 @@ def cmd_template_to_dashboard(
         click.echo(json.dumps(spec, indent=2, default=str))
         return
 
-    apply_dashboard(
-        session,
-        base_url,
-        spec,
-        existing_dashboard_id=dashboard_id,
-    )
+    apply_dashboard(session, base_url, spec)
 
 
 if __name__ == "__main__":
