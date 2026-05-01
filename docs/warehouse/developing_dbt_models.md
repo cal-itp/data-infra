@@ -327,6 +327,8 @@ Below are a few options to improve performance. [Data infra PR #2711](https://gi
 Incremental models have two different run modes: **full refreshes** (which re-process all historical data available) and **incremental runs** that load data in batches based on your incremental logic. These two modes run different code.
 
 If you make your table incremental, you should make sure to run both a full refresh (use the `--full-refresh` flag) and an incremental run (after the table has already been built once; no flag) in your testing to ensure that both are working as expected.
+
+Note that for [microbatch incremental models](https://docs.getdbt.com/docs/build/incremental-microbatch?version=1.12) it is a best practice to set `config.full-refresh` to `false` and ensure that only specific date ranges are ever run. So for these models, instead consider running a specific historical date range using `--event-time-start` and `--event-time-end` to sure that batches are being constructed correctly.
 ```
 
 (model-downstream-impacts)=
@@ -384,12 +386,9 @@ Once you have finished work, you should make a PR to get your changes merged int
 Once your changes merge, if they will impact other users (for example by changing a high-traffic model), you may want to announce your changes on Slack in  [`#data-warehouse-devs`](https://cal-itp.slack.com/archives/C050ZNDUL21), [`#data-analysis`](https://cal-itp.slack.com/archives/C02H6JUSS9L), or a similar channel.
 
 ```{warning}
-[Incremental models](https://docs.getdbt.com/docs/build/incremental-models) downstream of your changes may require a **full refresh** after your changes merge.
+[Incremental models](https://docs.getdbt.com/docs/build/incremental-models) downstream of your changes may require a **full refresh** or historical backfill after your changes merge.
 
-To check for incremental models downstream of your model, run `uv run dbt ls -s <your_model>+,config.materialized:incremental --resource-type model`. If you need to refresh incremental models:
-1. Wait for the [build-dbt](https://github.com/cal-itp/data-infra/actions/workflows/build-dbt.yml) GitHub action associated with your PR to complete after you merge.
-
-2. Go into the [Airflow UI](https://b2062ffca77d44a28b4e05f8f5bf4996-dot-us-west2.composer.googleusercontent.com/home) and go to the [transform_warehouse_full_refresh DAG](https://github.com/cal-itp/data-infra/tree/main/airflow/dags/transform_warehouse_full_refresh). **Specify appropriate model selectors to only refresh models that were affected by your changes** and then run the DAG task.
+To check for incremental models downstream of your model, run `uv run dbt ls -s <your_model>+,config.materialized:incremental --resource-type model`. If you need to refresh incremental models, ensure that the new dbt code has been deployed and then you can use the [`dbt_manual_run_with_args` Airflow DAG](https://github.com/cal-itp/data-infra/blob/main/airflow/dags/dbt_manual_run_with_args.py) to selectively re-run affected models.
 ```
 
 ## Incremental models
@@ -400,11 +399,9 @@ To check for incremental models downstream of your model, run `uv run dbt ls -s 
 Incremental models basically trade off a simple but computationally expensive approach (just process all of history every day) for a more complex approach, where daily processing is cheaper computationally but there is a higher cost in terms of time spent understanding or troubleshooting the model.
 ```
 
-Most of the Cal-ITP incremental models use a shared [`incremental_where macro`](https://github.com/cal-itp/data-infra/blob/main/warehouse/macros/incremental_where.sql) to handle the incremental logic; by default in dbt you could use the `if is_incremental()` checks directly in each incremental model, but we use the `incremental_where` macro to store some shared handling for things like the concept of the GTFS RT and GTFS schedule data start dates.
-
 The core question to ask when working with incremental models is: **How do I identify the new rows that should be brought in on each new run?**
 
-You can compile the SQL for an incremental model and run it directly in BigQuery to inspect what rows are identified for addition in an incremental run (see the [section on identifying bugs above](identify-bug) for information on how to find compiled SQL).
+In general, we use the [microbatch incremental strategy](https://docs.getdbt.com/docs/build/incremental-microbatch?version=1.12) for models that should be constructed based on data scrape time (e.g., models where they and their parents are partitioned on UTC date of data arrival) and a more general insert-overwrite strategy for models that are based on service date. See [materials in this folder](https://caltrans.sharepoint.com/:f:/s/DOTPMPHQ-DDSContractors/IgD9o-1P4maJSrdpCZhqAwINAc7KnxZts9UTek4pxkDgyWQ?e=167a2F) in Caltrans Sharepoint for more information about microbatch strategy and considerations.
 
 Working with incremental models can affect how you approach various dbt-related workflows. See callouts in the individual step sections above related to incremental models for more details.
 

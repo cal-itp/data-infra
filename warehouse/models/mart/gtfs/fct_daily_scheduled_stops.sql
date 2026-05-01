@@ -22,7 +22,7 @@ WITH fct_scheduled_trips AS (
         contains_warning_missing_foreign_key_stop_id
     FROM {{ ref('fct_scheduled_trips') }}
     WHERE service_date
-        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_MICROBATCH_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_SCHEDULE_START")) }}
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_SCHEDULE_START")) }}
             AND {{ ranged_incremental_max_date() }}
 ),
 

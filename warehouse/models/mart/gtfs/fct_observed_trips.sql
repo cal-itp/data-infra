@@ -15,14 +15,14 @@
 WITH trip_updates AS (
     SELECT * FROM {{ ref('fct_trip_updates_trip_summaries') }}
     WHERE service_date
-        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_MICROBATCH_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_START")) }}
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_START")) }}
             AND {{ ranged_incremental_max_date() }}
 ),
 
 vehicle_positions AS (
     SELECT * FROM {{ ref('fct_vehicle_positions_trip_summaries') }}
     WHERE service_date
-        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_MICROBATCH_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_START")) }}
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_START")) }}
             AND {{ ranged_incremental_max_date() }}
 ),
 

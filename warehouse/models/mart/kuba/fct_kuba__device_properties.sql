@@ -5,7 +5,7 @@
         event_time = 'ts',
         batch_size = 'day',
         begin=var('KUBA_DEVICE_START'),
-        lookback=var('DBT_DAILY_MICROBATCH_LOOKBACK_DAYS'),
+        lookback=var('DBT_DAILY_INCREMENTAL_LOOKBACK_DAYS'),
         partition_by={
             'field': 'ts',
             'data_type': 'timestamp',
