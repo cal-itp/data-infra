@@ -1,5 +1,5 @@
 description: "Parse Enghouse semicolon-delimited CSV files into JSONL"
-schedule_interval: "0 14 * * *"
+schedule_interval: "0 13 * * *"
 tags:
   - enghouse
   - payments
