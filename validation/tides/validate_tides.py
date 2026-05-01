@@ -13,13 +13,14 @@ Designed for local development against christopher_mart_gtfs / equivalent
 sandbox dataset. For production validation against the public bucket exports,
 point --table-uri at the GCS parquet path instead.
 """
+
 import argparse
 import json
 import sys
 from pathlib import Path
 
-from google.cloud import bigquery
 from frictionless import Resource, Schema, system, validate
+from google.cloud import bigquery
 
 # Allow validation of files at absolute paths. By default Frictionless 5.x
 # rejects paths it considers "unsafe" (anything outside the working directory).
@@ -40,10 +41,15 @@ INTERNAL_COLUMNS = {
 }
 
 
-def export_sample(client: bigquery.Client, dataset: str, table: str,
-                  service_date: str, output_path: Path,
-                  organization: str | None = None,
-                  row_limit: int | None = None) -> int:
+def export_sample(
+    client: bigquery.Client,
+    dataset: str,
+    table: str,
+    service_date: str,
+    output_path: Path,
+    organization: str | None = None,
+    row_limit: int | None = None,
+) -> int:
     """Export one service_date of a TIDES table to local parquet.
 
     Drops Cal-ITP internal columns to match what the public bucket export
@@ -58,10 +64,15 @@ def export_sample(client: bigquery.Client, dataset: str, table: str,
     fq = f"`{client.project}.{dataset}.{table}`"
     org_predicate = (
         f"AND LOWER(organization_name) LIKE '%{organization.lower()}%'"
-        if organization else ""
+        if organization
+        else ""
     )
-    sort_col = "event_timestamp" if "vehicle_locations" in table else "actual_trip_start"
-    limit_clause = f"\n    ORDER BY {sort_col}\n    LIMIT {row_limit}" if row_limit else ""
+    sort_col = (
+        "event_timestamp" if "vehicle_locations" in table else "actual_trip_start"
+    )
+    limit_clause = (
+        f"\n    ORDER BY {sort_col}\n    LIMIT {row_limit}" if row_limit else ""
+    )
     sql = f"""
     SELECT * EXCEPT ({', '.join(sorted(INTERNAL_COLUMNS))})
     FROM {fq}
@@ -73,8 +84,7 @@ def export_sample(client: bigquery.Client, dataset: str, table: str,
     # proper parquet nulls. Otherwise Frictionless reads them back as the
     # literal string 'nan' and fails minimum-constraint checks for any
     # nullable numeric TIDES field (odometer, speed, heading, etc.).
-    import numpy as np
-    for col in df.select_dtypes(include=['float', 'float64', 'float32']).columns:
+    for col in df.select_dtypes(include=["float", "float64", "float32"]).columns:
         df[col] = df[col].astype(object).where(df[col].notna(), None)
     df.to_parquet(output_path, index=False)
     return len(df)
@@ -118,25 +128,31 @@ def render_report(report, table_name: str, service_date: str, row_count: int) ->
         lines.append(f"  Valid: {task.valid}")
         if task.errors:
             from collections import Counter
+
             field_counts = Counter()
             for err in task.errors:
-                field = getattr(err, 'field_name', None) or '<unknown>'
+                field = getattr(err, "field_name", None) or "<unknown>"
                 field_counts[(err.type, field)] += 1
             lines.append(f"  Errors ({len(task.errors)} total). By type+field:")
-            for (etype, field), count in sorted(field_counts.items(), key=lambda x: -x[1]):
-                lines.append(f"    {count:6d}  {etype:25s} field={field}")
-            lines.append(f"\n  First 5 raw errors:")
+            for (etype, field), count in sorted(
+                field_counts.items(), key=lambda x: -x[1]
+            ):
+                lines.append(f"    {count:6d} {etype:25s} field={field}")
+            lines.append("\n  First 5 raw errors:")
             for err in task.errors[:5]:
-                cell = getattr(err, 'cell', '')
-                row_num = getattr(err, 'row_number', '?')
-                field = getattr(err, 'field_name', '?')
-                lines.append(f"    - row {row_num} field={field} cell={cell!r} type={err.type} note={err.note}")
+                cell = getattr(err, "cell", "")
+                row_num = getattr(err, "row_number", "?")
+                field = getattr(err, "field_name", "?")
+                lines.append(
+                    " - row %s field=%s cell=%r type=%s note=%s"
+                    % (row_num, field, cell, err.type, err.note)
+                )
         else:
             lines.append("  Errors: none")
         if task.warnings:
             lines.append(f"  Warnings ({len(task.warnings)}):")
             for w in task.warnings[:10]:
-                lines.append(f"    - {w}")
+                lines.append(" - %s" % w)
 
     return "\n".join(lines)
 
@@ -145,22 +161,36 @@ def main() -> int:
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument("--project", default=PROJECT_DEFAULT)
     p.add_argument("--location", default=LOCATION_DEFAULT)
-    p.add_argument("--dataset", required=True,
-                   help="BQ dataset (e.g., christopher_mart_gtfs)")
-    p.add_argument("--table", required=True,
-                   help="BQ table (e.g., fct_tides_vehicle_locations)")
-    p.add_argument("--schema", required=True, type=Path,
-                   help="Path to TIDES JSON schema file")
-    p.add_argument("--service-date", required=True,
-                   help="Service date to export, YYYY-MM-DD")
-    p.add_argument("--organization", default=None,
-                   help="Filter to one agency by name substring (case-insensitive). "
-                        "Useful for keeping sample exports manageable.")
-    p.add_argument("--row-limit", type=int, default=None,
-                   help="Cap the export at N rows. Default unlimited.")
-    p.add_argument("--output-dir", type=Path,
-                   default=Path(__file__).parent / "exports",
-                   help="Where to write parquet + report")
+    p.add_argument(
+        "--dataset", required=True, help="BQ dataset (e.g., christopher_mart_gtfs)"
+    )
+    p.add_argument(
+        "--table", required=True, help="BQ table (e.g., fct_tides_vehicle_locations)"
+    )
+    p.add_argument(
+        "--schema", required=True, type=Path, help="Path to TIDES JSON schema file"
+    )
+    p.add_argument(
+        "--service-date", required=True, help="Service date to export, YYYY-MM-DD"
+    )
+    p.add_argument(
+        "--organization",
+        default=None,
+        help="Filter to one agency by name substring (case-insensitive). "
+        "Useful for keeping sample exports manageable.",
+    )
+    p.add_argument(
+        "--row-limit",
+        type=int,
+        default=None,
+        help="Cap the export at N rows. Default unlimited.",
+    )
+    p.add_argument(
+        "--output-dir",
+        type=Path,
+        default=Path(__file__).parent / "exports",
+        help="Where to write parquet + report",
+    )
     args = p.parse_args()
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
@@ -169,13 +199,20 @@ def main() -> int:
 
     client = bigquery.Client(project=args.project, location=args.location)
 
-    print(f"Exporting {args.dataset}.{args.table} for {args.service_date}"
-          f"{f' (org=' + args.organization + ')' if args.organization else ''}"
-          f"{f' (limit=' + str(args.row_limit) + ')' if args.row_limit else ''}...")
-    row_count = export_sample(client, args.dataset, args.table,
-                              args.service_date, parquet_path,
-                              organization=args.organization,
-                              row_limit=args.row_limit)
+    print(
+        f"Exporting {args.dataset}.{args.table} for {args.service_date}"
+        f"{f' (org=' + args.organization + ')' if args.organization else ''}"
+        f"{f' (limit=' + str(args.row_limit) + ')' if args.row_limit else ''}..."
+    )
+    row_count = export_sample(
+        client,
+        args.dataset,
+        args.table,
+        args.service_date,
+        parquet_path,
+        organization=args.organization,
+        row_limit=args.row_limit,
+    )
     print(f"Wrote {row_count:,} rows to {parquet_path}")
 
     print(f"Loading TIDES schema from {args.schema}...")

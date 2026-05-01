@@ -20,7 +20,7 @@ Validate vehicle_locations for one service date in your sandbox:
 python validate_tides.py \
   --dataset christopher_mart_gtfs \
   --table fct_tides_vehicle_locations \
-  --schema ~/projects/jarvus/tides/TIDES/spec/vehicle_locations.schema.json \
+  --schema <path-to-your-TIDES-clone>/spec/vehicle_locations.schema.json \
   --service-date 2026-04-30
 ```
 
@@ -36,7 +36,7 @@ Exit code is 0 on validation success, 1 on failure.
 
 ## TIDES schemas
 
-This validator points at TIDES schema files in the upstream spec repo (`https://github.com/TIDES-transit/TIDES`). Local clone expected at `~/projects/jarvus/tides/TIDES/spec/`.
+This validator points at TIDES schema files in the upstream spec repo (`https://github.com/TIDES-transit/TIDES`). Pass `--schema <path-to-your-TIDES-clone>/spec/<table>.schema.json`.
 
 Currently supported schemas:
 
