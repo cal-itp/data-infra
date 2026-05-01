@@ -1,0 +1,12 @@
+======================================================================
+TIDES validation report: fct_tides_vehicle_locations
+Service date: 2026-04-30
+Exported rows: 280,297
+Frictionless report valid: True
+======================================================================
+
+Task: fct_tides_vehicle_locations_2026-04-30
+  Place: /Users/christopheryamas/projects/jarvus/cal-itp-data-infra-work/validation/tides/exports/fct_tides_vehicle_locations_2026-04-30.parquet
+  Stats: {'errors': 0, 'warnings': 0, 'seconds': 122.316, 'fields': 22, 'rows': 280297}
+  Valid: True
+  Errors: none
