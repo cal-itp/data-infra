@@ -13,9 +13,26 @@ int_elavon__deposit_transactions AS (
 
 payments_entity_mapping AS (
     SELECT
-        * EXCEPT(elavon_customer_name),
-        elavon_customer_name AS customer_name
+        gtfs_dataset_source_record_id,
+        organization_source_record_id,
+        littlepay_participant_id,
+        null as enghouse_operator_id,
+        elavon_customer_name AS customer_name,
+        _in_use_from,
+        _in_use_until
     FROM {{ ref('payments_entity_mapping') }}
+
+    UNION ALL
+
+    SELECT
+        gtfs_dataset_source_record_id,
+        organization_source_record_id,
+        null as littlepay_participant_id,
+        enghouse_operator_id,
+        elavon_customer_name AS customer_name,
+        _in_use_from,
+        _in_use_until
+    FROM {{ ref('payments_entity_mapping_enghouse') }}
 ),
 
 orgs AS (
@@ -39,7 +56,8 @@ join_orgs AS (
         union_deposits_and_billing.*,
         orgs.name AS organization_name,
         orgs.source_record_id AS organization_source_record_id,
-        littlepay_participant_id
+        littlepay_participant_id,
+        enghouse_operator_id
     FROM union_deposits_and_billing
     LEFT JOIN payments_entity_mapping USING (customer_name)
     LEFT JOIN orgs
@@ -53,6 +71,7 @@ fct_elavon__transactions AS (
         organization_name,
         organization_source_record_id,
         littlepay_participant_id,
+        enghouse_operator_id,
         LAST_DAY(payment_date, MONTH) AS end_of_month_date,
         payment_reference,
         payment_date,

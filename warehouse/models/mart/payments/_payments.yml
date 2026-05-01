@@ -413,7 +413,11 @@ models:
         description: |
           The Littlepay-assigned `participant_id` value that corresponds to this customer name/merchant number.
           If null, this customer/merchant's activity is not associated with Littlepay (for example, office or
-          online sales not processed by Littlepay).
+          online sales not processed by Littlepay, or this agency uses another processor).
+      - name: enghouse_operator_id
+        description: |
+          Enghouse operator ID for agencies that use Enghouse as fare processor.
+          Null for agencies that use a different processor.
       - &payment_reference
         name: payment_reference
         description: |
