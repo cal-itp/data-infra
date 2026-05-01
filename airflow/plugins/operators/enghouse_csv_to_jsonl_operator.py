@@ -39,6 +39,11 @@ def _parse_csv(content: bytes) -> list:
     return [
         {**row, "_line_number": line_number}
         for line_number, row in enumerate(reader, start=1)
+        if not all(
+            row.get(k) == k
+            for k in (reader.fieldnames or [])
+            if k != "calitp_unknown_fields"
+        )
     ]
 
 
