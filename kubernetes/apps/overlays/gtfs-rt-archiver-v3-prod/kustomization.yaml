@@ -10,12 +10,15 @@ resources:
 patches:
 - path: consumer.patch.yaml
   target:
+    kind: Deployment
     name: gtfs-rt-archiver-consumer
 - path: ticker.patch.yaml
   target:
+    kind: Deployment
     name: gtfs-rt-archiver-ticker
 - path: redis.patch.yaml
   target:
+    kind: Deployment
     name: redis
 
 images:
