@@ -1,21 +1,4 @@
-{{
-    config(
-        materialized='incremental',
-        incremental_strategy='microbatch',
-        event_time='dt',
-        batch_size='day',
-        begin=var('GTFS_RT_START'),
-        lookback=var('DBT_ALL_INCREMENTAL_LOOKBACK_DAYS'),
-        partition_by={
-            'field': 'dt',
-            'data_type': 'date',
-            'granularity': 'day',
-        },
-        full_refresh=false,
-        cluster_by=['dt', 'base64_url'],
-        on_schema_change='append_new_columns'
-    )
-}}
+{{ config(materialized='view') }}
 
 WITH source_vehicle_locations AS (
     SELECT *
@@ -25,18 +8,20 @@ WITH source_vehicle_locations AS (
 -- dim_provider_gtfs_data fans out: a single vehicle_positions feed can be
 -- associated with multiple service or organization rows (govcbus.com is shared
 -- by 7 cities; the SD MTS feed is shared with the airport). Collapse to one
--- row per VP feed key, picking the lex-smallest organization_name for
--- determinism, so the join below doesn't multiply ping rows.
+-- row per VP feed key so the join below doesn't multiply ping rows.
 public_subfeed_agencies AS (
     SELECT
         vehicle_positions_gtfs_dataset_key AS gtfs_dataset_key,
-        ANY_VALUE(organization_name HAVING MIN organization_name) AS organization_name,
-        ANY_VALUE(organization_ntd_id HAVING MIN organization_name) AS organization_ntd_id
+        organization_name,
+        organization_ntd_id
     FROM {{ ref('dim_provider_gtfs_data') }}
     WHERE _is_current = TRUE
       AND public_customer_facing_or_regional_subfeed_fixed_route = TRUE
       AND vehicle_positions_gtfs_dataset_key IS NOT NULL
-    GROUP BY 1
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY vehicle_positions_gtfs_dataset_key
+        ORDER BY organization_name ASC
+    ) = 1
 ),
 
 tides_vehicle_locations AS (
@@ -97,7 +82,7 @@ tides_vehicle_locations AS (
 
         -- TIDES schedule_relationship at vehicle_locations is stop-level
         -- (Scheduled / Skipped / Added / Missing); GTFS-RT carries trip-level.
-        -- Leaving NULL pending TIDES spec clarification (TIDES issue #252).
+        -- Leaving NULL pending https://github.com/TIDES-transit/TIDES/issues/252.
         CAST(NULL AS STRING) AS schedule_relationship,
 
         -- Internal columns retained for partitioning and the agency join;
