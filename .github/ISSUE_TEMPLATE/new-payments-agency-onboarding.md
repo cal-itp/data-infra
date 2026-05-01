@@ -14,11 +14,11 @@ assignees: [mrtopsyt, csuyat-dot, amandaha8]
 
 **GTFS Feed Name / Identifier**:
 
-- \[add feed name as it appears in the transit database - find it in the "Name" column under "gtfs datasets" in Airtable\]
+- \[add feed name as it appears in the transit database - find it in the "Name" column under "[gtfs datasets](https://airtable.com/appPnJWrQ7ui4UmIl/tbl5V6Vjs4mNQgYbc/viwPOujIFNr6yn4ib?blocks=hide)" in Airtable\]
 
 **Organization Name** _(as it appears in the transit database)_:
 
-- \[add organization name - find it in the "Name" column under "organizations" in Airtable \]
+- \[add organization name - find it in the "Name" column under "[organizations](https://airtable.com/appPnJWrQ7ui4UmIl/tblFsd8D5oFRqep8Z/viwhhibWpFXRJ7nYc?blocks=hide)" in Airtable \]
 
 **Fare Processor Vendor**:
 
@@ -42,7 +42,7 @@ _Complete this section if the agency uses Littlepay. Leave blank otherwise._
 
 **AWS Credentials and S3 Bucket**:
 
-- Littlepay will provide the AWS access key and S3 bucket/prefix ahead of launch. Confirm this has been shared before closing this ticket.
+- Littlepay will provide the AWS access key and S3 bucket/prefix ahead of launch. **Do NOT share this information in a GitHub ticket.** An assignee should confirm this has been shared privately before closing this ticket.
 
 ______________________________________________________________________
 
@@ -52,7 +52,7 @@ _Complete this section if the agency uses Enghouse. Leave blank otherwise._
 
 **Operator ID** _(provided by Enghouse)_:
 
-- \[add\]
+- \[add Enghouse Operator ID\]
 
 ______________________________________________________________________
 
@@ -60,7 +60,7 @@ ______________________________________________________________________
 
 **Elavon Customer Name** _(as it appears in Elavon data)_:
 
-- \[add\]
+- \[add Elavon Customer Name\]
 
 ______________________________________________________________________
 
