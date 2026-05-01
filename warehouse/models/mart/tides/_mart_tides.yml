@@ -112,3 +112,126 @@ models:
         description: '{{ doc("column_base64_url") }}'
       - name: gtfs_dataset_key
         description: '{{ doc("gtfs_schedule_gtfs_dataset_key") }}'
+
+  - name: fct_tides_trips_performed
+    description: |
+      Trips performed reshaped to the TIDES (Transit Integrated Data Exchange
+      Specification) `trips_performed` schema (https://tides-transit.org/main/).
+      Sourced from `fct_observed_trips`, joined to `fct_scheduled_trips` for
+      route metadata and to `fct_tides_vehicle_locations` for canonical
+      vehicle_id per trip. Filtered upstream to `appeared_in_vp = TRUE` so
+      every row has a derivable vehicle_id.
+    columns:
+      - name: service_date
+        description: TIDES PK (with trip_id_performed). From `fct_observed_trips.service_date`.
+        data_tests:
+          - not_null:
+              arguments:
+                config:
+                  where: 'service_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)'
+      - name: trip_id_performed
+        description: TIDES PK (with service_date). From `fct_observed_trips.trip_id`.
+        data_tests:
+          - not_null:
+              arguments:
+                config:
+                  where: 'service_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)'
+      - name: vehicle_id
+        description: |
+          Most-frequent vehicle_id observed in `fct_tides_vehicle_locations`
+          for the same (service_date, trip_id_performed). TIDES required.
+        data_tests:
+          - not_null:
+              arguments:
+                config:
+                  where: 'service_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)'
+          - relationships:
+              arguments:
+                to: ref('fct_tides_vehicle_locations')
+                field: vehicle_id
+                config:
+                  where: 'service_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)'
+      - name: trip_id_scheduled
+        description: |
+          Coarse MVP: equals trip_id_performed when the trip appeared in VP
+          or TU. A stricter join to `fct_scheduled_trips` is a follow-up.
+      - name: route_id
+        description: From `fct_scheduled_trips` via trip_instance_key. NULL when no schedule.
+      - name: route_type
+        description: GTFS route_type. From `fct_scheduled_trips`.
+      - name: ntd_mode
+        description: NULL in MVP.
+      - name: route_type_agency
+        description: NULL in MVP.
+      - name: shape_id
+        description: From `fct_scheduled_trips`.
+      - name: pattern_id
+        description: NULL in MVP.
+      - name: direction_id
+        description: From `fct_scheduled_trips`.
+      - name: operator_id
+        description: NULL; not derivable from GTFS-RT.
+      - name: block_id
+        description: From `fct_scheduled_trips`.
+      - name: trip_start_stop_id
+        description: NULL in MVP; needs stop_times join on min stop_sequence.
+      - name: trip_end_stop_id
+        description: NULL in MVP; needs stop_times join on max stop_sequence.
+      - name: schedule_trip_start
+        description: |
+          DATETIME in agency tz from `fct_scheduled_trips.trip_first_departure_ts`.
+      - name: schedule_trip_end
+        description: |
+          DATETIME in agency tz from `fct_scheduled_trips.trip_last_arrival_ts`.
+      - name: actual_trip_start
+        description: DATETIME in agency tz from `fct_observed_trips.vp_min_ts`.
+      - name: actual_trip_end
+        description: DATETIME in agency tz from `fct_observed_trips.vp_max_ts`.
+      - name: trip_type
+        description: |
+          Constant 'In service' in MVP because the model filters to VP-observed
+          trips. Future expansion could distinguish deadhead / layover / pull-in
+          / pull-out given supplemental signals.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['In service', 'Deadhead', 'Layover', 'Pullout', 'Pullin', 'Extra Pullout', 'Extra Pullin', 'Deadhead To Layover', 'Deadhead From Layover', 'Other not in service']
+                config:
+                  where: 'service_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)'
+      - name: schedule_relationship
+        description: |
+          TIDES enum (Scheduled / Added / Unscheduled / Canceled / Duplicated)
+          mapped from `fct_observed_trips.tu_starting_schedule_relationship`.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Scheduled', 'Added', 'Unscheduled', 'Canceled', 'Duplicated']
+                config:
+                  where: 'service_date >= DATE_SUB(CURRENT_DATE(), INTERVAL 2 DAY)'
+      - name: base64_url
+        description: '{{ doc("column_base64_url") }}'
+      - name: gtfs_dataset_key
+        description: '{{ doc("gtfs_schedule_gtfs_dataset_key") }}'
+
+exposures:
+  - name: california_tides
+    type: application
+    maturity: low
+    url: https://tides-transit.org/main/
+    description: >
+      Cal-ITP TIDES (Transit Integrated Data Exchange Specification) tables,
+      reshaped from GTFS-RT and joined to GTFS Schedule. Published as a
+      statewide TIDES product for analytics and TIDES-ecosystem tooling.
+
+    depends_on:
+      - ref("fct_tides_vehicle_locations")
+      - ref("fct_tides_trips_performed")
+
+    owner:
+      email: hello@calitp.org
+
+    meta:
+      methodology: |
+        Cal-ITP collects GTFS-RT vehicle position and trip update messages
+        statewide and reshapes them into the open TIDES specification for
+        analytics use. See https://tides-transit.org for the spec.
