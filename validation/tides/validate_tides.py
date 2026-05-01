@@ -9,7 +9,7 @@ Usage:
         --schema ~/projects/jarvus/tides/TIDES/spec/vehicle_locations.schema.json \
         --service-date 2026-04-30
 
-Designed for local development against christopher_mart_gtfs / equivalent
+Designed for local development against christopher_mart_tides / equivalent
 sandbox dataset. For production validation against the public bucket exports,
 point --table-uri at the GCS parquet path instead.
 """
@@ -31,7 +31,7 @@ PROJECT_DEFAULT = "cal-itp-data-infra-staging"
 LOCATION_DEFAULT = "us-west2"
 
 # Columns that are not part of the TIDES schema and are dropped at export time.
-# Match warehouse/models/mart/gtfs/fct_tides_vehicle_locations.sql.
+# Match warehouse/models/mart/tides/fct_tides_vehicle_locations.sql.
 INTERNAL_COLUMNS = {
     "dt",
     "base64_url",
@@ -162,7 +162,7 @@ def main() -> int:
     p.add_argument("--project", default=PROJECT_DEFAULT)
     p.add_argument("--location", default=LOCATION_DEFAULT)
     p.add_argument(
-        "--dataset", required=True, help="BQ dataset (e.g., christopher_mart_gtfs)"
+        "--dataset", required=True, help="BQ dataset (e.g., christopher_mart_tides)"
     )
     p.add_argument(
         "--table", required=True, help="BQ table (e.g., fct_tides_vehicle_locations)"

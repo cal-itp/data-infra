@@ -18,7 +18,7 @@ Validate vehicle_locations for one service date in your sandbox:
 
 ```bash
 python validate_tides.py \
-  --dataset christopher_mart_gtfs \
+  --dataset christopher_mart_tides \
   --table fct_tides_vehicle_locations \
   --schema <path-to-your-TIDES-clone>/spec/vehicle_locations.schema.json \
   --service-date 2026-04-30
