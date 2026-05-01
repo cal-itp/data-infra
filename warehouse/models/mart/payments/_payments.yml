@@ -414,7 +414,8 @@ models:
           The Littlepay-assigned `participant_id` value that corresponds to this customer name/merchant number.
           If null, this customer/merchant's activity is not associated with Littlepay (for example, office or
           online sales not processed by Littlepay, or this agency uses another processor).
-      - name: enghouse_operator_id
+      - &enghouse_operator_id
+        name: enghouse_operator_id
         description: |
           Enghouse operator ID for agencies that use Enghouse as fare processor.
           Null for agencies that use a different processor.
@@ -598,6 +599,7 @@ models:
       - *organization_name
       - *organization_source_record_id
       - *elavon_lp_participant_id
+      - *enghouse_operator_id
       - *fund_amt
       - *batch_reference
       - *batch_type
@@ -625,6 +627,7 @@ models:
       - *organization_name
       - *organization_source_record_id
       - *elavon_lp_participant_id
+      - *enghouse_operator_id
       - *payment_reference
       - *payment_date
       - *fund_amt
@@ -668,6 +671,7 @@ models:
       - *organization_name
       - *organization_source_record_id
       - *elavon_lp_participant_id
+      - *enghouse_operator_id
       - *payment_reference
       - *payment_date
       - *fund_amt
@@ -707,6 +711,7 @@ models:
       - *organization_name
       - *organization_source_record_id
       - *elavon_lp_participant_id
+      - *enghouse_operator_id
       - *payment_reference
       - *payment_date
       - *fund_amt
