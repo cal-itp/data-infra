@@ -2633,3 +2633,177 @@ models:
         description: |
           Number of vehicle location timestamps within 35 meters
           of the scheduled shape (path of travel)
+
+  - name: fct_tides_vehicle_locations
+    description: |
+      Vehicle location pings reshaped to conform with the TIDES (Transit Integrated
+      Data Exchange Specification) vehicle_locations schema
+      (https://tides-transit.org/main/). Each row represents one recorded
+      vehicle position event for a public, customer-facing or regional-subfeed
+      fixed-route GTFS feed. Sourced from `fct_vehicle_locations` (Cal-ITP's
+      de-duplicated vehicle positions table) and filtered via
+      `dim_provider_gtfs_data` to the agencies opted-in to the TIDES export
+      product. Closes #4837.
+
+      Cal-ITP-internal columns (`dt`, `base64_url`, `gtfs_dataset_key`,
+      `organization_name`, `organization_ntd_id`) are retained on the warehouse
+      table for partitioning, agency identification, and downstream joins.
+      They are not part of the TIDES vehicle_locations schema and are dropped
+      at export time when files are written to the public bucket.
+
+      Several TIDES-required-not-null and TIDES-enum constraints are enforced
+      in transformation: `current_status` is mapped to the TIDES enum casing,
+      out-of-bounds `latitude` / `longitude` / `heading` / `speed` / `odometer`
+      are nulled out rather than stored as invalid values.
+    columns:
+      - name: location_ping_id
+        description: |
+          TIDES location_ping_id. Identifies the recorded vehicle location event.
+          Sourced from `fct_vehicle_locations.key`, a deterministic surrogate
+          constructed from `service_date`, `base64_url`, `location_timestamp`,
+          `vehicle_id`, `vehicle_label`, `trip_id`, and `trip_start_time`.
+          TIDES requires this to be unique. Cal-ITP's upstream key has an
+          "almost unique" guarantee; see open question on uniqueness in the PR.
+        data_tests:
+          - not_null:
+              arguments:
+                where: '__rt_sampled__'
+          - unique_proportion:
+              arguments:
+                at_least: 0.999
+                where: '__rt_sampled__'
+      - name: service_date
+        description: |
+          TIDES service_date. The agency-local service date associated with
+          the vehicle position event. Inherited from `fct_vehicle_locations`,
+          which derives it via `COALESCE(trip_start_date, DATE(header_timestamp,
+          schedule_feed_timezone), DATE(_extract_ts, schedule_feed_timezone))`.
+      - name: event_timestamp
+        description: |
+          TIDES event_timestamp. The recorded event time of the vehicle ping,
+          expressed as a DATETIME in the agency's GTFS schedule feed timezone.
+          Sourced from `fct_vehicle_locations.location_timestamp`, which
+          coalesces `vehicle_timestamp` and `header_timestamp`.
+        data_tests:
+          - not_null:
+              arguments:
+                where: '__rt_sampled__'
+      - name: trip_id_performed
+        description: |
+          TIDES trip_id_performed. Identifies the trip performed. Sourced from
+          GTFS-RT TripDescriptor.trip_id. Cal-ITP's upstream model drops rows
+          with NULL trip_id; this is a known scope question (see PR description).
+      - name: trip_id_scheduled
+        description: |
+          TIDES trip_id_scheduled. Left NULL in MVP. Deriving requires a
+          confirmed match against `fct_scheduled_trips` for the service_date
+          and feed; planned as a follow-up.
+      - name: trip_stop_sequence
+        description: |
+          TIDES trip_stop_sequence. The actual order of stops visited within
+          the trip. Sourced from GTFS-RT current_stop_sequence as a coarse
+          approximation; precise actual-order requires the future stop_visits
+          table. TIDES specifies minimum 1.
+      - name: scheduled_stop_sequence
+        description: |
+          TIDES scheduled_stop_sequence. Left NULL in MVP. Future derivation
+          could join to `dim_stop_times` on `(trip_key, stop_sequence)`.
+      - name: vehicle_id
+        description: |
+          TIDES vehicle_id. Identifies a vehicle. TIDES requires this not-null;
+          Cal-ITP's upstream `stg_rt__vehicle_positions` already enforces
+          `vehicle.id IS NOT NULL`.
+        data_tests:
+          - not_null:
+              arguments:
+                where: '__rt_sampled__'
+      - name: device_id
+        description: |
+          TIDES device_id. Always NULL: not derivable from GTFS-RT alone.
+      - name: pattern_id
+        description: |
+          TIDES pattern_id. Always NULL in MVP. Future derivation could come
+          from joining trip_id to GTFS shape_id via `dim_trips`.
+      - name: stop_id
+        description: |
+          TIDES stop_id. Identifies the stop the vehicle is approaching or
+          serving currently. Sourced from GTFS-RT VehiclePosition.stop_id.
+      - name: current_status
+        description: |
+          TIDES current_status enum: "Incoming at" / "Stopped at" /
+          "In transit to". Mapped from GTFS-RT VehicleStopStatus enum
+          (INCOMING_AT / STOPPED_AT / IN_TRANSIT_TO).
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Incoming at', 'Stopped at', 'In transit to']
+                where: '__rt_sampled__ AND current_status IS NOT NULL'
+      - name: latitude
+        description: |
+          TIDES latitude. Degrees north, WGS-84. TIDES bounds enforced
+          (-90 to 90); out-of-bounds values are stored as NULL.
+      - name: longitude
+        description: |
+          TIDES longitude. Degrees east, WGS-84. TIDES bounds enforced
+          (-180 to 180); out-of-bounds values are stored as NULL.
+      - name: gps_quality
+        description: |
+          TIDES gps_quality enum. Always NULL: not derivable from GTFS-RT.
+      - name: heading
+        description: |
+          TIDES heading. Degrees, clockwise from true north. TIDES bounds
+          enforced (0 to 360); out-of-bounds values stored as NULL.
+      - name: speed
+        description: |
+          TIDES speed. Momentary speed in meters per second. TIDES requires
+          minimum 0; negative values stored as NULL.
+      - name: odometer
+        description: |
+          TIDES odometer. Odometer value in meters. TIDES requires minimum 0;
+          negative values stored as NULL.
+      - name: schedule_deviation
+        description: |
+          TIDES schedule_deviation. Always NULL in MVP. Future derivation
+          could come from trip_updates arrival_delay for the current stop.
+      - name: headway_deviation
+        description: |
+          TIDES headway_deviation. Always NULL: derivation requires multi-trip
+          analysis on the same route and direction.
+      - name: trip_type
+        description: |
+          TIDES trip_type enum. Coarse two-value classification: "In service"
+          when `trip_id_performed` is populated; NULL otherwise. Cal-ITP's
+          upstream model currently drops NULL-trip rows so this is effectively
+          constant 'In service'; expression retained for future expansion.
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['In service', 'Deadhead', 'Layover', 'Pullout', 'Pullin', 'Extra Pullout', 'Extra Pullin', 'Deadhead To Layover', 'Deadhead From Layover', 'Other not in service']
+                where: '__rt_sampled__ AND trip_type IS NOT NULL'
+      - name: schedule_relationship
+        description: |
+          TIDES schedule_relationship enum (stop-level: Scheduled / Skipped /
+          Added / Missing). Always NULL pending TIDES spec clarification on
+          stop-level vs trip-level semantics; see TIDES issue #252 / PR #251.
+      - name: dt
+        description: |
+          Cal-ITP-internal extract date partition. Not part of TIDES schema;
+          retained for incremental microbatch partitioning. Dropped at export.
+      - name: base64_url
+        description: |
+          Cal-ITP-internal feed identifier. Not part of TIDES schema; retained
+          for downstream joins. Dropped at export.
+      - name: gtfs_dataset_key
+        description: |
+          Cal-ITP-internal vehicle-positions GTFS dataset key, used to join
+          to `dim_provider_gtfs_data`. Not part of TIDES schema. Dropped at
+          export.
+      - name: organization_name
+        description: |
+          Cal-ITP-internal agency name from `dim_provider_gtfs_data`. Not part
+          of TIDES schema; retained for partition naming and operator-facing
+          file paths in the public bucket. Dropped from row-level export.
+      - name: organization_ntd_id
+        description: |
+          Cal-ITP-internal NTD ID from `dim_provider_gtfs_data`. Not part of
+          TIDES schema. Dropped at export.
