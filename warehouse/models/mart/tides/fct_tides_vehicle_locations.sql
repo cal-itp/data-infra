@@ -15,23 +15,15 @@ WITH source_vehicle_locations AS (
     ) = 1
 ),
 
--- dim_provider_gtfs_data fans out: a single vehicle_positions feed can be
--- associated with multiple service or organization rows (govcbus.com is shared
--- by 7 cities; the SD MTS feed is shared with the airport). Collapse to one
--- row per VP feed key so the join below doesn't multiply ping rows.
-public_subfeed_agencies AS (
-    SELECT
-        vehicle_positions_gtfs_dataset_key AS gtfs_dataset_key,
-        organization_name,
-        organization_ntd_id
+-- Filter to feeds tagged public-customer-facing or regional-subfeed
+-- fixed-route. Org info isn't part of the TIDES spec and isn't carried
+-- through; org metadata for the publish flow lives separately.
+public_subfeed_keys AS (
+    SELECT DISTINCT vehicle_positions_gtfs_dataset_key AS gtfs_dataset_key
     FROM {{ ref('dim_provider_gtfs_data') }}
     WHERE _is_current = TRUE
       AND public_customer_facing_or_regional_subfeed_fixed_route = TRUE
       AND vehicle_positions_gtfs_dataset_key IS NOT NULL
-    QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY vehicle_positions_gtfs_dataset_key
-        ORDER BY organization_name ASC
-    ) = 1
 ),
 
 tides_vehicle_locations AS (
@@ -95,16 +87,13 @@ tides_vehicle_locations AS (
         -- Leaving NULL pending https://github.com/TIDES-transit/TIDES/issues/252.
         CAST(NULL AS STRING) AS schedule_relationship,
 
-        -- Internal columns retained for partitioning and the agency join;
+        -- Internal columns retained for partitioning and the feed-key join;
         -- dropped at export time.
         vp.dt,
         vp.base64_url,
-        vp.gtfs_dataset_key,
-        agencies.organization_name,
-        agencies.organization_ntd_id
+        vp.gtfs_dataset_key
     FROM source_vehicle_locations AS vp
-    INNER JOIN public_subfeed_agencies AS agencies
-        USING (gtfs_dataset_key)
+    INNER JOIN public_subfeed_keys USING (gtfs_dataset_key)
 )
 
 SELECT * FROM tides_vehicle_locations
