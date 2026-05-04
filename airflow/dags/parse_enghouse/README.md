@@ -2,7 +2,7 @@
 
 Type: [Now / Scheduled](https://docs.calitp.org/data-infra/airflow/dags-maintenance.html)
 
-This DAG converts Enghouse semicolon-delimited CSV files from the raw GCS bucket (`cal-itp-data-infra-enghouse-raw`) into gzipped JSONL files written to the parsed bucket (`calitp-enghouse-parsed`), using `agency={agency}/dt={date}/` Hive partition paths. Downstream BigQuery external tables and dbt models read from the parsed bucket.
+This DAG converts Enghouse semicolon-delimited CSV files from the raw GCS bucket (`calitp-enghouse-raw`) into gzipped JSONL files written to the parsed bucket (`calitp-enghouse-parsed`), using `agency={agency}/dt={date}/` Hive partition paths. Downstream BigQuery external tables and dbt models read from the parsed bucket.
 
 Each run scans all files in the raw bucket and skips any already present in the parsed bucket, making it safe to re-run. Late or re-delivered files are automatically picked up on the next scheduled run. This scan-all approach was chosen because Enghouse delivery timing is not guaranteed to be consistent relative to the DAG schedule.
 
