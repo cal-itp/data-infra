@@ -12,8 +12,6 @@
 | 11:00 AM    | 3:00 AM              | 4:00 AM              | [create_external_tables](./create_external_tables)                                                                               | Every Day  |
 | 12:00 PM    | 4:00 AM              | 5:00 AM              | [download_and_parse_littlepay](#download_and_parse_littlepay)                                                                    | Every Day  |
 |  1:00 PM    | 5:00 AM              | 6:00 AM              | [parse_enghouse](./parse_enghouse)                                                                                               | Every Day  |
-|             | Every Hour           |                      | [sync_littlepay_v3](./sync_littlepay_v3)                                                                                         | Every Day  |
-|             | Every<br>Hour:30 min                       || [parse_littlepay_v3](./parse_littlepay_v3)                                                                                       | Every Day  |
 |             | Every<br>Hour:15 min                       || [parse_and_validate_rt](#parse_and_validate_rt)                                                                                  | Every Day  |
 |  2:00 PM    | 6:00 AM              | 7:00 AM              | [dbt_all](#dbt_all)                                                                                                              | Monday and Thursday |
 |  2:00 PM    | 6:00 AM              | 7:00 AM              | [dbt_daily](#dbt_daily)                                                                                                          | Sunday, Tuesday, Wednesday, Friday, and Saturday |

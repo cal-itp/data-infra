@@ -1,4 +1,4 @@
-# `sync_littlepay_v3`
+# DEPRECATED - `sync_littlepay_v3`
 
 Type: [Now / Scheduled](https://docs.calitp.org/data-infra/airflow/dags-maintenance.html)
 
