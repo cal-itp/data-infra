@@ -8,8 +8,6 @@ models:
       (https://tides-transit.org/main/). Sourced from `fct_vehicle_locations`
       and filtered via `dim_provider_gtfs_data` to public, customer-facing or
       regional-subfeed fixed-route feeds.
-    meta:
-      publish.product: tides
     columns:
       - name: location_ping_id
         description: |
@@ -114,10 +112,3 @@ models:
         description: '{{ doc("column_base64_url") }}'
       - name: gtfs_dataset_key
         description: '{{ doc("gtfs_schedule_gtfs_dataset_key") }}'
-      - name: organization_name
-        description: |
-          Canonical agency name from `dim_provider_gtfs_data` (lex-smallest
-          when multiple agencies share a feed). Not part of TIDES; retained
-          for per-agency export paths.
-      - name: organization_ntd_id
-        description: NTD ID for the canonical agency. Not part of TIDES.
