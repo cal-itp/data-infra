@@ -50,4 +50,3 @@ dim_shapes AS (
 )
 
 SELECT * FROM dim_shapes
--- modify file to test gh action
