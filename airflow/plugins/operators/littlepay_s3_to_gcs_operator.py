@@ -3,7 +3,7 @@ import logging
 import os
 from typing import Self, Sequence
 
-from airflow.exceptions import AirflowSkipException
+from airflow.exceptions import AirflowException, AirflowSkipException
 from airflow.models import BaseOperator
 from airflow.models.taskinstance import Context
 from airflow.providers.amazon.aws.hooks.s3 import S3Hook
@@ -112,6 +112,7 @@ class LittlepayS3ToGCSOperator(BaseOperator):
         self.report_path: str = report_path
         self.aws_conn_id: str = aws_conn_id
         self.gcp_conn_id: str = gcp_conn_id
+        self.exception: Exception = None
         self._source_object = None
         self._prior_artifact: PriorArtifact = None
 
@@ -131,13 +132,38 @@ class LittlepayS3ToGCSOperator(BaseOperator):
         return os.path.basename(self.source_path)
 
     def source_object(self) -> any:
-        if self._source_object is None:
-            self._source_object = (
-                self.s3_hook()
-                .get_key(bucket_name=self.source_bucket_name(), key=self.source_path)
-                .get()
-            )
+        if self.exception is None and self._source_object is None:
+            try:
+                self._source_object = (
+                    self.s3_hook()
+                    .get_key(
+                        bucket_name=self.source_bucket_name(), key=self.source_path
+                    )
+                    .get()
+                )
+            except Exception as e:
+                self.exception = e
+                logging.error(e)
+
         return self._source_object
+
+    def s3object_metadata(self) -> dict:
+        if self.source_object() is None:
+            return {
+                "Key": self.source_path,
+                "LastModified": None,
+                "ETag": None,
+                "Size": None,
+                "StorageClass": None,
+            }
+
+        return {
+            "Key": self.source_path,
+            "LastModified": self.source_object()["LastModified"].isoformat(),
+            "ETag": self.source_object()["ETag"].replace('"', '"'),
+            "Size": self.source_object()["ContentLength"],
+            "StorageClass": self.source_object().get("StorageClass"),
+        }
 
     def metadata(self) -> dict:
         return {
@@ -145,13 +171,7 @@ class LittlepayS3ToGCSOperator(BaseOperator):
             "instance": self.provider,
             "ts": self.ts,
             "s3bucket": self.source_bucket_name(),
-            "s3object": {
-                "Key": self.source_path,
-                "LastModified": self.source_object()["LastModified"].isoformat(),
-                "ETag": self.source_object()["ETag"].replace('"', '"'),
-                "Size": self.source_object()["ContentLength"],
-                "StorageClass": self.source_object().get("StorageClass"),
-            },
+            "s3object": self.s3object_metadata(),
         }
 
     def prior_artifact(self) -> PriorArtifact:
@@ -166,7 +186,8 @@ class LittlepayS3ToGCSOperator(BaseOperator):
 
     def exists(self) -> bool:
         return (
-            self.prior_artifact().s3object_metadata() is not None
+            self.source_object() is not None
+            and self.prior_artifact().s3object_metadata() is not None
             and self.source_object()["LastModified"].isoformat()
             == self.prior_artifact().s3object_metadata().get("LastModified")
             and self.source_object()["ETag"]
@@ -174,36 +195,38 @@ class LittlepayS3ToGCSOperator(BaseOperator):
         )
 
     def execute(self, context: Context) -> dict:
-        if self.entity not in LITTLEPAY_ENTITIES:
-            logging.warning("Entity is not in the list.")
-            raise AirflowSkipException
+        if self.entity.lower() not in LITTLEPAY_ENTITIES:
+            self.exception = f"File '{self.entity}' is not on the list."
+            logging.error(self.exception)
         elif not self.filename().endswith(".psv"):
-            logging.warning("File is not a psv type.")
-            raise AirflowSkipException
-        elif self.exists():
-            logging.info("File already downloaded.")
-            raise AirflowSkipException
+            self.exception = f"File '{self.filename()}' is not a psv type."
+            logging.error(self.exception)
+        else:
+            if self.exists():
+                logging.info("File already downloaded.")
+                raise AirflowSkipException
 
-        self.gcs_hook().upload(
-            bucket_name=self.destination_bucket_name(),
-            object_name=self.destination_path,
-            data=self.source_object()["Body"].read(),
-            mime_type=self.source_object()["ContentType"],
-            gzip=False,
-            metadata={
-                "PARTITIONED_ARTIFACT_METADATA": json.dumps(
-                    self.metadata(), default=str
+            if self.source_object() is not None:
+                self.gcs_hook().upload(
+                    bucket_name=self.destination_bucket_name(),
+                    object_name=self.destination_path,
+                    data=self.source_object()["Body"].read(),
+                    mime_type=self.source_object()["ContentType"],
+                    gzip=False,
+                    metadata={
+                        "PARTITIONED_ARTIFACT_METADATA": json.dumps(
+                            self.metadata(), default=str
+                        )
+                    },
                 )
-            },
-        )
 
         self.gcs_hook().upload(
             bucket_name=self.destination_bucket_name(),
             object_name=self.report_path,
             data=json.dumps(
                 {
-                    "success": True,
-                    "exception": None,
+                    "success": (self.exception is None),
+                    "exception": self.exception,
                     "prior": self.prior_artifact().s3object_metadata(),
                     "extract": self.metadata(),
                 },
@@ -222,6 +245,9 @@ class LittlepayS3ToGCSOperator(BaseOperator):
                 )
             },
         )
+
+        if self.exception is not None:
+            raise AirflowException(str(self.exception))
 
         return {
             "provider": self.provider,
