@@ -17,26 +17,26 @@ graph TB
     B --> C[Littlepay S3 Bucket]
     B2 --> C2[Enghouse Direct to GCS]
     D["Payment Processed (Received from Littlepay or Elavon)"] --> E[Elavon SFTP Server]
-    
+
     C --> F[sync_littlepay_v3 DAG]
     C2 --> H2[GCS: calitp-enghouse-raw]
     E --> G[sync_elavon DAG]
-    
+
     F --> H[GCS: calitp-payments-littlepay-raw-v3]
     G --> I[GCS: calitp-elavon-raw]
-    
+
     H --> J[parse_littlepay_v3 DAG]
     H2 --> J2[No parse needed]
     I --> K[parse_elavon DAG]
-    
+
     J --> L[GCS: calitp-payments-littlepay-parsed-v3]
     J2 --> L2[Data already in GCS]
     K --> M[GCS: calitp-elavon-parsed]
-    
+
     L --> N[create_external_tables DAG]
     L2 --> N
     M --> N
-    
+
     N --> O[BigQuery External Tables]
     O --> P[dbt Staging Models]
     P --> Q[dbt Intermediate Models]
@@ -106,7 +106,7 @@ Enghouse provides data directly to our GCS buckets via SFTP server (no intermedi
 **File Format (Enghouse GCS Raw):**
 
 ```
-gs://cal-itp-data-infra-enghouse-raw/tap/ventura/VENTURA_TAPtaps-2026-01-28.csv
+gs://calitp-enghouse-raw/tap/ventura/VENTURA_TAPtaps-2026-01-28.csv
 ```
 
 Data is delivered directly to GCS by Enghouse as CSV files. The schema differs significantly from Littlepay.
@@ -459,7 +459,7 @@ Let's trace a specific transaction through the entire pipeline! This exercise us
 In BigQuery, run:
 
 ```sql
-SELECT 
+SELECT
   littlepay_transaction_id,
   participant_id,
   transaction_date_time_pacific,
