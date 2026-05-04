@@ -51,7 +51,7 @@ Enghouse delivers data daily via SFTP server directly to our GCS bucket. This di
 
 **Implementation Details:**
 
-- Data is delivered directly to `gs://cal-itp-data-infra-enghouse-raw/` via SFTP
+- Data is delivered directly to `gs://calitp-enghouse-raw/` via SFTP
 - No sync DAG is needed (data arrives directly in GCS)
 - A daily parse DAG (`parse_enghouse`) converts the raw semicolon-delimited CSV files to JSONL.GZ in `gs://calitp-enghouse-parsed/`
 - External tables read from `gs://calitp-enghouse-parsed/` (the parsed bucket)
@@ -66,10 +66,10 @@ Enghouse delivers data daily via SFTP server directly to our GCS bucket. This di
 ### 1.1 Verify Raw Data in GCS
 
 1. Navigate to Google Cloud Storage
-2. Select the bucket `cal-itp-data-infra-enghouse-raw`
+2. Select the bucket `calitp-enghouse-raw`
 3. Select any table directory from the list, ex: `tap/`
 4. Select the directory of the agency whose sync task you are verifying, ex: `ventura/`
-5. You should see at least one file within that directory, ex: `cal-itp-data-infra-enghouse-raw/tap/ventura/VENTURA_TAPtaps-2025-12-14.csv`
+5. You should see at least one file within that directory, ex: `calitp-enghouse-raw/tap/ventura/VENTURA_TAPtaps-2025-12-14.csv`
 
 ## Step 2: Create Service Account
 
@@ -255,12 +255,12 @@ After the next scheduled run of the transform_warehouse DAG:
 
 ```sql
 -- Check staging table
-SELECT COUNT(*) 
+SELECT COUNT(*)
 FROM `cal-itp-data-infra.staging.stg_enghouse__taps`
 WHERE operator_id = '<enghouse-operator-id>'
 
 -- Check mart table
-SELECT 
+SELECT
   COUNT(*) as total_transactions,
 FROM `cal-itp-data-infra.mart_payments.fct_payments_rides_enghouse`
 WHERE operator_id = '<enghouse-operator-id>'
