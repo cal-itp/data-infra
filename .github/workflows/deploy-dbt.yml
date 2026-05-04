@@ -226,28 +226,41 @@ jobs:
           # runbook). Column-level docs from dbt have to land on every one
           # of those connections, not just the central warehouse connection,
           # so this step enumerates them via the Metabase API.
-          PAYMENTS_DBS=$(curl -fsS \
+          #
+          # We also capture each connection's dataset filter
+          # (dataset-filters-type + dataset-filters-patterns) so the sync
+          # step can scope dbt-metabase to exactly the schemas Metabase
+          # exposes on that connection. Per-agency configs differ — e.g.
+          # some have mart_benefits in their inclusion list, others don't —
+          # and dbt-metabase fails the whole sync whenever a requested
+          # schema isn't visible on the connection.
+          PAYMENTS_DBS_JSON=$(curl -fsS \
             -H "x-api-key: ${METABASE_API_KEY}" \
             "${METABASE_URL}/api/database" \
-            | jq -r '.data[] | select(.name | startswith("Payments - ")) | .name')
+            | jq -c '[.data[] | select(.name | startswith("Payments - ")) | {
+                name: .name,
+                filter_type: .details["dataset-filters-type"],
+                filter_patterns: .details["dataset-filters-patterns"]
+              }]')
 
-          if [ -z "${PAYMENTS_DBS}" ]; then
+          if [ "$(echo "${PAYMENTS_DBS_JSON}" | jq 'length')" = "0" ]; then
             echo "No 'Payments - *' databases found. Will sync only the central database."
           else
             echo "Discovered Payments databases:"
-            printf '  - %s\n' ${PAYMENTS_DBS}
+            echo "${PAYMENTS_DBS_JSON}" \
+              | jq -r '.[] | "  - \(.name) [filter_type=\(.filter_type // "<null>") patterns=\(.filter_patterns // "<null>")]"'
           fi
 
           {
-            echo "names<<EOF"
-            echo "${PAYMENTS_DBS}"
+            echo "json<<EOF"
+            echo "${PAYMENTS_DBS_JSON}"
             echo "EOF"
           } >> "${GITHUB_OUTPUT}"
 
       - name: Synchronize Metabase
         working-directory: warehouse
         env:
-          PAYMENTS_DBS: ${{ steps.payments-databases.outputs.names }}
+          PAYMENTS_DBS_JSON: ${{ steps.payments-databases.outputs.json }}
         run: |
           set -euo pipefail
 
@@ -275,19 +288,35 @@ jobs:
             echo "::warning::dbt-metabase sync failed for '${METABASE_DESTINATION_DATABASE}'"
           fi
 
-          # Per-agency Payments connections — restrict to the schemas exposed
-          # via dataset_filters_patterns on those connections (mart_payments,
-          # mart_benefits per the create-metabase-dashboards runbook). Loop is
+          # Per-agency Payments connections — scope dbt-metabase to the
+          # exact schemas each connection exposes via its dataset filter,
+          # read from the Metabase API. Keeps the sync correct as agency
+          # configs evolve (new schemas added, mart_benefits enabled or
+          # disabled per agency, etc.) without code changes. Loop is
           # partial-tolerant so one agency's outage doesn't block the rest.
-          if [ -n "${PAYMENTS_DBS}" ]; then
-            while IFS= read -r db; do
+          if [ -n "${PAYMENTS_DBS_JSON}" ] && [ "${PAYMENTS_DBS_JSON}" != "[]" ]; then
+            while IFS=$'\t' read -r db filter_type patterns; do
               [ -z "${db}" ] && continue
-              if ! sync_metabase_metadata "${db}" \
-                   --include-schemas=mart_payments,mart_benefits; then
+              case "${filter_type}" in
+                inclusion)
+                  args=(--include-schemas="${patterns}")
+                  ;;
+                exclusion)
+                  args=(--exclude-schemas="${patterns}")
+                  ;;
+                *)
+                  # No dataset filter on the connection — fall back to the
+                  # central-DB exclusion set. Unlikely for per-agency
+                  # connections but handled defensively.
+                  args=(--exclude-schemas=staging,payments)
+                  ;;
+              esac
+              if ! sync_metabase_metadata "${db}" "${args[@]}"; then
                 failed=1
                 echo "::warning::dbt-metabase sync failed for '${db}'"
               fi
-            done <<< "${PAYMENTS_DBS}"
+            done < <(echo "${PAYMENTS_DBS_JSON}" \
+              | jq -r '.[] | [.name, (.filter_type // ""), (.filter_patterns // "")] | @tsv')
           fi
 
           if [ "${failed}" -ne 0 ]; then
