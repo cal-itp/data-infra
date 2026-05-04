@@ -77,3 +77,9 @@ repos:
       - mdformat-gfm==0.3.5
       - mdformat-frontmatter
       - mdformat-footnote
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.5.0
+    hooks:
+    - id: detect-secrets
+      args: ['--baseline', '.secrets.baseline']
+      exclude: package.lock.json
