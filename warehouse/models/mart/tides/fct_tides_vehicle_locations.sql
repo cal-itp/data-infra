@@ -1,8 +1,18 @@
 {{ config(materialized='view') }}
 
+-- Upstream `key` is "almost unique" (documented unique_proportion at_least
+-- 0.999); TIDES requires location_ping_id strictly unique. `key` is composed
+-- of base64_url + location_timestamp + vehicle_id + ..., so those columns are
+-- all constant within a duplicate set and can't tie-break. `_extract_ts` is
+-- the upstream extract timestamp and differs across the duplicates, so pick
+-- the most-recently-extracted row per key.
 WITH source_vehicle_locations AS (
     SELECT *
     FROM {{ ref('fct_vehicle_locations') }}
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY `key`
+        ORDER BY _extract_ts DESC
+    ) = 1
 ),
 
 -- dim_provider_gtfs_data fans out: a single vehicle_positions feed can be
@@ -95,18 +105,6 @@ tides_vehicle_locations AS (
     FROM source_vehicle_locations AS vp
     INNER JOIN public_subfeed_agencies AS agencies
         USING (gtfs_dataset_key)
-),
-
--- TIDES requires location_ping_id strictly unique; the upstream key is
--- "almost unique" (unique_proportion at_least 0.999), so pick one canonical
--- row per id (most recent ping, then lex-smallest feed for determinism).
-deduped AS (
-    SELECT *
-    FROM tides_vehicle_locations
-    QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY location_ping_id
-        ORDER BY event_timestamp DESC, base64_url ASC
-    ) = 1
 )
 
-SELECT * FROM deduped
+SELECT * FROM tides_vehicle_locations
