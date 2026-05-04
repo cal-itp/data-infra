@@ -1,6 +1,8 @@
+from azure.communication.email import EmailClient
+
 from airflow.configuration import conf
 from airflow.hooks.base import BaseHook
-from azure.communication.email import EmailClient
+
 
 def send_email(
     to,

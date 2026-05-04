@@ -643,6 +643,33 @@ wheels = [
 ]
 
 [[package]]
+name = "azure-communication-email"
+version = "1.1.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "azure-core" },
+    { name = "isodate" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/97/de/f71191ead5e778a7d8939744977a049f796f6fb6549847c667fad373605e/azure_communication_email-1.1.0.tar.gz", hash = "sha256:6a4af8281024327c3ab18a4996919069a99a69aad3a19c40f7852a6682493327", size = 55546, upload-time = "2025-10-17T20:30:23.349Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/97/fe/9bd1028853c4b351c756ba4acc39ef5b5914a3452ebe2df0b8ddd6051114/azure_communication_email-1.1.0-py3-none-any.whl", hash = "sha256:9212153f21cf7e68734c32ebfe8702b43398bd01df2dddb0ca52cd5a8bbd5024", size = 64170, upload-time = "2025-10-17T20:30:24.829Z" },
+]
+
+[[package]]
+name = "azure-core"
+version = "1.40.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "requests" },
+    { name = "typing-extensions" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ce/d9/6f5972b44761277394527a3a76af5ae2ef82fc5f20ce351abf0c826eca67/azure_core-1.40.0.tar.gz", hash = "sha256:ecf5b6ddf2564471fae9d576147b7e77a4da285958b2d9f4fd6c3af104f3e9d7", size = 380057, upload-time = "2026-05-01T00:59:45.488Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ec/c9/25edc67692fb17523c7d29c73898be649b4d3c7ae13cc0f74f5c91938022/azure_core-1.40.0-py3-none-any.whl", hash = "sha256:7f3ea02579b1bb1d34e45043423b650621d11d7c2ea3b05e5554010080b78dfd", size = 220450, upload-time = "2026-05-01T00:59:47.17Z" },
+]
+
+[[package]]
 name = "babel"
 version = "2.17.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1106,6 +1133,7 @@ dependencies = [
     { name = "apache-airflow-providers-cncf-kubernetes" },
     { name = "apache-airflow-providers-google" },
     { name = "astronomer-cosmos" },
+    { name = "azure-communication-email" },
     { name = "beautifulsoup4" },
     { name = "boto3" },
     { name = "ckanapi" },
@@ -1138,6 +1166,7 @@ requires-dist = [
     { name = "apache-airflow-providers-cncf-kubernetes", specifier = "==10.1.0" },
     { name = "apache-airflow-providers-google", specifier = "==15.1.0" },
     { name = "astronomer-cosmos", specifier = "==1.9.0" },
+    { name = "azure-communication-email", specifier = ">=1.0.0" },
     { name = "beautifulsoup4", specifier = "==4.12.3" },
     { name = "boto3", specifier = "==1.41.2" },
     { name = "ckanapi", specifier = ">=4.8" },
@@ -3174,6 +3203,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/ef/4c/5dd1d8af08107f88c7f741ead7a40854b8ac24ddf9ae850afbcf698aa552/ipython_pygments_lexers-1.1.1.tar.gz", hash = "sha256:09c0138009e56b6854f9535736f4171d855c8c08a563a0dcd8022f78355c7e81", size = 8393, upload-time = "2025-01-17T11:24:34.505Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/d9/33/1f075bf72b0b747cb3288d011319aaf64083cf2efef8354174e3ed4540e2/ipython_pygments_lexers-1.1.1-py3-none-any.whl", hash = "sha256:a9462224a505ade19a605f71f8fa63c2048833ce50abc86768a0d81d876dc81c", size = 8074, upload-time = "2025-01-17T11:24:33.271Z" },
+]
+
+[[package]]
+name = "isodate"
+version = "0.7.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/54/4d/e940025e2ce31a8ce1202635910747e5a87cc3a6a6bb2d00973375014749/isodate-0.7.2.tar.gz", hash = "sha256:4cd1aa0f43ca76f4a6c6c0292a85f40b35ec2e43e315b59f06e6d32171a953e6", size = 29705, upload-time = "2024-10-08T23:04:11.5Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/15/aa/0aca39a37d3c7eb941ba736ede56d689e7be91cab5d9ca846bde3999eba6/isodate-0.7.2-py3-none-any.whl", hash = "sha256:28009937d8031054830160fce6d409ed342816b543597cece116d966c6d99e15", size = 22320, upload-time = "2024-10-08T23:04:09.501Z" },
 ]
 
 [[package]]
