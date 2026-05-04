@@ -112,3 +112,38 @@ models:
         description: '{{ doc("column_base64_url") }}'
       - name: gtfs_dataset_key
         description: '{{ doc("gtfs_schedule_gtfs_dataset_key") }}'
+
+exposures:
+  - name: california_tides
+    type: application
+    maturity: low
+    url: https://tides-transit.org/main/
+    description: >
+      Cal-ITP TIDES (Transit Integrated Data Exchange Specification) tables,
+      reshaped from GTFS-RT and joined to GTFS Schedule. Published as a
+      statewide TIDES product for analytics and TIDES-ecosystem tooling.
+
+    depends_on:
+      - ref("fct_tides_vehicle_locations")
+
+    owner:
+      email: hello@calitp.org
+
+    meta:
+      methodology: |
+        Cal-ITP collects GTFS-RT vehicle position and trip update messages
+        statewide and reshapes them into the open TIDES specification for
+        analytics use. See https://tides-transit.org for the spec.
+      destinations:
+        - type: gcs
+          format: parquet
+          compression: snappy
+          prefix: tides/v1
+          resources:
+            fct_tides_vehicle_locations:
+              partition_by:
+                - gtfs_dataset_key
+                - service_date
+              description: |
+                TIDES vehicle_locations table. Schema:
+                https://github.com/TIDES-transit/TIDES/blob/main/spec/vehicle_locations.schema.json
