@@ -46,11 +46,11 @@ construct_base64_url AS (
                         -- if there are multiple query parameters, we leave the question mark, remove ampersand
                         -- so example.com/gtfs?auth=key&p2=v2 becomes example.com/gtfs?p2=v2
                         WHEN REGEXP_CONTAINS(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}\&")
-                            THEN {{ to_url_safe_base64('REGEXP_REPLACE(uri, r"[\w]*\=\{\{[\w\s]*\}\}\&","")') }}
+                            THEN {{ to_url_safe_base64('REGEXP_REPLACE(uri, r"[\\w]*\\=\\{\\{[\\w\\s]*\\}\\}\\&","")') }}
                         -- if only one query parameter, remove the question mark
                         -- so example.com/gtfs?auth=key becomes example.com/gtfs
                         WHEN REGEXP_CONTAINS(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}$")
-                            THEN {{ to_url_safe_base64('REGEXP_REPLACE(uri, r"\?[\w]*\=\{\{[\w\s]*\}\}$","")') }}
+                            THEN {{ to_url_safe_base64('REGEXP_REPLACE(uri, r"\\?[\\w]*\\=\\{\\{[\\w\\s]*\\}\\}$","")') }}
                         ELSE {{ to_url_safe_base64('uri') }}
                     END
             ELSE {{ to_url_safe_base64('pipeline_url') }}
