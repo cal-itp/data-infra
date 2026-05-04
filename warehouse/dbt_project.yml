@@ -264,3 +264,5 @@ data_tests:
     mart:
       payments:
         +enabled: true
+      tides:
+        +enabled: true

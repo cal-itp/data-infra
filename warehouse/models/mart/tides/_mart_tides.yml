@@ -73,7 +73,7 @@ models:
               arguments:
                 values: ['Incoming at', 'Stopped at', 'In transit to']
                 config:
-                  where: '__rt_sampled__ AND current_status IS NOT NULL'
+                  where: '__rt_sampled__'
       - name: latitude
         description: WGS-84 degrees north; out-of-bounds values are NULLed.
       - name: longitude
@@ -100,7 +100,7 @@ models:
               arguments:
                 values: ['In service', 'Deadhead', 'Layover', 'Pullout', 'Pullin', 'Extra Pullout', 'Extra Pullin', 'Deadhead To Layover', 'Deadhead From Layover', 'Other not in service']
                 config:
-                  where: '__rt_sampled__ AND trip_type IS NOT NULL'
+                  where: '__rt_sampled__'
       - name: schedule_relationship
         description: |
           TIDES enum is stop-level (Scheduled / Skipped / Added / Missing);
