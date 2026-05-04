@@ -4,20 +4,31 @@ Local validator that exports a sample of a Cal-ITP TIDES table to parquet and ru
 
 Lives outside the dbt project on purpose: this is a tooling concern, not a warehouse model.
 
+## Prerequisites
+
+The validator needs a local clone of the upstream TIDES spec repo so it can read the JSON schema files. Clone it anywhere (a sibling to `data-infra/` is fine):
+
+```bash
+git clone https://github.com/TIDES-transit/TIDES.git
+```
+
+The `--schema` flag below points at the schema file inside that clone. The schemas currently used live at `<TIDES-clone>/spec/vehicle_locations.schema.json` and `<TIDES-clone>/spec/trips_performed.schema.json`. The harness is pinned to the `main` branch of the spec; bump the clone with `git pull` to pick up newer schema versions.
+
 ## Setup
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
+cd validation/tides
+uv sync
 ```
+
+`uv sync` reads `pyproject.toml` (and `uv.lock` if present) and creates a `.venv/` in this directory.
 
 ## Usage
 
 Validate vehicle_locations for one service date in your sandbox:
 
 ```bash
-python validate_tides.py \
+uv run validate_tides.py \
   --dataset christopher_mart_tides \
   --table fct_tides_vehicle_locations \
   --schema <path-to-your-TIDES-clone>/spec/vehicle_locations.schema.json \
@@ -36,9 +47,7 @@ Exit code is 0 on validation success, 1 on failure.
 
 ## TIDES schemas
 
-This validator points at TIDES schema files in the upstream spec repo (`https://github.com/TIDES-transit/TIDES`). Pass `--schema <path-to-your-TIDES-clone>/spec/<table>.schema.json`.
-
-Currently supported schemas:
+Currently supported schemas (under `<TIDES-clone>/spec/`):
 
 - `vehicle_locations.schema.json`
 - `trips_performed.schema.json` (added in PR 3)
@@ -54,5 +63,5 @@ Currently supported schemas:
 ## Future
 
 - Wrap the export-and-validate flow in an Airflow DAG so each daily public-bucket parquet write is validated automatically (file follow-up issue once #4700 lands the public bucket).
-- Add a Frictionless data-package descriptor that references both vehicle_locations.parquet and trips_performed.parquet so cross-table foreign-key checks (vehicle_locations.trip_id_performed → trips_performed.trip_id_performed) run as part of the validation.
+- Add a Frictionless data-package descriptor that references both vehicle_locations.parquet and trips_performed.parquet so cross-table foreign-key checks (vehicle_locations.trip_id_performed -> trips_performed.trip_id_performed) run as part of the validation.
 - Hook into the dbt build via a `post-hook` on the TIDES models so every `dbt run` of TIDES output gets a validation pass.
