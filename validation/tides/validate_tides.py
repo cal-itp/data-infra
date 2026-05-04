@@ -36,8 +36,6 @@ INTERNAL_COLUMNS = {
     "dt",
     "base64_url",
     "gtfs_dataset_key",
-    "organization_name",
-    "organization_ntd_id",
 }
 
 
@@ -47,7 +45,6 @@ def export_sample(
     table: str,
     service_date: str,
     output_path: Path,
-    organization: str | None = None,
     row_limit: int | None = None,
 ) -> int:
     """Export one service_date of a TIDES table to local parquet.
@@ -55,18 +52,11 @@ def export_sample(
     Drops Cal-ITP internal columns to match what the public bucket export
     produces. Returns row count of the exported file.
 
-    `organization` filters to a specific agency by name (substring match,
-    case-insensitive) before dropping the internal columns. Useful for keeping
-    sample exports small enough to fit in memory.
     `row_limit` caps the export at N rows after sorting by event/start time
-    for determinism.
+    for determinism. Useful for keeping sample exports small enough to fit
+    in memory.
     """
     fq = f"`{client.project}.{dataset}.{table}`"
-    org_predicate = (
-        f"AND LOWER(organization_name) LIKE '%{organization.lower()}%'"
-        if organization
-        else ""
-    )
     sort_col = (
         "event_timestamp" if "vehicle_locations" in table else "actual_trip_start"
     )
@@ -76,7 +66,7 @@ def export_sample(
     sql = f"""
     SELECT * EXCEPT ({', '.join(sorted(INTERNAL_COLUMNS))})
     FROM {fq}
-    WHERE service_date = DATE '{service_date}' {org_predicate}{limit_clause}
+    WHERE service_date = DATE '{service_date}'{limit_clause}
     """
     job = client.query(sql)
     df = job.to_dataframe()
@@ -174,12 +164,6 @@ def main() -> int:
         "--service-date", required=True, help="Service date to export, YYYY-MM-DD"
     )
     p.add_argument(
-        "--organization",
-        default=None,
-        help="Filter to one agency by name substring (case-insensitive). "
-        "Useful for keeping sample exports manageable.",
-    )
-    p.add_argument(
         "--row-limit",
         type=int,
         default=None,
@@ -201,7 +185,6 @@ def main() -> int:
 
     print(
         f"Exporting {args.dataset}.{args.table} for {args.service_date}"
-        f"{f' (org=' + args.organization + ')' if args.organization else ''}"
         f"{f' (limit=' + str(args.row_limit) + ')' if args.row_limit else ''}..."
     )
     row_count = export_sample(
@@ -210,7 +193,6 @@ def main() -> int:
         args.table,
         args.service_date,
         parquet_path,
-        organization=args.organization,
         row_limit=args.row_limit,
     )
     print(f"Wrote {row_count:,} rows to {parquet_path}")
