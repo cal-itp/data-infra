@@ -285,3 +285,15 @@ resource "google_storage_bucket" "calitp-analysis-staging" {
     main_page_suffix = "index.html"
   }
 }
+
+resource "google_storage_bucket" "calitp-tides-staging" {
+  default_event_based_hold    = "false"
+  force_destroy               = "true"
+  location                    = "US-WEST2"
+  name                        = "calitp-tides-staging"
+  project                     = "cal-itp-data-infra-staging"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
