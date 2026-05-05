@@ -40,6 +40,12 @@ public_subfeed_keys AS (
       AND vehicle_positions_gtfs_dataset_key IS NOT NULL
 ),
 
+-- Same publication-key narrowing as fct_tides_vehicle_locations.
+publication_keys AS (
+    SELECT gtfs_dataset_key
+    FROM {{ ref('tides_publication_keys') }}
+),
+
 tides_trips_performed AS (
     SELECT
         o.service_date,
@@ -86,6 +92,8 @@ tides_trips_performed AS (
     FROM observed o
     INNER JOIN public_subfeed_keys
         ON o.vp_gtfs_dataset_key = public_subfeed_keys.gtfs_dataset_key
+    INNER JOIN publication_keys
+        ON o.vp_gtfs_dataset_key = publication_keys.gtfs_dataset_key
     LEFT JOIN scheduled s
         ON s.trip_instance_key = o.trip_instance_key
     LEFT JOIN vehicle_per_trip v
