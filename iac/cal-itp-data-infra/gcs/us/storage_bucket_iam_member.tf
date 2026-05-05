@@ -370,12 +370,6 @@ resource "google_storage_bucket_iam_member" "tfer--test-calitp-elavon" {
   role   = "roles/storage.legacyObjectReader"
 }
 
-resource "google_storage_bucket_iam_member" "tfer--test-calitp-elavon-parsed" {
-  bucket = "b/test-calitp-elavon-parsed"
-  member = "projectEditor:cal-itp-data-infra"
-  role   = "roles/storage.legacyObjectOwner"
-}
-
 resource "google_storage_bucket_iam_member" "tfer--test-calitp-gtfs-config" {
   bucket = "b/test-calitp-gtfs-config"
   member = "projectOwner:cal-itp-data-infra"

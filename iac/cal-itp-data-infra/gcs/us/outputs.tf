@@ -234,10 +234,6 @@ output "google_storage_bucket_acl_tfer--test-calitp-dbt-python-models_id" {
   value = google_storage_bucket_acl.tfer--test-calitp-dbt-python-models.id
 }
 
-output "google_storage_bucket_acl_tfer--test-calitp-elavon-parsed_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-elavon-parsed.id
-}
-
 output "google_storage_bucket_acl_tfer--test-calitp-elavon_id" {
   value = google_storage_bucket_acl.tfer--test-calitp-elavon.id
 }
@@ -604,10 +600,6 @@ output "google_storage_bucket_iam_binding_tfer--test-calitp-airtable_id" {
 
 output "google_storage_bucket_iam_binding_tfer--test-calitp-dbt-python-models_id" {
   value = google_storage_bucket_iam_binding.tfer--test-calitp-dbt-python-models.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-elavon-parsed_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-elavon-parsed.id
 }
 
 output "google_storage_bucket_iam_binding_tfer--test-calitp-elavon_id" {
@@ -986,10 +978,6 @@ output "google_storage_bucket_iam_member_tfer--test-calitp-dbt-python-models_id"
   value = google_storage_bucket_iam_member.tfer--test-calitp-dbt-python-models.id
 }
 
-output "google_storage_bucket_iam_member_tfer--test-calitp-elavon-parsed_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-elavon-parsed.id
-}
-
 output "google_storage_bucket_iam_member_tfer--test-calitp-elavon_id" {
   value = google_storage_bucket_iam_member.tfer--test-calitp-elavon.id
 }
@@ -1364,10 +1352,6 @@ output "google_storage_bucket_iam_policy_tfer--test-calitp-airtable_id" {
 
 output "google_storage_bucket_iam_policy_tfer--test-calitp-dbt-python-models_id" {
   value = google_storage_bucket_iam_policy.tfer--test-calitp-dbt-python-models.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-elavon-parsed_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-elavon-parsed.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--test-calitp-elavon_id" {
@@ -1990,14 +1974,6 @@ output "google_storage_bucket_tfer--test-calitp-dbt-python-models_self_link" {
   value = google_storage_bucket.tfer--test-calitp-dbt-python-models.self_link
 }
 
-output "google_storage_bucket_tfer--test-calitp-elavon-parsed_name" {
-  value = google_storage_bucket.tfer--test-calitp-elavon-parsed.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-elavon-parsed_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-elavon-parsed.self_link
-}
-
 output "google_storage_bucket_tfer--test-calitp-elavon_name" {
   value = google_storage_bucket.tfer--test-calitp-elavon.name
 }
@@ -2500,10 +2476,6 @@ output "google_storage_default_object_acl_tfer--test-calitp-airtable_id" {
 
 output "google_storage_default_object_acl_tfer--test-calitp-dbt-python-models_id" {
   value = google_storage_default_object_acl.tfer--test-calitp-dbt-python-models.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-elavon-parsed_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-elavon-parsed.id
 }
 
 output "google_storage_default_object_acl_tfer--test-calitp-elavon_id" {

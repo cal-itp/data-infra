@@ -238,10 +238,6 @@ resource "google_storage_bucket_acl" "tfer--test-calitp-elavon" {
   bucket = "test-calitp-elavon"
 }
 
-resource "google_storage_bucket_acl" "tfer--test-calitp-elavon-parsed" {
-  bucket = "test-calitp-elavon-parsed"
-}
-
 resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-config" {
   bucket = "test-calitp-gtfs-config"
 }
