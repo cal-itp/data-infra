@@ -26,6 +26,13 @@ public_subfeed_keys AS (
       AND vehicle_positions_gtfs_dataset_key IS NOT NULL
 ),
 
+-- Narrows the public-subfeed set to the MVP publication list (Hermosa Beach
+-- traversing operators). Additive on top of the public-subfeed filter above.
+publication_keys AS (
+    SELECT gtfs_dataset_key
+    FROM {{ ref('tides_publication_keys') }}
+),
+
 tides_vehicle_locations AS (
     SELECT
         vp.key AS location_ping_id,
@@ -94,6 +101,7 @@ tides_vehicle_locations AS (
         vp.gtfs_dataset_key
     FROM source_vehicle_locations AS vp
     INNER JOIN public_subfeed_keys USING (gtfs_dataset_key)
+    INNER JOIN publication_keys USING (gtfs_dataset_key)
 )
 
 SELECT * FROM tides_vehicle_locations
