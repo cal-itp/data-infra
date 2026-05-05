@@ -41,8 +41,8 @@ stops AS (
 
     FROM {{ ref('fct_daily_scheduled_stops') }}
     WHERE service_date
-        -- do microbatch lookback + 1 to account for 1-day offset between UTC and Pacific dates
-        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS")+1, data_earliest_start=var("GTFS_RT_START")) }}
+        -- subtract 1 at the end to account for 1-day offset between UTC and Pacific dates (always want one service day earlier than the UTC lookback day would be)
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_START")) }} - 1
             AND {{ ranged_incremental_max_date() }}
 ),
 
