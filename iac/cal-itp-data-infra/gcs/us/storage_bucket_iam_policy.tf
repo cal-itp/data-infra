@@ -2329,43 +2329,6 @@ resource "google_storage_bucket_iam_policy" "tfer--test-calitp-dbt-python-models
 POLICY
 }
 
-resource "google_storage_bucket_iam_policy" "tfer--test-calitp-elavon" {
-  bucket = "b/test-calitp-elavon"
-
-  policy_data = <<POLICY
-{
-  "bindings": [
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketReader"
-    },
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectReader"
-    }
-  ]
-}
-POLICY
-}
-
 resource "google_storage_bucket_iam_policy" "tfer--test-calitp-gtfs-config" {
   bucket = "b/test-calitp-gtfs-config"
 
