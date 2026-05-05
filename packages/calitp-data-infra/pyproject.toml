@@ -17,6 +17,9 @@ typing-extensions = ">=3.10.0.2"
 gcsfs = "!=2022.7.1"
 google-api-core = "^2.24.1"
 google-cloud-secret-manager = "^2.23.1"
+aiohttp = "^3.10.11"
+protobuf = "^5.29.6"
+pyasn1 = "^0.6.3"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.1"
