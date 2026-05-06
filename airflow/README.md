@@ -2,7 +2,6 @@
 
 The following folder contains the project level directory for all our [Apache Airflow](https://airflow.apache.org/) [DAGs](https://airflow.apache.org/docs/apache-airflow/stable/core-concepts/dags.html). Airflow is an orchestration tool that we use to manage our raw data ingest. Airflow DAG tasks are scheduled at regular intervals to perform data processing steps, like unzipping raw GTFS zipfiles and writing the contents out to Google Cloud Storage.
 
-
 ## Local Development
 
 This project uses [composer-local-dev](https://github.com/GoogleCloudPlatform/composer-local-dev) to run DAGs locally.
@@ -12,41 +11,41 @@ In order to run most DAGs, you will need to follow a few setup steps.
 Login with `gcloud`:
 
 ```bash
-$ gcloud auth application-default login --login-config=../iac/login.json
+gcloud auth application-default login --login-config=../iac/login.json
 ```
 
 Install uv dependencies inside the warehouse and compile dbt:
 
 ```bash
-$ cd ../warehouse
-$ uv sync
-$ uv run dbt deps
-$ uv run dbt compile --target staging
+cd ../warehouse
+uv sync
+uv run dbt deps
+uv run dbt compile --target staging
 ```
 
 Install dependencies for airflow:
 
 ```bash
-$ cd ../airflow
-$ uv sync
+cd ../airflow
+uv sync
 ```
 
 Setup composer environment:
 
 ```bash
-$ make setup
+make setup
 ```
 
 Synchronize the environment files:
 
 ```bash
-$ make sync
+make sync
 ```
 
 Start the reactor (this also runs `make setup` and `make sync`):
 
 ```bash
-$ make start
+make start
 ```
 
 After a loading period, the Airflow UI will become available at [`http://localhost:8080`](http://localhost:8080).
@@ -54,7 +53,7 @@ After a loading period, the Airflow UI will become available at [`http://localho
 When setting up a new environment, you may want to create Airflow pools:
 
 ```bash
-$ make pools
+make pools
 ```
 
 If you're running any DAGs that require secrets or service-specific connection values, you may need to set those in the `Connections` tab in Airflow.
@@ -87,7 +86,6 @@ docker push ghcr.io/cal-itp/data-infra/gtfs-schedule-validator:development
 
 - If a task is producing errors but not producing complete logs for troubleshooting, or if it's reporting a memory issue, you may need to increase the RAM given by default to the Docker virtual machine that Airflow runs on. In Docker Desktop this setting can be accessed via the Preferences -> Advanced menu, and requires a restart of the VM to take effect.
 
-
 ## Deployment
 
 Airflow deployment is managed automatically by Terraform, automated by Github Actions. If you manually deploy Airflow, Terraform will delete the deployment the next time it applies a plan.
@@ -97,7 +95,6 @@ Airflow deployment is managed automatically by Terraform, automated by Github Ac
 - Upgrades to Airflow/Composer versions are perfomed by editing the `config.software_config.image_version` value in `environment.tf`.
 - The Docker containers used by `PodOperator` DAGs are built when a PR is merged into the `main` branch. More information can be found in the respective image READMEs.
 - Environment variables for each environment are set via `.<environment>.env` files, (e.g., staging variables are in `.staging.env`).
-
 
 ## Structure
 
@@ -117,7 +114,6 @@ If a DAG contains a `METADATA.yml` file, it uses gusty. Each DAG folder contains
 
 dbt dags are run using Cosmos, which turns a set of dbt models into a graph.
 
-
 ## Running automated tests
 
 Each DAG for this project should have a corresponding test in the `tests/dags` folder. Tests are run from the command line and require a local installation of airflow to function.
@@ -126,25 +122,24 @@ Each DAG for this project should have a corresponding test in the `tests/dags` f
 2. Fill in requested credentials
 3. `uv run pytest`
 
-
 You can specify which tests you want to run by adding them after the `pytest` command.
 
 To run all tests files from a specific path, add the path like this:
 
 ```bash
-$ uv run pytest tests/scripts
+uv run pytest tests/scripts
 ```
 
 To run a specific test file, add the file like this:
 
 ```bash
-$ uv run pytest tests/scripts/test_gtfs_rt_parser.py
+uv run pytest tests/scripts/test_gtfs_rt_parser.py
 ```
 
 To run a specific test within a test file, you can add like this:
 
 ```bash
-$ uv run pytest tests/scripts/test_gtfs_rt_parser.py::TestGtfsRtParser::test_no_vehicle_positions_for_date
+uv run pytest tests/scripts/test_gtfs_rt_parser.py::TestGtfsRtParser::test_no_vehicle_positions_for_date
 ```
 
 We use [pytest-recording](https://github.com/kiwicom/pytest-recording) to record and replay HTTP traffic (the flow of data exchanged between a client and a web server).
@@ -158,18 +153,17 @@ To use VCR cassettes in your tests:
     def test_execute():
   ```
 
-2. Run `pytest` using `--record-mode=once`.
+1. Run `pytest` using `--record-mode=once`.
 
   ```bash
-  $ uv run pytest tests/operators/test_airtable_to_gcs_operator.py::TestAirtableToGCSOperator --record-mode=once
+  uv run pytest tests/operators/test_airtable_to_gcs_operator.py::TestAirtableToGCSOperator --record-mode=once
   ```
 
 If you need to rewrite VCR cassettes, use `--record-mode=rewrite`:
 
 ```bash
-$ uv run pytest tests/scripts/test_gtfs_rt_parser.py::TestGtfsRtParser::test_no_vehicle_positions_for_date --record-mode=rewrite
+uv run pytest tests/scripts/test_gtfs_rt_parser.py::TestGtfsRtParser::test_no_vehicle_positions_for_date --record-mode=rewrite
 ```
-
 
 ## Testing Changes on Staging
 
@@ -179,14 +173,12 @@ Changes applied only to Staging can be overwride at any time, whenever a PR is m
 
 So, before applying your changes, inform on `#data-infra` channel in the Cal-ITP Slack.
 
-
 ### Apply automaticaly via staging branch
 
   1. Create a new branch starting with `staging/` (for example: `staging/my-changes`).
   2. Make your changes and push to Github.
   3. Visualize the progress of the workflow applying the changes through Terraform on [Github Actions](https://github.com/cal-itp/data-infra/actions).
   4. Once it is completed, you can test your changes on [Airflow Staging](https://console.cloud.google/composer/environments/detail/us-west2/calitp-staging-composer).
-
 
 ### Manually apply
 
@@ -197,11 +189,9 @@ So, before applying your changes, inform on `#data-infra` channel in the Cal-ITP
   5. Run `terraform apply` to apply your changes
   6. Once it completes, you can test your changes on [Airflow Staging](https://console.cloud.google/composer/environments/detail/us-west2/calitp-staging-composer).
 
-
 ## Deploying Changes to Production
 
-We have a [GitHub Action](../.github/workflows/deploy-airflow.yml) that runs when PRs touching this directory merge to the `main` branch. The GitHub Action updates the requirements sourced from [requirements.txt](./requirements.txt) and syncs the [DAGs](./dags) and [plugins](./plugins) directories to the bucket that Composer watches for code/data to parse. As of 2025-07-16, this bucket is `calitp-composer` on production and `calitp-staging-composer` on staging.
-
+We have a [GitHub Action](../.github/workflows/composer-apply-files.yml) that runs when PRs touching this directory merge to the `main` branch. The GitHub Action updates the requirements sourced from [requirements.txt](./requirements.txt) and syncs the [DAGs](./dags) and [plugins](./plugins) directories to the bucket that Composer watches for code/data to parse. As of 2025-07-16, this bucket is `calitp-composer` on production and `calitp-staging-composer` on staging.
 
 ## Secrets
 

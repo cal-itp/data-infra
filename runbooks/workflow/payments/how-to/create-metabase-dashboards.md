@@ -48,7 +48,7 @@ Each agency needs a dedicated Metabase "Database" connection that uses their ser
 
 ### 1.1 Add Database
 
-1. Log into [Metabase](https://dashboards.calitp.org) as administrator
+1. Log into [Metabase](https://metabase.dds.dot.ca.gov) as administrator
 2. Click Settings (gear icon) → **Admin settings**
 3. Navigate to **Databases** tab
 4. Click **Add database** (top right)
@@ -213,7 +213,7 @@ This is the most time-consuming step. Every question must be updated to use the 
 
 For **each question** in the duplicated dashboard:
 
-#### For GUI-Based Questions:
+#### For GUI-Based Questions
 
 1. Open the question (click on it)
 2. Click **Edit** (pencil icon, top right)
@@ -223,7 +223,7 @@ For **each question** in the duplicated dashboard:
 4. Reconfigure the question contents based on the source question to ensure configuration matches
 5. Click **Save** → **Replace original question**
 
-#### For SQL-Based Questions:
+#### For SQL-Based Questions
 
 1. Open the question
 2. Click **Edit**
@@ -282,9 +282,9 @@ The `Time Window` filter should already exist. Configure it to work with all que
 - You can create a test user account by simply adding `+test` to your primary email account (ex. `sara@gmail.com` --> `sara+test@gmail.com`)
 - This allows you to login in as a different user in Metabase, but still receive email notifications to your primary email address
 
-2. Add the appropriate permission group (and only that permission group) to your new test user account in `Admin Settings` --> `People`
-3. Log in as this new test user. When you log in, you should only see the database and collection for the agency that you are testing - you should not see any other databases, collections, questions, etc.
-4. You should only be able to view the agency's collection, not edit
+1. Add the appropriate permission group (and only that permission group) to your new test user account in `Admin Settings` --> `People`
+2. Log in as this new test user. When you log in, you should only see the database and collection for the agency that you are testing - you should not see any other databases, collections, questions, etc.
+3. You should only be able to view the agency's collection, not edit
 
 ### 7.3 Verify Row-Level Security
 

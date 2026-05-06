@@ -4,20 +4,18 @@ Many services and websites are deployed as part of the Cal-ITP ecosystem, mainta
 
 With the exception of Airflow, which is [managed via Google Cloud Composer](https://github.com/cal-itp/data-infra/tree/main/airflow#upgrading-airflow-itself), changes to the services discussed here are deployed via CI/CD processes that run automatically when new code is merged to the relevant Cal-ITP repository. These CI/CD processes are not all identical - different services have different testing steps that run when a pull request is opened against the services's code. Some services undergo a full test deployment when a PR is opened, some report the changes that a subject [Helm chart](https://helm.sh/docs/topics/charts/) will undergo upon merge, and some just perform basic linting.
 
-READMEs describing the individual testing and deployment process for each service are linked in the below table, and [the CI README](https://github.com/cal-itp/data-infra/tree/main/ci/README.md) provides some more general context for Kubernetes-based deployments. Many services are monitored via Sentry, discussed in [a later section](#error-monitoring-through-sentry).
+READMEs describing the individual testing and deployment process for each service are linked in the below table, and [the CI README](https://github.com/cal-itp/data-infra/tree/main/ci/README.md) provides some more general context for Kubernetes-based deployments.
 
-| Name              | Function                                                                                                                                                                                 | URL                                                                                       | Source code and README (if present)                                                                 | K8s namespace      | Development/test environment?    | Service Type                   |
-| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------ | -------------------------------- | ------------------------------ |
-| Airflow           | General orchestation/automation platform; downloads non-GTFS Realtime data and orchestrates data transformations outside of dbt; executes stateless jobs such as dbt and data publishing | https://b2062ffca77d44a28b4e05f8f5bf4996-dot-us-west2.composer.googleusercontent.com/home | https://github.com/cal-itp/data-infra/tree/main/airflow                                             | n/a                | Yes (local)                      | Infrastructure / Ingestion     |
-| BigQuery          | Data warehouse used for data modeling and analysis (managed via Google Cloud Composer)                                                                                                   | https://console.cloud.google.com/bigquery?project=cal-itp-data-infra                      | https://github.com/cal-itp/data-infra/tree/main/warehouse (infra managed via Google Cloud Composer) | n/a                | Yes (cal-itp-data-infra-staging) | Infrastructure                 |
-| Cal-ITP Docs Site | Public-facing documentation for various Cal-ITP repositories, services, and related technical resources                                                                                  | https://docs.calitp.org                                                                   | https://github.com/cal-itp/data-infra/tree/main/docs                                                | n/a                | Yes (Netlify deploy on PRs)      | Documentation                  |
-| Dask              | Parallelization infrastructure used by JupyerHub and Prometheus                                                                                                                          | n/a                                                                                       | https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/dask                         | dask               | No                               | Infrastructure                 |
-| Grafana           | Application observability (i.e. monitoring and alerting on metrics)                                                                                                                      | https://monitoring.calitp.org                                                             | https://github.com/JarvusInnovations/cluster-template/tree/develop/k8s-common/grafana (via hologit) | monitoring-grafana | No                               | Infrastructure                 |
-| GTFS-RT Archiver  | Downloads GTFS Realtime data (more rapidly than Airflow can handle)                                                                                                                      | n/a                                                                                       | https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver-v3                        | gtfs-rt-v3         | Yes (gtfs-rt-v3-test)            | Ingestion                      |
-| JupyterHub        | Kubernetes-driven Jupyter workspace provider                                                                                                                                             | https://jupyterhub.dds.dot.ca.gov                                                         | https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/jupyterhub                   | jupyterhub         | No                               | Analysis                       |
-| Metabase          | Web-hosted BI tool                                                                                                                                                                       | https://metabase.dds.dot.ca.gov                                                           | https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/metabase                     | metabase           | Yes (metabase-test)              | Analysis                       |
-| Netlify           | Web publishing infrastructure for Cal-ITP Analysis Portfolio, dbt docs site, and California GTFS Quality Dashboard, managed via GitHub interface                                         | TODO                                                                                      | Varies by specific deployed site (infra managed via Netlify GitHub interface)                       | n/a                | Yes (varies by deployed site)    | Documentation / Infrastructure |
-| Sentry            | Application error observability (i.e. collecting errors for investigation)                                                                                                               | https://sentry.calitp.org                                                                 | https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/sentry                       | sentry             | No                               | Infrastructure                 |
+| Name              | Function                                                                                                                                                                                 | URL                                                                                       | Source code and README (if present)                                                                 | K8s namespace | Development/test environment?    | Service Type                   |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------- | -------------------------------- | ------------------------------ |
+| Airflow           | General orchestation/automation platform; downloads non-GTFS Realtime data and orchestrates data transformations outside of dbt; executes stateless jobs such as dbt and data publishing | <https://b2062ffca77d44a28b4e05f8f5bf4996-dot-us-west2.composer.googleusercontent.com/home> | <https://github.com/cal-itp/data-infra/tree/main/airflow>                                             | n/a           | Yes (local)                      | Infrastructure / Ingestion     |
+| BigQuery          | Data warehouse used for data modeling and analysis (managed via Google Cloud Composer)                                                                                                   | <https://console.cloud.google.com/bigquery?project=cal-itp-data-infra>                      | <https://github.com/cal-itp/data-infra/tree/main/warehouse> (infra managed via Google Cloud Composer) | n/a           | Yes (cal-itp-data-infra-staging) | Infrastructure                 |
+| Cal-ITP Docs Site | Public-facing documentation for various Cal-ITP repositories, services, and related technical resources                                                                                  | <https://docs.calitp.org>                                                                   | <https://github.com/cal-itp/data-infra/tree/main/docs>                                                | n/a           | Yes (Netlify deploy on PRs)      | Documentation                  |
+| GTFS-RT Archiver  | Downloads GTFS Realtime data (more rapidly than Airflow can handle). Active production deployment runs on Cloud Run.                                                                    | n/a                                                                                       | <https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver>                           | n/a           | Yes (Cloud Run staging revision) | Ingestion                      |
+| GTFS-RT Archiver (in-cluster fallback) | Older v3 archiver retained at 0/0/0 replicas as a fallback if the Cloud Run archiver needs to be replaced.                                                          | n/a                                                                                       | <https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver-v3>                        | gtfs-rt-v3    | No                               | Ingestion                      |
+| JupyterHub        | Kubernetes-driven Jupyter workspace provider                                                                                                                                             | <https://jupyterhub.dds.dot.ca.gov>                                                         | <https://github.com/cal-itp/data-infra/tree/main/kubernetes/apps/charts/jupyterhub>                   | jupyterhub    | No                               | Analysis                       |
+| Metabase          | Web-hosted BI tool (deployed via Google Cloud Run, not Kubernetes)                                                                                                                       | <https://metabase.dds.dot.ca.gov>                                                            | <https://github.com/cal-itp/data-infra/tree/main/services/metabase>                                   | n/a           | Yes (Cloud Run staging revision) | Analysis                       |
+| Netlify           | Web publishing infrastructure for Cal-ITP Analysis Portfolio, dbt docs site, and California GTFS Quality Dashboard, managed via GitHub interface                                         | TODO                                                                                      | Varies by specific deployed site (infra managed via Netlify GitHub interface)                       | n/a           | Yes (varies by deployed site)    | Documentation / Infrastructure |
 
 ## Code and deployments (unless otherwise specified, deployments occur via GitHub Actions)
 
@@ -41,16 +39,15 @@ flowchart TD
             airflow_plugins
         end
         subgraph data_infra_apps_cluster[data-infra-apps]
-            subgraph rt_archiver[GTFS-RT Archiver]
-                rt_archiver_label[<a href='https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver-v3'>RT archiver</a>]
-                prod_rt_archiver[gtfs-rt-v3 archiver]
-                test_rt_archiver[gtfs-rt-v3-test archiver]
-            end
+            rt_archiver[<a href='https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver-v3'>RT archiver</a><br/><i>dormant — replicas: 0</i>]
             jupyterhub[<a href='https://jupyterhub.dds.dot.ca.gov'>JupyterHub</a>]
-            metabase[<a href='https://metabase.dds.dot.ca.gov'>Metabase</a>]
-            grafana[<a href='https://monitoring.calitp.org'>Grafana</a>]
-            sentry[<a href='https://sentry.calitp.org'>Sentry</a>]
         end
+    end
+
+    subgraph cloud_run[ ]
+        cloud_run_label[Google Cloud Run]
+        metabase[<a href='https://metabase.dds.dot.ca.gov'>Metabase</a>]
+        rt_archiver_cloud_run[<a href='https://github.com/cal-itp/data-infra/tree/main/services/gtfs-rt-archiver'>RT archiver</a>]
     end
 
     subgraph netlify[ ]
@@ -67,10 +64,9 @@ flowchart TD
 data_infra_repo --> airflow_dags
 data_infra_repo --> airflow_plugins
 data_infra_repo --> rt_archiver
+data_infra_repo --> rt_archiver_cloud_run
 data_infra_repo --> jupyterhub
 data_infra_repo --> metabase
-data_infra_repo --> grafana
-data_infra_repo --> sentry
 
 data_infra_repo --> data_infra_docs
 data_analyses_repo --> jupyterhub --->|portfolio.py| analysis_portfolio
@@ -78,16 +74,10 @@ reports_repo --> reports_website
 
 classDef default fill:white, color:black, stroke:black, stroke-width:1px
 classDef group_labelstyle fill:#cde6ef, color:black, stroke-width:0px
-class repos_label,kubernetes_label,netlify_label,github_pages_label group_labelstyle
+class repos_label,kubernetes_label,netlify_label,github_pages_label,cloud_run_label group_labelstyle
 ```
 
 ## Monitoring running services
-
-(error-monitoring-through-sentry)=
-
-### Error monitoring through Sentry
-
-A subset of our services and sites send error information to the Cal-ITP Sentry instance, which groups errors based on criteria we define in order to identify and track new errors, regressions, and intermittent service issues. A runbook is available [here](https://github.com/cal-itp/data-infra/blob/main/runbooks/workflow/sentry-triage.md) which discusses daily triage of events logged in Sentry, and general documentation for self-hosted instances of Sentry like ours is available [here](https://develop.sentry.dev/self-hosted/).
 
 ### Cost and performance monitoring
 
