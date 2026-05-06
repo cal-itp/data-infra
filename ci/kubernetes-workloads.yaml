@@ -46,9 +46,3 @@ calitp:
         - sentry_sentry-secret
         - sentry_sentry-sentry-postgresql
       timeout: 10m0s
-    # *-test deployments to test namespace
-    - name: archiver-test
-      driver: kustomize
-      kustomize_dir: kubernetes/apps/overlays/gtfs-rt-archiver-v3-test
-      secrets:
-        - gtfs-rt-v3-test_gtfs-feed-secrets
