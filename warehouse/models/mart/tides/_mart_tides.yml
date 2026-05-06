@@ -234,16 +234,3 @@ exposures:
         Cal-ITP collects GTFS-RT vehicle position and trip update messages
         statewide and reshapes them into the open TIDES specification for
         analytics use. See https://tides-transit.org for the spec.
-      destinations:
-        - type: gcs
-          format: parquet
-          compression: snappy
-          prefix: tides/v1
-          resources:
-            fct_tides_vehicle_locations:
-              partition_by:
-                - gtfs_dataset_key
-                - service_date
-              description: |
-                TIDES vehicle_locations table. Schema:
-                https://github.com/TIDES-transit/TIDES/blob/main/spec/vehicle_locations.schema.json
