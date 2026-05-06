@@ -1091,7 +1091,7 @@ dependencies = [
     { name = "ckanapi" },
     { name = "composer-dev" },
     { name = "db-dtypes" },
-    { name = "frictionless", extra = ["parquet"] },
+    { name = "frictionless" },
     { name = "gtfs-realtime-bindings" },
     { name = "gusty" },
     { name = "humanize" },
@@ -1127,7 +1127,7 @@ requires-dist = [
     { name = "ckanapi", specifier = ">=4.8" },
     { name = "composer-dev", git = "https://github.com/GoogleCloudPlatform/composer-local-dev.git?tag=0.10.2" },
     { name = "db-dtypes", specifier = ">=1.3" },
-    { name = "frictionless", extras = ["parquet"], specifier = ">=5.18" },
+    { name = "frictionless", specifier = ">=5.18" },
     { name = "gtfs-realtime-bindings", specifier = ">=1.0.0" },
     { name = "gusty", specifier = "==0.6.0" },
     { name = "humanize", specifier = "==4.14.0" },
@@ -1571,11 +1571,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/8d/21/3494557b8c72b8375597cdd5b85d46c76eb978994c2f34f5737262047438/frictionless-5.19.0.tar.gz", hash = "sha256:75a060c8806c4a84dd72112ceeb919277d84982b07420295b9b920e8e30a65ab", size = 74375968, upload-time = "2026-04-13T13:05:53.293Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/1b/3a/e568ea129fbcf9ee0f148178c67f8a2fc4e88de3aa34c840a180bcce4775/frictionless-5.19.0-py3-none-any.whl", hash = "sha256:81436b94a950b1a5cf83e953921e64dc888c00f51400f783ea0aa824319a6d67", size = 535173, upload-time = "2026-04-13T13:05:50.897Z" },
-]
-
-[package.optional-dependencies]
-parquet = [
-    { name = "pyarrow" },
 ]
 
 [[package]]
