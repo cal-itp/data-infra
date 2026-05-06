@@ -78,7 +78,7 @@ Once the old node pool is removed from the array, it can be drained and deleted 
 
 Cluster workloads are divided into two classes:
 
-1. Apps are the workloads that users actually care about; this includes deployed "applications" such as the GTFS-RT archiver but also includes "services" like Sentry.
+1. Apps are the workloads that users actually care about; this includes deployed "applications" such as the GTFS-RT archiver.
 
 2. System workloads are used to support running applications. This includes items such as an ingress controller, HTTPS certificate manager, etc. The system deploy command is run at cluster create time, but when new system workloads are added it may need to be run again.
 
