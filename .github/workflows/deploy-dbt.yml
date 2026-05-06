@@ -254,7 +254,11 @@ jobs:
           # some have mart_benefits in their inclusion list, others don't —
           # and dbt-metabase fails the whole sync whenever a requested
           # schema isn't visible on the connection.
+          # --retry/--retry-all-errors absorb transient 5xx blips from
+          # Metabase (e.g., container restart, brief deploy event) so a
+          # one-off Service Unavailable doesn't fail the whole workflow.
           PAYMENTS_DBS_JSON=$(curl -fsS \
+            --retry 3 --retry-delay 5 --retry-all-errors \
             -H "x-api-key: ${METABASE_API_KEY}" \
             "${METABASE_URL}/api/database" \
             | jq -c '[.data[] | select(.name | startswith("Payments - ")) | {
