@@ -18,6 +18,7 @@ fct_payments_billing_transactions AS (
         organization_name,
         organization_source_record_id,
         littlepay_participant_id,
+        enghouse_operator_id,
         fund_amt,
         batch_reference,
         batch_type,
