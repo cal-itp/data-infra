@@ -11,9 +11,10 @@ from airflow.operators.latest_only import LatestOnlyOperator
 DBT_TARGET = os.environ.get("DBT_TARGET")
 
 with DAG(
-    dag_id="dbt_manual",
-    tags=["dbt", "manual", "ad-hoc"],
-    schedule=None,
+    dag_id="dbt_monthly",
+    tags=["dbt", "monthly"],
+    # once a month on the 8th day of the month
+    schedule="0 14 8 * *",
     start_date=datetime(2025, 7, 21),
     catchup=False,
     default_args={
