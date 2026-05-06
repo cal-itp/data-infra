@@ -9,5 +9,6 @@ dependencies = [
     "frictionless[parquet]>=5.18",
     "google-cloud-bigquery>=3.20",
     "pandas>=2",
+    "pendulum>=3",
     "pyarrow>=15",
 ]
