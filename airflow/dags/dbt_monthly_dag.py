@@ -11,9 +11,10 @@ from airflow.operators.latest_only import LatestOnlyOperator
 DBT_TARGET = os.environ.get("DBT_TARGET")
 
 with DAG(
-    dag_id="dbt_manual",
-    tags=["dbt", "manual", "ad-hoc"],
-    schedule=None,
+    dag_id="dbt_monthly",
+    tags=["dbt", "monthly"],
+    # once a month on the 8th day of the month
+    schedule="0 14 8 * *",
     start_date=datetime(2025, 7, 21),
     catchup=False,
     default_args={
@@ -25,8 +26,8 @@ with DAG(
 ):
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
 
-    dbt_manual = DbtTaskGroup(
-        group_id="dbt_manual",
+    dbt_monthly = DbtTaskGroup(
+        group_id="dbt_monthly",
         project_config=ProjectConfig(
             dbt_project_path="/home/airflow/gcs/data/warehouse",
             manifest_path="/home/airflow/gcs/data/warehouse/target/manifest.json",
@@ -55,4 +56,4 @@ with DAG(
         },
     )
 
-    latest_only >> dbt_manual
+    latest_only >> dbt_monthly

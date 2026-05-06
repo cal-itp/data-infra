@@ -29,6 +29,7 @@ vars:
   INCREMENTAL_MAX_DT: ''
   DBT_ALL_INCREMENTAL_LOOKBACK_DAYS: 5
   DBT_DAILY_INCREMENTAL_LOOKBACK_DAYS: 1
+  DBT_MONTHLY_SAMPLE_INCREMENTAL_LOOKBACK_DAYS: 7
   DBT_INCREMENTAL_START_DATE: '' # placeholder to use as start data range on incremental models
   DBT_INCREMENTAL_END_DATE: '' # placeholder to use as end data range on incremental models
   'dbt_date:time_zone': 'America/Los_Angeles'
