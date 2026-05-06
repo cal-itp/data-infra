@@ -8,16 +8,11 @@ from pathlib import Path
 from typing import Sequence
 
 import requests
-from frictionless import Resource, Schema, system, validate
 
 from airflow.models import BaseOperator
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.bigquery import BigQueryHook
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
-
-# Frictionless 5.x rejects "unsafe" file paths by default. The validator runs
-# against parquet files in a temp directory outside the worker's CWD.
-system.trusted = True
 
 INTERNAL_COLUMNS = {
     "dt",
@@ -151,6 +146,8 @@ class ValidateTIDESToGCSOperator(BaseOperator):
     def export_parquet(
         self, client, parquet_path: Path
     ) -> tuple[int, str | None, str | None]:
+        # pandas + pyarrow get pulled in via the BQ client's `to_dataframe`
+        # path; importing inside execute keeps DAG parse cheap.
         from google.cloud import bigquery
 
         job_config = bigquery.QueryJobConfig(
@@ -180,7 +177,9 @@ class ValidateTIDESToGCSOperator(BaseOperator):
                 last_event = hi.isoformat() if hasattr(hi, "isoformat") else str(hi)
         return len(df), first_event, last_event
 
-    def fetch_schema(self) -> Schema:
+    def fetch_schema(self):
+        from frictionless import Schema
+
         response = requests.get(self.schema_url, timeout=30)
         response.raise_for_status()
         return Schema.from_descriptor(response.json())
@@ -259,7 +258,12 @@ class ValidateTIDESToGCSOperator(BaseOperator):
         )
 
     def execute(self, context: Context) -> dict:
+        from frictionless import Resource, system, validate
         from google.cloud import bigquery
+
+        # Frictionless 5.x rejects "unsafe" file paths outside the worker's
+        # CWD by default; we point the resource at a temp parquet file.
+        system.trusted = True
 
         client = bigquery.Client(
             project=self.bigquery_hook().get_client().project,
