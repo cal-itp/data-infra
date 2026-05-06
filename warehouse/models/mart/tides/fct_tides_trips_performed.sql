@@ -1,10 +1,26 @@
-{{ config(materialized='view') }}
+{{
+    config(
+        materialized='incremental',
+        incremental_strategy='insert_overwrite',
+        partition_by={
+            'field': 'service_date',
+            'data_type': 'date',
+            'granularity': 'day',
+        },
+        cluster_by=['service_date', 'base64_url'],
+        on_schema_change='append_new_columns',
+        tags=['tides_product'],
+    )
+}}
 
 WITH observed AS (
     SELECT *
     FROM {{ ref('fct_observed_trips') }}
     -- Drop TU-only trips (no VP) so every row has a derivable vehicle_id.
     WHERE appeared_in_vp = TRUE
+    {% if is_incremental() %}
+      AND service_date >= DATE_SUB((SELECT MAX(service_date) FROM {{ this }}), INTERVAL 1 DAY)
+    {% endif %}
 ),
 
 scheduled AS (
