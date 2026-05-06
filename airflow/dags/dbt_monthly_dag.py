@@ -26,8 +26,8 @@ with DAG(
 ):
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
 
-    dbt_manual = DbtTaskGroup(
-        group_id="dbt_manual",
+    dbt_monthly = DbtTaskGroup(
+        group_id="dbt_monthly",
         project_config=ProjectConfig(
             dbt_project_path="/home/airflow/gcs/data/warehouse",
             manifest_path="/home/airflow/gcs/data/warehouse/target/manifest.json",
@@ -56,4 +56,4 @@ with DAG(
         },
     )
 
-    latest_only >> dbt_manual
+    latest_only >> dbt_monthly
