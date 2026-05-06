@@ -40,6 +40,10 @@ jobs:
         name: Checkout
         uses: actions/checkout@v6
 
+      - &setup-graphviz
+        name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@v2
+
       - &install-uv
         name: Install uv
         uses: astral-sh/setup-uv@v7
@@ -93,9 +97,7 @@ jobs:
         name: Setup GCloud utilities
         uses: google-github-actions/setup-gcloud@v2
 
-      - &setup-graphviz
-        name: Setup Graphviz
-        uses: ts-graphviz/setup-graphviz@v2
+      - *setup-graphviz
 
       - *install-uv
       - *cache-dbt-setup
