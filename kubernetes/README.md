@@ -80,7 +80,7 @@ Cluster workloads are divided into two classes:
 
 1. Apps are the workloads that users actually care about; this includes deployed "applications" such as the GTFS-RT archiver.
 
-2. System workloads are used to support running applications. This includes items such as an ingress controller, HTTPS certificate manager, etc. The system deploy command is run at cluster create time, but when new system workloads are added it may need to be run again.
+2. System workloads are used to support running applications. The cluster currently relies on GKE-native ingress (Google Cloud Load Balancer + Google-managed certificates) so no in-cluster ingress controller or certificate manager is required.
 
 Changes to workloads should be deployed by opening a pull request according to the [GitOps](#gitops) section above.
 
@@ -128,13 +128,15 @@ This encoding could be accomplished by calling `cat <the secret yaml file> | bas
 
 At the time of this writing, a JupyterHub deployment is available at [https://jupyterhub.dds.dot.ca.gov](https://jupyterhub.dds.dot.ca.gov). If this domain name needs to change, the following configurations must also change so OAuth and ingress continue to function.
 
-1. Within the GitHub OAuth application, in Github, the homepage and callback URLs would need to be changed. Cal-ITP owns the Github OAUth application in GitHub, and [this Cal-ITP Github issue](https://github.com/cal-itp/data-infra/issues/367) can be referenced for individual contributors who may be able to helm adjusting the Github OAUth application's homepage and callback URLs.
+1. Within the GitHub OAuth application, in Github, the homepage and callback URLs would need to be changed. Cal-ITP owns the Github OAuth application in GitHub, and [this Cal-ITP Github issue](https://github.com/cal-itp/data-infra/issues/367) can be referenced for individual contributors who may be able to help adjusting the Github OAuth application's homepage and callback URLs.
 
-2. After the changes have been made to the GitHub OAuth application, the following portions of the JupyterHub chart's `values.yaml` must be changed:
+2. After the changes have been made to the GitHub OAuth application, the following files in `kubernetes/apps/charts/jupyterhub/` must be updated:
 
-- `hub.config.GitHubOAuthenticator.oauth_callback_url`
-- `ingress.hosts`
-- `ingress.tls.hosts`
+- `values.yaml`: `jupyterhub.hub.config.GitHubOAuthenticator.oauth_callback_url`
+- `templates/gke-managed-certificate.yaml`: `spec.domains` (the list of hostnames the Google-managed cert will be issued for)
+- `templates/gke-ingress.yaml`: `spec.rules[].host` (the hostnames the GKE Ingress accepts)
+
+Allow ~15-30 minutes after the DNS for the new hostname points at the GCLB IP for the Google-managed certificate to provision before traffic on the new hostname will succeed over HTTPS.
 
 ## Backups
 
