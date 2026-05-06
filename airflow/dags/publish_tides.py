@@ -28,15 +28,13 @@ with DAG(
 
     vehicle_locations_export = DBTBigQueryToParquetGCSOperator(
         task_id="vehicle_locations_export",
-        source_bucket_name=os.getenv("CALITP_BUCKET__DBT_DOCS"),
-        source_object_name="manifest.json",
         destination_bucket_name=os.getenv("CALITP_BUCKET__TIDES_PUBLISH"),
         destination_object_name=(
             "tides/v1/vehicle_locations/"
             "gtfs_dataset_key=*/service_date=*/data*.parquet"
         ),
+        dataset_id="mart_tides",
         table_name="fct_tides_vehicle_locations",
-        exposure_name="exposure.calitp_warehouse.california_tides",
     )
 
     metadata_sidecar = TidesMetadataSidecarOperator(

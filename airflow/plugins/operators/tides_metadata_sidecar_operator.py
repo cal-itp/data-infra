@@ -10,7 +10,8 @@ class TidesMetadataSidecarOperator(BaseOperator):
     template_fields: Sequence[str] = (
         "destination_bucket_name",
         "destination_object_name",
-        "warehouse_dataset",
+        "dataset_id",
+        "table_name",
         "gcp_conn_id",
     )
 
@@ -18,7 +19,8 @@ class TidesMetadataSidecarOperator(BaseOperator):
         self,
         destination_bucket_name: str,
         destination_object_name: str,
-        warehouse_dataset: str = "mart_transit_database",
+        dataset_id: str = "mart_transit_database",
+        table_name: str = "dim_provider_gtfs_data",
         gcp_conn_id: str = "google_cloud_default",
         location: str = os.getenv("CALITP_BQ_LOCATION"),
         **kwargs,
@@ -27,7 +29,8 @@ class TidesMetadataSidecarOperator(BaseOperator):
 
         self.destination_bucket_name = destination_bucket_name
         self.destination_object_name = destination_object_name
-        self.warehouse_dataset = warehouse_dataset
+        self.dataset_id = dataset_id
+        self.table_name = table_name
         self.gcp_conn_id = gcp_conn_id
         self.location = location
 
@@ -48,12 +51,16 @@ class TidesMetadataSidecarOperator(BaseOperator):
             "overwrite=true"
             ") AS "
             "SELECT DISTINCT gtfs_dataset_key, organization_name, organization_ntd_id "
-            "FROM {dataset}.dim_provider_gtfs_data "
+            "FROM {dataset}.{table} "
             "WHERE public_customer_facing_or_regional_subfeed_fixed_route = TRUE "
             "AND gtfs_dataset_key IS NOT NULL "
             "ORDER BY gtfs_dataset_key"
         )
-        return template.format(uri=self.destination(), dataset=self.warehouse_dataset)
+        return template.format(
+            uri=self.destination(),
+            dataset=self.dataset_id,
+            table=self.table_name,
+        )
 
     def execute(self, context: Context) -> str:
         self.bigquery_hook().get_client().query_and_wait(query=self.query())
