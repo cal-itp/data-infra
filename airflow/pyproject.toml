@@ -14,13 +14,17 @@ dependencies = [
     "boto3==1.41.2",
     "ckanapi>=4.8",
     "composer-dev",
+    "db-dtypes>=1.3",
+    "frictionless[parquet]>=5.18",
     "gtfs-realtime-bindings>=1.0.0",
     "gusty==0.6.0",
     "humanize==4.14.0",
     "openpyxl==3.1.5",
+    "pandas>=2",
     "pyairtable==2.2.1",
+    "pyarrow>=15",
     "sentry-sdk>=2.44.0",
-    "typer==0.4.1",
+    "typer>=0.12",
     "urllib3<2.0.0",
 ]
 
