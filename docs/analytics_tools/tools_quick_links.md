@@ -7,7 +7,7 @@
 | Tool                                                                                               | Purpose                                 |
 | -------------------------------------------------------------------------------------------------- | --------------------------------------- |
 | [**Analytics Repo**](https://github.com/cal-itp/data-analyses)                                     | Analytics team code repository.         |
-| [**notebooks.calitp.org**](https://notebooks.calitp.org/)                                          | JupyterHub cloud-based notebooks        |
+| [**jupyterhub.dds.dot.ca.gov**](https://jupyterhub.dds.dot.ca.gov/)                                | JupyterHub cloud-based notebooks        |
 | [**metabase.dds.dot.ca.gov**](https://metabase.dds.dot.ca.gov/)                                    | Metabase dashboards & Business Insights |
 | [**dbt-docs.dds.dot.ca.gov**](https://dbt-docs.dds.dot.ca.gov/)                                    | DBT warehouse documentation             |
 | [**analysis.calitp.org**](https://analysis.calitp.org/)                                            | Analytics portfolio landing page        |

@@ -126,7 +126,7 @@ This encoding could be accomplished by calling `cat <the secret yaml file> | bas
 
 ### Domain Name Changes
 
-At the time of this writing, a JupyterHub deployment is available at [https://notebooks.calitp.org](https://notebooks.calitp.org). If this domain name needs to change, the following configurations must also change so OAuth and ingress continue to function.
+At the time of this writing, a JupyterHub deployment is available at [https://jupyterhub.dds.dot.ca.gov](https://jupyterhub.dds.dot.ca.gov). If this domain name needs to change, the following configurations must also change so OAuth and ingress continue to function.
 
 1. Within the GitHub OAuth application, in Github, the homepage and callback URLs would need to be changed. Cal-ITP owns the Github OAUth application in GitHub, and [this Cal-ITP Github issue](https://github.com/cal-itp/data-infra/issues/367) can be referenced for individual contributors who may be able to helm adjusting the Github OAUth application's homepage and callback URLs.
 
