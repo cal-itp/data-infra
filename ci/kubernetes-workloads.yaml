@@ -11,16 +11,6 @@ calitp:
       kustomize_dir: kubernetes/apps/manifests/airflow-jobs
       secrets:
         - airflow-jobs_jobs-data
-    - name: grafana
-      driver: helm
-      namespace: monitoring-grafana
-      helm_name: grafana
-      helm_chart: kubernetes/apps/charts/grafana
-      helm_values:
-        - kubernetes/apps/values/grafana.yaml
-        - kubernetes/apps/values/grafana-prod.yaml
-      secrets:
-        - monitoring-grafana__grafana-initial-admin
     - name: jupyterhub
       driver: helm
       namespace: jupyterhub
@@ -32,23 +22,6 @@ calitp:
         - jupyterhub_jupyterhub-gcloud-service-key
         - jupyterhub_jupyterhub-github-config
       timeout: 10m0s
-    - name: loki
-      driver: helm
-      namespace: monitoring-loki
-      helm_name: loki
-      helm_chart: kubernetes/apps/charts/loki
-      helm_values:
-        - kubernetes/apps/values/loki-prod.yaml
-    - name: postgresql-backup-grafana
-      driver: helm
-      namespace: monitoring-grafana
-      helm_name: postgresql-backup
-      helm_chart: kubernetes/apps/charts/postgresql-backup
-      helm_values:
-        - kubernetes/apps/values/postgresql-backup-grafana.yaml
-      secrets:
-        - monitoring-grafana_database-backup
-        - monitoring-grafana_grafana-postgresql
     - name: postgresql-backup-sentry
       driver: helm
       namespace: sentry
@@ -58,20 +31,6 @@ calitp:
         - kubernetes/apps/values/postgresql-backup-sentry.yaml
       secrets:
         - sentry_database-backup
-    - name: prometheus
-      driver: helm
-      namespace: monitoring-prometheus
-      helm_name: prometheus
-      helm_chart: kubernetes/apps/charts/prometheus
-      helm_values:
-        - kubernetes/apps/values/prometheus.yaml
-    - name: promtail
-      driver: helm
-      namespace: monitoring-loki
-      helm_name: promtail
-      helm_chart: kubernetes/apps/charts/promtail
-      helm_values:
-        - kubernetes/apps/values/promtail.yaml
     - name: sftp-ingest-elavon
       driver: kustomize
       kustomize_dir: kubernetes/apps/overlays/prod-sftp-ingest-elavon
