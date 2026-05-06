@@ -209,7 +209,7 @@ jobs:
   metabase:
     name: Sync Metabase
     runs-on: ubuntu-latest
-    needs: [setup, dbt-changed, compile]
+    needs: [setup, dbt-changed, compile, dbt-run]
 
     permissions:
       contents: read
