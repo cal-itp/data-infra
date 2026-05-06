@@ -16,7 +16,7 @@ dependencies = [
     "ckanapi>=4.8",
     "composer-dev",
     "db-dtypes>=1.3",
-    "frictionless[parquet]>=5.18",
+    "frictionless>=5.18",
     "gtfs-realtime-bindings>=1.0.0",
     "gusty==0.6.0",
     "humanize==4.14.0",
