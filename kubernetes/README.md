@@ -138,53 +138,6 @@ At the time of this writing, a JupyterHub deployment is available at [https://ju
 
 Allow ~15-30 minutes after the DNS for the new hostname points at the GCLB IP for the Google-managed certificate to provision before traffic on the new hostname will succeed over HTTPS.
 
-## Backups
-
-For most of our backups we utilize [Restic](https://restic.readthedocs.io/en/latest/010_introduction.html); this section uses the Metabase database backup as an example.
-
-To verify that Metabase configuration backups have been created, there are three pieces of information you require:
-
-1. Name of the Restic repository
-2. Restic password
-3. Google Access token (if you have previously authenticated to `gcloud`, this should already be complete)
-
-There are several ways to obtain the Restic information, listed in order of effort.
-
-1. In Google Cloud Console, find the `database-backup` K8s Secret in the appropriate namespace (e.g. `metabase`) in the data-infra-apps cluster
-2. Perform #1 but using the [Lens Kubernetes IDE](https://k8slens.dev)
-3. Print out the K8s Secret and decode from base64 using `kubectl` and `jq`
-4. Determine the name of the secret from the deployment YAML (e.g. `metabase_database-backup`) and track it down in Google Cloud Secret Manager; the secrets generally follow the pattern of `<k8s-namespace>_<secret-name`
-5. Look at the K8s configuration of the CronJob that performs the backup (e.g. `postgresql-backup`) from the deployment YAML; this can be accomplished via Google Cloud, Lens, or kubectl
-
-## Restic
-
-Within Restic you can see the snapshots by running the following terminal commands:
-
-`restic list snapshot` or `restic snapshots latest`
-
-For spot testing, create a folder within the tmp directory
-`mkdir /tmp/pgdump` then run the Restic restore command to extract the data from a snapshot.
-
-`restic restore -t /tmp/pgdump latest`
-
-This will be a zipped file, unzip it by using
-
-`gunzip /tmp/pgdump/pg_dumpall.sql`
-
-## Verify SQL in Postgres
-
-To verify the SQL schema and underlying data has not been corrupted, open the SQL file within a Docker container. For initial Docker container setup please visit [Docker Documentation](https://docs.docker.com/get-started/)
-
-`docker run --rm -v /tmp/sql:/workspace -e POSTGRES_HOST_AUTH_METHOD=trust postgres:13.5`
-
-It is important to note that the version of Postgres used to take the Metabase snapshots (13.5) needs to be the same version of Postgres that is restoring the dump.
-
-To load the SQL into Postgres, run the following command:
-
-`psql -U postgres < pg_dumpall.sql`
-
-Then you can verify the schema and underlying data within postgres.
-
 ## Glossary
 
 > Mostly cribbed from the [official Kubernetes documentation](https://kubernetes.io/docs/concepts/workloads)
