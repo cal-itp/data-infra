@@ -1,4 +1,17 @@
-{{ config(materialized='view') }}
+{{
+    config(
+        materialized='incremental',
+        incremental_strategy='insert_overwrite',
+        partition_by={
+            'field': 'dt',
+            'data_type': 'date',
+            'granularity': 'day',
+        },
+        cluster_by=['dt', 'base64_url'],
+        on_schema_change='append_new_columns',
+        tags=['tides_product'],
+    )
+}}
 
 -- Upstream `key` is "almost unique" (documented unique_proportion at_least
 -- 0.999); TIDES requires location_ping_id strictly unique. `key` is composed
@@ -9,6 +22,9 @@
 WITH source_vehicle_locations AS (
     SELECT *
     FROM {{ ref('fct_vehicle_locations') }}
+    {% if is_incremental() %}
+    WHERE dt >= DATE_SUB((SELECT MAX(dt) FROM {{ this }}), INTERVAL 1 DAY)
+    {% endif %}
     QUALIFY ROW_NUMBER() OVER (
         PARTITION BY `key`
         ORDER BY _extract_ts DESC
@@ -62,6 +78,8 @@ tides_vehicle_locations AS (
             WHEN 'IN_TRANSIT_TO' THEN 'In transit to'
         END AS current_status,
 
+        -- null out values outside TIDES schema bounds so spec validation passes
+        -- upstream RT data quality is monitored separately by the TDQ team
         CASE
             WHEN vp.position_latitude BETWEEN -90 AND 90
             THEN vp.position_latitude
