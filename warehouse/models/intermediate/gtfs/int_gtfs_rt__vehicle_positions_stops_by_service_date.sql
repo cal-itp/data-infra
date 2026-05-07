@@ -13,7 +13,7 @@
 -- depends_on: {{ ref('dim_schedule_feeds') }}
 -- add dependency hint to let dbt know about the dependency inside the call statement block
 
--- fetch a list of feed keys
+-- fetch a list of _feed_valid_from dates that are implicated in these updates
 -- **the where clause here needs to align exactly with the where clause used on fct_scheduled_trips below**
 -- this allows us to filter stop times grouped for significant efficiency gains
 {% call statement('get_dates', fetch_result=True) %}
