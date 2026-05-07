@@ -102,18 +102,7 @@ jupyterhub:
     # holds github OAuth creds
     existingSecret: jupyterhub-github-config
   ingress:
-    enabled: true
-    annotations:
-      kubernetes.io/ingress.class: nginx
-      cert-manager.io/cluster-issuer: letsencrypt-prod
-      nginx.ingress.kubernetes.io/proxy-body-size: "0"
-      nginx.ingress.kubernetes.io/permanent-redirect: https://jupyterhub.dds.dot.ca.gov$request_uri
-    hosts:
-      - notebooks.calitp.org
-    tls:
-      - secretName: jupyterhub-tls
-        hosts:
-          - notebooks.calitp.org
+    enabled: false
   proxy:
     service:
       type: ClusterIP

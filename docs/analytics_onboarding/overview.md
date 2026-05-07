@@ -19,7 +19,7 @@
 
 **Analytics Tools:**
 
-- [ ] **[notebooks.calitp.org](https://notebooks.calitp.org/)** - JupyterHub cloud-based notebooks for querying Python, SQL, R | ([Docs](jupyterhub-intro))
+- [ ] **[jupyterhub.dds.dot.ca.gov](https://jupyterhub.dds.dot.ca.gov/)** - JupyterHub cloud-based notebooks for querying Python, SQL, R | ([Docs](jupyterhub-intro))
 - [ ] **[metabase.dds.dot.ca.gov](https://metabase.dds.dot.ca.gov/)** - Metabase business insights & dashboards | ([Docs](metabase))
 - [ ] **[dbt-docs.dds.dot.ca.gov](https://dbt-docs.dds.dot.ca.gov/)** - Documentation for the Cal-ITP data warehouse.
 - [ ] **[analysis.calitp.org](https://analysis.calitp.org/)** - The Cal-ITP analytics portfolio website.
