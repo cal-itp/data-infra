@@ -558,7 +558,8 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: iac/cal-itp-data-infra-staging/airflow/us
-          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
+          # use auto_approve: 'true' only here to make sure model changes are applied even if the plan was different
+          auto_approve: 'true'
 
   apply-changes-airflow-production:
     name: Production Apply Airflow Changes
@@ -589,3 +590,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: iac/cal-itp-data-infra/airflow/us
+          # use auto_approve: 'true' only here to make sure model changes are applied even if the plan was different
+          auto_approve: 'true'
