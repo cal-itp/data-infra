@@ -394,12 +394,6 @@ resource "google_storage_bucket_iam_member" "tfer--test-calitp-sentry" {
   role   = "roles/storage.legacyBucketOwner"
 }
 
-resource "google_storage_bucket_iam_member" "tfer--test-rt-parsed" {
-  bucket = "b/test-rt-parsed"
-  member = "projectEditor:cal-itp-data-infra"
-  role   = "roles/storage.legacyBucketOwner"
-}
-
 resource "google_storage_bucket_iam_member" "tfer--test-rt-validations" {
   bucket = "b/test-rt-validations"
   member = "projectOwner:cal-itp-data-infra"

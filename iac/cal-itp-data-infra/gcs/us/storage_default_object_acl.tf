@@ -261,10 +261,6 @@ resource "google_storage_default_object_acl" "tfer--test-calitp-sentry" {
   bucket = "test-calitp-sentry"
 }
 
-resource "google_storage_default_object_acl" "tfer--test-rt-parsed" {
-  bucket = "test-rt-parsed"
-}
-
 resource "google_storage_default_object_acl" "tfer--test-rt-validations" {
   bucket = "test-rt-validations"
 }
