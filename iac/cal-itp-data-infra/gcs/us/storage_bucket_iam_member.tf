@@ -382,12 +382,6 @@ resource "google_storage_bucket_iam_member" "tfer--test-calitp-gtfs-rt-raw" {
   role   = "roles/storage.legacyObjectOwner"
 }
 
-resource "google_storage_bucket_iam_member" "tfer--test-calitp-gtfs-schedule-processed" {
-  bucket = "b/test-calitp-gtfs-schedule-processed"
-  member = "projectViewer:cal-itp-data-infra"
-  role   = "roles/storage.legacyBucketReader"
-}
-
 resource "google_storage_bucket_iam_member" "tfer--test-calitp-gtfs-schedule-raw" {
   bucket = "b/test-calitp-gtfs-schedule-raw"
   member = "projectOwner:cal-itp-data-infra"
