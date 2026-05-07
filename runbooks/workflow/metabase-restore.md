@@ -117,4 +117,4 @@ gsutil rm gs://calitp-backups-metabase/pg_dump.sql
 ## Notes
 
 - Metabase auto-migrates its schema on startup when the application version is newer than the database schema version. Check Cloud Run logs if startup is slow.
-- The backup chart (`kubernetes/apps/charts/postgresql-backup`) uses `pg_dump --no-owner --no-privileges`, so dumps are portable across different database users without any transformation.
+- The historical backups in the Restic repository were created by a `postgresql-backup` chart (since removed) using `pg_dump --no-owner --no-privileges`, so dumps are portable across different database users without any transformation.

@@ -64,16 +64,15 @@ Across both data and services, we often have a "production" (live, end-user-faci
 ### production
 
 - Managed Airflow (i.e. Google Cloud Composer)
-- Production gtfs-rt-archiver-v3
+- GTFS-RT archiver (Cloud Run; the in-cluster v3 archiver is retained at 0/0/0 replicas as a fallback)
 - `cal-itp-data-infra` database (i.e. project) in BigQuery
 - Google Cloud Storage buckets _without_ a prefix
-  - e.g. `gs://calitp-gtfs-schedule-parsed-hourly`
+    - e.g. `gs://calitp-gtfs-schedule-parsed-hourly`
 
 ### testing/staging/dev
 
 - Locally-run Airflow (via docker-compose)
-- Test gtfs-rt-archiver-v3
 - `cal-itp-data-infra-staging` database (i.e. project) in BigQuery
 - GCS buckets with the `test-` prefix
-  - e.g. `gs://test-calitp-gtfs-rt-raw-v2`
-  - Some buckets prefixed with `dev-` also exist; primarily for testing the RT archiver locally
+    - e.g. `gs://test-calitp-gtfs-rt-raw-v2`
+    - Some buckets prefixed with `dev-` also exist; primarily for testing the RT archiver locally

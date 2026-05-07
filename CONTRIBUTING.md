@@ -7,9 +7,8 @@ primarily [data-infra](https://github.com/cal-itp/data-infra).
 
 - When submitting an issue, please try to use an existing template if one is appropriate
 - Provide enough information and context; try to do one or more of the following:
-  - Include links to specific lines of code, error logs, Slack context, etc.
-  - Include error messages or tracebacks if relevant and short
-  - Connect issues to Sentry issues
+    - Include links to specific lines of code, error logs, Slack context, etc.
+    - Include error messages or tracebacks if relevant and short
 
 ## Pull Requests
 
