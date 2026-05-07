@@ -254,14 +254,6 @@ resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-raw-v2" {
   bucket = "test-calitp-gtfs-schedule-raw-v2"
 }
 
-resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-validation" {
-  bucket = "test-calitp-gtfs-schedule-validation"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-validation-hourly" {
-  bucket = "test-calitp-gtfs-schedule-validation-hourly"
-}
-
 resource "google_storage_bucket_acl" "tfer--test-calitp-ntd-report-validation" {
   bucket = "test-calitp-ntd-report-validation"
 }

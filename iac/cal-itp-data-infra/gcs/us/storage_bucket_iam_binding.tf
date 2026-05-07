@@ -394,18 +394,6 @@ resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-schedule-ra
   role    = "roles/storage.legacyBucketReader"
 }
 
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-schedule-validation" {
-  bucket  = "b/test-calitp-gtfs-schedule-validation"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketReader"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-schedule-validation-hourly" {
-  bucket  = "b/test-calitp-gtfs-schedule-validation-hourly"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketOwner"
-}
-
 resource "google_storage_bucket_iam_binding" "tfer--test-calitp-ntd-report-validation" {
   bucket  = "b/test-calitp-ntd-report-validation"
   members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
