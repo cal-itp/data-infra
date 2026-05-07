@@ -29,10 +29,8 @@ Practical guides for accomplishing specific tasks. Use these when you need to ge
 - [Troubleshoot Data Sync Issues](how-to/troubleshoot-sync-issues.md)
 
 ### 📖 Reference - Information-Oriented
-*Coming soon: Technical descriptions and specifications for the payments ecosystem.*
 
 ### 💡 Explanation - Understanding-Oriented
-*Coming soon: Conceptual discussions to deepen your understanding of the payments system.*
 
 ## Quick Links
 
