@@ -57,7 +57,7 @@ resource "google_container_cluster" "tfer--data-infra-apps" {
     enable_components = ["SYSTEM_COMPONENTS"]
 
     managed_prometheus {
-      enabled = "true"
+      enabled = "false"
     }
   }
 
