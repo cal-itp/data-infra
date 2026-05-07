@@ -254,14 +254,6 @@ output "google_storage_bucket_acl_tfer--test-calitp-gtfs-schedule-raw_id" {
   value = google_storage_bucket_acl.tfer--test-calitp-gtfs-schedule-raw.id
 }
 
-output "google_storage_bucket_acl_tfer--test-calitp-publish-data-analysis_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-publish-data-analysis.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-publish_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-publish.id
-}
-
 output "google_storage_bucket_acl_tfer--test-calitp-sentry_id" {
   value = google_storage_bucket_acl.tfer--test-calitp-sentry.id
 }
@@ -556,14 +548,6 @@ output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-schedule-raw-v2
 
 output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-schedule-raw_id" {
   value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-schedule-raw.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-publish-data-analysis_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-publish-data-analysis.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-publish_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-publish.id
 }
 
 output "google_storage_bucket_iam_binding_tfer--test-calitp-sentry_id" {
@@ -862,14 +846,6 @@ output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-schedule-raw_id"
   value = google_storage_bucket_iam_member.tfer--test-calitp-gtfs-schedule-raw.id
 }
 
-output "google_storage_bucket_iam_member_tfer--test-calitp-publish-data-analysis_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-publish-data-analysis.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-publish_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-publish.id
-}
-
 output "google_storage_bucket_iam_member_tfer--test-calitp-sentry_id" {
   value = google_storage_bucket_iam_member.tfer--test-calitp-sentry.id
 }
@@ -1164,14 +1140,6 @@ output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-schedule-raw-v2_
 
 output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-schedule-raw_id" {
   value = google_storage_bucket_iam_policy.tfer--test-calitp-gtfs-schedule-raw.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-publish-data-analysis_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-publish-data-analysis.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-publish_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-publish.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--test-calitp-sentry_id" {
@@ -1734,22 +1702,6 @@ output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-raw_self_link" {
   value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-raw.self_link
 }
 
-output "google_storage_bucket_tfer--test-calitp-publish-data-analysis_name" {
-  value = google_storage_bucket.tfer--test-calitp-publish-data-analysis.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-publish-data-analysis_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-publish-data-analysis.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-publish_name" {
-  value = google_storage_bucket.tfer--test-calitp-publish.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-publish_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-publish.self_link
-}
-
 output "google_storage_bucket_tfer--test-calitp-sentry_name" {
   value = google_storage_bucket.tfer--test-calitp-sentry.name
 }
@@ -2072,14 +2024,6 @@ output "google_storage_default_object_acl_tfer--test-calitp-gtfs-schedule-raw-v2
 
 output "google_storage_default_object_acl_tfer--test-calitp-gtfs-schedule-raw_id" {
   value = google_storage_default_object_acl.tfer--test-calitp-gtfs-schedule-raw.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-publish-data-analysis_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-publish-data-analysis.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-publish_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-publish.id
 }
 
 output "google_storage_default_object_acl_tfer--test-calitp-sentry_id" {

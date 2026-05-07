@@ -261,14 +261,6 @@ resource "google_storage_default_object_acl" "tfer--test-calitp-gtfs-schedule-ra
   bucket = "test-calitp-gtfs-schedule-raw-v2"
 }
 
-resource "google_storage_default_object_acl" "tfer--test-calitp-publish" {
-  bucket = "test-calitp-publish"
-}
-
-resource "google_storage_default_object_acl" "tfer--test-calitp-publish-data-analysis" {
-  bucket = "test-calitp-publish-data-analysis"
-}
-
 resource "google_storage_default_object_acl" "tfer--test-calitp-sentry" {
   bucket = "test-calitp-sentry"
 }
