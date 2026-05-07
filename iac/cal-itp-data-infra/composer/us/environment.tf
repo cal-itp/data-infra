@@ -103,7 +103,6 @@ resource "google_composer_environment" "calitp-composer" {
         "CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN"         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-ntd-xlsx-products-clean_name}",
         "CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"           = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-ntd-xlsx-products-raw_name}",
         "CALITP_BUCKET__PUBLISH"                               = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-publish_name}",
-        "CALITP_BUCKET__SENTRY_EVENTS"                         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-sentry_name}",
         "CALITP_BUCKET__STATE_GEOPORTAL_DATA_PRODUCTS"         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-state-geoportal-scrape_name}",
         "CALITP_SLACK_URL"                                     = data.google_secret_manager_secret_version.slack-airflow-url.secret_data
         "CALITP_NOTIFY_EMAIL"                                  = "dds.app.notify@dot.ca.gov"
