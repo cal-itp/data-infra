@@ -254,10 +254,6 @@ resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-raw-v2" {
   bucket = "test-calitp-gtfs-schedule-raw-v2"
 }
 
-resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test" {
-  bucket = "test-calitp-gtfs-schedule-raw-v2-backfill-test"
-}
-
 resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-unzipped" {
   bucket = "test-calitp-gtfs-schedule-unzipped"
 }

@@ -394,12 +394,6 @@ resource "google_storage_bucket_iam_member" "tfer--test-calitp-gtfs-schedule-raw
   role   = "roles/storage.legacyObjectReader"
 }
 
-resource "google_storage_bucket_iam_member" "tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test" {
-  bucket = "b/test-calitp-gtfs-schedule-raw-v2-backfill-test"
-  member = "projectViewer:cal-itp-data-infra"
-  role   = "roles/storage.legacyBucketReader"
-}
-
 resource "google_storage_bucket_iam_member" "tfer--test-calitp-gtfs-schedule-unzipped" {
   bucket = "b/test-calitp-gtfs-schedule-unzipped"
   member = "projectOwner:cal-itp-data-infra"

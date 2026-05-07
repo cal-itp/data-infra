@@ -2534,43 +2534,6 @@ resource "google_storage_bucket_iam_policy" "tfer--test-calitp-gtfs-schedule-raw
 POLICY
 }
 
-resource "google_storage_bucket_iam_policy" "tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test" {
-  bucket = "b/test-calitp-gtfs-schedule-raw-v2-backfill-test"
-
-  policy_data = <<POLICY
-{
-  "bindings": [
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketReader"
-    },
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectReader"
-    }
-  ]
-}
-POLICY
-}
-
 resource "google_storage_bucket_iam_policy" "tfer--test-calitp-gtfs-schedule-unzipped" {
   bucket = "b/test-calitp-gtfs-schedule-unzipped"
 
