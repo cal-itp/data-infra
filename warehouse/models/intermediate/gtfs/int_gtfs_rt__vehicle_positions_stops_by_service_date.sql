@@ -11,7 +11,7 @@
 }}
 
 {%- call statement('get_keys', fetch_result=True) -%}
-    SELECT ARRAY_TO_STRING(ARRAY_AGG(DISTINCT feed_key), ',')
+    SELECT ARRAY_TO_STRING(ARRAY_AGG(DISTINCT '"' || feed_key || '"' ), ',')
     FROM {{ ref('fct_scheduled_trips') }}
     WHERE service_date
         -- subtract 1 at the end to account for 1-day offset between UTC and Pacific dates (always want one service day earlier than the UTC lookback day would be)
