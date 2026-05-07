@@ -258,10 +258,6 @@ output "google_storage_bucket_acl_tfer--test-calitp-sentry_id" {
   value = google_storage_bucket_acl.tfer--test-calitp-sentry.id
 }
 
-output "google_storage_bucket_acl_tfer--test-calitp-state-geoportal-scrape_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-state-geoportal-scrape.id
-}
-
 output "google_storage_bucket_acl_tfer--test-rt-parsed_id" {
   value = google_storage_bucket_acl.tfer--test-rt-parsed.id
 }
@@ -552,10 +548,6 @@ output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-schedule-raw_id
 
 output "google_storage_bucket_iam_binding_tfer--test-calitp-sentry_id" {
   value = google_storage_bucket_iam_binding.tfer--test-calitp-sentry.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-state-geoportal-scrape_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-state-geoportal-scrape.id
 }
 
 output "google_storage_bucket_iam_binding_tfer--test-rt-parsed_id" {
@@ -850,10 +842,6 @@ output "google_storage_bucket_iam_member_tfer--test-calitp-sentry_id" {
   value = google_storage_bucket_iam_member.tfer--test-calitp-sentry.id
 }
 
-output "google_storage_bucket_iam_member_tfer--test-calitp-state-geoportal-scrape_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-state-geoportal-scrape.id
-}
-
 output "google_storage_bucket_iam_member_tfer--test-rt-parsed_id" {
   value = google_storage_bucket_iam_member.tfer--test-rt-parsed.id
 }
@@ -1144,10 +1132,6 @@ output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-schedule-raw_id"
 
 output "google_storage_bucket_iam_policy_tfer--test-calitp-sentry_id" {
   value = google_storage_bucket_iam_policy.tfer--test-calitp-sentry.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-state-geoportal-scrape_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-state-geoportal-scrape.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--test-rt-parsed_id" {
@@ -1710,14 +1694,6 @@ output "google_storage_bucket_tfer--test-calitp-sentry_self_link" {
   value = google_storage_bucket.tfer--test-calitp-sentry.self_link
 }
 
-output "google_storage_bucket_tfer--test-calitp-state-geoportal-scrape_name" {
-  value = google_storage_bucket.tfer--test-calitp-state-geoportal-scrape.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-state-geoportal-scrape_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-state-geoportal-scrape.self_link
-}
-
 output "google_storage_bucket_tfer--test-rt-parsed_name" {
   value = google_storage_bucket.tfer--test-rt-parsed.name
 }
@@ -2028,10 +2004,6 @@ output "google_storage_default_object_acl_tfer--test-calitp-gtfs-schedule-raw_id
 
 output "google_storage_default_object_acl_tfer--test-calitp-sentry_id" {
   value = google_storage_default_object_acl.tfer--test-calitp-sentry.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-state-geoportal-scrape_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-state-geoportal-scrape.id
 }
 
 output "google_storage_default_object_acl_tfer--test-rt-parsed_id" {

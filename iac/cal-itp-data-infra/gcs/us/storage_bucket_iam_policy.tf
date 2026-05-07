@@ -2571,43 +2571,6 @@ resource "google_storage_bucket_iam_policy" "tfer--test-calitp-sentry" {
 POLICY
 }
 
-resource "google_storage_bucket_iam_policy" "tfer--test-calitp-state-geoportal-scrape" {
-  bucket = "b/test-calitp-state-geoportal-scrape"
-
-  policy_data = <<POLICY
-{
-  "bindings": [
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketReader"
-    },
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectReader"
-    }
-  ]
-}
-POLICY
-}
-
 resource "google_storage_bucket_iam_policy" "tfer--test-rt-parsed" {
   bucket = "b/test-rt-parsed"
 

@@ -258,10 +258,6 @@ resource "google_storage_bucket_acl" "tfer--test-calitp-sentry" {
   bucket = "test-calitp-sentry"
 }
 
-resource "google_storage_bucket_acl" "tfer--test-calitp-state-geoportal-scrape" {
-  bucket = "test-calitp-state-geoportal-scrape"
-}
-
 resource "google_storage_bucket_acl" "tfer--test-rt-parsed" {
   bucket = "test-rt-parsed"
 }
