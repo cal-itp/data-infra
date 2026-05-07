@@ -249,10 +249,6 @@ resource "google_storage_default_object_acl" "tfer--test-calitp-gtfs-download-co
   bucket = "test-calitp-gtfs-download-config"
 }
 
-resource "google_storage_default_object_acl" "tfer--test-calitp-gtfs-raw" {
-  bucket = "test-calitp-gtfs-raw"
-}
-
 resource "google_storage_default_object_acl" "tfer--test-calitp-gtfs-rt-parsed" {
   bucket = "test-calitp-gtfs-rt-parsed"
 }

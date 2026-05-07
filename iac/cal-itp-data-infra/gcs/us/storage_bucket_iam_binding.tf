@@ -376,12 +376,6 @@ resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-download-co
   role    = "roles/storage.legacyObjectOwner"
 }
 
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-raw" {
-  bucket  = "b/test-calitp-gtfs-raw"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectOwner"
-}
-
 resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-rt-parsed" {
   bucket  = "b/test-calitp-gtfs-rt-parsed"
   members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
