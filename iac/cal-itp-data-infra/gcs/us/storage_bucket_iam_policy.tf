@@ -2014,7 +2014,6 @@ resource "google_storage_bucket_iam_policy" "tfer--gtfs-data-test" {
     {
       "members": [
         "serviceAccount:calitp-py-ci@cal-itp-data-infra.iam.gserviceaccount.com",
-        "serviceAccount:gtfs-rt-archiver-test@cal-itp-data-infra.iam.gserviceaccount.com",
         "serviceAccount:local-airflow-dev@cal-itp-data-infra-staging.iam.gserviceaccount.com",
         "serviceAccount:project-1005246706141@storage-transfer-service.iam.gserviceaccount.com"
       ],
@@ -2702,7 +2701,6 @@ resource "google_storage_bucket_iam_policy" "tfer--test-calitp-gtfs-rt-raw" {
     },
     {
       "members": [
-        "serviceAccount:gtfs-rt-archiver-test@cal-itp-data-infra.iam.gserviceaccount.com",
         "serviceAccount:gtfs-rt-archiver-v3@cal-itp-data-infra.iam.gserviceaccount.com"
       ],
       "role": "roles/storage.objectAdmin"
