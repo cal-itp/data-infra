@@ -242,10 +242,6 @@ resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-download-config" {
   bucket = "test-calitp-gtfs-download-config"
 }
 
-resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-rt-parsed" {
-  bucket = "test-calitp-gtfs-rt-parsed"
-}
-
 resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-rt-raw" {
   bucket = "test-calitp-gtfs-rt-raw"
 }
