@@ -74,6 +74,6 @@ Across both data and services, we often have a "production" (live, end-user-faci
 - Locally-run Airflow (via docker-compose)
 - Test gtfs-rt-archiver-v3
 - `cal-itp-data-infra-staging` database (i.e. project) in BigQuery
-- GCS buckets with the `test-` prefix
-  - e.g. `gs://test-calitp-gtfs-rt-raw-v2`
+- Use Staging GCS buckets
+  - e.g. `gs://calitp-staging-gtfs-rt-raw-v2`
   - Some buckets prefixed with `dev-` also exist; primarily for testing the RT archiver locally
