@@ -7,7 +7,6 @@ from operators.airtable_to_gcs_operator import AirtableToGCSOperator
 from operators.blackcat_to_gcs_operator import BlackCatToGCSOperator
 from operators.enghouse_csv_to_jsonl_operator import EnghouseCSVToJSONLOperator
 from operators.external_table import ExternalTable
-from operators.gtfs_csv_to_jsonl_hourly import GtfsGcsToJsonlOperatorHourly
 from operators.kuba_to_gcs_operator import KubaToGCSOperator
 from operators.littlepay_raw_sync_feed_v3 import LittlepayRawSyncV3
 from operators.littlepay_to_jsonl_feed_v3 import LittlepayToJSONLV3
