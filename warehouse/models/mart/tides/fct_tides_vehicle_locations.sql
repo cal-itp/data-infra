@@ -1,13 +1,18 @@
 {{
     config(
         materialized='incremental',
-        incremental_strategy='insert_overwrite',
+        incremental_strategy='microbatch',
+        event_time = 'dt',
+        batch_size = 'day',
+        begin=var('GTFS_RT_START'),
+        lookback=var('DBT_ALL_INCREMENTAL_LOOKBACK_DAYS'),
         partition_by={
             'field': 'dt',
             'data_type': 'date',
             'granularity': 'day',
         },
-        cluster_by=['dt', 'base64_url'],
+        full_refresh=false,
+        cluster_by='base64_url',
         on_schema_change='append_new_columns',
         tags=['tides_product'],
     )
@@ -22,9 +27,6 @@
 WITH source_vehicle_locations AS (
     SELECT *
     FROM {{ ref('fct_vehicle_locations') }}
-    {% if is_incremental() %}
-    WHERE dt >= DATE_SUB((SELECT MAX(dt) FROM {{ this }}), INTERVAL 1 DAY)
-    {% endif %}
     QUALIFY ROW_NUMBER() OVER (
         PARTITION BY `key`
         ORDER BY _extract_ts DESC
