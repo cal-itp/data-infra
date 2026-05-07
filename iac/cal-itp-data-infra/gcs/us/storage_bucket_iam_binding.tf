@@ -310,12 +310,6 @@ resource "google_storage_bucket_iam_binding" "tfer--gtfs-data-test" {
   role    = "roles/storage.objectAdmin"
 }
 
-resource "google_storage_bucket_iam_binding" "tfer--gtfs-data-test-reports" {
-  bucket  = "b/gtfs-data-test-reports"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketOwner"
-}
-
 resource "google_storage_bucket_iam_binding" "tfer--littlepay-data-extract-prod" {
   bucket  = "b/littlepay-data-extract-prod"
   members = ["projectViewer:cal-itp-data-infra"]

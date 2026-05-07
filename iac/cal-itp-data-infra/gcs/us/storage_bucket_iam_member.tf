@@ -310,12 +310,6 @@ resource "google_storage_bucket_iam_member" "tfer--gtfs-data-test" {
   role   = "roles/storage.legacyBucketReader"
 }
 
-resource "google_storage_bucket_iam_member" "tfer--gtfs-data-test-reports" {
-  bucket = "b/gtfs-data-test-reports"
-  member = "projectEditor:cal-itp-data-infra"
-  role   = "roles/storage.legacyObjectOwner"
-}
-
 resource "google_storage_bucket_iam_member" "tfer--littlepay-data-extract-prod" {
   bucket = "b/littlepay-data-extract-prod"
   member = "serviceAccount:project-1005246706141@storage-transfer-service.iam.gserviceaccount.com"

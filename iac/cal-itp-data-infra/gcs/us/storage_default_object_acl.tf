@@ -204,10 +204,6 @@ resource "google_storage_default_object_acl" "tfer--gtfs-data-test" {
   bucket = "gtfs-data-test"
 }
 
-resource "google_storage_default_object_acl" "tfer--gtfs-data-test-reports" {
-  bucket = "gtfs-data-test-reports"
-}
-
 resource "google_storage_default_object_acl" "tfer--littlepay-data-extract-prod" {
   bucket = "littlepay-data-extract-prod"
 }

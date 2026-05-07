@@ -1995,43 +1995,6 @@ resource "google_storage_bucket_iam_policy" "tfer--gtfs-data-test" {
 POLICY
 }
 
-resource "google_storage_bucket_iam_policy" "tfer--gtfs-data-test-reports" {
-  bucket = "b/gtfs-data-test-reports"
-
-  policy_data = <<POLICY
-{
-  "bindings": [
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketReader"
-    },
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectReader"
-    }
-  ]
-}
-POLICY
-}
-
 resource "google_storage_bucket_iam_policy" "tfer--littlepay-data-extract-prod" {
   bucket = "b/littlepay-data-extract-prod"
 

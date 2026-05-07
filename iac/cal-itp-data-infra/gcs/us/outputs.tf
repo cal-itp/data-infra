@@ -190,10 +190,6 @@ output "google_storage_bucket_acl_tfer--gtfs-data-reports_id" {
   value = google_storage_bucket_acl.tfer--gtfs-data-reports.id
 }
 
-output "google_storage_bucket_acl_tfer--gtfs-data-test-reports_id" {
-  value = google_storage_bucket_acl.tfer--gtfs-data-test-reports.id
-}
-
 output "google_storage_bucket_acl_tfer--gtfs-data-test_id" {
   value = google_storage_bucket_acl.tfer--gtfs-data-test.id
 }
@@ -460,10 +456,6 @@ output "google_storage_bucket_iam_binding_tfer--export-ysjqwvyxc4ti3jmahojq_id" 
 
 output "google_storage_bucket_iam_binding_tfer--gtfs-data-reports_id" {
   value = google_storage_bucket_iam_binding.tfer--gtfs-data-reports.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--gtfs-data-test-reports_id" {
-  value = google_storage_bucket_iam_binding.tfer--gtfs-data-test-reports.id
 }
 
 output "google_storage_bucket_iam_binding_tfer--gtfs-data-test_id" {
@@ -734,10 +726,6 @@ output "google_storage_bucket_iam_member_tfer--gtfs-data-reports_id" {
   value = google_storage_bucket_iam_member.tfer--gtfs-data-reports.id
 }
 
-output "google_storage_bucket_iam_member_tfer--gtfs-data-test-reports_id" {
-  value = google_storage_bucket_iam_member.tfer--gtfs-data-test-reports.id
-}
-
 output "google_storage_bucket_iam_member_tfer--gtfs-data-test_id" {
   value = google_storage_bucket_iam_member.tfer--gtfs-data-test.id
 }
@@ -1004,10 +992,6 @@ output "google_storage_bucket_iam_policy_tfer--export-ysjqwvyxc4ti3jmahojq_id" {
 
 output "google_storage_bucket_iam_policy_tfer--gtfs-data-reports_id" {
   value = google_storage_bucket_iam_policy.tfer--gtfs-data-reports.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--gtfs-data-test-reports_id" {
-  value = google_storage_bucket_iam_policy.tfer--gtfs-data-test-reports.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--gtfs-data-test_id" {
@@ -1478,14 +1462,6 @@ output "google_storage_bucket_tfer--gtfs-data-reports_self_link" {
   value = google_storage_bucket.tfer--gtfs-data-reports.self_link
 }
 
-output "google_storage_bucket_tfer--gtfs-data-test-reports_name" {
-  value = google_storage_bucket.tfer--gtfs-data-test-reports.name
-}
-
-output "google_storage_bucket_tfer--gtfs-data-test-reports_self_link" {
-  value = google_storage_bucket.tfer--gtfs-data-test-reports.self_link
-}
-
 output "google_storage_bucket_tfer--gtfs-data-test_name" {
   value = google_storage_bucket.tfer--gtfs-data-test.name
 }
@@ -1816,10 +1792,6 @@ output "google_storage_default_object_acl_tfer--export-ysjqwvyxc4ti3jmahojq_id" 
 
 output "google_storage_default_object_acl_tfer--gtfs-data-reports_id" {
   value = google_storage_default_object_acl.tfer--gtfs-data-reports.id
-}
-
-output "google_storage_default_object_acl_tfer--gtfs-data-test-reports_id" {
-  value = google_storage_default_object_acl.tfer--gtfs-data-test-reports.id
 }
 
 output "google_storage_default_object_acl_tfer--gtfs-data-test_id" {
