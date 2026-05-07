@@ -9,7 +9,6 @@ from typing import ClassVar, List, Optional
 
 import humanize
 import pendulum
-import sentry_sdk
 from calitp_data_infra.auth import get_secrets_by_label
 from calitp_data_infra.storage import (
     JSONL_EXTENSION,
@@ -25,7 +24,6 @@ from calitp_data_infra.storage import (
     get_latest,
 )
 from pydantic.v1 import validator
-from requests.exceptions import HTTPError
 
 GTFS_FEED_LIST_ERROR_THRESHOLD = 0.95
 
@@ -74,7 +72,6 @@ class DownloadFeedsResult(PartitionedGCSArtifact):
 
 
 def download_all(task_instance, execution_date, **kwargs):
-    sentry_sdk.init()
     start = pendulum.now()
     auth_dict = get_secrets_by_label("gtfs_schedule")
 
@@ -95,48 +92,35 @@ def download_all(task_instance, execution_date, **kwargs):
     print(f"processing {len(configs)} configs")
 
     for i, config in enumerate(configs, start=1):
-        with sentry_sdk.push_scope() as scope:
-            print(f"attempting to fetch {i}/{len(configs)} {config.url}")
+        print(f"attempting to fetch {i}/{len(configs)} {config.url}")
 
-            scope.set_tag("config_name", config.name)
-            scope.set_tag("config_url", config.url)
-            scope.set_context("config", config.dict())
+        try:
+            extract, content = download_feed(
+                config=config,
+                auth_dict=auth_dict,
+                ts=start,
+            )
 
-            try:
-                extract, content = download_feed(
+            extract.save_content(fs=fs, content=content)
+
+            outcomes.append(
+                GTFSDownloadOutcome(
+                    success=True,
                     config=config,
-                    auth_dict=auth_dict,
-                    ts=start,
+                    extract=extract,
                 )
-
-                extract.save_content(fs=fs, content=content)
-
-                outcomes.append(
-                    GTFSDownloadOutcome(
-                        success=True,
-                        config=config,
-                        extract=extract,
-                    )
+            )
+        except Exception as e:
+            logging.exception(
+                f"exception occurred while attempting to download feed {config.url}"
+            )
+            outcomes.append(
+                GTFSDownloadOutcome(
+                    success=False,
+                    exception=e,
+                    config=config,
                 )
-            except Exception as e:
-                if isinstance(e, HTTPError):
-                    scope.fingerprint = [
-                        config.url,
-                        str(e),
-                        str(e.response.status_code),
-                    ]
-                else:
-                    scope.fingerprint = [config.url, str(e)]
-                logging.exception(
-                    f"exception occurred while attempting to download feed {config.url}"
-                )
-                outcomes.append(
-                    GTFSDownloadOutcome(
-                        success=False,
-                        exception=e,
-                        config=config,
-                    )
-                )
+            )
 
     print(
         f"took {humanize.naturaldelta(pendulum.now() - start)} to process {len(configs)} configs"
