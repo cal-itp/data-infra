@@ -202,14 +202,6 @@ output "google_storage_bucket_acl_tfer--gtfs-data_id" {
   value = google_storage_bucket_acl.tfer--gtfs-data.id
 }
 
-output "google_storage_bucket_acl_tfer--gtfs-schedule-backfill-test-deprecated_id" {
-  value = google_storage_bucket_acl.tfer--gtfs-schedule-backfill-test-deprecated.id
-}
-
-output "google_storage_bucket_acl_tfer--gtfs-schedule-backfill-test_id" {
-  value = google_storage_bucket_acl.tfer--gtfs-schedule-backfill-test.id
-}
-
 output "google_storage_bucket_acl_tfer--littlepay-data-extract-prod_id" {
   value = google_storage_bucket_acl.tfer--littlepay-data-extract-prod.id
 }
@@ -480,14 +472,6 @@ output "google_storage_bucket_iam_binding_tfer--gtfs-data-test_id" {
 
 output "google_storage_bucket_iam_binding_tfer--gtfs-data_id" {
   value = google_storage_bucket_iam_binding.tfer--gtfs-data.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--gtfs-schedule-backfill-test-deprecated_id" {
-  value = google_storage_bucket_iam_binding.tfer--gtfs-schedule-backfill-test-deprecated.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--gtfs-schedule-backfill-test_id" {
-  value = google_storage_bucket_iam_binding.tfer--gtfs-schedule-backfill-test.id
 }
 
 output "google_storage_bucket_iam_binding_tfer--littlepay-data-extract-prod_id" {
@@ -762,14 +746,6 @@ output "google_storage_bucket_iam_member_tfer--gtfs-data_id" {
   value = google_storage_bucket_iam_member.tfer--gtfs-data.id
 }
 
-output "google_storage_bucket_iam_member_tfer--gtfs-schedule-backfill-test-deprecated_id" {
-  value = google_storage_bucket_iam_member.tfer--gtfs-schedule-backfill-test-deprecated.id
-}
-
-output "google_storage_bucket_iam_member_tfer--gtfs-schedule-backfill-test_id" {
-  value = google_storage_bucket_iam_member.tfer--gtfs-schedule-backfill-test.id
-}
-
 output "google_storage_bucket_iam_member_tfer--littlepay-data-extract-prod_id" {
   value = google_storage_bucket_iam_member.tfer--littlepay-data-extract-prod.id
 }
@@ -1040,14 +1016,6 @@ output "google_storage_bucket_iam_policy_tfer--gtfs-data-test_id" {
 
 output "google_storage_bucket_iam_policy_tfer--gtfs-data_id" {
   value = google_storage_bucket_iam_policy.tfer--gtfs-data.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--gtfs-schedule-backfill-test-deprecated_id" {
-  value = google_storage_bucket_iam_policy.tfer--gtfs-schedule-backfill-test-deprecated.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--gtfs-schedule-backfill-test_id" {
-  value = google_storage_bucket_iam_policy.tfer--gtfs-schedule-backfill-test.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--littlepay-data-extract-prod_id" {
@@ -1534,22 +1502,6 @@ output "google_storage_bucket_tfer--gtfs-data_self_link" {
   value = google_storage_bucket.tfer--gtfs-data.self_link
 }
 
-output "google_storage_bucket_tfer--gtfs-schedule-backfill-test-deprecated_name" {
-  value = google_storage_bucket.tfer--gtfs-schedule-backfill-test-deprecated.name
-}
-
-output "google_storage_bucket_tfer--gtfs-schedule-backfill-test-deprecated_self_link" {
-  value = google_storage_bucket.tfer--gtfs-schedule-backfill-test-deprecated.self_link
-}
-
-output "google_storage_bucket_tfer--gtfs-schedule-backfill-test_name" {
-  value = google_storage_bucket.tfer--gtfs-schedule-backfill-test.name
-}
-
-output "google_storage_bucket_tfer--gtfs-schedule-backfill-test_self_link" {
-  value = google_storage_bucket.tfer--gtfs-schedule-backfill-test.self_link
-}
-
 output "google_storage_bucket_tfer--littlepay-data-extract-prod_name" {
   value = google_storage_bucket.tfer--littlepay-data-extract-prod.name
 }
@@ -1876,14 +1828,6 @@ output "google_storage_default_object_acl_tfer--gtfs-data-test_id" {
 
 output "google_storage_default_object_acl_tfer--gtfs-data_id" {
   value = google_storage_default_object_acl.tfer--gtfs-data.id
-}
-
-output "google_storage_default_object_acl_tfer--gtfs-schedule-backfill-test-deprecated_id" {
-  value = google_storage_default_object_acl.tfer--gtfs-schedule-backfill-test-deprecated.id
-}
-
-output "google_storage_default_object_acl_tfer--gtfs-schedule-backfill-test_id" {
-  value = google_storage_default_object_acl.tfer--gtfs-schedule-backfill-test.id
 }
 
 output "google_storage_default_object_acl_tfer--littlepay-data-extract-prod_id" {

@@ -316,18 +316,6 @@ resource "google_storage_bucket_iam_binding" "tfer--gtfs-data-test-reports" {
   role    = "roles/storage.legacyBucketOwner"
 }
 
-resource "google_storage_bucket_iam_binding" "tfer--gtfs-schedule-backfill-test" {
-  bucket  = "b/gtfs-schedule-backfill-test"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectOwner"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--gtfs-schedule-backfill-test-deprecated" {
-  bucket  = "b/gtfs-schedule-backfill-test-deprecated"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectOwner"
-}
-
 resource "google_storage_bucket_iam_binding" "tfer--littlepay-data-extract-prod" {
   bucket  = "b/littlepay-data-extract-prod"
   members = ["projectViewer:cal-itp-data-infra"]

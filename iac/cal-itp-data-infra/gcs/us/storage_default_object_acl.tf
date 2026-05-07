@@ -208,14 +208,6 @@ resource "google_storage_default_object_acl" "tfer--gtfs-data-test-reports" {
   bucket = "gtfs-data-test-reports"
 }
 
-resource "google_storage_default_object_acl" "tfer--gtfs-schedule-backfill-test" {
-  bucket = "gtfs-schedule-backfill-test"
-}
-
-resource "google_storage_default_object_acl" "tfer--gtfs-schedule-backfill-test-deprecated" {
-  bucket = "gtfs-schedule-backfill-test-deprecated"
-}
-
 resource "google_storage_default_object_acl" "tfer--littlepay-data-extract-prod" {
   bucket = "littlepay-data-extract-prod"
 }

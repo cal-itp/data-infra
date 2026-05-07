@@ -316,18 +316,6 @@ resource "google_storage_bucket_iam_member" "tfer--gtfs-data-test-reports" {
   role   = "roles/storage.legacyObjectOwner"
 }
 
-resource "google_storage_bucket_iam_member" "tfer--gtfs-schedule-backfill-test" {
-  bucket = "b/gtfs-schedule-backfill-test"
-  member = "projectViewer:cal-itp-data-infra"
-  role   = "roles/storage.legacyObjectReader"
-}
-
-resource "google_storage_bucket_iam_member" "tfer--gtfs-schedule-backfill-test-deprecated" {
-  bucket = "b/gtfs-schedule-backfill-test-deprecated"
-  member = "projectEditor:cal-itp-data-infra"
-  role   = "roles/storage.legacyObjectOwner"
-}
-
 resource "google_storage_bucket_iam_member" "tfer--littlepay-data-extract-prod" {
   bucket = "b/littlepay-data-extract-prod"
   member = "serviceAccount:project-1005246706141@storage-transfer-service.iam.gserviceaccount.com"

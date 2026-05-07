@@ -839,62 +839,6 @@ resource "google_storage_bucket" "tfer--gtfs-data-test-reports" {
   }
 }
 
-resource "google_storage_bucket" "tfer--gtfs-schedule-backfill-test" {
-  default_event_based_hold = "false"
-  force_destroy            = "false"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "0"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-
-  location                    = "US-WEST2"
-  name                        = "gtfs-schedule-backfill-test"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-}
-
-resource "google_storage_bucket" "tfer--gtfs-schedule-backfill-test-deprecated" {
-  default_event_based_hold = "false"
-  force_destroy            = "false"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "0"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-
-  location                    = "US-WEST2"
-  name                        = "gtfs-schedule-backfill-test-deprecated"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "ARCHIVE"
-  uniform_bucket_level_access = "true"
-}
-
 resource "google_storage_bucket" "tfer--littlepay-data-extract-prod" {
   default_event_based_hold    = "false"
   force_destroy               = "false"
