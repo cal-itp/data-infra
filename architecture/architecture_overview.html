@@ -558,9 +558,9 @@ class ingestion_label,modeling_label,analysis_label group_labelstyle
 <li><p>Locally-run Airflow (via docker-compose)</p></li>
 <li><p>Test gtfs-rt-archiver-v3</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">cal-itp-data-infra-staging</span></code> database (i.e. project) in BigQuery</p></li>
-<li><p>GCS buckets with the <code class="docutils literal notranslate"><span class="pre">test-</span></code> prefix</p>
+<li><p>Use Staging GCS buckets</p>
 <ul>
-<li><p>e.g. <code class="docutils literal notranslate"><span class="pre">gs://test-calitp-gtfs-rt-raw-v2</span></code></p></li>
+<li><p>e.g. <code class="docutils literal notranslate"><span class="pre">gs://calitp-staging-gtfs-rt-raw-v2</span></code></p></li>
 <li><p>Some buckets prefixed with <code class="docutils literal notranslate"><span class="pre">dev-</span></code> also exist; primarily for testing the RT archiver locally</p></li>
 </ul>
 </li>
