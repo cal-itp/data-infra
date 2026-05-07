@@ -388,12 +388,6 @@ resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-schedule-pa
   role    = "roles/storage.legacyObjectReader"
 }
 
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-schedule-parsed-hourly" {
-  bucket  = "b/test-calitp-gtfs-schedule-parsed-hourly"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketReader"
-}
-
 resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-schedule-processed" {
   bucket  = "b/test-calitp-gtfs-schedule-processed"
   members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]

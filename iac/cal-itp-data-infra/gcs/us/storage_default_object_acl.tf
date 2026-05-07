@@ -257,10 +257,6 @@ resource "google_storage_default_object_acl" "tfer--test-calitp-gtfs-schedule-pa
   bucket = "test-calitp-gtfs-schedule-parsed"
 }
 
-resource "google_storage_default_object_acl" "tfer--test-calitp-gtfs-schedule-parsed-hourly" {
-  bucket = "test-calitp-gtfs-schedule-parsed-hourly"
-}
-
 resource "google_storage_default_object_acl" "tfer--test-calitp-gtfs-schedule-processed" {
   bucket = "test-calitp-gtfs-schedule-processed"
 }

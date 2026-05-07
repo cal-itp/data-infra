@@ -250,10 +250,6 @@ resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-parsed" {
   bucket = "test-calitp-gtfs-schedule-parsed"
 }
 
-resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-parsed-hourly" {
-  bucket = "test-calitp-gtfs-schedule-parsed-hourly"
-}
-
 resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-processed" {
   bucket = "test-calitp-gtfs-schedule-processed"
 }
