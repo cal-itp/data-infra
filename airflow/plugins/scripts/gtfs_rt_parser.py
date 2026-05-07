@@ -628,26 +628,6 @@ class ValidationProcessor:
             except subprocess.CalledProcessError as e:
                 stderr = e.stderr.decode("utf-8")
 
-                fingerprint: List[Any] = [
-                    type(e),
-                    # convert back to url manually, I don't want to mess around with the hourly class
-                    base64.urlsafe_b64decode(
-                        self.aggregation.base64_url.encode()
-                    ).decode(),
-                ]
-                fingerprint.append(e.returncode)
-
-                # we could also use a custom exception for this
-                if "Unexpected end of ZLIB input stream" in stderr:
-                    fingerprint.append("Unexpected end of ZLIB input stream")
-
-                scope.fingerprint = fingerprint
-
-                # get the end of stderr, just enough to fit in MAX_STRING_LENGTH defined above
-                scope.set_context("Process", {"stderr": stderr[-2000:]})
-
-                sentry_sdk.capture_exception(e, scope=scope)
-
                 outcomes = [
                     RTFileProcessingOutcome(
                         step=self.aggregation.step,

@@ -1,0 +1,75 @@
+[ {
+  "errorMessage" : {
+    "messageId" : 0,
+    "gtfsRtFeedIterationModel" : null,
+    "validationRule" : {
+      "errorId" : "W008",
+      "severity" : "WARNING",
+      "title" : "Header timestamp is older than 65 seconds",
+      "errorDescription" : "The data in a GTFS-realtime feed should always be less than one minute old",
+      "occurrenceSuffix" : "old which is greater than the recommended age of 65 seconds"
+    },
+    "errorDetails" : null
+  },
+  "occurrenceList" : [ {
+    "occurrenceId" : 0,
+    "messageLogModel" : null,
+    "prefix" : "header.timestamp is 6645 min 53 sec"
+  } ]
+}, {
+  "errorMessage" : {
+    "messageId" : 0,
+    "gtfsRtFeedIterationModel" : null,
+    "validationRule" : {
+      "errorId" : "E034",
+      "severity" : "ERROR",
+      "title" : "GTFS-rt agency_id does not exist in GTFS data",
+      "errorDescription" : "All agency_ids provided in the GTFS-rt alert.informed_entity.agency_id should also exist in GTFS agency.txt",
+      "occurrenceSuffix" : "does not exist in the GTFS data agency.txt"
+    },
+    "errorDetails" : null
+  },
+  "occurrenceList" : [ {
+    "occurrenceId" : 0,
+    "messageLogModel" : null,
+    "prefix" : "alert ID c35dd89f-8af2-4155-adac-2f25f002ae9e agency_id 6216179"
+  }, {
+    "occurrenceId" : 0,
+    "messageLogModel" : null,
+    "prefix" : "alert ID c88999c5-37b0-46cf-afd4-4d9c68cc359b agency_id 6216179"
+  } ]
+}, {
+  "errorMessage" : {
+    "messageId" : 0,
+    "gtfsRtFeedIterationModel" : null,
+    "validationRule" : {
+      "errorId" : "E011",
+      "severity" : "ERROR",
+      "title" : "GTFS-rt stop_id does not exist in GTFS data",
+      "errorDescription" : "All stop_ids referenced in GTFS-rt feeds must exist in GTFS stops.txt",
+      "occurrenceSuffix" : "does not exist in GTFS data stops.txt"
+    },
+    "errorDetails" : null
+  },
+  "occurrenceList" : [ {
+    "occurrenceId" : 0,
+    "messageLogModel" : null,
+    "prefix" : "alert entity ID be2df725-4251-47c4-9af0-2b5651bf0cac stop_id 401"
+  }, {
+    "occurrenceId" : 0,
+    "messageLogModel" : null,
+    "prefix" : "alert entity ID be2df725-4251-47c4-9af0-2b5651bf0cac stop_id 401"
+  }, {
+    "occurrenceId" : 0,
+    "messageLogModel" : null,
+    "prefix" : "alert entity ID 2c3fb141-85be-4f6b-8678-13f6d6413b85 stop_id 510"
+  }, {
+    "occurrenceId" : 0,
+    "messageLogModel" : null,
+    "prefix" : "alert entity ID 89e12239-102d-4c8b-b256-a7ef994b512b stop_id 71"
+  }, {
+    "occurrenceId" : 0,
+    "messageLogModel" : null,
+    "prefix" : "alert entity ID 89e12239-102d-4c8b-b256-a7ef994b512b stop_id 71"
+  } ]
+} ]
