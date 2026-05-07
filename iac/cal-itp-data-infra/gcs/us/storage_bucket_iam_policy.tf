@@ -289,6 +289,10 @@ resource "google_storage_bucket_iam_policy" "tfer--calitp-backups-grafana" {
 POLICY
 }
 
+data "google_sql_database_instance" "metabase" {
+  name = "metabase"
+}
+
 resource "google_storage_bucket_iam_policy" "tfer--calitp-backups-metabase" {
   bucket = "b/calitp-backups-metabase"
 
@@ -323,7 +327,8 @@ resource "google_storage_bucket_iam_policy" "tfer--calitp-backups-metabase" {
     },
     {
       "members": [
-        "serviceAccount:backup-metabase@cal-itp-data-infra.iam.gserviceaccount.com"
+        "serviceAccount:backup-metabase@cal-itp-data-infra.iam.gserviceaccount.com",
+        "serviceAccount:${data.google_sql_database_instance.metabase.service_account_email_address}"
       ],
       "role": "roles/storage.objectAdmin"
     }
