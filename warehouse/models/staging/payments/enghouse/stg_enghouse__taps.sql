@@ -16,7 +16,7 @@ clean_columns AS (
         SAFE_CAST(tx_number AS INT64) AS tx_number,
         SAFE_CAST(tx_status AS INT64) AS tx_status,
         {{ trim_make_empty_string_null('payment_reference') }} AS payment_reference,
-        SAFE_CAST(terminal_spdh_code AS INT64) AS terminal_spdh_code,
+        {{ trim_make_empty_string_null('terminal_spdh_code') }} AS terminal_spdh_code,
         {{ trim_make_empty_string_null('denylist_version') }} AS denylist_version,
         {{ trim_make_empty_string_null('transit_data') }} AS transit_data,
         SAFE_CAST(currency AS INT64) AS currency,

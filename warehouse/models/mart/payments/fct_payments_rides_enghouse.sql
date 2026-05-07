@@ -79,7 +79,6 @@ join_orgs AS (
         ticket_results.start_dttm,
         ticket_results.end_dttm,
         ticket_results.ticket_code,
-        ticket_results.additional_infos,
 
         taps.mapping_terminal_id,
         taps.mapping_merchant_id,
@@ -167,7 +166,6 @@ fct_payments_rides_enghouse AS (
         start_dttm,
         end_dttm,
         ticket_code,
-        additional_infos,
         mapping_terminal_id,
         mapping_merchant_id,
         terminal,

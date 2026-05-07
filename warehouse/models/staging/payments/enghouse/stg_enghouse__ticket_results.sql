@@ -20,12 +20,11 @@ clean_columns AS (
         SAFE_CAST(start_dttm AS TIMESTAMP) AS start_dttm,
         SAFE_CAST(end_dttm AS TIMESTAMP) AS end_dttm,
         {{ trim_make_empty_string_null('ticket_code') }} AS ticket_code,
-        {{ trim_make_empty_string_null('additional_infos') }} AS additional_infos,
         agency,
         dt,
         {{ dbt_utils.generate_surrogate_key(['operator_id', 'id', 'ticket_id', 'station_name', 'amount', 'clearing_id',
             'reason', 'tap_id', 'ticket_type', 'created_dttm', 'line', 'start_station', 'end_station', 'start_dttm',
-            'end_dttm', 'ticket_code', 'additional_infos']) }} AS _content_hash
+            'end_dttm', 'ticket_code']) }} AS _content_hash
     FROM source
 ),
 
@@ -57,7 +56,6 @@ stg_enghouse__ticket_results AS (
         start_dttm,
         end_dttm,
         ticket_code,
-        additional_infos,
         agency,
         dt,
         _content_hash

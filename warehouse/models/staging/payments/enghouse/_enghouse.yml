@@ -34,7 +34,7 @@ models:
       - name: token
         description: Tokenized card number.
       - name: masked_pan
-        description: Masked primary account number (first six and last four digits).
+        description: Masked primary account number.
       - name: server_date
         description: Timestamp when the tap was received on the Enghouse server.
       - name: terminal_date
@@ -88,7 +88,7 @@ models:
       - name: zone_name
         description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: line_public_number
-        description: Transit data from the validator. Route identifier used to join taps to route data.
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: line_name
         description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: line_direction
@@ -123,37 +123,35 @@ models:
       - name: operator_id
         description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
       - name: id
-        description: Unique identifier for this ticket result in the Enghouse system.
+        description: Unique identifier for this ticket in the Enghouse system.
       - name: ticket_id
-        description: Identifier for the ticket associated with this result.
+        description: Unique identifier for this ticket in the Enghouse system.
       - name: station_name
-        description: Zone or station where the ticket was created.
+        description: Zone in which the ticket was created.
       - name: amount
-        description: Fare amount in USD dollars (converted from cents at source).
+        description: Fare amount (converted from cents at source).
       - name: clearing_id
-        description: Identifier of the clearing batch in which this ticket was calculated. Not meaningful for downstream analysis.
+        description: Identifier of the clearing in which this ticket was calculated. Not relevant.
       - name: reason
-        description: Explanation of how the fare was calculated (e.g., NOT_CAPPED_FULL_FARE).
+        description: Explanation of how the fare was calculated.
       - name: tap_id
         description: Identifier of the tap that generated this ticket result.
       - name: ticket_type
-        description: Type of ticket applied (e.g., FULL_FARE).
+        description: Type of ticket.
       - name: created_dttm
         description: Timestamp when the ticket was created.
       - name: line
-        description: Line associated with the trip, if provided by the validator.
+        description: Line, if provided by the validator.
       - name: start_station
-        description: Zone or station where the trip started.
+        description: Zone where the trip started.
       - name: end_station
-        description: Zone or station where the trip ended.
+        description: Zone where the trip ended.
       - name: start_dttm
-        description: Timestamp when the trip started.
+        description: Timestamp when the ticket started.
       - name: end_dttm
-        description: Timestamp when the trip ended. Only populated for time-based ticket types.
+        description: Only relevant for time-based tickets.
       - name: ticket_code
-        description: Additional code providing detail on the ticket or ticket type.
-      - name: additional_infos
-        description: Additional information field provided by Enghouse. Content varies by agency configuration.
+        description: Additional information for the ticket or ticket type.
       - name: agency
         description: Agency identifier parsed from the GCS path partition (e.g., "ventura", "raba", "camarillo").
       - name: dt
@@ -176,7 +174,7 @@ models:
       - name: id
         description: Unique identifier for this transaction in the Enghouse system.
       - name: operation
-        description: Type of transaction (e.g., authorization, settlement, debt recovery).
+        description: Type of transaction.
       - name: terminal_id
         description: Terminal identifier associated with the tap that triggered this transaction.
       - name: mapping_terminal_id
@@ -249,7 +247,7 @@ models:
           - `Closed`: money collected, no debt
           - `Debt`: debt recorded and recovery attempts ongoing
           - `DebtFinal`: debt recorded and all recovery attempts exhausted
-          - `NoAuthDone`: same as Open, but card verification was skipped because the card was used on a previous day
+          - `NoAuthDone`: same as Open, but card verification was skipped because the card was used on previous days
       - name: payment_reference
         description: Payment reference number (PRN / variable symbol) for this pay window.
       - name: terminal_id
