@@ -156,8 +156,11 @@ module "lb-http" {
       }
 
       log_config = {
-        enable = false
+        enable      = true
+        sample_rate = 0.1
       }
+
+      security_policy = google_compute_security_policy.metabase-staging.self_link
     }
   }
 }
