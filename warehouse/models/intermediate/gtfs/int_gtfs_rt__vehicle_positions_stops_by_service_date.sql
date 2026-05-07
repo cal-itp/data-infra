@@ -10,20 +10,24 @@
     )
 }}
 
+-- depends_on: {{ ref('dim_schedule_feeds') }}
+-- add dependency hint to let dbt know about the dependency inside the call statement block
+
 -- fetch a list of feed keys
 -- **the where clause here needs to align exactly with the where clause used on fct_scheduled_trips below**
 -- this allows us to filter stop times grouped for significant efficiency gains
-{%- call statement('get_keys', fetch_result=True) -%}
-    SELECT ARRAY_TO_STRING(ARRAY_AGG(DISTINCT '"' || feed_key || '"' ), ',')
-    FROM {{ ref('fct_scheduled_trips') }}
+{% call statement('get_dates', fetch_result=True) %}
+    SELECT ARRAY_TO_STRING(ARRAY_AGG(DISTINCT '"' || feeds._valid_from || '"' ), ',')
+    FROM {{ ref('fct_scheduled_trips') }} AS trips
+    LEFT JOIN {{ ref('dim_schedule_feeds') }} AS feeds
+    ON trips.feed_key = feeds.key
     WHERE service_date
         -- subtract 1 at the end to account for 1-day offset between UTC and Pacific dates (always want one service day earlier than the UTC lookback day would be)
         BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_STOP_ANALYSIS_START")) }} - 1
             AND {{ ranged_incremental_max_date() }}
-{%- endcall -%}
+{% endcall %}
 
-{%- set key_list = load_result('get_keys')['data'][0][0] -%}
-
+{% set date_list = load_result('get_dates')['data'][0][0] %}
 
 WITH trips AS (
     SELECT
@@ -50,7 +54,7 @@ stop_times_grouped AS (
     FROM {{ ref('int_gtfs_schedule__stop_times_grouped') }}
     -- use the list of feed keys fetched above
     -- note that you can't use a subquery here because BQ doesn't do partition elimination on subqueries
-    WHERE feed_key in ({{ key_list }})
+    WHERE _feed_valid_from in ({{ date_list }})
 ),
 
 stops AS (
@@ -85,6 +89,8 @@ vehicle_locations AS (
         trip_instance_key,
         location
     FROM {{ ref('fct_vehicle_locations') }}
+    -- we load this by dt rather than service date
+    -- this is ok because t-X days for service date will be fully covered by t-X days for dt
     WHERE dt
         BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_STOP_ANALYSIS_START")) }}
             AND {{ ranged_incremental_max_date() }}
@@ -126,13 +132,12 @@ scheduled_with_vp_url AS (
         daily_rt_feeds.vp_base64_url
     FROM schedule_joins
     INNER JOIN daily_rt_feeds
-        ON trips.feed_key = daily_rt_feeds.schedule_feed_key
+        ON schedule_joins.feed_key = daily_rt_feeds.schedule_feed_key
 ),
 
 
 vp_near_stops AS (
    SELECT
-        scheduled_with_vp_url.dt,
         scheduled_with_vp_url.service_date,
         scheduled_with_vp_url.vp_base64_url,
         vehicle_locations.key AS vp_key,
@@ -148,6 +153,7 @@ vp_near_stops AS (
         --ST_CLOSESTPOINT(vehicle_locations.location, schedule_joins.pt_geom) is returning a point useful? It'll be difficult to match against, use vp_keys instead and distances
 
     FROM scheduled_with_vp_url
+    -- we only want trips with data so inner join is ok
     INNER JOIN vehicle_locations
         ON scheduled_with_vp_url.vp_base64_url = vehicle_locations.base64_url
         AND scheduled_with_vp_url.service_date = vehicle_locations.service_date
@@ -156,7 +162,6 @@ vp_near_stops AS (
         -- 100 meters ~ 0.1 miles, 328 ft
     GROUP BY service_date, vp_base64_url, feed_key, trip_instance_key, stop_id, st_trip_key, vp_key
 ),
-
 
 int_gtfs_rt__vehicle_positions_stops_by_service_date AS (
     SELECT
