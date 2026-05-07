@@ -261,14 +261,6 @@ resource "google_storage_default_object_acl" "tfer--test-calitp-gtfs-schedule-ra
   bucket = "test-calitp-gtfs-schedule-raw-v2"
 }
 
-resource "google_storage_default_object_acl" "tfer--test-calitp-payments-littlepay-parsed" {
-  bucket = "test-calitp-payments-littlepay-parsed"
-}
-
-resource "google_storage_default_object_acl" "tfer--test-calitp-payments-littlepay-raw" {
-  bucket = "test-calitp-payments-littlepay-raw"
-}
-
 resource "google_storage_default_object_acl" "tfer--test-calitp-publish" {
   bucket = "test-calitp-publish"
 }

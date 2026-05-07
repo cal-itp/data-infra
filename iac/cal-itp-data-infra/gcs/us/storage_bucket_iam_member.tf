@@ -394,30 +394,6 @@ resource "google_storage_bucket_iam_member" "tfer--test-calitp-gtfs-schedule-raw
   role   = "roles/storage.legacyObjectReader"
 }
 
-resource "google_storage_bucket_iam_member" "tfer--test-calitp-payments-littlepay-parsed" {
-  bucket = "b/test-calitp-payments-littlepay-parsed"
-  member = "projectEditor:cal-itp-data-infra"
-  role   = "roles/storage.legacyObjectOwner"
-}
-
-resource "google_storage_bucket_iam_member" "tfer--test-calitp-payments-littlepay-parsed-v3" {
-  bucket = "b/test-calitp-payments-littlepay-parsed-v3"
-  member = "projectEditor:cal-itp-data-infra"
-  role   = "roles/storage.legacyObjectOwner"
-}
-
-resource "google_storage_bucket_iam_member" "tfer--test-calitp-payments-littlepay-raw" {
-  bucket = "b/test-calitp-payments-littlepay-raw"
-  member = "projectOwner:cal-itp-data-infra"
-  role   = "roles/storage.legacyBucketOwner"
-}
-
-resource "google_storage_bucket_iam_member" "tfer--test-calitp-payments-littlepay-raw-v3" {
-  bucket = "b/test-calitp-payments-littlepay-raw-v3"
-  member = "projectOwner:cal-itp-data-infra"
-  role   = "roles/storage.legacyBucketOwner"
-}
-
 resource "google_storage_bucket_iam_member" "tfer--test-calitp-publish" {
   bucket = "b/test-calitp-publish"
   member = "projectViewer:cal-itp-data-infra"
