@@ -22,8 +22,7 @@
     LEFT JOIN {{ ref('dim_schedule_feeds') }} AS feeds
     ON trips.feed_key = feeds.key
     WHERE service_date
-        -- subtract 1 at the end to account for 1-day offset between UTC and Pacific dates (always want one service day earlier than the UTC lookback day would be)
-        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_STOP_ANALYSIS_START")) }} - 1
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_STOP_ANALYSIS_START")) }}
             AND {{ ranged_incremental_max_date() }}
 {% endcall %}
 
@@ -38,8 +37,7 @@ WITH trips AS (
         trip_first_departure_sec,
     FROM {{ ref('fct_scheduled_trips') }}
     WHERE service_date
-        -- subtract 1 at the end to account for 1-day offset between UTC and Pacific dates (always want one service day earlier than the UTC lookback day would be)
-        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_STOP_ANALYSIS_START")) }} - 1
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_STOP_ANALYSIS_START")) }}
             AND {{ ranged_incremental_max_date() }}
 ),
 
@@ -76,8 +74,9 @@ daily_rt_feeds AS (
         base64_url AS vp_base64_url,
     FROM {{ ref('fct_daily_rt_feed_files') }}
     WHERE `date`
+        -- add one to the incremental max date because we need to get one extra UTC dt to ensure overlap with service date
         BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_STOP_ANALYSIS_START")) }}
-            AND {{ ranged_incremental_max_date() }}
+            AND {{ ranged_incremental_max_date() }} + 1
         AND feed_type = 'vehicle_positions'
 ),
 
@@ -90,10 +89,11 @@ vehicle_locations AS (
         location
     FROM {{ ref('fct_vehicle_locations') }}
     -- we load this by dt rather than service date
-    -- this is ok because t-X days for service date will be fully covered by t-X days for dt
+    -- this is ok for the min date because t-X days for service date will be fully covered by t-X days for dt
+    -- add one to the incremental max date because we need to get one extra UTC dt to ensure overlap with service date
     WHERE dt
         BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_STOP_ANALYSIS_START")) }}
-            AND {{ ranged_incremental_max_date() }}
+            AND {{ ranged_incremental_max_date() }} + 1
 ),
 
 schedule_joins AS (
@@ -116,6 +116,7 @@ schedule_joins AS (
         ON trips.feed_key = stops.feed_key
         AND trips.service_date = stops.service_date
         AND stop_id = stops.stop_id
+    -- TODO: add a where filter if needed to filter out rows missing any critical info
 ),
 
 -- we only want scheduled trips that have a VP url associated
@@ -154,6 +155,7 @@ vp_near_stops AS (
 
     FROM scheduled_with_vp_url
     -- we only want trips with data so inner join is ok
+    -- TODO, though, for testing: try a left join and confirm that trips only get dropped because they don't have locations data and not because of date mismatches
     INNER JOIN vehicle_locations
         ON scheduled_with_vp_url.vp_base64_url = vehicle_locations.base64_url
         AND scheduled_with_vp_url.service_date = vehicle_locations.service_date
