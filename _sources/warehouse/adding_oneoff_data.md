@@ -12,7 +12,7 @@ To add one-time data to BigQuery for use in Metabase follow the instructions bel
 
 1. First, upload your data to a [Google Cloud Storage](https://console.cloud.google.com/storage/browser/calitp-analytics-data) bucket in the `gs://calitp-analytics-data/data-analyses/` directory and make note of the `gsutil URI` (file path).
 
-2. Next, navigate to a [JupyterLab](https://notebooks.calitp.org/) terminal window.
+2. Next, navigate to a [JupyterLab](https://jupyterhub.dds.dot.ca.gov/) terminal window.
 
 3. Once in the terminal, input the following command with the appropriate structure:
 
