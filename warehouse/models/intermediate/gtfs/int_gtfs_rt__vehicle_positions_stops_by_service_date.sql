@@ -16,6 +16,7 @@
 -- fetch a list of _feed_valid_from dates that are implicated in these updates
 -- **the where clause here needs to align exactly with the where clause used on fct_scheduled_trips below**
 -- this allows us to filter stop times grouped for significant efficiency gains
+-- https://stackoverflow.com/questions/64007239/how-do-we-define-select-statement-as-a-variable-in-dbt
 {% call statement('get_dates', fetch_result=True) %}
     SELECT ARRAY_TO_STRING(ARRAY_AGG(DISTINCT '"' || feeds._valid_from || '"' ), ',')
     FROM {{ ref('fct_scheduled_trips') }} AS trips
