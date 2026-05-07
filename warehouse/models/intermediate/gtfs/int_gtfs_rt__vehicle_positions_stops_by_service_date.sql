@@ -3,13 +3,16 @@
         materialized='incremental',
         incremental_strategy = 'insert_overwrite',
         partition_by={
-            'field': 'dt',
+            'field': 'service_date',
             'data_type': 'date',
             'granularity': 'day'
-        }, cluster_by=['dt', 'vp_base64_url', 'feed_key']
+        }, cluster_by=['service_date', 'vp_base64_url', 'feed_key']
     )
 }}
 
+-- fetch a list of feed keys
+-- the where clause here needs to align exactly with the where clause used on fct_scheduled_trips below
+-- this allows us to filter stop times grouped for significant efficiency gains
 {%- call statement('get_keys', fetch_result=True) -%}
     SELECT ARRAY_TO_STRING(ARRAY_AGG(DISTINCT '"' || feed_key || '"' ), ',')
     FROM {{ ref('fct_scheduled_trips') }}
@@ -45,6 +48,8 @@ stop_times_grouped AS (
         stop_id_array,
 
     FROM {{ ref('int_gtfs_schedule__stop_times_grouped') }}
+    -- use the list of feed keys fetched above
+    -- note that you can't use a subquery here because BQ doesn't do partition elimination on subqueries
     WHERE feed_key in ({{ key_list }})
 ),
 
