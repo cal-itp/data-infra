@@ -253,10 +253,6 @@ resource "google_storage_default_object_acl" "tfer--test-calitp-gtfs-rt-raw" {
   bucket = "test-calitp-gtfs-rt-raw"
 }
 
-resource "google_storage_default_object_acl" "tfer--test-calitp-gtfs-rt-validation" {
-  bucket = "test-calitp-gtfs-rt-validation"
-}
-
 resource "google_storage_default_object_acl" "tfer--test-calitp-gtfs-schedule-parsed" {
   bucket = "test-calitp-gtfs-schedule-parsed"
 }
