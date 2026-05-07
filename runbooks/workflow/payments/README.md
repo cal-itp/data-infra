@@ -30,7 +30,11 @@ Practical guides for accomplishing specific tasks. Use these when you need to ge
 
 ### 📖 Reference - Information-Oriented
 
+*Add technical specifications, data dictionaries, and schema references here as they are written.*
+
 ### 💡 Explanation - Understanding-Oriented
+
+*Add conceptual overviews and architecture deep-dives here as they are written.*
 
 ## Quick Links
 
