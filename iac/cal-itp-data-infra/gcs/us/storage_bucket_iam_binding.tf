@@ -394,12 +394,6 @@ resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-schedule-ra
   role    = "roles/storage.legacyBucketReader"
 }
 
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-ntd-report-validation" {
-  bucket  = "b/test-calitp-ntd-report-validation"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectOwner"
-}
-
 resource "google_storage_bucket_iam_binding" "tfer--test-calitp-payments-littlepay-parsed" {
   bucket  = "b/test-calitp-payments-littlepay-parsed"
   members = ["projectViewer:cal-itp-data-infra"]
