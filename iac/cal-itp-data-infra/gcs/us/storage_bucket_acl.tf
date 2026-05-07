@@ -254,10 +254,6 @@ resource "google_storage_bucket_acl" "tfer--test-calitp-sentry" {
   bucket = "test-calitp-sentry"
 }
 
-resource "google_storage_bucket_acl" "tfer--test-rt-validations" {
-  bucket = "test-rt-validations"
-}
-
 resource "google_storage_bucket_acl" "tfer--us-002E-artifacts-002E-cal-itp-data-infra-002E-appspot-002E-com" {
   bucket = "us.artifacts.cal-itp-data-infra.appspot.com"
 }

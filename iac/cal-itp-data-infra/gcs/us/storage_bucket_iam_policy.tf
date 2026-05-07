@@ -2534,43 +2534,6 @@ resource "google_storage_bucket_iam_policy" "tfer--test-calitp-sentry" {
 POLICY
 }
 
-resource "google_storage_bucket_iam_policy" "tfer--test-rt-validations" {
-  bucket = "b/test-rt-validations"
-
-  policy_data = <<POLICY
-{
-  "bindings": [
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketReader"
-    },
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectReader"
-    }
-  ]
-}
-POLICY
-}
-
 resource "google_storage_bucket_iam_policy" "tfer--us-002E-artifacts-002E-cal-itp-data-infra-002E-appspot-002E-com" {
   bucket = "b/us.artifacts.cal-itp-data-infra.appspot.com"
 

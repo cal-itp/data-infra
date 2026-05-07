@@ -254,10 +254,6 @@ output "google_storage_bucket_acl_tfer--test-calitp-sentry_id" {
   value = google_storage_bucket_acl.tfer--test-calitp-sentry.id
 }
 
-output "google_storage_bucket_acl_tfer--test-rt-validations_id" {
-  value = google_storage_bucket_acl.tfer--test-rt-validations.id
-}
-
 output "google_storage_bucket_acl_tfer--us-002E-artifacts-002E-cal-itp-data-infra-002E-appspot-002E-com_id" {
   value = google_storage_bucket_acl.tfer--us-002E-artifacts-002E-cal-itp-data-infra-002E-appspot-002E-com.id
 }
@@ -536,10 +532,6 @@ output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-schedule-raw_id
 
 output "google_storage_bucket_iam_binding_tfer--test-calitp-sentry_id" {
   value = google_storage_bucket_iam_binding.tfer--test-calitp-sentry.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-rt-validations_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-rt-validations.id
 }
 
 output "google_storage_bucket_iam_binding_tfer--us-002E-artifacts-002E-cal-itp-data-infra-002E-appspot-002E-com_id" {
@@ -822,10 +814,6 @@ output "google_storage_bucket_iam_member_tfer--test-calitp-sentry_id" {
   value = google_storage_bucket_iam_member.tfer--test-calitp-sentry.id
 }
 
-output "google_storage_bucket_iam_member_tfer--test-rt-validations_id" {
-  value = google_storage_bucket_iam_member.tfer--test-rt-validations.id
-}
-
 output "google_storage_bucket_iam_member_tfer--us-002E-artifacts-002E-cal-itp-data-infra-002E-appspot-002E-com_id" {
   value = google_storage_bucket_iam_member.tfer--us-002E-artifacts-002E-cal-itp-data-infra-002E-appspot-002E-com.id
 }
@@ -1104,10 +1092,6 @@ output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-schedule-raw_id"
 
 output "google_storage_bucket_iam_policy_tfer--test-calitp-sentry_id" {
   value = google_storage_bucket_iam_policy.tfer--test-calitp-sentry.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-rt-validations_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-rt-validations.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--us-002E-artifacts-002E-cal-itp-data-infra-002E-appspot-002E-com_id" {
@@ -1654,14 +1638,6 @@ output "google_storage_bucket_tfer--test-calitp-sentry_self_link" {
   value = google_storage_bucket.tfer--test-calitp-sentry.self_link
 }
 
-output "google_storage_bucket_tfer--test-rt-validations_name" {
-  value = google_storage_bucket.tfer--test-rt-validations.name
-}
-
-output "google_storage_bucket_tfer--test-rt-validations_self_link" {
-  value = google_storage_bucket.tfer--test-rt-validations.self_link
-}
-
 output "google_storage_bucket_tfer--us-002E-artifacts-002E-cal-itp-data-infra-002E-appspot-002E-com_name" {
   value = google_storage_bucket.tfer--us-002E-artifacts-002E-cal-itp-data-infra-002E-appspot-002E-com.name
 }
@@ -1952,10 +1928,6 @@ output "google_storage_default_object_acl_tfer--test-calitp-gtfs-schedule-raw_id
 
 output "google_storage_default_object_acl_tfer--test-calitp-sentry_id" {
   value = google_storage_default_object_acl.tfer--test-calitp-sentry.id
-}
-
-output "google_storage_default_object_acl_tfer--test-rt-validations_id" {
-  value = google_storage_default_object_acl.tfer--test-rt-validations.id
 }
 
 output "google_storage_default_object_acl_tfer--us-002E-artifacts-002E-cal-itp-data-infra-002E-appspot-002E-com_id" {
