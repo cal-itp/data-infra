@@ -43,21 +43,23 @@ seeds:
     columns:
       - name: gtfs_dataset_source_record_id
         description: Unversioned key to dim_gtfs_datasets natural key from Airtable.
+      - name: organization_source_record_id
+        description: Unversioned key to dim_organizations natural key from Airtable. Used to join agency metadata such as organization name.
       - name: littlepay_participant_id
         description: Littlepay-assigned Participant ID.
         data_tests:
           - unique
       - name: elavon_customer_name
-        description: Elavon-assigned Customer Name.
+        description: Customer name exactly as it appears in Elavon data. Used to join Elavon settlement records to this agency.
         data_tests:
           - not_null
           - unique
       - name: _in_use_from
-        description: Start date from which this mapping is valid (inclusive). Used to handle cases where the same littlepay_participant_id maps to different elavon customer_name and customer_id over time.
+        description: Start date from which this mapping row is valid (inclusive). Used to handle agencies whose Elavon customer_name has changed over time — align to the cutover date. Use 2000-01-01 when no change has occurred.
         data_tests:
           - not_null
       - name: _in_use_until
-        description: End date until which this mapping is valid (inclusive). Used to handle cases where the same littlepay_participant_id maps to different elavon customer_name and customer_id over time.
+        description: End date until which this mapping row is valid (inclusive). Used to handle agencies whose Elavon customer_name has changed over time — align to the cutover date. Use 2099-12-31 when no change has occurred.
         data_tests:
           - not_null
 
@@ -70,24 +72,26 @@ seeds:
         enghouse_operator_id: string
     columns:
       - name: gtfs_dataset_source_record_id
-        description: Unversioned key to dim_gtfs_datasets natural key from Airtable.
+        description: Unversioned key to dim_gtfs_datasets natural key from Airtable. Used to join route and schedule data.
       - name: organization_source_record_id
-        description: To-do.
+        description: Unversioned key to dim_organizations natural key from Airtable. Used to join agency metadata such as organization name.
       - name: enghouse_operator_id
-        description: Enghouse-assigned operator ID.
+        description: Enghouse-assigned operator ID. Matches the operator_id field in Enghouse staging tables.
         data_tests:
           - unique
       - name: elavon_customer_name
-        description: Elavon-assigned Customer Name.
+        description: Customer name exactly as it appears in Elavon data. Used to join Elavon settlement records to this Enghouse operator.
         data_tests:
           - not_null
           - unique
+      - name: _common_name
+        description: Human-readable name for this mapping row. Used to distinguish rows that share the same organization_source_record_id (e.g., agencies operating under the same parent organization).
       - name: _in_use_from
-        description: Start date from which this mapping is valid (inclusive). Used to handle cases where the same enghouse_operator_id maps to different elavon customer_name and customer_id over time.
+        description: Start date from which this mapping row is valid (inclusive). Used to handle agencies whose Elavon customer_name has changed over time — align to the cutover date. Use 2000-01-01 when no change has occurred.
         data_tests:
           - not_null
       - name: _in_use_until
-        description: End date until which this mapping is valid (inclusive). Used to handle cases where the same enghouse_operator_id maps to different elavon customer_name and customer_id over time.
+        description: End date until which this mapping row is valid (inclusive). Used to handle agencies whose Elavon customer_name has changed over time — align to the cutover date. Use 2099-12-31 when no change has occurred.
         data_tests:
           - not_null
 
