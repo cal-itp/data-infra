@@ -177,6 +177,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: [setup, dbt-changed]
 
+    if: ${{ needs.dbt-changed.outputs.has-changed == 'true' }}
+
     permissions:
       contents: read
       id-token: write
@@ -191,25 +193,29 @@ jobs:
       - *install-project
       - *dbt-deps
 
+      - name: List changed and downstream models
+        working-directory: warehouse
+        run: uv run dbt list --select "${{ needs.dbt-changed.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --resource-type=model
+
       - name: Run seeds
         if: ${{ needs.dbt-changed.outputs.has-changed-seeds == 'true' }}
         working-directory: warehouse
         run: uv run dbt seed --select "${{ needs.dbt-changed.outputs.changed-seeds }}" --target ${{ env.DBT_TARGET }}
 
       - name: Full-Refresh changed models
-        if: ${{ needs.dbt-changed.outputs.has-changed == 'true' }}
         working-directory: warehouse
         run: uv run dbt run --select "${{ needs.dbt-changed.outputs.changed-models }}" --target ${{ env.DBT_TARGET }} --full-refresh
 
       - name: Run downstream models
-        if: ${{ needs.dbt-changed.outputs.has-changed == 'true' }}
         working-directory: warehouse
         run: uv run dbt run --select "${{ needs.dbt-changed.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --exclude "${{ needs.dbt-changed.outputs.changed-models }}"
 
   metabase:
     name: Sync Metabase
     runs-on: ubuntu-latest
-    needs: [setup, dbt-changed, compile, dbt-run]
+    needs: [compile, dbt-run]
+
+    if: ${{ !failure() && !cancelled() }}
 
     permissions:
       contents: read
