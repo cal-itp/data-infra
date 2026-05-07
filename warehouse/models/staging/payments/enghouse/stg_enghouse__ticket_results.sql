@@ -29,16 +29,6 @@ clean_columns AS (
     FROM source
 ),
 
-deduplicated AS (
-    SELECT * FROM (
-        SELECT
-            *,
-            ROW_NUMBER() OVER (PARTITION BY _content_hash ORDER BY dt ASC) AS row_num
-        FROM clean_columns
-    )
-    WHERE row_num = 1
-),
-
 stg_enghouse__ticket_results AS (
     SELECT
         operator_id,
