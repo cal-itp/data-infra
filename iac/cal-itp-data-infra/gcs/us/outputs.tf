@@ -246,10 +246,6 @@ output "google_storage_bucket_acl_tfer--test-calitp-gtfs-rt-raw_id" {
   value = google_storage_bucket_acl.tfer--test-calitp-gtfs-rt-raw.id
 }
 
-output "google_storage_bucket_acl_tfer--test-calitp-gtfs-schedule-parsed_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-gtfs-schedule-parsed.id
-}
-
 output "google_storage_bucket_acl_tfer--test-calitp-gtfs-schedule-processed_id" {
   value = google_storage_bucket_acl.tfer--test-calitp-gtfs-schedule-processed.id
 }
@@ -588,10 +584,6 @@ output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-download-config
 
 output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-rt-raw_id" {
   value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-rt-raw.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-schedule-parsed_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-schedule-parsed.id
 }
 
 output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-schedule-processed_id" {
@@ -942,10 +934,6 @@ output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-rt-raw_id" {
   value = google_storage_bucket_iam_member.tfer--test-calitp-gtfs-rt-raw.id
 }
 
-output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-schedule-parsed_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-gtfs-schedule-parsed.id
-}
-
 output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-schedule-processed_id" {
   value = google_storage_bucket_iam_member.tfer--test-calitp-gtfs-schedule-processed.id
 }
@@ -1292,10 +1280,6 @@ output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-download-config_
 
 output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-rt-raw_id" {
   value = google_storage_bucket_iam_policy.tfer--test-calitp-gtfs-rt-raw.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-schedule-parsed_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-gtfs-schedule-parsed.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-schedule-processed_id" {
@@ -1902,14 +1886,6 @@ output "google_storage_bucket_tfer--test-calitp-gtfs-rt-raw_self_link" {
   value = google_storage_bucket.tfer--test-calitp-gtfs-rt-raw.self_link
 }
 
-output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-parsed_name" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-parsed.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-parsed_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-parsed.self_link
-}
-
 output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-processed_name" {
   value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-processed.name
 }
@@ -2344,10 +2320,6 @@ output "google_storage_default_object_acl_tfer--test-calitp-gtfs-download-config
 
 output "google_storage_default_object_acl_tfer--test-calitp-gtfs-rt-raw_id" {
   value = google_storage_default_object_acl.tfer--test-calitp-gtfs-rt-raw.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-gtfs-schedule-parsed_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-gtfs-schedule-parsed.id
 }
 
 output "google_storage_default_object_acl_tfer--test-calitp-gtfs-schedule-processed_id" {
