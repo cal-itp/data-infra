@@ -18,9 +18,9 @@ WITH observed AS (
     FROM {{ ref('fct_observed_trips') }}
     -- Drop TU-only trips (no VP) so every row has a derivable vehicle_id.
     WHERE appeared_in_vp = TRUE
-    {% if is_incremental() %}
-      AND service_date >= DATE_SUB((SELECT MAX(service_date) FROM {{ this }}), INTERVAL 1 DAY)
-    {% endif %}
+      AND service_date
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_START")) }}
+            AND {{ ranged_incremental_max_date() }}
 ),
 
 scheduled AS (
@@ -35,6 +35,9 @@ scheduled AS (
         trip_first_departure_ts,
         trip_last_arrival_ts
     FROM {{ ref('fct_scheduled_trips') }}
+    WHERE service_date
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_START")) }}
+            AND {{ ranged_incremental_max_date() }}
 ),
 
 vehicle_per_trip AS (
@@ -43,7 +46,13 @@ vehicle_per_trip AS (
         trip_id_performed,
         APPROX_TOP_COUNT(vehicle_id, 1)[OFFSET(0)].value AS vehicle_id
     FROM {{ ref('fct_tides_vehicle_locations') }}
-    WHERE vehicle_id IS NOT NULL
+    -- we load this by dt rather than service date
+    -- this is ok for the min date because t-X days for service date will be fully covered by t-X days for dt
+    -- add one to the incremental max date because we need to get one extra UTC dt to ensure overlap with service date
+    WHERE dt
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_START")) }}
+            AND {{ ranged_incremental_max_date() }} + 1
+      AND vehicle_id IS NOT NULL
     GROUP BY 1, 2
 ),
 
