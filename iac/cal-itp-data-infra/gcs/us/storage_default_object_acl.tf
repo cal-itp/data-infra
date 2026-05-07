@@ -241,10 +241,6 @@ resource "google_storage_default_object_acl" "tfer--test-calitp-dbt-python-model
   bucket = "test-calitp-dbt-python-models"
 }
 
-resource "google_storage_default_object_acl" "tfer--test-calitp-gtfs-config" {
-  bucket = "test-calitp-gtfs-config"
-}
-
 resource "google_storage_default_object_acl" "tfer--test-calitp-gtfs-download-config" {
   bucket = "test-calitp-gtfs-download-config"
 }

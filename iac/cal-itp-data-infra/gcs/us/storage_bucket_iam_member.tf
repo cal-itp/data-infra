@@ -364,12 +364,6 @@ resource "google_storage_bucket_iam_member" "tfer--test-calitp-dbt-python-models
   role   = "roles/storage.legacyObjectOwner"
 }
 
-resource "google_storage_bucket_iam_member" "tfer--test-calitp-gtfs-config" {
-  bucket = "b/test-calitp-gtfs-config"
-  member = "projectOwner:cal-itp-data-infra"
-  role   = "roles/storage.legacyObjectOwner"
-}
-
 resource "google_storage_bucket_iam_member" "tfer--test-calitp-gtfs-download-config" {
   bucket = "b/test-calitp-gtfs-download-config"
   member = "projectOwner:cal-itp-data-infra"
