@@ -186,19 +186,6 @@ resource "google_storage_bucket" "calitp-staging-enghouse-parsed" {
   uniform_bucket_level_access = "true"
 }
 
-# TODO: Delete once is totally replaced by calitp-staging-enghouse-raw
-resource "google_storage_bucket" "cal-itp-data-infra-enghouse-raw" {
-  default_event_based_hold    = "false"
-  force_destroy               = "true"
-  location                    = "US-WEST2"
-  name                        = "cal-itp-data-infra-staging-enghouse-raw"
-  project                     = "cal-itp-data-infra-staging"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-}
-
 resource "google_storage_bucket" "calitp-staging" {
   for_each                    = local.environment_buckets
   name                        = each.key

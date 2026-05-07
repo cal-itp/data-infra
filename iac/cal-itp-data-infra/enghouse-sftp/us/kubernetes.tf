@@ -198,7 +198,7 @@ resource "kubernetes_deployment_v1" "enghouse-sftp" {
             driver    = "gcsfuse.csi.storage.gke.io"
 
             volume_attributes = {
-              bucketName   = data.terraform_remote_state.gcs.outputs.google_storage_bucket_cal-itp-data-infra-enghouse-raw_name
+              bucketName   = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-enghouse-raw_name
               mountOptions = "uid=2222,gid=2222,file-mode=777,dir-mode=777"
             }
           }
