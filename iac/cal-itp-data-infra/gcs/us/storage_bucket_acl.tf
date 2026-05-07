@@ -178,10 +178,6 @@ resource "google_storage_bucket_acl" "tfer--dev-calitp-gtfs-rt-raw" {
   bucket = "dev-calitp-gtfs-rt-raw"
 }
 
-resource "google_storage_bucket_acl" "tfer--dev-calitp-test-sandbox" {
-  bucket = "dev-calitp-test-sandbox"
-}
-
 resource "google_storage_bucket_acl" "tfer--export-ysjqwvyxc4ti3jmahojq" {
   bucket = "export-ysjqwvyxc4ti3jmahojq"
 }

@@ -182,10 +182,6 @@ resource "google_storage_default_object_acl" "tfer--dev-calitp-gtfs-rt-raw" {
   bucket = "dev-calitp-gtfs-rt-raw"
 }
 
-resource "google_storage_default_object_acl" "tfer--dev-calitp-test-sandbox" {
-  bucket = "dev-calitp-test-sandbox"
-}
-
 resource "google_storage_default_object_acl" "tfer--export-ysjqwvyxc4ti3jmahojq" {
   bucket      = "export-ysjqwvyxc4ti3jmahojq"
   role_entity = ["OWNER:project-editors-1005246706141", "OWNER:project-owners-1005246706141", "READER:project-viewers-1005246706141"]

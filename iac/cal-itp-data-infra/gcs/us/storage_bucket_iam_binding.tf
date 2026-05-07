@@ -280,12 +280,6 @@ resource "google_storage_bucket_iam_binding" "tfer--dev-calitp-gtfs-rt-raw" {
   role    = "roles/storage.legacyObjectReader"
 }
 
-resource "google_storage_bucket_iam_binding" "tfer--dev-calitp-test-sandbox" {
-  bucket  = "b/dev-calitp-test-sandbox"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectReader"
-}
-
 resource "google_storage_bucket_iam_binding" "tfer--export-ysjqwvyxc4ti3jmahojq" {
   bucket  = "b/export-ysjqwvyxc4ti3jmahojq"
   members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]

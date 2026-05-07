@@ -178,10 +178,6 @@ output "google_storage_bucket_acl_tfer--dev-calitp-gtfs-rt-raw_id" {
   value = google_storage_bucket_acl.tfer--dev-calitp-gtfs-rt-raw.id
 }
 
-output "google_storage_bucket_acl_tfer--dev-calitp-test-sandbox_id" {
-  value = google_storage_bucket_acl.tfer--dev-calitp-test-sandbox.id
-}
-
 output "google_storage_bucket_acl_tfer--export-ysjqwvyxc4ti3jmahojq_id" {
   value = google_storage_bucket_acl.tfer--export-ysjqwvyxc4ti3jmahojq.id
 }
@@ -444,10 +440,6 @@ output "google_storage_bucket_iam_binding_tfer--dataproc-temp-us-west2-100524670
 
 output "google_storage_bucket_iam_binding_tfer--dev-calitp-gtfs-rt-raw_id" {
   value = google_storage_bucket_iam_binding.tfer--dev-calitp-gtfs-rt-raw.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--dev-calitp-test-sandbox_id" {
-  value = google_storage_bucket_iam_binding.tfer--dev-calitp-test-sandbox.id
 }
 
 output "google_storage_bucket_iam_binding_tfer--export-ysjqwvyxc4ti3jmahojq_id" {
@@ -714,10 +706,6 @@ output "google_storage_bucket_iam_member_tfer--dev-calitp-gtfs-rt-raw_id" {
   value = google_storage_bucket_iam_member.tfer--dev-calitp-gtfs-rt-raw.id
 }
 
-output "google_storage_bucket_iam_member_tfer--dev-calitp-test-sandbox_id" {
-  value = google_storage_bucket_iam_member.tfer--dev-calitp-test-sandbox.id
-}
-
 output "google_storage_bucket_iam_member_tfer--export-ysjqwvyxc4ti3jmahojq_id" {
   value = google_storage_bucket_iam_member.tfer--export-ysjqwvyxc4ti3jmahojq.id
 }
@@ -980,10 +968,6 @@ output "google_storage_bucket_iam_policy_tfer--dataproc-temp-us-west2-1005246706
 
 output "google_storage_bucket_iam_policy_tfer--dev-calitp-gtfs-rt-raw_id" {
   value = google_storage_bucket_iam_policy.tfer--dev-calitp-gtfs-rt-raw.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--dev-calitp-test-sandbox_id" {
-  value = google_storage_bucket_iam_policy.tfer--dev-calitp-test-sandbox.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--export-ysjqwvyxc4ti3jmahojq_id" {
@@ -1438,14 +1422,6 @@ output "google_storage_bucket_tfer--dev-calitp-gtfs-rt-raw_self_link" {
   value = google_storage_bucket.tfer--dev-calitp-gtfs-rt-raw.self_link
 }
 
-output "google_storage_bucket_tfer--dev-calitp-test-sandbox_name" {
-  value = google_storage_bucket.tfer--dev-calitp-test-sandbox.name
-}
-
-output "google_storage_bucket_tfer--dev-calitp-test-sandbox_self_link" {
-  value = google_storage_bucket.tfer--dev-calitp-test-sandbox.self_link
-}
-
 output "google_storage_bucket_tfer--export-ysjqwvyxc4ti3jmahojq_name" {
   value = google_storage_bucket.tfer--export-ysjqwvyxc4ti3jmahojq.name
 }
@@ -1780,10 +1756,6 @@ output "google_storage_default_object_acl_tfer--dataproc-temp-us-west2-100524670
 
 output "google_storage_default_object_acl_tfer--dev-calitp-gtfs-rt-raw_id" {
   value = google_storage_default_object_acl.tfer--dev-calitp-gtfs-rt-raw.id
-}
-
-output "google_storage_default_object_acl_tfer--dev-calitp-test-sandbox_id" {
-  value = google_storage_default_object_acl.tfer--dev-calitp-test-sandbox.id
 }
 
 output "google_storage_default_object_acl_tfer--export-ysjqwvyxc4ti3jmahojq_id" {

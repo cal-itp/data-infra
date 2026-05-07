@@ -713,34 +713,6 @@ resource "google_storage_bucket" "tfer--dev-calitp-gtfs-rt-raw" {
   }
 }
 
-resource "google_storage_bucket" "tfer--dev-calitp-test-sandbox" {
-  default_event_based_hold = "false"
-  force_destroy            = "false"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "1"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-
-  location                    = "US-WEST2"
-  name                        = "dev-calitp-test-sandbox"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-}
-
 resource "google_storage_bucket" "tfer--export-ysjqwvyxc4ti3jmahojq" {
   default_event_based_hold    = "false"
   force_destroy               = "false"
