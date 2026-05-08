@@ -198,18 +198,18 @@ gcloud run deploy "$INSTANCE" \
 
 ### Console
 
-1. Open <https://console.cloud.google.com/run/create?project=cal-itp-data-infra-staging>.
-2. **Service name**: `metabase-restore-test`.
-3. **Region**: `us-west2`.
-4. **Container image URL**: `us-west2-docker.pkg.dev/cal-itp-data-infra-staging/ghcr/cal-itp/data-infra/metabase:staging`.
-5. **Authentication**: Require authentication.
-6. **CPU allocation**: CPU is only allocated during request processing.
-7. Under **Containers → Edit container**:
+01. Open <https://console.cloud.google.com/run/create?project=cal-itp-data-infra-staging>.
+02. **Service name**: `metabase-restore-test`.
+03. **Region**: `us-west2`.
+04. **Container image URL**: `us-west2-docker.pkg.dev/cal-itp-data-infra-staging/ghcr/cal-itp/data-infra/metabase:staging`.
+05. **Authentication**: Require authentication.
+06. **CPU allocation**: CPU is only allocated during request processing.
+07. Under **Containers → Edit container**:
     - **Resources**: 1 CPU, 2 GiB memory.
     - **Container port**: `3000`.
     - **Environment variables**: set `MB_DB_TYPE=postgres`, `MB_DB_DBNAME=metabase`, `MB_DB_HOST=127.0.0.1`, `MB_DB_USER=postgres`, `MB_DB_PASS=<your password>`, `JAVA_OPTS=-Xmx2048m`, `CLOUD_SQL_INSTANCE_CONNECTION_NAME=cal-itp-data-infra-staging:us-west2:metabase-restore-test`.
-8. Under **Cloud SQL connections**, add the temp instance's connection name.
-9. Under **Networking** / Service account, choose `metabase-service-account@cal-itp-data-infra-staging.iam.gserviceaccount.com`.
+08. Under **Cloud SQL connections**, add the temp instance's connection name.
+09. Under **Networking** / Service account, choose `metabase-service-account@cal-itp-data-infra-staging.iam.gserviceaccount.com`.
 10. Under **Autoscaling**, set **Minimum number of instances** to `1`.
 11. Click **Create**.
 
@@ -277,16 +277,16 @@ rm "/tmp/${INSTANCE}-postgres-pass"
 
 Measured from the validation run on 2026-05-07 (prod metabase ~800 MB SQL export, db-g1-small temp Cloud SQL, db-g1-small Cloud Run with 1 vCPU / 2 GiB).
 
-| Phase | Measured duration |
-|---|---|
-| Export prod DB to GCS (step 1) | ~56 s |
-| Create Cloud SQL instance (step 2) | ~2:17 |
-| Set password + create database (steps 3–4) | seconds each |
-| IAM grant for cross-project read (step 5) | seconds |
-| Import (step 6) | ~56 s |
-| Cloud Run deploy (step 7) | ~45 s |
-| Metabase first-boot startup (step 8) | **~25–50 minutes** — see below |
-| **Total wall-clock to ready instance** | **~30–55 minutes** |
+| Phase                                      | Measured duration              |
+| ------------------------------------------ | ------------------------------ |
+| Export prod DB to GCS (step 1)             | ~56 s                          |
+| Create Cloud SQL instance (step 2)         | ~2:17                          |
+| Set password + create database (steps 3–4) | seconds each                   |
+| IAM grant for cross-project read (step 5)  | seconds                        |
+| Import (step 6)                            | ~56 s                          |
+| Cloud Run deploy (step 7)                  | ~45 s                          |
+| Metabase first-boot startup (step 8)       | **~25–50 minutes** — see below |
+| **Total wall-clock to ready instance**     | **~30–55 minutes**             |
 
 The "Metabase first-boot startup" range reflects three components, listed in their measured order of impact:
 

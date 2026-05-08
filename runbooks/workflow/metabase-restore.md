@@ -145,15 +145,15 @@ curl -s https://metabase.dds.dot.ca.gov/api/health
 
 Measured against `metabase-restore-test` (db-g1-small, ~800 MB application DB seeded from a prod export, same Metabase version on each side of the restore). Wall-clock figures from the validation run on 2026-05-07 — actual times scale with database size.
 
-| Phase | Measured duration |
-|---|---|
-| List backups (step 1) | seconds |
-| On-demand pre-restore backup (step 2) | ~60–80 s |
-| Park Metabase — Cloud Run revision deploy (step 3) | ~10 s |
-| Restore from backup (step 4) | **~4 minutes** |
-| Bring Metabase back — Cloud Run revision deploy (step 5) | ~45 s |
-| Metabase startup health check returns `"ok"` (step 5–6) | ~5–10 minutes typical against prod's normal driver reachability |
-| **Total user-visible downtime** | **~10–15 minutes** typical |
+| Phase                                                    | Measured duration                                               |
+| -------------------------------------------------------- | --------------------------------------------------------------- |
+| List backups (step 1)                                    | seconds                                                         |
+| On-demand pre-restore backup (step 2)                    | ~60–80 s                                                        |
+| Park Metabase — Cloud Run revision deploy (step 3)       | ~10 s                                                           |
+| Restore from backup (step 4)                             | **~4 minutes**                                                  |
+| Bring Metabase back — Cloud Run revision deploy (step 5) | ~45 s                                                           |
+| Metabase startup health check returns `"ok"` (step 5–6)  | ~5–10 minutes typical against prod's normal driver reachability |
+| **Total user-visible downtime**                          | **~10–15 minutes** typical                                      |
 
 Notes on the dominant phases:
 
