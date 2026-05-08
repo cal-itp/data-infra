@@ -916,7 +916,6 @@ models:
       - name: elavon_purch_id
         description: |
           Elavon purchase ID matched to this pay window via payment_reference. NULL if no Elavon match found.
-          Approximately 87% of closed pay windows are expected to match.
       - name: elavon_settlement_date
         description: Settlement date from Elavon deposit data for this pay window.
       - name: elavon_payment_date
