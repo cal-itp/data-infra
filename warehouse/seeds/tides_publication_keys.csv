@@ -1,4 +1,4 @@
-gtfs_dataset_key,agency_name,notes
-9edf45e373638700ca420b1e588efdaf,Beach Cities Transit,Hermosa Beach local operator (BCT JPA)
-1745f7d9b9fa48cdbc8ea282e60602bd,LA Metro Bus,South Bay routes traverse Hermosa Beach
-46b00e5c738a0ebf93522371d9899627,Torrance Transit,Adjacent operator (Swiftly feed)
+vehicle_positions_source_record_id,agency_name,notes
+recUKDWE8Vq7rRAPM,Beach Cities Transit,Hermosa Beach local operator (BCT JPA)
+rectUboB2NipaQROx,LA Metro Bus,South Bay routes traverse Hermosa Beach
+rece8srb8wQEhqzh9,Torrance Transit,Adjacent operator (Swiftly feed)

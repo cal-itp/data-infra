@@ -4,7 +4,7 @@
         incremental_strategy='microbatch',
         event_time = 'dt',
         batch_size = 'day',
-        begin=var('GTFS_RT_START'),
+        begin=var('TIDES_PRODUCT_START'),
         lookback=var('DBT_ALL_INCREMENTAL_LOOKBACK_DAYS'),
         partition_by={
             'field': 'dt',
@@ -33,22 +33,29 @@ WITH source_vehicle_locations AS (
     ) = 1
 ),
 
--- Filter to feeds tagged public-customer-facing or regional-subfeed
--- fixed-route. Org info isn't part of the TIDES spec and isn't carried
--- through; org metadata for the publish flow lives separately.
-public_subfeed_keys AS (
-    SELECT DISTINCT vehicle_positions_gtfs_dataset_key AS gtfs_dataset_key
-    FROM {{ ref('dim_provider_gtfs_data') }}
-    WHERE _is_current = TRUE
-      AND public_customer_facing_or_regional_subfeed_fixed_route = TRUE
-      AND vehicle_positions_gtfs_dataset_key IS NOT NULL
+-- Persistent source-record IDs in the publication set. Stable across
+-- upstream gtfs_dataset_key rotations.
+publication_source_record_ids AS (
+    SELECT vehicle_positions_source_record_id
+    FROM {{ ref('tides_publication_keys') }}
 ),
 
--- Narrows the public-subfeed set to the MVP publication list (Hermosa Beach
--- traversing operators). Additive on top of the public-subfeed filter above.
-publication_keys AS (
-    SELECT gtfs_dataset_key
-    FROM {{ ref('tides_publication_keys') }}
+-- SCD Type 2 join to dim_provider_gtfs_data: resolve the dim record valid
+-- at each VP row's _extract_ts (not the current state). Filter to the
+-- publication-list source_record_ids and to the public-customer-facing
+-- or regional-subfeed fixed-route flag as it stood at the time the data
+-- was scraped. Org info isn't part of the TIDES spec and isn't carried
+-- through; org metadata for the publish flow lives separately.
+filtered_vehicle_locations AS (
+    SELECT vp.*
+    FROM source_vehicle_locations AS vp
+    INNER JOIN {{ ref('dim_provider_gtfs_data') }} AS d
+        ON d.vehicle_positions_gtfs_dataset_key = vp.gtfs_dataset_key
+        AND vp._extract_ts BETWEEN d._valid_from AND d._valid_to
+    WHERE d.public_customer_facing_or_regional_subfeed_fixed_route = TRUE
+      AND d.vehicle_positions_source_record_id IN (
+          SELECT vehicle_positions_source_record_id FROM publication_source_record_ids
+      )
 ),
 
 tides_vehicle_locations AS (
@@ -119,9 +126,7 @@ tides_vehicle_locations AS (
         vp.dt,
         vp.base64_url,
         vp.gtfs_dataset_key
-    FROM source_vehicle_locations AS vp
-    INNER JOIN public_subfeed_keys USING (gtfs_dataset_key)
-    INNER JOIN publication_keys USING (gtfs_dataset_key)
+    FROM filtered_vehicle_locations AS vp
 )
 
 SELECT * FROM tides_vehicle_locations
