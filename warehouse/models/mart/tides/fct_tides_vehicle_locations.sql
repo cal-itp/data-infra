@@ -41,7 +41,7 @@ WITH source_vehicle_locations AS (
 publication_dim_records AS (
     SELECT d.*
     FROM {{ ref('dim_provider_gtfs_data') }} AS d
-    INNER JOIN {{ ref('tides_publication_keys') }} AS p
+    INNER JOIN {{ ref('tides_publication_keys') }}
         USING (vehicle_positions_source_record_id)
     WHERE d.public_customer_facing_or_regional_subfeed_fixed_route = TRUE
 ),
