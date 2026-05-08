@@ -18,8 +18,8 @@ models:
       card interaction at the point of boarding. Each tap is associated with a pay window and may
       generate one or more ticket results.
 
-      Rows are deduplicated across delivery dates by content hash — when the same tap appears in
-      multiple files, only the earliest delivery is kept.
+      Rows are deduplicated by tap_id and operator_id. When the same tap appears in multiple
+      delivery files, the earliest delivery is kept.
     columns:
       - name: operator_id
         description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
@@ -107,18 +107,18 @@ models:
         description: Agency identifier parsed from the GCS path partition (e.g., "ventura", "raba", "camarillo").
       - name: dt
         description: Date partition parsed from the GCS path, corresponding to the date in the source filename.
+      - name: _payments_key
+        description: Surrogate key derived from tap_id and operator_id. Uniquely identifies one tap.
       - name: _content_hash
-        description: |
-          Hash of all data columns used to identify unique rows. Rows with the same content hash
-          appearing in multiple delivery files are deduplicated, keeping the earliest delivery.
+        description: Hash of all data columns. Retained for data quality inspection; deduplication uses _payments_key.
 
   - name: stg_enghouse__ticket_results
     description: |
       One row per ticket result, representing the fare calculation outcome for a tap. A ticket result
       records how much was charged, the fare type applied, and the tap it corresponds to.
 
-      Rows are deduplicated across delivery dates by content hash — when the same ticket result appears
-      in multiple files, only the earliest delivery is kept.
+      Rows are deduplicated by id and operator_id. When the same ticket appears in multiple deliveries
+      (e.g., before and after clearing), the row with populated timestamps is preferred.
     columns:
       - name: operator_id
         description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
@@ -156,18 +156,18 @@ models:
         description: Agency identifier parsed from the GCS path partition (e.g., "ventura", "raba", "camarillo").
       - name: dt
         description: Date partition parsed from the GCS path, corresponding to the date in the source filename.
+      - name: _payments_key
+        description: Surrogate key derived from id and operator_id. Uniquely identifies one ticket result.
       - name: _content_hash
-        description: |
-          Hash of all data columns used to identify unique rows. Rows with the same content hash
-          appearing in multiple delivery files are deduplicated, keeping the earliest delivery.
+        description: Hash of all data columns. Retained for data quality inspection; deduplication uses _payments_key.
 
   - name: stg_enghouse__transactions
     description: |
       One row per financial transaction record from Enghouse. Transactions represent the payment
       processing events (authorizations, settlements, debt recovery attempts) associated with taps.
 
-      Rows are deduplicated across delivery dates by content hash — when the same transaction appears
-      in multiple files, only the earliest delivery is kept.
+      Rows are deduplicated by id and operator_id. When the same transaction appears in multiple
+      delivery files, the row with a populated timestamp is preferred; otherwise the earliest delivery is kept.
     columns:
       - name: operator_id
         description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
@@ -211,10 +211,10 @@ models:
         description: Agency identifier parsed from the GCS path partition (e.g., "ventura", "raba", "camarillo").
       - name: dt
         description: Date partition parsed from the GCS path, corresponding to the date in the source filename.
+      - name: _payments_key
+        description: Surrogate key derived from id and operator_id. Uniquely identifies one transaction.
       - name: _content_hash
-        description: |
-          Hash of all data columns used to identify unique rows. Rows with the same content hash
-          appearing in multiple delivery files are deduplicated, keeping the earliest delivery.
+        description: Hash of all data columns. Retained for data quality inspection; deduplication uses _payments_key.
 
   - name: stg_enghouse__pay_windows
     description: |
@@ -222,8 +222,8 @@ models:
       before a single charge is collected. It opens on the first tap and closes when the aggregation
       is finalized and payment is collected.
 
-      Rows are deduplicated across delivery dates by content hash — when the same pay window appears
-      in multiple files, only the earliest delivery is kept.
+      Rows are deduplicated by id and operator_id. When the same pay window appears in multiple
+      delivery files, the earliest delivery is kept.
     columns:
       - name: operator_id
         description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
@@ -260,7 +260,7 @@ models:
         description: Agency identifier parsed from the GCS path partition (e.g., "ventura", "raba", "camarillo").
       - name: dt
         description: Date partition parsed from the GCS path, corresponding to the date in the source filename.
+      - name: _payments_key
+        description: Surrogate key derived from id and operator_id. Uniquely identifies one pay window.
       - name: _content_hash
-        description: |
-          Hash of all data columns used to identify unique rows. Rows with the same content hash
-          appearing in multiple delivery files are deduplicated, keeping the earliest delivery.
+        description: Hash of all data columns. Retained for data quality inspection; deduplication uses _payments_key.
