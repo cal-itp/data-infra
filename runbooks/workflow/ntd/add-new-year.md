@@ -4,22 +4,27 @@
 **Time Required:** 30–60 minutes\
 **Prerequisites:** GitHub write access, Airflow access
 
+> **Note on `YYYY`:** Throughout this document, `YYYY` refers to the four-digit reporting year being added (e.g., `2025`). Replace it with the actual year everywhere it appears.
+
 ## Overview
 
-The NTD (National Transit Database) pipeline ingests annual reporting data from the FTA website. Each new reporting year requires changes in six places: the Airflow download DAG, the external table definitions, the dbt source definitions, the dbt staging models, the intermediate union models, and the year constraint in dbt tests. The historical time-series tables (ridership, assets, expenses, etc.) update automatically and do not require year-specific changes.
+The NTD pipeline has two distinct data sources that behave differently when a new year is published:
+
+- **XLSX annual reporting tables** (`agency_information`, `contractual_relationships`) — These are published as year-specific XLSX files on the FTA website and require manual onboarding steps each year (Steps 1–6 below).
+- **API-synced multi-year tables** (breakdowns, service, funding, expenses, etc.) — These are pulled from SODA API endpoints that return data for all years at once. When NTD publishes a new year, those endpoints automatically include it on the next scheduled DAG run. No new configs are needed for these tables. The only required change is updating the dbt year constraints in Step 6, which applies to both data sources.
 
 ## Before You Start
 
-- [ ] Confirm the new year's XLSX files are published on the FTA NTD website. The two year-specific products are:
+- [ ] Confirm the new year's XLSX files are published on the FTA NTD website. Based on prior years, the URLs have followed this pattern — but NTD has changed URL structures before, so verify rather than assume:
   - `https://www.transit.dot.gov/ntd/data-product/YYYY-annual-database-agency-information`
   - `https://www.transit.dot.gov/ntd/data-product/YYYY-annual-database-contractual-relationship`
-  - If either URL 404s, the data is not yet published. Check back when it is.
+  - If the URLs have changed, find the correct ones from the [NTD data products page](https://www.transit.dot.gov/ntd/ntd-data) before proceeding.
 
 ## Step 1: Update the Airflow Download DAG
 
 File: `airflow/dags/download_and_parse_ntd_xlsx.py`
 
-Add two new entries to the `NTD_PRODUCTS` list — one for each year-specific product type. Follow the existing pattern:
+Add two new entries to the `NTD_PRODUCTS` list — one for each year-specific product type. Follow the existing pattern, using the confirmed URLs from the step above:
 
 ```python
 {
@@ -40,14 +45,7 @@ Place them alongside the existing entries for the same product types (not at the
 
 Directory: `airflow/dags/create_external_tables/ntd_data_products/`
 
-Create two new YAML files by copying the previous year's files and updating all year references:
-
-```bash
-cp 2024__annual_database_agency_information.yml YYYY__annual_database_agency_information.yml
-cp 2024__annual_database_contractual_relationships.yml YYYY__annual_database_contractual_relationships.yml
-```
-
-In each new file, replace all occurrences of `2024` with `YYYY`. There are four places in each file:
+Create two new YAML files by duplicating the most recent year's files and renaming them for the new year (e.g., `2025__annual_database_agency_information.yml`). In each new file, replace all occurrences of the prior year with `YYYY`. There are four places in each file:
 
 - The `post_hook` SELECT statement table name
 - The `source_objects` path
@@ -58,14 +56,14 @@ In each new file, replace all occurrences of `2024` with `YYYY`. There are four 
 
 File: `warehouse/models/staging/ntd_annual_reporting/_src.yml`
 
-Add source table entries for the new year. For `agency_information`, copy the full `2024__annual_database_agency_information` block (with all column definitions) and update the name and description year. For `contractual_relationships`, add a single name entry alongside the others:
+Add source table entries for the new year. For `agency_information`, copy the full prior year block (with all column definitions) and update the name and description year. For `contractual_relationships`, add a single name entry alongside the others:
 
 ```yaml
 - name: YYYY__annual_database_agency_information
   description: |
     Contains YYYY basic contact and agency information for each NTD reporter.
   columns:
-    # (copy column list from 2024 entry)
+    # (copy column list from prior year entry)
 ```
 
 ```yaml
@@ -76,14 +74,7 @@ Add source table entries for the new year. For `agency_information`, copy the fu
 
 Directory: `warehouse/models/staging/ntd_annual_reporting/`
 
-Create two new SQL files by copying the previous year's files:
-
-```bash
-cp stg_ntd__2024_agency_information.sql stg_ntd__YYYY_agency_information.sql
-cp stg_ntd__2024_contractual_relationships.sql stg_ntd__YYYY_contractual_relationships.sql
-```
-
-In each file, replace all occurrences of `2024` with `YYYY`. This updates the source reference and the final CTE name.
+Create two new SQL files by duplicating the most recent year's files and renaming them for the new year (e.g., `stg_ntd__2025_agency_information.sql`). In each file, replace all occurrences of the prior year with `YYYY`. This updates the source reference and the final CTE name.
 
 ## Step 5: Update Intermediate Union Models
 
@@ -91,17 +82,19 @@ These two models manually `UNION ALL` the year-specific staging models and must 
 
 **5a.** File: `warehouse/models/intermediate/ntd_annual_reporting/int_ntd__unioned_agency_information.sql`
 
-Add a new CTE at the top of the file and a new `UNION ALL` block at the bottom, following the 2024 pattern. Note: some columns are set to `NULL` for specific years where the NTD source did not include them (e.g., `division_department` is `NULL AS division_department` for 2022 and 2024 but present in 2023). Before copying the 2024 block, verify whether each nullable column exists in the new year's staging model. If it does not, keep `NULL AS column_name`.
+Add a new CTE at the top of the file and a new `UNION ALL` block at the bottom, following the prior year's pattern. NTD has historically changed its schema between reporting years — some columns have been added, removed, or renamed. Before copying the prior year's block, verify each column exists in the new year's staging model. For any column present in prior years but absent in the new year, use `NULL AS column_name`. For any new column not present in prior years, add it to all existing `UNION ALL` blocks as `NULL AS column_name` to keep the schema consistent.
 
 **5b.** File: `warehouse/models/intermediate/ntd_annual_reporting/int_ntd__unioned_contractual_relationships.sql`
 
-Add a new CTE and `UNION ALL` block following the 2024 pattern. Columns are consistent across years for this model, so copying the 2024 block directly should be safe — but verify against the new year's staging model if any test failures occur.
+Add a new CTE and `UNION ALL` block following the prior year's pattern. Apply the same schema verification as 5a — do not assume columns are consistent across years.
 
 ## Step 6: Update Year Constraints in dbt
 
+This step is required for both the XLSX annual tables and the API-synced multi-year tables. The `report_year` constraint is shared across both via a YAML anchor.
+
 **6a.** File: `warehouse/models/staging/ntd_annual_reporting/_stg_ntd_annual_reporting.yml`
 
-Update the `report_year` accepted values constraint (line ~28) and add model documentation entries for both new staging models. Copy the `stg_ntd__2024_agency_information` block and update the year in the name and description:
+Update the `report_year` accepted values constraint (line ~28) and add model documentation entries for both new staging models. Copy the prior year's `stg_ntd__YYYY_agency_information` block and update the year in the name and description:
 
 ```yaml
 - accepted_values:
@@ -114,7 +107,7 @@ Update the `report_year` accepted values constraint (line ~28) and add model doc
   description: |
     Contains YYYY basic contact and agency information for each NTD reporter.
   columns:
-    # (copy column list from 2024 entry)
+    # (copy column list from prior year entry)
 
 - name: stg_ntd__YYYY_contractual_relationships
 ```
@@ -151,6 +144,6 @@ Verify the new staging models return rows and the `report_year` test passes.
 | `warehouse/models/staging/ntd_annual_reporting/stg_ntd__YYYY_agency_information.sql`                        | New file (copy + update from prior year)    |
 | `warehouse/models/staging/ntd_annual_reporting/stg_ntd__YYYY_contractual_relationships.sql`                 | New file (copy + update from prior year)    |
 | `warehouse/models/staging/ntd_annual_reporting/_stg_ntd_annual_reporting.yml`                               | Update year constraint, add 2 model entries |
-| `warehouse/models/mart/ntd/_mart_ntd.yml`                                                                   | Update ~5 year constraints                  |
+| `warehouse/models/mart/ntd/_mart_ntd.yml`                                                                   | Update 4 year constraints                   |
 | `warehouse/models/intermediate/ntd_annual_reporting/int_ntd__unioned_agency_information.sql`                | Add CTE + UNION ALL block                   |
 | `warehouse/models/intermediate/ntd_annual_reporting/int_ntd__unioned_contractual_relationships.sql`         | Add CTE + UNION ALL block                   |
