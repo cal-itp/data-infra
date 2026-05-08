@@ -224,6 +224,11 @@ models:
           domain: mart
           dataset: ntd_validation
         schema: mart_ntd_validation
+      tides:
+        +labels:
+          domain: mart
+          dataset: tides
+        schema: mart_tides
       payments:
         +materialized: table
         +labels:
@@ -258,4 +263,6 @@ data_tests:
         +enabled: true
     mart:
       payments:
+        +enabled: true
+      tides:
         +enabled: true
