@@ -33,29 +33,27 @@ WITH source_vehicle_locations AS (
     ) = 1
 ),
 
--- Persistent source-record IDs in the publication set. Stable across
--- upstream gtfs_dataset_key rotations.
-publication_source_record_ids AS (
-    SELECT vehicle_positions_source_record_id
-    FROM {{ ref('tides_publication_keys') }}
+-- Pre-filter dim_provider_gtfs_data to the publication-set source_record_ids
+-- (persistent Airtable IDs, stable across upstream gtfs_dataset_key rotations)
+-- with the public-customer-facing or regional-subfeed fixed-route flag. Org
+-- info isn't part of the TIDES spec and isn't carried through; org metadata
+-- for the publish flow lives separately.
+publication_dim_records AS (
+    SELECT d.*
+    FROM {{ ref('dim_provider_gtfs_data') }} AS d
+    INNER JOIN {{ ref('tides_publication_keys') }} AS p
+        USING (vehicle_positions_source_record_id)
+    WHERE d.public_customer_facing_or_regional_subfeed_fixed_route = TRUE
 ),
 
--- SCD Type 2 join to dim_provider_gtfs_data: resolve the dim record valid
--- at each VP row's _extract_ts (not the current state). Filter to the
--- publication-list source_record_ids and to the public-customer-facing
--- or regional-subfeed fixed-route flag as it stood at the time the data
--- was scraped. Org info isn't part of the TIDES spec and isn't carried
--- through; org metadata for the publish flow lives separately.
+-- SCD Type 2 join: resolve the dim record valid at each VP row's
+-- _extract_ts (not the current state).
 filtered_vehicle_locations AS (
     SELECT vp.*
     FROM source_vehicle_locations AS vp
-    INNER JOIN {{ ref('dim_provider_gtfs_data') }} AS d
+    INNER JOIN publication_dim_records AS d
         ON d.vehicle_positions_gtfs_dataset_key = vp.gtfs_dataset_key
         AND vp._extract_ts BETWEEN d._valid_from AND d._valid_to
-    WHERE d.public_customer_facing_or_regional_subfeed_fixed_route = TRUE
-      AND d.vehicle_positions_source_record_id IN (
-          SELECT vehicle_positions_source_record_id FROM publication_source_record_ids
-      )
 ),
 
 tides_vehicle_locations AS (

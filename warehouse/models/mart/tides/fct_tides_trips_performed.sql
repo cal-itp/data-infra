@@ -56,28 +56,25 @@ vehicle_per_trip AS (
     GROUP BY 1, 2
 ),
 
--- Persistent source-record IDs in the publication set. Stable across
--- upstream gtfs_dataset_key rotations.
-publication_source_record_ids AS (
-    SELECT vehicle_positions_source_record_id
-    FROM {{ ref('tides_publication_keys') }}
+-- Pre-filter dim_provider_gtfs_data to the publication-set source_record_ids
+-- (persistent Airtable IDs, stable across upstream gtfs_dataset_key rotations)
+-- with the public-customer-facing or regional-subfeed fixed-route flag.
+publication_dim_records AS (
+    SELECT d.*
+    FROM {{ ref('dim_provider_gtfs_data') }} AS d
+    INNER JOIN {{ ref('tides_publication_keys') }} AS p
+        USING (vehicle_positions_source_record_id)
+    WHERE d.public_customer_facing_or_regional_subfeed_fixed_route = TRUE
 ),
 
--- SCD Type 2 join to dim_provider_gtfs_data: resolve the dim record valid
--- at vp_min_ts (the earliest VP timestamp for the trip), not the current
--- state. Filter to the publication-list source_record_ids and to the
--- public-customer-facing or regional-subfeed fixed-route flag as it stood
--- when the trip was observed.
+-- SCD Type 2 join: resolve the dim record valid at vp_min_ts (the earliest
+-- VP timestamp for the trip), not the current state.
 filtered_observed AS (
     SELECT o.*
     FROM observed AS o
-    INNER JOIN {{ ref('dim_provider_gtfs_data') }} AS d
+    INNER JOIN publication_dim_records AS d
         ON d.vehicle_positions_gtfs_dataset_key = o.vp_gtfs_dataset_key
         AND o.vp_min_ts BETWEEN d._valid_from AND d._valid_to
-    WHERE d.public_customer_facing_or_regional_subfeed_fixed_route = TRUE
-      AND d.vehicle_positions_source_record_id IN (
-          SELECT vehicle_positions_source_record_id FROM publication_source_record_ids
-      )
 ),
 
 tides_trips_performed AS (
