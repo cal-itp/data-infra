@@ -19,7 +19,7 @@ WITH observed AS (
     -- Drop TU-only trips (no VP) so every row has a derivable vehicle_id.
     WHERE appeared_in_vp = TRUE
       AND service_date
-        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_START")) }}
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("TIDES_PRODUCT_START")) }}
             AND {{ ranged_incremental_max_date() }}
 ),
 
@@ -36,7 +36,7 @@ scheduled AS (
         trip_last_arrival_ts
     FROM {{ ref('fct_scheduled_trips') }}
     WHERE service_date
-        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_START")) }}
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("TIDES_PRODUCT_START")) }}
             AND {{ ranged_incremental_max_date() }}
 ),
 
@@ -50,25 +50,31 @@ vehicle_per_trip AS (
     -- this is ok for the min date because t-X days for service date will be fully covered by t-X days for dt
     -- add one to the incremental max date because we need to get one extra UTC dt to ensure overlap with service date
     WHERE dt
-        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_RT_START")) }}
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("TIDES_PRODUCT_START")) }}
             AND {{ ranged_incremental_max_date() }} + 1
       AND vehicle_id IS NOT NULL
     GROUP BY 1, 2
 ),
 
--- Same feed-key filter as fct_tides_vehicle_locations.
-public_subfeed_keys AS (
-    SELECT DISTINCT vehicle_positions_gtfs_dataset_key AS gtfs_dataset_key
-    FROM {{ ref('dim_provider_gtfs_data') }}
-    WHERE _is_current = TRUE
-      AND public_customer_facing_or_regional_subfeed_fixed_route = TRUE
-      AND vehicle_positions_gtfs_dataset_key IS NOT NULL
+-- Pre-filter dim_provider_gtfs_data to the publication-set source_record_ids
+-- (persistent Airtable IDs, stable across upstream gtfs_dataset_key rotations)
+-- with the public-customer-facing or regional-subfeed fixed-route flag.
+publication_dim_records AS (
+    SELECT d.*
+    FROM {{ ref('dim_provider_gtfs_data') }} AS d
+    INNER JOIN {{ ref('tides_publication_keys') }}
+        USING (vehicle_positions_source_record_id)
+    WHERE d.public_customer_facing_or_regional_subfeed_fixed_route = TRUE
 ),
 
--- Same publication-key narrowing as fct_tides_vehicle_locations.
-publication_keys AS (
-    SELECT gtfs_dataset_key
-    FROM {{ ref('tides_publication_keys') }}
+-- SCD Type 2 join: resolve the dim record valid at vp_min_ts (the earliest
+-- VP timestamp for the trip), not the current state.
+filtered_observed AS (
+    SELECT o.*
+    FROM observed AS o
+    INNER JOIN publication_dim_records AS d
+        ON d.vehicle_positions_gtfs_dataset_key = o.vp_gtfs_dataset_key
+        AND o.vp_min_ts BETWEEN d._valid_from AND d._valid_to
 ),
 
 tides_trips_performed AS (
@@ -114,11 +120,7 @@ tides_trips_performed AS (
         -- dropped at export.
         o.vp_base64_url AS base64_url,
         o.vp_gtfs_dataset_key AS gtfs_dataset_key
-    FROM observed o
-    INNER JOIN public_subfeed_keys
-        ON o.vp_gtfs_dataset_key = public_subfeed_keys.gtfs_dataset_key
-    INNER JOIN publication_keys
-        ON o.vp_gtfs_dataset_key = publication_keys.gtfs_dataset_key
+    FROM filtered_observed o
     LEFT JOIN scheduled s
         ON s.trip_instance_key = o.trip_instance_key
     LEFT JOIN vehicle_per_trip v

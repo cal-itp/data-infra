@@ -398,8 +398,8 @@ seeds:
 
   - name: tides_publication_keys
     description: |
-      Feed keys included in the TIDES public publication. Acts as a narrowing
-      layer over `dim_provider_gtfs_data.public_customer_facing_or_regional_subfeed_fixed_route`
+      Source-record IDs included in the TIDES public publication. Acts as a
+      narrowing layer over `dim_provider_gtfs_data.public_customer_facing_or_regional_subfeed_fixed_route`
       while the publish flow is in MVP. Initial set covers agencies whose
       vehicles traverse Hermosa Beach (SCAG technical-assistance pilot):
       Beach Cities Transit, LA Metro Bus, Torrance Transit.
@@ -408,8 +408,11 @@ seeds:
         domain: seeds
         dataset: tides
     columns:
-      - name: gtfs_dataset_key
-        description: Stable key from `dim_provider_gtfs_data.vehicle_positions_gtfs_dataset_key`.
+      - name: vehicle_positions_source_record_id
+        description: |
+          Persistent identifier from `dim_provider_gtfs_data.vehicle_positions_source_record_id`
+          (the upstream Airtable record). Stable across GTFS feed-key
+          rotations, so the publication set survives upstream re-versioning.
         data_tests:
           - not_null
           - unique
