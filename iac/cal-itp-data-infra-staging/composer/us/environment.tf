@@ -179,7 +179,7 @@ resource "google_composer_environment" "calitp-staging-composer-c3" {
         webserver-show_trigger_form_if_no_params   = true
       }
 
-      pypi_packages = local.pypi_packages
+      pypi_packages = local.pypi_packages_c3
 
       env_variables = merge(local.env_variables_c3, {
         "POD_LOCATION"                                         = "us-west2",
