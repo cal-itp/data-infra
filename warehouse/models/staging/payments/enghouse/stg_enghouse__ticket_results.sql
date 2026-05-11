@@ -24,19 +24,9 @@ clean_columns AS (
         agency,
         dt,
         {{ dbt_utils.generate_surrogate_key(['operator_id', 'id', 'ticket_id', 'station_name', 'amount', 'clearing_id',
-            'reason', 'tap_id', 'ticket_type', 'created_dttm', 'line', 'start_station', 'end_station', 'start_dttm',
-            'end_dttm', 'ticket_code', 'additional_infos']) }} AS _content_hash
+            'reason', 'tap_id', 'ticket_type', 'line', 'start_station', 'end_station',
+         'ticket_code', 'additional_infos']) }} AS _content_hash
     FROM source
-),
-
-deduplicated AS (
-    SELECT * FROM (
-        SELECT
-            *,
-            ROW_NUMBER() OVER (PARTITION BY _content_hash ORDER BY dt ASC) AS row_num
-        FROM clean_columns
-    )
-    WHERE row_num = 1
 ),
 
 stg_enghouse__ticket_results AS (
@@ -61,7 +51,7 @@ stg_enghouse__ticket_results AS (
         agency,
         dt,
         _content_hash
-    FROM deduplicated
+    FROM clean_columns
 )
 
 SELECT * FROM stg_enghouse__ticket_results

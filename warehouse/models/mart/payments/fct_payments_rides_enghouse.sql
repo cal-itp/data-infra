@@ -2,7 +2,7 @@
     post_hook="{{ payments_enghouse_row_access_policy() }}") }}
 
 WITH ticket_results AS (
-    SELECT * FROM {{ ref('stg_enghouse__ticket_results') }}
+    SELECT * FROM {{ ref('int_payments__enghouse_ticket_results_deduped') }}
 ),
 
 taps AS (
