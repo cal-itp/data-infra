@@ -119,8 +119,10 @@ resource "google_composer_environment" "calitp-staging-composer-c3" {
   region  = "us-west2"
   project = "cal-itp-data-infra-staging"
 
-  # No storage_config: let Composer 3 auto-provision its own bucket.
-  # DAGs/plugins will be synced separately once we know the new bucket name.
+  # storage_config {
+  #   bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_name
+  # }
+
 
   config {
     node_config {
@@ -152,11 +154,11 @@ resource "google_composer_environment" "calitp-staging-composer-c3" {
     environment_size = "ENVIRONMENT_SIZE_SMALL"
 
     software_config {
-      image_version = "composer-3-airflow-2.10.5-build.18"
+      image_version = "composer-3-airflow-2.10.5-build.36"
 
       airflow_config_overrides = {
         celery-worker_concurrency                  = 4
-        core-dag_file_processor_timeout            = 1200
+        core-dag_file_processor_timeout            = 600
         core-dagbag_import_timeout                 = 600
         core-dags_are_paused_at_creation           = true
         core-max_active_runs_per_dag               = 128
@@ -164,14 +166,14 @@ resource "google_composer_environment" "calitp-staging-composer-c3" {
         core-max_templated_field_length            = 25000
         cosmos-use_dataset_airflow3_uri_standard   = true
         email-email_backend                        = "airflow.utils.email.send_email_smtp"
-        email-email_conn_id                        = "smtp_postmark"
-        email-from_email                           = "bot+airflow@calitp.org"
+        email-email_conn_id                        = "smtp_acs"
+        email-from_email                           = "donotreply@notifications.dot.ca.gov"
         scheduler-min_file_process_interval        = 120
         scheduler-scheduler_health_check_threshold = 120
         secrets-backend                            = "airflow.providers.google.cloud.secrets.secret_manager.CloudSecretManagerBackend"
-        smtp-smtp_mail_from                        = "bot+airflow@calitp.org"
+        smtp-smtp_mail_from                        = "donotreply@notifications.dot.ca.gov"
         smtp-smtp_starttls                         = true
-        smtp-smtp_host                             = "smtp.postmarkapp.com"
+        smtp-smtp_host                             = "smtp.azurecomm.net"
         smtp-smtp_port                             = 587
         webserver-reload_on_plugin_change          = true
         webserver-show_trigger_form_if_no_params   = true
@@ -179,7 +181,7 @@ resource "google_composer_environment" "calitp-staging-composer-c3" {
 
       pypi_packages = local.pypi_packages
 
-      env_variables = merge(local.env_variables, {
+      env_variables = merge(local.env_variables_c3, {
         "POD_LOCATION"                                         = "us-west2",
         "POD_CLUSTER_NAME"                                     = data.terraform_remote_state.gke.outputs.google_container_cluster_airflow-jobs-staging_name,
         "POD_SECRETS_NAMESPACE"                                = local.namespace,
@@ -210,6 +212,8 @@ resource "google_composer_environment" "calitp-staging-composer-c3" {
         "CALITP_BUCKET__LITTLEPAY_PARSED"                      = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-payments-littlepay-parsed_name}",
         "CALITP_BUCKET__LITTLEPAY_PARSED_V3"                   = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-payments-littlepay-parsed-v3_name}",
         "CALITP_BUCKET__LITTLEPAY_RAW"                         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-payments-littlepay-raw_name}",
+        # exist in staging composer2 config but was missing from composer3 originally by Chris
+        # "CALITP_BUCKET__ENGHOUSE_PARSED"                       = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-enghouse-parsed_name}",
         "CALITP_BUCKET__LITTLEPAY_RAW_V3"                      = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-payments-littlepay-raw-v3_name}",
         "CALITP_BUCKET__ENGHOUSE_RAW"                          = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-enghouse-raw_name}",
         "CALITP_BUCKET__NTD_API_DATA_PRODUCTS"                 = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-ntd-api-products_name}",
@@ -219,9 +223,7 @@ resource "google_composer_environment" "calitp-staging-composer-c3" {
         "CALITP_BUCKET__PUBLISH"                               = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-publish_name}",
         "CALITP_BUCKET__SENTRY_EVENTS"                         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-sentry_name}",
         "CALITP_BUCKET__STATE_GEOPORTAL_DATA_PRODUCTS"         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-state-geoportal-scrape_name}",
-        # Placeholder slack URL for the C3 test env — we don't want test traffic
-        # going to the real channel. Replace with a real test webhook once we have one.
-        "CALITP_SLACK_URL"                                     = "https://hooks.slack.com/services/PLACEHOLDER/COMPOSER3-TEST",
+        "CALITP_SLACK_URL"                                     = data.google_secret_manager_secret_version.slack-airflow-url.secret_data,
         "CALITP_NOTIFY_EMAIL"                                  = "dds.app.notify+staging@dot.ca.gov"
       })
     }
