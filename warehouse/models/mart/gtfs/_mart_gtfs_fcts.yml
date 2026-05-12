@@ -1349,7 +1349,17 @@ models:
       - name: n_hours_in_service
         description: |
           Number of hours in service. It is the distinct number of arrival hours based on a scheduled stop_time's arrival_time column.
+      - name: arrivals_per_hour_owl
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_per_hour_early_am
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
       - name: arrivals_per_hour_am_peak
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_per_hour_midday
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_per_hour_pm_peak
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_per_hour_evening
         description: '{{ doc("column_stop_arrivals_per_hour") }}'
       - &route_type_0
         name: route_type_0
