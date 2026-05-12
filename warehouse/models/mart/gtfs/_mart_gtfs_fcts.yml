@@ -1361,6 +1361,18 @@ models:
         description: '{{ doc("column_stop_arrivals_per_hour") }}'
       - name: arrivals_per_hour_evening
         description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_owl
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: arrivals_early_am
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: arrivals_am_peak
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: arrivals_midday
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: arrivals_pm_peak
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: arrivals_evening
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
       - &route_type_0
         name: route_type_0
         description: |
