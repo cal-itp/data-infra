@@ -481,11 +481,11 @@ x-common-fields:
       Hours 10-14: Midday
       Hours 15-19: PM Peak
       Hours 20-23: Evening
-
   - &shape_pt_array
     name: pt_array
     description: |
       Ordered array of WKT points that describe this shape.
+
 
 models:
   - name: fct_daily_schedule_feeds
@@ -1342,8 +1342,10 @@ models:
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
       - name: daily_arrivals
+        description: '{{ doc("column_daily_stop_arrivals") }}'
+      - name: _feed_valid_from
         description: |
-          The number of stop events associated with this stop on the given date.
+          Should not be used; exists to faciliate incremental materialization.
       - &route_type_0
         name: route_type_0
         description: |
@@ -1441,6 +1443,16 @@ models:
           quality issues were present in the trips data that is being summarized
           here, and counts may be inflated due to multiple rows with identical
           identifiers.
+      - name: route_id_array
+        description: |
+          An array of parsed route_ids.
+
+          See the macro: https://dbt-docs.dds.dot.ca.gov/#!/macro/macro.calitp_warehouse.parse_route_id
+
+      - name: route_type_array
+        description: '{{ doc("gtfs_routes__route_type") }}'
+      - name: n_route_types
+        description: Count of distinct route_types.
       - name: contains_warning_duplicate_stop_primary_key
         description: |
           Rows with `true` in this column have a duplicate primary key in dim_stops;
