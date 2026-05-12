@@ -1346,6 +1346,11 @@ models:
       - name: _feed_valid_from
         description: |
           Should not be used; exists to faciliate incremental materialization.
+      - name: n_hours_in_service
+        description: |
+          Number of hours in service. It is the distinct number of arrival hours based on a scheduled stop_time's arrival_time column.
+      - name: arrivals_per_hour_am_peak
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
       - &route_type_0
         name: route_type_0
         description: |
