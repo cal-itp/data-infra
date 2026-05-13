@@ -1,8 +1,9 @@
 --- These are GTFS RT trip update (stoptimeupdate) prediction accuracy metrics ---
 
-{% docs column_gtfs_rt__tu_prediction_error_seconds %}
+{% docs column_gtfs_rt__tu_prediction_error %}
 
 Difference between the predicted_arrival and actual_arrival.
+Units can be seconds or minutes based on column name.
 
 For interpretation, the magnitude is important. For many transit operators, the definition of 
 on-time can be much looser, such as between 1 minute early and 1 minute late. 
@@ -24,9 +25,10 @@ On-time: predicted_arrival is between actual_arrival and actual_departure.
 {% enddocs %}
 
 
-{% docs column_gtfs_rt__tu_scaled_prediction_error_sec %}
+{% docs column_gtfs_rt__tu_scaled_prediction_error %}
 
 The scaled prediction error divides the prediction_error by the number of minutes away from arrival.
+Scaled prediction error does not have units of seconds or minutes.
 Predictions 30 minutes away from arrival have prediction_errors divided by 30 minutes, and are weighted less than predictions that are 1 minute away.
 
 {% enddocs %}
@@ -57,7 +59,8 @@ pct_tu_complete_minutes = n_tu_complete_minutes / n_tu_minutes_available
 
 {% docs column_gtfs_rt__tu_predictions_by_category %}
 
-Total number of stoptimeupdate messages, or predictions, that is `early`, `on-time`, or `late`.
+Total number of stoptimeupdate messages, or predictions, by category.
+Category values are: `early`, `on-time`, or `late`.
 
 The percent of predictions are early, on-time, or late is calculated by dividing by total
 number of predictions (n_predictions).
