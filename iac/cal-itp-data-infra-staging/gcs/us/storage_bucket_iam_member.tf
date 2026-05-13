@@ -88,3 +88,9 @@ resource "google_storage_bucket_iam_member" "calitp-analysis-staging" {
   role   = "roles/storage.objectViewer"
   member = "allUsers"
 }
+
+resource "google_storage_bucket_iam_member" "calitp-tides-staging" {
+  bucket = google_storage_bucket.calitp-tides-staging.name
+  role   = "roles/storage.objectViewer"
+  member = "allUsers"
+}

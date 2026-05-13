@@ -281,3 +281,7 @@ output "google_storage_bucket_calitp-reports-staging_name" {
 output "google_storage_bucket_calitp-analysis-staging_name" {
   value = google_storage_bucket.calitp-analysis-staging.name
 }
+
+output "google_storage_bucket_calitp-tides-staging_name" {
+  value = google_storage_bucket.calitp-tides-staging.name
+}
