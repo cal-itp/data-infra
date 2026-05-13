@@ -2790,3 +2790,56 @@ models:
         name: tu_extract_duration_minutes
       - name: tu_messages_per_minute
         description: *rt_trip_messages_per_minute_desc
+
+  - name: fct_daily_rt_service_summary
+    description: TODO
+    columns:
+      - *service_date_for_summaries
+      # foreign keys
+      - <<: *base64_url
+        name: schedule_base64_url
+      - name: schedule_name
+        description: Name from the schedule GTFS dataset record associated.
+      - name: schedule_gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
+      - *feed_key
+      - name: tu_gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
+      - name: tu_name
+        description: Name from the trip updates GTFS dataset record associated.
+      - <<: *base64_url
+        name: tu_base64_url
+      - name: vp_gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
+      - name: vp_name
+        description: Name from the vehicle positions GTFS dataset record associated.
+      - <<: *base64_url
+        name: vp_base64_url
+      - name: n_trips
+        description: *n_scheduled_trips_desc
+      - name: n_routes
+        description: *n_scheduled_routes_desc
+      - name: appeared_in_tu
+        description: *appeared_in_tu_desc
+      - name: appeared_in_vp
+        description: *appeared_in_vp_desc
+      - name: tu_num_distinct_updates
+        description: *rt_trip_num_distinct_updates_desc
+      - name: n_tu_trips
+        description: Count of distinct trip_instance_keys from the trip updates dataset.
+      - name: n_tu_routes
+        description: Count of distinct route_ids from the trip updates dataset.
+      - <<: *extract_duration_minutes
+        name: tu_extract_duration_minutes
+      - name: tu_messages_per_minute
+        description: *rt_trip_messages_per_minute_desc
+      - name: vp_num_distinct_updates
+        description: *rt_trip_num_distinct_updates_desc
+      - name: n_vp_trips
+        description: Count of distinct trip_instance_keys from the vehicle positions dataset.
+      - name: n_vp_routes
+        description: Count of distinct route_ids from the vehicle positions dataset.
+      - <<: *extract_duration_minutes
+        name: vp_extract_duration_minutes
+      - name: vp_messages_per_minute
+        description: *rt_trip_messages_per_minute_desc
