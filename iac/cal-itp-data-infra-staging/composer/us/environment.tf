@@ -47,15 +47,14 @@ resource "google_composer_environment" "calitp-staging-composer" {
         core-max_active_tasks_per_dag              = 128
         core-max_templated_field_length            = 25000
         cosmos-use_dataset_airflow3_uri_standard   = true
-        email-email_backend                        = "airflow.utils.email.send_email_smtp"
-        email-email_conn_id                        = "smtp_acs"
-        email-from_email                           = "donotreply@notifications.dot.ca.gov"
+        email-email_backend                        = "src.acs_email_backend.send_email"
+        email-from_email                           = "DoNotReply@notifications.dot.ca.gov"
         scheduler-min_file_process_interval        = 120
         scheduler-scheduler_health_check_threshold = 120
         secrets-backend                            = "airflow.providers.google.cloud.secrets.secret_manager.CloudSecretManagerBackend"
-        smtp-smtp_mail_from                        = "donotreply@notifications.dot.ca.gov"
+        smtp-smtp_mail_from                        = "bot+airflow@calitp.org"
         smtp-smtp_starttls                         = true
-        smtp-smtp_host                             = "smtp.azurecomm.net"
+        smtp-smtp_host                             = "smtp.postmarkapp.com"
         smtp-smtp_port                             = 587
         webserver-reload_on_plugin_change          = true
         webserver-show_trigger_form_if_no_params   = true
@@ -104,6 +103,7 @@ resource "google_composer_environment" "calitp-staging-composer" {
         "CALITP_BUCKET__PUBLISH"                               = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-publish_name}",
         "CALITP_BUCKET__SENTRY_EVENTS"                         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-sentry_name}",
         "CALITP_BUCKET__STATE_GEOPORTAL_DATA_PRODUCTS"         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-state-geoportal-scrape_name}",
+        "CALITP_BUCKET__TIDES_PUBLISH"                         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-tides-staging_name}",
         "CALITP_SLACK_URL"                                     = data.google_secret_manager_secret_version.slack-airflow-url.secret_data,
         "CALITP_NOTIFY_EMAIL"                                  = "dds.app.notify+staging@dot.ca.gov"
       })
