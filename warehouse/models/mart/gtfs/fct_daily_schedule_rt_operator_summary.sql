@@ -106,7 +106,7 @@ daily_summary AS (
 
         -- trip updates
         COALESCE(daily_rt.n_tu_trips, 0) AS n_tu_trips,
-        ROUND(SAFE_DIVIDE(daily_rt.n_vp_trips, daily_schedule.n_trips), 3) AS pct_tu_trips,
+        ROUND(SAFE_DIVIDE(daily_rt.n_tu_trips, daily_schedule.n_trips), 3) AS pct_tu_trips,
         daily_rt.n_tu_routes,
         ROUND(SAFE_DIVIDE(daily_rt.n_tu_routes, daily_schedule.n_routes), 3) AS pct_tu_routes,
         daily_rt.tu_extract_duration_minutes,
