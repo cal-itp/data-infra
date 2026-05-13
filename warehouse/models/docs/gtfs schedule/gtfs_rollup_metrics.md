@@ -1,5 +1,6 @@
 --- These columns are derived from combining multiple GTFS tables ---
---- Multiple schedule (trips + stop_times + stops) or schedule + RT (scheduled trips + observed_trips) ---
+--- Multiple schedule (trips + stop_times + stops) or ---
+--- schedule + RT (scheduled trips + observed_trips) ---
 
 {% docs column_gtfs_route_name %}
 Parsed and standardized combined form of `route_id`, `route_short_name`, and `route_long_name`.
@@ -92,4 +93,33 @@ This normalized metric provides a useful comparison across time-of-day values.
 * peak = 8 hours
 * offpeak = 16 hours
 
+{% enddocs %}
+
+
+{% docs column_n_tu_trips %}
+
+Count of distinct trip_instance_keys from the trip updates dataset.
+
+pct_tu_trips is the percent of scheduled trips with trip updates.
+pct_tu_trips = n_tu_trips / n_scheduled_trips
+
+{% enddocs %}
+
+
+{% docs column_n_vp_trips %}
+
+Count of distinct trip_instance_keys from the vehicle positions dataset.
+pct_vp_trips is the percent of scheduled trips with vehicle positions.
+pct_vp_trips = n_vp_trips / n_scheduled_trips
+
+{% enddocs %}
+
+
+{% docs column_rt_messages_per_minute %}
+
+Count of how many messages per minute this entity was present for,
+which can help give a sense for how continuously this entity was updated.
+This number should be equal to `num_distinct_message_keys`.
+
+See `num_distinct_extract_ts` and `num_distinct_message_keys`.
 {% enddocs %}
