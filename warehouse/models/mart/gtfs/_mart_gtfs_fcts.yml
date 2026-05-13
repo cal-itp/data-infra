@@ -453,6 +453,23 @@ x-common-fields:
       a count of how many messages per minute this entity was present for,
       which can help give a sense for how continuously this trip was updated.
       This number should be equal to `num_distinct_extract_ts`.
+  - &rt_stu_actual_arrival
+    name: rt_stu_actual_arrival
+    description: |
+      Either last_trip_updates_arrival, or if that's null, use last_trip_updates_departure.
+      Often, either last_trip_updates_arrival or last_trip_updates_departure is null.
+  - &rt_stu_actual_departure
+    name: actual_departure
+    description: |
+      The later timestamp between last_trip_updates_arrival and last_trip_updates_departure.
+  - &rt_stu_actual_arrival_pacific
+    name: actual_arrival_pacific
+    description: |
+      actual_arrival converted to a DATETIME type in the "America/Los_Angeles" time zone.
+  - &rt_stu_actual_departure_pacific
+    name: actual_departure_pacific
+    description: |
+      actual_departure converted to a DATETIME type in the "America/Los_Angeles" time zone.
 
   - &service_date_for_summaries
     name: service_date
