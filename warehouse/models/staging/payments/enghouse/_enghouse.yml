@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: external_enghouse
-    description: External tables reading Enghouse payments data.
+    description: External tables reading Enghouse payments data from the parsed GCS bucket.
     database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
     schema: external_enghouse
     tables:
@@ -13,109 +13,254 @@ sources:
 
 models:
   - name: stg_enghouse__taps
-    description: Add description
+    description: |
+      One row per tap event recorded by an Enghouse validator terminal. A tap is the contactless
+      card interaction at the point of boarding. Each tap is associated with a pay window and may
+      generate one or more ticket results.
+
+      Rows are deduplicated by tap_id and operator_id. When the same tap appears in multiple
+      delivery files, the earliest delivery is kept.
     columns:
       - name: operator_id
+        description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
       - name: tap_id
+        description: Unique identifier for this tap in the Enghouse system.
       - name: mapping_terminal_id
+        description: Not relevant for US projects.
       - name: mapping_merchant_id
+        description: Not relevant for US projects.
       - name: terminal
+        description: Identifier of the terminal where the tap was created.
       - name: token
+        description: Tokenized card number.
       - name: masked_pan
+        description: Masked primary account number.
       - name: server_date
+        description: Timestamp when the tap was received on the Enghouse server.
       - name: terminal_date
+        description: Timestamp when the tap was created on the terminal.
       - name: tx_number
+        description: Enghouse internal tap status code. Not meaningful for downstream analysis.
       - name: tx_status
+        description: Enghouse internal tap status code. Not meaningful for downstream analysis.
       - name: payment_reference
+        description: Payment reference number (PRN / variable symbol) linking the tap to its transaction.
       - name: terminal_spdh_code
+        description: SPDH terminal protocol response code. 000 indicates approved.
       - name: denylist_version
+        description: Version of the denylist loaded on the terminal at the time of tap. Null if not provided by the validator.
       - name: transit_data
+        description: Indicates whether transit data fields were included with this tap.
       - name: currency
+        description: ISO 4217 numeric currency code (840 = USD).
       - name: par
+        description: Payment Account Reference (PAR).
       - name: fare_mode
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: fare_type
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: fare_value
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: fare_description
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: fare_linked_id
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: gps_longitude
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: gps_latitude
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: gps_altitude
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: vehicle_public_number
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: vehicle_name
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: stop_id
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: stop_name
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: platform_id
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: platform_name
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: zone_id
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: zone_name
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: line_public_number
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: line_name
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: line_direction
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: trip_public_number
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: trip_name
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: service_public_number
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: service_name
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: driver_id
+        description: Transit data from the validator. See Enghouse documentation for full explanation.
+      - name: agency
+        description: Agency identifier parsed from the GCS path partition (e.g., "ventura", "raba", "camarillo").
+      - name: dt
+        description: Date partition parsed from the GCS path, corresponding to the date in the source filename.
+      - name: _payments_key
+        description: Surrogate key derived from tap_id and operator_id. Uniquely identifies one tap.
       - name: _content_hash
+        description: Hash of all data columns. Retained for data quality inspection; deduplication uses _payments_key.
 
   - name: stg_enghouse__ticket_results
-    description: Add description
+    description: |
+      One row per ticket result, representing the fare calculation outcome for a tap. A ticket result
+      records how much was charged, the fare type applied, and the tap it corresponds to.
+
+      Rows are deduplicated by id and operator_id. When the same ticket appears in multiple deliveries
+      (e.g., before and after clearing), the row with populated timestamps is preferred.
     columns:
       - name: operator_id
+        description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
       - name: id
+        description: Unique identifier for this ticket in the Enghouse system.
       - name: ticket_id
+        description: Unique identifier for this ticket in the Enghouse system.
       - name: station_name
+        description: Zone in which the ticket was created.
       - name: amount
+        description: Fare amount (converted from cents at source).
       - name: clearing_id
+        description: Identifier of the clearing in which this ticket was calculated. Not relevant.
       - name: reason
+        description: Explanation of how the fare was calculated.
       - name: tap_id
+        description: Identifier of the tap that generated this ticket result.
       - name: ticket_type
+        description: Type of ticket.
       - name: created_dttm
+        description: Timestamp when the ticket was created.
       - name: line
+        description: Line, if provided by the validator.
       - name: start_station
+        description: Zone where the trip started.
       - name: end_station
+        description: Zone where the trip ended.
       - name: start_dttm
+        description: Timestamp when the ticket started.
       - name: end_dttm
+        description: Only relevant for time-based tickets.
       - name: ticket_code
-      - name: additional_infos
+        description: Additional information for the ticket or ticket type.
+      - name: agency
+        description: Agency identifier parsed from the GCS path partition (e.g., "ventura", "raba", "camarillo").
+      - name: dt
+        description: Date partition parsed from the GCS path, corresponding to the date in the source filename.
+      - name: _payments_key
+        description: Surrogate key derived from id and operator_id. Uniquely identifies one ticket result.
       - name: _content_hash
+        description: Hash of all data columns. Retained for data quality inspection; deduplication uses _payments_key.
 
   - name: stg_enghouse__transactions
-    description: Add description
+    description: |
+      One row per financial transaction record from Enghouse. Transactions represent the payment
+      processing events (authorizations, settlements, debt recovery attempts) associated with taps.
+
+      Rows are deduplicated by id and operator_id. When the same transaction appears in multiple
+      delivery files, the row with a populated timestamp is preferred; otherwise the earliest delivery is kept.
     columns:
       - name: operator_id
+        description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
       - name: id
+        description: Unique identifier for this transaction in the Enghouse system.
       - name: operation
+        description: Type of transaction.
       - name: terminal_id
+        description: Terminal identifier associated with the tap that triggered this transaction.
       - name: mapping_terminal_id
+        description: Not relevant for US projects.
       - name: mapping_merchant_id
+        description: Not relevant for US projects.
       - name: timestamp
+        description: Timestamp when the transaction occurred.
       - name: amount
+        description: Transaction amount in USD dollars (converted from cents at source).
       - name: payment_reference
+        description: Payment reference number (PRN / variable symbol) linking this transaction to its tap.
       - name: spdh_response
+        description: SPDH protocol response code. Not relevant for transactions.
       - name: response_type
+        description: Type of response received from the acquirer.
       - name: response_message
+        description: Response message received from the acquirer.
       - name: token
+        description: Tokenized card number.
       - name: issuer_response
+        description: Response code from the card issuer (bank), if provided. Enghouse sends transactions to the acquirer (Cybersource / Elavon) who forwards to the issuer.
       - name: core_response
+        description: Enghouse internal response code. Not meaningful for downstream analysis.
       - name: rrn
+        description: Retrieval Reference Number (RRN).
       - name: authorization_code
+        description: Authorization code received from the acquirer.
       - name: par
+        description: Payment Account Reference (PAR).
       - name: brand
+        description: Card scheme (e.g., VISA, MC, AMEX, DISCOVER).
+      - name: agency
+        description: Agency identifier parsed from the GCS path partition (e.g., "ventura", "raba", "camarillo").
+      - name: dt
+        description: Date partition parsed from the GCS path, corresponding to the date in the source filename.
+      - name: _payments_key
+        description: Surrogate key derived from id and operator_id. Uniquely identifies one transaction.
       - name: _content_hash
+        description: Hash of all data columns. Retained for data quality inspection; deduplication uses _payments_key.
 
   - name: stg_enghouse__pay_windows
-    description: Add description
+    description: |
+      One row per pay window. A pay window is the period during which a rider's taps are aggregated
+      before a single charge is collected. It opens on the first tap and closes when the aggregation
+      is finalized and payment is collected.
+
+      Rows are deduplicated by id and operator_id. When the same pay window appears in multiple
+      delivery files, the earliest delivery is kept.
     columns:
       - name: operator_id
+        description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
       - name: id
+        description: Unique identifier for this pay window in the Enghouse system.
       - name: token
+        description: Tokenized card number associated with this pay window.
       - name: amount_settled
+        description: Amount successfully charged for this pay window, as delivered by Enghouse.
       - name: amount_to_settle
+        description: Amount that was to be collected for this pay window, as delivered by Enghouse.
       - name: debt_settled
+        description: |
+          Amount of debt successfully recovered for this pay window. A debt is created when the
+          initial collection attempt fails; Enghouse retries at defined intervals (debt recovery).
+          At that point the pay window is already in a debt state.
       - name: stage
+        description: |
+          Status of the pay window. One of:
+          - `Open`: window is open, tickets not yet counted, waiting for aggregation
+          - `Closed`: money collected, no debt
+          - `Debt`: debt recorded and recovery attempts ongoing
+          - `DebtFinal`: debt recorded and all recovery attempts exhausted
+          - `NoAuthDone`: same as Open, but card verification was skipped because the card was used on previous days
       - name: payment_reference
+        description: Payment reference number (PRN / variable symbol) for this pay window.
       - name: terminal_id
+        description: Identifier of the terminal where the pay window was opened.
       - name: open_date
+        description: Timestamp when the pay window was opened.
       - name: close_date
+        description: Timestamp when the pay window was closed.
+      - name: agency
+        description: Agency identifier parsed from the GCS path partition (e.g., "ventura", "raba", "camarillo").
+      - name: dt
+        description: Date partition parsed from the GCS path, corresponding to the date in the source filename.
+      - name: _payments_key
+        description: Surrogate key derived from id and operator_id. Uniquely identifies one pay window.
       - name: _content_hash
+        description: Hash of all data columns. Retained for data quality inspection; deduplication uses _payments_key.

@@ -79,7 +79,6 @@ join_orgs AS (
         ticket_results.start_dttm,
         ticket_results.end_dttm,
         ticket_results.ticket_code,
-        ticket_results.additional_infos,
 
         taps.mapping_terminal_id,
         taps.mapping_merchant_id,
@@ -121,7 +120,7 @@ join_orgs AS (
         taps.driver_id,
 
         dim_orgs.name AS organization_name,
-        dim_orgs.source_record_id AS organization_source_record_id,
+        direct_map.organization_source_record_id,
 
         -- Common transaction info
         routes.route_long_name,
@@ -139,8 +138,13 @@ join_orgs AS (
             AND CAST(ticket_results.start_dttm AS TIMESTAMP)
                 BETWEEN CAST(routes._in_use_from AS TIMESTAMP)
                 AND CAST(routes._in_use_until AS TIMESTAMP)
+    LEFT JOIN payments_entity_mapping AS direct_map
+        ON ticket_results.operator_id = direct_map.operator_id
+            AND CAST(ticket_results.start_dttm AS TIMESTAMP)
+                BETWEEN CAST(direct_map._in_use_from AS TIMESTAMP)
+                AND CAST(direct_map._in_use_until AS TIMESTAMP)
     LEFT JOIN dim_orgs
-        ON routes.organization_source_record_id = dim_orgs.source_record_id
+        ON direct_map.organization_source_record_id = dim_orgs.source_record_id
         AND CAST(ticket_results.start_dttm AS TIMESTAMP) BETWEEN dim_orgs._valid_from AND dim_orgs._valid_to
 ),
 
@@ -162,7 +166,6 @@ fct_payments_rides_enghouse AS (
         start_dttm,
         end_dttm,
         ticket_code,
-        additional_infos,
         mapping_terminal_id,
         mapping_merchant_id,
         terminal,
