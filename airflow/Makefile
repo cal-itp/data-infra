@@ -1,13 +1,15 @@
 .PHONY: clean clean-postgres pools restart setup start stop sync teardown
 
-COMPOSER_ENVIRONMENT_SOURCE := calitp-staging-composer
 COMPOSER_ENVIRONMENT_NAME := calitp-development-composer
 COMPOSER_PATH := composer
 COMPOSER_ENVIRONMENT_PATH := $(COMPOSER_PATH)/$(COMPOSER_ENVIRONMENT_NAME)
 
-COMPOSER_VERSION := composer-2.15.2-airflow-2.10.5
 COMPOSER_PROJECT := cal-itp-data-infra-staging
-COMPOSER_LOCATION := us-west2
+# create composer-dev either with --from-image-version $(COMPOSER_VERSION)
+COMPOSER_VERSION := composer-3-airflow-2.10.5-build.36
+# or with --from-source-environment $(COMPOSER_ENVIRONMENT_SOURCE) --location $(COMPOSER_LOCATION)
+# COMPOSER_ENVIRONMENT_SOURCE := calitp-staging-composer
+# COMPOSER_LOCATION := us-west2
 
 WAREHOUSE_PATH := ../warehouse
 WAREHOUSE_TARGET := staging
@@ -41,9 +43,8 @@ $(COMPOSER_PATH):
 
 $(COMPOSER_ENVIRONMENT_PATH): $(COMPOSER_PATH)
 	uv run composer-dev create \
+		--from-image-version $(COMPOSER_VERSION) \
 		--project $(COMPOSER_PROJECT) \
-		--from-source-environment $(COMPOSER_ENVIRONMENT_SOURCE) \
-		--location $(COMPOSER_LOCATION) \
 		--port 8080 \
 		--dags-path dags/ \
 		--database postgresql \
