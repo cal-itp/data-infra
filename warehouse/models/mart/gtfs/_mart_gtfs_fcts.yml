@@ -913,12 +913,14 @@ models:
           quality issues were present in the stop times data that is being
           summarized here, and counts may be inflated due to multiple rows with
           identical identifiers.
-      - name: contains_warning_duplicate_trip_primary_key
+      - &contains_warning_duplicate_trip_primary_key
+        name: contains_warning_duplicate_trip_primary_key
         description: |
           Rows with `true` in this column indicate that `dim_trips` contains
           duplicates of this trip primary key.
           i.e., `trip_id` is duplicated within an individual feed instance.
-      - name: contains_warning_missing_foreign_key_stop_id
+      - &contains_warning_missing_foreign_key_stop_id
+        name: contains_warning_missing_foreign_key_stop_id
         description: |
           Rows with `true` in this column indicate that the columns in this table
           that are aggregated from stop times data (`n_stops`, `num_stop_times`,
@@ -2860,7 +2862,8 @@ models:
         description: *n_scheduled_shapes_desc
       - name: n_stops
         description: *n_scheduled_stops_desc
-      - *contains_warning_duplicate_stop_times_primary_key
+      - name: contains_warning_duplicate_stop_times_primary_key
+        description: '{{ doc("column_contains_warning_duplicate_stop_times_primary_key") }}'
       - *contains_warning_duplicate_trip_primary_key
       - *contains_warning_missing_foreign_key_stop_id
         # foreign keys
