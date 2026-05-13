@@ -1,15 +1,13 @@
 .PHONY: clean clean-postgres pools restart setup start stop sync teardown
 
+COMPOSER_ENVIRONMENT_SOURCE := calitp-staging-composer
 COMPOSER_ENVIRONMENT_NAME := calitp-development-composer
 COMPOSER_PATH := composer
 COMPOSER_ENVIRONMENT_PATH := $(COMPOSER_PATH)/$(COMPOSER_ENVIRONMENT_NAME)
 
-# create composer-dev either with --from-image-version $(COMPOSER_VERSION)
-COMPOSER_VERSION := composer-3-airflow-2.10.5-build.36
-# or with --from-source-environment $(COMPOSER_ENVIRONMENT_SOURCE) --location $(COMPOSER_LOCATION) --project $(COMPOSER_PROJECT)
-# COMPOSER_ENVIRONMENT_SOURCE := calitp-staging-composer
-# COMPOSER_PROJECT := cal-itp-data-infra-staging
-# COMPOSER_LOCATION := us-west2
+COMPOSER_VERSION := composer-2.15.2-airflow-2.10.5
+COMPOSER_PROJECT := cal-itp-data-infra-staging
+COMPOSER_LOCATION := us-west2
 
 WAREHOUSE_PATH := ../warehouse
 WAREHOUSE_TARGET := staging
@@ -26,7 +24,7 @@ stop:
 sync: $(WAREHOUSE_PATH)/target/manifest.json $(COMPOSER_ENVIRONMENT_PATH)
 	rsync -ar plugins/ $(COMPOSER_ENVIRONMENT_PATH)/plugins/
 	rsync -ar $(WAREHOUSE_PATH)/ $(COMPOSER_ENVIRONMENT_PATH)/data/warehouse/
-	cp -f requirements-c3.txt $(COMPOSER_ENVIRONMENT_PATH)/requirements.txt
+	cp -f requirements-dev.txt $(COMPOSER_ENVIRONMENT_PATH)/requirements.txt
 	cp -f .development.env $(COMPOSER_ENVIRONMENT_PATH)/variables.env
 ifneq (,$(wildcard .env))
 	cat .env >> $(COMPOSER_ENVIRONMENT_PATH)/variables.env
@@ -43,7 +41,9 @@ $(COMPOSER_PATH):
 
 $(COMPOSER_ENVIRONMENT_PATH): $(COMPOSER_PATH)
 	uv run composer-dev create \
-		--from-image-version $(COMPOSER_VERSION) \
+		--project $(COMPOSER_PROJECT) \
+		--from-source-environment $(COMPOSER_ENVIRONMENT_SOURCE) \
+		--location $(COMPOSER_LOCATION) \
 		--port 8080 \
 		--dags-path dags/ \
 		--database postgresql \
