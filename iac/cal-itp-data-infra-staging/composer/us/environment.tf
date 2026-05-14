@@ -112,17 +112,15 @@ resource "google_composer_environment" "calitp-staging-composer" {
 }
 
 # Parallel Composer 3 environment for migration testing.
-# Stood up alongside calitp-staging-composer; will be applied manually
-# (not via composer-apply-files.yml) until cutover is complete.
-resource "google_composer_environment" "calitp-staging-composer-c3" {
-  name    = "calitp-staging-composer-c3"
+# Stood up alongside calitp-staging-composer
+resource "google_composer_environment" "calitp-staging-composer3" {
+  name    = "calitp-staging-composer3"
   region  = "us-west2"
   project = "cal-itp-data-infra-staging"
 
-  # storage_config {
-  #   bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_name
-  # }
-
+  storage_config {
+    bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer3_name
+  }
 
   config {
     node_config {
@@ -212,10 +210,9 @@ resource "google_composer_environment" "calitp-staging-composer-c3" {
         "CALITP_BUCKET__LITTLEPAY_PARSED"                      = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-payments-littlepay-parsed_name}",
         "CALITP_BUCKET__LITTLEPAY_PARSED_V3"                   = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-payments-littlepay-parsed-v3_name}",
         "CALITP_BUCKET__LITTLEPAY_RAW"                         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-payments-littlepay-raw_name}",
-        # exist in staging composer2 config but was missing from composer3 originally by Chris
-        # "CALITP_BUCKET__ENGHOUSE_PARSED"                       = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-enghouse-parsed_name}",
         "CALITP_BUCKET__LITTLEPAY_RAW_V3"                      = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-payments-littlepay-raw-v3_name}",
         "CALITP_BUCKET__ENGHOUSE_RAW"                          = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-enghouse-raw_name}",
+        "CALITP_BUCKET__ENGHOUSE_PARSED"                       = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-enghouse-parsed_name}",
         "CALITP_BUCKET__NTD_API_DATA_PRODUCTS"                 = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-ntd-api-products_name}",
         "CALITP_BUCKET__NTD_REPORT_VALIDATION"                 = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-ntd-report-validation_name}",
         "CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN"         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-ntd-xlsx-products-clean_name}",

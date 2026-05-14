@@ -2,7 +2,7 @@ apache-airflow-providers-amazon>=9.17.0
 astronomer-cosmos
 beautifulsoup4==4.12.3
 boto3==1.41.2
-ckanapi>=4.8
+ckanapi>=4.11
 gtfs-realtime-bindings>=1.0.0
 gusty==0.6.0
 openpyxl==3.1.5
