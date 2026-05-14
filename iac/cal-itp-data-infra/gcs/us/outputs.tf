@@ -2009,3 +2009,7 @@ output "google_storage_bucket_calitp-enghouse-parsed_name" {
 output "google_storage_bucket_calitp-elavon-raw-v2_name" {
   value = google_storage_bucket.calitp-elavon-raw-v2.name
 }
+
+output "google_storage_bucket_calitp-tides_name" {
+  value = google_storage_bucket.calitp-tides.name
+}
