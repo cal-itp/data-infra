@@ -147,7 +147,8 @@ models:
         description: '{{ doc("gtfs_routes__route_short_name") }}'
       - name: route_long_name
         description: '{{ doc("gtfs_routes__route_long_name") }}'
-      - *route_name
+      - name: route_name
+        description: '{{ doc("column_gtfs_route_name") }}'
       - name: route_desc
         description: '{{ doc("gtfs_routes__route_desc") }}'
       - name: route_color
@@ -178,7 +179,7 @@ models:
       - name: n_trips
         description: &n_scheduled_trips_desc |
           Total number of trips ran in this period.
-      - *n_service_dates
+      - *n_service_days
       - *n_feed_keys
       - name: route_id_array
         description: &route_id_array_desc |
@@ -277,9 +278,10 @@ models:
           ferry: route_type 4
           other_rail: route_types 5, 6, 7, 12
           trolleybus: route_type 11
-      - *n_service_dates
+      - *n_service_days
       - *n_feed_keys
-      - *n_route_types
+      - name: n_route_types
+        description: Count of unique route_types.
       - name: stop_key
         description: Foreign key to the `dim_stops` table.
       - name: tts_stop_name
