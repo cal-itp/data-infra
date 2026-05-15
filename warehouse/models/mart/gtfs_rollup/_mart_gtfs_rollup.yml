@@ -181,7 +181,7 @@ models:
       - *n_service_dates
       - *n_feed_keys
       - name: route_id_array
-        description: |
+        description: &route_id_array_desc |
           An array of parsed route_ids.
           See the macro: https://dbt-docs.dds.dot.ca.gov/#!/macro/macro.calitp_warehouse.parse_route_id
 
@@ -197,12 +197,15 @@ models:
       - *month_first_day
       - name: route_name
         description: '{{ doc("column_gtfs_route_name") }}'
+      - name: route_type
+        description: '{{ doc("gtfs_routes__route_type") }}'
       - *direction_id
       - name: shape_id
         description: '{{ doc("gtfs_trips__shape_id") }}'
       - name: shape_array_key
         description: Foreign key to dim_shapes_arrays.
-      - *n_trip_instance_keys
+      - name: n_trips
+        description: *n_scheduled_trips_desc
       - *shape_pt_array
 
   - name: fct_monthly_scheduled_stops
@@ -217,12 +220,38 @@ models:
       - *day_type
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
-      - name: stop_key
-        description: Foreign key to the `dim_stops` table.
-      - name: tts_stop_name
-        description: '{{ doc("gtfs_stops__tts_stop_name") }}'
-      - *n_days
-      - *n_feeds
+      - name: total_stop_arrivals
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: daily_stop_arrivals
+        description: '{{ doc("column_daily_stop_arrivals") }}'
+      - name: n_hours_in_service
+        description: |
+          Number of hours in service.
+          It is the distinct number of arrival hours based on a scheduled stop_time's arrival_time column.
+      - name: arrivals_per_hour_owl
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_per_hour_early_am
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_per_hour_am_peak
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_per_hour_midday
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_per_hour_pm_peak
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_per_hour_evening
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_owl
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: arrivals_early_am
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: arrivals_am_peak
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: arrivals_midday
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: arrivals_pm_peak
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: arrivals_evening
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
       - *route_type_0
       - *route_type_1
       - *route_type_2
@@ -234,6 +263,25 @@ models:
       - *route_type_11
       - *route_type_12
       - *missing_route_type
+      - name: route_type_array
+        description: '{{ doc("gtfs_routes__route_type") }}'
+      - name: route_id_array
+        description: *route_id_array_desc
+      - name: transit_mode_array
+        description: |
+          Combine route_types into readable transit modes to align with NTD mode definitions.
+          Transit mode values are: ["rail", "bus", "ferry", "other_rail", "trolleybus"].
+
+          rail: route_types 0, 1, 2
+          bus: route_type 3
+          ferry: route_type 4
+          other_rail: route_types 5, 6, 7, 12
+          trolleybus: route_type 11
+      - *n_service_dates
+      - *n_feed_keys
+      - *n_route_types
+      - name: stop_key
+        description: Foreign key to the `dim_stops` table.
       - name: tts_stop_name
         description: '{{ doc("gtfs_stops__tts_stop_name") }}'
       - *stop_pt_geom
