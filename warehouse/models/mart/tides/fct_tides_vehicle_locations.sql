@@ -38,21 +38,14 @@ WITH source_vehicle_locations AS (
 -- with the public-customer-facing or regional-subfeed fixed-route flag. Org
 -- info isn't part of the TIDES spec and isn't carried through; org metadata
 -- for the publish flow lives separately.
-publication_dim_records AS (
-    SELECT d.*
-    FROM {{ ref('dim_provider_gtfs_data') }} AS d
-    INNER JOIN {{ ref('tides_publication_keys') }}
-        USING (vehicle_positions_source_record_id)
-    WHERE d.public_customer_facing_or_regional_subfeed_fixed_route = TRUE
-),
-
 -- SCD Type 2 join: resolve the dim record valid at each VP row's
 -- _extract_ts (not the current state).
 filtered_vehicle_locations AS (
     SELECT vp.*
     FROM source_vehicle_locations AS vp
-    INNER JOIN publication_dim_records AS d
+    INNER JOIN {{ ref('dim_provider_gtfs_data') }} AS d
         ON d.vehicle_positions_gtfs_dataset_key = vp.gtfs_dataset_key
+        AND d.public_customer_facing_or_regional_subfeed_fixed_route = TRUE
         AND vp._extract_ts BETWEEN d._valid_from AND d._valid_to
 ),
 
