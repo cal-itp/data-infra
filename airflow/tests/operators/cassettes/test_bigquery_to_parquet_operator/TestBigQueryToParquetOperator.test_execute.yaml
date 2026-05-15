@@ -1,0 +1,399 @@
+interactions:
+- request:
+    body: '{"useLegacySql": false, "formatOptions": {"useInt64Timestamp": true}, "query":
+      "EXPORT DATA OPTIONS(uri=''gs://calitp-staging-pytest/vehicle_locations/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/gtfs_dataset_key=recUKDWE8Vq7rRAPM/recUKDWE8Vq7rRAPM_*.parquet'',format=''PARQUET'',compression=''SNAPPY'',overwrite=true)
+      AS SELECT * FROM mart_tides.fct_tides_vehicle_locations WHERE dt = CAST(''2025-06-02''
+      AS DATE) AND gtfs_dataset_key = ''recUKDWE8Vq7rRAPM''", "requestId": "45287d80-4ddd-4623-841c-73ead90e8835"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '502'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      X-Goog-API-Client:
+      - gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: POST
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries?prettyPrint=false
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/42QW0/DMAyF/4t5baW2XFr6tkFhIK5dEeIJZalbMrKkS1yxqeK/k3QICRASL4lk
+        n3P82QO8ClVDDgvRrns0273xLdF2WlmEAJZ6UWKDBhVHyAfojF4ipwtv4kyGgrqwZsRCoRrDQkus
+        FardGUeR+5+rjbi9ejrKws1sckjRY6no8qYxk3V1du6kUnNGQiun7m34hpYSeA+ANDE53RLaO6M5
+        Wos+L9pln+hVJ5EcE5keA8fCX3AmCPKGSesK4yL/JfCBBkeIEpn1KANwXbt4KIv7h2JeFaffmaZC
+        yi+gsTyXmq6tq8RJnP2xlgP9nFOJlU+P0/Q4PsiiKE73fZI7oKFfvSzxVlT1z06SpO5WHzL3z7XH
+        AQAA
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Mon, 18 May 2026 23:46:42 GMT
+      Server:
+      - ESF
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - X-Origin
+      - Referer
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "--===============8803571001824418945==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"vehicle_location_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/recUKDWE8Vq7rRAPM_results.jsonl\",
+      \"crc32c\": \"Vr85zw==\"}\r\n--===============8803571001824418945==\r\ncontent-type:
+      application/jsonl\r\n\r\n{\"dataset_name\": \"mart_tides\", \"table_name\":
+      \"fct_tides_vehicle_locations\", \"source_record_name\": \"gtfs_dataset_key\",
+      \"source_record_id\": \"recUKDWE8Vq7rRAPM\", \"display_name\": \"Beach Cities
+      Transit\", \"destination_uri\": \"gs://calitp-staging-pytest/vehicle_locations/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/gtfs_dataset_key=recUKDWE8Vq7rRAPM/recUKDWE8Vq7rRAPM_*.parquet\",
+      \"dt\": \"2025-06-02\", \"ts\": \"2025-06-02T00:00:00+00:00\"}\r\n--===============8803571001824418945==--"
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '767'
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0 gccl-invocation-id/0d30c8c5-16b7-4bc9-9bfc-cc452160bb1c
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT04ODAzNTcxMDAxODI0
+        NDE4OTQ1PT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/jsonl
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/vehicle_location_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/recUKDWE8Vq7rRAPM_results.jsonl/1779148003285072\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/vehicle_location_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FrecUKDWE8Vq7rRAPM_results.jsonl\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/vehicle_location_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FrecUKDWE8Vq7rRAPM_results.jsonl?generation=1779148003285072&alt=media\",\n
+        \ \"name\": \"vehicle_location_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/recUKDWE8Vq7rRAPM_results.jsonl\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1779148003285072\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"426\",\n  \"md5Hash\": \"pWEIc73sC0ieXY14Hp1Bpg==\",\n
+        \ \"crc32c\": \"Vr85zw==\",\n  \"etag\": \"CNCw9OWCxJQDEAE=\",\n  \"timeCreated\":
+        \"2026-05-18T23:46:43.293Z\",\n  \"updated\": \"2026-05-18T23:46:43.293Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-05-18T23:46:43.293Z\",\n  \"timeFinalized\":
+        \"2026-05-18T23:46:43.293Z\"\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1192'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Mon, 18 May 2026 23:46:43 GMT
+      ETag:
+      - CNCw9OWCxJQDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEiYHbH1cJqSjxCjcr1fYOn1N3t8L1JVA1N3vEoSWyufeweiJALW7lWbdqf16pgx1jOGPFgA7Q
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"useLegacySql": false, "formatOptions": {"useInt64Timestamp": true}, "query":
+      "EXPORT DATA OPTIONS(uri=''gs://calitp-staging-pytest/vehicle_locations/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/gtfs_dataset_key=recUKDWE8Vq7rRAPM/recUKDWE8Vq7rRAPM_*.parquet'',format=''PARQUET'',compression=''SNAPPY'',overwrite=true)
+      AS SELECT * FROM mart_tides.fct_tides_vehicle_locations WHERE dt = CAST(''2025-06-02''
+      AS DATE) AND gtfs_dataset_key = ''recUKDWE8Vq7rRAPM''", "requestId": "0c031973-eaae-4bf9-95ca-bc7bd29f22a2"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '502'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.39.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.39.0
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: POST
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries?prettyPrint=false
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/42QXUvDMBSG/8vxdoWupHb2cq6gOMF11aE3I0tPa7Ys6ZJTxij776adCCqCNwmc
+        9yPPSQc7qUtIYSPrQ4v2dDWcObrGaIcwgq3Z5FihRS0Q0g4aa7Yo6L4PCa4CSU1QcuKB1JXlgSNe
+        S11fgoPJ3+uiPSQvNDvKdfX6sNoFi7levS0ZG1fzlbcqIzhJo727dcERHUVwHgEZ4mp6InRP1gh0
+        Dvu+8NJ9a/aNQvJMZFsceRbxjneSIK24cn4wLPJfgr7Q4gCRI3c9SgfClL4e8mzxnC2LbPadaSqV
+        +gIaxktl6NH5CYviP7bynJ/PFHLfl4+T5GbMJmHIYtaH/P9Z+qVdR8xrqMufShxHEzh/ANjNtM3G
+        AQAA
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Mon, 18 May 2026 23:46:45 GMT
+      Server:
+      - ESF
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - X-Origin
+      - Referer
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "--===============2040045899998478533==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"vehicle_location_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/recUKDWE8Vq7rRAPM_results.jsonl\",
+      \"crc32c\": \"Vr85zw==\"}\r\n--===============2040045899998478533==\r\ncontent-type:
+      application/jsonl\r\n\r\n{\"dataset_name\": \"mart_tides\", \"table_name\":
+      \"fct_tides_vehicle_locations\", \"source_record_name\": \"gtfs_dataset_key\",
+      \"source_record_id\": \"recUKDWE8Vq7rRAPM\", \"display_name\": \"Beach Cities
+      Transit\", \"destination_uri\": \"gs://calitp-staging-pytest/vehicle_locations/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/gtfs_dataset_key=recUKDWE8Vq7rRAPM/recUKDWE8Vq7rRAPM_*.parquet\",
+      \"dt\": \"2025-06-02\", \"ts\": \"2025-06-02T00:00:00+00:00\"}\r\n--===============2040045899998478533==--"
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '767'
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0 gccl-invocation-id/4d3d83cf-06f8-4fe2-ae72-596bbeb5f782
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0yMDQwMDQ1ODk5OTk4
+        NDc4NTMzPT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/jsonl
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/vehicle_location_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/recUKDWE8Vq7rRAPM_results.jsonl/1779148007045645\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/vehicle_location_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FrecUKDWE8Vq7rRAPM_results.jsonl\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/vehicle_location_results%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2FrecUKDWE8Vq7rRAPM_results.jsonl?generation=1779148007045645&alt=media\",\n
+        \ \"name\": \"vehicle_location_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/recUKDWE8Vq7rRAPM_results.jsonl\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1779148007045645\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"426\",\n  \"md5Hash\": \"pWEIc73sC0ieXY14Hp1Bpg==\",\n
+        \ \"crc32c\": \"Vr85zw==\",\n  \"etag\": \"CI302eeCxJQDEAE=\",\n  \"timeCreated\":
+        \"2026-05-18T23:46:47.054Z\",\n  \"updated\": \"2026-05-18T23:46:47.054Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-05-18T23:46:47.054Z\",\n  \"timeFinalized\":
+        \"2026-05-18T23:46:47.054Z\"\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1192'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Mon, 18 May 2026 23:46:47 GMT
+      ETag:
+      - CI302eeCxJQDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEhtKR9YiMfjxru54g31ik24C8KxPNqpXvpI029XHKRnbL-7Z5E-2Ghskh8IqG47rZ1NZwuBVdY
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0 gccl-invocation-id/9ef52de8-eb03-4173-9266-801023881d06
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?matchGlob=vehicle_locations%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2Fgtfs_dataset_key%3DrecUKDWE8Vq7rRAPM%2FrecUKDWE8Vq7rRAPM_%2A.parquet&prettyPrint=false
+  response:
+    body:
+      string: '{"kind":"storage#objects","items":[{"kind":"storage#object","id":"calitp-staging-pytest/vehicle_locations/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/gtfs_dataset_key=recUKDWE8Vq7rRAPM/recUKDWE8Vq7rRAPM_000000000000.parquet/1779148005341779","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/vehicle_locations%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fgtfs_dataset_key=recUKDWE8Vq7rRAPM%2FrecUKDWE8Vq7rRAPM_000000000000.parquet","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/vehicle_locations%2Fdt=2025-06-02%2Fts=2025-06-02T00:00:00%2B00:00%2Fgtfs_dataset_key=recUKDWE8Vq7rRAPM%2FrecUKDWE8Vq7rRAPM_000000000000.parquet?generation=1779148005341779&alt=media","name":"vehicle_locations/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/gtfs_dataset_key=recUKDWE8Vq7rRAPM/recUKDWE8Vq7rRAPM_000000000000.parquet","bucket":"calitp-staging-pytest","generation":"1779148005341779","metageneration":"1","contentType":"application/octet-stream","storageClass":"STANDARD","size":"3587","md5Hash":"yfE0oUn2dvL92WL2jo4gTA==","crc32c":"Be1sSA==","etag":"CNP08eaCxJQDEAE=","timeCreated":"2026-05-18T23:46:45.349Z","updated":"2026-05-18T23:46:45.349Z","timeStorageClassUpdated":"2026-05-18T23:46:45.349Z","timeFinalized":"2026-05-18T23:46:45.349Z"}]}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '1307'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Mon, 18 May 2026 23:46:48 GMT
+      Expires:
+      - Mon, 18 May 2026 23:46:48 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEg_o_5TBwz3jcdtwYMdAJ9PMHtTAvpPq05yry-3ZTsXSP902lE8UgQvjGcSmEIXEAZBxHhJzQ
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0 gccl-invocation-id/b02a658b-e41e-4fea-a7ab-107024b20257
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/vehicle_location_results%2Fdt%3D2025-06-02%2Fts%3D2025-06-02T00%3A00%3A00%2B00%3A00%2FrecUKDWE8Vq7rRAPM_results.jsonl?alt=media
+  response:
+    body:
+      string: '{"dataset_name": "mart_tides", "table_name": "fct_tides_vehicle_locations",
+        "source_record_name": "gtfs_dataset_key", "source_record_id": "recUKDWE8Vq7rRAPM",
+        "display_name": "Beach Cities Transit", "destination_uri": "gs://calitp-staging-pytest/vehicle_locations/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/gtfs_dataset_key=recUKDWE8Vq7rRAPM/recUKDWE8Vq7rRAPM_*.parquet",
+        "dt": "2025-06-02", "ts": "2025-06-02T00:00:00+00:00"}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '426'
+      Content-Type:
+      - application/jsonl
+      Date:
+      - Mon, 18 May 2026 23:46:48 GMT
+      ETag:
+      - CI302eeCxJQDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Mon, 18 May 2026 23:46:47 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEg-4loLqNrEd5rWuCjcs1FEQXrBTlxFRyNMN02aWtuABDCCn5vlVQmnnD1hA_DsblxbU9ch4A
+      X-Goog-Generation:
+      - '1779148007045645'
+      X-Goog-Hash:
+      - crc32c=Vr85zw==,md5=pWEIc73sC0ieXY14Hp1Bpg==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '426'
+    status:
+      code: 200
+      message: OK
+version: 1
