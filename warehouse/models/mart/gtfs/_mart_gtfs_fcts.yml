@@ -2721,34 +2721,34 @@ models:
       - *rt_stu_actual_arrival_pacific
       - *rt_stu_actual_departure_pacific
       - name: avg_prediction_error_sec
-        description: '{{ doc(column_gtfs_rt__tu_prediction_error) }}'
+        description: '{{ doc("column_gtfs_rt__tu_prediction_error") }}'
       - name: avg_scaled_prediction_error_sec
-        description: '{{ doc(column_gtfs_rt__tu_scaled_prediction_error) }}'
+        description: '{{ doc("column_gtfs_rt__tu_scaled_prediction_error") }}'
       - name: n_tu_accurate_minutes
-        description: '{{ doc(column_gtfs_rt__tu_accurate_minutes) }}'
+        description: '{{ doc("column_gtfs_rt__tu_accurate_minutes") }}'
       - name: n_predictions_early
-        description: '{{ doc(column_gtfs_rt__tu_predictions_by_category) }}'
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
       - name: n_predictions_ontime
-        description: '{{ doc(column_gtfs_rt__tu_predictions_by_category) }}'
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
       - name: n_predictions_late
-        description: '{{ doc(column_gtfs_rt__tu_predictions_by_category) }}'
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
       - name: prediction_error_by_minute_array
-        description: '{{ doc(column_gtfs_rt__tu_prediction_error) }}'
+        description: '{{ doc("column_gtfs_rt__tu_prediction_error") }}'
       - name: max_minutes_until_arrival
         description: &rt_tu_minutes_until_arrival_desc |
           The number of minutes before the actual_arrival is the difference, in minutes, between
           the _extract_ts and last_trip_updates_arrival_time.
           The max value of this is 30, as only the 30 minutes before the bus arrives is included.
       - name: scaled_prediction_error_by_minute_array
-        description: '{{ doc(column_gtfs_rt__tu_scaled_prediction_error) }}'
+        description: '{{ doc("column_gtfs_rt__tu_scaled_prediction_error") }}'
       - name: n_tu_complete_minutes
-        description: '{{ doc(column_gtfs_rt__tu_complete_minutes) }}'
+        description: '{{ doc("column_gtfs_rt__tu_complete_minutes") }}'
       - &n_tu_minutes_available
         name: n_tu_minutes_available
         description: |
           The number of minutes with valid StopTimeUpdate messages, or predictions, for each service_date-trip-stop_id-stop_sequence combination. Only up the 30 minutes until the bus arrives is considered. Max value of this column is 30.
       - name: sum_prediction_spread_seconds
-        description: '{{ doc(column_gtfs_rt__tu_prediction_spread) }}'
+        description: '{{ doc("column_gtfs_rt__tu_prediction_spread") }}'
       - name: max_minutes_until_arrival
         description: *rt_tu_minutes_until_arrival_desc
       - &rt_tu_n_predictions
@@ -2763,26 +2763,26 @@ models:
       - *rt_service_date
       - *rt_stu_stop_id
       - name: avg_prediction_error_sec
-        description: '{{ doc(column_gtfs_rt__tu_prediction_error) }}'
+        description: '{{ doc("column_gtfs_rt__tu_prediction_error") }}'
       - name: n_tu_accurate_minutes
-        description: '{{ doc(column_gtfs_rt__tu_accurate_minutes) }}'
+        description: '{{ doc("column_gtfs_rt__tu_accurate_minutes") }}'
       - name: n_tu_complete_minutes
-        description: '{{ doc(column_gtfs_rt__tu_complete_minutes) }}'
+        description: '{{ doc("column_gtfs_rt__tu_complete_minutes") }}'
       - *n_tu_minutes_available
       - name: n_predictions_early
-        description: '{{ doc(column_gtfs_rt__tu_predictions_by_category) }}'
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
       - name: n_predictions_ontime
-        description: '{{ doc(column_gtfs_rt__tu_predictions_by_category) }}'
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
       - name: n_predictions_late
-        description: '{{ doc(column_gtfs_rt__tu_predictions_by_category) }}'
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
       - name: avg_prediction_spread_minutes
-        description: '{{ doc(column_gtfs_rt__tu_prediction_spread) }}'
+        description: '{{ doc("column_gtfs_rt__tu_prediction_spread") }}'
       - *rt_tu_n_predictions
       - name: n_tu_trips
       - name: prediction_error_by_minute_array
-        description: '{{ doc(column_gtfs_rt__tu_prediction_error) }}'
+        description: '{{ doc("column_gtfs_rt__tu_prediction_error") }}'
       - name: scaled_prediction_error_by_minute_array
-        description: '{{ doc(column_gtfs_rt__tu_scaled_prediction_error) }}'
+        description: '{{ doc("column_gtfs_rt__tu_scaled_prediction_error") }}'
       - name: minutes_until_arrival
         description: *rt_tu_minutes_until_arrival_desc
 
@@ -2795,27 +2795,27 @@ models:
         description: |
           Foreign key to int_gtfs_rt__trip_updates_trip_day_map_grouping.
       - name: avg_prediction_error_sec
-        description: '{{ doc(column_gtfs_rt__tu_prediction_error) }}'
+        description: '{{ doc("column_gtfs_rt__tu_prediction_error") }}'
       - name: n_tu_accurate_minutes
-        description: '{{ doc(column_gtfs_rt__tu_accurate_minutes) }}'
+        description: '{{ doc("column_gtfs_rt__tu_accurate_minutes") }}'
       - name: n_tu_complete_minutes
-        description: '{{ doc(column_gtfs_rt__tu_complete_minutes) }}'
+        description: '{{ doc("column_gtfs_rt__tu_complete_minutes") }}'
       - *n_tu_minutes_available
       - name: avg_prediction_spread_minutes
-        description: '{{ doc(column_gtfs_rt__tu_prediction_spread) }}'
+        description: '{{ doc("column_gtfs_rt__tu_prediction_spread") }}'
       - *rt_tu_n_predictions
       - name: n_predictions_early
-        description: '{{ doc(column_gtfs_rt__tu_predictions_by_category) }}'
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
       - name: n_predictions_ontime
-        description: '{{ doc(column_gtfs_rt__tu_predictions_by_category) }}'
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
       - name: n_predictions_late
-        description: '{{ doc(column_gtfs_rt__tu_predictions_by_category) }}'
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
       - name: n_tu_stops
         description: Count of distinct trip-stop_id-stop_sequence combinations from the trip updates dataset.
       - name: prediction_error_by_minute_array
-        description: '{{ doc(column_gtfs_rt__tu_prediction_error) }}'
+        description: '{{ doc("column_gtfs_rt__tu_prediction_error") }}'
       - name: scaled_prediction_error_by_minute_array
-        description: '{{ doc(column_gtfs_rt__tu_scaled_prediction_error) }}'
+        description: '{{ doc("column_gtfs_rt__tu_scaled_prediction_error") }}'
       - name: minutes_until_arrival
         description: *rt_tu_minutes_until_arrival_desc
 
