@@ -492,12 +492,12 @@ x-common-fields:
       Categorized based on the Pacific Time departure of the trip's first departure.
       Grouping each military hour into a time-of-day for transit service.
       Ex: Hours 0-3 are inclusive, from 12:00 AM to 3:59 AM.
-      Hours 0-3: Owl
-      Hours 4-6: Early AM
-      Hours 7-9: AM Peak
-      Hours 10-14: Midday
-      Hours 15-19: PM Peak
-      Hours 20-23: Evening
+      Hours 0-3: owl
+      Hours 4-6: early_am
+      Hours 7-9: am_peak
+      Hours 10-14: midday
+      Hours 15-19: pm_peak
+      Hours 20-23: evening
   - &shape_pt_array
     name: pt_array
     description: |
@@ -1927,6 +1927,7 @@ models:
           - not_null
       - *feed_key
       - name: name
+        description: *gtfs_dataset_name_desc
       - *base64_url
       - name: regional_feed_type
         description: |

@@ -92,18 +92,6 @@ x-common-fields:
     name: day_type
     description: |
       Days of the week are categorized into weekday / Saturday / Sunday.
-  - &time_of_day
-    name: time_of_day
-    description: |
-      Categorized based on the Pacific Time departure of the trip's first departure.
-      Grouping each military hour into a time-of-day for transit service.
-      Ex: Hours 0-3 are inclusive, from 12:00 AM to 3:59 AM.
-      Hours 0-3: Owl
-      Hours 4-6: Early AM
-      Hours 7-9: AM Peak
-      Hours 10-14: Midday
-      Hours 15-19: PM Peak
-      Hours 20-23: Evening
   - &month
     name: month
     description: |
@@ -113,26 +101,12 @@ x-common-fields:
     description: |
       Actual calendar year (Pacific Time dates) in which this service was
       scheduled to occur.
-  - &n_trip_instance_keys
-    name: n_trips
-    description: |
-      Count of distinct trip_instance_keys, which capture a single
-      trip on a service_date.
-  - &n_days
+  - &n_service_days
     name: n_days
-    description: Count of distinct service_dates in this month for this day_type.
-  - &n_feeds
+    description: Count of distinct service_dates for this period.
+  - &n_feed_keys
     name: n_feeds
-    description: Count of distinct feed_keys in this month for this day_type.
-  - &route_name
-    name: route_name
-    description: |
-      Within a month, route_id, route_short_name, and route_long_name values can
-      change slightly while referring to the same physical route, so trips have been have been
-      aggregated based on a cleaned up, combined name.
-      route_ids that are updated when feeds change with suffixes are parsed and cleaned.
-      (LA Metro, 1-[suffix_for_feed1], 1-[suffix_for_feed2]).
-      route_short_name and route_long_name are combined and cleaned up for easier labeling.
+    description: Count of distinct feed_keys for this period.
 
 models:
   - name: fct_monthly_scheduled_trips
@@ -153,10 +127,19 @@ models:
       - &month_first_day
         name: month_first_day
         description: |
-          First day of the month saved as a date.
-          Service_date of 2025-09-15 would become 2025-09-01.
+          First day of the month saved as a date. Service_date of 2025-09-15 would become 2025-09-01.
       - *day_type
-      - *time_of_day
+      - name: time_of_day
+        description: |
+          Categorized based on the Pacific Time departure of the trip's first departure.
+          Grouping each military hour into a time-of-day for transit service.
+          Ex: Hours 0-3 are inclusive, from 12:00 AM to 3:59 AM.
+          Hours 0-3: owl
+          Hours 4-6: early_am
+          Hours 7-9: am_peak
+          Hours 10-14: midday
+          Hours 15-19: pm_peak
+          Hours 20-23: evening
       - &direction_id
         name: direction_id
         description: '{{ doc("gtfs_trips__direction_id") }}'
@@ -171,17 +154,36 @@ models:
         description: '{{ doc("gtfs_routes__route_color") }}'
       - name: route_text_color
         description: '{{ doc("gtfs_routes__route_text_color") }}'
+      - name: route_type
+        description: '{{ doc("gtfs_routes__route_type") }}'
       - name: trip_id
         description: '{{ doc("gtfs_trips__trip_id") }}'
+      - name: iteration_num
+        description: '{{ doc("column_st_iteration_num") }}'
       - name: shape_id
         description: '{{ doc("gtfs_trips__shape_id") }}'
       - name: shape_array_key
         description: Foreign key to dim_shapes_arrays.
+      - name: trip_first_departure_sec
+        description: |
+          The number of seconds after 12 hours before noon (usually midnight)
+          on `service_date` in `feed_timezone` at which this trip's first stop
+          departure occurred.
+      - name: is_gtfs_flex_trip
+        description: '{{ doc("column_is_gtfs_flex_trip") }}'
       - name: service_hours
         description: '{{ doc("column_service_hours") }}'
-      - *n_trip_instance_keys
-      - *n_days
-      - *n_feeds
+      - name: flex_service_hours
+        description: '{{ doc("column_flex_service_hours") }}'
+      - name: n_trips
+        description: &n_scheduled_trips_desc |
+          Total number of trips ran in this period.
+      - *n_service_dates
+      - *n_feed_keys
+      - name: route_id_array
+        description: |
+          An array of parsed route_ids.
+          See the macro: https://dbt-docs.dds.dot.ca.gov/#!/macro/macro.calitp_warehouse.parse_route_id
 
   - name: fct_monthly_routes
     description: |
@@ -193,7 +195,8 @@ models:
       - *year
       - *month
       - *month_first_day
-      - *route_name
+      - name: route_name
+        description: '{{ doc("column_gtfs_route_name") }}'
       - *direction_id
       - name: shape_id
         description: '{{ doc("gtfs_trips__shape_id") }}'
