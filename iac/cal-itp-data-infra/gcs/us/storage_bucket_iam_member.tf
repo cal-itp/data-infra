@@ -435,9 +435,3 @@ resource "google_storage_bucket_iam_member" "elavon-raw-v2-sftp-service-account"
   role   = "roles/storage.objectAdmin"
   member = "serviceAccount:${data.terraform_remote_state.iam.outputs.google_service_account_elavon-sftp-service-account_email}"
 }
-
-resource "google_storage_bucket_iam_member" "calitp-tides" {
-  bucket = google_storage_bucket.calitp-tides.name
-  role   = "roles/storage.objectViewer"
-  member = "allUsers"
-}
