@@ -1982,6 +1982,10 @@ output "google_storage_bucket_calitp-kuba_name" {
   value = google_storage_bucket.calitp["calitp-kuba"].name
 }
 
+output "google_storage_bucket_calitp-tides_name" {
+  value = google_storage_bucket.calitp["calitp-tides"].name
+}
+
 output "google_storage_bucket_calitp-gtfs-schedule-manual_name" {
   value = google_storage_bucket.calitp["calitp-gtfs-schedule-manual"].name
 }
@@ -2008,8 +2012,4 @@ output "google_storage_bucket_calitp-enghouse-parsed_name" {
 
 output "google_storage_bucket_calitp-elavon-raw-v2_name" {
   value = google_storage_bucket.calitp-elavon-raw-v2.name
-}
-
-output "google_storage_bucket_calitp-tides_name" {
-  value = google_storage_bucket.calitp-tides.name
 }
