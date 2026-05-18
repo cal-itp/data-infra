@@ -2,3 +2,4 @@ Jinja2
 PyYAML
 click
 requests
+google-cloud-secret-manager

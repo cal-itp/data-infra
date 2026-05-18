@@ -1,254 +1,374 @@
-# STEPS — Cloning a Metabase Dashboard for a New Agency
+# STEPS — Cloning a Metabase Dashboard with the Interactive Wizard
 
-A step-by-step guide for analysts. Replace every `<PLACEHOLDER>` with the
-value for your situation.
+A step-by-step guide for analysts cloning dashboards between Metabase Staging
+and Metabase Prod (or saving them to a YAML template for later).
+
+## What this tool does
+
+You pick a source dashboard (from Staging, Prod, or a previously-saved YAML
+template), pick a destination (Staging, Prod, or just a YAML file on disk),
+and the wizard takes care of:
+
+- Fetching the dashboard from the source instance.
+- Following any "saved questions on top of saved questions" chains so the
+  cloned dashboard isn't missing its underlying queries.
+- Saving a Jinja-templated YAML to `templates/` so you can re-apply or audit
+  later.
+- Creating fresh cards, tabs, and the new dashboard on the destination
+  instance — never modifying or overwriting anything that already exists.
+
+The original tool was driven by long `--metabase-url ... --metabase-api-key
+... --template-context '{...}'` command lines. That's still supported (see
+`python cli.py --help`) but is now a fallback for CI use. **For everyday
+work, run the wizard.**
 
 ## Mental model
 
-- Any existing agency's dashboard can be the source — there is no canonical
-  blessed template per dashboard family.
-- Templates are **transient by default**. You generate one, apply it, and
-  discard. Commit a template only if you've decided a specific shape is
-  worth versioning.
-- The flow is two phases:
-  1. **Export** — source dashboard → YAML template
-  2. **Apply** — template + per-agency context → new dashboard in target
-     collection
+- **Two source instances** — `Metabase Staging` and `Metabase Prod` — each
+  with its own API key stored as a GCP Secret Manager secret. The wizard
+  fetches the right key automatically based on the source you pick.
+- **Two failure-safety gates** are built in:
+  - Picking **Metabase Prod as a destination** requires a `[y/N]` confirm.
+  - **Duplicate dashboard names** in the target collection trigger another
+    `[y/N]` before any cards are created.
+- **Nothing is ever overwritten.** Apply only POSTs new objects. The worst
+  case is leftover orphan cards on a failed run — easy to trash via the
+  Metabase UI.
+
+---
 
 ## One-time setup
 
-From the repo root, once per workstation:
+You only need to do this once per workstation.
+
+### 1. Install Python dependencies
 
 ```bash
-python3 -m venv tools/metabase_dashboard_templates/.venv
-tools/metabase_dashboard_templates/.venv/bin/pip install \
-  -r tools/metabase_dashboard_templates/requirements.txt
+cd tools/metabase_dashboard_templates
+python3 -m venv .venv
+.venv/bin/pip install -r requirements.txt
 ```
 
-## Per-session setup
+This pulls in Jinja2, PyYAML, click, requests, and
+`google-cloud-secret-manager`.
+
+### 2. GCP authentication
+
+The wizard reads Metabase API keys from **GCP Secret Manager**, which means
+it needs your Google Cloud credentials. Cal-ITP uses **Workforce Identity
+Federation** through `dot.ca.gov`, not personal Google accounts — that's why
+the standard `gcloud auth application-default login` (without arguments)
+won't work out of the box.
+
+Use the cal-itp `glogin-*` aliases your `.zshrc` already has:
 
 ```bash
-# Pick the right environment — staging for testing, prod for real.
-export METABASE_URL="<https://metabase-staging.dds.dot.ca.gov OR prod URL>"
-export METABASE_API_KEY="<your-personal-api-key>"
+# For everyday work (you'll switch between these depending on which env
+# you're querying):
+glogin-calitp-staging      # auths against cal-itp-data-infra-staging
+glogin-calitp-prod         # auths against cal-itp-data-infra
 ```
 
-Generate the API key from the Metabase admin UI under your account
-settings. **Rotate it if you've shared it in a chat, ticket, or
-screenshot.**
+Each alias does the workforce-identity OAuth dance, writes credentials to
+`~/.config/gcloud/adc_calitp.json`, and switches gcloud's active
+configuration to point at the right project.
 
-## Step 1 — Identify source and target
+**The wizard will trigger this for you if needed.** If you run the wizard
+without ADC set up, you'll see:
 
-Gather four values from the Metabase UI before running anything.
+```
+GCP Application Default Credentials are not configured.
+Launching `gcloud auth application-default login` (a browser tab will open)...
+```
 
-| What                        | How to find it                                                                                                                |
-| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
-| `<SOURCE_DASHBOARD_ID>`     | Open the source dashboard. URL is `/dashboard/<id>-<slug>`; take the integer.                                                 |
-| `<TARGET_DATABASE_ID>`      | Admin → Databases → click your target connection. URL is `/admin/databases/<id>`. Must expose every schema the source uses.   |
-| `<TARGET_COLLECTION_ID>`    | Open the target collection. URL is `/collection/<id>-<slug>`.                                                                 |
-| `<DASHBOARD_NAME>`          | Free text — e.g. `"Foothill - Feed Level V2"`.                                                                                |
+Hit accept in the browser, control returns to the wizard, and the secret
+fetch retries automatically. (Note: the automatic path uses the *generic*
+gcloud login, which is fine for a fresh install. For cal-itp workforce
+identity specifically, prefer the `glogin-calitp-*` aliases since they wire
+the right project + ADC-file rotation.)
 
-Verify the target DB exposes the schemas the source dashboard needs (this
-catches the most common apply-time error):
+### 3. GCP IAM — once per cal-itp workstation
+
+You need the **`roles/secretmanager.secretAccessor`** IAM role on both
+Metabase API key secrets. Your team admin grants this once. To check whether
+it's already set up for your account:
 
 ```bash
-curl -s -H "X-API-Key: $METABASE_API_KEY" \
-  "$METABASE_URL/api/database/<TARGET_DATABASE_ID>/metadata" | \
-  jq -r '[.tables[].schema] | unique | .[]'
+gcloud secrets describe metabase-dashboard-copy-tool-metabase-staging-api-key \
+  --project=cal-itp-data-infra-staging
+gcloud secrets describe metabase-dashboard-copy-tool-metabase-prod-api-key \
+  --project=cal-itp-data-infra
 ```
 
-If the source uses `mart_payments` and the target DB only shows
-`mart_gtfs`, you have the wrong target DB. Pick a different one.
+Both should print the secret's metadata. If you see `PERMISSION_DENIED` or
+`NOT_FOUND` you don't have access yet — ask in `#data-engineering` (or
+whichever channel handles cal-itp IAM). The wizard will print the exact
+`gcloud` command to fix permission issues if it hits one at runtime.
 
-## Step 2 — Identify substitutions
+### 4. (Optional) Quota project
 
-Open the source dashboard in Metabase and look for agency-specific text in:
+You may see a yellow warning about a missing quota project:
 
-- Dashboard description
-- Card names
-- Card descriptions
-- Heading and text dashcards (the prose blocks between charts)
-- Filter labels
+```
+UserWarning: Your application has authenticated using end user credentials
+from Google Cloud SDK without a quota project...
+```
 
-For an MST → Foothill clone you might end up with:
-
-| Literal in source                     | Variable name (your choice) |
-| ------------------------------------- | --------------------------- |
-| `MST`                                 | `agency_short`              |
-| `Mendocino Transit Authority`         | `agency_long`               |
-
-Variable name rules: letters, digits, underscores. Can't start with a
-digit. No hyphens. (`agency-short` will be rejected; `agency_short` is
-fine.)
-
-## Step 3 — Export the source dashboard to a template
+It's noise, not blocking. Silence it with:
 
 ```bash
-tools/metabase_dashboard_templates/.venv/bin/python \
-  tools/metabase_dashboard_templates/cli.py \
-  dashboard-to-template \
-  --dashboard-id <SOURCE_DASHBOARD_ID> \
-  --template-file /tmp/<TEMPLATE_NAME>.yml \
-  --substitution "<LITERAL_1>=<VARNAME_1>" \
-  --substitution "<LITERAL_2>=<VARNAME_2>"
+gcloud auth application-default set-quota-project cal-itp-data-infra-staging
 ```
 
-Notes:
+---
 
-- `--substitution` is repeatable — one flag per `LITERAL=VARNAME` pair.
-- The script auto-templatizes the dashboard name to `{{ dashboard_name }}`.
-  Pass `--no-templatize-name` for migration-style 1:1 copies that should
-  keep the source's name.
-- Writing to `/tmp/` keeps templates out of the repo. The script will
-  create any missing parent directories.
+## Running the wizard
 
-Expected last line:
-
-```
-Wrote template (NNN expressions) -> /tmp/<TEMPLATE_NAME>.yml
-```
-
-You may also see warnings like `warn: viz field id NNNNN unresolved...`.
-These are stale Metabase catalog references in the source dashboard's
-column-formatting/click-behavior settings. The export proceeds; those
-specific column styles may revert to defaults on the target. Not an error.
-
-## Step 4 — (Optional) Hand-edit the template
-
-If something agency-specific isn't covered by your substitutions, open
-`/tmp/<TEMPLATE_NAME>.yml` and replace literal strings with
-`{{ varname }}` expressions directly. Add the corresponding key to your
-apply context in Step 5.
-
-## Step 5 — Dry-run the apply
-
-Always do this before a real push.
+From the `tools/metabase_dashboard_templates/` directory:
 
 ```bash
-tools/metabase_dashboard_templates/.venv/bin/python \
-  tools/metabase_dashboard_templates/cli.py \
-  template-to-dashboard \
-  --template-file /tmp/<TEMPLATE_NAME>.yml \
-  --template-context '{
-    "database_id": <TARGET_DATABASE_ID>,
-    "collection_id": <TARGET_COLLECTION_ID>,
-    "dashboard_name": "<DASHBOARD_NAME>",
-    "<VARNAME_1>": "<TARGET_VALUE_1>",
-    "<VARNAME_2>": "<TARGET_VALUE_2>"
-  }' \
-  --dry-run
+.venv/bin/python cli.py interactive
 ```
 
-`--dry-run` renders the template and prints the resulting dashboard spec
-as JSON. No HTTP writes happen.
+That's the whole invocation. Everything else is a prompt.
 
-Common dry-run errors and what they mean:
+### What you'll be asked, in order
 
-- `'<X>' is undefined` — you forgot a context key. Add it.
-- `table '<X>.<Y>' not found in target DB metadata` — the target DB
-  doesn't have a schema the source uses. Pick a different target DB
-  (re-do the schema check from Step 1).
+1. **Where to copy from**
+   ```
+   Where would you like to copy a dashboard from?
+     1 = Existing template in templates/
+     2 = Metabase Staging
+     3 = Metabase Prod
+   ```
+   Option 1 only appears if you have at least one YAML in `templates/` from
+   a previous export. Pick 2 or 3 to fetch fresh.
 
-## Step 6 — Real apply
+2. **Which dashboard** (only if source was a Metabase instance)
+   ```
+   Which dashboard would you like to copy?
+     1 = (CCJPA) Reconciliation dashboard (LittlePay to Elavon) (id: 304)
+     2 = Payments Overview (id: 12)
+     ...
+   ```
+   Sorted alphabetically. The `(id: N)` lets you cross-reference with
+   Metabase URLs (`/dashboard/<id>-...`).
 
-Same command, drop `--dry-run`:
+3. **Substitutions** (optional)
+   ```
+   Swap any literal text for Jinja variables in the template? [y/N]:
+   ```
+   If you're cloning MST's dashboard for Foothill, this is where you'd
+   define `MST → agency_short`, `Mendocino Transit Authority → agency_long`,
+   etc. Loops until you say no. Skip with `n` if you just want a structural
+   copy.
 
-```bash
-tools/metabase_dashboard_templates/.venv/bin/python \
-  tools/metabase_dashboard_templates/cli.py \
-  template-to-dashboard \
-  --template-file /tmp/<TEMPLATE_NAME>.yml \
-  --template-context '<same JSON as the dry-run>'
+   If a substitution literal appears inside a larger word (e.g. `LIST`
+   inside `customer_LIST`), the wizard flags it during export and asks
+   whether to substitute that specific occurrence. Each unique surrounding
+   token is asked once; the decision is cached for the rest of the export.
+
+4. **Where to copy to**
+   ```
+   Where would you like to copy it to?
+     0 = Template only (stop here; template already saved)
+     1 = Metabase Staging
+     2 = Metabase Prod
+   ```
+   Option 0 only appears when the source was a Metabase fetch (you can't
+   "template-only" a template — that'd be a copy). Picking `2 = Metabase
+   Prod` adds an explicit confirm:
+   ```
+   You chose Metabase Prod as the destination. This will create a new
+   dashboard and cards on production.  Continue? [y/N]:
+   ```
+
+5. **Target context** (only if destination is Staging or Prod)
+   ```
+   Target database (where the dashboard's queries will run):
+     1 = Cal-ITP Warehouse (id: 3)
+     ...
+
+   Target collection (where the new dashboard will live):
+     1 = Cal-ITP Reports (id: 12)
+     2 = Cal-ITP Reports / Payments (id: 22)
+     3 = Personal Collection (id: 5)
+     ...
+
+   New dashboard name [<source name>]: <type your name, e.g. "Foothill - Feed Level V2">
+   ```
+
+   - Collection paths show their parent chain so nested duplicates
+     (`Reports` inside multiple parents) are distinguishable.
+   - The new dashboard name defaults to the source name; you can override.
+     `#`, `:`, leading dashes, and other YAML-meta characters are safe to
+     include — they'll survive the YAML round-trip.
+
+6. **Substitution values** (only if you set up substitutions in step 3, or
+   if the template you picked already has them)
+   ```
+   This template uses 2 additional substitution variable(s):
+     agency_long: Foothill Transit
+     agency_short: foothill
+   ```
+
+7. **Duplicate-name guard** (only if a non-archived dashboard with your
+   chosen name already exists in the target collection)
+   ```
+   A dashboard named '<your name>' already exists in the target collection
+   (id 304).  Continuing will create a second dashboard with the same name
+   (Metabase permits duplicates).  Proceed? [y/N]:
+   ```
+
+That's it. After the last prompt, the wizard runs through:
+- Creating supporting cards (in dependency order),
+- Creating main cards,
+- Creating the dashboard shell,
+- Attaching tabs and dashcards,
+
+and prints a `View: <URL>` line. Click that URL to see the new dashboard.
+
+---
+
+## Templates on disk
+
+Every Metabase fetch saves a YAML to:
+
+```
+tools/metabase_dashboard_templates/templates/<id>-<slug>-<timestamp>.yml
 ```
 
-Output:
+e.g. `304-ccjpa-reconciliation-dashboard-littlepay-to-elavon-20260517-143215.yml`.
 
-```
-  created card <id>: '<name>'
-  ... (more cards) ...
-  created dashboard <id>: '<DASHBOARD_NAME>'
-  attached N dashcards
-View: <METABASE_URL>/dashboard/<NEW_DASHBOARD_ID>
-```
+The id prefix groups exports by dashboard. The timestamp suffix lets you
+keep historical versions side by side (a re-export never silently clobbers
+an older one). The wizard's "Existing template" picker shows all of them.
 
-## Step 7 — Verify
+Templates aren't committed to the repo unless you explicitly want to version
+one. Treat them as transient by default — re-export from prod whenever you
+need a fresh copy.
 
-Open the View URL. Check, in priority order:
+---
+
+## Verifying the result
+
+Open the `View:` URL from the wizard's output and check, in priority order:
 
 1. **Filters connect to cards.** Click a dashboard parameter; the cards
-   should react. If filters don't update the cards, something's wrong
-   with `parameter_mappings` in the apply path — flag this on the issue.
-2. **Card queries return data.** Each card should show real numbers, not
-   a SQL error.
-3. **Substitutions rendered.** Card titles, headings, descriptions should
-   show your `<TARGET_VALUE_*>` strings, not raw `MST` or
-   `{{ agency_short }}`.
-4. **Column styling matches source (mostly).** Stale viz field IDs from
-   Step 3 may cause some columns to lose their formatting. If the
-   divergence is severe, see "Cleaning a noisy source" below.
+   should react. If filters don't update the cards, something went wrong
+   with `parameter_mappings` — flag it.
+2. **Card queries return data.** Each card should show real numbers, not a
+   SQL error. If staging shows empty / null cards but prod has data, the
+   issue is usually that staging's database connection doesn't carry the
+   agency's data — not a tool bug (see "Why staging clones look empty"
+   below).
+3. **Substitutions rendered.** If you set up substitutions, card titles,
+   headings, and descriptions should show your target values, not the
+   source's literal text.
+4. **Tabs preserved.** If the source dashboard had tabs, the new one should
+   too, with the same names + same cards under each.
 
-## Step 8 — Cleanup
+---
 
-For a test push you don't want to keep:
+## Why staging clones often look empty
 
-- Delete the dashboard from Metabase: kebab menu → Move to Trash
-- Delete the orphan cards from the same collection
-- Delete the local template: `rm /tmp/<TEMPLATE_NAME>.yml`
+In prod, each transit agency has its own BigQuery database connection in
+Metabase (e.g. one for CCJPA, one for MST, etc.) — that's how data is
+isolated between agencies. Staging Metabase typically has a single unified
+warehouse connection that doesn't carry agency-specific data the same way.
 
-## Excludes / gitignore
+So a CCJPA dashboard cloned from prod to staging will:
+- Render structurally correctly (cards, tabs, layout, parameters).
+- Show empty / null results in the cards because staging's BigQuery doesn't
+  have CCJPA rows for those tables.
 
-Ad-hoc template files do not belong in the repo. Two clean approaches:
+This is **expected** and **safe** (the clone is isolated from prod data, not
+broken). For validating the *tool* this is fine; for validating actual
+dashboard logic, you'd test against prod (write to a sandbox collection like
+`Personal / Migration Tests`).
 
-1. **Always write to `/tmp/`** (recommended — nothing to commit, nothing
-   to gitignore).
-2. **Write to a local working dir and gitignore it.** Add to `.gitignore`:
-   ```
-   /templates/
-   /tools/metabase_dashboard_templates/templates/
-   ```
+---
 
-If you've already accidentally staged a stray template:
+## Troubleshooting
 
-```bash
-git restore --staged <path-to-stray.yml>
-rm <path-to-stray.yml>
-```
+| Symptom                                                                                  | Likely cause                                              | Fix                                                                                                          |
+| ---------------------------------------------------------------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| `GCP Application Default Credentials are not configured`                                 | ADC not set up at all                                     | Run `glogin-calitp-staging` (or `glogin-calitp-prod`) and re-run the wizard.                                 |
+| `Error code invalid_grant: Refresh token has expired`                                    | Workforce identity ADC has aged out (~16h)                | Re-run `glogin-calitp-staging` / `glogin-calitp-prod` to refresh.                                            |
+| `GCP returned 403 on '<secret>'`                                                         | Either secret doesn't exist OR you lack the IAM role      | The error message includes copy-paste `gcloud secrets describe` + `add-iam-policy-binding` commands. Run them. |
+| `Template references source-card int ids [...] that have no matching supporting_cards`    | Template was exported by an older version of this tool    | Re-export the dashboard with the current wizard (which handles supporting cards correctly).                  |
+| `Metabase rejected request: POST /api/card ... 500 ...`                                  | Apply-side error                                          | Response body printer surfaces Metabase's actual complaint. Paste it for diagnosis.                          |
+| `table '<X>.<Y>' not found in target DB metadata`                                        | Target DB you picked lacks a schema the source uses        | Re-run, pick a different target DB in the database picker.                                                   |
+| Cards show empty / null on staging                                                       | Staging DB doesn't carry the agency's data (per-agency isolation doesn't exist in staging) | Expected — see "Why staging clones often look empty" above.                                                 |
+| Duplicate cards in target collection after a re-clone                                    | Card names are not deduped; re-cloning creates duplicates  | Archive the unused set via Metabase UI. The dashboard-name dedupe guard catches the dashboard-level case only. |
 
-If a stray template is already on a feature branch but not yet pushed,
-`git rm --cached` plus a follow-up commit will get it out of the index.
+If the wizard errors halfway through (e.g. while creating cards), you'll
+have orphan cards in your target collection. Open the collection in
+Metabase, multi-select the orphans, "Move to trash." Then re-run.
 
-## Cleaning a noisy source
-
-If your export produced lots of `warn: viz field id ... unresolved`
-warnings (more than ~10), the source dashboard has significant catalog
-drift — typically because the warehouse changed shape and Metabase
-re-indexed with new field IDs. Two responses:
-
-- **Best**: open the source dashboard in Metabase and re-apply each
-  affected column-formatting/click-behavior rule (Metabase will rebind
-  to current IDs on save). Re-export. Warnings should be gone.
-- **Acceptable**: pick a different source dashboard that has fewer
-  warnings — there's no canonical version, so any clean dashboard works.
-
-## Troubleshooting cheatsheet
-
-| Symptom                                              | Likely cause                                | Fix                                                                  |
-| ---------------------------------------------------- | ------------------------------------------- | -------------------------------------------------------------------- |
-| `'<key>' is undefined`                               | Missing context key                         | Add `"<key>": "<value>"` to `--template-context`                     |
-| `table '<X>.<Y>' not found in target DB metadata`    | Target DB lacks a needed schema             | Pick a different target DB (re-run the metadata check from Step 1)   |
-| `field id NNNNN not found in source DB metadata`    | Stale ref in source's MBQL query            | Fix the source dashboard's query in Metabase, or pick a cleaner source |
-| `warn: viz field id NNNNN unresolved` (warning)     | Stale ref in source's display settings      | Cosmetic — that column's styling will revert to default on target    |
-| `--substitution must be LITERAL=VARNAME`             | Malformed flag                              | Format is `"text=var_name"`, one `=` only, valid identifier on right |
-| `FileNotFoundError` writing template                 | Output path's parent missing                | Resolved automatically in current version                            |
-| Filters don't react to changes on the new dashboard  | parameter_mappings card_id rewrite broke    | File a bug — this should not happen                                  |
+---
 
 ## Gotchas
 
-- API keys appear in `ps` output if you pass them via `--metabase-api-key`
-  on the command line. Prefer the env var form (`METABASE_API_KEY`).
-- Always apply against staging before production. Mistakes on staging are
-  easy to clean up; on production they're visible to agencies.
-- The four payments reference dashboard families (Littlepay flat,
-  Littlepay variable, Enghouse flat, MSC tracking) live in separate
-  per-agency collections. Pick a representative agency dashboard for each
-  family as the source rather than looking for a single canonical version.
+- **Always apply against Staging before Prod.** Mistakes on staging are
+  cheap to clean up; on prod they're visible to agencies. The y/N
+  confirmation on prod gives you one more chance to abort.
+
+- **The wizard always creates, never modifies.** A re-export + re-apply of
+  the same dashboard with the same name doesn't update the existing
+  dashboard — it creates a second one with the same name. The duplicate-name
+  guard catches this with a y/N prompt, but if you confirm, you really will
+  end up with two side-by-side. To "update" a dashboard, archive the old one
+  first.
+
+- **Templates accumulate.** Each export adds a timestamped file to
+  `templates/`. Nothing prunes them. Clean up by hand when the directory
+  gets noisy.
+
+- **Workforce identity tokens expire.** Cal-ITP's `glogin-calitp-*` tokens
+  expire after about 16 hours. If the wizard worked yesterday but fails
+  today with a `403`, your first move is `glogin-calitp-staging` or
+  `glogin-calitp-prod`.
+
+- **Substitution literals are simple `.replace()` matches.** Pick distinctive
+  strings (full agency names, full identifiers) rather than short fragments
+  that might appear as substrings elsewhere. The wizard does flag embedded
+  occurrences (`LIST` inside `customer_LIST` → prompt) but distinctive
+  literals reduce the noise.
+
+- **API keys never appear in `ps`.** The wizard fetches them from GCP at
+  runtime; they live in memory and aren't passed as flags. (The
+  non-interactive subcommands optionally take `--metabase-api-key`, which
+  would show up in `ps` — prefer `--gcp-secret` or the env var
+  `METABASE_API_KEY_RAW` in scripts.)
+
+---
+
+## Non-interactive flow (for scripts / CI)
+
+If you need to drive this from a CI pipeline or shell script, the original
+two-step subcommands still work:
+
+```bash
+# Export
+.venv/bin/python cli.py \
+  --metabase-url "https://metabase-staging.dds.dot.ca.gov" \
+  --gcp-secret "projects/cal-itp-data-infra-staging/secrets/metabase-dashboard-copy-tool-metabase-staging-api-key/versions/latest" \
+  dashboard-to-template \
+  --dashboard-id 304 \
+  --template-file templates/304.yml
+
+# Apply
+.venv/bin/python cli.py \
+  --metabase-url "https://metabase-staging.dds.dot.ca.gov" \
+  --gcp-secret "projects/cal-itp-data-infra-staging/secrets/metabase-dashboard-copy-tool-metabase-staging-api-key/versions/latest" \
+  template-to-dashboard \
+  --template-file templates/304.yml \
+  --template-context '{"database_id": 3, "collection_id": 22, "dashboard_name": "Foothill - Feed Level V2"}' \
+  --dry-run
+```
+
+Add `--dry-run` to apply for a render-only check. Drop it to actually push.
+
+But for everyday work — including most prod migrations — the wizard is the
+intended path.

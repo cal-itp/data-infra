@@ -636,8 +636,19 @@ class TestJinjaify:
         with pytest.raises(Exception, match="99999"):
             jinjaify(d, src_lookup)
 
-    def test_multiple_source_databases_raises(self, src_meta):
-        # Two cards on different DBs -- prototype declines to template.
+    def test_multiple_source_databases_is_warning_not_error(
+        self, src_meta, capsys
+    ):
+        # Real-world dashboards (e.g. CCJPA Reconciliation) occasionally
+        # span multiple source DB connections -- main cards against the
+        # warehouse, parameter-value cards against a metadata DB, etc.
+        # Since every `database` ref in the template collapses to the same
+        # `{{ database_id }}` placeholder, all cards land against whichever
+        # single target DB the user picks at apply time.  Schema/table
+        # names were discovered from each source DB's metadata; the lookup
+        # at apply time uses the target's metadata.  If a referenced table
+        # is missing on the target, apply will fail clearly later -- but
+        # the export itself should proceed with a heads-up warning.
         meta_2 = src_meta
         meta_4 = copy.deepcopy(SRC_META)  # DB 4: same schema, shifted ids
         for k in ("table_by_id", "field_by_id"):
@@ -676,8 +687,14 @@ class TestJinjaify:
                 },
             ]
         }
-        with pytest.raises(Exception, match="multiple source databases"):
-            jinjaify(d, lookup)
+        cleaned, _ = jinjaify(d, lookup)
+        # Both card-level `database_id` slots got the placeholder.
+        for dc in cleaned["dashcards"]:
+            assert dc["card"]["database_id"].startswith("__JINJAEXPR_")
+        # And the user got a heads-up about it on stderr.
+        stderr = capsys.readouterr().err
+        assert "spans 2 databases" in stderr
+        assert "[2, 4]" in stderr
 
     def test_field_refs_in_parameter_mappings_target_are_substituted(
         self, src_lookup
@@ -783,13 +800,37 @@ class TestJinjaify:
         assert "99999" in text
 
     def test_dashboard_name_auto_templatized_by_default(self, src_lookup):
+        # `dashboard_name` is a standalone string placeholder (replaces the
+        # whole value, not a substring), so it's emitted with `| tojson`
+        # so the renderer outputs a quoted YAML string.  Without tojson, a
+        # user value like 'My Clone #2' would have '#2' eaten as a YAML
+        # comment at re-parse time.
         d = {
             "name": "MST Payments",
             "dashcards": [],
         }
         text = self._walk_for_jinja_text(d, src_lookup)
-        assert "name: {{ dashboard_name }}" in text
+        assert "name: {{ dashboard_name | tojson }}" in text
         assert "MST Payments" not in text
+
+    def test_dashboard_name_with_yaml_metachars_survives_round_trip(
+        self, src_lookup
+    ):
+        # Regression: '#' in a user-supplied dashboard name used to be
+        # stripped because the rendered YAML treated everything after '#'
+        # as a comment.  tojson on the standalone placeholder keeps it
+        # intact through the JSON quoting.
+        import yaml
+        d = {"name": "Some Source Name", "dashcards": []}
+        cleaned, ph = jinjaify(copy.deepcopy(d), src_lookup)
+        text = emit_template_yaml(cleaned, ph)
+        env = make_jinja_env(src_lookup)
+        rendered = render_template_text(
+            text,
+            {"dashboard_name": "(CCJPA) Clone #2: special - test"},
+            env,
+        )
+        assert rendered["name"] == "(CCJPA) Clone #2: special - test"
 
     def test_no_templatize_name_preserves_literal(self, src_lookup):
         d = {"name": "MST Payments", "dashcards": []}
@@ -936,7 +977,15 @@ class TestJinjaify:
         assert rendered["name"] == "Foothill Payments"
         assert rendered["description"] == "Foothill overview"
 
-    def test_multiple_source_collections_raises(self, src_lookup):
+    def test_multiple_source_collections_is_warning_not_error(
+        self, src_lookup, capsys
+    ):
+        # Dashboards routinely have cards spread across several collections
+        # (e.g. CCJPA: dashboard in one collection, supporting cards in
+        # others).  Since every collection_id in the template resolves to
+        # the same `{{ collection_id }}` placeholder, all cards land in
+        # whichever single target collection the user picks at apply time.
+        # So this is informational, not fatal.
         d = {
             "collection_id": 145,
             "dashcards": [
@@ -953,8 +1002,17 @@ class TestJinjaify:
                 }
             ],
         }
-        with pytest.raises(Exception, match="multiple source collections"):
-            jinjaify(d, src_lookup)
+        cleaned, _ = jinjaify(d, src_lookup)
+        # Both collection_id slots get rewritten to the same placeholder
+        # expression, so apply will route everything to one target.
+        assert cleaned["collection_id"].startswith("__JINJAEXPR_")
+        assert cleaned["dashcards"][0]["card"]["collection_id"].startswith(
+            "__JINJAEXPR_"
+        )
+        # And the user got a heads-up about it on stderr.
+        stderr = capsys.readouterr().err
+        assert "spans 2 collections" in stderr
+        assert "145" in stderr and "999" in stderr
 
 
 # --------------------------------------------------------------------------- #
