@@ -17,8 +17,7 @@ and the wizard takes care of:
 - Creating fresh cards, tabs, and the new dashboard on the destination
   instance — never modifying or overwriting anything that already exists.
 
-The original tool was driven by long `--metabase-url ... --metabase-api-key
-... --template-context '{...}'` command lines. That's still supported (see
+The original tool was driven by long `--metabase-url ... --metabase-api-key ... --template-context '{...}'` command lines. That's still supported (see
 `python cli.py --help`) but is now a fallback for CI use. **For everyday
 work, run the wizard.**
 
@@ -35,7 +34,7 @@ work, run the wizard.**
   case is leftover orphan cards on a failed run — easy to trash via the
   Metabase UI.
 
----
+______________________________________________________________________
 
 ## One-time setup
 
@@ -120,7 +119,7 @@ It's noise, not blocking. Silence it with:
 gcloud auth application-default set-quota-project cal-itp-data-infra-staging
 ```
 
----
+______________________________________________________________________
 
 ## Running the wizard
 
@@ -135,29 +134,35 @@ That's the whole invocation. Everything else is a prompt.
 ### What you'll be asked, in order
 
 1. **Where to copy from**
+
    ```
    Where would you like to copy a dashboard from?
      1 = Existing template in templates/
      2 = Metabase Staging
      3 = Metabase Prod
    ```
+
    Option 1 only appears if you have at least one YAML in `templates/` from
    a previous export. Pick 2 or 3 to fetch fresh.
 
-2. **Which dashboard** (only if source was a Metabase instance)
+1. **Which dashboard** (only if source was a Metabase instance)
+
    ```
    Which dashboard would you like to copy?
      1 = (CCJPA) Reconciliation dashboard (LittlePay to Elavon) (id: 304)
      2 = Payments Overview (id: 12)
      ...
    ```
+
    Sorted alphabetically. The `(id: N)` lets you cross-reference with
    Metabase URLs (`/dashboard/<id>-...`).
 
-3. **Substitutions** (optional)
+1. **Substitutions** (optional)
+
    ```
    Swap any literal text for Jinja variables in the template? [y/N]:
    ```
+
    If you're cloning MST's dashboard for Foothill, this is where you'd
    define `MST → agency_short`, `Mendocino Transit Authority → agency_long`,
    etc. Loops until you say no. Skip with `n` if you just want a structural
@@ -168,22 +173,25 @@ That's the whole invocation. Everything else is a prompt.
    whether to substitute that specific occurrence. Each unique surrounding
    token is asked once; the decision is cached for the rest of the export.
 
-4. **Where to copy to**
+1. **Where to copy to**
+
    ```
    Where would you like to copy it to?
      0 = Template only (stop here; template already saved)
      1 = Metabase Staging
      2 = Metabase Prod
    ```
+
    Option 0 only appears when the source was a Metabase fetch (you can't
-   "template-only" a template — that'd be a copy). Picking `2 = Metabase
-   Prod` adds an explicit confirm:
+   "template-only" a template — that'd be a copy). Picking `2 = Metabase Prod` adds an explicit confirm:
+
    ```
    You chose Metabase Prod as the destination. This will create a new
    dashboard and cards on production.  Continue? [y/N]:
    ```
 
-5. **Target context** (only if destination is Staging or Prod)
+1. **Target context** (only if destination is Staging or Prod)
+
    ```
    Target database (where the dashboard's queries will run):
      1 = Cal-ITP Warehouse (id: 3)
@@ -204,16 +212,18 @@ That's the whole invocation. Everything else is a prompt.
      `#`, `:`, leading dashes, and other YAML-meta characters are safe to
      include — they'll survive the YAML round-trip.
 
-6. **Substitution values** (only if you set up substitutions in step 3, or
+1. **Substitution values** (only if you set up substitutions in step 3, or
    if the template you picked already has them)
+
    ```
    This template uses 2 additional substitution variable(s):
      agency_long: Foothill Transit
      agency_short: foothill
    ```
 
-7. **Duplicate-name guard** (only if a non-archived dashboard with your
+1. **Duplicate-name guard** (only if a non-archived dashboard with your
    chosen name already exists in the target collection)
+
    ```
    A dashboard named '<your name>' already exists in the target collection
    (id 304).  Continuing will create a second dashboard with the same name
@@ -221,6 +231,7 @@ That's the whole invocation. Everything else is a prompt.
    ```
 
 That's it. After the last prompt, the wizard runs through:
+
 - Creating supporting cards (in dependency order),
 - Creating main cards,
 - Creating the dashboard shell,
@@ -228,7 +239,7 @@ That's it. After the last prompt, the wizard runs through:
 
 and prints a `View: <URL>` line. Click that URL to see the new dashboard.
 
----
+______________________________________________________________________
 
 ## Templates on disk
 
@@ -248,7 +259,7 @@ Templates aren't committed to the repo unless you explicitly want to version
 one. Treat them as transient by default — re-export from prod whenever you
 need a fresh copy.
 
----
+______________________________________________________________________
 
 ## Verifying the result
 
@@ -257,18 +268,18 @@ Open the `View:` URL from the wizard's output and check, in priority order:
 1. **Filters connect to cards.** Click a dashboard parameter; the cards
    should react. If filters don't update the cards, something went wrong
    with `parameter_mappings` — flag it.
-2. **Card queries return data.** Each card should show real numbers, not a
+1. **Card queries return data.** Each card should show real numbers, not a
    SQL error. If staging shows empty / null cards but prod has data, the
    issue is usually that staging's database connection doesn't carry the
    agency's data — not a tool bug (see "Why staging clones look empty"
    below).
-3. **Substitutions rendered.** If you set up substitutions, card titles,
+1. **Substitutions rendered.** If you set up substitutions, card titles,
    headings, and descriptions should show your target values, not the
    source's literal text.
-4. **Tabs preserved.** If the source dashboard had tabs, the new one should
+1. **Tabs preserved.** If the source dashboard had tabs, the new one should
    too, with the same names + same cards under each.
 
----
+______________________________________________________________________
 
 ## Why staging clones often look empty
 
@@ -278,6 +289,7 @@ isolated between agencies. Staging Metabase typically has a single unified
 warehouse connection that doesn't carry agency-specific data the same way.
 
 So a CCJPA dashboard cloned from prod to staging will:
+
 - Render structurally correctly (cards, tabs, layout, parameters).
 - Show empty / null results in the cards because staging's BigQuery doesn't
   have CCJPA rows for those tables.
@@ -287,26 +299,26 @@ broken). For validating the *tool* this is fine; for validating actual
 dashboard logic, you'd test against prod (write to a sandbox collection like
 `Personal / Migration Tests`).
 
----
+______________________________________________________________________
 
 ## Troubleshooting
 
-| Symptom                                                                                  | Likely cause                                              | Fix                                                                                                          |
-| ---------------------------------------------------------------------------------------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
-| `GCP Application Default Credentials are not configured`                                 | ADC not set up at all                                     | Run `glogin-calitp-staging` (or `glogin-calitp-prod`) and re-run the wizard.                                 |
-| `Error code invalid_grant: Refresh token has expired`                                    | Workforce identity ADC has aged out (~16h)                | Re-run `glogin-calitp-staging` / `glogin-calitp-prod` to refresh.                                            |
-| `GCP returned 403 on '<secret>'`                                                         | Either secret doesn't exist OR you lack the IAM role      | The error message includes copy-paste `gcloud secrets describe` + `add-iam-policy-binding` commands. Run them. |
-| `Template references source-card int ids [...] that have no matching supporting_cards`    | Template was exported by an older version of this tool    | Re-export the dashboard with the current wizard (which handles supporting cards correctly).                  |
-| `Metabase rejected request: POST /api/card ... 500 ...`                                  | Apply-side error                                          | Response body printer surfaces Metabase's actual complaint. Paste it for diagnosis.                          |
-| `table '<X>.<Y>' not found in target DB metadata`                                        | Target DB you picked lacks a schema the source uses        | Re-run, pick a different target DB in the database picker.                                                   |
-| Cards show empty / null on staging                                                       | Staging DB doesn't carry the agency's data (per-agency isolation doesn't exist in staging) | Expected — see "Why staging clones often look empty" above.                                                 |
-| Duplicate cards in target collection after a re-clone                                    | Card names are not deduped; re-cloning creates duplicates  | Archive the unused set via Metabase UI. The dashboard-name dedupe guard catches the dashboard-level case only. |
+| Symptom                                                                                | Likely cause                                                                               | Fix                                                                                                            |
+| -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| `GCP Application Default Credentials are not configured`                               | ADC not set up at all                                                                      | Run `glogin-calitp-staging` (or `glogin-calitp-prod`) and re-run the wizard.                                   |
+| `Error code invalid_grant: Refresh token has expired`                                  | Workforce identity ADC has aged out (~16h)                                                 | Re-run `glogin-calitp-staging` / `glogin-calitp-prod` to refresh.                                              |
+| `GCP returned 403 on '<secret>'`                                                       | Either secret doesn't exist OR you lack the IAM role                                       | The error message includes copy-paste `gcloud secrets describe` + `add-iam-policy-binding` commands. Run them. |
+| `Template references source-card int ids [...] that have no matching supporting_cards` | Template was exported by an older version of this tool                                     | Re-export the dashboard with the current wizard (which handles supporting cards correctly).                    |
+| `Metabase rejected request: POST /api/card ... 500 ...`                                | Apply-side error                                                                           | Response body printer surfaces Metabase's actual complaint. Paste it for diagnosis.                            |
+| `table '<X>.<Y>' not found in target DB metadata`                                      | Target DB you picked lacks a schema the source uses                                        | Re-run, pick a different target DB in the database picker.                                                     |
+| Cards show empty / null on staging                                                     | Staging DB doesn't carry the agency's data (per-agency isolation doesn't exist in staging) | Expected — see "Why staging clones often look empty" above.                                                    |
+| Duplicate cards in target collection after a re-clone                                  | Card names are not deduped; re-cloning creates duplicates                                  | Archive the unused set via Metabase UI. The dashboard-name dedupe guard catches the dashboard-level case only. |
 
 If the wizard errors halfway through (e.g. while creating cards), you'll
 have orphan cards in your target collection. Open the collection in
 Metabase, multi-select the orphans, "Move to trash." Then re-run.
 
----
+______________________________________________________________________
 
 ## Gotchas
 
@@ -342,7 +354,7 @@ Metabase, multi-select the orphans, "Move to trash." Then re-run.
   would show up in `ps` — prefer `--gcp-secret` or the env var
   `METABASE_API_KEY_RAW` in scripts.)
 
----
+______________________________________________________________________
 
 ## Non-interactive flow (for scripts / CI)
 

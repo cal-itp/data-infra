@@ -281,9 +281,7 @@ def _run_gcloud_adc_login() -> None:
         err=True,
     )
     try:
-        subprocess.run(
-            ["gcloud", "auth", "application-default", "login"], check=True
-        )
+        subprocess.run(["gcloud", "auth", "application-default", "login"], check=True)
     except subprocess.CalledProcessError as exc:
         raise click.ClickException(
             f"`gcloud auth application-default login` failed "
@@ -507,10 +505,13 @@ def _smart_substitute(
             key = (literal, surrounding)
             if key not in decisions:
                 rel = idx - left
+                end_lit = rel + lit_len
                 marked = (
                     surrounding[:rel]
-                    + "[" + surrounding[rel : rel + lit_len] + "]"
-                    + surrounding[rel + lit_len :]
+                    + "["
+                    + surrounding[rel:end_lit]
+                    + "]"
+                    + surrounding[end_lit:]
                 )
                 decisions[key] = click.confirm(
                     f"\n  Substitution {literal!r} would replace text inside "
@@ -570,7 +571,7 @@ def _find_source_card_int_refs(node: Any) -> set[int]:
                     and isinstance(v, str)
                     and v.startswith("card__")
                 ):
-                    suffix = v[len("card__") :]
+                    suffix = v.removeprefix("card__")
                     if suffix.isdigit():
                         found.add(int(suffix))
                         continue
@@ -611,7 +612,7 @@ def _find_source_card_name_refs(node: Any) -> set[str]:
                     and isinstance(v, str)
                     and v.startswith("card_name__")
                 ):
-                    found.add(v[len("card_name__") :])
+                    found.add(v.removeprefix("card_name__"))
                     continue
                 if (
                     k == "card_name"
@@ -654,11 +655,10 @@ def _resolve_source_card_names_in_place(
                 )
             del node["source-card-name"]
             node["source-card"] = name_to_id[name]
-        if (
-            isinstance(node.get("source-table"), str)
-            and node["source-table"].startswith("card_name__")
-        ):
-            name = node["source-table"][len("card_name__") :]
+        if isinstance(node.get("source-table"), str) and node[
+            "source-table"
+        ].startswith("card_name__"):
+            name = node["source-table"].removeprefix("card_name__")
             if name not in name_to_id:
                 raise click.ClickException(
                     f"Template references source-table card_name__{name!r} "
@@ -925,11 +925,7 @@ def jinjaify(
                         seen_source_collections.add(v)
                     node[k] = alloc("collection_id")
                     continue
-                if (
-                    k == "source-card"
-                    and isinstance(v, int)
-                    and source_card_id_to_name
-                ):
+                if k == "source-card" and isinstance(v, int) and source_card_id_to_name:
                     name = source_card_id_to_name.get(v)
                     if name is not None:
                         del node[k]
@@ -942,7 +938,7 @@ def jinjaify(
                     and v.startswith("card__")
                     and source_card_id_to_name
                 ):
-                    suffix = v[len("card__") :]
+                    suffix = v.removeprefix("card__")
                     if suffix.isdigit():
                         ref_id = int(suffix)
                         name = source_card_id_to_name.get(ref_id)
@@ -977,11 +973,12 @@ def jinjaify(
                 # supporting_cards is also sticky -- once we descend into the
                 # supporting cards list, every descendant is "inside" so we
                 # know to skip the multi-collection check on their fields.
-                child_inside_supporting = (
-                    inside_supporting or k == "supporting_cards"
-                )
+                child_inside_supporting = inside_supporting or k == "supporting_cards"
                 walk(
-                    v, local, child_viz_table, child_inside_viz,
+                    v,
+                    local,
+                    child_viz_table,
+                    child_inside_viz,
                     child_inside_supporting,
                 )
         elif isinstance(node, list):
@@ -1405,9 +1402,7 @@ def apply_dashboard(
             session, base_url, target_name, target_collection_id
         )
         if duplicates:
-            existing_summary = ", ".join(
-                f"id {d.get('id')}" for d in duplicates
-            )
+            existing_summary = ", ".join(f"id {d.get('id')}" for d in duplicates)
             click.confirm(
                 f"\nA dashboard named {target_name!r} already exists in the "
                 f"target collection ({existing_summary}).  Continuing will "
@@ -1447,9 +1442,7 @@ def apply_dashboard(
     # we can use to rewrite every `source-card-name: "X"` further down.
     name_to_new_id: dict[str, int] = {}
     if supporting_cards:
-        click.echo(
-            f"Creating {len(supporting_cards)} supporting card(s)...", err=True
-        )
+        click.echo(f"Creating {len(supporting_cards)} supporting card(s)...", err=True)
         remaining = list(supporting_cards)
         # O(N^2) topo: each pass POSTs any card whose source-card-name refs
         # are already resolved.  Halts on a cycle or a missing dependency.
@@ -1486,9 +1479,7 @@ def apply_dashboard(
                 )
                 c = r.json()
                 name_to_new_id[card["name"]] = c["id"]
-                click.echo(
-                    f"  created supporting card {c['id']}: {c['name']!r}"
-                )
+                click.echo(f"  created supporting card {c['id']}: {c['name']!r}")
             remaining = blocked
 
     # Rewrite every source-card-name / card_name__ ref in the remaining spec
@@ -1504,10 +1495,9 @@ def apply_dashboard(
     # be live ones we just created (i.e. values from name_to_new_id).
     # Anything else points at a card on the source instance and is
     # guaranteed to FK-violate on POST -- surface it clearly instead.
-    leftover_int_refs = (
-        _find_source_card_int_refs({"_dc": dashcards, "_spec": spec})
-        - set(name_to_new_id.values())
-    )
+    leftover_int_refs = _find_source_card_int_refs(
+        {"_dc": dashcards, "_spec": spec}
+    ) - set(name_to_new_id.values())
     if leftover_int_refs:
         raise click.ClickException(
             f"Template references source-card int ids "
@@ -1701,17 +1691,11 @@ def export_dashboard_to_template_text(
             "dashboard; recursively fetching supporting cards...",
             err=True,
         )
-        cards_by_id = _fetch_source_cards_recursive(
-            session, base_url, initial_refs
-        )
+        cards_by_id = _fetch_source_cards_recursive(session, base_url, initial_refs)
         id_to_name = _build_source_card_id_to_name(cards_by_id)
-        supporting_cards = [
-            strip(c, STRIP_CARD_KEYS) for c in cards_by_id.values()
-        ]
+        supporting_cards = [strip(c, STRIP_CARD_KEYS) for c in cards_by_id.values()]
         cleaned["supporting_cards"] = supporting_cards
-        click.echo(
-            f"Embedded {len(supporting_cards)} supporting card(s).", err=True
-        )
+        click.echo(f"Embedded {len(supporting_cards)} supporting card(s).", err=True)
 
     def fetch_meta(db_id: int) -> dict:
         return fetch_database_metadata(session, base_url, db_id)
@@ -2047,7 +2031,7 @@ def _detect_template_vars(template_text: str) -> set[str]:
     Strips out the helper callables (get_table_id, get_field_id) since those
     come from the Jinja env, not the user-supplied context.
     """
-    parsed = jinja2.Environment().parse(template_text)
+    parsed = jinja2.Environment().parse(template_text)  # nosec B701
     return jinja2.meta.find_undeclared_variables(parsed) - TEMPLATE_BUILTIN_NAMES
 
 
@@ -2089,9 +2073,7 @@ def cmd_interactive(ctx: click.Context) -> None:
     # the numbering and dispatch stay in sync.
     src_options: list[tuple[str, str]] = []
     if existing_templates:
-        src_options.append(
-            ("template", f"Existing template in {templates_dir.name}/")
-        )
+        src_options.append(("template", f"Existing template in {templates_dir.name}/"))
     src_options.append(("staging", "Metabase Staging"))
     src_options.append(("prod", "Metabase Prod"))
 
@@ -2201,9 +2183,7 @@ def cmd_interactive(ctx: click.Context) -> None:
             )
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_text(template_text)
-        click.echo(
-            f"Wrote template ({placeholders_count} expressions) -> {out_path}"
-        )
+        click.echo(f"Wrote template ({placeholders_count} expressions) -> {out_path}")
         allow_template_only_dest = True
 
     # ----- Step 3: destination -----

@@ -636,9 +636,7 @@ class TestJinjaify:
         with pytest.raises(Exception, match="99999"):
             jinjaify(d, src_lookup)
 
-    def test_multiple_source_databases_is_warning_not_error(
-        self, src_meta, capsys
-    ):
+    def test_multiple_source_databases_is_warning_not_error(self, src_meta, capsys):
         # Real-world dashboards (e.g. CCJPA Reconciliation) occasionally
         # span multiple source DB connections -- main cards against the
         # warehouse, parameter-value cards against a metadata DB, etc.
@@ -696,9 +694,7 @@ class TestJinjaify:
         assert "spans 2 databases" in stderr
         assert "[2, 4]" in stderr
 
-    def test_field_refs_in_parameter_mappings_target_are_substituted(
-        self, src_lookup
-    ):
+    def test_field_refs_in_parameter_mappings_target_are_substituted(self, src_lookup):
         # parameter_mappings is a sibling of `card` at the dashcard level, so
         # without inheriting db_id from card.dataset_query.database, field-refs
         # inside parameter_mappings.target would be left as raw ints.  Regression
@@ -755,9 +751,7 @@ class TestJinjaify:
         # Both the dashboard-level and card-level collection_id should be templated.
         assert text.count("collection_id: {{ collection_id }}") == 2
 
-    def test_dashcard_viz_settings_with_stale_field_id_does_not_raise(
-        self, src_lookup
-    ):
+    def test_dashcard_viz_settings_with_stale_field_id_does_not_raise(self, src_lookup):
         # Dashcard-level visualization_settings can carry stale field ids
         # (column dropped or DB connection rebuilt).  Metabase tolerates
         # these at runtime; the export should warn-and-leave instead of
@@ -813,14 +807,11 @@ class TestJinjaify:
         assert "name: {{ dashboard_name | tojson }}" in text
         assert "MST Payments" not in text
 
-    def test_dashboard_name_with_yaml_metachars_survives_round_trip(
-        self, src_lookup
-    ):
+    def test_dashboard_name_with_yaml_metachars_survives_round_trip(self, src_lookup):
         # Regression: '#' in a user-supplied dashboard name used to be
         # stripped because the rendered YAML treated everything after '#'
         # as a comment.  tojson on the standalone placeholder keeps it
         # intact through the JSON quoting.
-        import yaml
         d = {"name": "Some Source Name", "dashcards": []}
         cleaned, ph = jinjaify(copy.deepcopy(d), src_lookup)
         text = emit_template_yaml(cleaned, ph)
@@ -834,16 +825,12 @@ class TestJinjaify:
 
     def test_no_templatize_name_preserves_literal(self, src_lookup):
         d = {"name": "MST Payments", "dashcards": []}
-        cleaned, ph = jinjaify(
-            copy.deepcopy(d), src_lookup, templatize_name=False
-        )
+        cleaned, ph = jinjaify(copy.deepcopy(d), src_lookup, templatize_name=False)
         text = emit_template_yaml(cleaned, ph)
         assert "name: MST Payments" in text
         assert "{{ dashboard_name }}" not in text
 
-    def test_dashboard_without_name_does_not_emit_dashboard_name_var(
-        self, src_lookup
-    ):
+    def test_dashboard_without_name_does_not_emit_dashboard_name_var(self, src_lookup):
         # Templatize-name is opportunistic: no top-level name -> no var.
         d = {"dashcards": []}
         text = self._walk_for_jinja_text(d, src_lookup)
@@ -948,9 +935,7 @@ class TestJinjaify:
         # Long-form match wins where both could apply; remainder uses short.
         assert "{{ agency_long }} - {{ agency_short }} zone" in text
 
-    def test_substitution_renders_through_full_pipeline(
-        self, src_lookup, tgt_lookup
-    ):
+    def test_substitution_renders_through_full_pipeline(self, src_lookup, tgt_lookup):
         # End-to-end: export with substitutions, render with context, the
         # rendered values land in the right places.
         d = {
@@ -977,9 +962,7 @@ class TestJinjaify:
         assert rendered["name"] == "Foothill Payments"
         assert rendered["description"] == "Foothill overview"
 
-    def test_multiple_source_collections_is_warning_not_error(
-        self, src_lookup, capsys
-    ):
+    def test_multiple_source_collections_is_warning_not_error(self, src_lookup, capsys):
         # Dashboards routinely have cards spread across several collections
         # (e.g. CCJPA: dashboard in one collection, supporting cards in
         # others).  Since every collection_id in the template resolves to
@@ -1514,4 +1497,3 @@ class TestCliSmoke:
         )
         assert result.exit_code != 0
         assert error_match in result.output
-
