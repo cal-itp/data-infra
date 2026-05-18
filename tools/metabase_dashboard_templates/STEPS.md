@@ -145,7 +145,7 @@ That's the whole invocation. Everything else is a prompt.
    Option 1 only appears if you have at least one YAML in `templates/` from
    a previous export. Pick 2 or 3 to fetch fresh.
 
-1. **Which dashboard** (only if source was a Metabase instance)
+2. **Which dashboard** (only if source was a Metabase instance)
 
    ```
    Which dashboard would you like to copy?
@@ -157,7 +157,7 @@ That's the whole invocation. Everything else is a prompt.
    Sorted alphabetically. The `(id: N)` lets you cross-reference with
    Metabase URLs (`/dashboard/<id>-...`).
 
-1. **Substitutions** (optional)
+3. **Substitutions** (optional)
 
    ```
    Swap any literal text for Jinja variables in the template? [y/N]:
@@ -173,7 +173,7 @@ That's the whole invocation. Everything else is a prompt.
    whether to substitute that specific occurrence. Each unique surrounding
    token is asked once; the decision is cached for the rest of the export.
 
-1. **Where to copy to**
+4. **Where to copy to**
 
    ```
    Where would you like to copy it to?
@@ -190,7 +190,7 @@ That's the whole invocation. Everything else is a prompt.
    dashboard and cards on production.  Continue? [y/N]:
    ```
 
-1. **Target context** (only if destination is Staging or Prod)
+5. **Target context** (only if destination is Staging or Prod)
 
    ```
    Target database (where the dashboard's queries will run):
@@ -212,7 +212,7 @@ That's the whole invocation. Everything else is a prompt.
      `#`, `:`, leading dashes, and other YAML-meta characters are safe to
      include — they'll survive the YAML round-trip.
 
-1. **Substitution values** (only if you set up substitutions in step 3, or
+6. **Substitution values** (only if you set up substitutions in step 3, or
    if the template you picked already has them)
 
    ```
@@ -221,7 +221,7 @@ That's the whole invocation. Everything else is a prompt.
      agency_short: foothill
    ```
 
-1. **Duplicate-name guard** (only if a non-archived dashboard with your
+7. **Duplicate-name guard** (only if a non-archived dashboard with your
    chosen name already exists in the target collection)
 
    ```
@@ -268,15 +268,15 @@ Open the `View:` URL from the wizard's output and check, in priority order:
 1. **Filters connect to cards.** Click a dashboard parameter; the cards
    should react. If filters don't update the cards, something went wrong
    with `parameter_mappings` — flag it.
-1. **Card queries return data.** Each card should show real numbers, not a
+2. **Card queries return data.** Each card should show real numbers, not a
    SQL error. If staging shows empty / null cards but prod has data, the
    issue is usually that staging's database connection doesn't carry the
    agency's data — not a tool bug (see "Why staging clones look empty"
    below).
-1. **Substitutions rendered.** If you set up substitutions, card titles,
+3. **Substitutions rendered.** If you set up substitutions, card titles,
    headings, and descriptions should show your target values, not the
    source's literal text.
-1. **Tabs preserved.** If the source dashboard had tabs, the new one should
+4. **Tabs preserved.** If the source dashboard had tabs, the new one should
    too, with the same names + same cards under each.
 
 ______________________________________________________________________
