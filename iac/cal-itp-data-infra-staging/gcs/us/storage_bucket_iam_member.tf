@@ -40,6 +40,12 @@ resource "google_storage_bucket_iam_member" "calitp-staging-composer" {
   role   = "roles/storage.legacyBucketOwner"
 }
 
+resource "google_storage_bucket_iam_member" "calitp-staging-composer3" {
+  bucket = google_storage_bucket.calitp-staging-composer3.name
+  member = "projectEditor:cal-itp-data-infra-staging"
+  role   = "roles/storage.legacyBucketOwner"
+}
+
 resource "google_storage_bucket_iam_member" "cal-bc-service-account" {
   bucket = google_storage_bucket.calitp-staging-cal-bc.name
   role   = "roles/storage.objectAdmin"
