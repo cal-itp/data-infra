@@ -895,6 +895,8 @@ models:
           Total service hours across entire feed on date; can be 0 if no service
       - name: gtfs_dataset_key
         description: *gtfs_dataset_key_desc
+      - name: gtfs_dataset_name
+        description: *gtfs_dataset_name_desc
       - name: n_trips
         description: &n_scheduled_trips_desc |
           Total number of trips ran on date; can be 0 if no scheduled trips
@@ -2734,7 +2736,7 @@ models:
         description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
       - name: prediction_error_by_minute_array
         description: '{{ doc("column_gtfs_rt__tu_prediction_error") }}'
-      - name: max_minutes_until_arrival
+      - name: minutes_until_arrival_array
         description: &rt_tu_minutes_until_arrival_desc |
           The number of minutes before the actual_arrival is the difference, in minutes, between
           the _extract_ts and last_trip_updates_arrival_time.
