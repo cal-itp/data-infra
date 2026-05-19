@@ -1,4 +1,4 @@
-vehicle_positions_source_record_id,agency_name,notes
-recUKDWE8Vq7rRAPM,Beach Cities Transit,Hermosa Beach local operator (BCT JPA)
-rectUboB2NipaQROx,LA Metro Bus,South Bay routes traverse Hermosa Beach
-rece8srb8wQEhqzh9,Torrance Transit,Adjacent operator (Swiftly feed)
+organization_source_record_id,agency_name,notes
+rec8zhnCPETu6qEiH,Beach Cities Transit,Hermosa Beach local operator (BCT JPA)
+recPnGkwdpnr8jmHB,LA Metro,South Bay routes via Hermosa Beach; org publishes Bus + Rail VP feeds
+recvzE9NXgGMmqcTH,Torrance Transit,Adjacent operator (Swiftly feed)
