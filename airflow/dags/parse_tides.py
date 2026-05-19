@@ -47,7 +47,7 @@ with DAG(
         source_record_name="gtfs_dataset_key",
         destination_bucket=os.environ.get("CALITP_BUCKET__TIDES"),
         destination_path_prefix="vehicle_locations/dt={{ ds }}/ts={{ ts }}/gtfs_dataset_key={{ task.source_record_id }}/",
-        report_path="vehicle_location_results/dt={{ ds }}/ts={{ ts }}/{{ task.source_record_id }}_results.jsonl",
+        report_path="vehicle_location_outcomes/dt={{ ds }}/ts={{ ts }}/{{ task.source_record_id }}_results.jsonl",
         map_index_template="{{ task.display_name }}",
         gcp_conn_id="google_cloud_default",
     ).expand_kwargs(
