@@ -25,7 +25,7 @@ class TestBigQueryToParquetOperator:
 
     @pytest.fixture
     def report_path(self) -> str:
-        return "vehicle_location_results/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/recUKDWE8Vq7rRAPM_results.jsonl"
+        return "vehicle_location_outcomes/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/recUKDWE8Vq7rRAPM_outcomes.jsonl"
 
     @pytest.fixture
     def test_dag(self, execution_date: datetime) -> DAG:
@@ -103,13 +103,13 @@ class TestBigQueryToParquetOperator:
         )
         assert len(parquet_files) > 0
 
-        unparsed_results = gcs_hook.download(
+        unparsed_outcomes = gcs_hook.download(
             bucket_name=os.environ.get("CALITP_BUCKET__TIDES").replace("gs://", ""),
             object_name=report_path,
         )
-        results = [json.loads(x) for x in unparsed_results.splitlines()]
+        outcomes = [json.loads(x) for x in unparsed_outcomes.splitlines()]
 
-        assert results[0] == {
+        assert outcomes[0] == {
             "dataset_name": "mart_tides",
             "table_name": "fct_tides_vehicle_locations",
             "source_record_name": "gtfs_dataset_key",
