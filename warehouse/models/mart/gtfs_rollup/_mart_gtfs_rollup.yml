@@ -396,16 +396,21 @@ models:
         description: '{{ doc("column_rt_messages_per_minute") }}'
       - name: n_vp_trips
         description: '{{ doc("column_n_vp_trips") }}'
-      - <<: *extract_duration_minutes
-        name: vp_extract_duration_minutes
+      - name: vp_extract_duration_minutes
+        description: &extract_duration_minutes_desc |
+          The sum of `extract_duration_minutes` for this period.
+          `extract_duration_minutes` is the difference between
+          `max_extract_ts` and `min_extract_ts` in
+          minutes, representing the duration of time for which this entity was
+          present in message responses we received from the agency.
       - name: vp_messages_per_minute
         description: '{{ doc("column_rt_messages_per_minute") }}'
       - name: tu_num_distinct_updates
         description: '{{ doc("column_rt_messages_per_minute") }}'
       - name: n_tu_trips
         description: '{{ doc("column_n_tu_trips") }}'
-      - <<: *extract_duration_minutes
-        name: tu_extract_duration_minutes
+      - name: tu_extract_duration_minutes
+        description: *extract_duration_minutes_desc
       - name: tu_messages_per_minute
         description: '{{ doc("column_rt_messages_per_minute") }}'
       - name: route_typology
@@ -523,7 +528,6 @@ models:
       - name: n_days_schedule_and_rt
         description: *n_days_by_gtfs_availability_desc
       - name: n_days_schedule_and_vp_only
-        description: *n_days_by_gtfs_availability_desc
         description: *n_days_by_gtfs_availability_desc
       - name: prediction_error_sec_array
         description: '{{ doc("column_gtfs_rt__tu_prediction_error") }}'
