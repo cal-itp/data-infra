@@ -18,7 +18,6 @@ Late arrivals: actual_departure - predicted_arrival < 0.
 Ex: the bus is predicted to arrive at 9:00 AM; it arrives at 8:55 AM, departs at 8:59 AM; 
 8:59 AM - 9:00 AM gives difference = -1 minutes; it is 1 minutes late. 
 Following the prediction leads you to miss the bus.
-Comparing to departure is a more conservative estimate of the prediction error (smaller values, less penalty) for late predictions.
 
 On-time: predicted_arrival is between actual_arrival and actual_departure.
 
