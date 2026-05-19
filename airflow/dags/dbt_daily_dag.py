@@ -135,5 +135,23 @@ with DAG(
         },
     )
 
+    dbt_tides = DbtTaskGroup(
+        group_id="dbt_tides",
+        project_config=project_config,
+        profile_config=profile_config,
+        render_config=RenderConfig(
+            select=[
+                "models/mart/fct_tides_vehicle_locations",
+            ],
+            test_behavior=TestBehavior.AFTER_ALL,
+        ),
+        operator_args={
+            "install_deps": True,
+        },
+        default_args={
+            "retries": 1,
+        },
+    )
+
     latest_only >> [dbt_audit, dbt_benefits, dbt_kuba]
-    latest_only >> dbt_gtfs >> dbt_payments
+    latest_only >> dbt_gtfs >> [dbt_payments, dbt_tides]
