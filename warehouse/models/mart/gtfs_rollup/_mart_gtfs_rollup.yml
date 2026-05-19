@@ -331,7 +331,13 @@ models:
         description: '{{ doc("column_daily_trips_by_time_of_day") }}'
       - name: n_route_ids
         description: |
-          Number of distinct (not parsed, not cleaned) route_ids for this period. There can be n_route_ids > 1 for the same route_name if the feed switches in the middle of the month. Ex: LA Metro Route 150 was 150-13188 (on 2025-12-01) and 150-13196 (on 2026-02-01). If the route_ids switched mid-month, it is possible for different route_ids to show up, but refer to the same route. See `route_name`.
+          Number of distinct (not parsed, not cleaned) route_ids for this period.
+          There can be n_route_ids > 1 for the same route_name if the feed switches in the
+          middle of the month.
+
+          Ex: LA Metro Route 150 was 150-13188 (on 2025-12-01) and 150-13196 (on 2026-02-01).
+          If the route_ids switched mid-month, it is possible for different route_ids to
+          show up, but refer to the same route. See `route_name`.
       - name: n_shapes
         description: &n_scheduled_shapes_desc |
           Total number of shapes that had trips scheduled for this period.
