@@ -2705,7 +2705,11 @@ models:
           of the scheduled shape (path of travel)
 
   - name: fct_stop_time_metrics
-    description: TODO
+    description: |
+      Prediction accuracy metrics calculated on GTFS RT StopTimeUpdates.
+      The grain is service_date-tu_base64-url-trip_id-stop_id_stop_sequence.
+      The StopTimeUpdate messages of the 30 minutes until the bus arrives is used to
+      calculate the metrics outlined in Professor Gregory Newmark's paper `Assessing GTFS Accuracy`.
     columns:
       - name: trip_key
         description: |
@@ -2758,7 +2762,8 @@ models:
         description: Total number of stoptimeupdate messages, or predictions.
 
   - name: fct_trip_updates_stop_metrics
-    description: TODO
+    description: |
+      Prediction accuracy metrics aggregated to service_date-base64_url-schedule_base64_url-stop_id.
     columns:
       - *base64_url
       - *rt_schedule_base64_url
@@ -2789,7 +2794,8 @@ models:
         description: *rt_tu_minutes_until_arrival_desc
 
   - name: fct_trip_updates_trip_metrics
-    description: ""
+    description: |
+      Prediction accuracy metrics aggregated to service_date-base64_url-schedule_base64_url-trip_id-trip_start_time.
     columns:
       - *base64_url
       - *rt_service_date
@@ -2822,7 +2828,11 @@ models:
         description: *rt_tu_minutes_until_arrival_desc
 
   - name: fct_daily_schedule_rt_route_direction_summary
-    description: TODO
+    description: |
+      Daily schedule + RT (quartet of schedule, vp, tu, sa) service totals by feed.
+      Service summary is based on `fct_daily_scheduled_service_summary` (schedule) and
+      `fct_daily_rt_service_summary` (RT).
+      Metrics for service alerts not yet available.
     columns:
       - *service_date_for_summaries
       - <<: *base64_url
@@ -2926,7 +2936,10 @@ models:
         description: '{{ doc("column_rt_messages_per_minute") }}'
 
   - name: fct_daily_rt_service_summary
-    description: TODO
+    description: |
+      Daily RT service totals by feed. Service summary is based on fct_observed_trips,
+      grouped to the service_date and feed level (tu_base64_url, vp_base64_url).
+      Metrics for service alerts not yet available.
     columns:
       - *service_date_for_summaries
       # foreign keys
@@ -2979,7 +2992,11 @@ models:
         description: '{{ doc("column_rt_messages_per_minute") }}'
 
   - name: fct_daily_schedule_rt_operator_summary
-    description: TODO
+    description: |
+      Daily schedule + RT (quartet of schedule, vp, tu, sa) service totals by feed.
+      Service summary is based on `fct_daily_scheduled_service_summary` (schedule) and
+      `fct_daily_rt_service_summary` (RT).
+      Metrics for service alerts not yet available.
     columns:
       - *service_date_for_summaries
       - *feed_key

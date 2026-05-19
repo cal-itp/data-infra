@@ -111,14 +111,7 @@ x-common-fields:
 models:
   - name: fct_monthly_scheduled_trips
     description: |
-      An monthly aggregation of GTFS scheduled trips by month-day_type (weekday/Sat/Sun).
-      Keeps the trip grain in `fct_scheduled_trips`, joins this with the shape_id present
-      in `fct_daily_scheduled_shapes`.
-      Each row is unique on name-month-year-day_type-trip_id-iteration_num.
-      It can be interpreted as:
-      In a typical month, we observed weekday Trip 1 service (across 20+ days),
-      Saturday Trip 1 service (across 4 days that month),
-      and Sunday Trip 1 service (across 4 days that month).
+      An aggregation of GTFS scheduled trips by month and day_type (weekday / Saturday / Sunday).
     columns:
       - name: name
         description: *gtfs_dataset_name_desc
@@ -188,8 +181,9 @@ models:
 
   - name: fct_monthly_routes
     description: |
-      An aggregation of GTFS schedule routes with trip activity in a given
-      month, where the shape with the most trips is associated.
+      An aggregation of GTFS schedule routes and shapes by month and day_type
+      (weekday / Saturday / Sunday). The route's line geometry comes from the
+      shape_id with the most trips.
     columns:
       - name: name
         description: *gtfs_dataset_name_desc
@@ -211,8 +205,11 @@ models:
 
   - name: fct_monthly_scheduled_stops
     description: |
-      An aggregation of GTFS schedule stops with stop time activity in a given
-      month.
+      An aggregation of GTFS schedule stops with stop time activity in a given month
+      and day_type (weekday / Saturday / Sunday).
+
+      Totals and daily metrics are provided to normalize across potential differences in GTFS
+      schedule or RT data availability.
     columns:
       - name: name
         description: *gtfs_dataset_name_desc
@@ -301,7 +298,19 @@ models:
         description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
 
   - name: fct_monthly_schedule_rt_route_direction_summary
-    description: TODO
+    description: |
+      A summary table of schedule + RT (quartet of schedule, vp, tu, sa) data
+      summarized by month-day_type-feed-route-direction.
+      Metrics for service alerts not yet available.
+
+      Since this table is a rollup, a monthly aggregation, `gtfs_dataset_key` is dropped
+      for schedule and RT data sources. The unversioned natural key (`base64_url`) is used
+      to refer to the same operator (across versioned feeds they're publishing).
+      `route_name-direction_id` is also used instead of the versioned
+      `route_id-direction_id` to refer to the same route entity (across versioned feeds).
+
+      Totals and daily metrics are provided to normalize across potential differences in GTFS
+      schedule or RT data availability.
     columns:
       - *month
       - *year
@@ -434,7 +443,17 @@ models:
           policy and planning levers.
 
   - name: fct_monthly_operator_summary
-    description: "add something about why gtfs_dataset_key is not included, add something about why daily metrics are included"
+    description: |
+      Schedule + RT (quartet of schedule, vp, tu, sa) operator summary by
+      month-day_type (weekday / Saturday / Sunday).
+
+      Since this table is a rollup, a monthly aggregation, `gtfs_dataset_key` is
+      dropped for schedule and RT data sources. The unversioned natural key
+      (`base64_url`) is used to refer to the same operator (across versioned feeds
+      they're publishing).
+
+      Totals and daily metrics are provided to normalize across potential differences in GTFS
+      schedule or RT data availability.
     columns:
       - *month
       - *year
@@ -583,7 +602,9 @@ models:
           make it explicit.
 
   - name: fct_operator_hourly_summary
-    description: TODO
+    description: |
+      An hourly summary of trips and service hours by month, day_type
+      (weekday / Saturday / Sunday) and hour of day (0-23).
     columns:
       - *month_first_day
       - name: name
