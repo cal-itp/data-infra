@@ -329,13 +329,17 @@ models:
         description: *n_scheduled_trips_desc
       - name: daily_trips_all_day
         description: '{{ doc("column_daily_trips_by_time_of_day") }}'
-      - <<: *n_routes #HAS_ANCHOR_MAYBE_USE_MACRO
-        name: n_route_ids
-      - name: n_shapes #HAS_ANCHOR_MAYBE_USE_MACRO
+      - name: n_route_ids
+        description: |
+          Number of distinct (not parsed, not cleaned) route_ids for this period. There can be n_route_ids > 1 for the same route_name if the feed switches in the middle of the month. Ex: LA Metro Route 150 was 150-13188 (on 2025-12-01) and 150-13196 (on 2026-02-01). If the route_ids switched mid-month, it is possible for different route_ids to show up, but refer to the same route. See `route_name`.
+      - name: n_shapes
+        description: &n_scheduled_shapes_desc |
+          Total number of shapes that had trips scheduled for this period.
       - name: avg_stops_served
-        description: *n_stops_desc #PARENT_ANCHOR_IN_MART
-      - *NEW_ANCHOR_n_feeds
-      - *NEW_ANCHOR_n_days
+        description: &n_scheduled_stops_desc |
+          Total number of distinct stop_ids that had trips scheduled for this period.
+      - *n_feed_keys
+      - *n_service_days
       - name: daily_trips_owl
         description: '{{ doc("column_daily_trips_by_time_of_day") }}'
       - name: daily_trips_early_am
@@ -383,26 +387,21 @@ models:
           this data (see `dim_provider_gtfs_data` to confirm) or because there is
           a vehicle positions feed but this trip did not appear within it.
       - name: vp_num_distinct_updates
-        description: *rt_trip_num_distinct_updates_desc
+        description: '{{ doc("column_rt_messages_per_minute") }}'
       - name: n_vp_trips
-        description: Count of distinct trip_instance_keys from vehicle positions dataset.
+        description: '{{ doc("column_n_vp_trips") }}'
       - <<: *extract_duration_minutes
         name: vp_extract_duration_minutes
       - name: vp_messages_per_minute
-        description: &rt_trip_messages_per_minute_desc |
-          Count of how many messages per minute this entity was present for,
-          which can help give a sense for how continuously this entity was updated.
-
-          This number should be equal to `num_distinct_message_keys`.
-          See `num_distinct_extract_ts` and `num_distinct_message_keys`.
+        description: '{{ doc("column_rt_messages_per_minute") }}'
       - name: tu_num_distinct_updates
-        description: *rt_trip_num_distinct_updates_desc
+        description: '{{ doc("column_rt_messages_per_minute") }}'
       - name: n_tu_trips
-        description: Count of distinct trip_instance_keys from trip updates dataset.
+        description: '{{ doc("column_n_tu_trips") }}'
       - <<: *extract_duration_minutes
         name: tu_extract_duration_minutes
       - name: tu_messages_per_minute
-        description: *rt_trip_messages_per_minute_desc
+        description: '{{ doc("column_rt_messages_per_minute") }}'
       - name: route_typology
         description: |
           Valid values are: rail, bus (not rapid or express), express, rapid, cable_tram,
@@ -422,3 +421,172 @@ models:
           NACTO (National Association of City Transportation Officials)
           has different route typologies defined. Each route typology is paired with
           policy and planning levers.
+
+  - name: fct_monthly_operator_summary
+    description: "add something about why gtfs_dataset_key is not included, add something about why daily metrics are included"
+    columns:
+      - *month
+      - *year
+      - *month_first_day
+      - <<: *base64_url
+        name: schedule_base64_url
+      - name: schedule_name
+        description: Name from the schedule GTFS dataset record associated.
+      - name: tu_name
+        description: Name from the trip updates GTFS dataset record associated.
+      - <<: *base64_url
+        name: tu_base64_url
+      - name: vp_name
+        description: Name from the vehicle positions GTFS dataset record associated.
+      - <<: *base64_url
+        name: vp_base64_url
+      - *day_type
+      - name: n_trips
+        description: *n_scheduled_trips_desc
+      - name: daily_trips
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: ttl_service_hours
+        description: |
+          Total service hours for the schedule_base64_url for this period.
+      - name: daily_service_hours
+        description: |
+          The average daily service hours for this period.
+          Total_service_hours / n_service_dates
+      - name: n_routes
+        description: |
+          Total number of routes that had trips scheduled for this period.
+      - name: n_shapes
+        description: *n_scheduled_shapes_desc
+      - name: n_stops
+        description: *n_scheduled_stops_desc
+      - name: num_stop_times
+        description: '{{ doc("column_num_stop_times") }}'
+      - name: daily_arrivals
+        description: '{{ doc("column_daily_stop_arrivals") }}'
+      - *n_service_days
+      - *n_feed_keys
+      - name: vp_messages_per_minute
+        description: '{{ doc("column_rt_messages_per_minute") }}'
+      - name: n_vp_trips
+        description: '{{ doc("column_n_vp_trips") }}'
+      - name: daily_vp_trips
+        description: '{{ doc("column_n_vp_trips") }}'
+      - name: pct_vp_trips
+        description: '{{ doc("column_n_vp_trips") }}'
+      - name: pct_vp_routes
+          The percent of scheduled routes that have at least 1 trip with vehicle positions data.
+          n_vp_routes / n_schedule_routes
+      - name: daily_vp_extract_duration_minutes
+        description: |
+          Total vp_extract_duration_minutes / n_service_dates
+          See `vp_extract_duration_minutes`.
+      - name: tu_messages_per_minute
+        description: '{{ doc("column_rt_messages_per_minute") }}'
+      - name: n_tu_trips
+        description: '{{ doc("column_n_tu_trips") }}'
+      - name: daily_tu_trips
+        description: '{{ doc("column_n_tu_trips") }}'
+      - name: pct_tu_trips
+        description: '{{ doc("column_n_tu_trips") }}'
+      - name: pct_tu_routes
+        description: |
+          The percent of scheduled routes that have at least 1 trip with trip updates data.
+          n_tu_routes / n_schedule_routes
+      - name: daily_tu_extract_duration_minutes
+        description: |
+          Total tu_extract_duration_minutes / n_service_dates.
+          See `tu_extract_duration_minutes`.
+      - name: pct_tu_complete_minutes
+        description: '{{ doc("column_gtfs_rt__tu_complete_minutes") }}'
+      - name: pct_tu_accurate_minutes
+        description: '{{ doc("column_gtfs_rt__tu_accurate_minutes") }}'
+      - name: avg_prediction_spread_minutes
+        description: '{{ doc("column_gtfs_rt__tu_prediction_spread") }}'
+      - name: n_predictions
+        description: Total number of stoptimeupdate messages, or predictions.
+      - name: pct_predictions_early
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
+      - name: pct_predictions_ontime
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
+      - name: pct_predictions_late
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
+      - name: n_days_schedule_only
+        description: &n_days_by_gtfs_availability_desc |
+          Count of distinct service_dates for each gtfs_availability value in
+          ["schedule_only", "schedule_and_rt", "schedule_and_vp_only", "schedule_and_tu_only"].
+      - name: n_days_schedule_and_rt
+        description: *n_days_by_gtfs_availability_desc
+      - name: n_days_schedule_and_vp_only
+        description: *n_days_by_gtfs_availability_desc
+        description: *n_days_by_gtfs_availability_desc
+      - name: prediction_error_sec_array
+        description: '{{ doc("column_gtfs_rt__tu_prediction_error") }}'
+      - name: prediction_error_sec_percentile_array
+        description: &percentile_array_values_desc |
+          Values are [5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 95],
+          referring to the 5th, 10th, ..., 95th percentile
+
+          Must be unpacked in the same order as prediction_error_sec_array.
+          Example:
+          percentile_array: [5th, 10th, ...., 95th percentile]
+          prediction_error_sec_array: [-100, -70, ..., 400]
+          The 5th percentile corresponds to -100 seconds; the 95th percentile corresponds to 400 seconds.
+
+          This is a metric in the Greg Newmark paper. It requires using the
+          `prediction_error_by_minute_array` column that has the prediction error for
+          every service_date-trip-stop_id-stop_sequence-minute_until_arrival combination.
+      - name: scaled_prediction_error_sec_array
+        description: '{{ doc("column_gtfs_rt__tu_scaled_prediction_error") }}'
+      - name: pos_prediction_error_sec_array
+        description: |
+          Filter to only positive prediction errors, then find the
+          5th, 10th, ..., 95th percentile on that filtered array.
+
+          Must be unpacked in the same order as pos_prediction_error_sec_array.
+          Example:
+          percentile_array: [5th, 10th, ...., 95th percentile]
+          pos_prediction_error_sec_array: [10, 20, ..., 400]
+          The 5th percentile corresponds to 10 seconds; the 95th percentile corresponds to 400 seconds.
+
+          This is a metric in the Greg Newmark paper. It requires using the
+          `prediction_error_by_minute_array` column that has the prediction error for
+          every service_date-trip-stop_id-stop_sequence-minute_until_arrival combination.
+      - name: neg_prediction_error_sec_array
+        description: |
+          Filter to only negative prediction errors, then find the
+          5th, 10th, ..., 95th percentile on that filtered array.
+
+          Must be unpacked in the same order as neg_prediction_error_sec_array.
+          Example:
+          percentile_array: [5th, 10th, ...., 95th percentile]
+          neg_prediction_error_sec_array: [-400, -300, ..., -5]
+          The 5th percentile corresponds to -400 seconds; the 95th percentile corresponds to -5 seconds.
+
+          This is a metric in the Greg Newmark paper. It requires using the
+          `prediction_error_by_minute_array` column that has the prediction error for
+          every service_date-trip-stop_id-stop_sequence-minute_until_arrival combination.
+      - name: pos_prediction_error_sec_percentile_array
+        description: |
+          Values are [95, 90, 80, 75, 70, 60, 50, 40, 30, 25, 20, 10, 5],
+          referring to the 95th, 90th, ... , and 5th percentile.
+          Greg Newmark paper refers to reversed percentiles. Reverse the percentiles here and
+          make it explicit.
+
+  - name: fct_operator_hourly_summary
+    description: TODO
+    columns:
+      - *month_first_day
+      - name: name
+        description: *gtfs_dataset_name_desc
+      - *day_type
+      - name: departure_hour
+        description: |
+          The departure hour (0-23) of the trip, in the feed_timezone.
+          Since trips can travel into the next service_date, each
+          trip is categorized into the service_date of the trip's first departure.
+      - name: n_trips
+        description: *n_scheduled_trips_desc
+      - name: service_hours
+        description: '{{ doc("column_service_hours") }}'
+      - name: flex_service_hours
+        description: '{{ doc("column_flex_service_hours") }}'

@@ -28,7 +28,7 @@ See the macro: https://dbt-docs.dds.dot.ca.gov/#!/macro/macro.calitp_warehouse.g
 
 {% docs column_daily_stop_arrivals %}
 
-Scheduled stop arrivals are scheduled stop times.
+Scheduled stop arrivals are scheduled stop times. See `num_stop_times`.
 The count of stop arrivals, the count of scheduled stop arrivals, per day.
 For longer periods, it is the total stop arrivals / n_service_dates for the period.
 
@@ -103,23 +103,37 @@ Count of distinct trip_instance_keys from the trip updates dataset.
 pct_tu_trips is the percent of scheduled trips with trip updates.
 pct_tu_trips = n_tu_trips / n_scheduled_trips
 
+daily_tu_trips is the average daily number of trips with trip updates over this 
+period (up to a month).
+daily_tu_trips = n_tu_trips / n_service_dates.
+
 {% enddocs %}
 
 
 {% docs column_n_vp_trips %}
 
 Count of distinct trip_instance_keys from the vehicle positions dataset.
+
 pct_vp_trips is the percent of scheduled trips with vehicle positions.
 pct_vp_trips = n_vp_trips / n_scheduled_trips
+
+daily_vp_trips is the average daily number of trips with vehicle positions over this 
+period (up to a month).
+daily_vp_trips = n_vp_trips / n_service_dates.
 
 {% enddocs %}
 
 
 {% docs column_rt_messages_per_minute %}
 
-Count of how many messages per minute this entity was present for,
+The `num_distinct_updates` number of distinct updates is the 
+count of how many messages per minute this entity was present for,
 which can help give a sense for how continuously this entity was updated.
 This number should be equal to `num_distinct_message_keys`.
+
+If you divide this value by `extract_duration_minutes`, you would get a count of 
+how many messages per minute this entity was present for, which can help give a 
+sense for how continuously this entity was updated.
 
 See `num_distinct_extract_ts` and `num_distinct_message_keys`.
 {% enddocs %}

@@ -903,8 +903,7 @@ models:
       - name: last_arrival_sec
         description: Time of last departure on date; null when no trips scheduled
       - name: num_stop_times
-        description: &n_scheduled_arrivals_desc |
-          Total number of scheduled stop arrivals; can be 0 if not scheduled trips
+        description: '{{ doc("column_num_stop_times") }}'
       - name: n_routes
         description: &n_scheduled_routes_desc |
           Total number of routes that had trips scheduled on this day; can be 0
@@ -2864,7 +2863,7 @@ models:
       - name: avg_stops_served
         description: *n_scheduled_stops_desc
       - name: num_stop_times
-        description: *n_scheduled_arrivals_desc
+        description: '{{ doc("column_num_stop_times") }}'
       - name: service_hours
         description: '{{ doc("column_service_hours") }}'
       - name: flex_service_hours
@@ -2990,7 +2989,7 @@ models:
       - name: last_arrival_sec
         description: Time of last departure on date; null when no trips scheduled
       - name: num_stop_times
-        description: *n_scheduled_arrivals_desc
+        description: '{{ doc("column_num_stop_times") }}'
       - name: n_routes
         description: *n_scheduled_routes_desc
       - name: n_shapes
