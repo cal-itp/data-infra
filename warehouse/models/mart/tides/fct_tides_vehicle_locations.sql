@@ -31,25 +31,28 @@ WITH source_vehicle_locations AS (
     ) = 1
 ),
 
--- Pre-filter dim_provider_gtfs_data to the publication-set organizations
--- (persistent Airtable org IDs, stable across upstream gtfs_dataset_key and
--- feed-URL rotations) with the public-customer-facing or regional-subfeed
--- fixed-route flag. Joining on the organization expands each allowlisted
--- agency to all of its current customer-facing VP feeds. Org info isn't part
--- of the TIDES spec and isn't carried through; org metadata for the publish
--- flow lives separately.
+-- Pre-filter dim_provider_gtfs_data to the publication set: every organization
+-- with the public-customer-facing or regional-subfeed fixed-route flag that is
+-- NOT on the tides_publication_keys denylist (a LEFT JOIN anti-join). This
+-- expands each published org to all of its current customer-facing VP feeds.
+-- Persistent Airtable org IDs are stable across gtfs_dataset_key and feed-URL
+-- rotations. Rolling out more agencies means deleting their denylist rows.
 publication_dim_records AS (
     SELECT d.*
     FROM {{ ref('dim_provider_gtfs_data') }} AS d
-    INNER JOIN {{ ref('tides_publication_keys') }}
-        USING (organization_source_record_id)
+    LEFT JOIN {{ ref('tides_publication_keys') }} AS excluded
+        ON d.organization_source_record_id = excluded.organization_source_record_id
     WHERE d.public_customer_facing_or_regional_subfeed_fixed_route = TRUE
+      AND d.organization_source_record_id IS NOT NULL
+      AND excluded.organization_source_record_id IS NULL
 ),
 
 -- SCD Type 2 join: resolve the dim record valid at each VP row's
 -- _extract_ts (not the current state).
 filtered_vehicle_locations AS (
-    SELECT vp.*
+    SELECT
+        vp.*,
+        d.organization_source_record_id
     FROM source_vehicle_locations AS vp
     INNER JOIN publication_dim_records AS d
         ON d.vehicle_positions_gtfs_dataset_key = vp.gtfs_dataset_key
@@ -119,11 +122,13 @@ tides_vehicle_locations AS (
         -- Leaving NULL pending https://github.com/TIDES-transit/TIDES/issues/252.
         CAST(NULL AS STRING) AS schedule_relationship,
 
-        -- Internal columns retained for partitioning and the feed-key join;
-        -- dropped at export time.
+        -- Internal columns, dropped at export time. dt + base64_url drive the
+        -- export DAG's pruned query; organization_source_record_id routes the
+        -- output and keys tides_publication_feeds; gtfs_dataset_key joins feeds.
         vp.dt,
         vp.base64_url,
-        vp.gtfs_dataset_key
+        vp.gtfs_dataset_key,
+        vp.organization_source_record_id
     FROM filtered_vehicle_locations AS vp
 )
 

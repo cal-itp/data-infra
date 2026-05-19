@@ -56,17 +56,20 @@ vehicle_per_trip AS (
     GROUP BY 1, 2
 ),
 
--- Pre-filter dim_provider_gtfs_data to the publication-set organizations
--- (persistent Airtable org IDs, stable across upstream gtfs_dataset_key and
--- feed-URL rotations) with the public-customer-facing or regional-subfeed
--- fixed-route flag. Joining on the organization expands each allowlisted
--- agency to all of its current customer-facing VP feeds.
+-- Pre-filter dim_provider_gtfs_data to the publication set: every organization
+-- with the public-customer-facing or regional-subfeed fixed-route flag that is
+-- NOT on the tides_publication_keys denylist (a LEFT JOIN anti-join). This
+-- expands each published org to all of its current customer-facing VP feeds.
+-- Persistent Airtable org IDs are stable across gtfs_dataset_key and feed-URL
+-- rotations. Rolling out more agencies means deleting their denylist rows.
 publication_dim_records AS (
     SELECT d.*
     FROM {{ ref('dim_provider_gtfs_data') }} AS d
-    INNER JOIN {{ ref('tides_publication_keys') }}
-        USING (organization_source_record_id)
+    LEFT JOIN {{ ref('tides_publication_keys') }} AS excluded
+        ON d.organization_source_record_id = excluded.organization_source_record_id
     WHERE d.public_customer_facing_or_regional_subfeed_fixed_route = TRUE
+      AND d.organization_source_record_id IS NOT NULL
+      AND excluded.organization_source_record_id IS NULL
 ),
 
 -- SCD Type 2 join: resolve the dim record valid at vp_min_ts (the earliest
