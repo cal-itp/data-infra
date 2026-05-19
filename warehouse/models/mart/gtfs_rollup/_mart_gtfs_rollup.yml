@@ -299,3 +299,126 @@ models:
         description: '{{ doc("gtfs_stops__location_type") }}'
       - name: wheelchair_boarding
         description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
+
+  - name: fct_monthly_schedule_rt_route_direction_summary
+    description: TODO
+    columns:
+      - *month
+      - *year
+      - *month_first_day
+      - *day_type
+      - <<: *base64_url
+        name: schedule_base64_url
+      - name: schedule_name
+        description: Name from the schedule GTFS dataset record associated.
+      - <<: *base64_url
+        name: tu_base64_url
+      - name: tu_name
+        description: Name from the trip updates GTFS dataset record associated.
+      - <<: *base64_url
+        name: vp_base64_url
+      - name: vp_name
+        description: Name from the vehicle positions GTFS dataset record associated.
+      - name: route_name
+        description: '{{ doc("column_gtfs_route_name") }}'
+      - name: direction_id
+        description: '{{ doc("gtfs_trips__direction_id") }}'
+      - name: route_type
+        description: '{{ doc("gtfs_routes__route_type") }}'
+      - name: n_trips
+        description: *n_scheduled_trips_desc
+      - name: daily_trips_all_day
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - <<: *n_routes #HAS_ANCHOR_MAYBE_USE_MACRO
+        name: n_route_ids
+      - name: n_shapes #HAS_ANCHOR_MAYBE_USE_MACRO
+      - name: avg_stops_served
+        description: *n_stops_desc #PARENT_ANCHOR_IN_MART
+      - *NEW_ANCHOR_n_feeds
+      - *NEW_ANCHOR_n_days
+      - name: daily_trips_owl
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_early_am
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_am_peak
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_midday
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_pm_peak
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_evening
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_peak
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_offpeak
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: frequency_owl
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_early_am
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_am_peak
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_midday
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_pm_peak
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_evening
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_peak
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_offpeak
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_all_day
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: appeared_in_tu
+        description: &appeared_in_tu_desc |
+          Boolean for whether this trip appeared in a trip updates feed.
+          Can be false either because there is no trip updates feed for this
+          data (see `dim_provider_gtfs_data` to confirm) or because there is a
+          trip updates feed but this trip did not appear within it.
+      - name: appeared_in_vp
+        description: &appeared_in_vp_desc |
+          Boolean for whether this trip appeared in a vehicle positions feed.
+          Can be false either because there is no vehicle positions feed for
+          this data (see `dim_provider_gtfs_data` to confirm) or because there is
+          a vehicle positions feed but this trip did not appear within it.
+      - name: vp_num_distinct_updates
+        description: *rt_trip_num_distinct_updates_desc
+      - name: n_vp_trips
+        description: Count of distinct trip_instance_keys from vehicle positions dataset.
+      - <<: *extract_duration_minutes
+        name: vp_extract_duration_minutes
+      - name: vp_messages_per_minute
+        description: &rt_trip_messages_per_minute_desc |
+          Count of how many messages per minute this entity was present for,
+          which can help give a sense for how continuously this entity was updated.
+
+          This number should be equal to `num_distinct_message_keys`.
+          See `num_distinct_extract_ts` and `num_distinct_message_keys`.
+      - name: tu_num_distinct_updates
+        description: *rt_trip_num_distinct_updates_desc
+      - name: n_tu_trips
+        description: Count of distinct trip_instance_keys from trip updates dataset.
+      - <<: *extract_duration_minutes
+        name: tu_extract_duration_minutes
+      - name: tu_messages_per_minute
+        description: *rt_trip_messages_per_minute_desc
+      - name: route_typology
+        description: |
+          Valid values are: rail, bus (not rapid or express), express, rapid, cable_tram,
+          trolleybus, and unknown.
+          For route_type 3 (bus), look for specific keywords within
+          `route_short_name`, and `route_long_name` and see if we can identify
+          whether a bus is express or rapid.
+
+          Other route_typologies correspond to route_type.
+          - rail: route_type values 0, 1, 2.
+          - bus: route_type value 3 (if unable to be categorized as express or rapid).
+          - express: route_type value 3 ('route_name' contains keyword 'express' or 'limited').
+          - rapid: route_type value 3 ('route_name' contains keyword 'rapid').
+          - cable_tram: route_type value 5.
+          - trolleybus: route_type value 11.
+
+          NACTO (National Association of City Transportation Officials)
+          has different route typologies defined. Each route typology is paired with
+          policy and planning levers.
