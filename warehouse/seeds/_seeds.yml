@@ -402,26 +402,29 @@ seeds:
 
   - name: tides_publication_keys
     description: |
-      Source-record IDs included in the TIDES public publication. Acts as a
-      narrowing layer over `dim_provider_gtfs_data.public_customer_facing_or_regional_subfeed_fixed_route`
-      while the publish flow is in MVP. Initial set covers agencies whose
-      vehicles traverse Hermosa Beach (SCAG technical-assistance pilot):
-      Beach Cities Transit, LA Metro Bus, Torrance Transit.
+      Organization-level allowlist of agencies included in the TIDES public
+      publication. Acts as a narrowing layer over
+      `dim_provider_gtfs_data.public_customer_facing_or_regional_subfeed_fixed_route`
+      while the publish flow is in MVP. Keyed on the persistent organization
+      Airtable record ID; `dim_provider_gtfs_data` expands each organization to
+      its current customer-facing vehicle-positions feeds (an organization may
+      have more than one — e.g. LA Metro publishes both Bus and Rail).
     config:
       labels:
         domain: seeds
         dataset: tides
     columns:
-      - name: vehicle_positions_source_record_id
+      - name: organization_source_record_id
         description: |
-          Persistent identifier from `dim_provider_gtfs_data.vehicle_positions_source_record_id`
-          (the upstream Airtable record). Stable across GTFS feed-key
-          rotations, so the publication set survives upstream re-versioning.
+          Persistent identifier from `dim_provider_gtfs_data.organization_source_record_id`
+          (the upstream Airtable organization record). Stable across GTFS
+          feed-key and feed-URL rotations, so the publication set survives
+          upstream re-versioning.
         data_tests:
           - not_null
           - unique
       - name: agency_name
-        description: Human-readable agency name for the feed.
+        description: Human-readable organization name.
         data_tests:
           - not_null
       - name: notes

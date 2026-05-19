@@ -56,14 +56,16 @@ vehicle_per_trip AS (
     GROUP BY 1, 2
 ),
 
--- Pre-filter dim_provider_gtfs_data to the publication-set source_record_ids
--- (persistent Airtable IDs, stable across upstream gtfs_dataset_key rotations)
--- with the public-customer-facing or regional-subfeed fixed-route flag.
+-- Pre-filter dim_provider_gtfs_data to the publication-set organizations
+-- (persistent Airtable org IDs, stable across upstream gtfs_dataset_key and
+-- feed-URL rotations) with the public-customer-facing or regional-subfeed
+-- fixed-route flag. Joining on the organization expands each allowlisted
+-- agency to all of its current customer-facing VP feeds.
 publication_dim_records AS (
     SELECT d.*
     FROM {{ ref('dim_provider_gtfs_data') }} AS d
     INNER JOIN {{ ref('tides_publication_keys') }}
-        USING (vehicle_positions_source_record_id)
+        USING (organization_source_record_id)
     WHERE d.public_customer_facing_or_regional_subfeed_fixed_route = TRUE
 ),
 

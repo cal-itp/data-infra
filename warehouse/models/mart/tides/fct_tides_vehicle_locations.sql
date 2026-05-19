@@ -1,48 +1,48 @@
 {{
     config(
-        materialized='incremental',
-        incremental_strategy='microbatch',
-        event_time = 'dt',
-        batch_size = 'day',
-        begin=var('TIDES_PRODUCT_START'),
-        lookback=var('DBT_ALL_INCREMENTAL_LOOKBACK_DAYS'),
-        partition_by={
-            'field': 'dt',
-            'data_type': 'date',
-            'granularity': 'day',
-        },
-        full_refresh=false,
-        cluster_by='base64_url',
-        on_schema_change='append_new_columns',
+        materialized='view',
         tags=['tides_product'],
     )
 }}
 
--- Upstream `key` is "almost unique" (documented unique_proportion at_least
--- 0.999); TIDES requires location_ping_id strictly unique. `key` is composed
--- of base64_url + location_timestamp + vehicle_id + ..., so those columns are
--- all constant within a duplicate set and can't tie-break. `_extract_ts` is
--- the upstream extract timestamp and differs across the duplicates, so pick
--- the most-recently-extracted row per key.
+-- This model is a view. The TIDES export DAG queries it filtered by
+-- `dt` + `base64_url`; that predicate prunes straight through to the
+-- partitioned/clustered `fct_vehicle_locations` scan (verified: a single
+-- agency-day prunes 1.19 TB -> 1.8 GB).
+--
+-- Dedup: upstream `key` is "almost unique" (documented unique_proportion
+-- at_least 0.999). `key` is composed of base64_url + location_timestamp +
+-- vehicle_id + ..., so those columns can't tie-break; `_extract_ts` (the
+-- upstream extract timestamp) differs across duplicates, so pick the
+-- most-recently-extracted row per key.
+--
+-- The window partitions by (key, dt, base64_url), not key alone, so that a
+-- view consumer's `WHERE dt = .. AND base64_url = ..` can be pushed below the
+-- window (BigQuery only pushes a filter past a window when the filter columns
+-- are a subset of PARTITION BY). base64_url is already a component of `key`, so
+-- adding it changes nothing; `dt` scopes the dedup to a single scrape-day,
+-- which is the export grain -- the DAG reads one `dt` at a time.
 WITH source_vehicle_locations AS (
     SELECT *
     FROM {{ ref('fct_vehicle_locations') }}
     QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY `key`
+        PARTITION BY `key`, dt, base64_url
         ORDER BY _extract_ts DESC
     ) = 1
 ),
 
--- Pre-filter dim_provider_gtfs_data to the publication-set source_record_ids
--- (persistent Airtable IDs, stable across upstream gtfs_dataset_key rotations)
--- with the public-customer-facing or regional-subfeed fixed-route flag. Org
--- info isn't part of the TIDES spec and isn't carried through; org metadata
--- for the publish flow lives separately.
+-- Pre-filter dim_provider_gtfs_data to the publication-set organizations
+-- (persistent Airtable org IDs, stable across upstream gtfs_dataset_key and
+-- feed-URL rotations) with the public-customer-facing or regional-subfeed
+-- fixed-route flag. Joining on the organization expands each allowlisted
+-- agency to all of its current customer-facing VP feeds. Org info isn't part
+-- of the TIDES spec and isn't carried through; org metadata for the publish
+-- flow lives separately.
 publication_dim_records AS (
     SELECT d.*
     FROM {{ ref('dim_provider_gtfs_data') }} AS d
     INNER JOIN {{ ref('tides_publication_keys') }}
-        USING (vehicle_positions_source_record_id)
+        USING (organization_source_record_id)
     WHERE d.public_customer_facing_or_regional_subfeed_fixed_route = TRUE
 ),
 
