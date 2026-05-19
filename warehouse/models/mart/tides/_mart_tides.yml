@@ -213,6 +213,46 @@ models:
       - name: gtfs_dataset_key
         description: '{{ doc("gtfs_schedule_gtfs_dataset_key") }}'
 
+  - name: tides_publication_feeds
+    description: |
+      Resolves the `tides_publication_keys` seed (an organization-level
+      allowlist) to the concrete set of current customer-facing
+      vehicle-positions feeds in the TIDES publication. One row per
+      (organization, feed) — an organization with multiple feeds (e.g. LA Metro:
+      Bus + Rail) yields multiple rows. The TIDES export DAG reads this view and
+      fans out one parquet export per row. Internal to the publish flow; not
+      part of the TIDES spec.
+    columns:
+      - name: organization_source_record_id
+        description: |
+          Persistent Airtable organization record ID — the publication grain
+          and the GCS export path key.
+        data_tests:
+          - not_null
+      - name: vehicle_positions_source_record_id
+        description: |
+          Persistent Airtable record ID of the vehicle-positions feed. One row
+          per feed, so this is unique within the view.
+        data_tests:
+          - not_null
+          - unique
+      - name: agency_name
+        description: Human-readable organization name, carried from the seed.
+      - name: feed_name
+        description: |
+          Per-feed name (e.g. "LA Metro Rail Vehicle Positions"), used as the
+          DAG's per-export display label so a multi-feed org's export tasks are
+          distinguishable.
+      - name: gtfs_dataset_key
+        description: |
+          Current versioned key of the vehicle-positions feed; joins to
+          `fct_tides_vehicle_locations.gtfs_dataset_key`.
+      - name: base64_url
+        description: |
+          Current base64-encoded feed URL, derived from recent
+          `fct_tides_vehicle_locations` data rather than seeded. NULL when the
+          feed has had no data in the recent window — the DAG skips NULL rows.
+
 exposures:
   - name: california_tides
     type: application
