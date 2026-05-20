@@ -86,8 +86,7 @@ class TestBigQueryToParquetOperator:
             "source_record_name": "gtfs_dataset_key",
             "source_record_id": "recUKDWE8Vq7rRAPM",
             "display_name": "Beach Cities Transit",
-            "destination_uri": os.path.join(
-                os.getenv("CALITP_BUCKET__TIDES"),
+            "destination_path": os.path.join(
                 destination_path_prefix,
                 "recUKDWE8Vq7rRAPM_*.parquet",
             ),
@@ -115,8 +114,7 @@ class TestBigQueryToParquetOperator:
             "source_record_name": "gtfs_dataset_key",
             "source_record_id": "recUKDWE8Vq7rRAPM",
             "display_name": "Beach Cities Transit",
-            "destination_uri": os.path.join(
-                os.getenv("CALITP_BUCKET__TIDES"),
+            "destination_path": os.path.join(
                 destination_path_prefix,
                 "recUKDWE8Vq7rRAPM_*.parquet",
             ),
