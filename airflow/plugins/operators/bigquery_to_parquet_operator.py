@@ -60,9 +60,8 @@ class BigQueryToParquetOperator(BaseOperator):
     def destination_name(self) -> str:
         return self.destination_bucket.replace("gs://", "")
 
-    def destination_uri(self) -> str:
+    def destination_path(self) -> str:
         return os.path.join(
-            self.destination_bucket,
             self.destination_path_prefix,
             f"{self.source_record_id}_*.parquet",
         )
@@ -88,7 +87,7 @@ class BigQueryToParquetOperator(BaseOperator):
             "source_record_name": self.source_record_name,
             "source_record_id": self.source_record_id,
             "display_name": self.display_name,
-            "destination_uri": self.destination_uri(),
+            "destination_path": self.destination_path(),
             "dt": self.dt,
             "ts": self.ts,
         }
@@ -104,7 +103,10 @@ class BigQueryToParquetOperator(BaseOperator):
             " WHERE dt = CAST('{dt}' AS DATE) AND {source_record_name} = '{source_record_id}'"
         )
         return template.format(
-            uri=self.destination_uri(),
+            uri=os.path.join(
+                self.destination_bucket,
+                self.destination_path(),
+            ),
             dataset=self.dataset_name,
             table=self.table_name,
             dt=self.dt,
@@ -130,7 +132,7 @@ class BigQueryToParquetOperator(BaseOperator):
             "source_record_name": self.source_record_name,
             "source_record_id": self.source_record_id,
             "display_name": self.display_name,
-            "destination_uri": self.destination_uri(),
+            "destination_path": self.destination_path(),
             "dt": self.dt,
             "ts": self.ts,
         }
