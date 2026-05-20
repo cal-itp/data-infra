@@ -99,7 +99,7 @@ class BigQueryToParquetOperator(BaseOperator):
             "format='PARQUET',"
             "compression='SNAPPY',"
             "overwrite=true"
-            ") AS SELECT * FROM {dataset}.{table}"
+            ") AS SELECT * FROM `{dataset}.{table}`"
             " WHERE dt = CAST('{dt}' AS DATE) AND {source_record_name} = '{source_record_id}'"
         )
         return template.format(
