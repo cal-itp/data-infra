@@ -21,11 +21,11 @@ class TestBigQueryToParquetOperator:
 
     @pytest.fixture
     def destination_path_prefix(self) -> str:
-        return "vehicle_locations/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/gtfs_dataset_key=recUKDWE8Vq7rRAPM/"
+        return "vehicle_locations/base64_url=aHR0cHM6Ly9hcGkuZ29zd2lmdC5seS9yZWFsLXRpbWUvbGFtZXRyby9ndGZzLXJ0LXZlaGljbGUtcG9zaXRpb25z/dt=2025-06-02/"
 
     @pytest.fixture
     def report_path(self) -> str:
-        return "vehicle_location_outcomes/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/recUKDWE8Vq7rRAPM_outcomes.jsonl"
+        return "vehicle_location_outcomes/dt=2025-06-02/ts=2025-06-02T00:00:00+00:00/aHR0cHM6Ly9hcGkuZ29zd2lmdC5seS9yZWFsLXRpbWUvbGFtZXRyby9ndGZzLXJ0LXZlaGljbGUtcG9zaXRpb25z_outcomes.jsonl"
 
     @pytest.fixture
     def test_dag(self, execution_date: datetime) -> DAG:
@@ -54,8 +54,8 @@ class TestBigQueryToParquetOperator:
             ts=execution_date.isoformat(),
             dataset_name="mart_tides",
             table_name="fct_tides_vehicle_locations",
-            source_record_name="gtfs_dataset_key",
-            source_record_id="recUKDWE8Vq7rRAPM",
+            source_record_name="base64_url",
+            source_record_id="aHR0cHM6Ly9hcGkuZ29zd2lmdC5seS9yZWFsLXRpbWUvbGFtZXRyby9ndGZzLXJ0LXZlaGljbGUtcG9zaXRpb25z",
             display_name="Beach Cities Transit",
             destination_bucket=os.environ.get("CALITP_BUCKET__TIDES"),
             destination_path_prefix=destination_path_prefix,
@@ -83,12 +83,12 @@ class TestBigQueryToParquetOperator:
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
         assert xcom_value == {
-            "source_record_name": "gtfs_dataset_key",
-            "source_record_id": "recUKDWE8Vq7rRAPM",
+            "source_record_name": "base64_url",
+            "source_record_id": "aHR0cHM6Ly9hcGkuZ29zd2lmdC5seS9yZWFsLXRpbWUvbGFtZXRyby9ndGZzLXJ0LXZlaGljbGUtcG9zaXRpb25z",
             "display_name": "Beach Cities Transit",
             "destination_path": os.path.join(
                 destination_path_prefix,
-                "recUKDWE8Vq7rRAPM_*.parquet",
+                "aHR0cHM6Ly9hcGkuZ29zd2lmdC5seS9yZWFsLXRpbWUvbGFtZXRyby9ndGZzLXJ0LXZlaGljbGUtcG9zaXRpb25z_*.parquet",
             ),
             "dt": "2025-06-02",
             "ts": "2025-06-02T00:00:00+00:00",
@@ -97,7 +97,8 @@ class TestBigQueryToParquetOperator:
         parquet_files = gcs_hook.list(
             bucket_name=os.environ.get("CALITP_BUCKET__TIDES").replace("gs://", ""),
             match_glob=os.path.join(
-                destination_path_prefix, "recUKDWE8Vq7rRAPM_*.parquet"
+                destination_path_prefix,
+                "aHR0cHM6Ly9hcGkuZ29zd2lmdC5seS9yZWFsLXRpbWUvbGFtZXRyby9ndGZzLXJ0LXZlaGljbGUtcG9zaXRpb25z_*.parquet",
             ),
         )
         assert len(parquet_files) > 0
@@ -111,12 +112,12 @@ class TestBigQueryToParquetOperator:
         assert outcomes[0] == {
             "dataset_name": "mart_tides",
             "table_name": "fct_tides_vehicle_locations",
-            "source_record_name": "gtfs_dataset_key",
-            "source_record_id": "recUKDWE8Vq7rRAPM",
+            "source_record_name": "base64_url",
+            "source_record_id": "aHR0cHM6Ly9hcGkuZ29zd2lmdC5seS9yZWFsLXRpbWUvbGFtZXRyby9ndGZzLXJ0LXZlaGljbGUtcG9zaXRpb25z",
             "display_name": "Beach Cities Transit",
             "destination_path": os.path.join(
                 destination_path_prefix,
-                "recUKDWE8Vq7rRAPM_*.parquet",
+                "aHR0cHM6Ly9hcGkuZ29zd2lmdC5seS9yZWFsLXRpbWUvbGFtZXRyby9ndGZzLXJ0LXZlaGljbGUtcG9zaXRpb25z_*.parquet",
             ),
             "dt": "2025-06-02",
             "ts": "2025-06-02T00:00:00+00:00",
