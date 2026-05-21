@@ -16,6 +16,7 @@ clean_columns AS (
         SAFE_CAST({{ trim_make_empty_string_null('currency_code') }} AS NUMERIC) AS currency_code,
         {{ trim_make_empty_string_null('type') }} AS type,
         {{ trim_make_empty_string_null('charge_type') }} AS charge_type,
+        SAFE_CAST(NULL AS STRING) AS status, --new v3 field, not defined in v1
         SAFE_CAST({{ trim_make_empty_string_null('_line_number') }} AS INTEGER) AS _line_number,
         `instance`,
         extract_filename,
@@ -63,6 +64,7 @@ stg_littlepay__micropayments AS (
         currency_code,
         type,
         charge_type,
+        status,
         _line_number,
         `instance`,
         'v1' AS feed_version,

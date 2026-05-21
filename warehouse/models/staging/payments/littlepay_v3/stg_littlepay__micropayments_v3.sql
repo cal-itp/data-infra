@@ -27,7 +27,7 @@ clean_columns AS (
 
         -- renamed funding_source_id in v3, this was funding_source_vault_id in v1
         {{ trim_make_empty_string_null('funding_source_id') }} AS funding_source_vault_id,
-
+        {{ trim_make_empty_string_null('status') }} AS status, -- new v3 field, needed for filtering
         -- these are new fields in v3, excluding for now to faciliate union with feed v1
         -- record_updated_timestamp_utc,
         -- channel,
@@ -100,6 +100,7 @@ stg_littlepay__micropayments_v3 AS (
         currency_code,
         type,
         charge_type,
+        status, -- new v3 field, needed for filtering
 
         -- these are new fields in v3, excluding for now to faciliate union with feed v1
         -- record_updated_timestamp_utc,
