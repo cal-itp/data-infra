@@ -11,10 +11,10 @@ from airflow.operators.latest_only import LatestOnlyOperator
 with DAG(
     dag_id="parse_tides",
     tags=["tides"],
-    # 12pm UTC (5am PDT/4am PST) every day
-    schedule="0 12 * * *",
-    start_date=datetime(2026, 5, 1),
-    catchup=False,
+    # Monday, Thursday at 10am PDT/9am PST (17pm UTC)
+    schedule="0 17 * * 1,4",
+    start_date=datetime(2025, 12, 1),
+    catchup=False,  # Change to True when tests are done to run all days
     default_args={
         "email": os.getenv("CALITP_NOTIFY_EMAIL"),
         "email_on_failure": email_on_failure(),
