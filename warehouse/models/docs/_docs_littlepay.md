@@ -296,6 +296,16 @@ Possible values:
 * `REFUND`
 {% enddocs %}
 
+{%docs lp_mp_status %}
+The status of the micropayment. 
+
+Possible values: 
+* `CLOSED`
+* `CLOSING`
+* `DELETED`
+* `PENDING`
+{% enddocs %}
+
 -------------------------------- MICROPAYMENT ADJUSTMENTS TABLE --------------------------------
 
 {% docs lp_adj_type %}

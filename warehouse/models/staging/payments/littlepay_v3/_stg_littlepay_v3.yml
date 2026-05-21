@@ -375,6 +375,13 @@ models:
       - *payments_input_row_key
       - *_content_hash
       - *payments_key_full_uniqueness
+      - name: status
+        description: '{{ doc("lp_mp_status") }}'
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["CLOSED", "CLOSING", "DELETED", "PENDING"]
 
   - name: stg_littlepay__product_data_v3
     columns:
