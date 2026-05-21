@@ -75,7 +75,8 @@ publication_dim_records AS (
 -- SCD Type 2 join: resolve the dim record valid at vp_min_ts (the earliest
 -- VP timestamp for the trip), not the current state.
 filtered_observed AS (
-    SELECT o.*
+    SELECT o.*,
+           d.organization_source_record_id
     FROM observed AS o
     INNER JOIN publication_dim_records AS d
         ON d.vehicle_positions_gtfs_dataset_key = o.vp_gtfs_dataset_key
@@ -124,7 +125,8 @@ tides_trips_performed AS (
         -- Internal columns retained for partitioning and downstream joins;
         -- dropped at export.
         o.vp_base64_url AS base64_url,
-        o.vp_gtfs_dataset_key AS gtfs_dataset_key
+        o.vp_gtfs_dataset_key AS gtfs_dataset_key,
+        o.organization_source_record_id
     FROM filtered_observed o
     LEFT JOIN scheduled s
         ON s.trip_instance_key = o.trip_instance_key

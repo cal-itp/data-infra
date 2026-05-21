@@ -119,7 +119,6 @@ models:
           (the row whose `_valid_from`/`_valid_to` window covers the ping's
           extract timestamp). Internal — not a TIDES field; carried so
           `tides_publication_feeds` and the export DAG can key by organization.
-          Dropped at export time.
 
   - name: fct_tides_trips_performed
     description: |
@@ -220,6 +219,13 @@ models:
         description: '{{ doc("column_base64_url") }}'
       - name: gtfs_dataset_key
         description: '{{ doc("gtfs_schedule_gtfs_dataset_key") }}'
+      - name: organization_source_record_id
+        description: |
+          Persistent Airtable organization record ID, taken from the
+          `dim_provider_gtfs_data` row in effect when the ping was scraped
+          (the row whose `_valid_from`/`_valid_to` window covers the ping's
+          extract timestamp). Internal — not a TIDES field; carried so
+          `tides_publication_feeds` and the export DAG can key by organization.
 
   - name: tides_publication_feeds
     description: |
