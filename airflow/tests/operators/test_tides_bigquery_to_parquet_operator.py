@@ -22,7 +22,6 @@ class TestTIDESBigQueryToParquetOperator:
     @pytest.fixture
     def destination_path_prefix(self) -> str:
         return "vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/"  # -> data_*.parquet
-        # return "vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/dt=2026-04-01/"                   -> aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==.parquet
 
     @pytest.fixture
     def report_path(self) -> str:

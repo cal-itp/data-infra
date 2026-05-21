@@ -101,7 +101,6 @@ class TIDESBigQueryToParquetOperator(BaseOperator):
             "overwrite=true"
             ") AS SELECT * FROM `{dataset}.{table}`"
             " WHERE dt = CAST('{dt}' AS DATE)"
-            " AND organization_source_record_id = '{organization_source_record_id}'"
             " AND base64_url = '{base64_url}'"
         )
         return template.format(
@@ -112,7 +111,6 @@ class TIDESBigQueryToParquetOperator(BaseOperator):
             dataset=self.dataset_name,
             table=self.table_name,
             dt=self.dt,
-            organization_source_record_id=self.organization_source_record_id,
             base64_url=self.base64_url,
         )
 
