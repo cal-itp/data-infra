@@ -12,9 +12,10 @@ class BigQueryToDictOperator(BaseOperator):
         "dataset_name",
         "table_name",
         "select_columns",
-        "filter_column_name",
-        "filter_value",
-        "rows_limit",
+        "filter_date_column",
+        "filter_date_start",
+        "filter_date_end",
+        "order_column",
         "gcp_conn_id",
     )
 
@@ -23,9 +24,10 @@ class BigQueryToDictOperator(BaseOperator):
         dataset_name: str,
         table_name: str,
         select_columns: list[str],
-        filter_column_name: str,
-        filter_value: str,
-        rows_limit: int = 0,
+        filter_date_column: str,
+        filter_date_start: str,
+        filter_date_end: str,
+        order_column: str,
         gcp_conn_id: str = "google_cloud_default",
         **kwargs,
     ) -> None:
@@ -36,9 +38,10 @@ class BigQueryToDictOperator(BaseOperator):
         self.dataset_name: str = dataset_name
         self.table_name: str = table_name
         self.select_columns: list[str] = select_columns
-        self.filter_column_name: str = filter_column_name
-        self.filter_value: str = filter_value
-        self.rows_limit: int = rows_limit
+        self.filter_date_column: str = filter_date_column
+        self.filter_date_start: str = filter_date_start
+        self.filter_date_end: str = filter_date_end
+        self.order_column: str = order_column
         self.gcp_conn_id: str = gcp_conn_id
 
     def gcs_hook(self) -> GCSHook:
@@ -58,37 +61,15 @@ class BigQueryToDictOperator(BaseOperator):
             )
         return self._big_query_hook
 
-    def query(self) -> str:
-        template = (
-            "SELECT {columns}"
-            " FROM `{dataset}.{table}`"
-            " WHERE {filter_column} = {filter_value}"
-            " {limit}"
-        )
-        limit = f"LIMIT {self.rows_limit}" if self.rows_limit > 0 else ""
-
-        return template.format(
-            columns=",".join(self.select_columns),
-            dataset=self.dataset_name,
-            table=self.table_name,
-            filter_column=self.filter_column_name,
-            filter_value=self.filter_value,
-            limit=limit,
-        )
-
     def rows(self) -> list[list[str]]:
-        columns = (
-            ", ".join(self.select_columns) if len(self.select_columns) > 0 else "*"
-        )
-        limit = f"LIMIT {self.rows_limit}" if self.rows_limit > 0 else ""
         return self.bigquery_hook().get_records(
-            sql=f"SELECT {columns} FROM `{self.dataset_name}.{self.table_name}` WHERE {self.filter_column_name} = {self.filter_value} {limit}",
+            sql=f"""
+                SELECT {", ".join(self.select_columns)}
+                FROM `{self.dataset_name}.{self.table_name}`
+                WHERE {self.filter_date_column} BETWEEN CAST('{self.filter_date_start}' AS DATE) AND CAST('{self.filter_date_end}' AS DATE)
+                ORDER BY {self.filter_date_column}, {self.order_column}
+            """,
         )
 
     def execute(self, context: Context) -> str:
         return [dict(zip(self.select_columns, row)) for row in self.rows()]
-        # return self.bigquery_hook().get_records(
-        #     sql_results=self.rows(),
-        #     as_dict=True,
-        #     selected_fields=None
-        # return self.rows()

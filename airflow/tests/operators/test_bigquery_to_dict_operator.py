@@ -11,7 +11,7 @@ from airflow.providers.google.cloud.hooks.gcs import GCSHook
 class TestBigQueryToDictOperator:
     @pytest.fixture
     def execution_date(self) -> datetime:
-        return datetime.fromisoformat("2026-04-01").replace(tzinfo=timezone.utc)
+        return datetime.fromisoformat("2026-04-02").replace(tzinfo=timezone.utc)
 
     @pytest.fixture
     def gcs_hook(self) -> GCSHook:
@@ -41,11 +41,14 @@ class TestBigQueryToDictOperator:
             select_columns=[
                 "dt",
                 "organization_source_record_id",
+                "vehicle_positions_source_record_id",
                 "feed_name",
                 "base64_url",
             ],
-            filter_column_name="dt",
-            filter_value="CAST('2026-04-01' AS DATE)",
+            filter_date_column="dt",
+            filter_date_start=(execution_date - timedelta(days=1)).strftime("%Y-%m-%d"),
+            filter_date_end=execution_date.strftime("%Y-%m-%d"),
+            order_column="feed_name",
             dag=test_dag,
         )
 
@@ -68,21 +71,45 @@ class TestBigQueryToDictOperator:
         xcom_value = task_instance.xcom_pull()
         assert xcom_value == [
             {
-                "base64_url": "aHR0cHM6Ly9hcGkuZ29zd2lmdC5seS9yZWFsLXRpbWUvbGFtZXRyby9ndGZzLXJ0LXZlaGljbGUtcG9zaXRpb25z",
-                "dt": "2026-04-01",
-                "feed_name": "LA Metro Bus Vehicle Positions",
-                "organization_source_record_id": "recPnGkwdpnr8jmHB",
-            },
-            {
                 "base64_url": "aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==",
                 "dt": "2026-04-01",
                 "feed_name": "Beach Cities VehiclePositions",
                 "organization_source_record_id": "rec8zhnCPETu6qEiH",
+                "vehicle_positions_source_record_id": "recUKDWE8Vq7rRAPM",
+            },
+            {
+                "base64_url": "aHR0cHM6Ly9hcGkuZ29zd2lmdC5seS9yZWFsLXRpbWUvbGFtZXRyby9ndGZzLXJ0LXZlaGljbGUtcG9zaXRpb25z",
+                "dt": "2026-04-01",
+                "feed_name": "LA Metro Bus Vehicle Positions",
+                "organization_source_record_id": "recPnGkwdpnr8jmHB",
+                "vehicle_positions_source_record_id": "rectUboB2NipaQROx",
             },
             {
                 "base64_url": "aHR0cHM6Ly9hcGkuZ29zd2lmdC5seS9yZWFsLXRpbWUvdG9ycmFuY2UvZ3Rmcy1ydC12ZWhpY2xlLXBvc2l0aW9ucw==",
                 "dt": "2026-04-01",
                 "feed_name": "Torrance Swiftly Vehicle Positions",
                 "organization_source_record_id": "recvzE9NXgGMmqcTH",
+                "vehicle_positions_source_record_id": "rece8srb8wQEhqzh9",
+            },
+            {
+                "base64_url": "aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==",
+                "dt": "2026-04-02",
+                "feed_name": "Beach Cities VehiclePositions",
+                "organization_source_record_id": "rec8zhnCPETu6qEiH",
+                "vehicle_positions_source_record_id": "recUKDWE8Vq7rRAPM",
+            },
+            {
+                "base64_url": "aHR0cHM6Ly9hcGkuZ29zd2lmdC5seS9yZWFsLXRpbWUvbGFtZXRyby9ndGZzLXJ0LXZlaGljbGUtcG9zaXRpb25z",
+                "dt": "2026-04-02",
+                "feed_name": "LA Metro Bus Vehicle Positions",
+                "organization_source_record_id": "recPnGkwdpnr8jmHB",
+                "vehicle_positions_source_record_id": "rectUboB2NipaQROx",
+            },
+            {
+                "base64_url": "aHR0cHM6Ly9hcGkuZ29zd2lmdC5seS9yZWFsLXRpbWUvdG9ycmFuY2UvZ3Rmcy1ydC12ZWhpY2xlLXBvc2l0aW9ucw==",
+                "dt": "2026-04-02",
+                "feed_name": "Torrance Swiftly Vehicle Positions",
+                "organization_source_record_id": "recvzE9NXgGMmqcTH",
+                "vehicle_positions_source_record_id": "rece8srb8wQEhqzh9",
             },
         ]

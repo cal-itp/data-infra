@@ -36,8 +36,10 @@ with DAG(
             "feed_name",
             "base64_url",
         ],
-        filter_column_name="dt",
-        filter_value="CAST('{{ ds }}' AS DATE)",
+        filter_date_column="dt",
+        filter_date_start="{{ macros.ds_add(ds, -3) }}",
+        filter_date_end="{{ ds }}",
+        order_column="feed_name",
     )
 
     export_vehicle_locations_to_parquet = BigQueryToParquetOperator.partial(
