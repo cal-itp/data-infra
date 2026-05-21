@@ -48,7 +48,7 @@ class TestBigQueryToDictOperator:
             filter_date_column="dt",
             filter_date_start=(execution_date - timedelta(days=1)).strftime("%Y-%m-%d"),
             filter_date_end=execution_date.strftime("%Y-%m-%d"),
-            order_column="feed_name",
+            order_columns="dt, feed_name",
             dag=test_dag,
         )
 

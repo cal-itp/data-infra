@@ -15,7 +15,7 @@ class BigQueryToDictOperator(BaseOperator):
         "filter_date_column",
         "filter_date_start",
         "filter_date_end",
-        "order_column",
+        "order_columns",
         "gcp_conn_id",
     )
 
@@ -27,7 +27,7 @@ class BigQueryToDictOperator(BaseOperator):
         filter_date_column: str,
         filter_date_start: str,
         filter_date_end: str,
-        order_column: str,
+        order_columns: str,
         gcp_conn_id: str = "google_cloud_default",
         **kwargs,
     ) -> None:
@@ -41,7 +41,7 @@ class BigQueryToDictOperator(BaseOperator):
         self.filter_date_column: str = filter_date_column
         self.filter_date_start: str = filter_date_start
         self.filter_date_end: str = filter_date_end
-        self.order_column: str = order_column
+        self.order_columns: str = order_columns
         self.gcp_conn_id: str = gcp_conn_id
 
     def gcs_hook(self) -> GCSHook:
@@ -67,7 +67,7 @@ class BigQueryToDictOperator(BaseOperator):
                 SELECT {", ".join(self.select_columns)}
                 FROM `{self.dataset_name}.{self.table_name}`
                 WHERE {self.filter_date_column} BETWEEN CAST('{self.filter_date_start}' AS DATE) AND CAST('{self.filter_date_end}' AS DATE)
-                ORDER BY {self.filter_date_column}, {self.order_column}
+                ORDER BY {self.order_columns}
             """,
         )
 

@@ -1,6 +1,6 @@
 interactions:
 - request:
-    body: '{"jobReference": {"jobId": "airflow_1779349296632848_b1ce7bf4739be3dd463a0077a4bcf46f",
+    body: '{"jobReference": {"jobId": "airflow_1779357777550367_b1ce7bf4739be3dd463a0077a4bcf46f",
       "projectId": "cal-itp-data-infra-staging", "location": "us-west2"}, "configuration":
       {"query": {"query": "\n                SELECT dt, organization_source_record_id,
       vehicle_positions_source_record_id, feed_name, base64_url\n                FROM
@@ -31,21 +31,21 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAC/6VUbW/aSBD+K5b7oVcV8Cs2RoruCLhNqhwkxmkU6SR3vJ51tjFeurtOlFb977e2
-        gbahPenu+GCheebleWZ25ot5z+rCnJo5Kz81KJ5efOS5OTBRQamt9tt37968Xl2+va0+06vX5dnK
-        mV9fnZxoD9ZGEaiGTG2HBSgYspoKGEodyepy2sjhI0rljoAJWvHHzAnDyPMjNwoCz534kyx3CIY5
-        9UMvytErCj/wwLbDEPycUD+guojEil6w+l6XulNqK6eWtSc6KjkvK4QtkyPCNwe79eBaW8E/IlHS
-        +jU/S+uU1n/m9nvFCSjG65O9Ts2W8JqyshEdYE6/mB2h7/6Yf9XGs986vojnqVGogcFFCTX73EVn
-        kjeCYCaQcFFkrBgYD3jHSIXZlkvWusif+FDEIqthgwMjB4mBnzWiOi76Jln9aXzYgFCZYgXKUffN
-        tk1esV5W1maSH45Db87iJNZ0jdM4vYnjpTGfrdPfXrq2Gwxtf2g7L43Z2ljM0viVMVsunsPuN/g4
-        9ypZxIlxett14yDlRz/dZk1VsbqjmUJeYdvg3cTP//lRtsHaKLF3zPxxHgRuNEFwCAXwHSeIAqfI
-        XShc8Kg3phEBh/o6TrWVuiioeQ2TgE68ie1jEIaO57ohhbEN0NopROOoKDxAgp7r2xElthuOPRtC
-        h4b5JNJh5teB+SiYwgWT+3nq1DfJeRpnaXK9nOsO6apbwbh2a5/O+TKNk9k8PX/fAo3ECyyBPK0/
-        VeaUQiVRp9RvOn3a6oaYV9dxcmv2pgQpCqzJv2uUDuzl/o/13S+JTnNYE81JF1FMz5DIlhER2M+S
-        bVrmfZ1xEIWeNzE7Z6GOsNAZt1eqLo6QidciiiuoTp8UykvBCUqJrRZbI4ed/LXLN+SUVdXBTIDc
-        4RlT5lSJBnsZuMFa7Xrer7L5daew6dR1ThpcrJZxq11PtCZsC1Umm7ydhMYONn3eGGyeX7Z9F6VV
-        VjyHynrk4p5yvfqXnFfSKrgaEhiW/MHa5bRiwe5hdNkSJvwP7TAioNM+9HOd7zqeIMj+UBFetCST
-        WL+bdRovtIi/AW+4PXoaBgAA
+        H4sIAAAAAAAC/6VUbW/bNhD+K4L2oRsQW6+WLAPB5tjaGjRzElmdF2CAeqKOChtZdEgqQVb0v4+U
+        bHeL1wHb+EEQ7p67e547Hj/ZD6yt7JldsvqxQ/HyzUde2mc2KqiN1Q0379hqk96uMPs1fPcTv3u8
+        nZ+fawQzUQSaEVO7UQUKRqylAkZSR7K2nnVy9IxS+WNggjb8ufDiOAkmsT6TiRtEcVF6BOOShnGQ
+        lBhUVRgF4LpxDGFJaBhRXURiQ69Y+6BL3Su1kzPHORAd15zXDcKOyTHh26PdefKdneAfkSjpfJ2f
+        o3VK5z9z+77hBBTj7flBp2ZLeEtZ3YneYc8+2T2hP/3Yv7XWq7NOr9JFblXqzOKihpb93kcXkneC
+        YCGQcFEVrDqznvCekQaLHZfMQOTfYChiVbSwxTOrBIlRWHSiOS36Y3b9s/VhC0IVilUox/232HVl
+        wwZZhckkP5yGbt6mWarpWhdpvknTlbWYr/Nv3/iuH43ccOR6b6z52lrO8/Q7a75avnb7X9ynua+z
+        ZZpZF3d9N45S/orTbdZUFWt7mjmUDZoG7yd++c+X0gRro8QBWISTMor8ZIrgEQoQel6URF5V+lD5
+        ENBgQhMCHg11nDKV+ihoeQvTiE6DqRtiFMde4PsxhYkLYOwUkklSVQEgwcAP3YQS148ngQuxR+Ny
+        mugw+/OZ/SyYwiWTh3nq1JvsMk+LPHu/WugO6ao7wbiGmatzucrTbL7IL38xjk7iFdZAXtaPjT2j
+        0EjUKfWdzl92uiH27fs0u7MHU4YUBbbk3zVKBw5y/8f6HpZEpzmuieakiyimZ0ikYUQEDrNkW8N8
+        qBN68dQPXLsHC3Xii9yJeaXa6tSTTM24uILm4kWhvBGcoJRotJh8x538OuSL54I1zdFMgNzjW6bs
+        mRIdDjJwi63a93xYZfvzXmHXq+tB2rm8XqVGu55oS9gOmkJ2pZmE9h1t+nljsH39sh26KJ264SU0
+        zjMXD5Tr1b/hvJFOxdWIwKjmT84+p5MK9gDjG0OY8B80YExAp30a5rrYdzxDkMNDRXhlSGapvjfr
+        PF1qEX8AuudDBBoGAAA=
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -54,9 +54,9 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Thu, 21 May 2026 06:41:37 GMT
+      - Thu, 21 May 2026 09:02:58 GMT
       ETag:
-      - 0GJJF+OPGYlzfQ+gHO1CUQ==
+      - b04WKiNWEQNeRX4KGoYqQA==
       Server:
       - ESF
       Transfer-Encoding:
@@ -92,24 +92,24 @@ interactions:
       x-goog-user-project:
       - cal-itp-data-infra-staging
     method: GET
-    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/airflow_1779349296632848_b1ce7bf4739be3dd463a0077a4bcf46f?location=us-west2&maxResults=0&prettyPrint=false
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/airflow_1779357777550367_b1ce7bf4739be3dd463a0077a4bcf46f?location=us-west2&maxResults=0&prettyPrint=false
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAC/6VUXXOjNhT9L/Q1njpA7CQz+yCBLMBIBCGbSJ2OB4PsZZcYF+SmaSb/vRfvzvat
-        0071onuGc4/O/Rjena/tqXEenX17/O1ihrefjsbmUyDMeOnsCNe5P43GuXGMrY7AfLrnBbHz9Ofb
-        P2rL5upuxS4N+vQJGGP92bxUzuO7c2hN14zO4y/vzql6MZDWWCDYt/MUh0gSQC99MyG+SVOEU+J8
-        3Pxg98OxOrV/VrbtT7uxvwy12Q2m7odm1zZ/CxVSxJz+s9Tv5nNbd2Z37sd2khv/p97BmGZ3jf9T
-        2r4azcLfXYbu3+T9+nHjfOn3whzMYE61mXp6HvovprbxNK666matPc+aylaz9nQYqtkI42lPR+ea
-        eCVV7XDo+tfd7XL54PkP7sNi4bn3/v1uf1ub5f7gL72HvfGaxl941Xy+XFb+vj74iwNodH19bT7I
-        XMbZqxmtC9U4trdVJ/pXGK2zANq5OhrZfzUTD5Otq0SQSIVyhFCBfIIQISgPEFrTPMYIYbx8XsLJ
-        s3iVb9V6s01UgBMfbZJ4HSaiDDzM+cqNUJoStnJpkKYJ1zIiKuEZB6y9CYvwySMRJqWPppMExbPe
-        0K0IGRdFRHy6VolgXNJAJRtKlGRZUtJVQQmTmOWaBsyjlLkly9KQEVUyjlwi8hL4kolcEo45zXUZ
-        czHdIVOCs9iVFHxQ5UmmZMA2uiRcPDPlCiJCzPVz6atEUS3DnGlFkUvX8J36SlImCnoHfniSsxW8
-        k+GSacBZso3AV8w8zLaiXDNd0FyFBWhQpMOMJ5LiXGYspfROhHmWTLp4o1McIY+yDMsIqTDWUJ/v
-        gSnIj72SqWQLeVM9kx8KWNONX8YaS7YqSqpBN3ZDlKWUMRUSrrdAAn9aMOWVJMP6qhvrnPJcBtDL
-        iHiBm+GCahG4PAxhKAVgeKeYMGGJgL5qPfUPcZ0739cFv1kzPg19bcbRTHs5/7ajQf9y7oyF3bbD
-        xdzATsPvI2rtN/zxF78XAlGbBAAA
+        H4sIAAAAAAAC/6VUXY+bOBT9L+zrRDsFkmxH6oMNjsHBphgnjL1aRQSclDYDLJCOpqP573tJV+3b
+        alfrF98jzj0+90O8Ol+atnYenGNz/vNqh5dfznbK5kDa8XqZRrj6rh2tc+fYqTwDs1v6Vqy+8f4Y
+        iKW//9Vr+9/85w8fgDFWn+xT6Ty8OqfGXurRefj91WnLJwtp9QSE6aWf4xApAuipq2ckdkmCcEKc
+        t7sf7G44l23zrZyarj2M3XWo7GGwVTfUh6b+KZQrGQv6z1Jf7aemuthD343NLDf+T72TtfXhFv+n
+        tGM52pV/uA6Xf5P3x9ud87k7Snuyg20rO/e0H7rPtprieVxVeVk0U7+oy6lcNO1pKBcjjKdpz84t
+        8UYqm+F06Z4P79br995yDWe5vPdW68PxXWXXx5O/9t4frVfX/sor7+/X69I/Vid/dQKNS1fdmg8y
+        13HxbMfJhWqcqZvKi+yeYbTOCmh9ebaq+2JnHqYbzGTOlEYZQihHPkGIEJQFCG1pFmOEMF4/zj6y
+        NN5ke73d7ZkOMPPRjsXbkMki8LAQGzdCSUL4xqVBkjBhVEQ0E6kAbLwZy/CjRyJMCh/NhwX5o9nR
+        vQy5kHlEfLrVTHKhaKDZjhKteMoKuskp4QrzzNCAe5Ryt+BpEnKiCy6QS2RWAF9xmSkisKCZKWIh
+        5zvkWgoeu4qCD6o9xbUK+M4URMhHrl1JZIiFeSx8zTQ1Ksy40RS5dAvfqa8V5TKnS/AjWMY38E6K
+        C24Ap2wfga+Ye5jvZbHlJqeZDnPQoMiEqWCK4kylPKF0KcMsZbMu3pkER8ijPMUqQjqMDdTne2AK
+        8mOv4JrtIW+uZ/ZDARu684vYYMU3eUEN6MZuiNKEcq5DIsweSODPSK69gqTY3HRjk1GRqQB6GREv
+        cFOcUyMDV4QhDCUHDO/kMyacSeirMXP/kDCZ8/e64JfJjh+HrrLjaOe9vP++o0H31F/sBLs9DVd7
+        BzsNv4+omb7jt78Ad0P1hZsEAAA=
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -118,9 +118,9 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Thu, 21 May 2026 06:41:38 GMT
+      - Thu, 21 May 2026 09:02:58 GMT
       ETag:
-      - P8NSEt0L/1xctM0Y5FMudA==
+      - o54eN6zMpbCN54V/3np84w==
       Server:
       - ESF
       Transfer-Encoding:
@@ -156,24 +156,24 @@ interactions:
       x-goog-user-project:
       - cal-itp-data-infra-staging
     method: GET
-    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/airflow_1779349296632848_b1ce7bf4739be3dd463a0077a4bcf46f?alt=json&location=us-west2
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/airflow_1779357777550367_b1ce7bf4739be3dd463a0077a4bcf46f?alt=json&location=us-west2
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAC/+1WS2/aQBC+8yss9xokY4jBlXoIlJi0hoIDAVxFaL07xpvYXrO7NjFV/nttQx6H
-        tiKKkl5y8e48P2vm29H8qimKektjon5WVI+uNynw/NMa5KS8OCDSUIriSFgsQD0pvUGidem9HnZc
-        bf1N3sEpF6OLTXKxYaPtly97L4EDiFDh96uQCtmnEBJRyD8rWTnoK1uMIigzElnFHrQyTyrt17Np
-        /7k+YqTSj2a2fda1++rBdH/y98yMr1FMd0hSFq8ESzmGFQfMOFlR8ifQy6lzMbJeC5tBQHEIq4QJ
-        WkKLd8T2AciqEt4MwkMCjNYq5eErMarzunZAU2+Y54APHGIMTwxKOLsBLC8qqmIU1qlM6gRJVKex
-        z1FdFLyk8foAWCbZuyLK/ZBtV41222y2TN00jKbeaXVWXgND2/Nb7abpQZOQltFEmtZuo5aH/Zbh
-        P2QKGa6IUyZLRX0LQurq489KJlHosG3JbdXYk5/vxT3VHwqn+s/Y/7yehSkrg3VNN+paq6411Efb
-        /ck/AgoWdXZB3Bv3p6mx6dPB8XGz71/n/c7Vps2ds/HwyLguIBwovYLKIJSrPbfHD9Q+MgcaOBoe
-        DA07N3N37mRe5GTL6CpY6gFdNifpUjelrRPNjYcSx5OMRFcMzUfCXXQzrIcampspLqfME9zhdl17
-        Bv6mRR/H1u2WJDHv3ESD7vFxcuaxrj6iCZo4P+6OjLPPlCFIzpRu+lh05RVVD7B1m7q6uSN6GJHe
-        qYDLshPnwl44iTefZZ51Lt2Fk3u5GRPL3dmLb5q9cENkhTeeNZPYMneo9NVPd/+zC9mub44Wa2sY
-        bfD0BdSHjuBeZzvpB5tdYB4ZN2Wco2IcKZdb6sswf5dOEMvMcXRevIlZ5jadCOeNnPQaujsPkqV+
-        F9pv/Sb0j0H0/oPoBUX/GERvNohe0IWPQXT0ICq+109bUzeXIMacYRACql1NUx8WwB6LkhBkuf9J
-        nkKlxsWrhwGVB13tvvYbKWai878MAAA=
+        H4sIAAAAAAAC/+1WW2+qShR+91cQ9mtNEC/ISfpQrcV9DrqValVOGjPMLGRaYHBmwI1N//sBtJeH
+        vXdsmva8lAeYdf3IWt+srIeaoqj3NCbqX4rq0c02BZ5/24CclgcHRBpKUXwSFgtQz0pvkGhTeifT
+        OdUv9WFsby772J50PbK93pyfH7wEDiBChd9DIRWyTyEkopD/rWTlqK9sMYqgzEhkFXvUyjyptJcX
+        s8FrfcRIpR/PbfuiZw/Uo+nx7PeZGd+gmO6RpCxeC5ZyDGsOmHGypuRXoNcz5/vYei9sBgHFIawT
+        JmgJLT4R2wcg60r4MAgPCei01ikP34lRfW9rRzT1jnkO+MAhxvDCoISzO8Dye0VVjMI6lUmdIInq
+        NPY5qouClzTeHAHLJAdXRLkfst26YRhms20UT7utNTvG2mtgMDy/ZTRND5qEtDpNpGmGgVoe9lsd
+        /ylTyHBFnDJZKuo7EFJXn39WMolCh+1KbqudA/n5QTxQ/alwqv+K/a/rWZiyMljX9E5da9W1hvps
+        ezz7Q0DBou4+iPuTwSztbAd0eHrc/J/LxaB7szW4czEZnRjXA4QDpV9QGYRyc+D25InaJ+ZAQ0fD
+        w1HHzs3cXTiZFznZKroJVnpAV81putJNaetEc+ORxPE0I9ENQ4uxcJe9DOuhhhZminfFlHmBO55u
+        a6/AP7Tok9i635Ek5t27aNg7PU7OPdbTxzRBU+fHzxPj7AtlBJIzpZc+F115R9UDbN2nrm7uiR5G
+        pN8WcF124krYSyfxFvPMs66ku3RyLzdjYrl7e/m3Zi/dEFnhnWfNJbbMPSp99fb+/+xCth+Y4+XG
+        GkVbPHsD9aEruNfdTQfBdh+YJ8bNGOeoGEfK9Y76Msw/pRPEMnMcXRV3Yp65TSfCeSMn/YbuLoJk
+        pf8M7Y++E/rXIPr8QfSGon8Nog8bRG/owtcgOnkQFe/bl62pl0sQE84wCAHVrqapTwtgn0VJCLLc
+        /yRPoVLj4tbDkMqjrvZY+w/CtDBCvwwAAA==
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -182,9 +182,9 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Thu, 21 May 2026 06:41:38 GMT
+      - Thu, 21 May 2026 09:02:59 GMT
       ETag:
-      - gM8Z0gJtxe5rsNIqpIqoNw==
+      - pQUi2D2HnLgDCcLP8bdqSg==
       Server:
       - ESF
       Transfer-Encoding:
@@ -220,24 +220,24 @@ interactions:
       x-goog-user-project:
       - cal-itp-data-infra-staging
     method: GET
-    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/airflow_1779349296632848_b1ce7bf4739be3dd463a0077a4bcf46f?alt=json&location=us-west2
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/airflow_1779357777550367_b1ce7bf4739be3dd463a0077a4bcf46f?alt=json&location=us-west2
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAC/+1WS2/aQBC+8yss9xokY4jBlXoIlJi0hoIDAVxFaL07xpvYXrO7NjFV/nttQx6H
-        tiKKkl5y8e48P2vm29H8qimKektjon5WVI+uNynw/NMa5KS8OCDSUIriSFgsQD0pvUGidem9HnZc
-        bf1N3sEpF6OLTXKxYaPtly97L4EDiFDh96uQCtmnEBJRyD8rWTnoK1uMIigzElnFHrQyTyrt17Np
-        /7k+YqTSj2a2fda1++rBdH/y98yMr1FMd0hSFq8ESzmGFQfMOFlR8ifQy6lzMbJeC5tBQHEIq4QJ
-        WkKLd8T2AciqEt4MwkMCjNYq5eErMarzunZAU2+Y54APHGIMTwxKOLsBLC8qqmIU1qlM6gRJVKex
-        z1FdFLyk8foAWCbZuyLK/ZBtV41222y2TN00jKbeaXVWXgND2/Nb7abpQZOQltFEmtZuo5aH/Zbh
-        P2QKGa6IUyZLRX0LQurq489KJlHosG3JbdXYk5/vxT3VHwqn+s/Y/7yehSkrg3VNN+paq6411Efb
-        /ck/AgoWdXZB3Bv3p6mx6dPB8XGz71/n/c7Vps2ds/HwyLguIBwovYLKIJSrPbfHD9Q+MgcaOBoe
-        DA07N3N37mRe5GTL6CpY6gFdNifpUjelrRPNjYcSx5OMRFcMzUfCXXQzrIcampspLqfME9zhdl17
-        Bv6mRR/H1u2WJDHv3ESD7vFxcuaxrj6iCZo4P+6OjLPPlCFIzpRu+lh05RVVD7B1m7q6uSN6GJHe
-        qYDLshPnwl44iTefZZ51Lt2Fk3u5GRPL3dmLb5q9cENkhTeeNZPYMneo9NVPd/+zC9mub44Wa2sY
-        bfD0BdSHjuBeZzvpB5tdYB4ZN2Wco2IcKZdb6sswf5dOEMvMcXRevIlZ5jadCOeNnPQaujsPkqV+
-        F9pv/Sb0j0H0/oPoBUX/GERvNohe0IWPQXT0ICq+109bUzeXIMacYRACql1NUx8WwB6LkhBkuf9J
-        nkKlxsWrhwGVB13tvvYbKWai878MAAA=
+        H4sIAAAAAAAC/+1WW2+qShR+91cQ9mtNEC/ISfpQrcV9DrqValVOGjPMLGRaYHBmwI1N//sBtJeH
+        vXdsmva8lAeYdf3IWt+srIeaoqj3NCbqX4rq0c02BZ5/24CclgcHRBpKUXwSFgtQz0pvkGhTeifT
+        OdUv9WFsby772J50PbK93pyfH7wEDiBChd9DIRWyTyEkopD/rWTlqK9sMYqgzEhkFXvUyjyptJcX
+        s8FrfcRIpR/PbfuiZw/Uo+nx7PeZGd+gmO6RpCxeC5ZyDGsOmHGypuRXoNcz5/vYei9sBgHFIawT
+        JmgJLT4R2wcg60r4MAgPCei01ikP34lRfW9rRzT1jnkO+MAhxvDCoISzO8Dye0VVjMI6lUmdIInq
+        NPY5qouClzTeHAHLJAdXRLkfst26YRhms20UT7utNTvG2mtgMDy/ZTRND5qEtDpNpGmGgVoe9lsd
+        /ylTyHBFnDJZKuo7EFJXn39WMolCh+1KbqudA/n5QTxQ/alwqv+K/a/rWZiyMljX9E5da9W1hvps
+        ezz7Q0DBou4+iPuTwSztbAd0eHrc/J/LxaB7szW4czEZnRjXA4QDpV9QGYRyc+D25InaJ+ZAQ0fD
+        w1HHzs3cXTiZFznZKroJVnpAV81putJNaetEc+ORxPE0I9ENQ4uxcJe9DOuhhhZminfFlHmBO55u
+        a6/AP7Tok9i635Ek5t27aNg7PU7OPdbTxzRBU+fHzxPj7AtlBJIzpZc+F115R9UDbN2nrm7uiR5G
+        pN8WcF124krYSyfxFvPMs66ku3RyLzdjYrl7e/m3Zi/dEFnhnWfNJbbMPSp99fb+/+xCth+Y4+XG
+        GkVbPHsD9aEruNfdTQfBdh+YJ8bNGOeoGEfK9Y76Msw/pRPEMnMcXRV3Yp65TSfCeSMn/YbuLoJk
+        pf8M7Y++E/rXIPr8QfSGon8Nog8bRG/owtcgOnkQFe/bl62pl0sQE84wCAHVrqapTwtgn0VJCLLc
+        /yRPoVLj4tbDkMqjrvZY+w/CtDBCvwwAAA==
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -246,9 +246,9 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Thu, 21 May 2026 06:41:38 GMT
+      - Thu, 21 May 2026 09:02:59 GMT
       ETag:
-      - gM8Z0gJtxe5rsNIqpIqoNw==
+      - pQUi2D2HnLgDCcLP8bdqSg==
       Server:
       - ESF
       Transfer-Encoding:
@@ -267,7 +267,7 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: '{"jobReference": {"jobId": "airflow_1779349299303643_b1ce7bf4739be3dd463a0077a4bcf46f",
+    body: '{"jobReference": {"jobId": "airflow_1779357780203089_b1ce7bf4739be3dd463a0077a4bcf46f",
       "projectId": "cal-itp-data-infra-staging", "location": "us-west2"}, "configuration":
       {"query": {"query": "\n                SELECT dt, organization_source_record_id,
       vehicle_positions_source_record_id, feed_name, base64_url\n                FROM
@@ -298,21 +298,21 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAC/6VU227bRhD9FYJ9SAtI4lWkKMBodWERA47kUEzcAAWY4XJWXpviKrtLCW6Qf+8u
-        KSmN3RRoqwdCmDkzc85c9rP9yJrKntol235qUTz98MBLe2Cjgq22vvXc9Xr+8N4TBy/2385/u5F5
-        eby60ghmogjUQ6b2wwoUDFlDBQyljmTNdtrK4RGl8kfABK35sfDiOAnCxE+SwA2iMChKj2Bc0jAO
-        khKDqgqjAFw3jiEsCQ0jqotIrOkNax51qXul9nLqOGeioy3n2xphz+SI8N3F7hx8Zy/4AxIlne/z
-        c7RO6fxnbj/XnIBivLk669RsCW8o27aic9jTz3ZH6C9/7N8b69lvk96ki9yq1MDiYgsN+6OLLiRv
-        BcFCIOGiKlg1sA54z0iNxZ5LZiDybzAUsSoa2OHAKkFiFBatqF8W/TVbv7E+7kCoQrEK5aj7Fvu2
-        rFkvqzCZ5MeXoXev0yzVdK15mt+l6cpazDb5j69814+Gbjh0vVfWbGMtZ3n6kzVbLZ+7/a/ul7nX
-        2TLNrPmHrhsXKd/idJs1VcWajmYOZY2mwaeJX//zUppgbZTYA4twXEaRn0wQPEIBQs+LksirSh8q
-        HwIajGlCwKOhjlOmUhcFDW9gEtFJMHFDjOLYC3w/pjB2AYydQjJOqioAJBj4oZtQ4vrxOHAh9mhc
-        ThIdZn8Z2EfBFC6ZPM9Tp77LrvO0yLN3q4XukK66F4xrmFmd61WeZrNFfv3eOFqJN7gF8rT5VNtT
-        CrVEnVLvdP60R3O479Lsg92bMqQosCH/rlE6sJf7P873fCQ6zeVMNCddRDE9QyINIyKwnyXbGeZ9
-        nXGUJMnYtTuwUN/6YtcNPHNw2FQvPKFvPIorqOdPCuWt4ASlRKPF5Lvc5PchXz1zVtcXMwFyj6+Z
-        sqdKtNjLwB026tTz/pTtLyeFbaeuA2nncr1KjXY90YawPdSFbEszCe272PTzxmD3/GU7d1E625qX
-        UDtHLh4p16d/y3ktnYqrIYHhlh+cU04nFewRRreGMOG/aMCIgE576Oe6OHU8Q5D9Q0V4ZUhmqd6b
-        TZ4utYg/Af2QlJgaBgAA
+        H4sIAAAAAAAC/6VUbW/bRgz+K4L2oRtmWa/Wi4Fgc2ytDZY6qawuKDBApU485RpZp96dEqRF//tO
+        ku1uyTpgmz8IBvmQfB7yyM/mHWsrc2mWrP7Yo3j87gMvzZmJCmpt/dSL9Y/8pR12+ev2TdZzhb/6
+        9dmZRrAhikBjMdVZFSiwWEsFWFJHsrZe9tJ6QKm8OTBBG/5QuFGU+Isoih3P8Z04KUqXYFTSIPKT
+        Ev2qCkIfHCeKICgJDUKqi0hs6CVr73SpW6U6ubTtI9F5zXndIHRMzgnfn+z2vWd3gn9AoqT9bX62
+        1int/8ztp4YTUIy3Z0edmi3hLWV1L0aHufxsjoT+9Mf8vTWe/HbpZbrOjUrNDC5qaNmnMbqQvBcE
+        C4GEi6pg1cy4x1tGGiw6LtkAkX+DoYhV0cIeZ0YJEsOg6EXzvOgv2dVr4/0ehCoUq1DOx2/R9WXD
+        JlnFkEm+fx568yrNUk3XOE/zmzTdGuvVLv/+hed4oeUEluO+MFY7Y7PK0x+M1Xbz1O19dT/PfZVt
+        0sw4fzd24yTlrzjdZk1VsXakmUPZ4NDgw8Qv/vlRDsHaKHECFsGiDEMviRFcQgEC1w2T0K1KDyoP
+        fOovaELApYGOU0OlMQpa3kIc0tiPnQDDKHJ9z4soLByAwU4hWSRV5QMS9L3ASShxvGjhOxC5NCrj
+        RIeZX2bmg2AKN0we56lT32QXeVrk2dvtWndIV+0E4xo2PJ2LbZ5mq3V+8dvg6CVeYg3kcfexMZcU
+        Gok6pX7T+WOnG2K+eZtm78zJlCFFgS35d43SgZPc/7G+xyXRaU5rojnpIorpGRI5MCICp1my/cB8
+        qhO4sRMFoTmChXrqc50kHq5UWz3zuNGwiooraM4fFcprwQlKiYMWR3tOO/ltyFfPOWuak5kAucVX
+        TJlLJXqcZOAeW3Xo+bTK5peDwn5UN4K0c3O1TQfteqItYR00hezLYRLad7Lp88Zg//SyHbso7brh
+        JTT2Axd3lOvVv+a8kXbFlUXAqvm9fchpp4Ldwfx6IEz4zxowJ6DT3k9zXR86niHI6VARXg0ks1S/
+        m12ebrSIPwBozIkAGgYAAA==
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -321,9 +321,9 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Thu, 21 May 2026 06:41:40 GMT
+      - Thu, 21 May 2026 09:03:01 GMT
       ETag:
-      - Q10OOBjV1rv172QBXLsTbw==
+      - zurC+oG/6pTMnQRuoteK3g==
       Server:
       - ESF
       Transfer-Encoding:
@@ -359,24 +359,24 @@ interactions:
       x-goog-user-project:
       - cal-itp-data-infra-staging
     method: GET
-    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/airflow_1779349299303643_b1ce7bf4739be3dd463a0077a4bcf46f?location=us-west2&maxResults=0&prettyPrint=false
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/airflow_1779357780203089_b1ce7bf4739be3dd463a0077a4bcf46f?location=us-west2&maxResults=0&prettyPrint=false
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAC/6VUXY+jNhT9L/R1ImWBTZSR9sEGx0CwGRsTYldVRMDJspsJGSA7mo7mv/eSrdq3
-        qlX94nvEucfnfoh353t7aZxH59CeXm62f/vlZEcxBdIOt/M4wHXtLoN1Hhw7Vidgbht5nO+YeHkj
-        LzeyumXFU++LL1+AMdRf7XPlPL47x9aem8F5/PXduVTPFtKaEQjj23WKQ6QIoOeumRAv0hThlDgf
-        D3+xu/5UXdrfq7HtLvuhu/W13fe27vpm3zZ/C+VKxpz+s9QP+7Wtz3Z/7YZ2khv+p97R2mZ/j/9T
-        2qEa7MLf3/rzv8n77ePB+dYdpD3a3l5qO/X02nffbD3G07jq6jxrx+usqcZq1l6OfTUbYDzt5eTc
-        E++kqu2P5+51/2m5XHn+yl2tvLm38L394VNtl4ejv/RWB+s1jb/wqvl8uaz8Q330F0fQOHf1vfkg
-        cxtmr3YYXajGGbuxOsvuFUbrLIB2rU5Wdd/txMPrMGUySJRGAiGUI58gRAgSAUIbKmKMEMbL3RKO
-        yOK12OpNsU10gBMfFUm8CRNZBh7mfO1GKE0JW7s0SNOEGxURnfCMAzbehGX45JEIk9JH00mCfGcK
-        upUh4zKPiE83OpGMKxropKBEK5YlJV3nlDCFmTA0YB6lzC1ZloaM6JJx5BIpSuArJoUiHHMqTBlz
-        Od0h05Kz2FUUfFDtKaZVwApTEi53TLuSyBBzsyt9nWhqVCiY0RS5dAPfqa8VZTKnn8EPTwRbwzsZ
-        LpkBnCXbCHzFzMNsK8sNMzkVOsxBgyITZjxRFAuVsZTSzzIUWTLp4sKkOEIeZRlWEdJhbKA+3wNT
-        kB97JdPJFvKmeiY/FLChhV/GBiu2zktqQDd2Q5SllDEdEm62QAJ/RjLtlSTD5q4bG0G5UAH0MiJe
-        4GY4p0YGLg9DGEoOGN7JJ0xYIqGvxkz9Q9wI5891wW+jHZ76rrbDYKe9nP/c0aB7vp7tCLs99jf7
-        ADsNv4+oHX/ijz8ACrZzpZsEAAA=
+        H4sIAAAAAAAC/6VUXY+jNhT9L/SxEzULJOyMtA82OA4Em7FxwtirKiLgZNlJQgqko+lo/nsv2ap9
+        q3a1fvE94tzjcz/Em/PcnGvnwdk1hz+utnv95WAHMQbS9tfj0MN1ac+9de4cO5QHYJ7E868G/xbN
+        9b6e7R67aTnMk8OnT8Doqy/2VDoPb86+sce6dx4+vznn8mQhrR6AMLxexjhCigA6tfWI+DpNEU6J
+        8373L7vtDuW5+ascmva87dtrV9ltZ6u2q7dN/Z9QrmTM6f9L/Wm/NNXRbi9t34xy/U/q7a2tt7f4
+        h9J2ZW/n/vbaHb8n7/f3O+dru5N2bzt7ruzY00vXfrXVEI/jqsrjpBkuk7ocyklz3nflpIfxNOeD
+        c0u8kcqm2x/bl+2HILj3ZkHwcepOvenH++3uQ2WD3d4PvPud9eran3vldBoEpb+r9v58DxrHtro1
+        H2Su/eTF9oML1ThDO5RH2b7AaJ050C7lwar22Y48TFw8k3miNBIIoRz5BCFCkAgRWlERY4QwDp4C
+        OCKLF2KjV+tNokOc+GidxKsokUXoYc4X7hKlKWELl4ZpmnCjlkQnPOOAjTdiGT16ZIlJ4aPxJGH+
+        ZNZ0IyPGZb4kPl3pRDKuaKiTNSVasSwp6CKnhCnMhKEh8yhlbsGyNGJEF4wjl0hRAF8xKRThmFNh
+        ipjL8Y6YlpzFrqLgg2pPMa1CtjYF4fKJaVcSGWFungpfJ5oaFQlmNEUuXcF36mtFmczpDPzwRLAF
+        vJPhghnAWbJZgq+YeZhtZLFiJqdCRzloUGSijCeKYqEyllI6k5HIklEXr02Kl8ijLMNqiXQUG6jP
+        98AU5MdewXSygbyxntEPBWzo2i9igxVb5AU1oBu7EcpSypiOCDcbIIE/I5n2CpJhc9ONjaBcqBB6
+        uSRe6GY4p0aGLo8iGEoOGN7JR0xYIqGvxoz9Q9wI5591wa+D7R+7trJ9b8e9nH7b0bA9XY52gN0e
+        uqu9g52G38eyGb7h978BdfU+DJsEAAA=
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -385,9 +385,9 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Thu, 21 May 2026 06:41:40 GMT
+      - Thu, 21 May 2026 09:03:01 GMT
       ETag:
-      - VdRf0XMQqyEquE9uOUPr4Q==
+      - mQk+ZB/D6Yfd5bPr0at6Jg==
       Server:
       - ESF
       Transfer-Encoding:
@@ -423,24 +423,24 @@ interactions:
       x-goog-user-project:
       - cal-itp-data-infra-staging
     method: GET
-    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/airflow_1779349299303643_b1ce7bf4739be3dd463a0077a4bcf46f?alt=json&location=us-west2
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/airflow_1779357780203089_b1ce7bf4739be3dd463a0077a4bcf46f?alt=json&location=us-west2
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAC/+1WS2+bShTe+1cg7rKxhMG1TaUubNfBbbBrEz+pImuYORgcYPDMgANV/nsBO4/F
-        vVeOoqSbbJg5zw+d883R+V2TJPnWj4j8RZIdf7tPgGX/bEFMy4sFPAkEL46YRhzki9IbBNqW3v0r
-        xWtffboz8v2n/u5HtPB610b369ejF8cehKjw+11Ihez6EBBeyL8qWTrpK1uEQigzElHFnrQiiyvt
-        t+5s8FwfUlLpx3PT7PbMgXwy3V/8d2bKtijycyR8Gm04TRiGDQNMGdn45N9Ar2fW97HxWtgUPB8H
-        sIkp90to/o7YLgDZVMKbQTiIQ6u5SVjwSozqvKmd0OQddSxwgUGE4YlBMaM7wOJ7RVWMgrov4jpB
-        AtX9yGWozgte+tH2BFgmOboin7kBPWwa7bauNXVV1zVFazW1jdPA0HbcZlvTHdAIabY0pCjtNmo6
-        2G223IdMAcUVccpkCa8fgAtVfvxZQQUKLHoouS23juRnR/FI9YfCye4z9j+vZ2FKy2BVUVt1pVlX
-        GvKj7f7ifwIKFnVyL+pPBrOktR/4w/Pj5lffloPOYt9mVncyOjOuBwh7Ur+gMnBpceT25IHaZ+ZA
-        Q0vBw1HLzPTMXlqpE1rpOlx4a9Xz19o0Wau6MFWi2NFI4GiaknBB0XLM7VUvxWqgoKWe4EMxZZ7g
-        Treb2jPwNy36JDJuDySOWGcXDnvnx4m5Q3vq2I/R1Pp5d2ac2ZVGIBiVeslj0aVXVN3Dxm1iq3pO
-        1CAk/c8crstOXHJzZcXOcp46xqWwV1bmZHpEDDs3Vz8Uc2UHyAh2jjEX2NBzVPqqn/O/2YU0H+jj
-        1dYYhXs8ewH1ocOZ0zlMB94+9/Qz42aUMVSMI+n64LsiyN6lE8TQMxxeFm9intqaFeKskZF+Q7WX
-        XrxW7wLzrd+E+jGI3n8QvaDoH4PozQbRC7rwMYjOHkTF9+Zpa+plAviEUQycQ7WrKfLDAtinYRyA
-        KPc/wRKo1Lh49TD0xUlXu6/9Adp/YEO/DAAA
+        H4sIAAAAAAAC/+1W3W+iShR/968g3NeaIFKRm+xDdS3uLrpKtSqbxgwzB6EdGJwZsLjp/34B7cfD
+        vTc2TbsvfWHmfP7IOb85Ob8biqLeRQlR/1ZUP9psM+DFXxuQ0+rigsioFOWRskSAelZ5g0SbytuV
+        xoTepxQb5hYbwcRY4nCx+/Ll4CVwCDEq/X6XUikHEVAiSvlXLStHfW1LUAxVRiLr2KNWFmmt/Xox
+        G7zUx4zU+vHccS56zkA9mh7O/jsz4xuURHskI5asBcs4hjUHzDhZR+TfQK9m7rex/VbYHMIIU1in
+        TEQVtPhA7ACArGvh3SB8JKBjrDNO34hRnzeNI5p6y3wXAuCQYHhmUMrZLWD5raYqRrQZybRJkETN
+        KAk4aoqSl1GyOQJWSQ6uKOIBZbt1yzSt9rlpdjVda2tda+23MJh+YJhty4c2IUanjTTNNJHh48Do
+        BI+ZKMM1capkmWjuQEhdffpZySSiLttV3FY7B/Lzg3ig+mPh1OAF+1/WszTlVbCu6Z2mZjS1lvpk
+        ezj7n4CSRd19mPQng1nW2Q6i4elx8x9fF4Pu9dbk7sVkdGJcDxAOlX5JZRDK9YHbk0dqn5gDDV0N
+        D0cdp7AKb+Hmfuzmq/g6XOlhtGpPs5VuSUcnmpeMJE6mOYmvGVqMhbfs5VinGlpYGa6mzDPc8XbT
+        eAH+rkWfJPbdjqQJ797Gw97pcXLus54+jlI0dX/enxjnXCgjkJwpveyp6Mobqh5i+y7zdGtPdBqT
+        /rmAq6oTl8JZuqm/mOe+fSm9pVv4hZUQ29s7y++as/Qosumtb88ltq09qnz18/2f7EK+H1jj5cYe
+        xVs8ewX1oSu4391NB+F2H1onxs0Y56gcR8rVLgokLT6kE8S2Chxflm9innttN8ZFqyD9lu4twnSl
+        31Pnvd+E/jmIPn4QvaLon4Po3QbRK7rwOYhOHkTl9+Z5a+oVEsSEMwxCQL2raerjAthncUpBVvuf
+        5BnUaly+ehhG8qhrPDT+AaYc2Ta/DAAA
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -449,9 +449,9 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Thu, 21 May 2026 06:41:41 GMT
+      - Thu, 21 May 2026 09:03:01 GMT
       ETag:
-      - CK0h7K+xGzq+CjJnVhBSGA==
+      - Rt4Plxplc47qc4fP4XchWw==
       Server:
       - ESF
       Transfer-Encoding:
@@ -487,24 +487,24 @@ interactions:
       x-goog-user-project:
       - cal-itp-data-infra-staging
     method: GET
-    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/airflow_1779349299303643_b1ce7bf4739be3dd463a0077a4bcf46f?alt=json&location=us-west2
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries/airflow_1779357780203089_b1ce7bf4739be3dd463a0077a4bcf46f?alt=json&location=us-west2
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAC/+1WS2+bShTe+1cg7rKxhMG1TaUubNfBbbBrEz+pImuYORgcYPDMgANV/nsBO4/F
-        vVeOoqSbbJg5zw+d883R+V2TJPnWj4j8RZIdf7tPgGX/bEFMy4sFPAkEL46YRhzki9IbBNqW3v0r
-        xWtffboz8v2n/u5HtPB610b369ejF8cehKjw+11Ihez6EBBeyL8qWTrpK1uEQigzElHFnrQiiyvt
-        t+5s8FwfUlLpx3PT7PbMgXwy3V/8d2bKtijycyR8Gm04TRiGDQNMGdn45N9Ar2fW97HxWtgUPB8H
-        sIkp90to/o7YLgDZVMKbQTiIQ6u5SVjwSozqvKmd0OQddSxwgUGE4YlBMaM7wOJ7RVWMgrov4jpB
-        AtX9yGWozgte+tH2BFgmOboin7kBPWwa7bauNXVV1zVFazW1jdPA0HbcZlvTHdAIabY0pCjtNmo6
-        2G223IdMAcUVccpkCa8fgAtVfvxZQQUKLHoouS23juRnR/FI9YfCye4z9j+vZ2FKy2BVUVt1pVlX
-        GvKj7f7ifwIKFnVyL+pPBrOktR/4w/Pj5lffloPOYt9mVncyOjOuBwh7Ur+gMnBpceT25IHaZ+ZA
-        Q0vBw1HLzPTMXlqpE1rpOlx4a9Xz19o0Wau6MFWi2NFI4GiaknBB0XLM7VUvxWqgoKWe4EMxZZ7g
-        Treb2jPwNy36JDJuDySOWGcXDnvnx4m5Q3vq2I/R1Pp5d2ac2ZVGIBiVeslj0aVXVN3Dxm1iq3pO
-        1CAk/c8crstOXHJzZcXOcp46xqWwV1bmZHpEDDs3Vz8Uc2UHyAh2jjEX2NBzVPqqn/O/2YU0H+jj
-        1dYYhXs8ewH1ocOZ0zlMB94+9/Qz42aUMVSMI+n64LsiyN6lE8TQMxxeFm9intqaFeKskZF+Q7WX
-        XrxW7wLzrd+E+jGI3n8QvaDoH4PozQbRC7rwMYjOHkTF9+Zpa+plAviEUQycQ7WrKfLDAtinYRyA
-        KPc/wRKo1Lh49TD0xUlXu6/9Adp/YEO/DAAA
+        H4sIAAAAAAAC/+1W3W+iShR/968g3NeaIFKRm+xDdS3uLrpKtSqbxgwzB6EdGJwZsLjp/34B7cfD
+        vTc2TbsvfWHmfP7IOb85Ob8biqLeRQlR/1ZUP9psM+DFXxuQ0+rigsioFOWRskSAelZ5g0SbytuV
+        xoTepxQb5hYbwcRY4nCx+/Ll4CVwCDEq/X6XUikHEVAiSvlXLStHfW1LUAxVRiLr2KNWFmmt/Xox
+        G7zUx4zU+vHccS56zkA9mh7O/jsz4xuURHskI5asBcs4hjUHzDhZR+TfQK9m7rex/VbYHMIIU1in
+        TEQVtPhA7ACArGvh3SB8JKBjrDNO34hRnzeNI5p6y3wXAuCQYHhmUMrZLWD5raYqRrQZybRJkETN
+        KAk4aoqSl1GyOQJWSQ6uKOIBZbt1yzSt9rlpdjVda2tda+23MJh+YJhty4c2IUanjTTNNJHh48Do
+        BI+ZKMM1capkmWjuQEhdffpZySSiLttV3FY7B/Lzg3ig+mPh1OAF+1/WszTlVbCu6Z2mZjS1lvpk
+        ezj7n4CSRd19mPQng1nW2Q6i4elx8x9fF4Pu9dbk7sVkdGJcDxAOlX5JZRDK9YHbk0dqn5gDDV0N
+        D0cdp7AKb+Hmfuzmq/g6XOlhtGpPs5VuSUcnmpeMJE6mOYmvGVqMhbfs5VinGlpYGa6mzDPc8XbT
+        eAH+rkWfJPbdjqQJ797Gw97pcXLus54+jlI0dX/enxjnXCgjkJwpveyp6Mobqh5i+y7zdGtPdBqT
+        /rmAq6oTl8JZuqm/mOe+fSm9pVv4hZUQ29s7y++as/Qosumtb88ltq09qnz18/2f7EK+H1jj5cYe
+        xVs8ewX1oSu4391NB+F2H1onxs0Y56gcR8rVLgokLT6kE8S2Chxflm9innttN8ZFqyD9lu4twnSl
+        31Pnvd+E/jmIPn4QvaLon4Po3QbRK7rwOYhOHkTl9+Z5a+oVEsSEMwxCQL2raerjAthncUpBVvuf
+        5BnUaly+ehhG8qhrPDT+AaYc2Ta/DAAA
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -513,9 +513,9 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Thu, 21 May 2026 06:41:41 GMT
+      - Thu, 21 May 2026 09:03:02 GMT
       ETag:
-      - CK0h7K+xGzq+CjJnVhBSGA==
+      - Rt4Plxplc47qc4fP4XchWw==
       Server:
       - ESF
       Transfer-Encoding:
