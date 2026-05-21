@@ -9,6 +9,8 @@ This project uses [composer-local-dev](https://github.com/GoogleCloudPlatform/co
 
 In order to run most DAGs, you will need to follow a few setup steps.
 
+### macOS / Linux
+
 Login with `gcloud`:
 
 ```bash
@@ -47,6 +49,156 @@ Start the reactor (this also runs `make setup` and `make sync`):
 
 ```bash
 $ make start
+```
+
+After a loading period, the Airflow UI will become available at [`http://localhost:8080`](http://localhost:8080).
+
+### Windows (git-bash)
+
+#### Prerequisites
+
+- [git-bash for Windows](https://git-scm.com/install/windows)
+- [Rancher Desktop - Open a SNOW ticket to install](https://cdotprod.service-now.com/sp?id=sc_category) (provides Docker) — ensure it's running with `dockerd` (containerd mode may not work)
+- [gcloud CLI](https://cloud.google.com/sdk/docs/install) installed and authenticated (`gcloud auth application-default login`)
+- Python 3.11 installed (e.g. from [python.org](https://www.python.org/downloads/))
+
+#### Tool Installation
+
+Install `make` and `rsync` (not included in git-bash by default):
+
+```bash
+# Download and install make 4.4.1 from MSYS2
+curl -sL "https://repo.msys2.org/msys/x86_64/make-4.4.1-2-x86_64.pkg.tar.zst" -o /tmp/make.pkg.tar.zst
+# Extract and copy
+python -c "import zstandard, tarfile, io; dctx=zstandard.ZstdDecompressor(); \
+  open('/tmp/make.pkg.tar.zst','rb') as f, \
+  dctx.stream_reader(f) as r, \
+  tarfile.open(fileobj=r, mode='r|') as tar: tar.extractall(path='/tmp/msys2')"
+cp /tmp/msys2/usr/bin/make.exe ~/bin/
+cp /tmp/msys2/usr/share/locale ~/bin/ 2>/dev/null
+echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
+
+# Download and install rsync 3.4.1 + xxhash DLL from MSYS2
+curl -sL "https://repo.msys2.org/msys/x86_64/rsync-3.4.1-1-x86_64.pkg.tar.zst" -o /tmp/rsync.pkg.tar.zst
+curl -sL "https://repo.msys2.org/msys/x86_64/libxxhash-0.8.2-1-x86_64.pkg.tar.zst" -o /tmp/xxhash.pkg.tar.zst
+python -c "import zstandard, tarfile, io; dctx=zstandard.ZstdDecompressor(); \
+  open('/tmp/rsync.pkg.tar.zst','rb') as f, \
+  dctx.stream_reader(f) as r, \
+  tarfile.open(fileobj=r, mode='r|') as tar: tar.extractall(path='/tmp/msys2')"
+python -c "import zstandard, tarfile, io; dctx=zstandard.ZstdDecompressor(); \
+  open('/tmp/xxhash.pkg.tar.zst','rb') as f, \
+  dctx.stream_reader(f) as r, \
+  tarfile.open(fileobj=r, mode='r|') as tar: tar.extractall(path='/tmp/msys2')"
+cp /tmp/msys2/usr/bin/rsync.exe ~/bin/
+cp /tmp/msys2/usr/bin/msys-xxhash-0.dll ~/bin/
+source ~/.bashrc
+```
+
+If `make` or `rsync` do not run (exit code 127 / missing DLL), copy the required DLLs to a PATH directory or install via [MSYS2](https://www.msys2.org/) directly.
+
+#### Environment Setup
+
+Set the required environment variables in `~/.bashrc` (or run them in each git-bash session):
+
+```bash
+export USER=$(whoami)
+# Python 3.11 for warehouse
+export UV_PYTHON="C:/Users/$USER/AppData/Local/Programs/Python/Python311/python.exe"
+
+# gcloud needs Python on PATH
+export CLOUDSDK_PYTHON="C:/Users/$USER/AppData/Local/Microsoft/WindowsApps/python.exe"
+export PATH="$PATH:/c/Users/$USER/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin"
+
+# uv scripts
+export PATH="$PATH:/c/Users/$USER/AppData/Local/Packages/PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0/LocalCache/local-packages/Python313/Scripts"
+
+# make and rsync
+export PATH="$HOME/bin:$PATH"
+
+# uv
+UV_SCRIPTS="/c/Users/$USER/AppData/Local/Packages/PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0/LocalCache/local-packages/Python313/Scripts"
+export PATH="$PATH:$UV_SCRIPTS"
+
+# unicode
+export PYTHONIOENCODING=utf-8
+```
+
+Then source it:
+```bash
+$ source ~/.bashrc
+```
+
+#### Known Windows Issues
+
+**1. `pygraphviz` requires a C compiler**
+
+`pygraphviz` has no pre-built Windows wheel and requires MSVC Build Tools + Graphviz to build from source. This prevents `uv sync` in `../warehouse` from completing. Workaround:
+
+- Install Graphviz from https://graphviz.org/download/ and ensure `bin/` is on PATH
+
+```bash
+$ cd ../warehouse
+$ pip install dbt-core dbt-bigquery
+$ uv run dbt deps
+$ uv run dbt compile --target staging
+```
+
+**2. `COMPOSER_CONTAINER_RUN_AS_HOST_USER` must be `False`**
+
+The `.development.env` file sets `COMPOSER_CONTAINER_RUN_AS_HOST_USER=True`, which conflicts with Windows. After running `make sync`, override this in the generated `variables.env`:
+
+```bash
+$ echo "COMPOSER_CONTAINER_RUN_AS_HOST_USER=False" >> composer/calitp-development-composer/variables.env
+```
+
+**3. Unicode encoding errors in the terminal**
+
+The `rich` library may produce `UnicodeEncodeError` on Windows terminals. Set:
+
+```bash
+$ export PYTHONIOENCODING=utf-8
+```
+
+**4. `rsync` path syntax**
+
+When running `make sync` or `make start`, rsync may have issues with Windows path separators. The install from MSYS2 above resolves this. If you see rsync path errors, ensure the `msys-xxhash-0.dll` is in a PATH directory.
+
+#### Windows Quick-Start
+
+```bash
+# 1. Login with gcloud (opens browser — complete auth)
+$ gcloud auth application-default login --login-config="../iac/login.json"
+$ ./setup_windows.sh
+```
+
+If any errors from the script run, follow the below steps to manually fix.
+
+```bash
+# 2. Install warehouse deps with pip (avoids pygraphviz build issue)
+$ cd ../warehouse
+$ pip install dbt-core dbt-bigquery
+$ uv run dbt deps
+$ uv run dbt compile --target staging
+
+# 3. Install airflow deps
+$ cd ../airflow
+$ uv sync
+
+# 4. Setup and start
+$ make setup
+$ make sync
+
+# 5. Fix Windows-specific env var
+$ echo "COMPOSER_CONTAINER_RUN_AS_HOST_USER=False" >> composer/calitp-development-composer/variables.env
+```
+
+Then start AirFlow:
+
+```bash
+# 6. Start Airflow
+$ export PYTHONIOENCODING=utf-8
+$ .venv/Scripts/composer-dev.exe start
+# or: uv run composer-dev start
 ```
 
 After a loading period, the Airflow UI will become available at [`http://localhost:8080`](http://localhost:8080).

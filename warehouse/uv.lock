@@ -198,6 +198,11 @@ dependencies = [
     { name = "typer" },
 ]
 
+[package.optional-dependencies]
+build = [
+    { name = "pygraphviz" },
+]
+
 [package.dev-dependencies]
 dev = [
     { name = "black" },
@@ -237,6 +242,7 @@ requires-dist = [
     { name = "pyarrow", specifier = "==19.0.0" },
     { name = "pydantic", specifier = ">=1.9.0,<2" },
     { name = "pygraphviz", specifier = "==1.14" },
+    { name = "pygraphviz", marker = "extra == 'build'", specifier = "==1.14" },
     { name = "python-slugify", specifier = ">=6.1.2,<7" },
     { name = "requests-toolbelt", specifier = ">=0.9.1,<0.10" },
     { name = "sentry-sdk", specifier = ">=1.9.8,<2" },
@@ -246,6 +252,7 @@ requires-dist = [
     { name = "tqdm", specifier = ">=4.64.0,<5" },
     { name = "typer", specifier = ">=0.4.0,<0.5" },
 ]
+provides-extras = ["build"]
 
 [package.metadata.requires-dev]
 dev = [
