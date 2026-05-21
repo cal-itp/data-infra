@@ -210,7 +210,7 @@
 
    This DAG exports daily Transit Integrated Data Exchange Specification (TIDES) data as parquet files.
 
-   The `mart_tides.fct_tides_vehicle_locations` converts GTFS-Realtime data to TIDES limited by agencies from `staging.tides_publication_keys` and date (using the current UTC date).
+   The `mart_tides.fct_tides_vehicle_locations` converts GTFS-Realtime data to TIDES limited by base64 urls from `staging.tides_publication_keys` and date (using the current UTC date).
 
 
 ## publish_gtfs (Publish GTFS)
