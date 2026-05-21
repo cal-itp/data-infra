@@ -5,23 +5,24 @@ from dags import email_on_failure, log_failure_to_slack
 from operators.bigquery_to_dict_operator import BigQueryToDictOperator
 from operators.tides_bigquery_to_parquet_operator import TIDESBigQueryToParquetOperator
 
-from airflow import DAG
+from airflow.decorators import dag
 from airflow.operators.latest_only import LatestOnlyOperator
 
-with DAG(
-    dag_id="parse_tides",
-    tags=["tides"],
+
+@dag(
     # Monday, Thursday at 10am PDT/9am PST (17pm UTC)
     schedule="0 17 * * 1,4",
     start_date=datetime(2025, 12, 1),
     catchup=False,  # Change to True when tests are done to run all days
+    tags=["tides"],
     default_args={
         "email": os.getenv("CALITP_NOTIFY_EMAIL"),
         "email_on_failure": email_on_failure(),
         "email_on_retry": False,
         "on_failure_callback": log_failure_to_slack,
     },
-):
+)
+def parse_tides():
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
 
     vehicle_location_agencies = BigQueryToDictOperator(
@@ -39,7 +40,7 @@ with DAG(
         filter_date_column="dt",
         filter_date_start="{{ macros.ds_add(ds, -3) }}",
         filter_date_end="{{ ds }}",
-        order_column="feed_name",
+        order_columns="dt, feed_name",
     )
 
     export_vehicle_locations_to_parquet = TIDESBigQueryToParquetOperator.partial(
@@ -50,9 +51,9 @@ with DAG(
         dataset_name="mart_tides",
         table_name="fct_tides_vehicle_locations",
         destination_bucket=os.environ.get("CALITP_BUCKET__TIDES"),
-        destination_path_prefix="vehicle_locations/organization_source_record_id={{ task.organization_source_record_id }}/dt={{ task.dt }}/base64_url={{ task.base64_url }}/",
+        destination_path_prefix="vehicle_locations/organization_source_record_id={{ task.organization_source_record_id }}/base64_url={{ task.base64_url }}/dt={{ task.dt }}/",
         report_path="vehicle_location_outcomes/dt={{ task.dt }}/ts={{ ts }}/organization_source_record_id={{ task.organization_source_record_id }}/{{ task.base64_url }}_outcomes.jsonl",
-        map_index_template="{{ task.display_name }}",
+        map_index_template="{{ task.dt }} - {{ task.display_name }}",
     ).expand_kwargs(
         vehicle_location_agencies.output.map(
             lambda agency: {
@@ -67,3 +68,6 @@ with DAG(
     )
 
     latest_only >> vehicle_location_agencies >> export_vehicle_locations_to_parquet
+
+
+parse_tides = parse_tides()
