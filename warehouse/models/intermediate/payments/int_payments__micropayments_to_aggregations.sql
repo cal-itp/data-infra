@@ -6,7 +6,7 @@
 
 WITH micropayments AS (
     SELECT *
-    FROM {{ ref('int_littlepay__unioned_micropayments') }}
+    FROM {{ ref('int_payments__filtered_micropayments') }}
 ),
 
 -- flag micropayments that were adjusted

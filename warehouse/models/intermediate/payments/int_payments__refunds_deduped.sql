@@ -5,7 +5,7 @@ WITH micropayment_device_transactions AS (
 ),
 
 micropayments_refunds AS (
-    SELECT * FROM {{ ref('int_littlepay__unioned_micropayments') }}
+    SELECT * FROM {{ ref('int_payments__filtered_micropayments') }}
     WHERE type = 'CREDIT'
 ),
 

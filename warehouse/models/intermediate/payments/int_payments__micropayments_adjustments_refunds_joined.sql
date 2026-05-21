@@ -1,5 +1,5 @@
 WITH debit_micropayments AS (
-    SELECT * FROM {{ ref('int_littlepay__unioned_micropayments') }}
+    SELECT * FROM {{ ref('int_payments__filtered_micropayments') }}
     WHERE type = 'DEBIT'
 ),
 
