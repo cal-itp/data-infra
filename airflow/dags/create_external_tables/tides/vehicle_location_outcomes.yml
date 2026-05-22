@@ -8,15 +8,13 @@ use_bq_client: true
 hive_options:
   mode: CUSTOM
   require_partition_filter: false
-  source_uri_prefix: "vehicle_location_outcomes/{dt:DATE}/{ts:TIMESTAMP}/"
+  source_uri_prefix: "vehicle_location_outcomes/{dt:DATE}/{ts:TIMESTAMP}/{organization_source_record_id:STRING}"
 schema_fields:
   - name: display_name
     type: STRING
   - name: dataset_name
     type: STRING
   - name: table_name
-    type: STRING
-  - name: organization_source_record_id
     type: STRING
   - name: base64_url
     type: STRING
