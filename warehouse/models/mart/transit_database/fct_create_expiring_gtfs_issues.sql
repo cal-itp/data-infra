@@ -52,6 +52,7 @@ datasets_with_expiration AS (
     dg.name,
     dg.key AS gtfs_dataset_key,
     dg.source_record_id AS gtfs_dataset_source_record_id,
+    dg.uri,
     csf.max_end_date,
     CASE
       WHEN csf.max_end_date < CURRENT_DATE() THEN 'Expired'
@@ -71,6 +72,7 @@ expiring_datasets AS (
     dwe.gtfs_dataset_source_record_id,
     dwe.max_end_date,
     dwe.expiration_status,
+    dwe.uri,
     dp.service_name,
     dp.service_source_record_id,
     dp.organization_name
@@ -121,6 +123,7 @@ expiring_datasets_with_airtable_ids AS (
     ed.service_name,
     ed.service_source_record_id,
     ed.organization_name,
+    ed.uri,
     s.id AS service_record_id,
     d.id AS gtfs_dataset_record_id
   FROM expiring_datasets ed
@@ -153,7 +156,8 @@ fct_create_expiring_gtfs_issues AS (
     edwai.gtfs_dataset_record_id,
     edwai.service_name,
     edwai.service_record_id,
-    edwai.organization_name
+    edwai.organization_name,
+    edwai.uri
   FROM expiring_datasets_with_airtable_ids edwai
   LEFT JOIN expiring_open_issues i
     ON edwai.gtfs_dataset_source_record_id = i.gtfs_dataset_source_record_id

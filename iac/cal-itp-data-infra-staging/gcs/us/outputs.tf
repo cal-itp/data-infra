@@ -114,6 +114,16 @@ output "google_storage_bucket_calitp-staging-composer_id" {
   value = google_storage_bucket.calitp-staging-composer.id
 }
 
+# parallel staging bucket for airflow managed by composer3
+# once the c3 airflow is verified, will pointing it
+# to "calitp-staging-composer" and decommission this one
+output "google_storage_bucket_calitp-staging-composer3_name" {
+  value = google_storage_bucket.calitp-staging-composer3.name
+}
+output "google_storage_bucket_calitp-staging-composer3_id" {
+  value = google_storage_bucket.calitp-staging-composer3.id
+}
+
 output "google_storage_bucket_calitp-staging-dbt-artifacts_id" {
   value = google_storage_bucket.calitp-staging-dbt-artifacts.id
 }
@@ -216,6 +226,10 @@ output "google_storage_bucket_calitp-staging-gtfs-schedule-validation-hourly_nam
 
 output "google_storage_bucket_calitp-staging-kuba_name" {
   value = google_storage_bucket.calitp-staging["calitp-staging-kuba"].name
+}
+
+output "google_storage_bucket_calitp-staging-tides_name" {
+  value = google_storage_bucket.calitp-staging["calitp-staging-tides"].name
 }
 
 output "google_storage_bucket_calitp-staging-payments-littlepay-parsed_name" {

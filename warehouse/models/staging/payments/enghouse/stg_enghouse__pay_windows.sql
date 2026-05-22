@@ -17,8 +17,9 @@ clean_columns AS (
         SAFE_CAST(close_date AS TIMESTAMP) AS close_date,
         agency,
         dt,
+        {{ dbt_utils.generate_surrogate_key(['id', 'operator_id']) }} AS _payments_key,
         {{ dbt_utils.generate_surrogate_key(['operator_id', 'id', 'token', 'amount_settled', 'amount_to_settle',
-            'debt_settled', 'stage', 'payment_reference', 'terminal_id', 'open_date', 'close_date']) }} AS _content_hash,
+            'debt_settled', 'stage', 'payment_reference', 'terminal_id', 'open_date', 'close_date']) }} AS _content_hash
     FROM source
 ),
 
@@ -26,7 +27,7 @@ deduplicated AS (
     SELECT * FROM (
         SELECT
             *,
-            ROW_NUMBER() OVER (PARTITION BY _content_hash ORDER BY dt ASC) AS row_num
+            ROW_NUMBER() OVER (PARTITION BY id, operator_id ORDER BY dt ASC) AS row_num
         FROM clean_columns
     )
     WHERE row_num = 1
@@ -47,7 +48,8 @@ stg_enghouse__pay_windows AS (
         close_date,
         agency,
         dt,
-        _content_hash,
+        _payments_key,
+        _content_hash
     FROM deduplicated
 )
 
