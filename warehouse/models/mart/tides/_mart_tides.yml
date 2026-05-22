@@ -112,6 +112,13 @@ models:
         description: '{{ doc("column_base64_url") }}'
       - name: gtfs_dataset_key
         description: '{{ doc("gtfs_schedule_gtfs_dataset_key") }}'
+      - name: organization_source_record_id
+        description: |
+          Persistent Airtable organization record ID, taken from the
+          `dim_provider_gtfs_data` row in effect when the ping was scraped
+          (the row whose `_valid_from`/`_valid_to` window covers the ping's
+          extract timestamp). Internal — not a TIDES field; carried so
+          `tides_publication_feeds` and the export DAG can key by organization.
 
   - name: fct_tides_trips_performed
     description: |
@@ -212,6 +219,62 @@ models:
         description: '{{ doc("column_base64_url") }}'
       - name: gtfs_dataset_key
         description: '{{ doc("gtfs_schedule_gtfs_dataset_key") }}'
+      - name: organization_source_record_id
+        description: |
+          Persistent Airtable organization record ID, taken from the
+          `dim_provider_gtfs_data` row in effect when the ping was scraped
+          (the row whose `_valid_from`/`_valid_to` window covers the ping's
+          extract timestamp). Internal — not a TIDES field; carried so
+          `tides_publication_feeds` and the export DAG can key by organization.
+
+  - name: tides_publication_feeds
+    description: |
+      Day-by-day record of which vehicle-positions feed to publish for which
+      organization on which scrape-day (`dt`) — one row per
+      (dt, organization, feed). The TIDES export DAG reads this filtered to a
+      single `dt` and fans out one parquet export per row, filtering
+      `fct_tides_vehicle_locations` on `dt` + `base64_url`. Because the record
+      is per-day, a backfill of any past date uses the `base64_url` that was
+      correct for that day. Internal to the publish flow; not a TIDES spec
+      table.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - dt
+              - organization_source_record_id
+              - gtfs_dataset_key
+    columns:
+      - name: dt
+        description: Date (UTC) the vehicle-positions data was scraped.
+        data_tests:
+          - not_null
+      - name: organization_source_record_id
+        description: |
+          Persistent Airtable organization record ID — the publication grain
+          and the GCS export-path key.
+        data_tests:
+          - not_null
+      - name: vehicle_positions_source_record_id
+        description: |
+          Persistent Airtable record ID of the vehicle-positions feed, from the
+          current dim snapshot. NULL if the feed has no current dim row.
+      - name: agency_name
+        description: Human-readable organization name, from the current dim snapshot.
+      - name: feed_name
+        description: |
+          Per-feed name (e.g. "LA Metro Rail Vehicle Positions"), used as the
+          DAG's per-export label.
+      - name: gtfs_dataset_key
+        description: |
+          Versioned key of the vehicle-positions feed; joins to
+          `fct_tides_vehicle_locations.gtfs_dataset_key`.
+      - name: base64_url
+        description: |
+          Base64-encoded feed URL observed for this feed on this `dt`. The DAG
+          filters `fct_tides_vehicle_locations` on `dt` + `base64_url`.
+        data_tests:
+          - not_null
 
 exposures:
   - name: california_tides

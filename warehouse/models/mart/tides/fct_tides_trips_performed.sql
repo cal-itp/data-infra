@@ -56,21 +56,27 @@ vehicle_per_trip AS (
     GROUP BY 1, 2
 ),
 
--- Pre-filter dim_provider_gtfs_data to the publication-set source_record_ids
--- (persistent Airtable IDs, stable across upstream gtfs_dataset_key rotations)
--- with the public-customer-facing or regional-subfeed fixed-route flag.
+-- Pre-filter dim_provider_gtfs_data to the publication set: every organization
+-- with the public-customer-facing or regional-subfeed fixed-route flag that is
+-- NOT on the tides_publication_keys denylist (a LEFT JOIN anti-join). This
+-- expands each published org to all of its current customer-facing VP feeds.
+-- Persistent Airtable org IDs are stable across gtfs_dataset_key and feed-URL
+-- rotations. Rolling out more agencies means deleting their denylist rows.
 publication_dim_records AS (
     SELECT d.*
     FROM {{ ref('dim_provider_gtfs_data') }} AS d
-    INNER JOIN {{ ref('tides_publication_keys') }}
-        USING (vehicle_positions_source_record_id)
+    LEFT JOIN {{ ref('tides_publication_keys') }} AS excluded
+        ON d.organization_source_record_id = excluded.organization_source_record_id
     WHERE d.public_customer_facing_or_regional_subfeed_fixed_route = TRUE
+      AND d.organization_source_record_id IS NOT NULL
+      AND excluded.organization_source_record_id IS NULL
 ),
 
 -- SCD Type 2 join: resolve the dim record valid at vp_min_ts (the earliest
 -- VP timestamp for the trip), not the current state.
 filtered_observed AS (
-    SELECT o.*
+    SELECT o.*,
+           d.organization_source_record_id
     FROM observed AS o
     INNER JOIN publication_dim_records AS d
         ON d.vehicle_positions_gtfs_dataset_key = o.vp_gtfs_dataset_key
@@ -119,7 +125,8 @@ tides_trips_performed AS (
         -- Internal columns retained for partitioning and downstream joins;
         -- dropped at export.
         o.vp_base64_url AS base64_url,
-        o.vp_gtfs_dataset_key AS gtfs_dataset_key
+        o.vp_gtfs_dataset_key AS gtfs_dataset_key,
+        o.organization_source_record_id
     FROM filtered_observed o
     LEFT JOIN scheduled s
         ON s.trip_instance_key = o.trip_instance_key
