@@ -18,7 +18,7 @@
 |  2:00 PM    | 6:00 AM              | 7:00 AM              | [dbt_all](#dbt_all)                                                                                                              | Monday and Thursday |
 |  2:00 PM    | 6:00 AM              | 7:00 AM              | [dbt_daily](#dbt_daily)                                                                                                          | Sunday, Tuesday, Wednesday, Friday, and Saturday |
 |  2:00 PM    | 6:00 AM              | 7:00 AM              | [airtable_issue_management](#airtable_issue_management)                                                                          | Fridays    |
-|  5:00 PM    | 9:00 AM              |10:00 AM              | [parse_tides](#parse_tides)                                                                                                      | Every Day  |
+|  5:00 PM    | 9:00 AM              |10:00 AM              | [parse_tides](#parse_tides)                                                                                                      | Monday and Thursday |
 |  -          | -                    | -                    | [dbt_manual_run_with_args](#dbt_manual_run_with_args)<br>[download_gtfs_schedule_v2](./download_gtfs_schedule_v2)<br>[unzip_and_validate_gtfs_schedule_hourly](./unzip_and_validate_gtfs_schedule_hourly)| Runs Only Manually |
 
 ## dbt_all
