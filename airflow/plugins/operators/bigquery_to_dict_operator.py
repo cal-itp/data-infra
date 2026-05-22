@@ -71,5 +71,5 @@ class BigQueryToDictOperator(BaseOperator):
             """,
         )
 
-    def execute(self, context: Context) -> str:
+    def execute(self, context: Context) -> list[dict]:
         return [dict(zip(self.select_columns, row)) for row in self.rows()]

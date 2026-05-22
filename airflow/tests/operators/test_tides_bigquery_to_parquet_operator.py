@@ -21,11 +21,11 @@ class TestTIDESBigQueryToParquetOperator:
 
     @pytest.fixture
     def destination_path_prefix(self) -> str:
-        return "vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/"  # -> data_*.parquet
+        return "vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/"
 
     @pytest.fixture
     def report_path(self) -> str:
-        return "vehicle_location_outcomes/dt=2026-04-01/ts=2026-04-01T00:00:00+00:00/aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl"
+        return "vehicle_location_outcomes/dt=2026-04-01/ts=2026-04-01T00:00:00+00:00/organization_source_record_id=rec8zhnCPETu6qEiH/aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl"
 
     @pytest.fixture
     def test_dag(self, execution_date: datetime) -> DAG:
