@@ -24,7 +24,7 @@ stg_ntd__capital_expenses_by_capital_use AS (
         {{ trim_make_empty_string_null('fare_collection_equipment_1') }} AS fare_collection_equipment_1,
         {{ trim_make_empty_string_null('form_type') }} AS form_type,
         SAFE_CAST(guideway AS NUMERIC) AS guideway,
-        SAFE_CAST(guideway_questionable AS NUMERIC) AS guideway_questionable,
+        {{ trim_make_empty_string_null('guideway_questionable') }} AS guideway_questionable,
         SAFE_CAST(maintenance_buildings AS NUMERIC) AS maintenance_buildings,
         {{ trim_make_empty_string_null('maintenance_buildings_1') }} AS maintenance_buildings_1,
         {{ trim_make_empty_string_null('mode_name') }} AS mode_name,
