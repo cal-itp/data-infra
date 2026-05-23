@@ -1,0 +1,19 @@
+version: 2
+
+sources:
+  - name: external_tides
+    description: TIDES (Transit Integrated Data Exchange Specification)
+    database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
+    schema: external_tides
+    tables:
+      - name: vehicle_location_outcomes
+        description: Outcomes from converting GTFS Vehicle Location to TIDES (Transit Integrated Data Exchange Specification)
+        columns:
+          - name: display_name
+          - name: dataset_name
+          - name: table_name
+          - name: organization_source_record_id
+          - name: base64_url
+          - name: destination_path
+          - name: dt
+          - name: ts

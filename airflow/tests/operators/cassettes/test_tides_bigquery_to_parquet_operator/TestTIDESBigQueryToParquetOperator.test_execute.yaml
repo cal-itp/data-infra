@@ -1,0 +1,401 @@
+interactions:
+- request:
+    body: '{"useLegacySql": false, "formatOptions": {"useInt64Timestamp": true}, "query":
+      "EXPORT DATA OPTIONS(uri=''gs://calitp-staging-pytest/vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/data_*.parquet'',format=''PARQUET'',compression=''SNAPPY'',overwrite=true)
+      AS SELECT * FROM `mart_tides.fct_tides_vehicle_locations` WHERE dt = CAST(''2026-04-01''
+      AS DATE) AND base64_url = ''aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==''",
+      "requestId": "c5f11261-58c5-4f3f-b1bd-3c153b02e06e"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '608'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      X-Goog-API-Client:
+      - gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0 gccl/3.39.0
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: POST
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries?prettyPrint=false
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/42QzW7CMBCE32V7JRL5x9xKG0oPSG2gZ2ScDXUwdmpvRBHi3esELm1VqRdb8uzM
+        fOsz7KWuYApbufvo0J7uhrNE1xrtEEbQmG2JNVrUAmF6htaaBgU99ybBVSCpDSpOPJC6tjxwxHdS
+        767GYcjfm3oeL+aZa0zcHOf7TX6/zLtOU8ROn09+VBnBSRrtpzsXHNFRBJcRkCGuZidC92KNQOew
+        z8ujMcviMLtWPJhDq5A8GtkORx5JvONCEkxrrpx/GPb5L0gfaHFgKZG7nugMwlQ+Hsri9a1YrYvH
+        72gzqdSNK07DPEngpq6UoaXzQppNwj+W9Ly3urU89CVhnrNkEmXjScjGXvbfaemXlrLeirr6qbCE
+        Mbh8AewlKizVAQAA
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Fri, 22 May 2026 20:43:29 GMT
+      Server:
+      - ESF
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - X-Origin
+      - Referer
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "--===============3655653244343581896==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"vehicle_location_outcomes/dt=2026-04-01/ts=2026-04-01T00:00:00+00:00/organization_source_record_id=rec8zhnCPETu6qEiH/aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl\",
+      \"crc32c\": \"ftZxWw==\"}\r\n--===============3655653244343581896==\r\ncontent-type:
+      application/jsonl\r\n\r\n{\"dataset_name\": \"mart_tides\", \"table_name\":
+      \"fct_tides_vehicle_locations\", \"organization_source_record_id\": \"rec8zhnCPETu6qEiH\",
+      \"base64_url\": \"aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==\",
+      \"display_name\": \"Beach Cities VehiclePositions\", \"destination_path\": \"vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/data_*.parquet\",
+      \"dt\": \"2026-04-01\", \"ts\": \"2026-04-01T00:00:00+00:00\"}\r\n--===============3655653244343581896==--"
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '971'
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0 gccl-invocation-id/87fa019f-767a-4f1e-a095-dbef3380d402
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0zNjU1NjUzMjQ0MzQz
+        NTgxODk2PT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/jsonl
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/vehicle_location_outcomes/dt=2026-04-01/ts=2026-04-01T00:00:00+00:00/organization_source_record_id=rec8zhnCPETu6qEiH/aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl/1779482610881022\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/vehicle_location_outcomes%2Fdt=2026-04-01%2Fts=2026-04-01T00:00:00%2B00:00%2Forganization_source_record_id=rec8zhnCPETu6qEiH%2FaHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/vehicle_location_outcomes%2Fdt=2026-04-01%2Fts=2026-04-01T00:00:00%2B00:00%2Forganization_source_record_id=rec8zhnCPETu6qEiH%2FaHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl?generation=1779482610881022&alt=media\",\n
+        \ \"name\": \"vehicle_location_outcomes/dt=2026-04-01/ts=2026-04-01T00:00:00+00:00/organization_source_record_id=rec8zhnCPETu6qEiH/aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1779482610881022\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"525\",\n  \"md5Hash\": \"6kIe6saunl1UNxQjlnvdXA==\",\n
+        \ \"crc32c\": \"ftZxWw==\",\n  \"etag\": \"CP6jn6fhzZQDEAE=\",\n  \"timeCreated\":
+        \"2026-05-22T20:43:30.884Z\",\n  \"updated\": \"2026-05-22T20:43:30.884Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-05-22T20:43:30.884Z\",\n  \"timeFinalized\":
+        \"2026-05-22T20:43:30.884Z\"\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1616'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Fri, 22 May 2026 20:43:30 GMT
+      ETag:
+      - CP6jn6fhzZQDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEhbBVZ2mL0zl9OiJeEdFyFQkOKdZl5B76dY9aQriDg0-ci-EGxUEdh-YfIiDKaAOfCCQa2cQQ
+    status:
+      code: 200
+      message: OK
+- request:
+    body: '{"useLegacySql": false, "formatOptions": {"useInt64Timestamp": true}, "query":
+      "EXPORT DATA OPTIONS(uri=''gs://calitp-staging-pytest/vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/data_*.parquet'',format=''PARQUET'',compression=''SNAPPY'',overwrite=true)
+      AS SELECT * FROM `mart_tides.fct_tides_vehicle_locations` WHERE dt = CAST(''2026-04-01''
+      AS DATE) AND base64_url = ''aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==''",
+      "requestId": "727dc184-8672-488c-bd3f-7edda243a13c"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '608'
+      Content-Type:
+      - application/json
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.39.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.39.0
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: POST
+    uri: https://bigquery.googleapis.com/bigquery/v2/projects/cal-itp-data-infra-staging/queries?prettyPrint=false
+  response:
+    body:
+      string: !!binary |
+        H4sIAAAAAAAC/42QzW7CMBCE32V7JRJOQoI50lIVKqQ2oRLqpXKcJTU1dmovrRDi3esELv059GJL
+        ntmZb32EN2VqmEClmvc9usNVfxboW2s8wgC2tipwgw6NRJgcoXV2i5Lm3ZAUOlLURrUgESmzcSLy
+        JBplmvNgbwr3S1IusDroW36/aJbZcPo8b2uOH+u0bHmwaisFKWuCe++jT/QUw2kAZEno6YHQPzgr
+        0Xvs8vJ4yLOEZeeKa7trNVJAI7fHQUCSr3inCCYboX146Pf5L0gX6LBnKVD4jugI0tYhHorZ49Os
+        XM1uvqNNldYXrmTE8jSFi1pqS0sfhFHaw/61ZOC91K3Urithec7TcZyxmPFRkMN3OvqlpeMuEE39
+        U0kYZ3D6AlfMy4/VAQAA
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Fri, 22 May 2026 20:43:33 GMT
+      Server:
+      - ESF
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Origin
+      - X-Origin
+      - Referer
+      X-Content-Type-Options:
+      - nosniff
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-XSS-Protection:
+      - '0'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "--===============2127624948050800564==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"vehicle_location_outcomes/dt=2026-04-01/ts=2026-04-01T00:00:00+00:00/organization_source_record_id=rec8zhnCPETu6qEiH/aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl\",
+      \"crc32c\": \"ftZxWw==\"}\r\n--===============2127624948050800564==\r\ncontent-type:
+      application/jsonl\r\n\r\n{\"dataset_name\": \"mart_tides\", \"table_name\":
+      \"fct_tides_vehicle_locations\", \"organization_source_record_id\": \"rec8zhnCPETu6qEiH\",
+      \"base64_url\": \"aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==\",
+      \"display_name\": \"Beach Cities VehiclePositions\", \"destination_path\": \"vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/data_*.parquet\",
+      \"dt\": \"2026-04-01\", \"ts\": \"2026-04-01T00:00:00+00:00\"}\r\n--===============2127624948050800564==--"
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '971'
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0 gccl-invocation-id/1331de4e-8d32-431c-b943-333276b81941
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0yMTI3NjI0OTQ4MDUw
+        ODAwNTY0PT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/jsonl
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/vehicle_location_outcomes/dt=2026-04-01/ts=2026-04-01T00:00:00+00:00/organization_source_record_id=rec8zhnCPETu6qEiH/aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl/1779482614246378\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/vehicle_location_outcomes%2Fdt=2026-04-01%2Fts=2026-04-01T00:00:00%2B00:00%2Forganization_source_record_id=rec8zhnCPETu6qEiH%2FaHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/vehicle_location_outcomes%2Fdt=2026-04-01%2Fts=2026-04-01T00:00:00%2B00:00%2Forganization_source_record_id=rec8zhnCPETu6qEiH%2FaHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl?generation=1779482614246378&alt=media\",\n
+        \ \"name\": \"vehicle_location_outcomes/dt=2026-04-01/ts=2026-04-01T00:00:00+00:00/organization_source_record_id=rec8zhnCPETu6qEiH/aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1779482614246378\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"525\",\n  \"md5Hash\": \"6kIe6saunl1UNxQjlnvdXA==\",\n
+        \ \"crc32c\": \"ftZxWw==\",\n  \"etag\": \"COrX7KjhzZQDEAE=\",\n  \"timeCreated\":
+        \"2026-05-22T20:43:34.253Z\",\n  \"updated\": \"2026-05-22T20:43:34.253Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-05-22T20:43:34.253Z\",\n  \"timeFinalized\":
+        \"2026-05-22T20:43:34.253Z\"\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1616'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Fri, 22 May 2026 20:43:34 GMT
+      ETag:
+      - COrX7KjhzZQDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEi6AuEDDA2vvGgAR7y-88ZAmr6GgcjoaBpQ1YhG1KVtcel_uUAtEt1Mzgl2lEe8rJKh
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0 gccl-invocation-id/498c8f4d-93c1-4466-bbb8-6a381287cbb6
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?matchGlob=vehicle_locations%2Forganization_source_record_id%3Drec8zhnCPETu6qEiH%2Fbase64_url%3DaHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw%3D%3D%2Fdt%3D2026-04-01%2Fdata_%2A.parquet&prettyPrint=false
+  response:
+    body:
+      string: '{"kind":"storage#objects","items":[{"kind":"storage#object","id":"calitp-staging-pytest/vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/data_000000000000.parquet/1779482613054985","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/vehicle_locations%2Forganization_source_record_id=rec8zhnCPETu6qEiH%2Fbase64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==%2Fdt=2026-04-01%2Fdata_000000000000.parquet","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/vehicle_locations%2Forganization_source_record_id=rec8zhnCPETu6qEiH%2Fbase64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==%2Fdt=2026-04-01%2Fdata_000000000000.parquet?generation=1779482613054985&alt=media","name":"vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/data_000000000000.parquet","bucket":"calitp-staging-pytest","generation":"1779482613054985","metageneration":"1","contentType":"application/octet-stream","storageClass":"STANDARD","size":"3779","md5Hash":"SiCvQIRYppCS28T2Kyttlg==","crc32c":"xfA+TQ==","etag":"CIn8o6jhzZQDEAE=","timeCreated":"2026-05-22T20:43:33.063Z","updated":"2026-05-22T20:43:33.063Z","timeStorageClassUpdated":"2026-05-22T20:43:33.063Z","timeFinalized":"2026-05-22T20:43:33.063Z"}]}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '1523'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Fri, 22 May 2026 20:43:35 GMT
+      Expires:
+      - Fri, 22 May 2026 20:43:35 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEh-qWKlILhDd2C8xXruLl-RwYeRbadg20RgUqIllX-sMiwpJAO-jS8_BAjTETSSz_h-
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/3.7.0 gccl-invocation-id/05740df9-f8a2-43f2-a080-be41aaab63ce
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/vehicle_location_outcomes%2Fdt%3D2026-04-01%2Fts%3D2026-04-01T00%3A00%3A00%2B00%3A00%2Forganization_source_record_id%3Drec8zhnCPETu6qEiH%2FaHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw%3D%3D_outcomes.jsonl?alt=media
+  response:
+    body:
+      string: '{"dataset_name": "mart_tides", "table_name": "fct_tides_vehicle_locations",
+        "organization_source_record_id": "rec8zhnCPETu6qEiH", "base64_url": "aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==",
+        "display_name": "Beach Cities VehiclePositions", "destination_path": "vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/data_*.parquet",
+        "dt": "2026-04-01", "ts": "2026-04-01T00:00:00+00:00"}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '525'
+      Content-Type:
+      - application/jsonl
+      Date:
+      - Fri, 22 May 2026 20:43:35 GMT
+      ETag:
+      - COrX7KjhzZQDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Fri, 22 May 2026 20:43:34 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEiEuUIR7ZtLlwUxf7D0EGu8nZ06m2j5piXTI4VuGj_uAtuXPnkKEdzKWeghzULbi1Ww
+      X-Goog-Generation:
+      - '1779482614246378'
+      X-Goog-Hash:
+      - crc32c=ftZxWw==,md5=6kIe6saunl1UNxQjlnvdXA==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '525'
+    status:
+      code: 200
+      message: OK
+version: 1
