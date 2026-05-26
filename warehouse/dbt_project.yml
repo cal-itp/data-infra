@@ -230,6 +230,11 @@ models:
           domain: mart
           dataset: tides
         schema: mart_tides
+      tides_audit:
+        +labels:
+          domain: mart
+          dataset: tides_audit
+        schema: mart_tides_audit
       payments:
         +materialized: table
         +labels:
