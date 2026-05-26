@@ -179,12 +179,23 @@ jobs:
             echo "> If any impacted exposures are unexpected, verify that your changes do not unintentionally affect downstream consumers."
           } > "$RUNNER_TEMP/exposure-comment.md"
 
-      - name: Post exposures comment
+      - name: Find existing exposures comment
+        id: find-exposures-comment
+        if: ${{ steps.changed-models.outputs.any_changed == 'true' }}
+        uses: peter-evans/find-comment@v3
+        with:
+          issue-number: ${{ github.event.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '## Impacted Exposures'
+
+      - name: Post or update exposures comment
         if: ${{ steps.changed-models.outputs.any_changed == 'true' }}
         uses: peter-evans/create-or-update-comment@v4
         with:
+          comment-id: ${{ steps.find-exposures-comment.outputs.comment-id }}
           issue-number: ${{ github.event.number }}
           body-path: ${{ runner.temp }}/exposure-comment.md
+          edit-mode: replace
 
   upload_latest_artifacts:
     name: Upload to latest dbt artifacts folder (Staging)
