@@ -10,7 +10,7 @@ classifiers = [
 # Data science packages are now managed by the data-analyses uv workspace.
 # Analysts install them via `uv sync` into a persistent venv.
 dependencies = [
-    "jupyterlab (>=4.5.0, <4.6.0)",
+    "jupyterlab>=4.5.7,<4.6.0",
     "pyproject-local-kernel>=0.11.0",
     "jupyter-resource-usage (>=1.1.1, <2.0.0)",
     "jupyter-server-proxy (>=4.1.1, <5.0.0)",
