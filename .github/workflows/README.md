@@ -14,7 +14,7 @@ Workflows prefixed with `preview-` deal with generating previews for pull reques
 
 ## build-model-report.yml
 
-This workflow builds a visual comment about model changes and uploads latest dbt artifacts (staging) when merging to the Main branch.
+This workflow compiles dbt, posts a comment on PRs listing exposures impacted by the changed models, and uploads latest dbt artifacts (staging) when merging to the Main branch.
 
 ## composer-plan-files.yml
 
