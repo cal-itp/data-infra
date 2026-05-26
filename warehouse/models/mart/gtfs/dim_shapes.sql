@@ -1,3 +1,4 @@
+-- test impacted-exposures CI (push 1) — will be reverted before merge
 {{
     config(
         materialized='incremental',
