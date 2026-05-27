@@ -241,7 +241,6 @@ requires-dist = [
     { name = "pendulum", specifier = ">=2.1.2,<3" },
     { name = "pyarrow", specifier = "==19.0.0" },
     { name = "pydantic", specifier = ">=1.9.0,<2" },
-    { name = "pygraphviz", specifier = "==1.14" },
     { name = "pygraphviz", marker = "extra == 'build'", specifier = "==1.14" },
     { name = "python-slugify", specifier = ">=6.1.2,<7" },
     { name = "requests-toolbelt", specifier = ">=0.9.1,<0.10" },

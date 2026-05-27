@@ -21,11 +21,11 @@ export PYTHONIOENCODING=utf-8
 # Find Python 3.11
 PY311="C:/Users/$USER/AppData/Local/Programs/Python/Python311/python.exe"
 if [ -f "$PY311" ]; then
-    export UV_PYTHON="$PY311"
-    echo "Using Python 3.11: $PY311"
+	export UV_PYTHON="$PY311"
+	echo "Using Python 3.11: $PY311"
 else
-    echo "WARNING: Python 3.11 not found at $PY311"
-    echo "Install from https://www.python.org/downloads/"
+	echo "WARNING: Python 3.11 not found at $PY311"
+	echo "Install from https://www.python.org/downloads/"
 fi
 
 # --- Tool Check ---
@@ -38,10 +38,10 @@ echo "uv:     $(uv --version 2>/dev/null || echo 'NOT FOUND')"
 echo "gcloud: $(gcloud --version 2>/dev/null | head -1 || echo 'NOT FOUND')"
 
 if ! command -v make &>/dev/null; then
-    echo "ERROR: make is required. Install via MSYS2:"
-    echo "  curl -sL https://repo.msys2.org/msys/x86_64/make-4.4.1-2-x86_64.pkg.tar.zst -o /tmp/make.pkg.tar.zst"
-    echo "  Then extract and copy make.exe to ~/bin/"
-    exit 1
+	echo "ERROR: make is required. Install via MSYS2:"
+	echo "  curl -sL https://repo.msys2.org/msys/x86_64/make-4.4.1-2-x86_64.pkg.tar.zst -o /tmp/make.pkg.tar.zst"
+	echo "  Then extract and copy make.exe to ~/bin/"
+	exit 1
 fi
 
 # --- Warehouse Setup ---
@@ -49,12 +49,12 @@ echo ""
 echo "=== Setting up warehouse (dbt deps + compile) ==="
 cd "$PROJECT_ROOT/warehouse"
 
-# Check if uv sync works (it may fail on pygraphviz on Windows)
+# Check if uv sync works
 if uv sync --no-group dev 2>/dev/null; then
-    echo "uv sync succeeded"
+	echo "uv sync succeeded"
 else
-    echo "uv sync failed (likely pygraphviz build issue). Using pip fallback..."
-    pip install dbt-core dbt-bigquery 2>/dev/null || python -m pip install dbt-core dbt-bigquery
+	echo "uv sync failed. Using pip fallback..."
+	pip install dbt-core dbt-bigquery 2>/dev/null || python -m pip install dbt-core dbt-bigquery
 fi
 
 uv run dbt deps || true
@@ -66,23 +66,23 @@ echo "=== Setting up airflow ==="
 cd "$SCRIPT_DIR"
 
 if [ ! -d ".venv" ]; then
-    uv sync
+	uv sync
 else
-    echo "Airflow venv already exists"
+	echo "Airflow venv already exists"
 fi
 
 # Setup composer environment
 if [ ! -d "composer/calitp-development-composer" ]; then
-    make setup
+	make setup
 else
-    echo "Composer environment already exists"
+	echo "Composer environment already exists"
 fi
 
 # Sync files
 make sync
 
 # Fix Windows-specific env var
-echo "COMPOSER_CONTAINER_RUN_AS_HOST_USER=False" >> composer/calitp-development-composer/variables.env 2>/dev/null || true
+echo "COMPOSER_CONTAINER_RUN_AS_HOST_USER=False" >>composer/calitp-development-composer/variables.env 2>/dev/null || true
 
 echo ""
 echo "=== Setup complete ==="

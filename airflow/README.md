@@ -130,17 +130,12 @@ $ source ~/.bashrc
 
 #### Known Windows Issues
 
-**1. `pygraphviz` requires a C compiler**
+**1. Windows Python 3.13 compatibility**
 
-`pygraphviz` has no pre-built Windows wheel and requires MSVC Build Tools + Graphviz to build from source. This prevents `uv sync` in `../warehouse` from completing. Workaround:
-
-- Install Graphviz from https://graphviz.org/download/ and ensure `bin/` is on PATH
+The `uv` package may not work with Python 3.13. Ensure you're using Python 3.11 for the warehouse environment.
 
 ```bash
-$ cd ../warehouse
-$ pip install dbt-core dbt-bigquery
-$ uv run dbt deps
-$ uv run dbt compile --target staging
+$ export UV_PYTHON="C:/Users/$USER/AppData/Local/Programs/Python/Python311/python.exe"
 ```
 
 **2. `COMPOSER_CONTAINER_RUN_AS_HOST_USER` must be `False`**
@@ -174,9 +169,10 @@ $ ./setup_windows.sh
 If any errors from the script run, follow the below steps to manually fix.
 
 ```bash
-# 2. Install warehouse deps with pip (avoids pygraphviz build issue)
+# 2. Install warehouse deps
 $ cd ../warehouse
-$ pip install dbt-core dbt-bigquery
+$ export UV_PYTHON="C:/Users/$USER/AppData/Local/Programs/Python/Python311/python.exe"
+$ uv sync
 $ uv run dbt deps
 $ uv run dbt compile --target staging
 
