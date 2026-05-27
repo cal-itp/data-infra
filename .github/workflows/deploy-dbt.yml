@@ -250,7 +250,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [compile, dbt-run]
 
-    if: ${{ !failure() && !cancelled() }}
+    # Skip on Dependabot PRs: Dependabot runs see a separate secrets
+    # namespace, so METABASE_API_KEY expands to "" and the sync step 401s.
+    if: ${{ !failure() && !cancelled() && github.actor != 'dependabot[bot]' }}
 
     permissions:
       contents: read
