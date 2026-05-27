@@ -633,7 +633,6 @@ resource "google_project_iam_member" "ms-entra-id-DDS_Warehouse_Users_Flex" {
   project = "cal-itp-data-infra"
 }
 
-# DDS_Payments_Admins and DDS_Warehouse_Users_Flex have been added with viewer access enabled.
 resource "google_project_iam_member" "ms-entra-id-DDS_Cloud_Owners" {
   for_each = toset([
     "roles/owner"
