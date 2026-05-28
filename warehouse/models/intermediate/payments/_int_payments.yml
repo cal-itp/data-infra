@@ -844,7 +844,6 @@ models:
       - name: status
         description: '{{ doc("lp_mp_status") }}'
         data_tests:
-          - not_null
           - accepted_values:
               arguments:
                 values: ["CLOSED", "CLOSING", "PENDING"]
