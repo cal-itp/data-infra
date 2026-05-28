@@ -2722,7 +2722,8 @@ models:
       - *rt_trip_start_time
       - *rt_stu_stop_id
       - *rt_stu_stop_sequence
-      - *rt_stu_actual_arrival
+      - <<: *rt_stu_actual_arrival
+        name: actual_arrival
       - *rt_stu_actual_departure
       - *rt_stu_actual_arrival_pacific
       - *rt_stu_actual_departure_pacific
@@ -2790,7 +2791,7 @@ models:
         description: '{{ doc("column_gtfs_rt__tu_prediction_error") }}'
       - name: scaled_prediction_error_by_minute_array
         description: '{{ doc("column_gtfs_rt__tu_scaled_prediction_error") }}'
-      - name: minutes_until_arrival
+      - name: minutes_until_arrival_array
         description: *rt_tu_minutes_until_arrival_desc
 
   - name: fct_trip_updates_trip_metrics
@@ -2824,7 +2825,7 @@ models:
         description: '{{ doc("column_gtfs_rt__tu_prediction_error") }}'
       - name: scaled_prediction_error_by_minute_array
         description: '{{ doc("column_gtfs_rt__tu_scaled_prediction_error") }}'
-      - name: minutes_until_arrival
+      - name: minutes_until_arrival_array
         description: *rt_tu_minutes_until_arrival_desc
 
   - name: fct_daily_schedule_rt_route_direction_summary
@@ -3106,6 +3107,7 @@ models:
       - name: n_vp_routes
         description: Count of distinct route_ids from the vehicle positions dataset.
       - name: pct_vp_routes
+        description: |
           The percent of scheduled routes that have at least 1 trip with vehicle positions data.
           n_vp_routes / n_schedule_routes
       - <<: *extract_duration_minutes

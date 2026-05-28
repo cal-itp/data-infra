@@ -504,6 +504,7 @@ models:
       - name: pct_vp_trips
         description: '{{ doc("column_n_vp_trips") }}'
       - name: pct_vp_routes
+        description: |
           The percent of scheduled routes that have at least 1 trip with vehicle positions data.
           n_vp_routes / n_schedule_routes
       - name: daily_vp_extract_duration_minutes
