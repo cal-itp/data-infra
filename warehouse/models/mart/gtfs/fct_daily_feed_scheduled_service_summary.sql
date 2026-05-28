@@ -72,6 +72,7 @@ fct_daily_feed_scheduled_service_summary AS (
         feeds.gtfs_dataset_key,
         feeds.gtfs_dataset_name,
         COALESCE(trips.ttl_service_hours, 0) AS ttl_service_hours,
+        COALESCE(trips.ttl_flex_service_hours, 0) AS ttl_flex_service_hours,
         COALESCE(trips.n_trips, 0) AS n_trips,
         trips.first_departure_sec,
         trips.last_arrival_sec,
