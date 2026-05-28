@@ -30,7 +30,7 @@ route_direction_aggregation AS (
         ROUND(SUM(service_hours), 2) AS ttl_service_hours,
         ROUND(SUM(flex_service_hours), 2) AS ttl_flex_service_hours,
         ROUND(SUM(service_hours) / COUNT(DISTINCT service_date), 2) AS daily_service_hours,
-        ROUND(SUM(ttl_flex_service_hours) / COUNT(DISTINCT service_date), 2) AS daily_flex_service_hours,
+        ROUND(SUM(flex_service_hours) / COUNT(DISTINCT service_date), 2) AS daily_flex_service_hours,
 
         COUNT(DISTINCT feed_key) AS n_feeds,
         COUNT(DISTINCT service_date) AS n_days,
