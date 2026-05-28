@@ -34,6 +34,7 @@ trip_summary AS (
         feed_key,
         gtfs_dataset_key,
         SUM(service_hours) AS ttl_service_hours,
+        SUM(flex_service_hours) AS ttl_flex_service_hours,
         COUNT(DISTINCT trip_id) AS n_trips,
         MIN(trip_first_departure_sec) AS first_departure_sec,
         MAX(trip_last_arrival_sec) AS last_arrival_sec,
