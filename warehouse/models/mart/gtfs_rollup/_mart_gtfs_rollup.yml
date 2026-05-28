@@ -353,6 +353,24 @@ models:
       - name: avg_stops_served
         description: &n_scheduled_stops_desc |
           Total number of distinct stop_ids that had trips scheduled for this period.
+      - &ttl_service_hours
+        name: ttl_service_hours
+        description: |
+          Total service hours for the schedule_base64_url for this period.
+      - &daily_service_hours
+        name: daily_service_hours
+        description: |
+          The average daily service hours for this period.
+          Total_service_hours / n_service_dates
+      - &ttl_flex_service_hours
+        name: ttl_flex_service_hours
+        description: |
+          Total flex service hours for the schedule_base64_url for this period.
+      - &daily_flex_service_hours
+        name: daily_flex_service_hours
+        description: |
+          The average daily flex service hours for this period.
+          Total_flex_service_hours / n_service_dates
       - *n_feed_keys
       - *n_service_days
       - name: daily_trips_owl
@@ -475,13 +493,8 @@ models:
         description: *n_scheduled_trips_desc
       - name: daily_trips
         description: '{{ doc("column_daily_trips_by_time_of_day") }}'
-      - name: ttl_service_hours
-        description: |
-          Total service hours for the schedule_base64_url for this period.
-      - name: daily_service_hours
-        description: |
-          The average daily service hours for this period.
-          Total_service_hours / n_service_dates
+      - *ttl_service_hours
+      - *daily_service_hours
       - name: n_routes
         description: |
           Total number of routes that had trips scheduled for this period.
@@ -504,6 +517,7 @@ models:
       - name: pct_vp_trips
         description: '{{ doc("column_n_vp_trips") }}'
       - name: pct_vp_routes
+        description: |
           The percent of scheduled routes that have at least 1 trip with vehicle positions data.
           n_vp_routes / n_schedule_routes
       - name: daily_vp_extract_duration_minutes
