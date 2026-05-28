@@ -893,6 +893,10 @@ models:
         name: ttl_service_hours
         description: |
           Total service hours across entire feed on date; can be 0 if no service
+      - &ttl_flex_service_hours
+        name: ttl_flex_service_hours
+        description: |
+          Total flex service hours across entire feed on date; can be 0 if no service
       - name: gtfs_dataset_key
         description: *gtfs_dataset_key_desc
       - name: gtfs_dataset_name
@@ -3002,6 +3006,7 @@ models:
       - *service_date_for_summaries
       - *feed_key
       - *ttl_service_hours
+      - *ttl_flex_service_hours
       - name: n_trips
         description: *n_scheduled_trips_desc
       - name: first_departure_sec
