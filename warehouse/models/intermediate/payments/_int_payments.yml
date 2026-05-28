@@ -773,3 +773,78 @@ models:
         description: '{{ doc("customer_funding_source_principal_customer_id") }}'
       - *bin
       - *card_scheme
+  - name: int_payments__filtered_micropayments
+    data_tests:
+      - &littlepay_uniqueness
+        dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - instance
+              - extract_filename
+              - ts
+              - _line_number
+    description: This model makes the assumption that, in the case of duplicated micropayment_id values, the one with the latest transaction_time in the latest export file takes precedence.
+    columns:
+      - name: micropayment_id
+        description: '{{ doc("lp_micropayment_id") }}'
+        data_tests:
+          - dbt_utils.not_null_proportion:
+              arguments:
+                at_least: 0.9999
+          - unique_proportion:
+              arguments:
+                at_least: 0.9999
+      - name: aggregation_id
+        description: '{{ doc("lp_aggregation_id") }}'
+      - *participant_id
+      - name: customer_id
+        description: '{{ doc("lp_customer_id") }}'
+      - name: funding_source_vault_id
+        description: '{{ doc("lp_funding_source_vault_id") }}'
+      - name: transaction_time
+        description: '{{ doc("lp_transaction_time") }}'
+      - name: payment_liability
+        description: '{{ doc("lp_payment_liability") }}'
+      - name: charge_amount
+        description: '{{ doc("lp_charge_amount") }}'
+      - name: nominal_amount
+        description: '{{ doc("lp_nominal_amount") }}'
+      - name: currency_code
+        description: '{{ doc("lp_currency_code") }}'
+      - name: type
+        description: '{{ doc("lp_mp_type") }}'
+      - name: charge_type
+        description: '{{ doc("lp_charge_type") }}'
+      - name: littlepay_export_date
+        description: '{{ doc("lp_export_date") }}'
+      - name: littlepay_export_ts
+        description: '{{ doc("lp_export_ts") }}'
+      - name: _line_number
+        description: '{{ doc("lp_line_number") }}'
+      - name: _key
+        description: '{{ doc("lp_input_row_key") }}'
+        data_tests:
+          - not_null
+          - unique
+      - name: _content_hash
+        description: '{{ doc("lp_content_hash") }}'
+      - name: _payments_key
+        description: '{{ doc("lp_payments_key") }}'
+        data_tests:
+          - not_null
+          - unique
+      - name: instance
+        description: '{{ doc("lp_instance") }}'
+      - name: feed_version
+        description: '{{ doc("lp_feed_version") }}'
+      - name: extract_filename
+        description: '{{ doc("lp_extract_filename") }}'
+      - name: ts
+        description: '{{ doc("lp_ts") }}'
+      - name: status
+        description: '{{ doc("lp_mp_status") }}'
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["CLOSED", "CLOSING", "PENDING"]

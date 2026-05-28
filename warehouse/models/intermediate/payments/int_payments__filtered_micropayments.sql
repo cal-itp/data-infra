@@ -1,14 +1,84 @@
 {{ config(materialized = "table") }}
 
 WITH micropayments AS (
-    SELECT *
+    SELECT
+        micropayment_id,
+        aggregation_id,
+        participant_id,
+        customer_id,
+        funding_source_vault_id,
+        transaction_time,
+        payment_liability,
+        charge_amount,
+        nominal_amount,
+        currency_code,
+        type,
+        charge_type,
+        status,
+        _line_number,
+        instance,
+        feed_version,
+        extract_filename,
+        ts,
+        littlepay_export_ts,
+        littlepay_export_date,
+        _content_hash,
+        _key,
+        _payments_key,
     FROM {{ ref('int_littlepay__unioned_micropayments') }}
 ),
 
 int_payments__filtered_micropayments AS (
-    SELECT *
+    SELECT
+        micropayment_id,
+        aggregation_id,
+        participant_id,
+        customer_id,
+        funding_source_vault_id,
+        transaction_time,
+        payment_liability,
+        charge_amount,
+        nominal_amount,
+        currency_code,
+        type,
+        charge_type,
+        status,
+        _line_number,
+        instance,
+        feed_version,
+        extract_filename,
+        ts,
+        littlepay_export_ts,
+        littlepay_export_date,
+        _content_hash,
+        _key,
+        _payments_key,
     FROM micropayments
     WHERE status != 'DELETED' OR status IS NULL
 )
 
-SELECT * FROM int_payments__filtered_micropayments
+SELECT
+    micropayment_id,
+    aggregation_id,
+    participant_id,
+    customer_id,
+    funding_source_vault_id,
+    transaction_time,
+    payment_liability,
+    charge_amount,
+    nominal_amount,
+    currency_code,
+    type,
+    charge_type,
+    status,
+    _line_number,
+    instance,
+    feed_version,
+    extract_filename,
+    ts,
+    littlepay_export_ts,
+    littlepay_export_date,
+    _content_hash,
+    _key,
+    _payments_key,
+FROM int_payments__filtered_micropayments

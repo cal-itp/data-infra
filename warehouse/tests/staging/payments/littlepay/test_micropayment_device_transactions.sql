@@ -17,7 +17,7 @@ with int_payments__cleaned_micropayment_device_transactions as (
 
 int_payments__filtered_micropayments as (
 
-    select * from {{ ref('int_littlepay__filtered_micropayments') }}
+    select * from {{ ref('int_payments__filtered_micropayments') }}
 
 ),
 
