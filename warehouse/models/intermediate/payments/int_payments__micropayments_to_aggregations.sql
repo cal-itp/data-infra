@@ -5,7 +5,14 @@
 }}
 
 WITH micropayments AS (
-    SELECT *
+    SELECT
+        micropayment_id,
+        aggregation_id,
+        participant_id,
+        charge_amount,
+        nominal_amount,
+        transaction_time,
+        charge_type,
     FROM {{ ref('int_payments__filtered_micropayments') }}
 ),
 

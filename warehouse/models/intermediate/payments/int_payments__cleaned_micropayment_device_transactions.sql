@@ -9,7 +9,11 @@ WITH int_littlepay__unioned_micropayment_device_transactions AS (
 ),
 
 int_payments__filtered_micropayments AS (
-    SELECT * FROM {{ ref('int_payments__filtered_micropayments') }}
+    SELECT
+        micropayment_id,
+        charge_type,
+        type,
+    FROM {{ ref('int_payments__filtered_micropayments') }}
 ),
 
 deduped_micropayment_device_transaction_ids AS (
