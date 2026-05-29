@@ -37,8 +37,6 @@ models:
               arguments:
                 config:
                   where: '__rt_sampled__'
-      - name: dt
-        description: UTC Date.
       - name: trip_id_performed
         description: GTFS-RT trip_id.
       - name: trip_stop_sequence
