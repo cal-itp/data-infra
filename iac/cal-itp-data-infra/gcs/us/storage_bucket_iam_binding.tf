@@ -400,6 +400,12 @@ resource "google_storage_bucket_iam_binding" "calitp-composer" {
   role    = "roles/storage.legacyBucketOwner"
 }
 
+resource "google_storage_bucket_iam_binding" "calitp-tides" {
+  bucket   = "calitp-tides"
+  members  = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
+  role     = "roles/storage.legacyObjectOwner"
+}
+
 resource "google_storage_bucket_iam_binding" "calitp" {
   for_each = local.environment_buckets
   bucket   = google_storage_bucket.calitp[each.key].name

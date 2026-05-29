@@ -1262,3 +1262,16 @@ resource "google_storage_bucket" "calitp" {
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
 }
+
+resource "google_storage_bucket" "calitp-tides" {
+  name                        = "calitp-tides"
+  project                     = "cal-itp-data-infra"
+  location                    = "US-WEST2"
+
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  public_access_prevention    = "inherited"
+  requester_pays              = "true"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
