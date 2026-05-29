@@ -6,14 +6,13 @@ from operators.bigquery_to_dict_operator import BigQueryToDictOperator
 from operators.tides_bigquery_to_parquet_operator import TIDESBigQueryToParquetOperator
 
 from airflow.decorators import dag, task
-from airflow.operators.latest_only import LatestOnlyOperator
 
 
 @dag(
     # Monday, Thursday at 10am PDT/9am PST (17pm UTC)
     schedule="0 17 * * 1,4",
     start_date=datetime(2025, 12, 1),
-    catchup=False,  # Change to True when tests are done to run all days
+    catchup=True,
     tags=["tides"],
     default_args={
         "email": os.getenv("CALITP_NOTIFY_EMAIL"),
@@ -23,10 +22,6 @@ from airflow.operators.latest_only import LatestOnlyOperator
     },
 )
 def generate_tides():
-    latest_only = LatestOnlyOperator(
-        task_id="latest_only", depends_on_past=False
-    )  # Remove this when tests are done to run all days
-
     @task
     def list_dates(
         data_interval_start=None, data_interval_end=None, **kwargs
@@ -114,8 +109,7 @@ def generate_tides():
     )
 
     (
-        latest_only
-        >> dates
+        dates
         >> date_publication_feeds
         >> merged_publication_feeds
         >> (export_vehicle_locations, export_trips_performed)
