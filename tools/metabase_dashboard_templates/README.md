@@ -86,7 +86,8 @@ The disadvantages of this approach are:
 Calling the command might be something like this:
 
 ```bash
-python3 tools/metabase_dashboard_templates/cli.py \
+# from tools/metabase_dashboard_templates/
+uv run cli.py \
   --metabase-url http://localhost:3000 \
   --metabase-api-key abc123 \
   dashboard-to-template \
@@ -125,7 +126,8 @@ collection for the dashboard and its cards).
 Calling the command might be something like this:
 
 ```bash
-python3 tools/metabase_dashboard_templates/cli.py \
+# from tools/metabase_dashboard_templates/
+uv run cli.py \
   --metabase-url http://localhost:3000 \
   --metabase-api-key abc123 \
   template-to-dashboard \

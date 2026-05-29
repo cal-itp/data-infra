@@ -44,12 +44,12 @@ You only need to do this once per workstation.
 
 ```bash
 cd tools/metabase_dashboard_templates
-python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
+uv sync
 ```
 
-This pulls in Jinja2, PyYAML, click, requests, and
-`google-cloud-secret-manager`.
+This creates a `.venv` and installs Jinja2, PyYAML, click, requests, and
+`google-cloud-secret-manager`. Run [`uv`](https://docs.astral.sh/uv/) commands
+from this directory.
 
 ### 2. GCP authentication
 
@@ -126,7 +126,7 @@ ______________________________________________________________________
 From the `tools/metabase_dashboard_templates/` directory:
 
 ```bash
-.venv/bin/python cli.py interactive
+uv run cli.py interactive
 ```
 
 That's the whole invocation. Everything else is a prompt.
@@ -363,7 +363,7 @@ two-step subcommands still work:
 
 ```bash
 # Export
-.venv/bin/python cli.py \
+uv run cli.py \
   --metabase-url "https://metabase-staging.dds.dot.ca.gov" \
   --gcp-secret "projects/cal-itp-data-infra-staging/secrets/metabase-dashboard-copy-tool-metabase-staging-api-key/versions/latest" \
   dashboard-to-template \
@@ -371,7 +371,7 @@ two-step subcommands still work:
   --template-file templates/304.yml
 
 # Apply
-.venv/bin/python cli.py \
+uv run cli.py \
   --metabase-url "https://metabase-staging.dds.dot.ca.gov" \
   --gcp-secret "projects/cal-itp-data-infra-staging/secrets/metabase-dashboard-copy-tool-metabase-staging-api-key/versions/latest" \
   template-to-dashboard \

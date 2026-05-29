@@ -1,0 +1,20 @@
+[project]
+name = "metabase-dashboard-templates"
+version = "0.1.0"
+description = "Manage Metabase dashboards as Jinja-templated YAML files."
+requires-python = ">=3.11"
+dependencies = [
+    "Jinja2",
+    "PyYAML",
+    "click",
+    "requests",
+    "google-cloud-secret-manager",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+]
+
+[tool.uv]
+package = false
