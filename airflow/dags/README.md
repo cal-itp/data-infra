@@ -18,7 +18,7 @@
 |  2:00 PM    | 6:00 AM              | 7:00 AM              | [dbt_all](#dbt_all)                                                                                                              | Monday and Thursday |
 |  2:00 PM    | 6:00 AM              | 7:00 AM              | [dbt_daily](#dbt_daily)                                                                                                          | Sunday, Tuesday, Wednesday, Friday, and Saturday |
 |  2:00 PM    | 6:00 AM              | 7:00 AM              | [airtable_issue_management](#airtable_issue_management)                                                                          | Fridays    |
-|  5:00 PM    | 9:00 AM              |10:00 AM              | [parse_tides](#parse_tides)                                                                                                      | Monday and Thursday |
+|  5:00 PM    | 9:00 AM              |10:00 AM              | [generate_tides](#generate_tides)                                                                                                      | Monday and Thursday |
 |  -          | -                    | -                    | [dbt_manual_run_with_args](#dbt_manual_run_with_args)<br>[download_gtfs_schedule_v2](./download_gtfs_schedule_v2)<br>[unzip_and_validate_gtfs_schedule_hourly](./unzip_and_validate_gtfs_schedule_hourly)| Runs Only Manually |
 
 ## dbt_all
@@ -201,19 +201,19 @@
       To visualize the raw data from these files, you can query **external_gtfs_schedule.{filename}\_txt_parse_outcomes** or **staging.stg_gtfs_schedule__file_parse_outcomes** in BigQuery.
 
 
-## parse_and_validate_rt (Parse and Validate RT)
+## generate_tides
+
+   This DAG exports daily Transit Integrated Data Exchange Specification (TIDES) data as parquet files.
+
+   The `mart_tides.fct_tides_vehicle_locations` view converts GTFS-Realtime data to TIDES limited by base64 urls from `staging.tides_publication_keys` and date (using the current UTC date).
+
+
+## parse_and_validate_rt
 
    This DAG orchestrates the parsing and validation of GTFS RT data downloaded by the [archiver](../../services/gtfs-rt-archiver-v3/README.md).
 
 
-## parse_tides (Parse TIDES)
-
-   This DAG exports daily Transit Integrated Data Exchange Specification (TIDES) data as parquet files.
-
-   The `mart_tides.fct_tides_vehicle_locations` converts GTFS-Realtime data to TIDES limited by base64 urls from `staging.tides_publication_keys` and date (using the current UTC date).
-
-
-## publish_gtfs (Publish GTFS)
+## publish_gtfs
 
    This DAG orchestrates the publishing of data from the Cal-ITP data warehouse to the California Open Data Portal. Failures in this job may require coordination with the central data portal team if there is an issue with CKAN itself.
 

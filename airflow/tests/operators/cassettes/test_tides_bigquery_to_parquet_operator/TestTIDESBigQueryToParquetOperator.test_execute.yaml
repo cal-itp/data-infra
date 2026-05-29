@@ -1,10 +1,10 @@
 interactions:
 - request:
     body: '{"useLegacySql": false, "formatOptions": {"useInt64Timestamp": true}, "query":
-      "EXPORT DATA OPTIONS(uri=''gs://calitp-staging-pytest/vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/data_*.parquet'',format=''PARQUET'',compression=''SNAPPY'',overwrite=true)
-      AS SELECT * FROM `mart_tides.fct_tides_vehicle_locations` WHERE dt = CAST(''2026-04-01''
-      AS DATE) AND base64_url = ''aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==''",
-      "requestId": "c5f11261-58c5-4f3f-b1bd-3c153b02e06e"}'
+      "\n            EXPORT DATA OPTIONS(\n            uri=''gs://calitp-staging-pytest/vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/data_*.parquet'',\n            format=''PARQUET'',\n            compression=''SNAPPY'',\n            overwrite=true\n            )
+      AS SELECT * FROM `mart_tides.fct_tides_vehicle_locations`\n            WHERE
+      service_date = CAST(''2026-04-01'' AS DATE)\n            AND base64_url = ''aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==''\n        ",
+      "requestId": "044548e1-a40a-4625-9565-9c540ed6864d"}'
     headers:
       Accept:
       - '*/*'
@@ -15,7 +15,7 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '608'
+      - '738'
       Content-Type:
       - application/json
       User-Agent:
@@ -29,12 +29,12 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAC/42QzW7CMBCE32V7JRL5x9xKG0oPSG2gZ2ScDXUwdmpvRBHi3esELm1VqRdb8uzM
-        fOsz7KWuYApbufvo0J7uhrNE1xrtEEbQmG2JNVrUAmF6htaaBgU99ybBVSCpDSpOPJC6tjxwxHdS
-        767GYcjfm3oeL+aZa0zcHOf7TX6/zLtOU8ROn09+VBnBSRrtpzsXHNFRBJcRkCGuZidC92KNQOew
-        z8ujMcviMLtWPJhDq5A8GtkORx5JvONCEkxrrpx/GPb5L0gfaHFgKZG7nugMwlQ+Hsri9a1YrYvH
-        72gzqdSNK07DPEngpq6UoaXzQppNwj+W9Ly3urU89CVhnrNkEmXjScjGXvbfaemXlrLeirr6qbCE
-        Mbh8AewlKizVAQAA
+        H4sIAAAAAAAC/42QzW7CMBCE32V7JZKTAAncmpaKHspPAIlbZZwFTI0d7I0qhHj32qE9tFWlXmzJ
+        szvzjS/wJnUFQ9jI3alBe75rzxJdbbRD6MDBbErcokUtEIYXqK05oKDnsCS4iiTVUcWJR1JvLY8c
+        8Z3Uu9tiO+Tv12nWz9azqTyO5/eTp2a9T3FCtjjF8Zj5UWUEJ2m0n25c9I6OErh2gAxxVZwJ3cwa
+        gc5h8EtYl3WzAevfMh7MsVZIno1sgx3PJPY4lgTDLVfOP7SF/ksSDC22MCVyF5AuIEzl7aEczVej
+        xXL0+J2tkEp9gXWzJE2CTysvlKEX55XeIE//qOmBP/OW8hhS4ixnLI8HcRKnoaL/UEu/tB7LvYa6
+        +qmkab8H1w+ALhqp1wEAAA==
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -43,7 +43,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Fri, 22 May 2026 20:43:29 GMT
+      - Fri, 29 May 2026 19:11:53 GMT
       Server:
       - ESF
       Transfer-Encoding:
@@ -62,14 +62,13 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: "--===============3655653244343581896==\r\ncontent-type: application/json;
-      charset=UTF-8\r\n\r\n{\"name\": \"vehicle_location_outcomes/dt=2026-04-01/ts=2026-04-01T00:00:00+00:00/organization_source_record_id=rec8zhnCPETu6qEiH/aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl\",
-      \"crc32c\": \"ftZxWw==\"}\r\n--===============3655653244343581896==\r\ncontent-type:
+    body: "--===============5457468762836891482==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"vehicle_location_outcomes/dt=2026-04-01/ts=2026-04-01T00:00:00+00:00/organization_source_record_id=rec8zhnCPETu6qEiH/aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl\"}\r\n--===============5457468762836891482==\r\ncontent-type:
       application/jsonl\r\n\r\n{\"dataset_name\": \"mart_tides\", \"table_name\":
       \"fct_tides_vehicle_locations\", \"organization_source_record_id\": \"rec8zhnCPETu6qEiH\",
       \"base64_url\": \"aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==\",
       \"display_name\": \"Beach Cities VehiclePositions\", \"destination_path\": \"vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/data_*.parquet\",
-      \"dt\": \"2026-04-01\", \"ts\": \"2026-04-01T00:00:00+00:00\"}\r\n--===============3655653244343581896==--"
+      \"service_date\": \"2026-04-01\", \"ts\": \"2026-04-01T00:00:00+00:00\"}\r\n--===============5457468762836891482==--"
     headers:
       Accept:
       - application/json
@@ -80,17 +79,17 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '971'
+      - '959'
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/2.19.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/87fa019f-767a-4f1e-a095-dbef3380d402
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/2.19.0 gccl-invocation-id/8278cc04-2d51-4c48-b740-6aaa776fa3d9
       content-type:
       - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0zNjU1NjUzMjQ0MzQz
-        NTgxODk2PT0i
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT01NDU3NDY4NzYyODM2
+        ODkxNDgyPT0i
       x-goog-user-project:
       - cal-itp-data-infra-staging
       x-upload-content-type:
@@ -99,17 +98,17 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/vehicle_location_outcomes/dt=2026-04-01/ts=2026-04-01T00:00:00+00:00/organization_source_record_id=rec8zhnCPETu6qEiH/aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl/1779482610881022\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/vehicle_location_outcomes/dt=2026-04-01/ts=2026-04-01T00:00:00+00:00/organization_source_record_id=rec8zhnCPETu6qEiH/aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl/1780081914530449\",\n
         \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/vehicle_location_outcomes%2Fdt=2026-04-01%2Fts=2026-04-01T00:00:00%2B00:00%2Forganization_source_record_id=rec8zhnCPETu6qEiH%2FaHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/vehicle_location_outcomes%2Fdt=2026-04-01%2Fts=2026-04-01T00:00:00%2B00:00%2Forganization_source_record_id=rec8zhnCPETu6qEiH%2FaHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl?generation=1779482610881022&alt=media\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/vehicle_location_outcomes%2Fdt=2026-04-01%2Fts=2026-04-01T00:00:00%2B00:00%2Forganization_source_record_id=rec8zhnCPETu6qEiH%2FaHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl?generation=1780081914530449&alt=media\",\n
         \ \"name\": \"vehicle_location_outcomes/dt=2026-04-01/ts=2026-04-01T00:00:00+00:00/organization_source_record_id=rec8zhnCPETu6qEiH/aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1779482610881022\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1780081914530449\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
-        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"525\",\n  \"md5Hash\": \"6kIe6saunl1UNxQjlnvdXA==\",\n
-        \ \"crc32c\": \"ftZxWw==\",\n  \"etag\": \"CP6jn6fhzZQDEAE=\",\n  \"timeCreated\":
-        \"2026-05-22T20:43:30.884Z\",\n  \"updated\": \"2026-05-22T20:43:30.884Z\",\n
-        \ \"timeStorageClassUpdated\": \"2026-05-22T20:43:30.884Z\",\n  \"timeFinalized\":
-        \"2026-05-22T20:43:30.884Z\"\n}\n"
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"535\",\n  \"md5Hash\": \"dQ4+8ZzPTG2IET/jU9pd4Q==\",\n
+        \ \"crc32c\": \"x7HR/A==\",\n  \"etag\": \"CJGVv/GZ35QDEAE=\",\n  \"timeCreated\":
+        \"2026-05-29T19:11:54.537Z\",\n  \"updated\": \"2026-05-29T19:11:54.537Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-05-29T19:11:54.537Z\",\n  \"timeFinalized\":
+        \"2026-05-29T19:11:54.537Z\"\n}\n"
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -120,9 +119,9 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Fri, 22 May 2026 20:43:30 GMT
+      - Fri, 29 May 2026 19:11:54 GMT
       ETag:
-      - CP6jn6fhzZQDEAE=
+      - CJGVv/GZ35QDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -133,16 +132,16 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AAVLpEhbBVZ2mL0zl9OiJeEdFyFQkOKdZl5B76dY9aQriDg0-ci-EGxUEdh-YfIiDKaAOfCCQa2cQQ
+      - AAVLpEjUGTjKzLxvI5kothsoLF9KNzxfBLQzTAx1Evc5RtChsav-7cP-aDDPKjF26Y_8XdLN
     status:
       code: 200
       message: OK
 - request:
     body: '{"useLegacySql": false, "formatOptions": {"useInt64Timestamp": true}, "query":
-      "EXPORT DATA OPTIONS(uri=''gs://calitp-staging-pytest/vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/data_*.parquet'',format=''PARQUET'',compression=''SNAPPY'',overwrite=true)
-      AS SELECT * FROM `mart_tides.fct_tides_vehicle_locations` WHERE dt = CAST(''2026-04-01''
-      AS DATE) AND base64_url = ''aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==''",
-      "requestId": "727dc184-8672-488c-bd3f-7edda243a13c"}'
+      "\n            EXPORT DATA OPTIONS(\n            uri=''gs://calitp-staging-pytest/vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/data_*.parquet'',\n            format=''PARQUET'',\n            compression=''SNAPPY'',\n            overwrite=true\n            )
+      AS SELECT * FROM `mart_tides.fct_tides_vehicle_locations`\n            WHERE
+      service_date = CAST(''2026-04-01'' AS DATE)\n            AND base64_url = ''aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==''\n        ",
+      "requestId": "616ae5ca-ab9f-4428-9b89-f9a722f96734"}'
     headers:
       Accept:
       - '*/*'
@@ -153,14 +152,14 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '608'
+      - '738'
       Content-Type:
       - application/json
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
         gccl/3.39.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
         gccl/3.39.0
       x-goog-user-project:
       - cal-itp-data-infra-staging
@@ -169,12 +168,12 @@ interactions:
   response:
     body:
       string: !!binary |
-        H4sIAAAAAAAC/42QzW7CMBCE32V7JRJOQoI50lIVKqQ2oRLqpXKcJTU1dmovrRDi3esELv059GJL
-        ntmZb32EN2VqmEClmvc9usNVfxboW2s8wgC2tipwgw6NRJgcoXV2i5Lm3ZAUOlLURrUgESmzcSLy
-        JBplmvNgbwr3S1IusDroW36/aJbZcPo8b2uOH+u0bHmwaisFKWuCe++jT/QUw2kAZEno6YHQPzgr
-        0Xvs8vJ4yLOEZeeKa7trNVJAI7fHQUCSr3inCCYboX146Pf5L0gX6LBnKVD4jugI0tYhHorZ49Os
-        XM1uvqNNldYXrmTE8jSFi1pqS0sfhFHaw/61ZOC91K3Urithec7TcZyxmPFRkMN3OvqlpeMuEE39
-        U0kYZ3D6AlfMy4/VAQAA
+        H4sIAAAAAAAC/42QX0/CMBTFv8v1lSXdwP3hEVmiiVMYqI+kdHezWNrRXmKQ8N3tBj6oMfGlTXru
+        Oed3e4Q3qSsYw1o2uz3aw1V/luhaox3CADZmXWKNFrVAGB+htWaDgu46k+AqkNQGFSceSF1bHjji
+        jdTN2dgP+XvVVA9VlhWr8OMlx13xODPPZsfU9H4up35UGcFJGu2n9y54R0cRnAZAhriaHAjdzBqB
+        zmGXF7ERGyUZi88dN2bbKiTPRnaPA88kXvFWEoxrrpx/6Bf6L0kXaLGHKZG7DukIwlQ+Hsp8/pQv
+        lvn0O9tEKvUFNkqiYcTgIi+UocJ5JY6G6R9reuBL31Juu5YwSRlLwyy8jpPQy/5DLf3UYsY6K+rq
+        l5ImDE6fNWFTU9cBAAA=
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -183,7 +182,7 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Fri, 22 May 2026 20:43:33 GMT
+      - Fri, 29 May 2026 19:11:56 GMT
       Server:
       - ESF
       Transfer-Encoding:
@@ -202,14 +201,13 @@ interactions:
       code: 200
       message: OK
 - request:
-    body: "--===============2127624948050800564==\r\ncontent-type: application/json;
-      charset=UTF-8\r\n\r\n{\"name\": \"vehicle_location_outcomes/dt=2026-04-01/ts=2026-04-01T00:00:00+00:00/organization_source_record_id=rec8zhnCPETu6qEiH/aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl\",
-      \"crc32c\": \"ftZxWw==\"}\r\n--===============2127624948050800564==\r\ncontent-type:
+    body: "--===============8836307342028788631==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"vehicle_location_outcomes/dt=2026-04-01/ts=2026-04-01T00:00:00+00:00/organization_source_record_id=rec8zhnCPETu6qEiH/aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl\"}\r\n--===============8836307342028788631==\r\ncontent-type:
       application/jsonl\r\n\r\n{\"dataset_name\": \"mart_tides\", \"table_name\":
       \"fct_tides_vehicle_locations\", \"organization_source_record_id\": \"rec8zhnCPETu6qEiH\",
       \"base64_url\": \"aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==\",
       \"display_name\": \"Beach Cities VehiclePositions\", \"destination_path\": \"vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/data_*.parquet\",
-      \"dt\": \"2026-04-01\", \"ts\": \"2026-04-01T00:00:00+00:00\"}\r\n--===============2127624948050800564==--"
+      \"service_date\": \"2026-04-01\", \"ts\": \"2026-04-01T00:00:00+00:00\"}\r\n--===============8836307342028788631==--"
     headers:
       Accept:
       - application/json
@@ -220,17 +218,17 @@ interactions:
       Connection:
       - keep-alive
       Content-Length:
-      - '971'
+      - '959'
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/2.19.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/1331de4e-8d32-431c-b943-333276b81941
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/2.19.0 gccl-invocation-id/8c56262c-9a27-477a-aaa1-7e2879e9719e
       content-type:
       - !!binary |
-        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0yMTI3NjI0OTQ4MDUw
-        ODAwNTY0PT0i
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT04ODM2MzA3MzQyMDI4
+        Nzg4NjMxPT0i
       x-goog-user-project:
       - cal-itp-data-infra-staging
       x-upload-content-type:
@@ -239,17 +237,17 @@ interactions:
     uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
   response:
     body:
-      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/vehicle_location_outcomes/dt=2026-04-01/ts=2026-04-01T00:00:00+00:00/organization_source_record_id=rec8zhnCPETu6qEiH/aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl/1779482614246378\",\n
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/vehicle_location_outcomes/dt=2026-04-01/ts=2026-04-01T00:00:00+00:00/organization_source_record_id=rec8zhnCPETu6qEiH/aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl/1780081918004930\",\n
         \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/vehicle_location_outcomes%2Fdt=2026-04-01%2Fts=2026-04-01T00:00:00%2B00:00%2Forganization_source_record_id=rec8zhnCPETu6qEiH%2FaHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl\",\n
-        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/vehicle_location_outcomes%2Fdt=2026-04-01%2Fts=2026-04-01T00:00:00%2B00:00%2Forganization_source_record_id=rec8zhnCPETu6qEiH%2FaHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl?generation=1779482614246378&alt=media\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/vehicle_location_outcomes%2Fdt=2026-04-01%2Fts=2026-04-01T00:00:00%2B00:00%2Forganization_source_record_id=rec8zhnCPETu6qEiH%2FaHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl?generation=1780081918004930&alt=media\",\n
         \ \"name\": \"vehicle_location_outcomes/dt=2026-04-01/ts=2026-04-01T00:00:00+00:00/organization_source_record_id=rec8zhnCPETu6qEiH/aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl\",\n
-        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1779482614246378\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1780081918004930\",\n
         \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
-        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"525\",\n  \"md5Hash\": \"6kIe6saunl1UNxQjlnvdXA==\",\n
-        \ \"crc32c\": \"ftZxWw==\",\n  \"etag\": \"COrX7KjhzZQDEAE=\",\n  \"timeCreated\":
-        \"2026-05-22T20:43:34.253Z\",\n  \"updated\": \"2026-05-22T20:43:34.253Z\",\n
-        \ \"timeStorageClassUpdated\": \"2026-05-22T20:43:34.253Z\",\n  \"timeFinalized\":
-        \"2026-05-22T20:43:34.253Z\"\n}\n"
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"535\",\n  \"md5Hash\": \"dQ4+8ZzPTG2IET/jU9pd4Q==\",\n
+        \ \"crc32c\": \"x7HR/A==\",\n  \"etag\": \"CMKdk/OZ35QDEAE=\",\n  \"timeCreated\":
+        \"2026-05-29T19:11:58.014Z\",\n  \"updated\": \"2026-05-29T19:11:58.014Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-05-29T19:11:58.014Z\",\n  \"timeFinalized\":
+        \"2026-05-29T19:11:58.014Z\"\n}\n"
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -260,9 +258,9 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Fri, 22 May 2026 20:43:34 GMT
+      - Fri, 29 May 2026 19:11:58 GMT
       ETag:
-      - COrX7KjhzZQDEAE=
+      - CMKdk/OZ35QDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Pragma:
@@ -273,7 +271,7 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AAVLpEi6AuEDDA2vvGgAR7y-88ZAmr6GgcjoaBpQ1YhG1KVtcel_uUAtEt1Mzgl2lEe8rJKh
+      - AAVLpEh44TzDzyxf_-60Yx-WbXFlKc-4-mY-YAtIO5ZOd-Wzfq6O3-TYaZNM06ObstOAR_Rd
     status:
       code: 200
       message: OK
@@ -289,18 +287,18 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/2.19.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/498c8f4d-93c1-4466-bbb8-6a381287cbb6
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/2.19.0 gccl-invocation-id/047eccf2-e7df-42a2-9f08-01c192b2e4f2
       x-goog-user-project:
       - cal-itp-data-infra-staging
     method: GET
     uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?matchGlob=vehicle_locations%2Forganization_source_record_id%3Drec8zhnCPETu6qEiH%2Fbase64_url%3DaHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw%3D%3D%2Fdt%3D2026-04-01%2Fdata_%2A.parquet&prettyPrint=false
   response:
     body:
-      string: '{"kind":"storage#objects","items":[{"kind":"storage#object","id":"calitp-staging-pytest/vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/data_000000000000.parquet/1779482613054985","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/vehicle_locations%2Forganization_source_record_id=rec8zhnCPETu6qEiH%2Fbase64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==%2Fdt=2026-04-01%2Fdata_000000000000.parquet","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/vehicle_locations%2Forganization_source_record_id=rec8zhnCPETu6qEiH%2Fbase64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==%2Fdt=2026-04-01%2Fdata_000000000000.parquet?generation=1779482613054985&alt=media","name":"vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/data_000000000000.parquet","bucket":"calitp-staging-pytest","generation":"1779482613054985","metageneration":"1","contentType":"application/octet-stream","storageClass":"STANDARD","size":"3779","md5Hash":"SiCvQIRYppCS28T2Kyttlg==","crc32c":"xfA+TQ==","etag":"CIn8o6jhzZQDEAE=","timeCreated":"2026-05-22T20:43:33.063Z","updated":"2026-05-22T20:43:33.063Z","timeStorageClassUpdated":"2026-05-22T20:43:33.063Z","timeFinalized":"2026-05-22T20:43:33.063Z"}]}'
+      string: '{"kind":"storage#objects","items":[{"kind":"storage#object","id":"calitp-staging-pytest/vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/data_000000000000.parquet/1780081916764218","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/vehicle_locations%2Forganization_source_record_id=rec8zhnCPETu6qEiH%2Fbase64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==%2Fdt=2026-04-01%2Fdata_000000000000.parquet","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/vehicle_locations%2Forganization_source_record_id=rec8zhnCPETu6qEiH%2Fbase64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==%2Fdt=2026-04-01%2Fdata_000000000000.parquet?generation=1780081916764218&alt=media","name":"vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/data_000000000000.parquet","bucket":"calitp-staging-pytest","generation":"1780081916764218","metageneration":"1","contentType":"application/octet-stream","storageClass":"STANDARD","size":"2579","md5Hash":"3XeAGFcB1+wBN1xHmUVd5Q==","crc32c":"buahcA==","etag":"CLrAx/KZ35QDEAE=","timeCreated":"2026-05-29T19:11:56.772Z","updated":"2026-05-29T19:11:56.772Z","timeStorageClassUpdated":"2026-05-29T19:11:56.772Z","timeFinalized":"2026-05-29T19:11:56.772Z"}]}'
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -311,16 +309,16 @@ interactions:
       Content-Type:
       - application/json; charset=UTF-8
       Date:
-      - Fri, 22 May 2026 20:43:35 GMT
+      - Fri, 29 May 2026 19:11:59 GMT
       Expires:
-      - Fri, 22 May 2026 20:43:35 GMT
+      - Fri, 29 May 2026 19:11:59 GMT
       Server:
       - UploadServer
       Vary:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AAVLpEh-qWKlILhDd2C8xXruLl-RwYeRbadg20RgUqIllX-sMiwpJAO-jS8_BAjTETSSz_h-
+      - AAVLpEj6Rv88Uhofkmy-nsKyTnEY9ii1VsblG9r0pBLDA_1SbZ7Ft2lIqc_RMmh2V07zNM29
     status:
       code: 200
       message: OK
@@ -334,11 +332,11 @@ interactions:
       Connection:
       - keep-alive
       User-Agent:
-      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/2.19.0
       X-Goog-API-Client:
-      - gcloud-python/3.7.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
-        gccl/3.7.0 gccl-invocation-id/05740df9-f8a2-43f2-a080-be41aaab63ce
+      - gcloud-python/2.19.0  gl-python/3.11.13 grpc/1.76.0 gax/2.28.1 gapic/3.39.0
+        gccl/2.19.0 gccl-invocation-id/b973398a-9faa-47e8-a87f-420401785fdf
       accept-encoding:
       - gzip
       content-type:
@@ -354,7 +352,7 @@ interactions:
       string: '{"dataset_name": "mart_tides", "table_name": "fct_tides_vehicle_locations",
         "organization_source_record_id": "rec8zhnCPETu6qEiH", "base64_url": "aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==",
         "display_name": "Beach Cities VehiclePositions", "destination_path": "vehicle_locations/organization_source_record_id=rec8zhnCPETu6qEiH/base64_url=aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==/dt=2026-04-01/data_*.parquet",
-        "dt": "2026-04-01", "ts": "2026-04-01T00:00:00+00:00"}'
+        "service_date": "2026-04-01", "ts": "2026-04-01T00:00:00+00:00"}'
     headers:
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
@@ -363,17 +361,17 @@ interactions:
       Content-Disposition:
       - attachment
       Content-Length:
-      - '525'
+      - '535'
       Content-Type:
       - application/jsonl
       Date:
-      - Fri, 22 May 2026 20:43:35 GMT
+      - Fri, 29 May 2026 19:11:59 GMT
       ETag:
-      - COrX7KjhzZQDEAE=
+      - CMKdk/OZ35QDEAE=
       Expires:
       - Mon, 01 Jan 1990 00:00:00 GMT
       Last-Modified:
-      - Fri, 22 May 2026 20:43:34 GMT
+      - Fri, 29 May 2026 19:11:58 GMT
       Pragma:
       - no-cache
       Server:
@@ -382,11 +380,11 @@ interactions:
       - Origin
       - X-Origin
       X-GUploader-UploadID:
-      - AAVLpEiEuUIR7ZtLlwUxf7D0EGu8nZ06m2j5piXTI4VuGj_uAtuXPnkKEdzKWeghzULbi1Ww
+      - AAVLpEgKwVWEJ6LnMb4MpFTF3HFtne-K_nBMNtDDiWqULCCRoHKx2Fu4Z7C6FSeGV87mtR5Z
       X-Goog-Generation:
-      - '1779482614246378'
+      - '1780081918004930'
       X-Goog-Hash:
-      - crc32c=ftZxWw==,md5=6kIe6saunl1UNxQjlnvdXA==
+      - crc32c=x7HR/A==,md5=dQ4+8ZzPTG2IET/jU9pd4Q==
       X-Goog-Metageneration:
       - '1'
       X-Goog-Storage-Class:
@@ -394,7 +392,7 @@ interactions:
       X-Goog-Stored-Content-Encoding:
       - identity
       X-Goog-Stored-Content-Length:
-      - '525'
+      - '535'
     status:
       code: 200
       message: OK

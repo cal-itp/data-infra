@@ -6,17 +6,17 @@
 }}
 
 -- Day-by-day record of which vehicle-positions feed to publish for which
--- organization on which scrape-day (dt) -- one row per (dt, organization,
--- feed). The TIDES export DAG reads this filtered to a single dt and fans out
+-- organization on which service_date (Pacific Time) -- one row per (service_date, organization,
+-- feed). The TIDES export DAG reads this filtered to a single service_date and fans out
 -- one parquet export per row:
 --     SELECT ... FROM fct_tides_vehicle_locations
---     WHERE dt = <ds> AND base64_url = <row.base64_url>
+--     WHERE service_date = <ds> AND base64_url = <row.base64_url>
 --
--- dt + base64_url are observed straight from fct_tides_vehicle_locations (which
+-- service_date + base64_url are observed straight from fct_tides_vehicle_locations (which
 -- is already restricted to the published organizations -- the denylist
 -- anti-join lives there), so the URL recorded for a day is the URL that
 -- actually served data that day: a feed-URL rotation flows through on its own,
--- and a backfill of any past dt picks up the URL that was correct then.
+-- and a backfill of any past service_date picks up the URL that was correct then.
 -- Organization and feed names are attached from the current dim snapshot.
 --
 -- KNOWN LIMITATION (regional/combined feeds): a VP gtfs_dataset_key attached to
@@ -26,7 +26,7 @@
 -- before onboarding agencies that publish through a shared regional feed.
 WITH feed_days AS (
     SELECT DISTINCT
-        dt,
+        service_date,
         organization_source_record_id,
         gtfs_dataset_key,
         base64_url
@@ -49,7 +49,7 @@ feed_meta AS (
 )
 
 SELECT
-    fd.dt,
+    fd.service_date,
     fd.organization_source_record_id,
     fm.vehicle_positions_source_record_id,
     fm.agency_name,

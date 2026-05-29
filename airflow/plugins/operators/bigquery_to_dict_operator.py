@@ -12,9 +12,8 @@ class BigQueryToDictOperator(BaseOperator):
         "dataset_name",
         "table_name",
         "select_columns",
-        "filter_date_column",
-        "filter_date_start",
-        "filter_date_end",
+        "filter_column",
+        "filter_value",
         "order_columns",
         "gcp_conn_id",
     )
@@ -24,9 +23,8 @@ class BigQueryToDictOperator(BaseOperator):
         dataset_name: str,
         table_name: str,
         select_columns: list[str],
-        filter_date_column: str,
-        filter_date_start: str,
-        filter_date_end: str,
+        filter_column: str,
+        filter_value: str,
         order_columns: str,
         gcp_conn_id: str = "google_cloud_default",
         **kwargs,
@@ -38,9 +36,8 @@ class BigQueryToDictOperator(BaseOperator):
         self.dataset_name: str = dataset_name
         self.table_name: str = table_name
         self.select_columns: list[str] = select_columns
-        self.filter_date_column: str = filter_date_column
-        self.filter_date_start: str = filter_date_start
-        self.filter_date_end: str = filter_date_end
+        self.filter_column: str = filter_column
+        self.filter_value: str = filter_value
         self.order_columns: str = order_columns
         self.gcp_conn_id: str = gcp_conn_id
 
@@ -62,13 +59,21 @@ class BigQueryToDictOperator(BaseOperator):
         return self._big_query_hook
 
     def rows(self) -> list[list[str]]:
+        template = """
+            SELECT {select_columns}
+            FROM `{dataset_name}.{table_name}`
+            WHERE {filter_column} = '{filter_value}'
+            ORDER BY {order_columns}
+        """
         return self.bigquery_hook().get_records(
-            sql=f"""
-                SELECT {", ".join(self.select_columns)}
-                FROM `{self.dataset_name}.{self.table_name}`
-                WHERE {self.filter_date_column} BETWEEN CAST('{self.filter_date_start}' AS DATE) AND CAST('{self.filter_date_end}' AS DATE)
-                ORDER BY {self.order_columns}
-            """,
+            sql=template.format(
+                select_columns=", ".join(self.select_columns),
+                dataset_name=self.dataset_name,
+                table_name=self.table_name,
+                filter_column=self.filter_column,
+                filter_value=self.filter_value,
+                order_columns=self.order_columns,
+            ),
         )
 
     def execute(self, context: Context) -> list[dict]:

@@ -90,7 +90,7 @@ class TestTIDESBigQueryToParquetOperator:
                 destination_path_prefix,
                 "data_*.parquet",
             ),
-            "dt": "2026-04-01",
+            "service_date": "2026-04-01",
             "ts": "2026-04-01T00:00:00+00:00",
         }
 
@@ -119,6 +119,6 @@ class TestTIDESBigQueryToParquetOperator:
                 destination_path_prefix,
                 "data_*.parquet",
             ),
-            "dt": "2026-04-01",
+            "service_date": "2026-04-01",
             "ts": "2026-04-01T00:00:00+00:00",
         }
