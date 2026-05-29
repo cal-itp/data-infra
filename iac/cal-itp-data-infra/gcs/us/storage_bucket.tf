@@ -1264,9 +1264,9 @@ resource "google_storage_bucket" "calitp" {
 }
 
 resource "google_storage_bucket" "calitp-tides" {
-  name                        = "calitp-tides"
-  project                     = "cal-itp-data-infra"
-  location                    = "US-WEST2"
+  name     = "calitp-tides"
+  project  = "cal-itp-data-infra"
+  location = "US-WEST2"
 
   default_event_based_hold    = "false"
   force_destroy               = "false"
