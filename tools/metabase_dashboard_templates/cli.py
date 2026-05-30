@@ -82,7 +82,7 @@ try:  # package context (e.g. `tools.metabase_dashboard_templates.cli` under pyt
         TEMPLATES_DIR,
     )
     from .environments import ENV_LABELS, ENVIRONMENTS
-    from .gcp_secrets import fetch_secret_from_gcp
+    from .gcp_secrets import SecretAccessError, fetch_secret_from_gcp
 except ImportError:  # script context (e.g. `uv run cli.py`, `python cli.py`)
     from constants import (
         POST_DASHBOARD_KEYS,
@@ -92,7 +92,7 @@ except ImportError:  # script context (e.g. `uv run cli.py`, `python cli.py`)
         TEMPLATES_DIR,
     )
     from environments import ENV_LABELS, ENVIRONMENTS
-    from gcp_secrets import fetch_secret_from_gcp
+    from gcp_secrets import SecretAccessError, fetch_secret_from_gcp
 
 # ---------------------------------------------------------------------------
 # Metabase HTTP helpers
@@ -1413,7 +1413,10 @@ def _ensure_session(ctx: click.Context) -> None:
         )
     if gcp_secret:
         click.echo(f"Fetching Metabase API key from GCP: {gcp_secret}", err=True)
-        api_key = fetch_secret_from_gcp(gcp_secret)
+        try:
+            api_key = fetch_secret_from_gcp(gcp_secret)
+        except SecretAccessError as exc:
+            raise click.ClickException(str(exc))
     ctx.obj["session"] = make_session(api_key)
     ctx.obj["base_url"] = url.rstrip("/")
 
@@ -1707,7 +1710,10 @@ def _connect_env(env_name: str) -> tuple[requests.Session, str]:
     cfg = ENVIRONMENTS[env_name]
     label = ENV_LABELS.get(env_name, env_name)
     click.echo(f"Fetching API key from GCP for {label}...", err=True)
-    api_key = fetch_secret_from_gcp(cfg["gcp_secret"])
+    try:
+        api_key = fetch_secret_from_gcp(cfg["gcp_secret"])
+    except SecretAccessError as exc:
+        raise click.ClickException(str(exc))
     return make_session(api_key), cfg["url"].rstrip("/")
 
 
