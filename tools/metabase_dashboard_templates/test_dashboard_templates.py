@@ -6,9 +6,8 @@ Two flows are exercised:
   - dashboard-to-template:  jinjaify + emit_template_yaml
   - template-to-dashboard:  Jinja env helpers + render_template_text + apply_dashboard
 
-Run (from repo root):
-    python -m pytest \
-        tools/metabase_dashboard_templates/test_dashboard_templates.py -v
+Run (from tools/metabase_dashboard_templates):
+    uv run pytest
 """
 
 import copy
@@ -16,9 +15,7 @@ import json
 from unittest.mock import MagicMock
 
 import pytest
-from click.testing import CliRunner
-
-from tools.metabase_dashboard_templates.cli import (
+from cli import (
     STRIP_CARD_KEYS,
     apply_dashboard,
     build_card_payload,
@@ -32,6 +29,7 @@ from tools.metabase_dashboard_templates.cli import (
     strip,
     strip_dashboard_for_template,
 )
+from click.testing import CliRunner
 
 # --------------------------------------------------------------------------- #
 # Fixtures
@@ -1396,7 +1394,7 @@ class TestCliSmoke:
         src_lookup,
         tgt_lookup,
     ):
-        import tools.metabase_dashboard_templates.cli as mod
+        import cli as mod
 
         # Build a tiny template via the export path and write it to disk.
         d = {
@@ -1473,7 +1471,7 @@ class TestCliSmoke:
         bad,
         error_match,
     ):
-        import tools.metabase_dashboard_templates.cli as mod
+        import cli as mod
 
         monkeypatch.setattr(mod, "make_session", lambda key: MagicMock())
         # The substitution validation runs before the network calls, so we
