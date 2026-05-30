@@ -7,8 +7,7 @@ dependencies = [
     "Jinja2",
     "PyYAML",
     "click",
-    "requests",
-    "google-cloud-secret-manager",
+    "google-cloud-secret-manager==2.16.1",
 ]
 
 [dependency-groups]
