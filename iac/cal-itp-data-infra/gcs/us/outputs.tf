@@ -2013,3 +2013,7 @@ output "google_storage_bucket_calitp-elavon-raw-v2_name" {
 output "google_storage_bucket_calitp-tides_name" {
   value = google_storage_bucket.calitp-tides.name
 }
+
+output "google_storage_bucket_calitp-tides-site_name" {
+  value = google_storage_bucket.calitp["calitp-tides-site"].name
+}
