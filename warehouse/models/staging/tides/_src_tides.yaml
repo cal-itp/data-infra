@@ -6,8 +6,19 @@ sources:
     database: "{{ env_var('GOOGLE_CLOUD_PROJECT', var('GOOGLE_CLOUD_PROJECT')) }}"
     schema: external_tides
     tables:
-      - name: vehicle_location_outcomes
-        description: Outcomes from converting GTFS Vehicle Location to TIDES (Transit Integrated Data Exchange Specification)
+      - name: vehicle_locations_outcomes
+        description: Outcomes from converting GTFS-RT Vehicle Position to TIDES (Transit Integrated Data Exchange Specification)
+        columns:
+          - name: display_name
+          - name: dataset_name
+          - name: table_name
+          - name: organization_source_record_id
+          - name: base64_url
+          - name: destination_path
+          - name: dt
+          - name: ts
+      - name: trips_performed_outcomes
+        description: Outcomes from converting GTFS-RT Trip Updates to TIDES (Transit Integrated Data Exchange Specification)
         columns:
           - name: display_name
           - name: dataset_name
