@@ -1,6 +1,14 @@
 {{
     config(
-        materialized='view',
+        materialized='incremental',
+        incremental_strategy='insert_overwrite',
+        partition_by={
+            'field': 'service_date',
+            'data_type': 'date',
+            'granularity': 'day',
+        },
+        cluster_by=['service_date', 'base64_url'],
+        on_schema_change='append_new_columns',
         tags=['tides_product'],
     )
 }}
@@ -8,6 +16,13 @@
 WITH source_vehicle_locations AS (
     SELECT *
     FROM {{ ref('fct_vehicle_locations') }}
+    -- fct_vehicle_locations is partitioned by dt (UTC); we partition by
+    -- service_date (local). A service_date appears in dt = service_date and
+    -- dt = service_date + 1, so read one extra trailing UTC day to fully cover
+    -- the local window, then trim back to the exact service_date range below.
+    WHERE dt
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("TIDES_PRODUCT_START")) }}
+            AND {{ ranged_incremental_max_date() }} + 1
     QUALIFY ROW_NUMBER() OVER (
         PARTITION BY `key`, service_date, base64_url
         ORDER BY _extract_ts DESC
@@ -55,6 +70,11 @@ tides_vehicle_locations AS (
         vp.gtfs_dataset_key,
         vp.organization_source_record_id
     FROM filtered_vehicle_locations AS vp
+    -- Trim the dt+1 read back to the exact service_date partition window so
+    -- insert_overwrite only rewrites partitions it has fully recomputed.
+    WHERE vp.service_date
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("TIDES_PRODUCT_START")) }}
+            AND {{ ranged_incremental_max_date() }}
 )
 
 SELECT * FROM tides_vehicle_locations

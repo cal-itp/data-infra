@@ -46,12 +46,10 @@ vehicle_per_trip AS (
         trip_id_performed,
         APPROX_TOP_COUNT(vehicle_id, 1)[OFFSET(0)].value AS vehicle_id
     FROM {{ ref('fct_tides_vehicle_locations') }}
-    -- we load this by dt rather than service date
-    -- this is ok for the min date because t-X days for service date will be fully covered by t-X days for dt
-    -- add one to the incremental max date because we need to get one extra UTC dt to ensure overlap with service date
-    WHERE dt
+    -- now partitioned by service_date, so filter on it directly to prune partitions
+    WHERE service_date
         BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("TIDES_PRODUCT_START")) }}
-            AND {{ ranged_incremental_max_date() }} + 1
+            AND {{ ranged_incremental_max_date() }}
       AND vehicle_id IS NOT NULL
     GROUP BY 1, 2
 ),
