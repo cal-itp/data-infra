@@ -56,12 +56,6 @@ vehicle_per_trip AS (
     GROUP BY 1, 2
 ),
 
--- Pre-filter dim_provider_gtfs_data to the publication set: every organization
--- with the public-customer-facing or regional-subfeed fixed-route flag that is
--- NOT on the tides_publication_keys denylist (a LEFT JOIN anti-join). This
--- expands each published org to all of its current customer-facing VP feeds.
--- Persistent Airtable org IDs are stable across gtfs_dataset_key and feed-URL
--- rotations. Rolling out more agencies means deleting their denylist rows.
 publication_dim_records AS (
     SELECT d.*
     FROM {{ ref('dim_provider_gtfs_data') }} AS d
@@ -72,8 +66,6 @@ publication_dim_records AS (
       AND excluded.organization_source_record_id IS NULL
 ),
 
--- SCD Type 2 join: resolve the dim record valid at vp_min_ts (the earliest
--- VP timestamp for the trip), not the current state.
 filtered_observed AS (
     SELECT o.*,
            d.organization_source_record_id
@@ -88,42 +80,21 @@ tides_trips_performed AS (
         o.service_date,
         o.trip_id AS trip_id_performed,
         v.vehicle_id,
-
         -- trip_id_scheduled coarse: trip appeared in VP or TU implies a
         -- scheduled trip. A stricter test would require fct_scheduled_trips
         -- presence.
         o.trip_id AS trip_id_scheduled,
-
         s.route_id,
         s.route_type,
-        CAST(NULL AS STRING) AS ntd_mode,
-        CAST(NULL AS STRING) AS route_type_agency,
         s.shape_id,
-        CAST(NULL AS STRING) AS pattern_id,
         s.direction_id,
-        CAST(NULL AS STRING) AS operator_id,
         s.block_id,
-        CAST(NULL AS STRING) AS trip_start_stop_id,
-        CAST(NULL AS STRING) AS trip_end_stop_id,
-
         DATETIME(s.trip_first_departure_ts, COALESCE(s.feed_timezone, 'America/Los_Angeles')) AS schedule_trip_start,
         DATETIME(s.trip_last_arrival_ts, COALESCE(s.feed_timezone, 'America/Los_Angeles')) AS schedule_trip_end,
         DATETIME(o.vp_min_ts, COALESCE(s.feed_timezone, 'America/Los_Angeles')) AS actual_trip_start,
         DATETIME(o.vp_max_ts, COALESCE(s.feed_timezone, 'America/Los_Angeles')) AS actual_trip_end,
-
-        -- Constant 'In service' since the model filters to VP-observed trips.
         'In service' AS trip_type,
-
-        CASE
-            WHEN o.tu_starting_schedule_relationship = 'SCHEDULED'   THEN 'Scheduled'
-            WHEN o.tu_starting_schedule_relationship = 'ADDED'       THEN 'Added'
-            WHEN o.tu_starting_schedule_relationship = 'CANCELED'    THEN 'Canceled'
-            WHEN o.tu_starting_schedule_relationship = 'UNSCHEDULED' THEN 'Unscheduled'
-            WHEN o.tu_starting_schedule_relationship = 'DUPLICATED'  THEN 'Duplicated'
-        END AS schedule_relationship,
-
-        -- Internal columns retained for partitioning and downstream joins;
-        -- dropped at export.
+        INITCAP(o.tu_starting_schedule_relationship) AS schedule_relationship,
         o.vp_base64_url AS base64_url,
         o.vp_gtfs_dataset_key AS gtfs_dataset_key,
         o.organization_source_record_id
@@ -135,8 +106,6 @@ tides_trips_performed AS (
        AND v.trip_id_performed = o.trip_id
 ),
 
--- TIDES IDs are only unique within feed; partition the dedup by feed identity
--- so trips that share trip_id_performed across different feeds both survive.
 deduped AS (
     SELECT *
     FROM tides_trips_performed

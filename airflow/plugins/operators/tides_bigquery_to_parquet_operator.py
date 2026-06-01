@@ -88,21 +88,21 @@ class TIDESBigQueryToParquetOperator(BaseOperator):
             "base64_url": self.base64_url,
             "display_name": self.display_name,
             "destination_path": self.destination_path(),
-            "dt": self.dt,
+            "service_date": self.dt,
             "ts": self.ts,
         }
 
     def query(self) -> str:
-        template = (
-            "EXPORT DATA OPTIONS("
-            "uri='{uri}',"
-            "format='PARQUET',"
-            "compression='SNAPPY',"
-            "overwrite=true"
-            ") AS SELECT * FROM `{dataset}.{table}`"
-            " WHERE dt = CAST('{dt}' AS DATE)"
-            " AND base64_url = '{base64_url}'"
-        )
+        template = """
+            EXPORT DATA OPTIONS(
+            uri='{uri}',
+            format='PARQUET',
+            compression='SNAPPY',
+            overwrite=true
+            ) AS SELECT * FROM `{dataset}.{table}`
+            WHERE service_date = CAST('{dt}' AS DATE)
+            AND base64_url = '{base64_url}'
+        """
         return template.format(
             uri=os.path.join(
                 self.destination_bucket,
@@ -133,6 +133,6 @@ class TIDESBigQueryToParquetOperator(BaseOperator):
             "base64_url": self.base64_url,
             "display_name": self.display_name,
             "destination_path": self.destination_path(),
-            "dt": self.dt,
+            "service_date": self.dt,
             "ts": self.ts,
         }

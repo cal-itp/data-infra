@@ -11,7 +11,7 @@ from airflow.providers.google.cloud.hooks.gcs import GCSHook
 class TestBigQueryToDictOperator:
     @pytest.fixture
     def execution_date(self) -> datetime:
-        return datetime.fromisoformat("2026-05-17").replace(tzinfo=timezone.utc)
+        return datetime.fromisoformat("2026-05-28").replace(tzinfo=timezone.utc)
 
     @pytest.fixture
     def gcs_hook(self) -> GCSHook:
@@ -39,16 +39,15 @@ class TestBigQueryToDictOperator:
             dataset_name="mart_tides",
             table_name="tides_publication_feeds",
             select_columns=[
-                "dt",
+                "service_date",
                 "organization_source_record_id",
                 "vehicle_positions_source_record_id",
                 "feed_name",
                 "base64_url",
             ],
-            filter_date_column="dt",
-            filter_date_start=(execution_date - timedelta(days=1)).strftime("%Y-%m-%d"),
-            filter_date_end=execution_date.strftime("%Y-%m-%d"),
-            order_columns="dt, feed_name",
+            filter_column="service_date",
+            filter_value=(execution_date - timedelta(days=1)).strftime("%Y-%m-%d"),
+            order_columns="service_date, feed_name",
             dag=test_dag,
         )
 
@@ -71,7 +70,7 @@ class TestBigQueryToDictOperator:
         xcom_value = task_instance.xcom_pull()
         assert xcom_value[0] == {
             "base64_url": "aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==",
-            "dt": "2026-05-16",
+            "service_date": "2026-05-27",
             "feed_name": "Beach Cities VehiclePositions",
             "organization_source_record_id": "rec8zhnCPETu6qEiH",
             "vehicle_positions_source_record_id": "recUKDWE8Vq7rRAPM",
