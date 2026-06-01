@@ -1,8 +1,8 @@
-# Metabase database backups
+# Metabase backups: Cloud SQL automated backups
 
 This documents how backups work for the Cloud SQL Postgres instance that backs
 the **staging** Metabase. The backup configuration lives in
-[`sql.tf`](./sql.tf).
+[`sql.tf`](../../iac/cal-itp-data-infra-staging/metabase/us/sql.tf).
 
 > **Scope:** this was rolled out to staging first (per the recommendation on
 > [issue #5098](https://github.com/cal-itp/data-infra/issues/5098)). Production
@@ -18,17 +18,17 @@ backup restore brings back the Metabase app state, not warehouse data.
 
 ## Current state
 
-| Environment | Project | Instance | Retention | Backup location |
-| --- | --- | --- | --- | --- |
-| Staging | `cal-itp-data-infra-staging` | `metabase-staging` | 60 backups | `us` (multi-region) |
-| Production | `cal-itp-data-infra` | `metabase` | 7 backups | `us-west2` (single region) |
+| Environment | Project                      | Instance           | Retention  | Backup location            |
+| ----------- | ---------------------------- | ------------------ | ---------- | -------------------------- |
+| Staging     | `cal-itp-data-infra-staging` | `metabase-staging` | 60 backups | `us` (multi-region)        |
+| Production  | `cal-itp-data-infra`         | `metabase`         | 7 backups  | `us-west2` (single region) |
 
 Production is intentionally unchanged for now; the plan is to apply the same
 configuration there once it has been validated in staging.
 
 ## How backups are configured
 
-In [`sql.tf`](./sql.tf), the `backup_configuration` block controls backups:
+In [`sql.tf`](../../iac/cal-itp-data-infra-staging/metabase/us/sql.tf), the `backup_configuration` block controls backups:
 
 ```hcl
 backup_configuration {
