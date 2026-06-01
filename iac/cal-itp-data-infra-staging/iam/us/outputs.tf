@@ -162,10 +162,6 @@ output "google_service_account_metabase-service-account_name" {
   value = google_service_account.metabase-service-account.name
 }
 
-output "google_service_account_metabase-backup_email" {
-  value = google_service_account.metabase-backup.email
-}
-
 output "google_service_account_composer-service-account_id" {
   value = google_service_account.composer-service-account.id
 }

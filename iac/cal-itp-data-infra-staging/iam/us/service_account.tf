@@ -58,14 +58,6 @@ resource "google_service_account" "metabase-service-account" {
   project      = "cal-itp-data-infra-staging"
 }
 
-resource "google_service_account" "metabase-backup" {
-  account_id   = "metabase-backup"
-  description  = "Service account for the scheduled Metabase Cloud SQL to GCS export workflow"
-  disabled     = "false"
-  display_name = "metabase-backup"
-  project      = "cal-itp-data-infra-staging"
-}
-
 resource "google_service_account" "composer-service-account" {
   account_id   = "composer-service-account"
   description  = "Service account for Composer"

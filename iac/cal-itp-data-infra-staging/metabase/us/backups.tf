@@ -6,11 +6,32 @@
 # the live database to a timestamped .sql.gz object in a dedicated GCS bucket.
 #
 # The workflow runs as (and the scheduler authenticates as) the metabase-backup
-# service account, which is defined in the iam module (iam/us) and consumed here
-# via data.terraform_remote_state.iam.
+# service account defined below. The SA, its roles, the bucket, the workflow, and
+# the scheduler all live in this module so they plan and apply together, with no
+# cross-module ordering against the iam module's remote state.
 locals {
   backup_source_path = "${path.module}/workflows"
-  backup_runner_sa   = data.terraform_remote_state.iam.outputs.google_service_account_metabase-backup_email
+  backup_runner_sa   = google_service_account.metabase-backup.email
+}
+
+# Identity the Cloud Scheduler job authenticates as and the Cloud Workflow runs
+# as. It calls the Cloud SQL Admin instances.export API and triggers the workflow
+# execution. Keyless: no JSON key is generated (auth is via GCP identity binding).
+resource "google_service_account" "metabase-backup" {
+  account_id   = "metabase-backup"
+  description  = "Service account for the scheduled Metabase Cloud SQL to GCS export workflow"
+  display_name = "metabase-backup"
+  project      = "cal-itp-data-infra-staging"
+}
+
+resource "google_project_iam_member" "metabase-backup" {
+  for_each = toset([
+    "roles/cloudsql.editor",   # permission to call instances.export
+    "roles/workflows.invoker", # scheduler -> workflow execution
+  ])
+  role    = each.key
+  member  = "serviceAccount:${google_service_account.metabase-backup.email}"
+  project = "cal-itp-data-infra-staging"
 }
 
 # Dedicated bucket for portable pg_dump exports. Single-region us-west2 (matches

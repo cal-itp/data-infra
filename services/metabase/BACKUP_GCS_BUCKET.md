@@ -60,11 +60,11 @@ finished dump.
 
 Three identities participate, per environment. Only the first is one we create.
 
-| Identity                                                | Role in the flow                                                                | Permission                                         | Where granted                    |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------- | -------------------------------------------------- | -------------------------------- |
-| `metabase-backup` (created)                             | Scheduler authenticates as it; workflow **runs as** it and calls the export API | `roles/workflows.invoker`, `roles/cloudsql.editor` | `…/iam/us/project_iam_member.tf` |
-| Cloud SQL **instance** service account (Google-managed) | Performs the dump and **writes** the object to the bucket                       | `roles/storage.objectAdmin` on the bucket          | `…/metabase/us/backups.tf`       |
-| Cloud Scheduler **service agent** (Google-managed)      | Mints the OAuth token for `metabase-backup` at fire time                        | auto (`cloudscheduler.serviceAgent`)               | —                                |
+| Identity                                                | Role in the flow                                                                | Permission                                         | Where granted              |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------- | -------------------------------------------------- | -------------------------- |
+| `metabase-backup` (created)                             | Scheduler authenticates as it; workflow **runs as** it and calls the export API | `roles/workflows.invoker`, `roles/cloudsql.editor` | `…/metabase/us/backups.tf` |
+| Cloud SQL **instance** service account (Google-managed) | Performs the dump and **writes** the object to the bucket                       | `roles/storage.objectAdmin` on the bucket          | `…/metabase/us/backups.tf` |
+| Cloud Scheduler **service agent** (Google-managed)      | Mints the OAuth token for `metabase-backup` at fire time                        | auto (`cloudscheduler.serviceAgent`)               | —                          |
 
 `metabase-backup` is **keyless** — no JSON key is generated or stored. Auth is
 entirely via GCP-managed identity binding (the workflow's `service_account` and
@@ -73,16 +73,16 @@ the scheduler's `oauth_token`). Each project (staging and prod) has its own
 
 ## Per-environment configuration
 
-|                        | Staging                                                     | Production                                          |
-| ---------------------- | ----------------------------------------------------------- | --------------------------------------------------- |
-| **Status**             | Implemented                                                 | Planned follow-up                                   |
-| **Project**            | `cal-itp-data-infra-staging`                                | `cal-itp-data-infra`                                |
-| **Instance**           | `metabase-staging`                                          | `metabase`                                          |
-| **Destination bucket** | `calitp-backups-metabase-staging` (new)                     | `calitp-backups-metabase` (existing, reused)        |
-| **Bucket region**      | `us-west2` (single region)                                  | `us-west1` (single region)                          |
-| **Object path**        | `exports/metabase-staging-YYYY-MM-DD.sql.gz`                | `exports/metabase-YYYY-MM-DD.sql.gz`                |
-| **Schedule**           | daily 04:00 `America/Los_Angeles`                           | daily 04:00 `America/Los_Angeles`                   |
-| **Terraform**          | `iac/cal-itp-data-infra-staging/metabase/us/` + `…/iam/us/` | `iac/cal-itp-data-infra/metabase/us/` + `…/iam/us/` |
+|                        | Staging                                       | Production                                   |
+| ---------------------- | --------------------------------------------- | -------------------------------------------- |
+| **Status**             | Implemented                                   | Planned follow-up                            |
+| **Project**            | `cal-itp-data-infra-staging`                  | `cal-itp-data-infra`                         |
+| **Instance**           | `metabase-staging`                            | `metabase`                                   |
+| **Destination bucket** | `calitp-backups-metabase-staging` (new)       | `calitp-backups-metabase` (existing, reused) |
+| **Bucket region**      | `us-west2` (single region)                    | `us-west1` (single region)                   |
+| **Object path**        | `exports/metabase-staging-YYYY-MM-DD.sql.gz`  | `exports/metabase-YYYY-MM-DD.sql.gz`         |
+| **Schedule**           | daily 04:00 `America/Los_Angeles`             | daily 04:00 `America/Los_Angeles`            |
+| **Terraform**          | `iac/cal-itp-data-infra-staging/metabase/us/` | `iac/cal-itp-data-infra/metabase/us/`        |
 
 Notes:
 
@@ -100,16 +100,19 @@ Notes:
 Using staging paths as the example (prod mirrors these under
 `iac/cal-itp-data-infra/`):
 
-| Resource                                                             | File                                                                 |
-| -------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| Service account `metabase-backup` + its project roles + email output | `…/iam/us/service_account.tf`, `project_iam_member.tf`, `outputs.tf` |
-| Bucket, bucket IAM, Workflow, Scheduler job                          | `…/metabase/us/backups.tf`                                           |
-| Workflow definition (export step)                                    | `…/metabase/us/workflows/metabase-backup.yaml`                       |
+| Resource                                                                                           | File                                           |
+| -------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| Service account `metabase-backup` + its project roles, bucket, bucket IAM, Workflow, Scheduler job | `…/metabase/us/backups.tf`                     |
+| Workflow definition (export step)                                                                  | `…/metabase/us/workflows/metabase-backup.yaml` |
 
-The SA lives in the `iam` module (the repo's convention for all service
-accounts) and is consumed by the `metabase` module via
-`data.terraform_remote_state.iam`, the same way the Cloud Run service consumes
-`metabase-service-account`.
+All of these resources live in the `metabase` module so they plan and apply as a
+single unit. This is a deliberate deviation from the repo convention of defining
+service accounts in the `iam` module: keeping the SA here avoids a cross-module
+ordering dependency — otherwise the `metabase` module would have to read a
+brand-new `iam`-module output from remote state that does not exist until `iam`
+is applied, which the parallel, unordered Terraform CI cannot guarantee. The
+Cloud Run service still consumes `metabase-service-account` from the `iam` module
+via `data.terraform_remote_state.iam`, as before.
 
 ## How to restore
 

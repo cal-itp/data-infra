@@ -250,16 +250,6 @@ resource "google_project_iam_member" "metabase-service-account" {
   project = "cal-itp-data-infra-staging"
 }
 
-resource "google_project_iam_member" "metabase-backup" {
-  for_each = toset([
-    "roles/cloudsql.editor",   # permission to call instances.export
-    "roles/workflows.invoker", # scheduler -> workflow execution
-  ])
-  role    = each.key
-  member  = "serviceAccount:${google_service_account.metabase-backup.email}"
-  project = "cal-itp-data-infra-staging"
-}
-
 resource "google_project_iam_member" "composer-service-account" {
   for_each = toset([
     "roles/bigquery.dataOwner",
