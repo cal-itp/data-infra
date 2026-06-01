@@ -1827,19 +1827,19 @@ output "google_storage_default_object_acl_tfer--us-west2-calitp-airflow2-pr-88ca
 }
 
 output "google_storage_bucket_calitp-gtfs_name" {
-  value = google_storage_bucket.calitp-gtfs.name
+  value = google_storage_bucket.calitp-site["calitp-gtfs"].name
 }
 
 output "google_storage_bucket_calitp-dbt-docs_name" {
-  value = google_storage_bucket.calitp-dbt-docs.name
+  value = google_storage_bucket.calitp-site["calitp-dbt-docs"].name
 }
 
 output "google_storage_bucket_calitp-reports_name" {
-  value = google_storage_bucket.calitp-reports.name
+  value = google_storage_bucket.calitp-site["calitp-reports"].name
 }
 
 output "google_storage_bucket_calitp-analysis_name" {
-  value = google_storage_bucket.calitp-analysis.name
+  value = google_storage_bucket.calitp-site["calitp-analysis"].name
 }
 
 output "google_storage_bucket_calitp-aggregator-scraper_name" {
@@ -2003,9 +2003,9 @@ output "google_storage_bucket_calitp-elavon-raw-v2_name" {
 }
 
 output "google_storage_bucket_calitp-tides_name" {
-  value = google_storage_bucket.calitp-tides.name
+  value = google_storage_bucket.calitp-requester-pays["calitp-tides"].name
 }
 
 output "google_storage_bucket_calitp-tides-site_name" {
-  value = google_storage_bucket.calitp["calitp-tides-site"].name
+  value = google_storage_bucket.calitp-site["calitp-tides-site"].name
 }
