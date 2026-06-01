@@ -450,10 +450,6 @@ output "google_storage_bucket_iam_binding_tfer--gtfs-data-reports_id" {
   value = google_storage_bucket_iam_binding.tfer--gtfs-data-reports.id
 }
 
-output "google_storage_bucket_iam_binding_tfer--gtfs-data-test_id" {
-  value = google_storage_bucket_iam_binding.tfer--gtfs-data-test.id
-}
-
 output "google_storage_bucket_iam_binding_tfer--gtfs-data_id" {
   value = google_storage_bucket_iam_binding.tfer--gtfs-data.id
 }
@@ -484,10 +480,6 @@ output "google_storage_bucket_iam_binding_tfer--test-calitp-dbt-python-models_id
 
 output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-download-config_id" {
   value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-download-config.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-rt-raw_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-rt-raw.id
 }
 
 output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-schedule-raw-v2_id" {

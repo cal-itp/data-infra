@@ -430,6 +430,12 @@ resource "google_storage_bucket_iam_member" "calitp-tides" {
   member = "allUsers"
 }
 
+resource "google_storage_bucket_iam_member" "calitp-tides-site" {
+  bucket = google_storage_bucket.calitp["calitp-tides-site"].name
+  role   = "roles/storage.objectViewer"
+  member = "allUsers"
+}
+
 resource "google_storage_bucket_iam_member" "enghouse-raw-sftp-service-account" {
   bucket = google_storage_bucket.calitp-enghouse-raw.name
   role   = "roles/storage.objectAdmin"
