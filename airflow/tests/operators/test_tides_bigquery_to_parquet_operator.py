@@ -25,7 +25,7 @@ class TestTIDESBigQueryToParquetOperator:
 
     @pytest.fixture
     def report_path(self) -> str:
-        return "vehicle_location_outcomes/dt=2026-04-01/ts=2026-04-01T00:00:00+00:00/organization_source_record_id=rec8zhnCPETu6qEiH/aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl"
+        return "vehicle_locations_outcomes/dt=2026-04-01/ts=2026-04-01T00:00:00+00:00/organization_source_record_id=rec8zhnCPETu6qEiH/aHR0cHM6Ly9yZWRvbmRvYmVhY2hiY3QuY29tL2d0ZnMtcnQvdmVoaWNsZXBvc2l0aW9ucw==_outcomes.jsonl"
 
     @pytest.fixture
     def test_dag(self, execution_date: datetime) -> DAG:
@@ -101,7 +101,7 @@ class TestTIDESBigQueryToParquetOperator:
                 "data_*.parquet",
             ),
         )
-        assert len(parquet_files) == 1
+        assert len(parquet_files) == 101
 
         unparsed_outcomes = gcs_hook.download(
             bucket_name=os.environ.get("CALITP_BUCKET__TIDES").replace("gs://", ""),
