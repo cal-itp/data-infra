@@ -3,7 +3,18 @@ locals {
     "calitp-gtfs-schedule-manual",
     "calitp-kuba",
     "calitp-gtfs-rt-archiver",
-    "calitp-tides-site"
+  ])
+
+  requester_pays_buckets = toset([
+    "calitp-tides",
+  ])
+
+  site_buckets = toset([
+    "calitp-tides-site",
+    "calitp-analysis",
+    "calitp-reports",
+    "calitp-dbt-docs",
+    "calitp-gtfs"
   ])
 }
 

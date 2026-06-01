@@ -235,9 +235,7 @@ resource "google_storage_bucket_iam_policy" "tfer--calitp-analytics-data" {
     },
     {
       "members": [
-        "serviceAccount:jupyterlab@cal-itp-data-infra.iam.gserviceaccount.com",
-        "user:charlie.c@jarv.us",
-        "user:tiffany@calitp.org"
+        "serviceAccount:jupyterlab@cal-itp-data-infra.iam.gserviceaccount.com"
       ],
       "role": "roles/storage.objectCreator"
     }

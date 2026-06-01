@@ -412,3 +412,10 @@ resource "google_storage_bucket_iam_binding" "calitp" {
   members  = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
   role     = "roles/storage.legacyObjectOwner"
 }
+
+resource "google_storage_bucket_iam_binding" "calitp-site" {
+  for_each = local.site_buckets
+  bucket   = google_storage_bucket.calitp-site[each.key].name
+  members  = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
+  role     = "roles/storage.legacyObjectOwner"
+}
