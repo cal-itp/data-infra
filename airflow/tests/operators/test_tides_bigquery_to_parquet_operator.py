@@ -60,6 +60,7 @@ class TestTIDESBigQueryToParquetOperator:
             destination_bucket=os.environ.get("CALITP_BUCKET__TIDES"),
             destination_path_prefix=destination_path_prefix,
             report_path=report_path,
+            user_project=os.environ.get("GOOGLE_CLOUD_PROJECT"),
             gcp_conn_id="google_cloud_default",
         )
 
