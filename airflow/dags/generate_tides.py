@@ -74,6 +74,7 @@ def generate_tides():
         destination_bucket=os.environ.get("CALITP_BUCKET__TIDES"),
         destination_path_prefix="vehicle_locations/organization_source_record_id={{ task.organization_source_record_id }}/base64_url={{ task.base64_url }}/dt={{ task.dt }}/",
         report_path="vehicle_locations_outcomes/dt={{ task.dt }}/ts={{ ts }}/organization_source_record_id={{ task.organization_source_record_id }}/{{ task.base64_url }}_outcomes.jsonl",
+        user_project=os.environ.get("GOOGLE_CLOUD_PROJECT"),
         map_index_template="{{ task.dt }} - {{ task.display_name }}",
     ).expand_kwargs(
         merged_publication_feeds.map(
