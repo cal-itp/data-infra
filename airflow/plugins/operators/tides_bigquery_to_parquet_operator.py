@@ -2,6 +2,8 @@ import json
 import os
 from typing import Sequence
 
+from google.auth import default
+
 from airflow.models import BaseOperator
 from airflow.models.taskinstance import Context
 from airflow.providers.google.cloud.hooks.bigquery import BigQueryHook
@@ -115,6 +117,8 @@ class TIDESBigQueryToParquetOperator(BaseOperator):
         )
 
     def execute(self, context: Context) -> dict:
+        _, project_id = default()
+
         self.bigquery_hook().get_client().query_and_wait(query=self.query())
 
         self.gcs_hook().upload(
@@ -126,6 +130,7 @@ class TIDESBigQueryToParquetOperator(BaseOperator):
             ),
             mime_type="application/jsonl",
             gzip=False,
+            user_project=project_id,
         )
 
         return {
