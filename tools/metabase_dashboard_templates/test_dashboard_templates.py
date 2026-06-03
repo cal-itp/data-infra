@@ -16,16 +16,16 @@ import logging
 from unittest.mock import MagicMock
 
 import pytest
-from cli import (
-    STRIP_CARD_KEYS,
+from cli import cli
+from click.testing import CliRunner
+from constants import STRIP_CARD_KEYS
+from template_apply import (
     apply_dashboard,
     build_card_payload,
     build_dashcard_for_put,
-    cli,
     make_jinja_env,
     render_template_text,
 )
-from click.testing import CliRunner
 from template_export import (
     emit_template_yaml,
     is_virtual_dashcard,
