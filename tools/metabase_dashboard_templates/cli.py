@@ -83,6 +83,16 @@ try:  # package context (e.g. `tools.metabase_dashboard_templates.cli` under pyt
     )
     from .environments import ENV_LABELS, ENVIRONMENTS
     from .gcp_secrets import SecretAccessError, fetch_secret_from_gcp
+    from .read_metabase import (
+        existing_dashboards_with_name,
+        fetch_card,
+        fetch_dashboard,
+        fetch_database_metadata,
+        list_collections,
+        list_dashboards,
+        list_databases,
+        make_session,
+    )
 except ImportError:  # script context (e.g. `uv run cli.py`, `python cli.py`)
     from constants import (
         POST_DASHBOARD_KEYS,
@@ -93,64 +103,16 @@ except ImportError:  # script context (e.g. `uv run cli.py`, `python cli.py`)
     )
     from environments import ENV_LABELS, ENVIRONMENTS
     from gcp_secrets import SecretAccessError, fetch_secret_from_gcp
-
-# ---------------------------------------------------------------------------
-# Metabase HTTP helpers
-# ---------------------------------------------------------------------------
-
-
-def make_session(api_key: str) -> requests.Session:
-    s = requests.Session()
-    s.headers.update({"X-API-Key": api_key})
-    return s
-
-
-def fetch_dashboard(
-    session: requests.Session, base_url: str, dashboard_id: int
-) -> dict:
-    r = session.get(f"{base_url}/api/dashboard/{dashboard_id}")
-    r.raise_for_status()
-    return r.json()
-
-
-def fetch_card(session: requests.Session, base_url: str, card_id: int) -> dict:
-    """GET /api/card/{id}.  Used by the source-card discovery pass when a
-    dashboard's cards build their queries on top of other saved questions."""
-    r = session.get(f"{base_url}/api/card/{card_id}")
-    r.raise_for_status()
-    return r.json()
-
-
-def fetch_database_metadata(
-    session: requests.Session, base_url: str, db_id: int
-) -> dict:
-    """
-    Returns id-name maps in both directions:
-      - table_by_id:   table_id -> (schema, table_name)
-      - field_by_id:   field_id -> (schema, table_name, column_name)
-      - table_to_id:   (schema, table_name) -> table_id
-      - field_to_id:   (schema, table_name, column_name) -> field_id
-    """
-    r = session.get(f"{base_url}/api/database/{db_id}/metadata")
-    r.raise_for_status()
-    raw = r.json()
-    table_by_id, table_to_id = {}, {}
-    field_by_id, field_to_id = {}, {}
-    for t in raw.get("tables", []):
-        key = (t["schema"], t["name"])
-        table_by_id[t["id"]] = key
-        table_to_id[key] = t["id"]
-        for f in t.get("fields", []):
-            fkey = (t["schema"], t["name"], f["name"])
-            field_by_id[f["id"]] = fkey
-            field_to_id[fkey] = f["id"]
-    return {
-        "table_by_id": table_by_id,
-        "field_by_id": field_by_id,
-        "table_to_id": table_to_id,
-        "field_to_id": field_to_id,
-    }
-
+    from read_metabase import (
+        existing_dashboards_with_name,
+        fetch_card,
+        fetch_dashboard,
+        fetch_database_metadata,
+        list_collections,
+        list_dashboards,
+        list_databases,
+        make_session,
+    )
 
 # ---------------------------------------------------------------------------
 # Strip / classify
@@ -1051,45 +1013,6 @@ def build_dashcard_for_put(
     return out
 
 
-def _existing_dashboards_with_name(
-    session: requests.Session,
-    base_url: str,
-    name: str,
-    collection_id: int,
-) -> list[dict]:
-    """List non-archived dashboards in `collection_id` whose name matches
-    `name` (case-insensitive).  Empty list = no collision.
-
-    Bounded to one /api/collection/{id}/items request with a large limit;
-    if a collection has > 1000 dashboards we cheerfully miss the long tail
-    and let the duplicate happen.  Cal-ITP collections are nowhere near
-    that scale.
-    """
-    try:
-        r = session.get(
-            f"{base_url}/api/collection/{collection_id}/items",
-            params={"models": "dashboard", "archived": "false", "limit": 1000},
-        )
-        r.raise_for_status()
-    except requests.HTTPError:
-        # If the collection isn't readable for whatever reason (permissions,
-        # API drift), don't fail the apply -- just skip the check.  Worst
-        # case the user gets the silent-duplicate they were getting before.
-        return []
-    payload = r.json()
-    items = payload.get("data", []) if isinstance(payload, dict) else payload
-    name_norm = name.strip().lower()
-    return [
-        item
-        for item in items
-        if isinstance(item, dict)
-        and item.get("model") == "dashboard"
-        and isinstance(item.get("name"), str)
-        and item["name"].strip().lower() == name_norm
-        and not item.get("archived")
-    ]
-
-
 def _check_metabase_response(
     r: requests.Response,
     *,
@@ -1157,7 +1080,7 @@ def apply_dashboard(
     target_name = spec.get("name")
     target_collection_id = spec.get("collection_id")
     if isinstance(target_name, str) and isinstance(target_collection_id, int):
-        duplicates = _existing_dashboards_with_name(
+        duplicates = existing_dashboards_with_name(
             session, base_url, target_name, target_collection_id
         )
         if duplicates:
@@ -1717,62 +1640,6 @@ def _connect_env(env_name: str) -> tuple[requests.Session, str]:
     return make_session(api_key), cfg["url"].rstrip("/")
 
 
-def _list_databases(session: requests.Session, base_url: str) -> list[dict]:
-    """Return target Metabase databases sorted by name.
-
-    Drops the built-in Sample Database (id == 1) by default since it's never
-    the right answer for cal-itp work; users can still type the id manually
-    if they really want it.
-    """
-    r = session.get(f"{base_url}/api/database")
-    r.raise_for_status()
-    items = r.json()
-    if isinstance(items, dict):
-        items = items.get("data", [])
-    items = [
-        d
-        for d in items
-        if isinstance(d, dict)
-        and d.get("id") is not None
-        and d.get("id") != 1  # skip Metabase's Sample Database
-    ]
-    items.sort(key=lambda d: (d.get("name") or "").lower())
-    return items
-
-
-def _list_collections(session: requests.Session, base_url: str) -> list[dict]:
-    """Return non-archived collections with a `path` field built from `location`.
-
-    Metabase's collection list is flat; the tree position is encoded in the
-    `location` string like `/123/456/`.  We resolve those ids to names so the
-    picker shows e.g. "Cal-ITP Reports / Payments" instead of two ambiguous
-    rows both labelled "Payments".
-    """
-    r = session.get(f"{base_url}/api/collection")
-    r.raise_for_status()
-    items = r.json()
-    if isinstance(items, dict):
-        items = items.get("data", [])
-    items = [
-        c
-        for c in items
-        if isinstance(c, dict)
-        and isinstance(c.get("id"), int)  # drop root sentinel (id is None or "root")
-        and not c.get("archived")
-    ]
-    by_id = {c["id"]: c for c in items}
-
-    def path_for(c: dict) -> str:
-        loc = c.get("location") or ""
-        parent_ids = [int(p) for p in loc.strip("/").split("/") if p.isdigit()]
-        parent_names = [by_id[pid]["name"] for pid in parent_ids if pid in by_id]
-        return " / ".join(parent_names + [c.get("name") or "?"])
-
-    out = [{"id": c["id"], "path": path_for(c)} for c in items]
-    out.sort(key=lambda c: c["path"].lower())
-    return out
-
-
 # Names that the Jinja env supplies as callables rather than context values --
 # they always appear "undeclared" to find_undeclared_variables but we never
 # prompt the user for them.
@@ -1787,19 +1654,6 @@ def _detect_template_vars(template_text: str) -> set[str]:
     """
     parsed = jinja2.Environment().parse(template_text)  # nosec B701
     return jinja2.meta.find_undeclared_variables(parsed) - TEMPLATE_BUILTIN_NAMES
-
-
-def _list_dashboards(session: requests.Session, base_url: str) -> list[dict]:
-    """Return non-archived dashboards sorted by name (case-insensitive)."""
-    r = session.get(f"{base_url}/api/dashboard/")
-    r.raise_for_status()
-    items = r.json()
-    if not isinstance(items, list):
-        # Some Metabase versions wrap the list -- defensive fallback.
-        items = items.get("data", []) if isinstance(items, dict) else []
-    items = [d for d in items if not d.get("archived")]
-    items.sort(key=lambda d: (d.get("name") or "").lower())
-    return items
 
 
 @cli.command("interactive")
@@ -1871,7 +1725,7 @@ def cmd_interactive(ctx: click.Context) -> None:
         src_session, src_url = _connect_env(src_env)
 
         click.echo(f"Loading dashboards from {src_label} ({src_url})...", err=True)
-        dashboards = _list_dashboards(src_session, src_url)
+        dashboards = list_dashboards(src_session, src_url)
         if not dashboards:
             raise click.ClickException(f"No dashboards found on {src_label}.")
 
@@ -1992,7 +1846,7 @@ def cmd_interactive(ctx: click.Context) -> None:
     # database_id -- pick from a list rather than typing the int.
     if "database_id" in template_vars:
         click.echo("Loading databases...", err=True)
-        databases = _list_databases(dst_session, dst_url)
+        databases = list_databases(dst_session, dst_url)
         if not databases:
             raise click.ClickException(
                 f"No databases configured on {dst_label}; cannot pick a target."
@@ -2013,7 +1867,7 @@ def cmd_interactive(ctx: click.Context) -> None:
     # nested duplicates (e.g. two "Reports" folders) are distinguishable.
     if "collection_id" in template_vars:
         click.echo("Loading collections...", err=True)
-        collections = _list_collections(dst_session, dst_url)
+        collections = list_collections(dst_session, dst_url)
         if not collections:
             raise click.ClickException(
                 f"No collections found on {dst_label}; cannot pick a target."
