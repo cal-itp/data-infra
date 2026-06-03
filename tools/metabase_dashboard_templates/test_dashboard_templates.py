@@ -12,6 +12,7 @@ Run (from tools/metabase_dashboard_templates):
 
 import copy
 import json
+import logging
 from unittest.mock import MagicMock
 
 import pytest
@@ -21,15 +22,17 @@ from cli import (
     build_card_payload,
     build_dashcard_for_put,
     cli,
+    make_jinja_env,
+    render_template_text,
+)
+from click.testing import CliRunner
+from template_export import (
     emit_template_yaml,
     is_virtual_dashcard,
     jinjaify,
-    make_jinja_env,
-    render_template_text,
     strip,
     strip_dashboard_for_template,
 )
-from click.testing import CliRunner
 
 # --------------------------------------------------------------------------- #
 # Fixtures
@@ -634,7 +637,7 @@ class TestJinjaify:
         with pytest.raises(Exception, match="99999"):
             jinjaify(d, src_lookup)
 
-    def test_multiple_source_databases_is_warning_not_error(self, src_meta, capsys):
+    def test_multiple_source_databases_is_warning_not_error(self, src_meta, caplog):
         # Real-world dashboards (e.g. CCJPA Reconciliation) occasionally
         # span multiple source DB connections -- main cards against the
         # warehouse, parameter-value cards against a metadata DB, etc.
@@ -683,14 +686,14 @@ class TestJinjaify:
                 },
             ]
         }
-        cleaned, _ = jinjaify(d, lookup)
+        with caplog.at_level(logging.WARNING):
+            cleaned, _ = jinjaify(d, lookup)
         # Both card-level `database_id` slots got the placeholder.
         for dc in cleaned["dashcards"]:
             assert dc["card"]["database_id"].startswith("__JINJAEXPR_")
-        # And the user got a heads-up about it on stderr.
-        stderr = capsys.readouterr().err
-        assert "spans 2 databases" in stderr
-        assert "[2, 4]" in stderr
+        # And the user got a heads-up about it via a logged warning.
+        assert "spans 2 databases" in caplog.text
+        assert "[2, 4]" in caplog.text
 
     def test_field_refs_in_parameter_mappings_target_are_substituted(self, src_lookup):
         # parameter_mappings is a sibling of `card` at the dashcard level, so
@@ -960,7 +963,7 @@ class TestJinjaify:
         assert rendered["name"] == "Foothill Payments"
         assert rendered["description"] == "Foothill overview"
 
-    def test_multiple_source_collections_is_warning_not_error(self, src_lookup, capsys):
+    def test_multiple_source_collections_is_warning_not_error(self, src_lookup, caplog):
         # Dashboards routinely have cards spread across several collections
         # (e.g. CCJPA: dashboard in one collection, supporting cards in
         # others).  Since every collection_id in the template resolves to
@@ -983,17 +986,17 @@ class TestJinjaify:
                 }
             ],
         }
-        cleaned, _ = jinjaify(d, src_lookup)
+        with caplog.at_level(logging.WARNING):
+            cleaned, _ = jinjaify(d, src_lookup)
         # Both collection_id slots get rewritten to the same placeholder
         # expression, so apply will route everything to one target.
         assert cleaned["collection_id"].startswith("__JINJAEXPR_")
         assert cleaned["dashcards"][0]["card"]["collection_id"].startswith(
             "__JINJAEXPR_"
         )
-        # And the user got a heads-up about it on stderr.
-        stderr = capsys.readouterr().err
-        assert "spans 2 collections" in stderr
-        assert "145" in stderr and "999" in stderr
+        # And the user got a heads-up about it via a logged warning.
+        assert "spans 2 collections" in caplog.text
+        assert "145" in caplog.text and "999" in caplog.text
 
 
 # --------------------------------------------------------------------------- #
