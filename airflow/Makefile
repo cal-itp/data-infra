@@ -107,4 +107,5 @@ ifneq (,$(wildcard $(COMPOSER_ENVIRONMENT_PATH)/variables.env))
 endif
 
 teardown: stop
+	uv run composer-dev remove --skip-confirmation
 	rm -r $(COMPOSER_PATH)
