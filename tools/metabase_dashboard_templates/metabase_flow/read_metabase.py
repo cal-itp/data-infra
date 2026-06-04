@@ -130,14 +130,41 @@ def list_collections(session: requests.Session, base_url: str) -> list[dict]:
 
 
 def list_dashboards(session: requests.Session, base_url: str) -> list[dict]:
-    """Return non-archived dashboards sorted by name (case-insensitive)."""
-    r = session.get(f"{base_url}/api/dashboard/")
-    r.raise_for_status()
-    items = r.json()
-    if not isinstance(items, list):
-        # Some Metabase versions wrap the list -- defensive fallback.
-        items = items.get("data", []) if isinstance(items, dict) else []
-    items = [d for d in items if not d.get("archived")]
+    """Return non-archived dashboards sorted by name (case-insensitive).
+
+    Uses GET /api/search (models=dashboard) rather than the deprecated
+    GET /api/dashboard/.  Search is paginated in newer Metabase versions, so
+    we walk offsets until a short page comes back; older versions return the
+    whole set in one page and exit on the first iteration.  Like the old
+    endpoint, this only returns dashboards the API key's user can read -- a
+    non-admin key sees only the collections its group was granted View on.
+    """
+    items: list[dict] = []
+    limit, offset = 200, 0
+    while True:
+        r = session.get(
+            f"{base_url}/api/search",
+            params={
+                "models": "dashboard",
+                "archived": "false",
+                "limit": limit,
+                "offset": offset,
+            },
+        )
+        r.raise_for_status()
+        payload = r.json()
+        # Search always wraps results: {"data": [...], "total": N, ...}.
+        page = payload.get("data", []) if isinstance(payload, dict) else payload
+        items.extend(
+            d
+            for d in page
+            if isinstance(d, dict)
+            and d.get("model") == "dashboard"
+            and not d.get("archived")
+        )
+        if len(page) < limit:
+            break
+        offset += limit
     items.sort(key=lambda d: (d.get("name") or "").lower())
     return items
 
