@@ -80,19 +80,23 @@ import requests
 # carry no CLI dependency and can be reused by other tools.  This layer catches
 # those exceptions and re-raises them as click.ClickException so the CLI prints
 # a clean message instead of a traceback.
-from constants import TEMPLATES_DIR
-from environments import ENV_LABELS, ENVIRONMENTS
-from errors import DuplicateDashboardError, TemplateError
-from gcp_secrets import SecretAccessError, fetch_secret_from_gcp
-from read_metabase import (
+from metabase_flow.constants import TEMPLATES_DIR
+from metabase_flow.environments import ENV_LABELS, ENVIRONMENTS
+from metabase_flow.errors import DuplicateDashboardError, TemplateError
+from metabase_flow.gcp_secrets import SecretAccessError, fetch_secret_from_gcp
+from metabase_flow.read_metabase import (
     fetch_database_metadata,
     list_collections,
     list_dashboards,
     list_databases,
     make_session,
 )
-from template_apply import apply_dashboard, make_jinja_env, render_template_text
-from template_export import export_dashboard_to_template_text
+from metabase_flow.template_apply import (
+    apply_dashboard,
+    make_jinja_env,
+    render_template_text,
+)
+from metabase_flow.template_export import export_dashboard_to_template_text
 
 # ---------------------------------------------------------------------------
 # CLI

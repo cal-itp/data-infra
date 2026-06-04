@@ -14,12 +14,17 @@ from typing import Any, Callable
 
 import requests
 import yaml
-
-# Absolute imports: the package is run/tested from its own directory (on
-# sys.path), not imported as tools.metabase_dashboard_templates.*.
-from constants import STRIP_CARD_KEYS, STRIP_DASHBOARD_KEYS, STRIP_DASHCARD_KEYS
-from errors import TemplateError
-from read_metabase import fetch_card, fetch_dashboard, fetch_database_metadata
+from metabase_flow.constants import (
+    STRIP_CARD_KEYS,
+    STRIP_DASHBOARD_KEYS,
+    STRIP_DASHCARD_KEYS,
+)
+from metabase_flow.errors import TemplateError
+from metabase_flow.read_metabase import (
+    fetch_card,
+    fetch_dashboard,
+    fetch_database_metadata,
+)
 
 logger = logging.getLogger(__name__)
 

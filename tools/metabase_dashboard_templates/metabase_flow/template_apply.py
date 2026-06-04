@@ -16,10 +16,14 @@ from typing import Callable
 import jinja2
 import requests
 import yaml
-from constants import POST_DASHBOARD_KEYS, STRIP_CARD_KEYS, STRIP_DASHBOARD_KEYS
-from errors import DuplicateDashboardError, TemplateError
-from read_metabase import existing_dashboards_with_name
-from template_export import (
+from metabase_flow.constants import (
+    POST_DASHBOARD_KEYS,
+    STRIP_CARD_KEYS,
+    STRIP_DASHBOARD_KEYS,
+)
+from metabase_flow.errors import DuplicateDashboardError, TemplateError
+from metabase_flow.read_metabase import existing_dashboards_with_name
+from metabase_flow.template_export import (
     _find_source_card_int_refs,
     _find_source_card_name_refs,
     _resolve_source_card_names_in_place,
