@@ -55,6 +55,8 @@ After a loading period, the Airflow UI will become available at [`http://localho
 
 ### Windows (git-bash)
 
+*NOTE: This is broken as of now as `Visual Studio C++` is requried to compile python package `openlineage-sql`*
+
 #### Prerequisites
 
 - [Git for Windows](https://git-scm.com/install/windows) -- installing with `winget` is recommended.
