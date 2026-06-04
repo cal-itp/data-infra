@@ -14,6 +14,15 @@ COMPOSER_VERSION := composer-3-airflow-2.10.5-build.36
 WAREHOUSE_PATH := ../warehouse
 WAREHOUSE_TARGET := staging
 
+# --------------------------------------------------------------
+# OS detection (Windows sets OS=Windows_NT, otherwise we assume *nix)
+# --------------------------------------------------------------
+ifeq ($(OS),Windows_NT)
+	IS_WINDOWS := 1
+else
+	IS_WINDOWS := 0
+endif
+
 restart: sync
 	uv run composer-dev restart
 
@@ -27,9 +36,15 @@ sync: $(WAREHOUSE_PATH)/target/manifest.json $(COMPOSER_ENVIRONMENT_PATH)
 	rsync -ar plugins/ $(COMPOSER_ENVIRONMENT_PATH)/plugins/
 	rsync -ar $(WAREHOUSE_PATH)/ $(COMPOSER_ENVIRONMENT_PATH)/data/warehouse/
 	cp -f requirements-dev.txt $(COMPOSER_ENVIRONMENT_PATH)/requirements.txt
+	# copy the base .development.env
 	cp -f .development.env $(COMPOSER_ENVIRONMENT_PATH)/variables.env
 ifneq (,$(wildcard .env))
 	cat .env >> $(COMPOSER_ENVIRONMENT_PATH)/variables.env
+endif
+	# If we are on Windows, force COMPOSER_CONTAINER_RUN_AS_HOST_USER=False
+	# The later definition overwrites the earlier one when the env file is read.
+ifneq ($(IS_WINDOWS),0)
+	@echo COMPOSER_CONTAINER_RUN_AS_HOST_USER=False >> $(COMPOSER_ENVIRONMENT_PATH)/variables.env
 endif
 
 $(WAREHOUSE_PATH)/target/manifest.json:

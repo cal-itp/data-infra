@@ -57,10 +57,10 @@ After a loading period, the Airflow UI will become available at [`http://localho
 
 #### Prerequisites
 
-- [git-bash for Windows](https://git-scm.com/install/windows)
+- [Git for Windows](https://git-scm.com/install/windows) -- installing with `winget` is recommended.
 - [Rancher Desktop - Open a SNOW ticket to install](https://cdotprod.service-now.com/sp?id=sc_category) (provides Docker) — ensure it's running with `dockerd` (containerd mode may not work)
-- [gcloud CLI](https://cloud.google.com/sdk/docs/install) installed and authenticated (`gcloud auth application-default login`)
-- Python 3.11 installed (e.g. from [python.org](https://www.python.org/downloads/))
+- [uv](https://docs.astral.sh/uv/getting-started/installation/#winget)
+- [gcloud CLI](https://cloud.google.com/sdk/docs/install)
 
 #### Tool Installation
 
@@ -101,24 +101,8 @@ If `make` or `rsync` do not run (exit code 127 / missing DLL), copy the required
 Set the required environment variables in `~/.bashrc` (or run them in each git-bash session):
 
 ```bash
-export USER=$(whoami)
-# Python 3.11 for warehouse
-export UV_PYTHON="C:/Users/$USER/AppData/Local/Programs/Python/Python311/python.exe"
-
-# gcloud needs Python on PATH
-export CLOUDSDK_PYTHON="C:/Users/$USER/AppData/Local/Microsoft/WindowsApps/python.exe"
-export PATH="$PATH:/c/Users/$USER/AppData/Local/Google/Cloud SDK/google-cloud-sdk/bin"
-
-# uv scripts
-export PATH="$PATH:/c/Users/$USER/AppData/Local/Packages/PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0/LocalCache/local-packages/Python313/Scripts"
-
 # make and rsync
 export PATH="$HOME/bin:$PATH"
-
-# uv
-UV_SCRIPTS="/c/Users/$USER/AppData/Local/Packages/PythonSoftwareFoundation.Python.3.13_qbz5n2kfra8p0/LocalCache/local-packages/Python313/Scripts"
-export PATH="$PATH:$UV_SCRIPTS"
-
 # unicode
 export PYTHONIOENCODING=utf-8
 ```
@@ -130,23 +114,7 @@ $ source ~/.bashrc
 
 #### Known Windows Issues
 
-**1. Windows Python 3.13 compatibility**
-
-The `uv` package may not work with Python 3.13. Ensure you're using Python 3.11 for the warehouse environment.
-
-```bash
-$ export UV_PYTHON="C:/Users/$USER/AppData/Local/Programs/Python/Python311/python.exe"
-```
-
-**2. `COMPOSER_CONTAINER_RUN_AS_HOST_USER` must be `False`**
-
-The `.development.env` file sets `COMPOSER_CONTAINER_RUN_AS_HOST_USER=True`, which conflicts with Windows. After running `make sync`, override this in the generated `variables.env`:
-
-```bash
-$ echo "COMPOSER_CONTAINER_RUN_AS_HOST_USER=False" >> composer/calitp-development-composer/variables.env
-```
-
-**3. Unicode encoding errors in the terminal**
+**1. Unicode encoding errors in the terminal**
 
 The `rich` library may produce `UnicodeEncodeError` on Windows terminals. Set:
 
@@ -154,60 +122,9 @@ The `rich` library may produce `UnicodeEncodeError` on Windows terminals. Set:
 $ export PYTHONIOENCODING=utf-8
 ```
 
-**4. `rsync` path syntax**
+**2. `rsync` path syntax**
 
 When running `make sync` or `make start`, rsync may have issues with Windows path separators. The install from MSYS2 above resolves this. If you see rsync path errors, ensure the `msys-xxhash-0.dll` is in a PATH directory.
-
-#### Windows Quick-Start
-
-```bash
-# 1. Login with gcloud (opens browser — complete auth)
-$ gcloud auth application-default login --login-config="../iac/login.json"
-$ ./setup_windows.sh
-```
-
-If any errors from the script run, follow the below steps to manually fix.
-
-```bash
-# 2. Install warehouse deps
-$ cd ../warehouse
-$ export UV_PYTHON="C:/Users/$USER/AppData/Local/Programs/Python/Python311/python.exe"
-$ uv sync
-$ uv run dbt deps
-$ uv run dbt compile --target staging
-
-# 3. Install airflow deps
-$ cd ../airflow
-$ uv sync
-
-# 4. Setup and start
-$ make setup
-$ make sync
-
-# 5. Fix Windows-specific env var
-$ echo "COMPOSER_CONTAINER_RUN_AS_HOST_USER=False" >> composer/calitp-development-composer/variables.env
-```
-
-Then start AirFlow:
-
-```bash
-# 6. Start Airflow
-$ export PYTHONIOENCODING=utf-8
-$ .venv/Scripts/composer-dev.exe start
-# or: uv run composer-dev start
-```
-
-After a loading period, the Airflow UI will become available at [`http://localhost:8080`](http://localhost:8080).
-
-When setting up a new environment, you may want to create Airflow pools:
-
-```bash
-$ make pools
-```
-
-If you're running any DAGs that require secrets or service-specific connection values, you may need to set those in the `Connections` tab in Airflow.
-
-Additional reading about general Airflow setup via Docker can be found on the [Airflow Docs](https://airflow.apache.org/docs/apache-airflow/stable/start/docker.html).
 
 ### PodOperators
 
