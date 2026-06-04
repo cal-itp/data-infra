@@ -452,10 +452,10 @@ def _connect_env(env_name: str) -> tuple[requests.Session, str]:
     label = ENV_LABELS.get(env_name, env_name)
     click.echo(f"Fetching API key from GCP for {label}...", err=True)
     try:
-        api_key = fetch_secret_from_gcp(cfg["gcp_secret"])
+        api_key = fetch_secret_from_gcp(str(cfg["gcp_secret"]))
     except SecretAccessError as exc:
         raise click.ClickException(str(exc))
-    return make_session(api_key), cfg["url"].rstrip("/")
+    return make_session(api_key), str(cfg["url"]).rstrip("/")
 
 
 # Names that the Jinja env supplies as callables rather than context values --
@@ -499,8 +499,8 @@ def cmd_interactive(ctx: click.Context) -> None:
     src_options: list[tuple[str, str]] = []
     if existing_templates:
         src_options.append(("template", f"Existing template in {templates_dir.name}/"))
-    src_options.append(("staging", "Metabase Staging"))
-    src_options.append(("prod", "Metabase Prod"))
+    for env_name in ENVIRONMENTS:
+        src_options.append((env_name, ENV_LABELS.get(env_name, env_name)))
 
     click.echo("Where would you like to copy a dashboard from?")
     for i, (_, label) in enumerate(src_options, start=1):
@@ -621,30 +621,40 @@ def cmd_interactive(ctx: click.Context) -> None:
     # existing template, drop that option -- the user must apply somewhere.
     click.echo("")
     click.echo("Where would you like to copy it to?")
-    dst_options: list[tuple[str, str]] = []
+    dst_choices: list[tuple[str, str]] = []  # (kind, label) in display order
     if allow_template_only_dest:
-        click.echo("  0 = Template only (stop here; template already saved)")
-        dst_options.append(("template_only", "0"))
-    click.echo("  1 = Metabase Staging")
-    dst_options.append(("staging", "1"))
-    click.echo("  2 = Metabase Prod")
-    dst_options.append(("prod", "2"))
+        dst_choices.append(
+            ("template_only", "Template only (stop here; template already saved)")
+        )
+    for env_name in ENVIRONMENTS:
+        dst_choices.append((env_name, ENV_LABELS.get(env_name, env_name)))
+    # Number from 0 when "template only" is present so it stays option 0;
+    # otherwise the environments start at 1.
+    start = 0 if allow_template_only_dest else 1
+    dst_options = [
+        (kind, label, str(i))
+        for i, (kind, label) in enumerate(dst_choices, start=start)
+    ]
+    for kind, label, num in dst_options:
+        click.echo(f"  {num} = {label}")
 
     dst_choice = click.prompt(
         "Choice",
-        type=click.Choice([num for _, num in dst_options]),
+        type=click.Choice([num for _, _, num in dst_options]),
         show_choices=False,
     )
-    dst_kind = next(kind for kind, num in dst_options if num == dst_choice)
+    dst_kind = next(kind for kind, _, num in dst_options if num == dst_choice)
     if dst_kind == "template_only":
         return
 
-    # Guard rail: writes to Prod create real cards + a real dashboard, so
-    # require an explicit y/N before doing anything (auth, prompts, etc.).
-    # Staging is intentionally not gated -- it's the day-to-day target.
-    if dst_kind == "prod":
+    # Guard rail: writes to a production instance create real cards + a real
+    # dashboard, so require an explicit y/N before doing anything (auth,
+    # prompts, etc.).  Non-production instances (e.g. staging) are not gated
+    # -- they're the day-to-day target.  Driven by the `is_production` flag
+    # in ENVIRONMENTS so new prod-like instances get the guard for free.
+    if ENVIRONMENTS.get(dst_kind, {}).get("is_production"):
         click.confirm(
-            f"\nYou chose {ENV_LABELS['prod']} as the destination. "
+            f"\nYou chose {ENV_LABELS.get(dst_kind, dst_kind)} as the destination. "
             "This will create a new dashboard and cards on production.  Continue?",
             default=False,
             abort=True,
