@@ -1,5 +1,7 @@
 provider "google" {
-  project = "cal-itp-data-infra"
+  project               = "cal-itp-data-infra"
+  billing_project       = "cal-itp-data-infra"
+  user_project_override = true
 }
 
 terraform {

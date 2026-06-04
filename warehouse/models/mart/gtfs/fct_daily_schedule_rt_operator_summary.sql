@@ -83,6 +83,7 @@ daily_summary AS (
         daily_schedule.gtfs_dataset_key, -- should get rid of a set of these so schedule keys aren't doubled up...once we figure out how to tag cases
         daily_schedule.gtfs_dataset_name,
         ROUND(daily_schedule.ttl_service_hours, 2) AS ttl_service_hours,
+        ROUND(daily_schedule.ttl_flex_service_hours, 2) AS ttl_flex_service_hours,
         COALESCE(daily_schedule.n_trips, 0) AS n_trips,
         daily_schedule.first_departure_sec,
         daily_schedule.last_arrival_sec,
@@ -106,7 +107,7 @@ daily_summary AS (
 
         -- trip updates
         COALESCE(daily_rt.n_tu_trips, 0) AS n_tu_trips,
-        ROUND(SAFE_DIVIDE(daily_rt.n_vp_trips, daily_schedule.n_trips), 3) AS pct_tu_trips,
+        ROUND(SAFE_DIVIDE(daily_rt.n_tu_trips, daily_schedule.n_trips), 3) AS pct_tu_trips,
         daily_rt.n_tu_routes,
         ROUND(SAFE_DIVIDE(daily_rt.n_tu_routes, daily_schedule.n_routes), 3) AS pct_tu_routes,
         daily_rt.tu_extract_duration_minutes,

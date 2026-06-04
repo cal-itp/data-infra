@@ -300,7 +300,7 @@ resource "google_storage_bucket_iam_binding" "tfer--gtfs-data-reports" {
 
 resource "google_storage_bucket_iam_binding" "tfer--gtfs-data-test" {
   bucket  = "b/gtfs-data-test"
-  members = ["serviceAccount:calitp-py-ci@cal-itp-data-infra.iam.gserviceaccount.com", "serviceAccount:gtfs-rt-archiver-test@cal-itp-data-infra.iam.gserviceaccount.com", "serviceAccount:local-airflow-dev@cal-itp-data-infra-staging.iam.gserviceaccount.com", "serviceAccount:project-1005246706141@storage-transfer-service.iam.gserviceaccount.com"]
+  members = ["serviceAccount:calitp-py-ci@cal-itp-data-infra.iam.gserviceaccount.com", "serviceAccount:local-airflow-dev@cal-itp-data-infra-staging.iam.gserviceaccount.com", "serviceAccount:project-1005246706141@storage-transfer-service.iam.gserviceaccount.com"]
   role    = "roles/storage.objectAdmin"
 }
 
@@ -348,7 +348,7 @@ resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-download-co
 
 resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-rt-raw" {
   bucket  = "b/test-calitp-gtfs-rt-raw"
-  members = ["serviceAccount:gtfs-rt-archiver-test@cal-itp-data-infra.iam.gserviceaccount.com", "serviceAccount:gtfs-rt-archiver-v3@cal-itp-data-infra.iam.gserviceaccount.com"]
+  members = ["serviceAccount:gtfs-rt-archiver-v3@cal-itp-data-infra.iam.gserviceaccount.com"]
   role    = "roles/storage.objectAdmin"
 }
 
@@ -400,9 +400,22 @@ resource "google_storage_bucket_iam_binding" "calitp-composer" {
   role    = "roles/storage.legacyBucketOwner"
 }
 
+resource "google_storage_bucket_iam_binding" "calitp-tides" {
+  bucket  = "calitp-tides"
+  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
+  role    = "roles/storage.legacyObjectOwner"
+}
+
 resource "google_storage_bucket_iam_binding" "calitp" {
   for_each = local.environment_buckets
   bucket   = google_storage_bucket.calitp[each.key].name
+  members  = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
+  role     = "roles/storage.legacyObjectOwner"
+}
+
+resource "google_storage_bucket_iam_binding" "calitp-site" {
+  for_each = local.site_buckets
+  bucket   = google_storage_bucket.calitp-site[each.key].name
   members  = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
   role     = "roles/storage.legacyObjectOwner"
 }

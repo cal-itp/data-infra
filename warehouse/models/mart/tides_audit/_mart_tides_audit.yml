@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: dim_tides_trips_performed_outcomes
+    description: Outcomes from converting GTFS-RT Trip Updates to TIDES (Transit Integrated Data Exchange Specification)
+    columns:
+      - name: display_name
+      - name: organization_source_record_id
+      - name: base64_url
+      - name: dataset_name
+      - name: table_name
+      - name: destination_path
+      - name: service_date
+      - name: dt
+      - name: ts
+  - name: dim_tides_vehicle_locations_outcomes
+    description: Outcomes from converting GTFS-RT Vehicle Position to TIDES (Transit Integrated Data Exchange Specification)
+    columns:
+      - name: display_name
+      - name: organization_source_record_id
+      - name: base64_url
+      - name: dataset_name
+      - name: table_name
+      - name: destination_path
+      - name: service_date
+      - name: dt
+      - name: ts

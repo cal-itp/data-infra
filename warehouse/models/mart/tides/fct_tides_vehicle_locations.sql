@@ -1,55 +1,48 @@
 {{
     config(
         materialized='incremental',
-        incremental_strategy='microbatch',
-        event_time = 'dt',
-        batch_size = 'day',
-        begin=var('TIDES_PRODUCT_START'),
-        lookback=var('DBT_ALL_INCREMENTAL_LOOKBACK_DAYS'),
+        incremental_strategy='insert_overwrite',
         partition_by={
-            'field': 'dt',
+            'field': 'service_date',
             'data_type': 'date',
             'granularity': 'day',
         },
-        full_refresh=false,
-        cluster_by='base64_url',
+        cluster_by=['service_date', 'base64_url'],
         on_schema_change='append_new_columns',
         tags=['tides_product'],
     )
 }}
 
--- Upstream `key` is "almost unique" (documented unique_proportion at_least
--- 0.999); TIDES requires location_ping_id strictly unique. `key` is composed
--- of base64_url + location_timestamp + vehicle_id + ..., so those columns are
--- all constant within a duplicate set and can't tie-break. `_extract_ts` is
--- the upstream extract timestamp and differs across the duplicates, so pick
--- the most-recently-extracted row per key.
 WITH source_vehicle_locations AS (
     SELECT *
     FROM {{ ref('fct_vehicle_locations') }}
+    -- fct_vehicle_locations is partitioned by dt (UTC); we partition by
+    -- service_date (local). A service_date appears in dt = service_date and
+    -- dt = service_date + 1, so read one extra trailing UTC day to fully cover
+    -- the local window, then trim back to the exact service_date range below.
+    WHERE dt
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("TIDES_PRODUCT_START")) }}
+            AND {{ ranged_incremental_max_date() }} + 1
     QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY `key`
+        PARTITION BY `key`, service_date, base64_url
         ORDER BY _extract_ts DESC
     ) = 1
 ),
 
--- Pre-filter dim_provider_gtfs_data to the publication-set source_record_ids
--- (persistent Airtable IDs, stable across upstream gtfs_dataset_key rotations)
--- with the public-customer-facing or regional-subfeed fixed-route flag. Org
--- info isn't part of the TIDES spec and isn't carried through; org metadata
--- for the publish flow lives separately.
 publication_dim_records AS (
     SELECT d.*
     FROM {{ ref('dim_provider_gtfs_data') }} AS d
-    INNER JOIN {{ ref('tides_publication_keys') }}
-        USING (vehicle_positions_source_record_id)
+    LEFT JOIN {{ ref('tides_publication_keys') }} AS excluded
+        ON d.organization_source_record_id = excluded.organization_source_record_id
     WHERE d.public_customer_facing_or_regional_subfeed_fixed_route = TRUE
+      AND d.organization_source_record_id IS NOT NULL
+      AND excluded.organization_source_record_id IS NULL
 ),
 
--- SCD Type 2 join: resolve the dim record valid at each VP row's
--- _extract_ts (not the current state).
 filtered_vehicle_locations AS (
-    SELECT vp.*
+    SELECT
+        vp.*,
+        d.organization_source_record_id
     FROM source_vehicle_locations AS vp
     INNER JOIN publication_dim_records AS d
         ON d.vehicle_positions_gtfs_dataset_key = vp.gtfs_dataset_key
@@ -61,70 +54,27 @@ tides_vehicle_locations AS (
         vp.key AS location_ping_id,
         vp.service_date,
         DATETIME(vp.location_timestamp, vp.schedule_feed_timezone) AS event_timestamp,
-
         vp.trip_id AS trip_id_performed,
-        -- trip_id_scheduled left NULL for MVP; deriving requires a reliable
-        -- join to fct_scheduled_trips on schedule_base64_url + trip_start_time.
-        CAST(NULL AS STRING) AS trip_id_scheduled,
-
-        -- TIDES requires trip_stop_sequence >= 1. GTFS-RT current_stop_sequence
-        -- can be 0 when approaching the first stop; NULL it out instead of
-        -- emitting a spec-violating value.
-        CASE WHEN vp.current_stop_sequence >= 1 THEN vp.current_stop_sequence END
-            AS trip_stop_sequence,
-        CAST(NULL AS INT64) AS scheduled_stop_sequence,
-
+        vp.current_stop_sequence AS trip_stop_sequence,
         vp.vehicle_id,
-        CAST(NULL AS STRING) AS device_id,
-        CAST(NULL AS STRING) AS pattern_id,
         vp.stop_id,
-
-        CASE vp.current_status
-            WHEN 'INCOMING_AT'   THEN 'Incoming at'
-            WHEN 'STOPPED_AT'    THEN 'Stopped at'
-            WHEN 'IN_TRANSIT_TO' THEN 'In transit to'
-        END AS current_status,
-
-        -- null out values outside TIDES schema bounds so spec validation passes
-        -- upstream RT data quality is monitored separately by the TDQ team
-        CASE
-            WHEN vp.position_latitude BETWEEN -90 AND 90
-            THEN vp.position_latitude
-        END AS latitude,
-        CASE
-            WHEN vp.position_longitude BETWEEN -180 AND 180
-            THEN vp.position_longitude
-        END AS longitude,
-
-        CAST(NULL AS STRING) AS gps_quality,
-
-        CASE
-            WHEN vp.position_bearing BETWEEN 0 AND 360
-            THEN vp.position_bearing
-        END AS heading,
-
-        CASE WHEN vp.position_speed >= 0 THEN vp.position_speed END AS speed,
-        CASE WHEN vp.position_odometer >= 0 THEN vp.position_odometer END AS odometer,
-
-        CAST(NULL AS INT64) AS schedule_deviation,
-        CAST(NULL AS INT64) AS headway_deviation,
-
-        -- fct_vehicle_locations drops NULL trip_id upstream, so this is
-        -- effectively constant 'In service'. Expression kept for future
-        -- expansion to the deadhead / layover / pull-in / pull-out cases.
-        CASE WHEN vp.trip_id IS NOT NULL THEN 'In service' END AS trip_type,
-
-        -- TIDES schedule_relationship at vehicle_locations is stop-level
-        -- (Scheduled / Skipped / Added / Missing); GTFS-RT carries trip-level.
-        -- Leaving NULL pending https://github.com/TIDES-transit/TIDES/issues/252.
-        CAST(NULL AS STRING) AS schedule_relationship,
-
-        -- Internal columns retained for partitioning and the feed-key join;
-        -- dropped at export time.
+        REPLACE(INITCAP(vp.current_status, ''), '_', ' ') AS current_status,
+        vp.position_latitude AS latitude,
+        vp.position_longitude AS longitude,
+        vp.position_bearing AS heading,
+        vp.position_speed AS speed,
+        vp.position_odometer AS odometer,
+        IF(vp.trip_id IS NOT NULL, 'In service', NULL) AS trip_type,
         vp.dt,
         vp.base64_url,
-        vp.gtfs_dataset_key
+        vp.gtfs_dataset_key,
+        vp.organization_source_record_id
     FROM filtered_vehicle_locations AS vp
+    -- Trim the dt+1 read back to the exact service_date partition window so
+    -- insert_overwrite only rewrites partitions it has fully recomputed.
+    WHERE vp.service_date
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("TIDES_PRODUCT_START")) }}
+            AND {{ ranged_incremental_max_date() }}
 )
 
 SELECT * FROM tides_vehicle_locations

@@ -55,6 +55,7 @@ dev = [
     "sqlfluff-templater-dbt>=2.0.2,<3",
     "ipdb>=0.13.13,<0.14",
     "mypy>=1.2.0,<2",
+	"pre-commit>=2.18.1",
     "pyspark>=3.0,<3.1",
     "pyspark-stubs>=3.0.0.post3,<4",
     "dbt-coverage>=0.3.4,<0.4",

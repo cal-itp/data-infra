@@ -34,6 +34,12 @@ resource "google_storage_bucket_iam_binding" "calitp-staging-composer-composer-s
   role    = "roles/storage.legacyBucketOwner"
 }
 
+resource "google_storage_bucket_iam_binding" "calitp-staging-composer3-composer-service-account" {
+  bucket  = google_storage_bucket.calitp-staging-composer3.name
+  members = ["projectEditor:cal-itp-data-infra-staging", "projectOwner:cal-itp-data-infra-staging", "serviceAccount:${data.terraform_remote_state.iam.outputs.google_service_account_composer-service-account_email}"]
+  role    = "roles/storage.legacyBucketOwner"
+}
+
 resource "google_storage_bucket_iam_binding" "calitp-staging-pytest" {
   bucket  = google_storage_bucket.calitp-staging-pytest.name
   members = ["projectEditor:cal-itp-data-infra-staging", "projectOwner:cal-itp-data-infra-staging"]
