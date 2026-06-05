@@ -175,3 +175,9 @@ schema_fields:
   - name: analysis_name
     type: STRING
     mode: NULLABLE
+  - name: has_authentication
+    type: BOOLEAN
+    mode: NULLABLE
+  - name: authentication_contact_details
+    type: STRING
+    mode: NULLABLE
