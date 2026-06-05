@@ -1,0 +1,21 @@
+main:
+  steps:
+    - init:
+        assign:
+          - timestamp: $${text.substring(time.format(sys.now()), 0, 10)}
+          - uri: $${"gs://${bucket}/exports/metabase-staging-" + timestamp + ".sql.gz"}
+    - export:
+        call: googleapis.sqladmin.v1.instances.export
+        args:
+          project: "${project}"
+          instance: "${instance}"
+          body:
+            exportContext:
+              kind: "sql#exportContext"
+              fileType: "SQL"
+              uri: $${uri}
+              databases:
+                - "${database}"
+        result: exportResult
+    - done:
+        return: $${uri}

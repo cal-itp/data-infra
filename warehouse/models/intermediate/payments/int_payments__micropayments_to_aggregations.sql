@@ -5,8 +5,15 @@
 }}
 
 WITH micropayments AS (
-    SELECT *
-    FROM {{ ref('int_littlepay__unioned_micropayments') }}
+    SELECT
+        micropayment_id,
+        aggregation_id,
+        participant_id,
+        charge_amount,
+        nominal_amount,
+        transaction_time,
+        charge_type,
+    FROM {{ ref('int_payments__filtered_micropayments') }}
 ),
 
 -- flag micropayments that were adjusted

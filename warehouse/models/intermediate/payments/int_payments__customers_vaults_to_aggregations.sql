@@ -5,7 +5,7 @@ with micropayment_aggregations_customer_map as (
         customer_id,
         funding_source_vault_id,
         transaction_time
-    from {{ ref('int_littlepay__unioned_micropayments') }}
+    from {{ ref('int_payments__filtered_micropayments') }}
 ),
 
 settlement_aggregations_customer_map as (
