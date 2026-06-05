@@ -3,6 +3,11 @@ astronomer-cosmos==1.14.2
 beautifulsoup4==4.12.3
 boto3==1.41.2
 ckanapi==4.11
+# Force the gcs 2.x line: gcs 3.1.x (the Composer 3 image default) vendored a
+# media layer whose _GzipDecoder.decompress() drops urllib3 2.x's max_length
+# arg, which breaks the publish_gtfs CKAN push. Pinning 2.19.0 also forces
+# firebase-admin down from 7.4.0 (its >=3.1.1 floor is what pulled gcs up).
+google-cloud-storage==2.19.0
 gtfs-realtime-bindings==2.0.0
 gusty==0.6.0
 openpyxl==3.1.5
