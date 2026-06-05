@@ -13,6 +13,7 @@ dependencies = [
     "beautifulsoup4",
     "boto3",
     "ckanapi",
+    "google-cloud-storage==2.19.0",
     "gtfs-realtime-bindings",
     "gusty",
     "humanize",
@@ -20,6 +21,9 @@ dependencies = [
     "pyairtable",
     "sentry-sdk",
     "typer==0.4.1",
+    # urllib3 2.x changed gzip handling; the VCR cassettes store gzip bodies and
+    # only decompress correctly on replay under urllib3 1.x (matches main).
+    "urllib3<2.0.0",
 ]
 
 [dependency-groups]
