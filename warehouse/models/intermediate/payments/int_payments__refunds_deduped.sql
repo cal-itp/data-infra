@@ -1,11 +1,33 @@
 {{ config(materialized = "table") }}
 
 WITH micropayment_device_transactions AS (
-    SELECT * FROM {{ ref('int_payments__cleaned_micropayment_device_transactions') }}
+    SELECT
+        littlepay_transaction_id,
+        micropayment_id,
+        _key,
+    FROM {{ ref('int_payments__cleaned_micropayment_device_transactions') }}
 ),
 
 micropayments_refunds AS (
-    SELECT * FROM {{ ref('int_littlepay__unioned_micropayments') }}
+    SELECT
+        micropayment_id,
+        aggregation_id,
+        participant_id,
+        customer_id,
+        transaction_time,
+        charge_amount,
+        type,
+        _line_number,
+        currency_code,
+        instance,
+        extract_filename,
+        ts,
+        littlepay_export_ts,
+        littlepay_export_date,
+        _content_hash,
+        _key,
+        _payments_key,
+    FROM {{ ref('int_payments__filtered_micropayments') }}
     WHERE type = 'CREDIT'
 ),
 
