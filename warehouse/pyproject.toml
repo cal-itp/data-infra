@@ -35,11 +35,6 @@ dependencies = [
     "pyarrow==19.0.0",
 ]
 
-[project.optional-dependencies]
-build = [
-    "pygraphviz==1.14",
-]
-
 [dependency-groups]
 dev = [
     "black>=24.3.0,<25",
