@@ -9,11 +9,11 @@ resource "google_sql_database_instance" "metabase" {
     tier    = "db-g1-small"
 
     backup_configuration {
-      location = "us-west2"
+      location = "us"
       enabled  = true
 
       backup_retention_settings {
-        retained_backups = 7
+        retained_backups = 60
         retention_unit   = "COUNT"
       }
     }
