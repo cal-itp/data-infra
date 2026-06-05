@@ -16,7 +16,7 @@ writes to that instance behind an explicit y/N confirmation.
 """
 
 ENVIRONMENTS: dict[str, dict[str, object]] = {
-    "staging": {
+    "staging_payments_writer": {
         "url": "https://metabase-staging.dds.dot.ca.gov",
         "gcp_secret": (
             "projects/cal-itp-data-infra-staging/secrets/"
@@ -24,7 +24,7 @@ ENVIRONMENTS: dict[str, dict[str, object]] = {
         ),
         "is_production": False,
     },
-    "prod": {
+    "prod_payments_template_reader": {
         "url": "https://metabase.dds.dot.ca.gov",
         "gcp_secret": (
             "projects/cal-itp-data-infra/secrets/"
@@ -32,10 +32,19 @@ ENVIRONMENTS: dict[str, dict[str, object]] = {
         ),
         "is_production": True,
     },
+    "prod_payments_dashboard_writer": {
+        "url": "https://metabase.dds.dot.ca.gov",
+        "gcp_secret": (
+            "projects/cal-itp-data-infra/secrets/"
+            "metabase-dashboard-copy-tool-metabase-prod-writer-api-key/versions/latest"
+        ),
+        "is_production": True,
+    },
 }
 
 # Human-readable labels for each environment, used in interactive prompts.
 ENV_LABELS: dict[str, str] = {
-    "staging": "Metabase Staging",
-    "prod": "Metabase Prod",
+    "staging_payments_writer": "Metabase Staging - Payments Writer",
+    "prod_payments_template_reader": "Metabase Prod - Payments Template Reader",
+    "prod_payments_dashboard_writer": "Metabase Prod - Payments Dashboard Writer",
 }
