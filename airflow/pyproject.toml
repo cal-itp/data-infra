@@ -7,19 +7,26 @@ requires-python = ">=3.11.6"
 dependencies = [
     "composer-dev",
     "apache-airflow-providers-amazon",
+    "apache-airflow-providers-cncf-kubernetes",
+    "apache-airflow-providers-google",
     "astronomer-cosmos",
     "beautifulsoup4",
     "boto3",
     "ckanapi",
     "gtfs-realtime-bindings",
     "gusty",
+    "humanize",
     "openpyxl",
     "pyairtable",
+    "sentry-sdk",
     "typer==0.4.1",
 ]
 
 [dependency-groups]
 dev = [
+    # vcrpy's aiohttp patcher references aiohttp.streams.AsyncStreamReaderMixin,
+    # which aiohttp 3.14 removed; hold at 3.13.x so the @pytest.mark.vcr tests run.
+    "aiohttp<3.14",
     "ipdb>=0.13.13",
     "moto[s3]>=5.1.21",
     "pytest>=9.0.2",
