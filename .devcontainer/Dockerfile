@@ -12,8 +12,8 @@ RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.
     curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && \
     apt-get update -y && apt-get install -y google-cloud-cli
 
-# install pygraphviz deps
-RUN apt-get update && apt-get install -y libgdal-dev libgraphviz-dev graphviz-dev
+# install gdal deps
+RUN apt-get update && apt-get install -y libgdal-dev
 
 # create and switch to non-root user for devcontainer
 RUN useradd --create-home --shell /bin/bash $USER && \
