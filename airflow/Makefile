@@ -19,8 +19,10 @@ WAREHOUSE_TARGET := staging
 # --------------------------------------------------------------
 ifeq ($(OS),Windows_NT)
 	IS_WINDOWS := 1
+	UNAME_S := Windows
 else
 	IS_WINDOWS := 0
+	UNAME_S := $(shell uname -s)
 endif
 
 restart: sync
@@ -35,16 +37,31 @@ stop:
 sync: $(WAREHOUSE_PATH)/target/manifest.json $(COMPOSER_ENVIRONMENT_PATH)
 	rsync -ar plugins/ $(COMPOSER_ENVIRONMENT_PATH)/plugins/
 	rsync -ar $(WAREHOUSE_PATH)/ $(COMPOSER_ENVIRONMENT_PATH)/data/warehouse/
-	cp -f requirements-dev.txt $(COMPOSER_ENVIRONMENT_PATH)/requirements.txt
+	# Install the SAME requirements the staging Composer 3 env deploys
+	# (terraform feeds airflow/requirements-c3.txt to pypi_packages_c3), so the
+	# local env mirrors staging-c3 rather than a dev-only requirements file.
+	cp -f requirements-c3.txt $(COMPOSER_ENVIRONMENT_PATH)/requirements.txt
 	# copy the base .development.env
 	cp -f .development.env $(COMPOSER_ENVIRONMENT_PATH)/variables.env
 ifneq (,$(wildcard .env))
 	cat .env >> $(COMPOSER_ENVIRONMENT_PATH)/variables.env
 endif
-	# If we are on Windows, force COMPOSER_CONTAINER_RUN_AS_HOST_USER=False
-	# The later definition overwrites the earlier one when the env file is read.
+	# Configure the container user per-OS (appended last so the later
+	# definition wins when the env file is read).
+	#   Linux / WSL: run as the host user so files written into dags/, data/
+	#     and logs/ are owned by you (host uid, not always 1000).
+	#   macOS & Windows: run as the in-image airflow(999) user. Docker Desktop
+	#     maps uids transparently there, and the host-user mapping otherwise
+	#     breaks the image entrypoint (it chowns /home/airflow to the host user
+	#     and then its own non-root `cp` can no longer write -> container exits).
 ifneq ($(IS_WINDOWS),0)
 	@echo COMPOSER_CONTAINER_RUN_AS_HOST_USER=False >> $(COMPOSER_ENVIRONMENT_PATH)/variables.env
+else ifeq ($(UNAME_S),Darwin)
+	@echo COMPOSER_CONTAINER_RUN_AS_HOST_USER=False >> $(COMPOSER_ENVIRONMENT_PATH)/variables.env
+else
+	@echo COMPOSER_CONTAINER_RUN_AS_HOST_USER=True >> $(COMPOSER_ENVIRONMENT_PATH)/variables.env
+	@echo COMPOSER_HOST_USER_NAME=$(shell id -un) >> $(COMPOSER_ENVIRONMENT_PATH)/variables.env
+	@echo COMPOSER_HOST_USER_ID=$(shell id -u) >> $(COMPOSER_ENVIRONMENT_PATH)/variables.env
 endif
 
 $(WAREHOUSE_PATH)/target/manifest.json:
