@@ -30,5 +30,5 @@ WITH stg_gtfs_rt__service_alerts AS (
 
     FROM {{ source('external_gtfs_rt', 'service_alerts') }}
 )
-
+ 
 SELECT * FROM stg_gtfs_rt__service_alerts
