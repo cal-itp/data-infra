@@ -40,6 +40,8 @@ WITH int_transit_database__gtfs_datasets_dim AS (
            type,
            private_dataset,
            analysis_name,
+           has_authentication,
+           authentication_contact_details,
            _is_current,
            _valid_from,
            _valid_to
