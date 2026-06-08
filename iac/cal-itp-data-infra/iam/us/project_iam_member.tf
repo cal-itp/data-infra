@@ -94,6 +94,18 @@ resource "google_project_iam_member" "tfer--projects-002F-cal-itp-data-infra-002
   role    = "projects/cal-itp-data-infra/roles/AgencyPaymentsServiceReader"
 }
 
+resource "google_project_iam_member" "tfer--projects-002F-cal-itp-data-infra-002F-roles-002F-AgencyPaymentsServiceReaderserviceAccount-003A-valley-payments-user-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
+  member  = "serviceAccount:valley-payments-user@cal-itp-data-infra.iam.gserviceaccount.com"
+  project = "cal-itp-data-infra"
+  role    = "projects/cal-itp-data-infra/roles/AgencyPaymentsServiceReader"
+}
+
+resource "google_project_iam_member" "tfer--projects-002F-cal-itp-data-infra-002F-roles-002F-AgencyPaymentsServiceReaderserviceAccount-003A-scrra-payments-user-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
+  member  = "serviceAccount:scrra-payments-user@cal-itp-data-infra.iam.gserviceaccount.com"
+  project = "cal-itp-data-infra"
+  role    = "projects/cal-itp-data-infra/roles/AgencyPaymentsServiceReader"
+}
+
 resource "google_project_iam_member" "tfer--roles-002F-appengine-002E-serviceAgentserviceAccount-003A-service-1005246706141-0040-gcp-gae-service-002E-iam-002E-gserviceaccount-002E-com" {
   member  = "serviceAccount:service-1005246706141@gcp-gae-service.iam.gserviceaccount.com"
   project = "cal-itp-data-infra"
@@ -572,7 +584,8 @@ resource "google_project_iam_member" "composer-service-account" {
     "roles/cloudbuild.builds.viewer",
     "roles/composer.worker",
     "roles/secretmanager.secretAccessor",
-    "roles/secretmanager.viewer"
+    "roles/secretmanager.viewer",
+    "roles/serviceusage.serviceUsageConsumer"
   ])
   role    = each.key
   member  = "serviceAccount:${google_service_account.composer-service-account.email}"
@@ -606,6 +619,33 @@ resource "google_project_iam_member" "ms-entra-id-DDS_Cloud_Admins" {
   ])
   role    = each.key
   member  = "principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DDS_Cloud_Admins"
+  project = "cal-itp-data-infra"
+}
+
+resource "google_project_iam_member" "ms-entra-id-DDS_Payments_Admins" {
+  for_each = toset([
+    "roles/viewer",
+  ])
+  role    = each.key
+  member  = "principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DDS_Payments_Admins"
+  project = "cal-itp-data-infra"
+}
+
+resource "google_project_iam_member" "ms-entra-id-DDS_Warehouse_Users_Flex" {
+  for_each = toset([
+    "roles/viewer",
+  ])
+  role    = each.key
+  member  = "principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DDS_Warehouse_Users_Flex"
+  project = "cal-itp-data-infra"
+}
+
+resource "google_project_iam_member" "ms-entra-id-DDS_Cloud_Owners" {
+  for_each = toset([
+    "roles/owner"
+  ])
+  role    = each.key
+  member  = "principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DDS_Cloud_Owners"
   project = "cal-itp-data-infra"
 }
 

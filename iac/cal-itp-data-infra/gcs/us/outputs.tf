@@ -174,16 +174,8 @@ output "google_storage_bucket_acl_tfer--dataproc-temp-us-west2-1005246706141-x9m
   value = google_storage_bucket_acl.tfer--dataproc-temp-us-west2-1005246706141-x9mtxbwg.id
 }
 
-output "google_storage_bucket_acl_tfer--dev-calitp-aggregator-scraper_id" {
-  value = google_storage_bucket_acl.tfer--dev-calitp-aggregator-scraper.id
-}
-
 output "google_storage_bucket_acl_tfer--dev-calitp-gtfs-rt-raw_id" {
   value = google_storage_bucket_acl.tfer--dev-calitp-gtfs-rt-raw.id
-}
-
-output "google_storage_bucket_acl_tfer--dev-calitp-test-sandbox_id" {
-  value = google_storage_bucket_acl.tfer--dev-calitp-test-sandbox.id
 }
 
 output "google_storage_bucket_acl_tfer--export-ysjqwvyxc4ti3jmahojq_id" {
@@ -194,24 +186,12 @@ output "google_storage_bucket_acl_tfer--gtfs-data-reports_id" {
   value = google_storage_bucket_acl.tfer--gtfs-data-reports.id
 }
 
-output "google_storage_bucket_acl_tfer--gtfs-data-test-reports_id" {
-  value = google_storage_bucket_acl.tfer--gtfs-data-test-reports.id
-}
-
 output "google_storage_bucket_acl_tfer--gtfs-data-test_id" {
   value = google_storage_bucket_acl.tfer--gtfs-data-test.id
 }
 
 output "google_storage_bucket_acl_tfer--gtfs-data_id" {
   value = google_storage_bucket_acl.tfer--gtfs-data.id
-}
-
-output "google_storage_bucket_acl_tfer--gtfs-schedule-backfill-test-deprecated_id" {
-  value = google_storage_bucket_acl.tfer--gtfs-schedule-backfill-test-deprecated.id
-}
-
-output "google_storage_bucket_acl_tfer--gtfs-schedule-backfill-test_id" {
-  value = google_storage_bucket_acl.tfer--gtfs-schedule-backfill-test.id
 }
 
 output "google_storage_bucket_acl_tfer--littlepay-data-extract-prod_id" {
@@ -230,10 +210,6 @@ output "google_storage_bucket_acl_tfer--staging-002E-cal-itp-data-infra-002E-app
   value = google_storage_bucket_acl.tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com.id
 }
 
-output "google_storage_bucket_acl_tfer--test-calitp-aggregator-scraper_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-aggregator-scraper.id
-}
-
 output "google_storage_bucket_acl_tfer--test-calitp-airtable_id" {
   value = google_storage_bucket_acl.tfer--test-calitp-airtable.id
 }
@@ -242,60 +218,12 @@ output "google_storage_bucket_acl_tfer--test-calitp-dbt-python-models_id" {
   value = google_storage_bucket_acl.tfer--test-calitp-dbt-python-models.id
 }
 
-output "google_storage_bucket_acl_tfer--test-calitp-elavon-parsed_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-elavon-parsed.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-elavon-raw_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-elavon-raw.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-elavon_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-elavon.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-gtfs-config_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-gtfs-config.id
-}
-
 output "google_storage_bucket_acl_tfer--test-calitp-gtfs-download-config_id" {
   value = google_storage_bucket_acl.tfer--test-calitp-gtfs-download-config.id
 }
 
-output "google_storage_bucket_acl_tfer--test-calitp-gtfs-raw_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-gtfs-raw.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-gtfs-rt-parsed_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-gtfs-rt-parsed.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-gtfs-rt-raw-v2_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-gtfs-rt-raw-v2.id
-}
-
 output "google_storage_bucket_acl_tfer--test-calitp-gtfs-rt-raw_id" {
   value = google_storage_bucket_acl.tfer--test-calitp-gtfs-rt-raw.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-gtfs-rt-validation_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-gtfs-rt-validation.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-gtfs-schedule-parsed-hourly_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-gtfs-schedule-parsed-hourly.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-gtfs-schedule-parsed_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-gtfs-schedule-parsed.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-gtfs-schedule-processed_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-gtfs-schedule-processed.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test.id
 }
 
 output "google_storage_bucket_acl_tfer--test-calitp-gtfs-schedule-raw-v2_id" {
@@ -306,56 +234,8 @@ output "google_storage_bucket_acl_tfer--test-calitp-gtfs-schedule-raw_id" {
   value = google_storage_bucket_acl.tfer--test-calitp-gtfs-schedule-raw.id
 }
 
-output "google_storage_bucket_acl_tfer--test-calitp-gtfs-schedule-unzipped-hourly_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-gtfs-schedule-unzipped-hourly.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-gtfs-schedule-unzipped_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-gtfs-schedule-unzipped.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-gtfs-schedule-validation-hourly_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-gtfs-schedule-validation-hourly.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-gtfs-schedule-validation_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-gtfs-schedule-validation.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-ntd-report-validation_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-ntd-report-validation.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-payments-littlepay-parsed_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-payments-littlepay-parsed.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-payments-littlepay-raw_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-payments-littlepay-raw.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-publish-data-analysis_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-publish-data-analysis.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-publish_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-publish.id
-}
-
 output "google_storage_bucket_acl_tfer--test-calitp-sentry_id" {
   value = google_storage_bucket_acl.tfer--test-calitp-sentry.id
-}
-
-output "google_storage_bucket_acl_tfer--test-calitp-state-geoportal-scrape_id" {
-  value = google_storage_bucket_acl.tfer--test-calitp-state-geoportal-scrape.id
-}
-
-output "google_storage_bucket_acl_tfer--test-rt-parsed_id" {
-  value = google_storage_bucket_acl.tfer--test-rt-parsed.id
-}
-
-output "google_storage_bucket_acl_tfer--test-rt-validations_id" {
-  value = google_storage_bucket_acl.tfer--test-rt-validations.id
 }
 
 output "google_storage_bucket_acl_tfer--us-002E-artifacts-002E-cal-itp-data-infra-002E-appspot-002E-com_id" {
@@ -558,16 +438,8 @@ output "google_storage_bucket_iam_binding_tfer--dataproc-temp-us-west2-100524670
   value = google_storage_bucket_iam_binding.tfer--dataproc-temp-us-west2-1005246706141-x9mtxbwg.id
 }
 
-output "google_storage_bucket_iam_binding_tfer--dev-calitp-aggregator-scraper_id" {
-  value = google_storage_bucket_iam_binding.tfer--dev-calitp-aggregator-scraper.id
-}
-
 output "google_storage_bucket_iam_binding_tfer--dev-calitp-gtfs-rt-raw_id" {
   value = google_storage_bucket_iam_binding.tfer--dev-calitp-gtfs-rt-raw.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--dev-calitp-test-sandbox_id" {
-  value = google_storage_bucket_iam_binding.tfer--dev-calitp-test-sandbox.id
 }
 
 output "google_storage_bucket_iam_binding_tfer--export-ysjqwvyxc4ti3jmahojq_id" {
@@ -578,24 +450,8 @@ output "google_storage_bucket_iam_binding_tfer--gtfs-data-reports_id" {
   value = google_storage_bucket_iam_binding.tfer--gtfs-data-reports.id
 }
 
-output "google_storage_bucket_iam_binding_tfer--gtfs-data-test-reports_id" {
-  value = google_storage_bucket_iam_binding.tfer--gtfs-data-test-reports.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--gtfs-data-test_id" {
-  value = google_storage_bucket_iam_binding.tfer--gtfs-data-test.id
-}
-
 output "google_storage_bucket_iam_binding_tfer--gtfs-data_id" {
   value = google_storage_bucket_iam_binding.tfer--gtfs-data.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--gtfs-schedule-backfill-test-deprecated_id" {
-  value = google_storage_bucket_iam_binding.tfer--gtfs-schedule-backfill-test-deprecated.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--gtfs-schedule-backfill-test_id" {
-  value = google_storage_bucket_iam_binding.tfer--gtfs-schedule-backfill-test.id
 }
 
 output "google_storage_bucket_iam_binding_tfer--littlepay-data-extract-prod_id" {
@@ -614,10 +470,6 @@ output "google_storage_bucket_iam_binding_tfer--staging-002E-cal-itp-data-infra-
   value = google_storage_bucket_iam_binding.tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com.id
 }
 
-output "google_storage_bucket_iam_binding_tfer--test-calitp-aggregator-scraper_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-aggregator-scraper.id
-}
-
 output "google_storage_bucket_iam_binding_tfer--test-calitp-airtable_id" {
   value = google_storage_bucket_iam_binding.tfer--test-calitp-airtable.id
 }
@@ -626,60 +478,8 @@ output "google_storage_bucket_iam_binding_tfer--test-calitp-dbt-python-models_id
   value = google_storage_bucket_iam_binding.tfer--test-calitp-dbt-python-models.id
 }
 
-output "google_storage_bucket_iam_binding_tfer--test-calitp-elavon-parsed_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-elavon-parsed.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-elavon-raw_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-elavon-raw.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-elavon_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-elavon.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-config_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-config.id
-}
-
 output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-download-config_id" {
   value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-download-config.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-raw_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-raw.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-rt-parsed_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-rt-parsed.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-rt-raw-v2_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-rt-raw-v2.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-rt-raw_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-rt-raw.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-rt-validation_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-rt-validation.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-schedule-parsed-hourly_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-schedule-parsed-hourly.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-schedule-parsed_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-schedule-parsed.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-schedule-processed_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-schedule-processed.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test.id
 }
 
 output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-schedule-raw-v2_id" {
@@ -690,64 +490,8 @@ output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-schedule-raw_id
   value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-schedule-raw.id
 }
 
-output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-schedule-unzipped-hourly_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-schedule-unzipped-hourly.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-schedule-unzipped_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-schedule-unzipped.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-schedule-validation-hourly_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-schedule-validation-hourly.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-gtfs-schedule-validation_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-gtfs-schedule-validation.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-ntd-report-validation_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-ntd-report-validation.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-payments-littlepay-parsed_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-payments-littlepay-parsed.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-payments-littlepay-parsed-v3_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-payments-littlepay-parsed-v3.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-payments-littlepay-raw_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-payments-littlepay-raw.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-payments-littlepay-raw-v3_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-payments-littlepay-raw-v3.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-publish-data-analysis_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-publish-data-analysis.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-publish_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-publish.id
-}
-
 output "google_storage_bucket_iam_binding_tfer--test-calitp-sentry_id" {
   value = google_storage_bucket_iam_binding.tfer--test-calitp-sentry.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-calitp-state-geoportal-scrape_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-calitp-state-geoportal-scrape.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-rt-parsed_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-rt-parsed.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--test-rt-validations_id" {
-  value = google_storage_bucket_iam_binding.tfer--test-rt-validations.id
 }
 
 output "google_storage_bucket_iam_binding_tfer--us-002E-artifacts-002E-cal-itp-data-infra-002E-appspot-002E-com_id" {
@@ -950,16 +694,8 @@ output "google_storage_bucket_iam_member_tfer--dataproc-temp-us-west2-1005246706
   value = google_storage_bucket_iam_member.tfer--dataproc-temp-us-west2-1005246706141-x9mtxbwg.id
 }
 
-output "google_storage_bucket_iam_member_tfer--dev-calitp-aggregator-scraper_id" {
-  value = google_storage_bucket_iam_member.tfer--dev-calitp-aggregator-scraper.id
-}
-
 output "google_storage_bucket_iam_member_tfer--dev-calitp-gtfs-rt-raw_id" {
   value = google_storage_bucket_iam_member.tfer--dev-calitp-gtfs-rt-raw.id
-}
-
-output "google_storage_bucket_iam_member_tfer--dev-calitp-test-sandbox_id" {
-  value = google_storage_bucket_iam_member.tfer--dev-calitp-test-sandbox.id
 }
 
 output "google_storage_bucket_iam_member_tfer--export-ysjqwvyxc4ti3jmahojq_id" {
@@ -970,24 +706,12 @@ output "google_storage_bucket_iam_member_tfer--gtfs-data-reports_id" {
   value = google_storage_bucket_iam_member.tfer--gtfs-data-reports.id
 }
 
-output "google_storage_bucket_iam_member_tfer--gtfs-data-test-reports_id" {
-  value = google_storage_bucket_iam_member.tfer--gtfs-data-test-reports.id
-}
-
 output "google_storage_bucket_iam_member_tfer--gtfs-data-test_id" {
   value = google_storage_bucket_iam_member.tfer--gtfs-data-test.id
 }
 
 output "google_storage_bucket_iam_member_tfer--gtfs-data_id" {
   value = google_storage_bucket_iam_member.tfer--gtfs-data.id
-}
-
-output "google_storage_bucket_iam_member_tfer--gtfs-schedule-backfill-test-deprecated_id" {
-  value = google_storage_bucket_iam_member.tfer--gtfs-schedule-backfill-test-deprecated.id
-}
-
-output "google_storage_bucket_iam_member_tfer--gtfs-schedule-backfill-test_id" {
-  value = google_storage_bucket_iam_member.tfer--gtfs-schedule-backfill-test.id
 }
 
 output "google_storage_bucket_iam_member_tfer--littlepay-data-extract-prod_id" {
@@ -1006,10 +730,6 @@ output "google_storage_bucket_iam_member_tfer--staging-002E-cal-itp-data-infra-0
   value = google_storage_bucket_iam_member.tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com.id
 }
 
-output "google_storage_bucket_iam_member_tfer--test-calitp-aggregator-scraper_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-aggregator-scraper.id
-}
-
 output "google_storage_bucket_iam_member_tfer--test-calitp-airtable_id" {
   value = google_storage_bucket_iam_member.tfer--test-calitp-airtable.id
 }
@@ -1018,60 +738,12 @@ output "google_storage_bucket_iam_member_tfer--test-calitp-dbt-python-models_id"
   value = google_storage_bucket_iam_member.tfer--test-calitp-dbt-python-models.id
 }
 
-output "google_storage_bucket_iam_member_tfer--test-calitp-elavon-parsed_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-elavon-parsed.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-elavon-raw_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-elavon-raw.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-elavon_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-elavon.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-config_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-gtfs-config.id
-}
-
 output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-download-config_id" {
   value = google_storage_bucket_iam_member.tfer--test-calitp-gtfs-download-config.id
 }
 
-output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-raw_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-gtfs-raw.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-rt-parsed_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-gtfs-rt-parsed.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-rt-raw-v2_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-gtfs-rt-raw-v2.id
-}
-
 output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-rt-raw_id" {
   value = google_storage_bucket_iam_member.tfer--test-calitp-gtfs-rt-raw.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-rt-validation_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-gtfs-rt-validation.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-schedule-parsed-hourly_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-gtfs-schedule-parsed-hourly.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-schedule-parsed_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-gtfs-schedule-parsed.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-schedule-processed_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-gtfs-schedule-processed.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test.id
 }
 
 output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-schedule-raw-v2_id" {
@@ -1082,64 +754,8 @@ output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-schedule-raw_id"
   value = google_storage_bucket_iam_member.tfer--test-calitp-gtfs-schedule-raw.id
 }
 
-output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-schedule-unzipped-hourly_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-gtfs-schedule-unzipped-hourly.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-schedule-unzipped_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-gtfs-schedule-unzipped.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-schedule-validation-hourly_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-gtfs-schedule-validation-hourly.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-gtfs-schedule-validation_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-gtfs-schedule-validation.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-ntd-report-validation_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-ntd-report-validation.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-payments-littlepay-parsed_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-payments-littlepay-parsed.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-payments-littlepay-parsed-v3_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-payments-littlepay-parsed-v3.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-payments-littlepay-raw_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-payments-littlepay-raw.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-payments-littlepay-raw-v3_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-payments-littlepay-raw-v3.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-publish-data-analysis_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-publish-data-analysis.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-publish_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-publish.id
-}
-
 output "google_storage_bucket_iam_member_tfer--test-calitp-sentry_id" {
   value = google_storage_bucket_iam_member.tfer--test-calitp-sentry.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-calitp-state-geoportal-scrape_id" {
-  value = google_storage_bucket_iam_member.tfer--test-calitp-state-geoportal-scrape.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-rt-parsed_id" {
-  value = google_storage_bucket_iam_member.tfer--test-rt-parsed.id
-}
-
-output "google_storage_bucket_iam_member_tfer--test-rt-validations_id" {
-  value = google_storage_bucket_iam_member.tfer--test-rt-validations.id
 }
 
 output "google_storage_bucket_iam_member_tfer--us-002E-artifacts-002E-cal-itp-data-infra-002E-appspot-002E-com_id" {
@@ -1342,16 +958,8 @@ output "google_storage_bucket_iam_policy_tfer--dataproc-temp-us-west2-1005246706
   value = google_storage_bucket_iam_policy.tfer--dataproc-temp-us-west2-1005246706141-x9mtxbwg.id
 }
 
-output "google_storage_bucket_iam_policy_tfer--dev-calitp-aggregator-scraper_id" {
-  value = google_storage_bucket_iam_policy.tfer--dev-calitp-aggregator-scraper.id
-}
-
 output "google_storage_bucket_iam_policy_tfer--dev-calitp-gtfs-rt-raw_id" {
   value = google_storage_bucket_iam_policy.tfer--dev-calitp-gtfs-rt-raw.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--dev-calitp-test-sandbox_id" {
-  value = google_storage_bucket_iam_policy.tfer--dev-calitp-test-sandbox.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--export-ysjqwvyxc4ti3jmahojq_id" {
@@ -1362,24 +970,12 @@ output "google_storage_bucket_iam_policy_tfer--gtfs-data-reports_id" {
   value = google_storage_bucket_iam_policy.tfer--gtfs-data-reports.id
 }
 
-output "google_storage_bucket_iam_policy_tfer--gtfs-data-test-reports_id" {
-  value = google_storage_bucket_iam_policy.tfer--gtfs-data-test-reports.id
-}
-
 output "google_storage_bucket_iam_policy_tfer--gtfs-data-test_id" {
   value = google_storage_bucket_iam_policy.tfer--gtfs-data-test.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--gtfs-data_id" {
   value = google_storage_bucket_iam_policy.tfer--gtfs-data.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--gtfs-schedule-backfill-test-deprecated_id" {
-  value = google_storage_bucket_iam_policy.tfer--gtfs-schedule-backfill-test-deprecated.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--gtfs-schedule-backfill-test_id" {
-  value = google_storage_bucket_iam_policy.tfer--gtfs-schedule-backfill-test.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--littlepay-data-extract-prod_id" {
@@ -1398,10 +994,6 @@ output "google_storage_bucket_iam_policy_tfer--staging-002E-cal-itp-data-infra-0
   value = google_storage_bucket_iam_policy.tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com.id
 }
 
-output "google_storage_bucket_iam_policy_tfer--test-calitp-aggregator-scraper_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-aggregator-scraper.id
-}
-
 output "google_storage_bucket_iam_policy_tfer--test-calitp-airtable_id" {
   value = google_storage_bucket_iam_policy.tfer--test-calitp-airtable.id
 }
@@ -1410,60 +1002,12 @@ output "google_storage_bucket_iam_policy_tfer--test-calitp-dbt-python-models_id"
   value = google_storage_bucket_iam_policy.tfer--test-calitp-dbt-python-models.id
 }
 
-output "google_storage_bucket_iam_policy_tfer--test-calitp-elavon-parsed_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-elavon-parsed.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-elavon-raw_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-elavon-raw.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-elavon_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-elavon.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-config_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-gtfs-config.id
-}
-
 output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-download-config_id" {
   value = google_storage_bucket_iam_policy.tfer--test-calitp-gtfs-download-config.id
 }
 
-output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-raw_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-gtfs-raw.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-rt-parsed_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-gtfs-rt-parsed.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-rt-raw-v2_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-gtfs-rt-raw-v2.id
-}
-
 output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-rt-raw_id" {
   value = google_storage_bucket_iam_policy.tfer--test-calitp-gtfs-rt-raw.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-rt-validation_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-gtfs-rt-validation.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-schedule-parsed-hourly_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-gtfs-schedule-parsed-hourly.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-schedule-parsed_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-gtfs-schedule-parsed.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-schedule-processed_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-gtfs-schedule-processed.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-schedule-raw-v2_id" {
@@ -1474,64 +1018,8 @@ output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-schedule-raw_id"
   value = google_storage_bucket_iam_policy.tfer--test-calitp-gtfs-schedule-raw.id
 }
 
-output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-schedule-unzipped-hourly_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-gtfs-schedule-unzipped-hourly.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-schedule-unzipped_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-gtfs-schedule-unzipped.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-schedule-validation-hourly_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-gtfs-schedule-validation-hourly.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-gtfs-schedule-validation_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-gtfs-schedule-validation.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-ntd-report-validation_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-ntd-report-validation.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-payments-littlepay-parsed_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-payments-littlepay-parsed.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-payments-littlepay-parsed-v3_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-payments-littlepay-parsed-v3.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-payments-littlepay-raw_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-payments-littlepay-raw.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-payments-littlepay-raw-v3_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-payments-littlepay-raw-v3.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-publish-data-analysis_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-publish-data-analysis.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-publish_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-publish.id
-}
-
 output "google_storage_bucket_iam_policy_tfer--test-calitp-sentry_id" {
   value = google_storage_bucket_iam_policy.tfer--test-calitp-sentry.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-calitp-state-geoportal-scrape_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-calitp-state-geoportal-scrape.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-rt-parsed_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-rt-parsed.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--test-rt-validations_id" {
-  value = google_storage_bucket_iam_policy.tfer--test-rt-validations.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--us-002E-artifacts-002E-cal-itp-data-infra-002E-appspot-002E-com_id" {
@@ -1918,28 +1406,12 @@ output "google_storage_bucket_tfer--dataproc-temp-us-west2-1005246706141-x9mtxbw
   value = google_storage_bucket.tfer--dataproc-temp-us-west2-1005246706141-x9mtxbwg.self_link
 }
 
-output "google_storage_bucket_tfer--dev-calitp-aggregator-scraper_name" {
-  value = google_storage_bucket.tfer--dev-calitp-aggregator-scraper.name
-}
-
-output "google_storage_bucket_tfer--dev-calitp-aggregator-scraper_self_link" {
-  value = google_storage_bucket.tfer--dev-calitp-aggregator-scraper.self_link
-}
-
 output "google_storage_bucket_tfer--dev-calitp-gtfs-rt-raw_name" {
   value = google_storage_bucket.tfer--dev-calitp-gtfs-rt-raw.name
 }
 
 output "google_storage_bucket_tfer--dev-calitp-gtfs-rt-raw_self_link" {
   value = google_storage_bucket.tfer--dev-calitp-gtfs-rt-raw.self_link
-}
-
-output "google_storage_bucket_tfer--dev-calitp-test-sandbox_name" {
-  value = google_storage_bucket.tfer--dev-calitp-test-sandbox.name
-}
-
-output "google_storage_bucket_tfer--dev-calitp-test-sandbox_self_link" {
-  value = google_storage_bucket.tfer--dev-calitp-test-sandbox.self_link
 }
 
 output "google_storage_bucket_tfer--export-ysjqwvyxc4ti3jmahojq_name" {
@@ -1958,14 +1430,6 @@ output "google_storage_bucket_tfer--gtfs-data-reports_self_link" {
   value = google_storage_bucket.tfer--gtfs-data-reports.self_link
 }
 
-output "google_storage_bucket_tfer--gtfs-data-test-reports_name" {
-  value = google_storage_bucket.tfer--gtfs-data-test-reports.name
-}
-
-output "google_storage_bucket_tfer--gtfs-data-test-reports_self_link" {
-  value = google_storage_bucket.tfer--gtfs-data-test-reports.self_link
-}
-
 output "google_storage_bucket_tfer--gtfs-data-test_name" {
   value = google_storage_bucket.tfer--gtfs-data-test.name
 }
@@ -1980,22 +1444,6 @@ output "google_storage_bucket_tfer--gtfs-data_name" {
 
 output "google_storage_bucket_tfer--gtfs-data_self_link" {
   value = google_storage_bucket.tfer--gtfs-data.self_link
-}
-
-output "google_storage_bucket_tfer--gtfs-schedule-backfill-test-deprecated_name" {
-  value = google_storage_bucket.tfer--gtfs-schedule-backfill-test-deprecated.name
-}
-
-output "google_storage_bucket_tfer--gtfs-schedule-backfill-test-deprecated_self_link" {
-  value = google_storage_bucket.tfer--gtfs-schedule-backfill-test-deprecated.self_link
-}
-
-output "google_storage_bucket_tfer--gtfs-schedule-backfill-test_name" {
-  value = google_storage_bucket.tfer--gtfs-schedule-backfill-test.name
-}
-
-output "google_storage_bucket_tfer--gtfs-schedule-backfill-test_self_link" {
-  value = google_storage_bucket.tfer--gtfs-schedule-backfill-test.self_link
 }
 
 output "google_storage_bucket_tfer--littlepay-data-extract-prod_name" {
@@ -2030,14 +1478,6 @@ output "google_storage_bucket_tfer--staging-002E-cal-itp-data-infra-002E-appspot
   value = google_storage_bucket.tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com.self_link
 }
 
-output "google_storage_bucket_tfer--test-calitp-aggregator-scraper_name" {
-  value = google_storage_bucket.tfer--test-calitp-aggregator-scraper.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-aggregator-scraper_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-aggregator-scraper.self_link
-}
-
 output "google_storage_bucket_tfer--test-calitp-airtable_name" {
   value = google_storage_bucket.tfer--test-calitp-airtable.name
 }
@@ -2054,38 +1494,6 @@ output "google_storage_bucket_tfer--test-calitp-dbt-python-models_self_link" {
   value = google_storage_bucket.tfer--test-calitp-dbt-python-models.self_link
 }
 
-output "google_storage_bucket_tfer--test-calitp-elavon-parsed_name" {
-  value = google_storage_bucket.tfer--test-calitp-elavon-parsed.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-elavon-parsed_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-elavon-parsed.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-elavon-raw_name" {
-  value = google_storage_bucket.tfer--test-calitp-elavon-raw.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-elavon-raw_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-elavon-raw.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-elavon_name" {
-  value = google_storage_bucket.tfer--test-calitp-elavon.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-elavon_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-elavon.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-config_name" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-config.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-config_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-config.self_link
-}
-
 output "google_storage_bucket_tfer--test-calitp-gtfs-download-config_name" {
   value = google_storage_bucket.tfer--test-calitp-gtfs-download-config.name
 }
@@ -2094,76 +1502,12 @@ output "google_storage_bucket_tfer--test-calitp-gtfs-download-config_self_link" 
   value = google_storage_bucket.tfer--test-calitp-gtfs-download-config.self_link
 }
 
-output "google_storage_bucket_tfer--test-calitp-gtfs-raw_name" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-raw.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-raw_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-raw.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-rt-parsed_name" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-rt-parsed.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-rt-parsed_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-rt-parsed.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-rt-raw-v2_name" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-rt-raw-v2.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-rt-raw-v2_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-rt-raw-v2.self_link
-}
-
 output "google_storage_bucket_tfer--test-calitp-gtfs-rt-raw_name" {
   value = google_storage_bucket.tfer--test-calitp-gtfs-rt-raw.name
 }
 
 output "google_storage_bucket_tfer--test-calitp-gtfs-rt-raw_self_link" {
   value = google_storage_bucket.tfer--test-calitp-gtfs-rt-raw.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-rt-validation_name" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-rt-validation.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-rt-validation_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-rt-validation.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-parsed-hourly_name" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-parsed-hourly.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-parsed-hourly_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-parsed-hourly.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-parsed_name" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-parsed.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-parsed_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-parsed.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-processed_name" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-processed.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-processed_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-processed.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test_name" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test.self_link
 }
 
 output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-raw-v2_name" {
@@ -2182,124 +1526,12 @@ output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-raw_self_link" {
   value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-raw.self_link
 }
 
-output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-unzipped-hourly_name" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-unzipped-hourly.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-unzipped-hourly_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-unzipped-hourly.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-unzipped_name" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-unzipped.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-unzipped_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-unzipped.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-validation-hourly_name" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-validation-hourly.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-validation-hourly_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-validation-hourly.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-validation_name" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-validation.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-gtfs-schedule-validation_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-gtfs-schedule-validation.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-ntd-report-validation_name" {
-  value = google_storage_bucket.tfer--test-calitp-ntd-report-validation.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-ntd-report-validation_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-ntd-report-validation.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-payments-littlepay-parsed_name" {
-  value = google_storage_bucket.tfer--test-calitp-payments-littlepay-parsed.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-payments-littlepay-parsed-v3_name" {
-  value = google_storage_bucket.tfer--test-calitp-payments-littlepay-parsed-v3.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-payments-littlepay-parsed_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-payments-littlepay-parsed.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-payments-littlepay-parsed-v3_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-payments-littlepay-parsed-v3.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-payments-littlepay-raw_name" {
-  value = google_storage_bucket.tfer--test-calitp-payments-littlepay-raw.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-payments-littlepay-raw-v3_name" {
-  value = google_storage_bucket.tfer--test-calitp-payments-littlepay-raw-v3.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-payments-littlepay-raw_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-payments-littlepay-raw.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-payments-littlepay-raw-v3_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-payments-littlepay-raw-v3.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-publish-data-analysis_name" {
-  value = google_storage_bucket.tfer--test-calitp-publish-data-analysis.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-publish-data-analysis_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-publish-data-analysis.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-publish_name" {
-  value = google_storage_bucket.tfer--test-calitp-publish.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-publish_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-publish.self_link
-}
-
 output "google_storage_bucket_tfer--test-calitp-sentry_name" {
   value = google_storage_bucket.tfer--test-calitp-sentry.name
 }
 
 output "google_storage_bucket_tfer--test-calitp-sentry_self_link" {
   value = google_storage_bucket.tfer--test-calitp-sentry.self_link
-}
-
-output "google_storage_bucket_tfer--test-calitp-state-geoportal-scrape_name" {
-  value = google_storage_bucket.tfer--test-calitp-state-geoportal-scrape.name
-}
-
-output "google_storage_bucket_tfer--test-calitp-state-geoportal-scrape_self_link" {
-  value = google_storage_bucket.tfer--test-calitp-state-geoportal-scrape.self_link
-}
-
-output "google_storage_bucket_tfer--test-rt-parsed_name" {
-  value = google_storage_bucket.tfer--test-rt-parsed.name
-}
-
-output "google_storage_bucket_tfer--test-rt-parsed_self_link" {
-  value = google_storage_bucket.tfer--test-rt-parsed.self_link
-}
-
-output "google_storage_bucket_tfer--test-rt-validations_name" {
-  value = google_storage_bucket.tfer--test-rt-validations.name
-}
-
-output "google_storage_bucket_tfer--test-rt-validations_self_link" {
-  value = google_storage_bucket.tfer--test-rt-validations.self_link
 }
 
 output "google_storage_bucket_tfer--us-002E-artifacts-002E-cal-itp-data-infra-002E-appspot-002E-com_name" {
@@ -2514,16 +1746,8 @@ output "google_storage_default_object_acl_tfer--dataproc-temp-us-west2-100524670
   value = google_storage_default_object_acl.tfer--dataproc-temp-us-west2-1005246706141-x9mtxbwg.id
 }
 
-output "google_storage_default_object_acl_tfer--dev-calitp-aggregator-scraper_id" {
-  value = google_storage_default_object_acl.tfer--dev-calitp-aggregator-scraper.id
-}
-
 output "google_storage_default_object_acl_tfer--dev-calitp-gtfs-rt-raw_id" {
   value = google_storage_default_object_acl.tfer--dev-calitp-gtfs-rt-raw.id
-}
-
-output "google_storage_default_object_acl_tfer--dev-calitp-test-sandbox_id" {
-  value = google_storage_default_object_acl.tfer--dev-calitp-test-sandbox.id
 }
 
 output "google_storage_default_object_acl_tfer--export-ysjqwvyxc4ti3jmahojq_id" {
@@ -2534,24 +1758,12 @@ output "google_storage_default_object_acl_tfer--gtfs-data-reports_id" {
   value = google_storage_default_object_acl.tfer--gtfs-data-reports.id
 }
 
-output "google_storage_default_object_acl_tfer--gtfs-data-test-reports_id" {
-  value = google_storage_default_object_acl.tfer--gtfs-data-test-reports.id
-}
-
 output "google_storage_default_object_acl_tfer--gtfs-data-test_id" {
   value = google_storage_default_object_acl.tfer--gtfs-data-test.id
 }
 
 output "google_storage_default_object_acl_tfer--gtfs-data_id" {
   value = google_storage_default_object_acl.tfer--gtfs-data.id
-}
-
-output "google_storage_default_object_acl_tfer--gtfs-schedule-backfill-test-deprecated_id" {
-  value = google_storage_default_object_acl.tfer--gtfs-schedule-backfill-test-deprecated.id
-}
-
-output "google_storage_default_object_acl_tfer--gtfs-schedule-backfill-test_id" {
-  value = google_storage_default_object_acl.tfer--gtfs-schedule-backfill-test.id
 }
 
 output "google_storage_default_object_acl_tfer--littlepay-data-extract-prod_id" {
@@ -2570,10 +1782,6 @@ output "google_storage_default_object_acl_tfer--staging-002E-cal-itp-data-infra-
   value = google_storage_default_object_acl.tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com.id
 }
 
-output "google_storage_default_object_acl_tfer--test-calitp-aggregator-scraper_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-aggregator-scraper.id
-}
-
 output "google_storage_default_object_acl_tfer--test-calitp-airtable_id" {
   value = google_storage_default_object_acl.tfer--test-calitp-airtable.id
 }
@@ -2582,60 +1790,12 @@ output "google_storage_default_object_acl_tfer--test-calitp-dbt-python-models_id
   value = google_storage_default_object_acl.tfer--test-calitp-dbt-python-models.id
 }
 
-output "google_storage_default_object_acl_tfer--test-calitp-elavon-parsed_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-elavon-parsed.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-elavon-raw_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-elavon-raw.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-elavon_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-elavon.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-gtfs-config_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-gtfs-config.id
-}
-
 output "google_storage_default_object_acl_tfer--test-calitp-gtfs-download-config_id" {
   value = google_storage_default_object_acl.tfer--test-calitp-gtfs-download-config.id
 }
 
-output "google_storage_default_object_acl_tfer--test-calitp-gtfs-raw_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-gtfs-raw.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-gtfs-rt-parsed_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-gtfs-rt-parsed.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-gtfs-rt-raw-v2_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-gtfs-rt-raw-v2.id
-}
-
 output "google_storage_default_object_acl_tfer--test-calitp-gtfs-rt-raw_id" {
   value = google_storage_default_object_acl.tfer--test-calitp-gtfs-rt-raw.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-gtfs-rt-validation_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-gtfs-rt-validation.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-gtfs-schedule-parsed-hourly_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-gtfs-schedule-parsed-hourly.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-gtfs-schedule-parsed_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-gtfs-schedule-parsed.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-gtfs-schedule-processed_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-gtfs-schedule-processed.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test.id
 }
 
 output "google_storage_default_object_acl_tfer--test-calitp-gtfs-schedule-raw-v2_id" {
@@ -2646,56 +1806,8 @@ output "google_storage_default_object_acl_tfer--test-calitp-gtfs-schedule-raw_id
   value = google_storage_default_object_acl.tfer--test-calitp-gtfs-schedule-raw.id
 }
 
-output "google_storage_default_object_acl_tfer--test-calitp-gtfs-schedule-unzipped-hourly_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-gtfs-schedule-unzipped-hourly.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-gtfs-schedule-unzipped_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-gtfs-schedule-unzipped.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-gtfs-schedule-validation-hourly_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-gtfs-schedule-validation-hourly.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-gtfs-schedule-validation_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-gtfs-schedule-validation.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-ntd-report-validation_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-ntd-report-validation.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-payments-littlepay-parsed_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-payments-littlepay-parsed.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-payments-littlepay-raw_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-payments-littlepay-raw.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-publish-data-analysis_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-publish-data-analysis.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-publish_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-publish.id
-}
-
 output "google_storage_default_object_acl_tfer--test-calitp-sentry_id" {
   value = google_storage_default_object_acl.tfer--test-calitp-sentry.id
-}
-
-output "google_storage_default_object_acl_tfer--test-calitp-state-geoportal-scrape_id" {
-  value = google_storage_default_object_acl.tfer--test-calitp-state-geoportal-scrape.id
-}
-
-output "google_storage_default_object_acl_tfer--test-rt-parsed_id" {
-  value = google_storage_default_object_acl.tfer--test-rt-parsed.id
-}
-
-output "google_storage_default_object_acl_tfer--test-rt-validations_id" {
-  value = google_storage_default_object_acl.tfer--test-rt-validations.id
 }
 
 output "google_storage_default_object_acl_tfer--us-002E-artifacts-002E-cal-itp-data-infra-002E-appspot-002E-com_id" {
@@ -2715,19 +1827,19 @@ output "google_storage_default_object_acl_tfer--us-west2-calitp-airflow2-pr-88ca
 }
 
 output "google_storage_bucket_calitp-gtfs_name" {
-  value = google_storage_bucket.calitp-gtfs.name
+  value = google_storage_bucket.calitp-site["calitp-gtfs"].name
 }
 
 output "google_storage_bucket_calitp-dbt-docs_name" {
-  value = google_storage_bucket.calitp-dbt-docs.name
+  value = google_storage_bucket.calitp-site["calitp-dbt-docs"].name
 }
 
 output "google_storage_bucket_calitp-reports_name" {
-  value = google_storage_bucket.calitp-reports.name
+  value = google_storage_bucket.calitp-site["calitp-reports"].name
 }
 
 output "google_storage_bucket_calitp-analysis_name" {
-  value = google_storage_bucket.calitp-analysis.name
+  value = google_storage_bucket.calitp-site["calitp-analysis"].name
 }
 
 output "google_storage_bucket_calitp-aggregator-scraper_name" {
@@ -2888,4 +2000,12 @@ output "google_storage_bucket_calitp-enghouse-parsed_name" {
 
 output "google_storage_bucket_calitp-elavon-raw-v2_name" {
   value = google_storage_bucket.calitp-elavon-raw-v2.name
+}
+
+output "google_storage_bucket_calitp-tides_name" {
+  value = google_storage_bucket.calitp-requester-pays["calitp-tides"].name
+}
+
+output "google_storage_bucket_calitp-tides-site_name" {
+  value = google_storage_bucket.calitp-site["calitp-tides-site"].name
 }

@@ -59,6 +59,7 @@ LITTLEPAY_TRANSIT_PROVIDER_CONFIG = {
         "bucket": "littlepay-datafeed-prod-sbmtd-58599230",
         "prefix": "sbmtd/v3",
     },
+    "scrra": {"bucket": "littlepay-datafeed-prod-scrra-ccb1a1b0", "prefix": "scrra/v3"},
     "slo-transit": {
         "bucket": "littlepay-datafeed-prod-slo-transit-979e5390",
         "prefix": "slo-transit/v3",

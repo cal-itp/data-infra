@@ -174,16 +174,8 @@ resource "google_storage_bucket_acl" "tfer--dataproc-temp-us-west2-1005246706141
   bucket = "dataproc-temp-us-west2-1005246706141-x9mtxbwg"
 }
 
-resource "google_storage_bucket_acl" "tfer--dev-calitp-aggregator-scraper" {
-  bucket = "dev-calitp-aggregator-scraper"
-}
-
 resource "google_storage_bucket_acl" "tfer--dev-calitp-gtfs-rt-raw" {
   bucket = "dev-calitp-gtfs-rt-raw"
-}
-
-resource "google_storage_bucket_acl" "tfer--dev-calitp-test-sandbox" {
-  bucket = "dev-calitp-test-sandbox"
 }
 
 resource "google_storage_bucket_acl" "tfer--export-ysjqwvyxc4ti3jmahojq" {
@@ -202,18 +194,6 @@ resource "google_storage_bucket_acl" "tfer--gtfs-data-test" {
   bucket = "gtfs-data-test"
 }
 
-resource "google_storage_bucket_acl" "tfer--gtfs-data-test-reports" {
-  bucket = "gtfs-data-test-reports"
-}
-
-resource "google_storage_bucket_acl" "tfer--gtfs-schedule-backfill-test" {
-  bucket = "gtfs-schedule-backfill-test"
-}
-
-resource "google_storage_bucket_acl" "tfer--gtfs-schedule-backfill-test-deprecated" {
-  bucket = "gtfs-schedule-backfill-test-deprecated"
-}
-
 resource "google_storage_bucket_acl" "tfer--littlepay-data-extract-prod" {
   bucket = "littlepay-data-extract-prod"
 }
@@ -230,10 +210,6 @@ resource "google_storage_bucket_acl" "tfer--staging-002E-cal-itp-data-infra-002E
   bucket = "staging.cal-itp-data-infra.appspot.com"
 }
 
-resource "google_storage_bucket_acl" "tfer--test-calitp-aggregator-scraper" {
-  bucket = "test-calitp-aggregator-scraper"
-}
-
 resource "google_storage_bucket_acl" "tfer--test-calitp-airtable" {
   bucket = "test-calitp-airtable"
 }
@@ -242,56 +218,12 @@ resource "google_storage_bucket_acl" "tfer--test-calitp-dbt-python-models" {
   bucket = "test-calitp-dbt-python-models"
 }
 
-resource "google_storage_bucket_acl" "tfer--test-calitp-elavon" {
-  bucket = "test-calitp-elavon"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-elavon-parsed" {
-  bucket = "test-calitp-elavon-parsed"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-elavon-raw" {
-  bucket = "test-calitp-elavon-raw"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-config" {
-  bucket = "test-calitp-gtfs-config"
-}
-
 resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-download-config" {
   bucket = "test-calitp-gtfs-download-config"
 }
 
-resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-raw" {
-  bucket = "test-calitp-gtfs-raw"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-rt-parsed" {
-  bucket = "test-calitp-gtfs-rt-parsed"
-}
-
 resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-rt-raw" {
   bucket = "test-calitp-gtfs-rt-raw"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-rt-raw-v2" {
-  bucket = "test-calitp-gtfs-rt-raw-v2"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-rt-validation" {
-  bucket = "test-calitp-gtfs-rt-validation"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-parsed" {
-  bucket = "test-calitp-gtfs-schedule-parsed"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-parsed-hourly" {
-  bucket = "test-calitp-gtfs-schedule-parsed-hourly"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-processed" {
-  bucket = "test-calitp-gtfs-schedule-processed"
 }
 
 resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-raw" {
@@ -302,60 +234,8 @@ resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-raw-v2" {
   bucket = "test-calitp-gtfs-schedule-raw-v2"
 }
 
-resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test" {
-  bucket = "test-calitp-gtfs-schedule-raw-v2-backfill-test"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-unzipped" {
-  bucket = "test-calitp-gtfs-schedule-unzipped"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-unzipped-hourly" {
-  bucket = "test-calitp-gtfs-schedule-unzipped-hourly"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-validation" {
-  bucket = "test-calitp-gtfs-schedule-validation"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-gtfs-schedule-validation-hourly" {
-  bucket = "test-calitp-gtfs-schedule-validation-hourly"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-ntd-report-validation" {
-  bucket = "test-calitp-ntd-report-validation"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-payments-littlepay-parsed" {
-  bucket = "test-calitp-payments-littlepay-parsed"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-payments-littlepay-raw" {
-  bucket = "test-calitp-payments-littlepay-raw"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-publish" {
-  bucket = "test-calitp-publish"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-publish-data-analysis" {
-  bucket = "test-calitp-publish-data-analysis"
-}
-
 resource "google_storage_bucket_acl" "tfer--test-calitp-sentry" {
   bucket = "test-calitp-sentry"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-calitp-state-geoportal-scrape" {
-  bucket = "test-calitp-state-geoportal-scrape"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-rt-parsed" {
-  bucket = "test-rt-parsed"
-}
-
-resource "google_storage_bucket_acl" "tfer--test-rt-validations" {
-  bucket = "test-rt-validations"
 }
 
 resource "google_storage_bucket_acl" "tfer--us-002E-artifacts-002E-cal-itp-data-infra-002E-appspot-002E-com" {

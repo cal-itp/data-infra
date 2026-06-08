@@ -100,6 +100,7 @@ class AirtableIssuesEmailOperator(BaseOperator):
         expiration_status = row.get("expiration_status", "")
         max_end_date = row.get("max_end_date", "")
         organization_name = row.get("organization_name", "")
+        schedule_feed = row.get("schedule_feed", "")
 
         ticket_description = self.build_ticket_description(
             expiration_status=expiration_status,
@@ -109,13 +110,12 @@ class AirtableIssuesEmailOperator(BaseOperator):
         is_mtc_511 = self.is_mtc_511_agency(gtfs_dataset_name)
 
         return f"""
-        <table>
-            <tr><td><b>Ticket description:</b></td><td>{ticket_description}</td></tr>
-            <tr><td><b>Issue Type:</b></td><td>{issue_type}</td></tr>
-            <tr><td><b>Is this an MTC 511 agency?</b></td><td>{is_mtc_511}</td></tr>
-            <tr><td><b>Companies Associated records:</b></td><td>{organization_name}</td></tr>
-            <tr><td><b>Internal Support Ticket Subject:</b></td><td>GTFS Data Quality</td></tr>
-        </table>
+        <b>Ticket description:</b> {ticket_description}.<br>
+        <b>Issue Type:</b> {issue_type}.<br>
+        <b>Is this an MTC 511 agency?</b> {is_mtc_511}.<br>
+        <b>Companies Associated records:</b> {organization_name}.<br>
+        <b>Internal Support Ticket Subject:</b> GTFS Data Quality.<br>
+        <b>Schedule Feed:</b> {schedule_feed}.
         """
 
     def send_individual_create_emails(

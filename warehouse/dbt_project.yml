@@ -26,6 +26,7 @@ vars:
   GTFS_SCHEDULE_START: "{{ '2021-04-16' if target.name == 'prod' else (modules.datetime.datetime.now() - modules.datetime.timedelta(days=7)).strftime('%Y-%m-%d') }}"
   GTFS_RT_START: "{{ '2022-09-15' if target.name == 'prod' else (modules.datetime.datetime.now() - modules.datetime.timedelta(days=7)).strftime('%Y-%m-%d') }}"
   KUBA_DEVICE_START: '2025-08-11'
+  TIDES_PRODUCT_START: "{{ '2025-12-01' if target.name == 'prod' else (modules.datetime.datetime.now() - modules.datetime.timedelta(days=7)).strftime('%Y-%m-%d') }}"
   INCREMENTAL_MAX_DT: ''
   DBT_ALL_INCREMENTAL_LOOKBACK_DAYS: 5
   DBT_DAILY_INCREMENTAL_LOOKBACK_DAYS: 1
@@ -224,6 +225,16 @@ models:
           domain: mart
           dataset: ntd_validation
         schema: mart_ntd_validation
+      tides:
+        +labels:
+          domain: mart
+          dataset: tides
+        schema: mart_tides
+      tides_audit:
+        +labels:
+          domain: mart
+          dataset: tides_audit
+        schema: mart_tides_audit
       payments:
         +materialized: table
         +labels:
@@ -258,4 +269,6 @@ data_tests:
         +enabled: true
     mart:
       payments:
+        +enabled: true
+      tides:
         +enabled: true

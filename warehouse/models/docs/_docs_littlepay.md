@@ -62,6 +62,34 @@ The file name from which this data was sourced (the name of the file that was in
 The timestamp at which the data was ingested from Littlepay.
 {% enddocs %}
 
+{% docs lp_export_date %}
+Date of the source file from Littlepay. Date is extracted from filenames, which generally have the
+structure {timestamp}_{data_type}.{file extension}.
+{% enddocs %}
+
+{% docs lp_export_ts %}
+Timestamp of the source file from Littlepay. Timestamp is extracted from filenames, which generally have the
+structure {timestamp}_{data_type}.{file extension}.
+{% enddocs %}
+
+{% docs lp_line_number %}
+Line number of this row in the source file.
+Some line numbers may be missing because we drop extra copies of rows that are full duplicates of another row.
+{% enddocs %}
+
+{% docs lp_input_row_key %}
+Synthetic key composed of Littlepay file date and line number to uniquely identify a row within source data.
+{% enddocs %}
+
+{% docs lp_payments_key %}
+Synthentic key composed of the elements that define a natural key within the source data (primary key according to Littlepay schema.)
+{% enddocs %}
+
+{% docs lp_content_hash %}
+Hash of all data columns to uniquely identify row's content, mostly for debugging purposes.
+Should ideally be handled by uniqueness of `_payments_key` but surfaced for troubleshooting.
+{% enddocs %}
+
 
 -------------------------------- AGGREGATIONS/SUMMARIES --------------------------------
 
@@ -294,6 +322,16 @@ Possible values:
 * `COMPLETE_VARIABLE_FARE`
 * `INCOMPLETE_VARIABLE_FARE`
 * `REFUND`
+{% enddocs %}
+
+{%docs lp_mp_status %}
+The status of the micropayment. 
+
+Possible values: 
+* `CLOSED`
+* `CLOSING`
+* `DELETED`
+* `PENDING`
 {% enddocs %}
 
 -------------------------------- MICROPAYMENT ADJUSTMENTS TABLE --------------------------------

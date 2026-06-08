@@ -300,6 +300,18 @@ resource "google_service_account" "camarillo-payments-user" {
   project    = "cal-itp-data-infra"
 }
 
+resource "google_service_account" "valley-payments-user" {
+  account_id = "valley-payments-user"
+  disabled   = "false"
+  project    = "cal-itp-data-infra"
+}
+
+resource "google_service_account" "scrra-payments-user" {
+  account_id = "scrra-payments-user"
+  disabled   = "false"
+  project    = "cal-itp-data-infra"
+}
+
 resource "google_service_account" "enghouse-sftp-service-account" {
   account_id   = "enghouse-sftp-service-account"
   description  = "Service account for enghouse sftp server"

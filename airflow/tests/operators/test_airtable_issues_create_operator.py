@@ -52,6 +52,7 @@ class TestAirtableIssuesCreateOperator:
                 "max_end_date": date(2026, 1, 15),
                 "expiration_status": "Expired",
                 "organization_name": "Organization A",
+                "uri": "https://uriA.com",
             },
             {
                 "gtfs_dataset_name": "Dataset B",
@@ -61,6 +62,7 @@ class TestAirtableIssuesCreateOperator:
                 "max_end_date": date(2026, 1, 30),
                 "expiration_status": "Expiring in Less Than 30 Days",
                 "organization_name": "Organization B",
+                "uri": "https://uriB.com",
             },
         ]
 
@@ -168,6 +170,7 @@ class TestAirtableIssuesCreateOperator:
                 "expiration_status": "Expired",
                 "max_end_date": "2026-01-15",
                 "organization_name": "Organization A",
+                "schedule_feed": "https://uriA.com",
             },
             {
                 "issue_number": 102,
@@ -176,5 +179,6 @@ class TestAirtableIssuesCreateOperator:
                 "expiration_status": "Expiring in Less Than 30 Days",
                 "max_end_date": "2026-01-30",
                 "organization_name": "Organization B",
+                "schedule_feed": "https://uriB.com",
             },
         ]

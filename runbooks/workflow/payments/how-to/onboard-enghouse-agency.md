@@ -141,13 +141,13 @@ Edit `warehouse/seeds/payments_entity_mapping_enghouse.csv`:
 Add a new row:
 
 ```csv
-<gtfs-dataset-source-record-id>,<organization-source-record-id>,<enghouse-operator-id>,<elavon-customer-name>,<_in_use_from>,<_in_use_until>
+<gtfs-dataset-source-record-id>,<organization-source-record-id>,<enghouse-operator-id>,<elavon-customer-name>,<_common_name>,<_in_use_from>,<_in_use_until>
 ```
 
 **Example (from actual file):**
 
 ```csv
-recrAG7e0oOiR6FiP,rec7EN71rsZxDFxZd,253,Ventura County Transportation Commission,2000-01-01,2099-12-31
+recrAG7e0oOiR6FiP,rec7EN71rsZxDFxZd,253,VENTURA COUNTY TRANSPORTATION,Ventura County Transportation Commission,2000-01-01,2099-12-31
 ```
 
 **Column Definitions:**
@@ -155,12 +155,13 @@ recrAG7e0oOiR6FiP,rec7EN71rsZxDFxZd,253,Ventura County Transportation Commission
 1. **gtfs_dataset_source_record_id** - The `source_record_id` from `dim_gtfs_datasets` for the agency's GTFS feed where `_is_current` is TRUE
 2. **organization_source_record_id** - The `source_record_id` from `dim_organizations` for the agency where `_is_current` is TRUE
 3. **enghouse_operator_id** - Operator ID from Enghouse (no quotes in CSV)
-4. **elavon_customer_name** - Agency `customer_name` as it appears in Elavon data
-5. **\_in_use_from** & **\_in_use_until**
+4. **elavon_customer_name** - Agency `customer_name` exactly as it appears in Elavon settlement data (all caps, as delivered)
+5. **\_common_name** - Human-readable display name for this row. Required when two rows share the same `organization_source_record_id` (e.g., an agency operating under a parent organization with a separate sub-operator). Use the agency's common name (e.g., `Ventura County Transportation Commission`, `Valley Express`).
+6. **\_in_use_from** & **\_in_use_until**
 
-- These columns were added for the very rare circumstances when an agency's Elavon `customer_name` changes over time (as of this writing this only applies to sacrt)
+- These columns were added for the very rare circumstances when an agency's Elavon `customer_name` changes over time
 - For those agencies, align `_in_use_from` and `_in_use_until` dates to the `customer_name` cutover
-- For agencies where this doesn't apply, use arbitrary distant `_in_use_from` and `_in_use_until` dates such as `2000-01-01`and `2099-12-31`
+- For agencies where this doesn't apply, use arbitrary distant dates: `_in_use_from = 2000-01-01`, `_in_use_until = 2099-12-31`
 
 **To find the source_record_ids:**
 Unfortunately, these are somewhat manual processes. Use the queries below to filter the results down, and then manually page through the results until you find the `name` value of the agency that you are looking for. Once you've found the correct name, copy that `source_record_id` for that row.

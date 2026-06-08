@@ -686,33 +686,6 @@ resource "google_storage_bucket" "tfer--dataproc-temp-us-west2-1005246706141-x9m
   uniform_bucket_level_access = "false"
 }
 
-resource "google_storage_bucket" "tfer--dev-calitp-aggregator-scraper" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "dev-calitp-aggregator-scraper"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
 resource "google_storage_bucket" "tfer--dev-calitp-gtfs-rt-raw" {
   default_event_based_hold    = "false"
   force_destroy               = "false"
@@ -738,34 +711,6 @@ resource "google_storage_bucket" "tfer--dev-calitp-gtfs-rt-raw" {
       with_state                 = "ANY"
     }
   }
-}
-
-resource "google_storage_bucket" "tfer--dev-calitp-test-sandbox" {
-  default_event_based_hold = "false"
-  force_destroy            = "false"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "1"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-
-  location                    = "US-WEST2"
-  name                        = "dev-calitp-test-sandbox"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
 }
 
 resource "google_storage_bucket" "tfer--export-ysjqwvyxc4ti3jmahojq" {
@@ -833,93 +778,6 @@ resource "google_storage_bucket" "tfer--gtfs-data-test" {
       with_state                 = "ANY"
     }
   }
-}
-
-resource "google_storage_bucket" "tfer--gtfs-data-test-reports" {
-  autoclass {
-    enabled = "true"
-  }
-
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "gtfs-data-test-reports"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--gtfs-schedule-backfill-test" {
-  default_event_based_hold = "false"
-  force_destroy            = "false"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "0"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-
-  location                    = "US-WEST2"
-  name                        = "gtfs-schedule-backfill-test"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-}
-
-resource "google_storage_bucket" "tfer--gtfs-schedule-backfill-test-deprecated" {
-  default_event_based_hold = "false"
-  force_destroy            = "false"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "0"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-
-  location                    = "US-WEST2"
-  name                        = "gtfs-schedule-backfill-test-deprecated"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "ARCHIVE"
-  uniform_bucket_level_access = "true"
 }
 
 resource "google_storage_bucket" "tfer--littlepay-data-extract-prod" {
@@ -991,33 +849,6 @@ resource "google_storage_bucket" "tfer--staging-002E-cal-itp-data-infra-002E-app
   uniform_bucket_level_access = "false"
 }
 
-resource "google_storage_bucket" "tfer--test-calitp-aggregator-scraper" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-aggregator-scraper"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
 resource "google_storage_bucket" "tfer--test-calitp-airtable" {
   default_event_based_hold    = "false"
   force_destroy               = "false"
@@ -1072,119 +903,6 @@ resource "google_storage_bucket" "tfer--test-calitp-dbt-python-models" {
   }
 }
 
-resource "google_storage_bucket" "tfer--test-calitp-elavon" {
-  default_event_based_hold = "false"
-  force_destroy            = "false"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-
-  location                    = "US-WEST2"
-  name                        = "test-calitp-elavon"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  versioning {
-    enabled = "false"
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-elavon-parsed" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-elavon-parsed"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-elavon-raw" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-elavon-raw"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-gtfs-config" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-gtfs-config"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
 resource "google_storage_bucket" "tfer--test-calitp-gtfs-download-config" {
   default_event_based_hold    = "false"
   force_destroy               = "false"
@@ -1212,200 +930,11 @@ resource "google_storage_bucket" "tfer--test-calitp-gtfs-download-config" {
   }
 }
 
-resource "google_storage_bucket" "tfer--test-calitp-gtfs-raw" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-gtfs-raw"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-gtfs-rt-parsed" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-gtfs-rt-parsed"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
 resource "google_storage_bucket" "tfer--test-calitp-gtfs-rt-raw" {
   default_event_based_hold    = "false"
   force_destroy               = "false"
   location                    = "US-WEST2"
   name                        = "test-calitp-gtfs-rt-raw"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-gtfs-rt-raw-v2" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-gtfs-rt-raw-v2"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-gtfs-rt-validation" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-gtfs-rt-validation"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-parsed" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-gtfs-schedule-parsed"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-parsed-hourly" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-gtfs-schedule-parsed-hourly"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-processed" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-gtfs-schedule-processed"
   project                     = "cal-itp-data-infra"
   public_access_prevention    = "inherited"
   requester_pays              = "false"
@@ -1482,330 +1011,6 @@ resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-raw-v2" {
   }
 }
 
-resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-gtfs-schedule-raw-v2-backfill-test"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-unzipped" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-gtfs-schedule-unzipped"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-unzipped-hourly" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-gtfs-schedule-unzipped-hourly"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-validation" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-gtfs-schedule-validation"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-gtfs-schedule-validation-hourly" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-gtfs-schedule-validation-hourly"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-ntd-report-validation" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-ntd-report-validation"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-payments-littlepay-parsed" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-payments-littlepay-parsed"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-payments-littlepay-parsed-v3" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-payments-littlepay-parsed-v3"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-payments-littlepay-raw" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-payments-littlepay-raw"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-payments-littlepay-raw-v3" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-payments-littlepay-raw-v3"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-publish" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-publish"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-publish-data-analysis" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-publish-data-analysis"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
 resource "google_storage_bucket" "tfer--test-calitp-sentry" {
   default_event_based_hold    = "false"
   force_destroy               = "false"
@@ -1813,87 +1018,6 @@ resource "google_storage_bucket" "tfer--test-calitp-sentry" {
   name                        = "test-calitp-sentry"
   project                     = "cal-itp-data-infra"
   public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-calitp-state-geoportal-scrape" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US"
-  name                        = "test-calitp-state-geoportal-scrape"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-rt-parsed" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-rt-parsed"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
-resource "google_storage_bucket" "tfer--test-rt-validations" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "test-rt-validations"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
@@ -1987,67 +1111,6 @@ resource "google_storage_bucket" "tfer--us-west2-calitp-airflow2-pr-f6bb9855-buc
   }
 }
 
-resource "google_storage_bucket" "calitp-gtfs" {
-  location                    = "US-WEST2"
-  name                        = "calitp-gtfs"
-  project                     = "cal-itp-data-infra"
-  uniform_bucket_level_access = "true"
-  storage_class               = "STANDARD"
-  force_destroy               = "true"
-
-  website {
-    main_page_suffix = "index.html"
-    not_found_page   = "404.html"
-  }
-}
-
-resource "google_storage_bucket" "calitp-dbt-docs" {
-  default_event_based_hold    = "false"
-  force_destroy               = "true"
-  location                    = "US-WEST2"
-  name                        = "calitp-dbt-docs"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  website {
-    main_page_suffix = "index.html"
-  }
-}
-
-resource "google_storage_bucket" "test-calitp-dbt-docs" {
-  default_event_based_hold    = "false"
-  force_destroy               = "true"
-  location                    = "US-WEST2"
-  name                        = "test-calitp-dbt-docs"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  website {
-    main_page_suffix = "index.html"
-  }
-
-  lifecycle_rule {
-    action {
-      type = "Delete"
-    }
-
-    condition {
-      age                        = "30"
-      created_before             = ""
-      days_since_custom_time     = "0"
-      days_since_noncurrent_time = "0"
-      num_newer_versions         = "0"
-      with_state                 = "ANY"
-    }
-  }
-}
-
 resource "google_storage_bucket" "calitp-composer" {
   default_event_based_hold    = "false"
   force_destroy               = "true"
@@ -2061,38 +1124,6 @@ resource "google_storage_bucket" "calitp-composer" {
 
   lifecycle {
     ignore_changes = [labels]
-  }
-}
-
-resource "google_storage_bucket" "calitp-reports" {
-  default_event_based_hold    = "false"
-  force_destroy               = "true"
-  location                    = "US-WEST2"
-  name                        = "calitp-reports"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  website {
-    main_page_suffix = "index.html"
-  }
-}
-
-resource "google_storage_bucket" "calitp-analysis" {
-  default_event_based_hold    = "false"
-  force_destroy               = "true"
-  location                    = "US-WEST2"
-  name                        = "calitp-analysis"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  website {
-    main_page_suffix = "index.html"
   }
 }
 
@@ -2166,6 +1197,49 @@ resource "google_storage_bucket" "calitp" {
   project                     = "cal-itp-data-infra"
   public_access_prevention    = "inherited"
   requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-requester-pays" {
+  for_each                    = local.requester_pays_buckets
+  name                        = each.key
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  location                    = "US-WEST2"
+  project                     = "cal-itp-data-infra"
+  public_access_prevention    = "inherited"
+  requester_pays              = "true"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-site" {
+  for_each                    = local.site_buckets
+  name                        = each.key
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  location                    = "US-WEST2"
+  project                     = "cal-itp-data-infra"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+
+  website {
+    main_page_suffix = "index.html"
+  }
+}
+
+resource "google_storage_bucket" "calitp-tides" {
+  name     = "calitp-tides"
+  project  = "cal-itp-data-infra"
+  location = "US-WEST2"
+
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  public_access_prevention    = "inherited"
+  requester_pays              = "true"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
 }

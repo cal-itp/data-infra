@@ -21,7 +21,7 @@ stg_ntd__service_by_mode AS (
         SAFE_CAST(max_mode_voms AS NUMERIC) AS max_mode_voms,
         {{ trim_make_empty_string_null('max_organization_type') }} AS max_organization_type,
         SAFE_CAST(max_primary_uza_area_sq_miles AS NUMERIC) AS max_primary_uza_area_sq_miles,
-        SAFE_CAST(max_primary_uza_code AS NUMERIC) AS max_primary_uza_code,
+        {{ trim_make_empty_string_null('max_primary_uza_code') }} AS max_primary_uza_code,
         {{ trim_make_empty_string_null('max_primary_uza_name') }} AS max_primary_uza_name,
         SAFE_CAST(max_primary_uza_population AS NUMERIC) AS max_primary_uza_population,
         {{ trim_make_empty_string_null('max_reporter_type') }} AS max_reporter_type,

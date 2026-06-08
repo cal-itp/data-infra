@@ -1,14 +1,60 @@
 {{ config(materialized = "table") }}
 
 WITH micropayments_v1 AS (
-    SELECT *
+    SELECT
+        micropayment_id,
+        aggregation_id,
+        participant_id,
+        customer_id,
+        funding_source_vault_id,
+        transaction_time,
+        payment_liability,
+        charge_amount,
+        nominal_amount,
+        currency_code,
+        type,
+        charge_type,
+        status,
+        _line_number,
+        `instance`,
+        feed_version,
+        extract_filename,
+        ts,
+        littlepay_export_ts,
+        littlepay_export_date,
+        _content_hash,
+        _key,
+        _payments_key,
     FROM {{ ref('stg_littlepay__micropayments') }}
     -- For agencies that had v1 feeds, keep everything before cutover date
     WHERE littlepay_export_date <= '2025-05-16'
 ),
 
 micropayments_v3 AS (
-    SELECT *
+    SELECT
+        micropayment_id,
+        aggregation_id,
+        participant_id,
+        customer_id,
+        funding_source_vault_id,
+        transaction_time,
+        payment_liability,
+        charge_amount,
+        nominal_amount,
+        currency_code,
+        type,
+        charge_type,
+        status,
+        _line_number,
+        `instance`,
+        feed_version,
+        extract_filename,
+        ts,
+        littlepay_export_ts,
+        littlepay_export_date,
+        _content_hash,
+        _key,
+        _payments_key,
     FROM {{ ref('stg_littlepay__micropayments_v3') }}
     WHERE
         -- Keep all records for agencies that didn't have a competing feed v1

@@ -34,9 +34,9 @@ schema_fields:
   - name: aptl_questionable
     type: STRING
   - name: average_passenger_trip_length_aptl_
-    type: NUMERIC
+    type: STRING
   - name: average_speed
-    type: NUMERIC
+    type: STRING
   - name: average_speed_questionable
     type: STRING
   - name: brt_non_statutory_mixed_traffic
@@ -82,7 +82,7 @@ schema_fields:
   - name: primary_uza_area_sq_miles
     type: NUMERIC
   - name: primary_uza_code
-    type: NUMERIC
+    type: STRING
   - name: primary_uza_name
     type: STRING
   - name: primary_uza_population

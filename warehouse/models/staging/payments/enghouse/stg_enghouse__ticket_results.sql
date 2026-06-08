@@ -20,12 +20,12 @@ clean_columns AS (
         SAFE_CAST(start_dttm AS TIMESTAMP) AS start_dttm,
         SAFE_CAST(end_dttm AS TIMESTAMP) AS end_dttm,
         {{ trim_make_empty_string_null('ticket_code') }} AS ticket_code,
-        {{ trim_make_empty_string_null('additional_infos') }} AS additional_infos,
         agency,
         dt,
+        {{ dbt_utils.generate_surrogate_key(['id', 'operator_id']) }} AS _payments_key,
         {{ dbt_utils.generate_surrogate_key(['operator_id', 'id', 'ticket_id', 'station_name', 'amount', 'clearing_id',
             'reason', 'tap_id', 'ticket_type', 'created_dttm', 'line', 'start_station', 'end_station', 'start_dttm',
-            'end_dttm', 'ticket_code', 'additional_infos']) }} AS _content_hash
+            'end_dttm', 'ticket_code']) }} AS _content_hash
     FROM source
 ),
 
@@ -33,7 +33,10 @@ deduplicated AS (
     SELECT * FROM (
         SELECT
             *,
-            ROW_NUMBER() OVER (PARTITION BY _content_hash ORDER BY dt ASC) AS row_num
+            ROW_NUMBER() OVER (
+                PARTITION BY id, operator_id
+                ORDER BY (start_dttm IS NOT NULL) DESC, dt ASC
+            ) AS row_num
         FROM clean_columns
     )
     WHERE row_num = 1
@@ -57,9 +60,9 @@ stg_enghouse__ticket_results AS (
         start_dttm,
         end_dttm,
         ticket_code,
-        additional_infos,
         agency,
         dt,
+        _payments_key,
         _content_hash
     FROM deduplicated
 )

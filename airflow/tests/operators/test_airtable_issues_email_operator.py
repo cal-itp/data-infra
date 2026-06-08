@@ -63,6 +63,7 @@ class TestAirtableIssuesEmailOperator:
                     "expiration_status": "Expired",
                     "max_end_date": "2026-03-25",
                     "organization_name": "Organization C",
+                    "schedule_feed": "https://uriC.com",
                 },
                 {
                     "issue_number": "ISSUE-4",
@@ -71,6 +72,7 @@ class TestAirtableIssuesEmailOperator:
                     "expiration_status": "Expiring",
                     "max_end_date": "2026-03-30",
                     "organization_name": "Organization D",
+                    "schedule_feed": "https://uriD.com",
                 },
             ],
             "failed_batches": [{"batch_num": 1, "error": "Create failure"}],

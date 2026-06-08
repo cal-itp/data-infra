@@ -183,7 +183,8 @@ monthly_summary AS (
         ROUND(SUM(n_trips) / COUNT(DISTINCT service_date), 1) AS daily_trips,
         ROUND(SUM(ttl_service_hours), 1) AS ttl_service_hours,
         ROUND(SUM(ttl_service_hours) / COUNT(DISTINCT service_date), 1) AS daily_service_hours,
-
+        ROUND(SUM(ttl_flex_service_hours), 1) AS ttl_flex_service_hours,
+        ROUND(SUM(ttl_flex_service_hours) / COUNT(DISTINCT service_date), 1) AS daily_flex_service_hours,
         MAX(n_routes) AS n_routes,
         MAX(n_shapes) AS n_shapes,
         MAX(n_stops) AS n_stops,

@@ -65,7 +65,7 @@ resource "google_container_node_pool" "tfer--data-infra-apps_gtfsrt-v4" {
   autoscaling {
     location_policy      = "BALANCED"
     max_node_count       = "2"
-    min_node_count       = "1"
+    min_node_count       = "0"
     total_max_node_count = "0"
     total_min_node_count = "0"
   }
@@ -139,7 +139,7 @@ resource "google_container_node_pool" "tfer--data-infra-apps_jobs-v1" {
   autoscaling {
     location_policy      = "BALANCED"
     max_node_count       = "3"
-    min_node_count       = "1"
+    min_node_count       = "0"
     total_max_node_count = "0"
     total_min_node_count = "0"
   }

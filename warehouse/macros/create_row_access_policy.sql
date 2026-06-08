@@ -99,6 +99,12 @@ filter using (
 ) }};
 
 {{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = 'scrra',
+    principals = ['serviceAccount:scrra-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
     principals = [
         'serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
         'serviceAccount:metabase-payments-team@cal-itp-data-infra.iam.gserviceaccount.com',
@@ -183,12 +189,6 @@ filter using (
 
 {{ create_row_access_policy(
     filter_column = 'organization_name',
-    filter_value = 'Ventura County Transportation Commission',
-    principals = ['serviceAccount:vctc-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
-) }};
-
-{{ create_row_access_policy(
-    filter_column = 'organization_name',
     filter_value = 'El Dorado County Transit Authority',
     principals = ['serviceAccount:eldorado-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }};
@@ -196,7 +196,10 @@ filter using (
 {{ create_row_access_policy(
     filter_column = 'organization_name',
     filter_value = 'Ventura County Transportation Commission',
-    principals = ['serviceAccount:vctc-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+    principals = [
+        'serviceAccount:vctc-payments-user@cal-itp-data-infra.iam.gserviceaccount.com',
+        'serviceAccount:valley-payments-user@cal-itp-data-infra.iam.gserviceaccount.com'
+    ]
 ) }};
 
 {{ create_row_access_policy(
@@ -215,6 +218,12 @@ filter using (
     filter_column = 'organization_name',
     filter_value = 'City of Camarillo',
     principals = ['serviceAccount:camarillo-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = 'Southern California Regional Rail Authority',
+    principals = ['serviceAccount:scrra-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }};
 
 {{ create_row_access_policy(
@@ -250,6 +259,12 @@ filter using (
     filter_column = 'operator_id',
     filter_value = '277',
     principals = ['serviceAccount:camarillo-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'operator_id',
+    filter_value = '279',
+    principals = ['serviceAccount:valley-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }};
 
 {{ create_row_access_policy(

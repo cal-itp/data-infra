@@ -274,20 +274,8 @@ resource "google_storage_bucket_iam_binding" "tfer--dataproc-temp-us-west2-10052
   role    = "roles/storage.legacyBucketReader"
 }
 
-resource "google_storage_bucket_iam_binding" "tfer--dev-calitp-aggregator-scraper" {
-  bucket  = "b/dev-calitp-aggregator-scraper"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectReader"
-}
-
 resource "google_storage_bucket_iam_binding" "tfer--dev-calitp-gtfs-rt-raw" {
   bucket  = "b/dev-calitp-gtfs-rt-raw"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectReader"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--dev-calitp-test-sandbox" {
-  bucket  = "b/dev-calitp-test-sandbox"
   members = ["projectViewer:cal-itp-data-infra"]
   role    = "roles/storage.legacyObjectReader"
 }
@@ -312,26 +300,8 @@ resource "google_storage_bucket_iam_binding" "tfer--gtfs-data-reports" {
 
 resource "google_storage_bucket_iam_binding" "tfer--gtfs-data-test" {
   bucket  = "b/gtfs-data-test"
-  members = ["serviceAccount:calitp-py-ci@cal-itp-data-infra.iam.gserviceaccount.com", "serviceAccount:gtfs-rt-archiver-test@cal-itp-data-infra.iam.gserviceaccount.com", "serviceAccount:local-airflow-dev@cal-itp-data-infra-staging.iam.gserviceaccount.com", "serviceAccount:project-1005246706141@storage-transfer-service.iam.gserviceaccount.com"]
+  members = ["serviceAccount:calitp-py-ci@cal-itp-data-infra.iam.gserviceaccount.com", "serviceAccount:local-airflow-dev@cal-itp-data-infra-staging.iam.gserviceaccount.com", "serviceAccount:project-1005246706141@storage-transfer-service.iam.gserviceaccount.com"]
   role    = "roles/storage.objectAdmin"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--gtfs-data-test-reports" {
-  bucket  = "b/gtfs-data-test-reports"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketOwner"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--gtfs-schedule-backfill-test" {
-  bucket  = "b/gtfs-schedule-backfill-test"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectOwner"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--gtfs-schedule-backfill-test-deprecated" {
-  bucket  = "b/gtfs-schedule-backfill-test-deprecated"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectOwner"
 }
 
 resource "google_storage_bucket_iam_binding" "tfer--littlepay-data-extract-prod" {
@@ -358,12 +328,6 @@ resource "google_storage_bucket_iam_binding" "tfer--staging-002E-cal-itp-data-in
   role    = "roles/storage.legacyBucketOwner"
 }
 
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-aggregator-scraper" {
-  bucket  = "b/test-calitp-aggregator-scraper"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketOwner"
-}
-
 resource "google_storage_bucket_iam_binding" "tfer--test-calitp-airtable" {
   bucket  = "b/test-calitp-airtable"
   members = ["projectViewer:cal-itp-data-infra"]
@@ -376,82 +340,16 @@ resource "google_storage_bucket_iam_binding" "tfer--test-calitp-dbt-python-model
   role    = "roles/storage.legacyObjectReader"
 }
 
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-elavon" {
-  bucket  = "b/test-calitp-elavon"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectReader"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-elavon-parsed" {
-  bucket  = "b/test-calitp-elavon-parsed"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectReader"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-elavon-raw" {
-  bucket  = "b/test-calitp-elavon-raw"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketOwner"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-config" {
-  bucket  = "b/test-calitp-gtfs-config"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketOwner"
-}
-
 resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-download-config" {
   bucket  = "b/test-calitp-gtfs-download-config"
   members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
   role    = "roles/storage.legacyObjectOwner"
 }
 
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-raw" {
-  bucket  = "b/test-calitp-gtfs-raw"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectOwner"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-rt-parsed" {
-  bucket  = "b/test-calitp-gtfs-rt-parsed"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketOwner"
-}
-
 resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-rt-raw" {
   bucket  = "b/test-calitp-gtfs-rt-raw"
-  members = ["serviceAccount:gtfs-rt-archiver-test@cal-itp-data-infra.iam.gserviceaccount.com", "serviceAccount:gtfs-rt-archiver-v3@cal-itp-data-infra.iam.gserviceaccount.com"]
+  members = ["serviceAccount:gtfs-rt-archiver-v3@cal-itp-data-infra.iam.gserviceaccount.com"]
   role    = "roles/storage.objectAdmin"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-rt-raw-v2" {
-  bucket  = "b/test-calitp-gtfs-rt-raw-v2"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketReader"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-rt-validation" {
-  bucket  = "b/test-calitp-gtfs-rt-validation"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketReader"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-schedule-parsed" {
-  bucket  = "b/test-calitp-gtfs-schedule-parsed"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectReader"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-schedule-parsed-hourly" {
-  bucket  = "b/test-calitp-gtfs-schedule-parsed-hourly"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketReader"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-schedule-processed" {
-  bucket  = "b/test-calitp-gtfs-schedule-processed"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectOwner"
 }
 
 resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-schedule-raw" {
@@ -466,100 +364,10 @@ resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-schedule-ra
   role    = "roles/storage.legacyBucketReader"
 }
 
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-schedule-raw-v2-backfill-test" {
-  bucket  = "b/test-calitp-gtfs-schedule-raw-v2-backfill-test"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketOwner"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-schedule-unzipped" {
-  bucket  = "b/test-calitp-gtfs-schedule-unzipped"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketOwner"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-schedule-unzipped-hourly" {
-  bucket  = "b/test-calitp-gtfs-schedule-unzipped-hourly"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectReader"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-schedule-validation" {
-  bucket  = "b/test-calitp-gtfs-schedule-validation"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketReader"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-gtfs-schedule-validation-hourly" {
-  bucket  = "b/test-calitp-gtfs-schedule-validation-hourly"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketOwner"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-ntd-report-validation" {
-  bucket  = "b/test-calitp-ntd-report-validation"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectOwner"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-payments-littlepay-parsed" {
-  bucket  = "b/test-calitp-payments-littlepay-parsed"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketReader"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-payments-littlepay-parsed-v3" {
-  bucket  = "b/test-calitp-payments-littlepay-parsed-v3"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketReader"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-payments-littlepay-raw" {
-  bucket  = "b/test-calitp-payments-littlepay-raw"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketReader"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-payments-littlepay-raw-v3" {
-  bucket  = "b/test-calitp-payments-littlepay-raw-v3"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketReader"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-publish" {
-  bucket  = "b/test-calitp-publish"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketOwner"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-publish-data-analysis" {
-  bucket  = "b/test-calitp-publish-data-analysis"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectReader"
-}
-
 resource "google_storage_bucket_iam_binding" "tfer--test-calitp-sentry" {
   bucket  = "b/test-calitp-sentry"
   members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
   role    = "roles/storage.legacyObjectOwner"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-calitp-state-geoportal-scrape" {
-  bucket  = "b/test-calitp-state-geoportal-scrape"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketOwner"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-rt-parsed" {
-  bucket  = "b/test-rt-parsed"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectOwner"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--test-rt-validations" {
-  bucket  = "b/test-rt-validations"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketOwner"
 }
 
 resource "google_storage_bucket_iam_binding" "tfer--us-002E-artifacts-002E-cal-itp-data-infra-002E-appspot-002E-com" {
@@ -592,9 +400,22 @@ resource "google_storage_bucket_iam_binding" "calitp-composer" {
   role    = "roles/storage.legacyBucketOwner"
 }
 
+resource "google_storage_bucket_iam_binding" "calitp-tides" {
+  bucket  = "calitp-tides"
+  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
+  role    = "roles/storage.legacyObjectOwner"
+}
+
 resource "google_storage_bucket_iam_binding" "calitp" {
   for_each = local.environment_buckets
   bucket   = google_storage_bucket.calitp[each.key].name
+  members  = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
+  role     = "roles/storage.legacyObjectOwner"
+}
+
+resource "google_storage_bucket_iam_binding" "calitp-site" {
+  for_each = local.site_buckets
+  bucket   = google_storage_bucket.calitp-site[each.key].name
   members  = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
   role     = "roles/storage.legacyObjectOwner"
 }

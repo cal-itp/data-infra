@@ -25,6 +25,27 @@ locals {
     for variable in local.env :
     variable.name => variable.value
   })
+
+  requirements-c3_txt_path = abspath("../../../../airflow/requirements-c3.txt")
+  requirements_c3 = tolist([
+    for line in split("\n", trimspace(file(local.requirements-c3_txt_path))) :
+    regex(local.python_package_regex, line)
+  ])
+
+  pypi_packages_c3 = tomap({
+    for requirement in local.requirements_c3 :
+    requirement.name => requirement.version
+  })
+
+  env_path_c3 = abspath("../../../../airflow/.staging_c3.env")
+  env_c3 = tolist([
+    for line in split("\n", trimspace(file(local.env_path_c3))) :
+    regex("(?P<name>[A-Z0-9_]+)=(?P<value>.*)", line)
+  ])
+  env_variables_c3 = tomap({
+    for variable in local.env_c3 :
+    variable.name => variable.value
+  })
 }
 
 data "kubernetes_secret" "composer" {

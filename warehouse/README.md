@@ -8,7 +8,7 @@ This dbt project is intended to be the source of truth for the cal-itp-data-infr
 If you are developing dbt models in JupyterHub, the following pieces
 are already configured/installed.
 
-- Libraries such as gdal and graphviz
+- Libraries such as gdal
 - The `gcloud` CLI
 
 > You may have already authenticated gcloud and the GitHub CLI (gh) if you followed the
@@ -30,15 +30,6 @@ are already configured/installed.
 
 > [!NOTE]
 > If you run into the error `No such file or directory` you need to [install uv](#Install-uv).
->
-> If you run into an error complaining about graphviz (e.g. `fatal error: 'graphviz/cgraph.h' file not found`); see [pygraphviz#398](https://github.com/pygraphviz/pygraphviz/issues/398).
->
-> ```bash
-> export CFLAGS="-I $(brew --prefix graphviz)/include"
-> export LDFLAGS="-L $(brew --prefix graphviz)/lib"
-> uv sync
-> ```
->
 
 
 4. Execute `uv run dbt deps` to install the dbt dependencies defined in `packages.yml` (such as `dbt_utils`).
@@ -291,7 +282,7 @@ You can enable [displaying hidden folders/files in macOS Finder](https://www.mac
 ### Install Homebrew (if you haven't)
 
 1. Follow the installation instructions at [https://brew.sh/](https://brew.sh/)
-2. Then, `brew install gdal graphviz` to install libraries used by some Python libraries.
+2. Then, `brew install gdal` to install libraries used by some Python libraries.
 
 
 ### Install the Google SDK (if you haven't)

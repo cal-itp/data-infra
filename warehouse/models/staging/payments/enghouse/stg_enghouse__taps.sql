@@ -16,7 +16,7 @@ clean_columns AS (
         SAFE_CAST(tx_number AS INT64) AS tx_number,
         SAFE_CAST(tx_status AS INT64) AS tx_status,
         {{ trim_make_empty_string_null('payment_reference') }} AS payment_reference,
-        SAFE_CAST(terminal_spdh_code AS INT64) AS terminal_spdh_code,
+        {{ trim_make_empty_string_null('terminal_spdh_code') }} AS terminal_spdh_code,
         {{ trim_make_empty_string_null('denylist_version') }} AS denylist_version,
         {{ trim_make_empty_string_null('transit_data') }} AS transit_data,
         SAFE_CAST(currency AS INT64) AS currency,
@@ -47,6 +47,7 @@ clean_columns AS (
         {{ trim_make_empty_string_null('driver_id') }} AS driver_id,
         agency,
         dt,
+        {{ dbt_utils.generate_surrogate_key(['tap_id', 'operator_id']) }} AS _payments_key,
         {{ dbt_utils.generate_surrogate_key([ 'operator_id', 'tap_id', 'mapping_terminal_id', 'mapping_merchant_id', 'terminal', 'token',
             'masked_pan', 'server_date', 'terminal_date', 'tx_number', 'tx_status', 'payment_reference',
             'terminal_spdh_code', 'denylist_version', 'transit_data', 'currency', 'par', 'fare_mode', 'fare_type', 'fare_value',
@@ -60,7 +61,7 @@ deduplicated AS (
     SELECT * FROM (
         SELECT
             *,
-            ROW_NUMBER() OVER (PARTITION BY _content_hash ORDER BY dt ASC) AS row_num
+            ROW_NUMBER() OVER (PARTITION BY tap_id, operator_id ORDER BY dt ASC) AS row_num
         FROM clean_columns
     )
     WHERE row_num = 1
@@ -111,6 +112,7 @@ stg_enghouse__taps AS (
         driver_id,
         agency,
         dt,
+        _payments_key,
         _content_hash
     FROM deduplicated
 )

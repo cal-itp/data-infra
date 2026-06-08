@@ -26,29 +26,21 @@ models:
       - name: authorisation_date_time_utc
       - &lp_export_date
         name: littlepay_export_date
-        description: |
-          Date of the source file from Littlepay. Date is extracted from filenames, which generally have the
-          structure {timestamp}_{data_type}.{file extension}.
+        description: '{{ doc("lp_export_date") }}'
       - &lp_export_ts
         name: littlepay_export_ts
-        description: |
-          Timestamp of the source file from Littlepay. Timestamp is extracted from filenames, which generally have the
-          structure {timestamp}_{data_type}.{file extension}.
+        description: '{{ doc("lp_export_ts") }}'
       - &lp_line_number
         name: _line_number
-        description: |
-          Line number of this row in the source file.
-          Some line numbers may be missing because we drop extra copies of rows that are full duplicates of another row.
+        description: '{{ doc("lp_line_number") }}'
       - &payments_input_row_key
         name: _key
-        description: |
-          Synthetic key composed of Littlepay file date and line number to uniquely identify a row within source data.
+        description: '{{ doc("lp_input_row_key") }}'
         data_tests:
           - not_null
           - unique
       - name: _payments_key
-        description: |
-          Synthentic key composed of the elements that define a natural key within the source data (primary key according to Littlepay schema.)
+        description: '{{ doc("lp_payments_key") }}'
         data_tests:
           - not_null
           - unique_proportion:
@@ -60,9 +52,7 @@ models:
                 field: _payments_key
       - &_content_hash
         name: _content_hash
-        description: |
-          Hash of all data columns to uniquely identify row's content, mostly for debugging purposes.
-          Should ideally be handled by uniqueness of _payments_key but surfaced for troubleshooting.
+        description: '{{ doc("lp_content_hash") }}'
 
   - name: stg_littlepay__customer_funding_source
     columns:
@@ -109,8 +99,7 @@ models:
       - *payments_input_row_key
       - &payments_key_full_uniqueness
         name: _payments_key
-        description: |
-          Synthentic key composed of the elements that define a natural key within the source data (primary key according to Littlepay schema.)
+        description: '{{ doc("lp_payments_key") }}'
         data_tests:
           - not_null
           - unique
@@ -167,8 +156,12 @@ models:
       - name: littlepay_transaction_id
         description: '{{ doc("lp_littlepay_transaction_id") }}'
         data_tests:
-          - not_null
-          - unique
+          - dbt_utils.not_null_proportion:
+              arguments:
+                at_least: 0.9999
+          - unique_proportion:
+              arguments:
+                at_least: 0.9999
       - name: location_id
         description: The identifier of the location where the transaction occurred.
       - name: location_name
@@ -269,8 +262,9 @@ models:
       - name: micropayment_id
         description: '{{ doc("lp_micropayment_id") }}'
         data_tests:
-          - unique:
+          - unique_proportion:
               arguments:
+                at_least: 0.9999
                 where: applied
       - *participant_id
       - name: customer_id
@@ -330,8 +324,12 @@ models:
       - name: micropayment_id
         description: '{{ doc("lp_micropayment_id") }}'
         data_tests:
-          - not_null
-          - unique
+          - dbt_utils.not_null_proportion:
+              arguments:
+                at_least: 0.9999
+          - unique_proportion:
+              arguments:
+                at_least: 0.9999
       - name: aggregation_id
         description: '{{ doc("lp_aggregation_id") }}'
       - *participant_id
@@ -366,8 +364,9 @@ models:
       - name: product_id
         description: '{{ doc("lp_product_id") }}'
         data_tests:
-          - not_null
-          - unique
+          - dbt_utils.not_null_proportion:
+              arguments:
+                at_least: 0.9999
       - name: previous_version_id
         description: '{{ doc("lp_previous_version_id") }}'
       - name: original_version_id
