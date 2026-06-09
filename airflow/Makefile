@@ -11,6 +11,8 @@ COMPOSER_VERSION := composer-3-airflow-2.10.5-build.36
 # COMPOSER_ENVIRONMENT_SOURCE := calitp-staging-composer
 # COMPOSER_LOCATION := us-west2
 
+COMPOSER_CMD := uv run --no-project --with composer-dev composer-dev
+
 WAREHOUSE_PATH := ../warehouse
 WAREHOUSE_TARGET := staging
 
@@ -26,13 +28,13 @@ else
 endif
 
 restart: sync
-	uv run composer-dev restart
+	$(COMPOSER_CMD) restart
 
 start: sync
-	uv run composer-dev start
+	$(COMPOSER_CMD) start
 
 stop:
-	uv run composer-dev stop
+	$(COMPOSER_CMD) stop
 
 sync: $(WAREHOUSE_PATH)/target/manifest.json $(COMPOSER_ENVIRONMENT_PATH)
 	rsync -ar plugins/ $(COMPOSER_ENVIRONMENT_PATH)/plugins/
@@ -74,7 +76,7 @@ $(COMPOSER_PATH):
 	mkdir $(COMPOSER_PATH)
 
 $(COMPOSER_ENVIRONMENT_PATH): $(COMPOSER_PATH)
-	uv run composer-dev create \
+	$(COMPOSER_CMD) create \
 		--from-image-version $(COMPOSER_VERSION) \
 		--project $(COMPOSER_PROJECT) \
 		--port 8080 \
@@ -83,37 +85,37 @@ $(COMPOSER_ENVIRONMENT_PATH): $(COMPOSER_PATH)
 		$(COMPOSER_ENVIRONMENT_NAME)
 
 pools:
-	uv run composer-dev run-airflow-cmd \
+	$(COMPOSER_CMD) run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set airtable_pool 4 ""
-	uv run composer-dev run-airflow-cmd \
+	$(COMPOSER_CMD) run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set external_table_pool 4 ""
-	uv run composer-dev run-airflow-cmd \
+	$(COMPOSER_CMD) run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set rt_parse_pool 1 ""
-	uv run composer-dev run-airflow-cmd \
+	$(COMPOSER_CMD) run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set rt_validate_pool 1 ""
-	uv run composer-dev run-airflow-cmd \
+	$(COMPOSER_CMD) run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set schedule_parse_pool 4 ""
-	uv run composer-dev run-airflow-cmd \
+	$(COMPOSER_CMD) run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set schedule_unzip_pool 4 ""
-	uv run composer-dev run-airflow-cmd \
+	$(COMPOSER_CMD) run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set schedule_validate_pool 4 ""
-	uv run composer-dev run-airflow-cmd \
+	$(COMPOSER_CMD) run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set schedule_download_pool 4 ""
-	uv run composer-dev run-airflow-cmd \
+	$(COMPOSER_CMD) run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set littlepay_list_pool 4 ""
-	uv run composer-dev run-airflow-cmd \
+	$(COMPOSER_CMD) run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set littlepay_download_pool 4 ""
-	uv run composer-dev run-airflow-cmd \
+	$(COMPOSER_CMD) run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set littlepay_parse_pool 4 ""
 
@@ -139,5 +141,5 @@ ifneq (,$(wildcard $(COMPOSER_ENVIRONMENT_PATH)/variables.env))
 endif
 
 teardown: stop
-	uv run composer-dev remove --skip-confirmation
+	$(COMPOSER_CMD) remove --skip-confirmation
 	rm -r $(COMPOSER_PATH)
