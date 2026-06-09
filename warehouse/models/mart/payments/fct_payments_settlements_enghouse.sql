@@ -16,6 +16,10 @@ dim_gtfs_datasets AS (
     SELECT * FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
+dim_orgs AS (
+    SELECT * FROM {{ ref('dim_organizations') }}
+),
+
 join_orgs AS (
     SELECT
         transactions.operator_id,
@@ -38,7 +42,6 @@ join_orgs AS (
         transactions.par,
         transactions.brand,
         transactions._content_hash,
-
         dim_orgs.name AS organization_name,
         direct_map.organization_source_record_id,
     FROM transactions
