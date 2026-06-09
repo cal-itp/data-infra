@@ -1,7 +1,7 @@
 {{ config(materialized = 'table',
     post_hook="{{ payments_enghouse_row_access_policy() }}") }}
 
-WITH transactions AS (
+WITH deduped_transactions AS (
     SELECT
         operator_id,
         id,
@@ -23,7 +23,7 @@ WITH transactions AS (
         par,
         brand,
         _content_hash,
-    FROM {{ ref('stg_enghouse__transactions') }}
+    FROM {{ ref('stg_enghouse__deduped_transactions') }}
 ),
 
 payments_entity_mapping AS (
@@ -46,37 +46,37 @@ dim_orgs AS (
 
 join_orgs AS (
     SELECT
-        transactions.operator_id,
-        transactions.id,
-        transactions.operation,
-        transactions.terminal_id,
-        transactions.mapping_terminal_id,
-        transactions.mapping_merchant_id,
-        transactions.timestamp,
-        transactions.amount,
-        transactions.payment_reference,
-        transactions.spdh_response,
-        transactions.response_type,
-        transactions.response_message,
-        transactions.token,
-        transactions.issuer_response,
-        transactions.core_response,
-        transactions.rrn,
-        transactions.authorization_code,
-        transactions.par,
-        transactions.brand,
-        transactions._content_hash,
+        deduped_transactions.operator_id,
+        deduped_transactions.id,
+        deduped_transactions.operation,
+        deduped_transactions.terminal_id,
+        deduped_transactions.mapping_terminal_id,
+        deduped_transactions.mapping_merchant_id,
+        deduped_transactions.timestamp,
+        deduped_transactions.amount,
+        deduped_transactions.payment_reference,
+        deduped_transactions.spdh_response,
+        deduped_transactions.response_type,
+        deduped_transactions.response_message,
+        deduped_transactions.token,
+        deduped_transactions.issuer_response,
+        deduped_transactions.core_response,
+        deduped_transactions.rrn,
+        deduped_transactions.authorization_code,
+        deduped_transactions.par,
+        deduped_transactions.brand,
+        deduped_transactions._content_hash,
         dim_orgs.name AS organization_name,
         direct_map.organization_source_record_id,
-    FROM transactions
+    FROM deduped_transactions
     LEFT JOIN payments_entity_mapping AS direct_map
-        ON transactions.operator_id = direct_map.operator_id
-            AND CAST(transactions.timestamp AS TIMESTAMP)
+        ON deduped_transactions.operator_id = direct_map.operator_id
+            AND CAST(deduped_transactions.timestamp AS TIMESTAMP)
                 BETWEEN CAST(direct_map._in_use_from AS TIMESTAMP)
                 AND CAST(direct_map._in_use_until AS TIMESTAMP)
     LEFT JOIN dim_orgs
         ON direct_map.organization_source_record_id = dim_orgs.source_record_id
-        AND CAST(transactions.timestamp AS TIMESTAMP) BETWEEN dim_orgs._valid_from AND dim_orgs._valid_to
+        AND CAST(deduped_transactions.timestamp AS TIMESTAMP) BETWEEN dim_orgs._valid_from AND dim_orgs._valid_to
 ),
 
 fct_payments_settlements_enghouse AS (

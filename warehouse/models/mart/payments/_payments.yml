@@ -919,24 +919,46 @@ models:
       - name: organization_name
       - name: organization_source_record_id
       - name: operator_id
+        description: '{{ doc("enghouse_operator_id") }}'
       - name: id
+        description: '{{ doc("enghouse_id") }}'
       - name: operation
+        description: '{{ doc("enghouse_operation") }}'
       - name: terminal_id
+        description: '{{ doc("enghouse_terminal_id") }}'
       - name: mapping_terminal_id
+        description: '{{ doc("enghouse_mapping_terminal_id") }}'
       - name: mapping_merchant_id
+        description: '{{ doc("enghouse_mapping_merchant_id") }}'
       - name: timestamp
+        description: '{{ doc("enghouse_timestamp") }}'
       - name: amount
+        description: '{{ doc("enghouse_amount") }}'
       - name: payment_reference
+        description: '{{ doc("enghouse_payment_reference") }}'
+        data_tests:
+          - unique
       - name: spdh_response
+        description: '{{ doc("enghouse_spdh_response") }}'
       - name: response_type
+        description: '{{ doc("enghouse_response_type") }}'
       - name: response_message
+        description: '{{ doc("enghouse_response_message") }}'
       - name: token
+        description: '{{ doc("enghouse_token") }}'
       - name: issuer_response
+        description: '{{ doc("enghouse_issuer_response") }}'
       - name: core_response
+        description: '{{ doc("enghouse_core_response") }}'
       - name: rrn
+        description: '{{ doc("enghouse_rrn") }}'
       - name: authorization_code
+        description: '{{ doc("enghouse_authorization_code") }}'
       - name: par
+        description: '{{ doc("enghouse_par") }}'
       - name: brand
+        description: '{{ doc("enghouse_brand") }}'
       - name: end_of_month_date_pacific
       - name: end_of_month_date_utc
       - name: _content_hash
+        description: '{{ doc("enghouse_content_hash") }}'
