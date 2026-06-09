@@ -2,22 +2,46 @@
     post_hook="{{ payments_enghouse_row_access_policy() }}") }}
 
 WITH transactions AS (
-    SELECT * FROM {{ ref('stg_enghouse__transactions') }}
+    SELECT
+        operator_id,
+        id,
+        operation,
+        terminal_id,
+        mapping_terminal_id,
+        mapping_merchant_id,
+        timestamp,
+        amount,
+        payment_reference,
+        spdh_response,
+        response_type,
+        response_message,
+        token,
+        issuer_response,
+        core_response,
+        rrn,
+        authorization_code,
+        par,
+        brand,
+        _content_hash,
+    FROM {{ ref('stg_enghouse__transactions') }}
 ),
 
 payments_entity_mapping AS (
     SELECT
-        * EXCEPT(enghouse_operator_id),
-        enghouse_operator_id AS operator_id
+        organization_source_record_id,
+        enghouse_operator_id AS operator_id,
+        _in_use_from,
+        _in_use_until
     FROM {{ ref('payments_entity_mapping_enghouse') }}
 ),
 
-dim_gtfs_datasets AS (
-    SELECT * FROM {{ ref('dim_gtfs_datasets') }}
-),
-
 dim_orgs AS (
-    SELECT * FROM {{ ref('dim_organizations') }}
+    SELECT
+        source_record_id,
+        name,
+        _valid_from,
+        _valid_to
+    FROM {{ ref('dim_organizations') }}
 ),
 
 join_orgs AS (
@@ -84,4 +108,29 @@ fct_payments_settlements_enghouse AS (
     FROM join_orgs
 )
 
-SELECT * FROM fct_payments_settlements_enghouse
+SELECT
+    operator_id,
+    id,
+    operation,
+    terminal_id,
+    mapping_terminal_id,
+    mapping_merchant_id,
+    timestamp,
+    amount,
+    payment_reference,
+    spdh_response,
+    response_type,
+    response_message,
+    token,
+    issuer_response,
+    core_response,
+    rrn,
+    authorization_code,
+    par,
+    brand,
+    organization_name,
+    organization_source_record_id,
+    end_of_month_date_pacific,
+    end_of_month_date_utc,
+    _content_hash
+FROM fct_payments_settlements_enghouse
