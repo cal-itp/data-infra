@@ -287,6 +287,26 @@ resource "google_storage_bucket_iam_policy" "tfer--calitp-backups-grafana" {
 POLICY
 }
 
+# The Metabase GCS-export backups (see services/metabase/backup-gcs-export.md,
+# defined in iac/cal-itp-data-infra/metabase/us/backups.tf) have the prod Cloud
+# SQL instance export pg_dumps into this bucket's exports/ prefix. The export runs
+# as the Cloud SQL instance's own service identity, so that identity needs
+# objectAdmin here. (Write access to this bucket is not new: the backup-metabase
+# SA below has held objectAdmin since the old restic backups, which wrote as it.
+# The difference is that Cloud SQL's instances.export writes as the instance, not
+# as the invoking SA, so it is the instance identity that must be granted — added
+# here alongside backup-metabase, not replacing it.) Because this bucket's IAM is
+# authoritative (the
+# google_storage_bucket_iam_policy below owns the whole policy), the grant has to
+# be part of the policy_data rather than a separate additive iam_member, which the
+# policy would otherwise strip on the next apply. The instance lives in the
+# metabase module; its service account email is read live via this data source
+# (the instance already exists, so there is no cross-module apply ordering).
+data "google_sql_database_instance" "metabase" {
+  name    = "metabase"
+  project = "cal-itp-data-infra"
+}
+
 resource "google_storage_bucket_iam_policy" "tfer--calitp-backups-metabase" {
   bucket = "b/calitp-backups-metabase"
 
@@ -321,7 +341,8 @@ resource "google_storage_bucket_iam_policy" "tfer--calitp-backups-metabase" {
     },
     {
       "members": [
-        "serviceAccount:backup-metabase@cal-itp-data-infra.iam.gserviceaccount.com"
+        "serviceAccount:backup-metabase@cal-itp-data-infra.iam.gserviceaccount.com",
+        "serviceAccount:${data.google_sql_database_instance.metabase.service_account_email_address}"
       ],
       "role": "roles/storage.objectAdmin"
     }
