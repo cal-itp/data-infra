@@ -24,14 +24,18 @@ resource "google_service_account" "metabase-backup" {
   project      = "cal-itp-data-infra-staging"
 }
 
-resource "google_project_iam_member" "metabase-backup" {
-  for_each = toset([
-    "roles/cloudsql.editor",   # permission to call instances.export
-    "roles/workflows.invoker", # scheduler -> workflow execution
-  ])
-  role    = each.key
+resource "google_project_iam_member" "metabase-backup-cloudsql" {
+  role    = "roles/cloudsql.editor"
   member  = "serviceAccount:${google_service_account.metabase-backup.email}"
   project = "cal-itp-data-infra-staging"
+}
+
+resource "google_workflows_workflow_iam_member" "metabase-backup-invoker" {
+  project  = "cal-itp-data-infra-staging"
+  location = google_workflows_workflow.metabase-staging-backup.region
+  workflow = google_workflows_workflow.metabase-staging-backup.name
+  role     = "roles/workflows.invoker"
+  member   = "serviceAccount:${google_service_account.metabase-backup.email}"
 }
 
 # Dedicated bucket for portable pg_dump exports. Single-region us-west2 (matches
