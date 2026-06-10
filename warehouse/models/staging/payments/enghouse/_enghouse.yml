@@ -228,9 +228,18 @@ models:
 
   - name: stg_enghouse__deduped_transactions
     description: |
-      One row per payment_reference, built from stg_enghouse__transactions by keeping only the most
-      recent row for each payment_reference (rows with a null payment_reference are all retained).
+      One row per operator_id + payment_reference, built from stg_enghouse__transactions by keeping
+      only the most recent row for each operator_id + payment_reference (payment_reference is not
+      unique between operators; rows with a null payment_reference are all retained).
       Feeds fct_payments_settlements_enghouse.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - operator_id
+              - payment_reference
+          config:
+            where: "payment_reference is not null"
     columns:
       - name: operator_id
         description: '{{ doc("enghouse_operator_id") }}'
@@ -256,7 +265,6 @@ models:
       - name: payment_reference
         description: '{{ doc("enghouse_payment_reference") }}'
         data_tests:
-          - unique
           - dbt_utils.not_null_proportion:
               arguments:
                 at_least: 0.9999

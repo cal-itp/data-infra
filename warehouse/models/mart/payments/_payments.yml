@@ -915,6 +915,14 @@ models:
 
   - name: fct_payments_settlements_enghouse
     description: Enghouse settlements (completed transactions.)
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - operator_id
+              - payment_reference
+          config:
+            where: "payment_reference is not null"
     columns:
       - name: organization_name
       - name: organization_source_record_id
@@ -926,10 +934,6 @@ models:
         description: '{{ doc("enghouse_operation") }}'
       - name: terminal_id
         description: '{{ doc("enghouse_terminal_id") }}'
-      - name: mapping_terminal_id
-        description: '{{ doc("enghouse_mapping_terminal_id") }}'
-      - name: mapping_merchant_id
-        description: '{{ doc("enghouse_mapping_merchant_id") }}'
       - name: timestamp
         description: '{{ doc("enghouse_timestamp") }}'
       - name: amount
@@ -939,14 +943,9 @@ models:
       - name: payment_reference
         description: '{{ doc("enghouse_payment_reference") }}'
         data_tests:
-          - unique_proportion:
-              arguments:
-                at_least: 0.9999
           - dbt_utils.not_null_proportion:
               arguments:
                 at_least: 0.9999
-      - name: spdh_response
-        description: '{{ doc("enghouse_spdh_response") }}'
       - name: response_type
         description: '{{ doc("enghouse_response_type") }}'
       - name: response_message
@@ -955,8 +954,6 @@ models:
         description: '{{ doc("enghouse_token") }}'
       - name: issuer_response
         description: '{{ doc("enghouse_issuer_response") }}'
-      - name: core_response
-        description: '{{ doc("enghouse_core_response") }}'
       - name: rrn
         description: '{{ doc("enghouse_rrn") }}'
         data_tests:

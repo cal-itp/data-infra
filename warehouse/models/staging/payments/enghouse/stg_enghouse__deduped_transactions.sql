@@ -28,11 +28,12 @@ WITH transactions AS (
 
 stg_enghouse__deduped_transactions AS (
     SELECT * FROM transactions
-    -- Keep the most recent row per payment_reference. Rows with a null
-    -- payment_reference cannot be deduplicated this way, so they are all retained.
+    -- Keep the most recent row per operator_id + payment_reference (payment_reference is not
+    -- unique between operators). Rows with a null payment_reference cannot be deduplicated this
+    -- way, so they are all retained.
     QUALIFY
         ROW_NUMBER() OVER (
-            PARTITION BY payment_reference
+            PARTITION BY operator_id, payment_reference
             ORDER BY (timestamp IS NOT NULL) DESC, timestamp DESC, dt DESC
         ) = 1
         OR payment_reference IS NULL
