@@ -400,6 +400,12 @@ resource "google_storage_bucket_iam_member" "calitp-composer" {
   role   = "roles/storage.legacyBucketOwner"
 }
 
+resource "google_storage_bucket_iam_member" "calitp-composer3" {
+  bucket = google_storage_bucket.calitp-composer3.name
+  member = "projectEditor:cal-itp-data-infra"
+  role   = "roles/storage.legacyBucketOwner"
+}
+
 resource "google_storage_bucket_iam_member" "calitp-tides" {
   bucket = google_storage_bucket.calitp-tides.name
   role   = "roles/storage.objectViewer"

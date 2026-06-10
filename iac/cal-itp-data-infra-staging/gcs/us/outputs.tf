@@ -114,9 +114,7 @@ output "google_storage_bucket_calitp-staging-composer_id" {
   value = google_storage_bucket.calitp-staging-composer.id
 }
 
-# parallel staging bucket for airflow managed by composer3
-# once the c3 airflow is verified, will pointing it
-# to "calitp-staging-composer" and decommission this one
+# bucket for airflow managed by composer3
 output "google_storage_bucket_calitp-staging-composer3_name" {
   value = google_storage_bucket.calitp-staging-composer3.name
 }
