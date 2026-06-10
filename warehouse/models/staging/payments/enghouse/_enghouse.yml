@@ -175,6 +175,7 @@ models:
         description: '{{ doc("enghouse_id") }}'
         data_tests:
           - unique
+          - not_null
       - name: operation
         description: '{{ doc("enghouse_operation") }}'
       - name: terminal_id
@@ -187,6 +188,8 @@ models:
         description: '{{ doc("enghouse_timestamp") }}'
       - name: amount
         description: '{{ doc("enghouse_amount") }}'
+        data_tests:
+          - not_null
       - name: payment_reference
         description: '{{ doc("enghouse_payment_reference") }}'
       - name: spdh_response
@@ -205,6 +208,9 @@ models:
         description: '{{ doc("enghouse_rrn") }}'
         data_tests:
           - unique
+          - dbt_utils.not_null_proportion:
+              arguments:
+                at_least: 0.9999
       - name: authorization_code
         description: '{{ doc("enghouse_authorization_code") }}'
       - name: par
@@ -232,6 +238,7 @@ models:
         description: '{{ doc("enghouse_id") }}'
         data_tests:
           - unique
+          - not_null
       - name: operation
         description: '{{ doc("enghouse_operation") }}'
       - name: terminal_id
@@ -244,10 +251,15 @@ models:
         description: '{{ doc("enghouse_timestamp") }}'
       - name: amount
         description: '{{ doc("enghouse_amount") }}'
+        data_tests:
+          - not_null
       - name: payment_reference
         description: '{{ doc("enghouse_payment_reference") }}'
         data_tests:
           - unique
+          - dbt_utils.not_null_proportion:
+              arguments:
+                at_least: 0.9999
       - name: spdh_response
         description: '{{ doc("enghouse_spdh_response") }}'
       - name: response_type
@@ -264,6 +276,9 @@ models:
         description: '{{ doc("enghouse_rrn") }}'
         data_tests:
           - unique
+          - dbt_utils.not_null_proportion:
+              arguments:
+                at_least: 0.9999
       - name: authorization_code
         description: '{{ doc("enghouse_authorization_code") }}'
       - name: par

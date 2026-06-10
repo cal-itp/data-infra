@@ -934,10 +934,17 @@ models:
         description: '{{ doc("enghouse_timestamp") }}'
       - name: amount
         description: '{{ doc("enghouse_amount") }}'
+        data_tests:
+          - not_null
       - name: payment_reference
         description: '{{ doc("enghouse_payment_reference") }}'
         data_tests:
-          - unique
+          - unique_proportion:
+              arguments:
+                at_least: 0.9999
+          - dbt_utils.not_null_proportion:
+              arguments:
+                at_least: 0.9999
       - name: spdh_response
         description: '{{ doc("enghouse_spdh_response") }}'
       - name: response_type
@@ -952,6 +959,9 @@ models:
         description: '{{ doc("enghouse_core_response") }}'
       - name: rrn
         description: '{{ doc("enghouse_rrn") }}'
+        data_tests:
+          - unique
+          - not_null
       - name: authorization_code
         description: '{{ doc("enghouse_authorization_code") }}'
       - name: par
