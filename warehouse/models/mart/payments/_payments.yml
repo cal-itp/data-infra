@@ -958,6 +958,8 @@ models:
         description: '{{ doc("enghouse_par") }}'
       - name: brand
         description: '{{ doc("enghouse_brand") }}'
+      - name: settlement_type
+        description: '{{ doc("enghouse_settlement_type") }}'
       - name: end_of_month_date_pacific
       - name: end_of_month_date_utc
       - name: _content_hash

@@ -96,3 +96,7 @@ Surrogate key derived from id and operator_id. Uniquely identifies one transacti
 {% docs enghouse_content_hash %}
 Hash of all data columns. Retained for data quality inspection; deduplication uses _payments_key.
 {% enddocs %}
+
+{% docs enghouse_settlement_type %}
+Type of settlement that occurred. `CREDIT` for refunds (operation = `REFUND`); `DEBIT` for all other operations.
+{% enddocs %}

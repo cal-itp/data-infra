@@ -100,6 +100,10 @@ fct_payments_settlements_enghouse AS (
         authorization_code,
         par,
         brand,
+        CASE
+            WHEN operation = 'REFUND' THEN 'CREDIT'
+            ELSE 'DEBIT'
+        END AS settlement_type,
         organization_name,
         organization_source_record_id,
         LAST_DAY(EXTRACT(DATE FROM timestamp AT TIME ZONE "America/Los_Angeles"), MONTH) AS end_of_month_date_pacific,
@@ -128,6 +132,7 @@ SELECT
     authorization_code,
     par,
     brand,
+    settlement_type,
     organization_name,
     organization_source_record_id,
     end_of_month_date_pacific,
