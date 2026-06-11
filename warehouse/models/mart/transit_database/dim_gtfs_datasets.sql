@@ -33,8 +33,6 @@ dim_gtfs_datasets AS (
         base64_url,
         private_dataset,
         analysis_name,
-        has_authentication,
-        authentication_contact_details,
         _is_current,
         _valid_from,
         _valid_to
