@@ -1,8 +1,8 @@
 """Read-only Metabase HTTP access for the dashboard template tool.
 
 Thin wrappers over the Metabase REST API GET endpoints: build an
-authenticated session, fetch dashboards / cards / database metadata, and list
-databases, collections, and dashboards for the interactive picker.  Every
+authenticated session, fetch dashboards / cards / database metadata, and look
+up existing dashboards by name (for the apply-time duplicate check).  Every
 function takes an explicit `session` + `base_url`, so callers (and tests)
 inject the HTTP boundary rather than this module reaching for global state.
 
@@ -71,102 +71,6 @@ def fetch_database_metadata(
         "table_to_id": table_to_id,
         "field_to_id": field_to_id,
     }
-
-
-def list_databases(session: requests.Session, base_url: str) -> list[dict]:
-    """Return target Metabase databases sorted by name.
-
-    Drops the built-in Sample Database (id == 1) by default since it's never
-    the right answer for cal-itp work; users can still type the id manually
-    if they really want it.
-    """
-    r = session.get(f"{base_url}/api/database")
-    r.raise_for_status()
-    items = r.json()
-    if isinstance(items, dict):
-        items = items.get("data", [])
-    items = [
-        d
-        for d in items
-        if isinstance(d, dict)
-        and d.get("id") is not None
-        and d.get("id") != 1  # skip Metabase's Sample Database
-    ]
-    items.sort(key=lambda d: (d.get("name") or "").lower())
-    return items
-
-
-def list_collections(session: requests.Session, base_url: str) -> list[dict]:
-    """Return non-archived collections with a `path` field built from `location`.
-
-    Metabase's collection list is flat; the tree position is encoded in the
-    `location` string like `/123/456/`.  We resolve those ids to names so the
-    picker shows e.g. "Cal-ITP Reports / Payments" instead of two ambiguous
-    rows both labelled "Payments".
-    """
-    r = session.get(f"{base_url}/api/collection")
-    r.raise_for_status()
-    items = r.json()
-    if isinstance(items, dict):
-        items = items.get("data", [])
-    items = [
-        c
-        for c in items
-        if isinstance(c, dict)
-        and isinstance(c.get("id"), int)  # drop root sentinel (id is None or "root")
-        and not c.get("archived")
-    ]
-    by_id = {c["id"]: c for c in items}
-
-    def path_for(c: dict) -> str:
-        loc = c.get("location") or ""
-        parent_ids = [int(p) for p in loc.strip("/").split("/") if p.isdigit()]
-        parent_names = [by_id[pid]["name"] for pid in parent_ids if pid in by_id]
-        return " / ".join(parent_names + [c.get("name") or "?"])
-
-    out = [{"id": c["id"], "path": path_for(c)} for c in items]
-    out.sort(key=lambda c: c["path"].lower())
-    return out
-
-
-def list_dashboards(session: requests.Session, base_url: str) -> list[dict]:
-    """Return non-archived dashboards sorted by name (case-insensitive).
-
-    Uses GET /api/search (models=dashboard) rather than the deprecated
-    GET /api/dashboard/.  Search is paginated in newer Metabase versions, so
-    we walk offsets until a short page comes back; older versions return the
-    whole set in one page and exit on the first iteration.  Like the old
-    endpoint, this only returns dashboards the API key's user can read -- a
-    non-admin key sees only the collections its group was granted View on.
-    """
-    items: list[dict] = []
-    limit, offset = 200, 0
-    while True:
-        r = session.get(
-            f"{base_url}/api/search",
-            params={
-                "models": "dashboard",
-                "archived": "false",
-                "limit": limit,
-                "offset": offset,
-            },
-        )
-        r.raise_for_status()
-        payload = r.json()
-        # Search always wraps results: {"data": [...], "total": N, ...}.
-        page = payload.get("data", []) if isinstance(payload, dict) else payload
-        items.extend(
-            d
-            for d in page
-            if isinstance(d, dict)
-            and d.get("model") == "dashboard"
-            and not d.get("archived")
-        )
-        if len(page) < limit:
-            break
-        offset += limit
-    items.sort(key=lambda d: (d.get("name") or "").lower())
-    return items
 
 
 def existing_dashboards_with_name(

@@ -2,16 +2,8 @@
 
 Nothing here is user-configurable: the strip-key sets are dictated by the
 Metabase API contract (which fields are server-generated and rejected or
-ignored on write), and TEMPLATES_DIR is fixed relative to the tool.  Pure
-data, stdlib-only.
+ignored on write).  Pure data, stdlib-only.
 """
-
-from pathlib import Path
-
-# Directory where exported templates live (and where the wizard looks for
-# already-exported ones).  Sits next to this module so the templates ship
-# alongside the tool in source control.
-TEMPLATES_DIR: Path = Path(__file__).resolve().parent / "templates"
 
 # ---------------------------------------------------------------------------
 # Strip-key sets
