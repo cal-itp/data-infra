@@ -103,8 +103,6 @@ stg_transit_database__gtfs_datasets AS (
         END AS type,
         private_dataset,
         analysis_name,
-        has_authentication,
-        authentication_contact_details,
         ts,
         dt
     FROM construct_base64_url
