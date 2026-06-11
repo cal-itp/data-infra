@@ -154,7 +154,6 @@ resource "google_composer_environment" "calitp-composer3" {
 
       airflow_config_overrides = {
         celery-worker_concurrency                  = 4
-        core-catchup_by_default                    = false
         core-dag_file_processor_timeout            = 600
         core-dagbag_import_timeout                 = 600
         core-dags_are_paused_at_creation           = true

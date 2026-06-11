@@ -2,11 +2,11 @@ description: "Scrape NTD endpoints from DOT API monthly"
 schedule_interval: "0 9 * * 3" # 9am UTC (2am PDT/1am PST) every Wednesday
 tags:
   - ntd
+catchup: False
 default_args:
     owner: airflow
     depends_on_past: False
     start_date: "2025-07-06"
-    catchup: False
     email_on_failure: True
     email_on_retry: False
     retries: 1
