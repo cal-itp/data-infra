@@ -11,8 +11,8 @@ from airflow.decorators import dag, task
 @dag(
     # Monday, Thursday at 10am PDT/9am PST (17pm UTC)
     schedule="0 17 * * 1,4",
-    start_date=datetime(2025, 12, 1),
-    catchup=True,
+    start_date=datetime(2026, 6, 10),
+    catchup=False,
     tags=["tides"],
     default_args={
         "email": os.getenv("CALITP_NOTIFY_EMAIL"),
