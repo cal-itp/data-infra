@@ -80,7 +80,8 @@ fct_payments_settlements_enghouse AS (
         operation,
         terminal_id,
         timestamp,
-        amount,
+        -- Refunds are negated so that SUM(amount) is the net amount requested for settlement.
+        CASE WHEN settlement_type = 'CREDIT' THEN -amount ELSE amount END AS amount,
         payment_reference,
         response_type,
         response_message,

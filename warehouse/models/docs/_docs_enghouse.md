@@ -37,6 +37,11 @@ Timestamp when the transaction occurred.
 Transaction amount in USD dollars (converted from cents at source).
 {% enddocs %}
 
+{% docs enghouse_settlement_amount %}
+Transaction amount in USD dollars (converted from cents at source), negated for refunds
+(settlement_type = 'CREDIT') so that SUM(amount) is the net amount requested for settlement by Enghouse.
+{% enddocs %}
+
 {% docs enghouse_payment_reference %}
 Payment reference number (PRN / variable symbol) linking this transaction to its tap.
 {% enddocs %}
