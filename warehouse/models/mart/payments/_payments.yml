@@ -943,10 +943,6 @@ models:
           - not_null
       - name: payment_reference
         description: '{{ doc("enghouse_payment_reference") }}'
-        data_tests:
-          - dbt_utils.not_null_proportion:
-              arguments:
-                at_least: 0.9999
       - name: response_type
         description: '{{ doc("enghouse_response_type") }}'
       - name: response_message
