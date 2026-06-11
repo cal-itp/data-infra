@@ -2,11 +2,11 @@ description: "Scrape State Highway Network from State Geoportal"
 schedule_interval: "0 4 1 * *" # 4am UTC first day of every month
 tags:
   - geoportal
+catchup: False
 default_args:
     owner: airflow
     depends_on_past: False
     start_date: "2025-07-06"
-    catchup: False
     email_on_failure: True
     email_on_retry: False
     retries: 1

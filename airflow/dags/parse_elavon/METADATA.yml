@@ -3,11 +3,11 @@ schedule_interval: "0 2 * * *"
 tags:
   - elavon
   - payments
+catchup: False
 default_args:
     owner: airflow
     depends_on_past: False
     start_date: "2025-07-06"
-    catchup: False
     email_on_failure: True
     pool: default_pool
     concurrency: 50

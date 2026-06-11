@@ -2,11 +2,11 @@ description: Copies data from production buckets to staging buckets
 schedule_interval: "@daily"
 tags:
   - production
+catchup: False
 default_args:
   owner: airflow
   depends_on_past: False
   start_date: "2025-08-22"
-  catchup: False
   email_on_failure: True
   pool: default_pool
   max_active_dag_runs: 1
