@@ -228,9 +228,11 @@ models:
 
   - name: stg_enghouse__deduped_transactions
     description: |
-      One row per operator_id + payment_reference, built from stg_enghouse__transactions by keeping
-      only the most recent row for each operator_id + payment_reference (payment_reference is not
-      unique between operators; rows with a null payment_reference are all retained).
+      One row per operator_id + payment_reference + settlement_type, built from
+      stg_enghouse__transactions. For each operator_id + payment_reference, the most recent
+      non-refund (DEBIT) and the most recent refund (CREDIT) are kept as separate rows
+      (payment_reference is not unique between operators; rows with a null payment_reference are all
+      retained).
       Feeds fct_payments_settlements_enghouse.
     data_tests:
       - dbt_utils.unique_combination_of_columns:
@@ -238,6 +240,7 @@ models:
             combination_of_columns:
               - operator_id
               - payment_reference
+              - settlement_type
           config:
             where: "payment_reference is not null"
     columns:
@@ -293,6 +296,8 @@ models:
         description: '{{ doc("enghouse_par") }}'
       - name: brand
         description: '{{ doc("enghouse_brand") }}'
+      - name: settlement_type
+        description: '{{ doc("enghouse_settlement_type") }}'
       - name: agency
         description: '{{ doc("enghouse_agency") }}'
       - name: dt

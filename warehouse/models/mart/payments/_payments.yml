@@ -921,6 +921,7 @@ models:
             combination_of_columns:
               - operator_id
               - payment_reference
+              - settlement_type
           config:
             where: "payment_reference is not null"
     columns:
