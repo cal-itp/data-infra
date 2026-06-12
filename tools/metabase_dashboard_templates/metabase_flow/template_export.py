@@ -3,10 +3,8 @@
 Strips a fetched dashboard, discovers and embeds supporting cards, replaces
 instance-specific ids with Jinja expressions, and emits Jinja-templated YAML.
 
-Raises `TemplateError`, logs progress/warnings via the stdlib `logging`
-module, and defers the one interactive decision (whether to substitute a
-literal that lands inside a larger word) to an injected `resolve_embedded`
-callback.
+Raises `TemplateError` and logs progress/warnings via the stdlib `logging`
+module.
 """
 
 import logging
@@ -93,69 +91,6 @@ def _placeholder_str(idx: int) -> str:
     a user value like '(CCJPA) Clone #2' would have the `#2` parsed away
     as a YAML comment."""
     return f"{PLACEHOLDER_PREFIX_STR}{idx}{PLACEHOLDER_SUFFIX}"
-
-
-def _smart_substitute(
-    s: str,
-    literal: str,
-    placeholder: str,
-    decisions: dict[tuple[str, str], bool],
-    resolve_embedded: Callable[[str, str], bool] | None = None,
-) -> str:
-    """Replace `literal` with `placeholder` in `s` -- but for any occurrence
-    where `literal` sits inside a larger word (alphanumeric or underscore
-    on either side), defer to `resolve_embedded` before substituting.
-
-    Without this guard, `LIST` -> `{{ agency_short }}` would happily turn
-    `customer_LIST` into `customer_LI{{ agency_short }}`.  We detect that
-    case by checking the chars immediately around each occurrence and ask
-    once per (literal, surrounding-token) pair; the answer is cached in
-    `decisions` so repeated occurrences of the same token across the
-    dashboard don't re-ask.
-
-    `resolve_embedded(literal, surrounding_token) -> bool` decides whether an
-    embedded occurrence should be substituted.  When not supplied it defaults
-    to "no" -- the safe, non-interactive behavior; the CLI passes a
-    click.confirm-based prompt.
-
-    Word-boundary occurrences ("MST" in "MST Payments") are substituted
-    without asking -- those are the intentional ones.
-    """
-    out: list[str] = []
-    pos = 0
-    n = len(s)
-    lit_len = len(literal)
-    while pos < n:
-        idx = s.find(literal, pos)
-        if idx == -1:
-            out.append(s[pos:])
-            break
-        end = idx + lit_len
-        left_embedded = idx > 0 and (s[idx - 1].isalnum() or s[idx - 1] == "_")
-        right_embedded = end < n and (s[end].isalnum() or s[end] == "_")
-        out.append(s[pos:idx])
-        if left_embedded or right_embedded:
-            # Expand to the full surrounding alnum+underscore token so we
-            # can show the resolver (and key the cache by) the meaningful unit.
-            left = idx
-            while left > 0 and (s[left - 1].isalnum() or s[left - 1] == "_"):
-                left -= 1
-            right = end
-            while right < n and (s[right].isalnum() or s[right] == "_"):
-                right += 1
-            surrounding = s[left:right]
-            key = (literal, surrounding)
-            if key not in decisions:
-                decisions[key] = (
-                    resolve_embedded(literal, surrounding)
-                    if resolve_embedded is not None
-                    else False
-                )
-            out.append(placeholder if decisions[key] else literal)
-        else:
-            out.append(placeholder)
-        pos = end
-    return "".join(out)
 
 
 # ---------------------------------------------------------------------------
@@ -376,9 +311,7 @@ def jinjaify(
     fetch_metadata: Callable[[int], dict],
     *,
     templatize_name: bool = True,
-    substitutions: list[tuple[str, str]] | None = None,
     source_card_id_to_name: dict[int, str] | None = None,
-    resolve_embedded: Callable[[str, str], bool] | None = None,
 ) -> tuple[dict, dict[int, str]]:
     """Walk a dashboard, replacing instance-specific ids with placeholder
     strings.  Returns (mutated_dashboard, {placeholder_index: jinja_expr}).
@@ -397,11 +330,6 @@ def jinjaify(
     for branching a canonical template into a new agency's space; pass
     False for migration-style 1:1 copies.
 
-    `substitutions` is an optional list of (literal, varname) pairs.  Each
-    occurrence of `literal` in any string value (not key) is replaced with
-    `{{ varname }}`.  Useful for parameterizing agency-specific text in
-    card names, descriptions, and virtual dashcard headings.
-
     `source_card_id_to_name` maps each int source-card id to the saved-question
     name to substitute.  The caller is expected to have prefetched referenced
     cards (via _fetch_source_cards_recursive) and embedded them under
@@ -409,11 +337,6 @@ def jinjaify(
     multi-collection check for any collection_ids that appear inside
     `supporting_cards`, since those will be retargeted to the dashboard's
     collection at apply time.
-
-    `resolve_embedded(literal, surrounding_token) -> bool` decides, for a
-    substitution literal that lands inside a larger word, whether to replace
-    it anyway.  Defaults to "no" (non-interactive safe); the CLI passes a
-    click.confirm-based prompt.
 
     Raises TemplateError if a referenced table/field id is missing from the
     source DB metadata.  Spanning multiple source databases or collections is
@@ -426,11 +349,11 @@ def jinjaify(
     seen_source_collections: set[int] = set()
 
     def alloc(expr: str, *, is_string: bool = False) -> str:
-        """Allocate a placeholder.  `is_string=True` for substitutions whose
-        Jinja result is a YAML string (dashboard_name, agency literals);
-        the default is_string=False is the int form (database_id, table_id,
-        get_field_id(), etc.).  Without this distinction a user value like
-        'My Dashboard #2' would have the '#2' eaten as a YAML comment."""
+        """Allocate a placeholder.  `is_string=True` for values whose Jinja
+        result is a YAML string (dashboard_name); the default is_string=False
+        is the int form (database_id, table_id, get_field_id(), etc.).
+        Without this distinction a user value like 'My Dashboard #2' would
+        have the '#2' eaten as a YAML comment."""
         idx = counter[0]
         counter[0] += 1
         placeholders[idx] = expr
@@ -702,57 +625,6 @@ def jinjaify(
             sorted(seen_source_collections),
         )
 
-    # Post-walk: apply user-supplied literal->variable substitutions across
-    # every string value in the dashboard.  Each substitution allocates one
-    # placeholder, reused for every match.  Longer literals are applied
-    # first so overlapping prefixes (e.g. "MST" inside "MST Authority")
-    # bind to the more-specific match.
-    if substitutions:
-        sub_phs: list[tuple[str, str]] = []  # (literal, placeholder)
-        for literal, varname in substitutions:
-            # Substitutions are inline within larger strings (e.g.
-            # "MST overview" -> "{{ agency_short }} overview").  Using the
-            # int-form bare `{{ var }}` keeps the surrounding YAML text
-            # intact; tojson here would inject quotes mid-string and break
-            # parse.  Trade-off: substitution values with YAML metachars
-            # (`:` / `#` etc.) can break the rendered YAML.  Typical agency
-            # short codes are fine; document the limitation if it bites.
-            sub_phs.append((literal, alloc(varname)))
-        sub_phs.sort(key=lambda lp: -len(lp[0]))
-
-        # Per-export cache: {(literal, surrounding_token): substitute?}.  An
-        # embedded occurrence (e.g. "LIST" inside "customer_LIST") defers to
-        # `resolve_embedded`; that decision is stored here so the same token
-        # repeated across multiple string values across the dashboard isn't
-        # re-resolved dozens of times.
-        embedded_decisions: dict[tuple[str, str], bool] = {}
-
-        def replace_in_strings(node: Any) -> None:
-            if isinstance(node, dict):
-                for k, v in list(node.items()):
-                    if isinstance(v, str):
-                        for literal, ph in sub_phs:
-                            if literal in v:
-                                v = _smart_substitute(
-                                    v, literal, ph, embedded_decisions, resolve_embedded
-                                )
-                        node[k] = v
-                    else:
-                        replace_in_strings(v)
-            elif isinstance(node, list):
-                for i, v in enumerate(node):
-                    if isinstance(v, str):
-                        for literal, ph in sub_phs:
-                            if literal in v:
-                                v = _smart_substitute(
-                                    v, literal, ph, embedded_decisions, resolve_embedded
-                                )
-                        node[i] = v
-                    else:
-                        replace_in_strings(v)
-
-        replace_in_strings(dashboard)
-
     return dashboard, placeholders
 
 
@@ -803,16 +675,13 @@ def export_dashboard_to_template_text(
     dashboard_id: int,
     *,
     templatize_name: bool = True,
-    substitutions: list[tuple[str, str]] | None = None,
-    resolve_embedded: Callable[[str, str], bool] | None = None,
 ) -> tuple[str, int]:
     """Full export pipeline: fetch + strip + discover source cards + jinjaify
     + emit YAML text.  Returns (template_text, placeholder_count).
 
-    Lifted out of `cmd_dashboard_to_template` so the interactive wizard's
-    "fetch from Metabase" branch hits the same code path.  Without this,
-    the wizard skipped source-card discovery and produced templates that
-    blew up at apply with the FK violation we're now guarding against.
+    Runs source-card discovery before jinjaify so the emitted template embeds
+    every referenced saved question under `supporting_cards:`; without that,
+    apply blows up with the FK violation we now guard against.
     """
     dashboard = fetch_dashboard(session, base_url, dashboard_id)
     cleaned = strip_dashboard_for_template(dashboard)
@@ -843,8 +712,6 @@ def export_dashboard_to_template_text(
         cleaned,
         fetch_meta,
         templatize_name=templatize_name,
-        substitutions=substitutions,
         source_card_id_to_name=id_to_name,
-        resolve_embedded=resolve_embedded,
     )
     return emit_template_yaml(cleaned, placeholders), len(placeholders)

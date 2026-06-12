@@ -22,10 +22,9 @@ The sync runs in two phases:
      agency's `database_id` / `collection_id` and a name of
      `name_prefix + new_name_no_prefix`, and create it on the writer instance.
 
-Per the current scope we perform NO text substitutions: templates are
-exported with `substitutions=None`.  Only the three structural context
-variables (`database_id`, `collection_id`, `dashboard_name`) are supplied at
-apply time.
+No arbitrary text substitutions are performed: only the three structural
+context variables (`database_id`, `collection_id`, `dashboard_name`) are
+supplied at apply time.
 
 Usage
 -----
@@ -254,14 +253,13 @@ def export_templates(
         dest = config.template_path(key)
         click.echo(f"Exporting {key} (id {tmpl.prod_id}) -> {dest.name}", err=True)
         try:
-            # No text substitutions for now (per current scope); the
-            # dashboard name is templatized so each agency gets its prefix.
+            # The dashboard name is templatized so each agency gets its
+            # prefix; no other text is parameterized.
             text, n = export_dashboard_to_template_text(
                 session,
                 base_url,
                 tmpl.prod_id,
                 templatize_name=True,
-                substitutions=None,
             )
         except (TemplateError, requests.HTTPError) as exc:
             failures.append(f"export {key} (id {tmpl.prod_id}): {exc}")
