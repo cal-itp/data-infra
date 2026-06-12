@@ -194,23 +194,6 @@ resource "google_compute_firewall" "tfer--gke-us-west2-calitp-airflow2-pr-171e4e
   target_tags   = ["gke-us-west2-calitp-airflow2-pr-171e4e47-gke-0b2083d6-node"]
 }
 
-resource "google_compute_firewall" "tfer--k8s-ad40eb3afc69e4deeaf43a1ed1393eeb-http-hc" {
-  allow {
-    ports    = ["32549"]
-    protocol = "tcp"
-  }
-
-  description   = "{\"kubernetes.io/service-name\":\"ingress-nginx/ingress-nginx-controller\", \"kubernetes.io/service-ip\":\"34.127.51.123\"}"
-  direction     = "INGRESS"
-  disabled      = "false"
-  name          = "k8s-ad40eb3afc69e4deeaf43a1ed1393eeb-http-hc"
-  network       = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
-  priority      = "1000"
-  project       = "cal-itp-data-infra"
-  source_ranges = ["130.211.0.0/22", "209.85.152.0/22", "209.85.204.0/22", "35.191.0.0/16"]
-  target_tags   = ["gke-data-infra-apps-0fe1e974-node"]
-}
-
 resource "google_compute_firewall" "tfer--k8s-e092126e72b02003-node-http-hc" {
   allow {
     ports    = ["10256"]
@@ -239,24 +222,6 @@ resource "google_compute_firewall" "tfer--k8s-fw-a0d3bb39e959b49a1b6015fd2193e30
   direction          = "INGRESS"
   disabled           = "false"
   name               = "k8s-fw-a0d3bb39e959b49a1b6015fd2193e30d"
-  network            = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
-  priority           = "1000"
-  project            = "cal-itp-data-infra"
-  source_ranges      = ["0.0.0.0/0"]
-  target_tags        = ["gke-data-infra-apps-0fe1e974-node"]
-}
-
-resource "google_compute_firewall" "tfer--k8s-fw-ad40eb3afc69e4deeaf43a1ed1393eeb" {
-  allow {
-    ports    = ["443", "80"]
-    protocol = "tcp"
-  }
-
-  description        = "{\"kubernetes.io/service-name\":\"ingress-nginx/ingress-nginx-controller\", \"kubernetes.io/service-ip\":\"34.127.51.123\"}"
-  destination_ranges = ["34.127.51.123"]
-  direction          = "INGRESS"
-  disabled           = "false"
-  name               = "k8s-fw-ad40eb3afc69e4deeaf43a1ed1393eeb"
   network            = data.terraform_remote_state.networks.outputs.google_compute_network_tfer--default_self_link
   priority           = "1000"
   project            = "cal-itp-data-infra"
