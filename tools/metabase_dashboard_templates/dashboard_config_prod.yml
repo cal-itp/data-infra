@@ -1,0 +1,33 @@
+template_dashboards:
+  contactless_payments_metrics_dashboard:
+    template_dashboard_prod_id: 279
+    template_dashboard_original_name: "() Contactless Payments Metrics Dashboard"
+    template_dashboard_new_name_no_prefix: "Contactless Payments Metrics Dashboard"
+  merchant_service_charge_dashboard:
+    template_dashboard_prod_id: 280
+    template_dashboard_original_name: "(BLANK) Merchant Service Charge tracking  - Duplicate"
+    template_dashboard_new_name_no_prefix: "Merchant Service Charge Tracking"
+  reconciliation_dashboard:
+    template_dashboard_prod_id:
+    template_dashboard_new_name_no_prefix:
+agencies:
+  mst:
+    #acronym: "MST" ignore for now
+    name_prefix: "MST - "
+    collection_id: 128
+    database_id: 16
+    dashboards_required:
+      - contactless_payments_metrics_dashboard
+      - merchant_service_charge_dashboard
+  ccjpa:
+    #acronym: "CCJPA" ignore for now
+    name_prefix: "CCJPA - "
+    collection_id: 162
+    database_id: 19
+    dashboards_required:
+      - merchant_service_charge_dashboard
+environments:
+  reader: "prod_payments_template_reader"
+  writer: "prod_payments_dashboard_writer"
+local_storage:
+  path: "prod_templates/"

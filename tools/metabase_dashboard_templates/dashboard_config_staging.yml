@@ -1,11 +1,9 @@
 template_dashboards:
   how_many_bus_routes:
     template_dashboard_prod_id: 33
-    template_dashboard_original_name: "How many bus routes are there?"
     template_dashboard_new_name_no_prefix: "N Bus Routes"
   favorite_bus_route:
     template_dashboard_prod_id: 34
-    template_dashboard_original_name: "what's my favorite bus route?"
     template_dashboard_new_name_no_prefix: "Favorite bus route?"
 agencies:
   agency_a:
