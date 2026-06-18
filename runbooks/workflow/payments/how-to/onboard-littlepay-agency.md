@@ -34,7 +34,9 @@ Verify you have:
 
 ### 1.1 Receive Credentials from Littlepay
 
-Littlepay should reach out to their Cal-ITP contacts when an agency's credentials are available. The credentials should inclide:
+Littlepay should reach out to the DDS payment admin group ([dds_payments_data_admins@dds.dot.ca.gov]) when an agency's credentials are available. If an agency is about to soft launch and these credentials have not been received, they can be requested from the agency's project manager for onboarding. Typically, financial operations staff are able to provide emails for these contacts, who differ from agency to agency.
+
+The credentials should inclide:
 
 - UserName (different from participant_id)
 - AccessKeyId
