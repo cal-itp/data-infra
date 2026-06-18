@@ -19,10 +19,6 @@ WITH transactions AS (
         authorization_code,
         par,
         brand,
-        CASE
-            WHEN operation = 'REFUND' THEN 'CREDIT'
-            ELSE 'DEBIT'
-        END AS settlement_type,
         agency,
         dt,
         _payments_key,
@@ -30,8 +26,19 @@ WITH transactions AS (
     FROM {{ ref('stg_enghouse__transactions') }}
 ),
 
+filtered_transactions AS (
+    SELECT
+        *,
+        CASE
+            WHEN operation = 'REFUND' THEN 'CREDIT'
+            ELSE 'DEBIT'
+        END AS settlement_type,
+    FROM transactions
+    WHERE operation in ('DEBT_RECOVERY_AUTO', 'ONLINE_CLEARING', 'DEBT_RECOVERY_MANUAL', 'PREAUTH_FINAL', 'REFUND')
+),
+
 stg_enghouse__deduped_transactions AS (
-    SELECT * FROM transactions
+    SELECT * FROM filtered_transactions
     -- Per operator_id + payment_reference, keep the most recent row of each settlement_type, so a
     -- CREDIT (refund) and a DEBIT (non-refund) for the same payment_reference are kept as separate
     -- rows. payment_reference is not unique between operators. Rows with a null payment_reference
