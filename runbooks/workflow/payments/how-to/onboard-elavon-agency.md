@@ -162,7 +162,7 @@ WHERE customer_name = '<elavon-customer-name>'
 
 ### 3.6 Verify dbt Transformations
 
-After the next scheduled run of the transform_warehouse DAG:
+After the next scheduled run of the `dbt_all` or `dbt_daily` DAG or check the [Onboarding Dashboard](https://metabase.dds.dot.ca.gov/dashboard/369-agency-onboarding-dashboard):
 
 ```sql
 -- Check staging table
