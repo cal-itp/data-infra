@@ -250,6 +250,11 @@ models:
           - not_null
       - name: operation
         description: '{{ doc("enghouse_operation") }}'
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["CARD_VERIFY", "DEBT_RECOVERY_AUTO", "GET_PAR_MANUAL", "ONLINE_CLEARING", "DEBT_RECOVERY_MANUAL", "REFUND", "PREAUTH", "PREAUTH_FINAL"]
       - name: terminal_id
         description: '{{ doc("enghouse_terminal_id") }}'
       - name: mapping_terminal_id

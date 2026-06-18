@@ -933,6 +933,11 @@ models:
         description: '{{ doc("enghouse_id") }}'
       - name: operation
         description: '{{ doc("enghouse_operation") }}'
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["DEBT_RECOVERY_AUTO", "GET_PAR_MANUAL", "ONLINE_CLEARING", "DEBT_RECOVERY_MANUAL", "REFUND", "PREAUTH_FINAL"]
       - name: terminal_id
         description: '{{ doc("enghouse_terminal_id") }}'
       - name: timestamp
