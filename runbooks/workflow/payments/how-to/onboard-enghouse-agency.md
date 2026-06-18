@@ -164,7 +164,7 @@ recrAG7e0oOiR6FiP,rec7EN71rsZxDFxZd,253,VENTURA COUNTY TRANSPORTATION,Ventura Co
 - For agencies where this doesn't apply, use arbitrary distant dates: `_in_use_from = 2000-01-01`, `_in_use_until = 2099-12-31`
 
 **To find the source_record_ids:**
-Look for organization names and GTFS dataset names in the organizations and datasets tables respetively on [Airtable](https://airtable.com/appPnJWrQ7ui4UmIl?). Then, lookup the `source_record_id`s using on the [Onboarding Dashboard](https://airtable.com/appPnJWrQ7ui4UmIl?) or the below SQL query:
+Look for organization names and GTFS dataset names in the organizations and datasets tables respetively on [Airtable](https://airtable.com/appPnJWrQ7ui4UmIl?). Then, lookup the `source_record_id`s using the [Onboarding Dashboard](https://airtable.com/appPnJWrQ7ui4UmIl?) or the below SQL query:
 
 ```sql
 -- Find GTFS dataset source_record_id
@@ -252,7 +252,7 @@ WHERE operator_id = '<enghouse-operator-id>'
 
 ### 5.2 Verify dbt Transformations
 
-After the next scheduled run of the `dbt_all` or `dbt_daily` DAG, run these queries, or reference the [Onboarding Dashboard](https://metabase.dds.dot.ca.gov/dashboard/369-agency-onboarding-dashboard):
+After the next scheduled run of the `dbt_all` or `dbt_daily` DAG, run these queries, or check the [Onboarding Dashboard](https://metabase.dds.dot.ca.gov/dashboard/369-agency-onboarding-dashboard):
 
 ```sql
 -- Check staging table
