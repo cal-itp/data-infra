@@ -184,18 +184,18 @@ class TestBuildCardPayload:
 class TestJinjaHelpers:
     def test_get_table_id_with_qualified_name(self, tgt_lookup):
         env = make_jinja_env(tgt_lookup)
-        tpl = env.from_string('{{ get_table_id(database_id, "mart_gtfs.dim_stops") }}')
+        tpl = env.from_string('${ get_table_id(database_id, "mart_gtfs.dim_stops") }')
         assert tpl.render(database_id=3) == "325"
 
     def test_get_table_id_with_unqualified_unique_name(self, tgt_lookup):
         env = make_jinja_env(tgt_lookup)
-        tpl = env.from_string('{{ get_table_id(database_id, "dim_stops") }}')
+        tpl = env.from_string('${ get_table_id(database_id, "dim_stops") }')
         assert tpl.render(database_id=3) == "325"
 
     def test_get_table_id_unknown_table_raises(self, tgt_lookup):
         env = make_jinja_env(tgt_lookup)
         tpl = env.from_string(
-            '{{ get_table_id(database_id, "mart_gtfs.does_not_exist") }}'
+            '${ get_table_id(database_id, "mart_gtfs.does_not_exist") }'
         )
         with pytest.raises(Exception, match="not found in target DB"):
             tpl.render(database_id=3)
@@ -209,14 +209,14 @@ class TestJinjaHelpers:
             "field_by_id": {},
         }
         env = make_jinja_env(lambda _: meta)
-        tpl = env.from_string('{{ get_table_id(database_id, "users") }}')
+        tpl = env.from_string('${ get_table_id(database_id, "users") }')
         with pytest.raises(Exception, match="ambiguous"):
             tpl.render(database_id=99)
 
     def test_get_field_id_qualified(self, tgt_lookup):
         env = make_jinja_env(tgt_lookup)
         out = env.from_string(
-            '{{ get_field_id(database_id, "mart_gtfs.dim_stops", "feed_key") }}'
+            '${ get_field_id(database_id, "mart_gtfs.dim_stops", "feed_key") }'
         ).render(database_id=3)
         assert out == "8256"
 
@@ -224,7 +224,7 @@ class TestJinjaHelpers:
         env = make_jinja_env(tgt_lookup)
         with pytest.raises(Exception, match="not found in target DB"):
             env.from_string(
-                '{{ get_field_id(database_id, "mart_gtfs.dim_stops", "nope") }}'
+                '${ get_field_id(database_id, "mart_gtfs.dim_stops", "nope") }'
             ).render(database_id=3)
 
     def test_metadata_lookup_is_cached_per_db_id(self, tgt_meta):
@@ -235,9 +235,9 @@ class TestJinjaHelpers:
             return tgt_meta
 
         env = make_jinja_env(lookup)
-        tpl1 = env.from_string('{{ get_table_id(database_id, "dim_stops") }}')
+        tpl1 = env.from_string('${ get_table_id(database_id, "dim_stops") }')
         tpl2 = env.from_string(
-            '{{ get_field_id(database_id, "dim_stops", "feed_key") }}'
+            '${ get_field_id(database_id, "dim_stops", "feed_key") }'
         )
         tpl1.render(database_id=3)
         tpl2.render(database_id=3)

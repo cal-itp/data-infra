@@ -13,6 +13,8 @@ from typing import Any, Callable
 import requests
 import yaml
 from metabase_flow.constants import (
+    JINJA_VARIABLE_END,
+    JINJA_VARIABLE_START,
     STRIP_CARD_KEYS,
     STRIP_DASHBOARD_KEYS,
     STRIP_DASHCARD_KEYS,
@@ -78,14 +80,14 @@ PLACEHOLDER_PREFIX = PLACEHOLDER_PREFIX_INT
 def _placeholder(idx: int) -> str:
     """Int-valued placeholder.  After emit_template_yaml's quote-stripping,
     the rendered Jinja produces a bare integer literal, e.g.
-        database: {{ database_id }}  ->  database: 3
+        database: ${ database_id }  ->  database: 3
     so YAML parses it as int 3, not the string "3"."""
     return f"{PLACEHOLDER_PREFIX_INT}{idx}{PLACEHOLDER_SUFFIX}"
 
 
 def _placeholder_str(idx: int) -> str:
     """String-valued placeholder.  After emit_template_yaml's substitution
-    the rendered output is `{{ var | tojson }}`, which Jinja outputs as a
+    the rendered output is `${ var | tojson }`, which Jinja outputs as a
     JSON-encoded string -- complete with surrounding quotes and escaping
     for special YAML characters (#, :, leading dash, etc.).  Without this,
     a user value like '(CCJPA) Clone #2' would have the `#2` parsed away
@@ -651,7 +653,7 @@ def emit_template_yaml(dashboard: dict, placeholders: dict[int, str]) -> str:
         # one of these two placeholder strings appears in the text.
         int_ph = _placeholder(idx)
         if int_ph in text:
-            replacement = "{{ " + expr + " }}"
+            replacement = f"{JINJA_VARIABLE_START} {expr} {JINJA_VARIABLE_END}"
             # Order matters: strip quoted forms first so the bare form is
             # only matched on un-quoted occurrences.
             text = text.replace(f"'{int_ph}'", replacement)
@@ -662,7 +664,7 @@ def emit_template_yaml(dashboard: dict, placeholders: dict[int, str]) -> str:
         if str_ph in text:
             # tojson supplies its own quotes, so strip yaml.safe_dump's
             # quoting around the placeholder same way as the int form.
-            replacement = "{{ " + expr + " | tojson }}"
+            replacement = f"{JINJA_VARIABLE_START} {expr} | tojson {JINJA_VARIABLE_END}"
             text = text.replace(f"'{str_ph}'", replacement)
             text = text.replace(f'"{str_ph}"', replacement)
             text = text.replace(str_ph, replacement)

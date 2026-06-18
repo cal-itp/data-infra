@@ -81,6 +81,32 @@ STRIP_DASHBOARD_KEYS = {
     "is_remote_synced",
 }
 
+# ---------------------------------------------------------------------------
+# Jinja delimiters
+#
+# Metabase native-SQL queries carry their OWN `{{ ... }}` parameters -- field
+# filters and variables -- e.g. `[[AND {{transaction_date_time_pacific}}]]`.
+# Those are the same delimiters Jinja uses by default, so if we templated with
+# the defaults the apply-time render would try to resolve Metabase's own
+# parameters as one of our variables and blow up with `'<name>' is undefined`.
+#
+# Fix: move OUR templating onto a `$`-sigil delimiter family that Metabase
+# never emits.  Jinja then passes Metabase's `{{ ... }}` (and its `[[ ... ]]`
+# optional clauses, which Jinja already ignores) through untouched.  We also
+# move the block/comment delimiters off the `{% %}` / `{# #}` defaults so a
+# stray `{%`/`{#` inside a SQL string can never be misread either.
+#
+# Both ends of the pipeline MUST agree on these: emit_template_yaml writes
+# them, make_jinja_env parses them.  The three start strings differ in their
+# second character (`{`, `%`, `#`) so there is no prefix ambiguity, and none
+# of these sequences appear in exported dashboard content.
+JINJA_VARIABLE_START = "${"
+JINJA_VARIABLE_END = "}"
+JINJA_BLOCK_START = "$%"
+JINJA_BLOCK_END = "%$"
+JINJA_COMMENT_START = "$#"
+JINJA_COMMENT_END = "#$"
+
 # Subset of dashboard top-level keys that POST /api/dashboard/ accepts.
 # Anything else gets attached via the follow-up PUT /api/dashboard/{id}.
 POST_DASHBOARD_KEYS = {

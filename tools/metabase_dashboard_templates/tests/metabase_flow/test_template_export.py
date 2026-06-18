@@ -173,8 +173,8 @@ class TestJinjaify:
             ],
         }
         text = self._walk_for_jinja_text(d, src_lookup)
-        assert "database_id: {{ database_id }}" in text
-        assert "database: {{ database_id }}" in text
+        assert "database_id: ${ database_id }" in text
+        assert "database: ${ database_id }" in text
         assert 'get_table_id(database_id, "mart_gtfs.dim_stops")' in text
 
     def test_field_ref_legacy_form(self, src_lookup):
@@ -259,7 +259,7 @@ class TestJinjaify:
             ]
         }
         text = self._walk_for_jinja_text(d, src_lookup)
-        assert "database: {{ database_id }}" in text
+        assert "database: ${ database_id }" in text
         # Native SQL text is untouched.
         assert "select * from mart_gtfs.dim_stops" in text
         # No field/table helper calls were emitted.
@@ -376,7 +376,7 @@ class TestJinjaify:
         # span multiple source DB connections -- main cards against the
         # warehouse, parameter-value cards against a metadata DB, etc.
         # Since every `database` ref in the template collapses to the same
-        # `{{ database_id }}` placeholder, all cards land against whichever
+        # `${ database_id }` placeholder, all cards land against whichever
         # single target DB the user picks at apply time.  Schema/table
         # names were discovered from each source DB's metadata; the lookup
         # at apply time uses the target's metadata.  If a referenced table
@@ -484,7 +484,7 @@ class TestJinjaify:
         }
         text = self._walk_for_jinja_text(d, src_lookup)
         # Both the dashboard-level and card-level collection_id should be templated.
-        assert text.count("collection_id: {{ collection_id }}") == 2
+        assert text.count("collection_id: ${ collection_id }") == 2
 
     def test_dashcard_viz_settings_with_stale_field_id_does_not_raise(self, src_lookup):
         # Dashcard-level visualization_settings can carry stale field ids
@@ -539,7 +539,7 @@ class TestJinjaify:
             "dashcards": [],
         }
         text = self._walk_for_jinja_text(d, src_lookup)
-        assert "name: {{ dashboard_name | tojson }}" in text
+        assert "name: ${ dashboard_name | tojson }" in text
         assert "MST Payments" not in text
 
     def test_dashboard_name_with_yaml_metachars_survives_round_trip(self, src_lookup):
@@ -563,13 +563,13 @@ class TestJinjaify:
         cleaned, ph = jinjaify(copy.deepcopy(d), src_lookup, templatize_name=False)
         text = emit_template_yaml(cleaned, ph)
         assert "name: MST Payments" in text
-        assert "{{ dashboard_name }}" not in text
+        assert "${ dashboard_name }" not in text
 
     def test_dashboard_without_name_does_not_emit_dashboard_name_var(self, src_lookup):
         # Templatize-name is opportunistic: no top-level name -> no var.
         d = {"dashcards": []}
         text = self._walk_for_jinja_text(d, src_lookup)
-        assert "{{ dashboard_name }}" not in text
+        assert "${ dashboard_name }" not in text
 
     def test_card_level_name_not_touched_by_templatize_name(self, src_lookup):
         # Only the dashboard's top-level name is templatized; cards keep theirs.
@@ -597,7 +597,7 @@ class TestJinjaify:
         # Dashboards routinely have cards spread across several collections
         # (e.g. CCJPA: dashboard in one collection, supporting cards in
         # others).  Since every collection_id in the template resolves to
-        # the same `{{ collection_id }}` placeholder, all cards land in
+        # the same `${ collection_id }` placeholder, all cards land in
         # whichever single target collection the user picks at apply time.
         # So this is informational, not fatal.
         d = {
@@ -659,9 +659,9 @@ class TestEmitTemplateYaml:
         }
         text = emit_template_yaml(*jinjaify(d, src_lookup))
         # The substitution itself shouldn't be quoted.
-        assert "database: {{ database_id }}" in text
-        assert "database: '{{ database_id }}'" not in text
-        assert 'database: "{{ database_id }}"' not in text
+        assert "database: ${ database_id }" in text
+        assert "database: '${ database_id }'" not in text
+        assert 'database: "${ database_id }"' not in text
 
         # And after Jinja rendering with a real int, YAML parses it as int.
         env = make_jinja_env(lambda _: tgt_meta)

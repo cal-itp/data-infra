@@ -17,6 +17,12 @@ import jinja2
 import requests
 import yaml
 from metabase_flow.constants import (
+    JINJA_BLOCK_END,
+    JINJA_BLOCK_START,
+    JINJA_COMMENT_END,
+    JINJA_COMMENT_START,
+    JINJA_VARIABLE_END,
+    JINJA_VARIABLE_START,
     POST_DASHBOARD_KEYS,
     STRIP_CARD_KEYS,
     STRIP_DASHBOARD_KEYS,
@@ -89,6 +95,15 @@ def make_jinja_env(
     env = jinja2.Environment(  # nosec B701
         undefined=jinja2.StrictUndefined,
         keep_trailing_newline=True,
+        # Custom `$`-sigil delimiters so Metabase's own `{{ ... }}` native-SQL
+        # parameters pass through untouched instead of being resolved (and
+        # failing) as our variables.  See constants.py for the rationale.
+        variable_start_string=JINJA_VARIABLE_START,
+        variable_end_string=JINJA_VARIABLE_END,
+        block_start_string=JINJA_BLOCK_START,
+        block_end_string=JINJA_BLOCK_END,
+        comment_start_string=JINJA_COMMENT_START,
+        comment_end_string=JINJA_COMMENT_END,
     )
     # NOTE: We are ignoring B701 above because (1) we are not generating
     # runnable code, just dashboard specs, and (2) the Jinja expressions are
