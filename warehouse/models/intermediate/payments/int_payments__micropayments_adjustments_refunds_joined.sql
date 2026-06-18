@@ -1,5 +1,17 @@
 WITH debit_micropayments AS (
-    SELECT * FROM {{ ref('int_littlepay__unioned_micropayments') }}
+    SELECT
+        participant_id,
+        micropayment_id,
+        aggregation_id,
+        funding_source_vault_id,
+        customer_id,
+        charge_amount,
+        nominal_amount,
+        charge_type,
+        transaction_time,
+        type,
+        feed_version,
+    FROM {{ ref('int_payments__filtered_micropayments') }}
     WHERE type = 'DEBIT'
 ),
 
@@ -22,7 +34,12 @@ products AS (
 ),
 
 individual_refunds AS (
-    SELECT * FROM {{ ref('int_payments__refunds_deduped') }}
+    SELECT
+        aggregation_id,
+        micropayment_id,
+        participant_id,
+        refund_amount,
+    FROM {{ ref('int_payments__refunds_deduped') }}
 ),
 
 aggregation_refunds AS (

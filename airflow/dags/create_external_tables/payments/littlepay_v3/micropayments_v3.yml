@@ -34,6 +34,8 @@ schema_fields:
     type: STRING
   - name: record_updated_timestamp_utc
     type: TIMESTAMP
+  - name: status
+    type: STRING
   - name: channel
     type: STRING
   - name: _line_number

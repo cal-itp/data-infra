@@ -12,8 +12,8 @@ with DAG(
     tags=["gtfs", "gtfs-rt"],
     # Every hour at 15 minutes past the hour
     schedule="15 * * * *",
-    start_date=datetime(2025, 9, 2),
-    catchup=True,
+    start_date=datetime(2026, 6, 10),
+    catchup=False,
     default_args={
         "email": os.getenv("CALITP_NOTIFY_EMAIL"),
         "email_on_failure": email_on_failure(),

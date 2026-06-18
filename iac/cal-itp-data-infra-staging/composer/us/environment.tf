@@ -1,10 +1,10 @@
-resource "google_composer_environment" "calitp-staging-composer" {
-  name    = "calitp-staging-composer"
+resource "google_composer_environment" "calitp-staging-composer3" {
+  name    = "calitp-staging-composer3"
   region  = "us-west2"
   project = "cal-itp-data-infra-staging"
 
   storage_config {
-    bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer_name
+    bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-composer3_name
   }
 
   config {
@@ -31,16 +31,17 @@ resource "google_composer_environment" "calitp-staging-composer" {
         min_count  = 1
         max_count  = 8
       }
+      # dag_processor and triggerer left to defaults; tune later if needed
     }
 
     environment_size = "ENVIRONMENT_SIZE_SMALL"
 
     software_config {
-      image_version = "composer-2.15.2-airflow-2.10.5"
+      image_version = "composer-3-airflow-2.10.5-build.36"
 
       airflow_config_overrides = {
         celery-worker_concurrency                  = 4
-        core-dag_file_processor_timeout            = 1200
+        core-dag_file_processor_timeout            = 600
         core-dagbag_import_timeout                 = 600
         core-dags_are_paused_at_creation           = true
         core-max_active_runs_per_dag               = 128
@@ -61,9 +62,9 @@ resource "google_composer_environment" "calitp-staging-composer" {
         webserver-show_trigger_form_if_no_params   = true
       }
 
-      pypi_packages = local.pypi_packages
+      pypi_packages = local.pypi_packages_c3
 
-      env_variables = merge(local.env_variables, {
+      env_variables = merge(local.env_variables_c3, {
         "POD_LOCATION"                                         = "us-west2",
         "POD_CLUSTER_NAME"                                     = data.terraform_remote_state.gke.outputs.google_container_cluster_airflow-jobs-staging_name,
         "POD_SECRETS_NAMESPACE"                                = local.namespace,
@@ -75,7 +76,7 @@ resource "google_composer_environment" "calitp-staging-composer" {
         "CALITP_BUCKET__DBT_ARTIFACTS"                         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-dbt-artifacts_name}",
         "CALITP_BUCKET__DBT_DOCS"                              = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-dbt-docs_name}",
         "CALITP_BUCKET__ELAVON_PARSED"                         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-elavon-parsed_name}",
-        "CALITP_BUCKET__ELAVON_RAW"                            = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-elavon-raw_name}",
+        "CALITP_BUCKET__ELAVON_RAW"                            = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-elavon-raw-v2_name}",
         "CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"                  = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-download-config_name}",
         "CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG_PROD_SOURCE"      = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-download-config_name}",
         "CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG_TEST_DESTINATION" = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-download-config-test_name}",
@@ -90,6 +91,7 @@ resource "google_composer_environment" "calitp-staging-composer" {
         "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-schedule-unzipped-hourly_name}",
         "CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION"              = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-schedule-validation_name}",
         "CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY"       = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-schedule-validation-hourly_name}",
+        "CALITP_BUCKET__TIDES"                                 = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-tides_name}",
         "CALITP_BUCKET__KUBA"                                  = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-kuba_name}",
         "CALITP_BUCKET__LITTLEPAY_PARSED"                      = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-payments-littlepay-parsed_name}",
         "CALITP_BUCKET__LITTLEPAY_PARSED_V3"                   = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-payments-littlepay-parsed-v3_name}",
@@ -102,7 +104,6 @@ resource "google_composer_environment" "calitp-staging-composer" {
         "CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__CLEAN"         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-ntd-xlsx-products-clean_name}",
         "CALITP_BUCKET__NTD_XLSX_DATA_PRODUCTS__RAW"           = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-ntd-xlsx-products-raw_name}",
         "CALITP_BUCKET__PUBLISH"                               = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-publish_name}",
-        "CALITP_BUCKET__SENTRY_EVENTS"                         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-sentry_name}",
         "CALITP_BUCKET__STATE_GEOPORTAL_DATA_PRODUCTS"         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-state-geoportal-scrape_name}",
         "CALITP_SLACK_URL"                                     = data.google_secret_manager_secret_version.slack-airflow-url.secret_data,
         "CALITP_NOTIFY_EMAIL"                                  = "dds.app.notify+staging@dot.ca.gov"

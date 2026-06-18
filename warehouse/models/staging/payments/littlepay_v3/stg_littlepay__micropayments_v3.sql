@@ -1,5 +1,22 @@
 WITH source AS (
-    SELECT * FROM {{ source('external_littlepay_v3', 'micropayments') }}
+    SELECT
+        micropayment_id,
+        aggregation_id,
+        participant_id,
+        customer_id,
+        funding_source_id,
+        status,
+        payment_liability,
+        charge_amount,
+        nominal_amount,
+        currency_code,
+        type,
+        charge_type,
+        _line_number,
+        `instance`,
+        extract_filename,
+        ts,
+    FROM {{ source('external_littlepay_v3', 'micropayments') }}
 ),
 
 -- bringing this in identify transaction_time (removed in v3) by joining device_transactions -> micropayment_device_transactions -> micropayments
@@ -27,7 +44,7 @@ clean_columns AS (
 
         -- renamed funding_source_id in v3, this was funding_source_vault_id in v1
         {{ trim_make_empty_string_null('funding_source_id') }} AS funding_source_vault_id,
-
+        {{ trim_make_empty_string_null('status') }} AS status, -- new v3 field, needed for filtering
         -- these are new fields in v3, excluding for now to faciliate union with feed v1
         -- record_updated_timestamp_utc,
         -- channel,
@@ -100,6 +117,7 @@ stg_littlepay__micropayments_v3 AS (
         currency_code,
         type,
         charge_type,
+        status, -- new v3 field, needed for filtering
 
         -- these are new fields in v3, excluding for now to faciliate union with feed v1
         -- record_updated_timestamp_utc,

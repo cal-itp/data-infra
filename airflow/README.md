@@ -9,6 +9,8 @@ This project uses [composer-local-dev](https://github.com/GoogleCloudPlatform/co
 
 In order to run most DAGs, you will need to follow a few setup steps.
 
+### macOS / Linux
+
 Login with `gcloud`:
 
 ```bash
@@ -51,15 +53,64 @@ $ make start
 
 After a loading period, the Airflow UI will become available at [`http://localhost:8080`](http://localhost:8080).
 
-When setting up a new environment, you may want to create Airflow pools:
+### Windows (git-bash)
+
+#### Prerequisites
+
+- [Git for Windows](https://git-scm.com/install/windows) -- installing with `winget` is recommended.
+- [Rancher Desktop - Open a SNOW ticket to install](https://cdotprod.service-now.com/sp?id=sc_category) (provides Docker) — ensure it's running with `dockerd` (containerd mode may not work)
+- [uv](https://docs.astral.sh/uv/getting-started/installation/#winget)
+- [gcloud CLI](https://cloud.google.com/sdk/docs/install)
+
+#### Tool Installation
+
+Install `make` and `rsync` (not included in git-bash by default):
 
 ```bash
-$ make pools
+# Download and install make 4.4.1 from MSYS2
+curl -sL "https://repo.msys2.org/msys/x86_64/make-4.4.1-2-x86_64.pkg.tar.zst" -o /tmp/make.pkg.tar.zst
+# Extract and copy
+python -c "import zstandard, tarfile, io; dctx=zstandard.ZstdDecompressor(); \
+  open('/tmp/make.pkg.tar.zst','rb') as f, \
+  dctx.stream_reader(f) as r, \
+  tarfile.open(fileobj=r, mode='r|') as tar: tar.extractall(path='/tmp/msys2')"
+cp /tmp/msys2/usr/bin/make.exe ~/bin/
+cp /tmp/msys2/usr/share/locale ~/bin/ 2>/dev/null
+echo 'export PATH="$HOME/bin:$PATH"' >> ~/.bashrc
+
+# Download and install rsync 3.4.1 + xxhash DLL from MSYS2
+curl -sL "https://repo.msys2.org/msys/x86_64/rsync-3.4.1-1-x86_64.pkg.tar.zst" -o /tmp/rsync.pkg.tar.zst
+curl -sL "https://repo.msys2.org/msys/x86_64/libxxhash-0.8.2-1-x86_64.pkg.tar.zst" -o /tmp/xxhash.pkg.tar.zst
+python -c "import zstandard, tarfile, io; dctx=zstandard.ZstdDecompressor(); \
+  open('/tmp/rsync.pkg.tar.zst','rb') as f, \
+  dctx.stream_reader(f) as r, \
+  tarfile.open(fileobj=r, mode='r|') as tar: tar.extractall(path='/tmp/msys2')"
+python -c "import zstandard, tarfile, io; dctx=zstandard.ZstdDecompressor(); \
+  open('/tmp/xxhash.pkg.tar.zst','rb') as f, \
+  dctx.stream_reader(f) as r, \
+  tarfile.open(fileobj=r, mode='r|') as tar: tar.extractall(path='/tmp/msys2')"
+cp /tmp/msys2/usr/bin/rsync.exe ~/bin/
+cp /tmp/msys2/usr/bin/msys-xxhash-0.dll ~/bin/
+source ~/.bashrc
 ```
 
-If you're running any DAGs that require secrets or service-specific connection values, you may need to set those in the `Connections` tab in Airflow.
+If `make` or `rsync` do not run (exit code 127 / missing DLL), copy the required DLLs to a PATH directory or install via [MSYS2](https://www.msys2.org/) directly.
 
-Additional reading about general Airflow setup via Docker can be found on the [Airflow Docs](https://airflow.apache.org/docs/apache-airflow/stable/start/docker.html).
+#### Environment Setup
+
+Set the required environment variables in `~/.bashrc` (or run them in each git-bash session):
+
+```bash
+# make and rsync
+export PATH="$HOME/bin:$PATH"
+# unicode
+export PYTHONIOENCODING=utf-8
+```
+
+Then source it:
+```bash
+$ source ~/.bashrc
+```
 
 ### PodOperators
 

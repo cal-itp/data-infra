@@ -92,18 +92,6 @@ x-common-fields:
     name: day_type
     description: |
       Days of the week are categorized into weekday / Saturday / Sunday.
-  - &time_of_day
-    name: time_of_day
-    description: |
-      Categorized based on the Pacific Time departure of the trip's first departure.
-      Grouping each military hour into a time-of-day for transit service.
-      Ex: Hours 0-3 are inclusive, from 12:00 AM to 3:59 AM.
-      Hours 0-3: Owl
-      Hours 4-6: Early AM
-      Hours 7-9: AM Peak
-      Hours 10-14: Midday
-      Hours 15-19: PM Peak
-      Hours 20-23: Evening
   - &month
     name: month
     description: |
@@ -113,38 +101,17 @@ x-common-fields:
     description: |
       Actual calendar year (Pacific Time dates) in which this service was
       scheduled to occur.
-  - &n_trip_instance_keys
-    name: n_trips
-    description: |
-      Count of distinct trip_instance_keys, which capture a single
-      trip on a service_date.
-  - &n_days
+  - &n_service_days
     name: n_days
-    description: Count of distinct service_dates in this month for this day_type.
-  - &n_feeds
+    description: Count of distinct service_dates for this period.
+  - &n_feed_keys
     name: n_feeds
-    description: Count of distinct feed_keys in this month for this day_type.
-  - &route_name
-    name: route_name
-    description: |
-      Within a month, route_id, route_short_name, and route_long_name values can
-      change slightly while referring to the same physical route, so trips have been have been
-      aggregated based on a cleaned up, combined name.
-      route_ids that are updated when feeds change with suffixes are parsed and cleaned.
-      (LA Metro, 1-[suffix_for_feed1], 1-[suffix_for_feed2]).
-      route_short_name and route_long_name are combined and cleaned up for easier labeling.
+    description: Count of distinct feed_keys for this period.
 
 models:
   - name: fct_monthly_scheduled_trips
     description: |
-      An monthly aggregation of GTFS scheduled trips by month-day_type (weekday/Sat/Sun).
-      Keeps the trip grain in `fct_scheduled_trips`, joins this with the shape_id present
-      in `fct_daily_scheduled_shapes`.
-      Each row is unique on name-month-year-day_type-trip_id-iteration_num.
-      It can be interpreted as:
-      In a typical month, we observed weekday Trip 1 service (across 20+ days),
-      Saturday Trip 1 service (across 4 days that month),
-      and Sunday Trip 1 service (across 4 days that month).
+      An aggregation of GTFS scheduled trips by month and day_type (weekday / Saturday / Sunday).
     columns:
       - name: name
         description: *gtfs_dataset_name_desc
@@ -153,10 +120,19 @@ models:
       - &month_first_day
         name: month_first_day
         description: |
-          First day of the month saved as a date.
-          Service_date of 2025-09-15 would become 2025-09-01.
+          First day of the month saved as a date. Service_date of 2025-09-15 would become 2025-09-01.
       - *day_type
-      - *time_of_day
+      - name: time_of_day
+        description: |
+          Categorized based on the Pacific Time departure of the trip's first departure.
+          Grouping each military hour into a time-of-day for transit service.
+          Ex: Hours 0-3 are inclusive, from 12:00 AM to 3:59 AM.
+          Hours 0-3: owl
+          Hours 4-6: early_am
+          Hours 7-9: am_peak
+          Hours 10-14: midday
+          Hours 15-19: pm_peak
+          Hours 20-23: evening
       - &direction_id
         name: direction_id
         description: '{{ doc("gtfs_trips__direction_id") }}'
@@ -164,48 +140,76 @@ models:
         description: '{{ doc("gtfs_routes__route_short_name") }}'
       - name: route_long_name
         description: '{{ doc("gtfs_routes__route_long_name") }}'
-      - *route_name
+      - name: route_name
+        description: '{{ doc("column_gtfs_route_name") }}'
       - name: route_desc
         description: '{{ doc("gtfs_routes__route_desc") }}'
       - name: route_color
         description: '{{ doc("gtfs_routes__route_color") }}'
       - name: route_text_color
         description: '{{ doc("gtfs_routes__route_text_color") }}'
+      - name: route_type
+        description: '{{ doc("gtfs_routes__route_type") }}'
       - name: trip_id
         description: '{{ doc("gtfs_trips__trip_id") }}'
+      - name: iteration_num
+        description: '{{ doc("column_st_iteration_num") }}'
       - name: shape_id
         description: '{{ doc("gtfs_trips__shape_id") }}'
       - name: shape_array_key
         description: Foreign key to dim_shapes_arrays.
+      - name: trip_first_departure_sec
+        description: |
+          The number of seconds after 12 hours before noon (usually midnight)
+          on `service_date` in `feed_timezone` at which this trip's first stop
+          departure occurred.
+      - name: is_gtfs_flex_trip
+        description: '{{ doc("column_is_gtfs_flex_trip") }}'
       - name: service_hours
         description: '{{ doc("column_service_hours") }}'
-      - *n_trip_instance_keys
-      - *n_days
-      - *n_feeds
+      - name: flex_service_hours
+        description: '{{ doc("column_flex_service_hours") }}'
+      - name: n_trips
+        description: &n_scheduled_trips_desc |
+          Total number of trips ran in this period.
+      - *n_service_days
+      - *n_feed_keys
+      - name: route_id_array
+        description: &route_id_array_desc |
+          An array of parsed route_ids.
+          See the macro: https://dbt-docs.dds.dot.ca.gov/#!/macro/macro.calitp_warehouse.parse_route_id
 
   - name: fct_monthly_routes
     description: |
-      An aggregation of GTFS schedule routes with trip activity in a given
-      month, where the shape with the most trips is associated.
+      An aggregation of GTFS schedule routes and shapes by month and day_type
+      (weekday / Saturday / Sunday). The route's line geometry comes from the
+      shape_id with the most trips.
     columns:
       - name: name
         description: *gtfs_dataset_name_desc
       - *year
       - *month
       - *month_first_day
-      - *route_name
+      - name: route_name
+        description: '{{ doc("column_gtfs_route_name") }}'
+      - name: route_type
+        description: '{{ doc("gtfs_routes__route_type") }}'
       - *direction_id
       - name: shape_id
         description: '{{ doc("gtfs_trips__shape_id") }}'
       - name: shape_array_key
         description: Foreign key to dim_shapes_arrays.
-      - *n_trip_instance_keys
+      - name: n_trips
+        description: *n_scheduled_trips_desc
       - *shape_pt_array
 
   - name: fct_monthly_scheduled_stops
     description: |
-      An aggregation of GTFS schedule stops with stop time activity in a given
-      month.
+      An aggregation of GTFS schedule stops with stop time activity in a given month
+      and day_type (weekday / Saturday / Sunday).
+
+      Totals and daily metrics are provided to normalize across potential differences in GTFS
+      schedule or RT data availability.
     columns:
       - name: name
         description: *gtfs_dataset_name_desc
@@ -214,12 +218,38 @@ models:
       - *day_type
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
-      - name: stop_key
-        description: Foreign key to the `dim_stops` table.
-      - name: tts_stop_name
-        description: '{{ doc("gtfs_stops__tts_stop_name") }}'
-      - *n_days
-      - *n_feeds
+      - name: total_stop_arrivals
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: daily_stop_arrivals
+        description: '{{ doc("column_daily_stop_arrivals") }}'
+      - name: n_hours_in_service
+        description: |
+          Number of hours in service.
+          It is the distinct number of arrival hours based on a scheduled stop_time's arrival_time column.
+      - name: arrivals_per_hour_owl
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_per_hour_early_am
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_per_hour_am_peak
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_per_hour_midday
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_per_hour_pm_peak
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_per_hour_evening
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_owl
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: arrivals_early_am
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: arrivals_am_peak
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: arrivals_midday
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: arrivals_pm_peak
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: arrivals_evening
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
       - *route_type_0
       - *route_type_1
       - *route_type_2
@@ -231,6 +261,26 @@ models:
       - *route_type_11
       - *route_type_12
       - *missing_route_type
+      - name: route_type_array
+        description: '{{ doc("gtfs_routes__route_type") }}'
+      - name: route_id_array
+        description: *route_id_array_desc
+      - name: transit_mode_array
+        description: |
+          Combine route_types into readable transit modes to align with NTD mode definitions.
+          Transit mode values are: ["rail", "bus", "ferry", "other_rail", "trolleybus"].
+
+          rail: route_types 0, 1, 2
+          bus: route_type 3
+          ferry: route_type 4
+          other_rail: route_types 5, 6, 7, 12
+          trolleybus: route_type 11
+      - *n_service_days
+      - *n_feed_keys
+      - name: n_route_types
+        description: Count of unique route_types.
+      - name: stop_key
+        description: Foreign key to the `dim_stops` table.
       - name: tts_stop_name
         description: '{{ doc("gtfs_stops__tts_stop_name") }}'
       - *stop_pt_geom
@@ -246,3 +296,342 @@ models:
         description: '{{ doc("gtfs_stops__location_type") }}'
       - name: wheelchair_boarding
         description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
+
+  - name: fct_monthly_schedule_rt_route_direction_summary
+    description: |
+      A summary table of schedule + RT (quartet of schedule, vp, tu, sa) data
+      summarized by month-day_type-feed-route-direction.
+      Metrics for service alerts not yet available.
+
+      Since this table is a rollup, a monthly aggregation, `gtfs_dataset_key` is dropped
+      for schedule and RT data sources. The unversioned natural key (`base64_url`) is used
+      to refer to the same operator (across versioned feeds they're publishing).
+      `route_name-direction_id` is also used instead of the versioned
+      `route_id-direction_id` to refer to the same route entity (across versioned feeds).
+
+      Totals and daily metrics are provided to normalize across potential differences in GTFS
+      schedule or RT data availability.
+    columns:
+      - *month
+      - *year
+      - *month_first_day
+      - *day_type
+      - <<: *base64_url
+        name: schedule_base64_url
+      - name: schedule_name
+        description: Name from the schedule GTFS dataset record associated.
+      - <<: *base64_url
+        name: tu_base64_url
+      - name: tu_name
+        description: Name from the trip updates GTFS dataset record associated.
+      - <<: *base64_url
+        name: vp_base64_url
+      - name: vp_name
+        description: Name from the vehicle positions GTFS dataset record associated.
+      - name: route_name
+        description: '{{ doc("column_gtfs_route_name") }}'
+      - name: direction_id
+        description: '{{ doc("gtfs_trips__direction_id") }}'
+      - name: route_type
+        description: '{{ doc("gtfs_routes__route_type") }}'
+      - name: n_trips
+        description: *n_scheduled_trips_desc
+      - name: daily_trips_all_day
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: n_route_ids
+        description: |
+          Number of distinct (not parsed, not cleaned) route_ids for this period.
+          There can be n_route_ids > 1 for the same route_name if the feed switches in the
+          middle of the month.
+
+          Ex: LA Metro Route 150 was 150-13188 (on 2025-12-01) and 150-13196 (on 2026-02-01).
+          If the route_ids switched mid-month, it is possible for different route_ids to
+          show up, but refer to the same route. See `route_name`.
+      - name: n_shapes
+        description: &n_scheduled_shapes_desc |
+          Total number of shapes that had trips scheduled for this period.
+      - name: avg_stops_served
+        description: &n_scheduled_stops_desc |
+          Total number of distinct stop_ids that had trips scheduled for this period.
+      - &ttl_service_hours
+        name: ttl_service_hours
+        description: |
+          Total service hours for the schedule_base64_url for this period.
+      - &daily_service_hours
+        name: daily_service_hours
+        description: |
+          The average daily service hours for this period.
+          Total_service_hours / n_service_dates
+      - &ttl_flex_service_hours
+        name: ttl_flex_service_hours
+        description: |
+          Total flex service hours for the schedule_base64_url for this period.
+      - &daily_flex_service_hours
+        name: daily_flex_service_hours
+        description: |
+          The average daily flex service hours for this period.
+          Total_flex_service_hours / n_service_dates
+      - *n_feed_keys
+      - *n_service_days
+      - name: daily_trips_owl
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_early_am
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_am_peak
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_midday
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_pm_peak
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_evening
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_peak
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_offpeak
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: frequency_owl
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_early_am
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_am_peak
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_midday
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_pm_peak
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_evening
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_peak
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_offpeak
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_all_day
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: appeared_in_tu
+        description: &appeared_in_tu_desc |
+          Boolean for whether this trip appeared in a trip updates feed.
+          Can be false either because there is no trip updates feed for this
+          data (see `dim_provider_gtfs_data` to confirm) or because there is a
+          trip updates feed but this trip did not appear within it.
+      - name: appeared_in_vp
+        description: &appeared_in_vp_desc |
+          Boolean for whether this trip appeared in a vehicle positions feed.
+          Can be false either because there is no vehicle positions feed for
+          this data (see `dim_provider_gtfs_data` to confirm) or because there is
+          a vehicle positions feed but this trip did not appear within it.
+      - name: vp_num_distinct_updates
+        description: '{{ doc("column_rt_messages_per_minute") }}'
+      - name: n_vp_trips
+        description: '{{ doc("column_n_vp_trips") }}'
+      - name: vp_extract_duration_minutes
+        description: &extract_duration_minutes_desc |
+          The sum of `extract_duration_minutes` for this period.
+          `extract_duration_minutes` is the difference between
+          `max_extract_ts` and `min_extract_ts` in
+          minutes, representing the duration of time for which this entity was
+          present in message responses we received from the agency.
+      - name: vp_messages_per_minute
+        description: '{{ doc("column_rt_messages_per_minute") }}'
+      - name: tu_num_distinct_updates
+        description: '{{ doc("column_rt_messages_per_minute") }}'
+      - name: n_tu_trips
+        description: '{{ doc("column_n_tu_trips") }}'
+      - name: tu_extract_duration_minutes
+        description: *extract_duration_minutes_desc
+      - name: tu_messages_per_minute
+        description: '{{ doc("column_rt_messages_per_minute") }}'
+      - name: route_typology
+        description: |
+          Valid values are: rail, bus (not rapid or express), express, rapid, cable_tram,
+          trolleybus, and unknown.
+          For route_type 3 (bus), look for specific keywords within
+          `route_short_name`, and `route_long_name` and see if we can identify
+          whether a bus is express or rapid.
+
+          Other route_typologies correspond to route_type.
+          - rail: route_type values 0, 1, 2.
+          - bus: route_type value 3 (if unable to be categorized as express or rapid).
+          - express: route_type value 3 ('route_name' contains keyword 'express' or 'limited').
+          - rapid: route_type value 3 ('route_name' contains keyword 'rapid').
+          - cable_tram: route_type value 5.
+          - trolleybus: route_type value 11.
+
+          NACTO (National Association of City Transportation Officials)
+          has different route typologies defined. Each route typology is paired with
+          policy and planning levers.
+
+  - name: fct_monthly_operator_summary
+    description: |
+      Schedule + RT (quartet of schedule, vp, tu, sa) operator summary by
+      month-day_type (weekday / Saturday / Sunday).
+
+      Since this table is a rollup, a monthly aggregation, `gtfs_dataset_key` is
+      dropped for schedule and RT data sources. The unversioned natural key
+      (`base64_url`) is used to refer to the same operator (across versioned feeds
+      they're publishing).
+
+      Totals and daily metrics are provided to normalize across potential differences in GTFS
+      schedule or RT data availability.
+    columns:
+      - *month
+      - *year
+      - *month_first_day
+      - <<: *base64_url
+        name: schedule_base64_url
+      - name: schedule_name
+        description: Name from the schedule GTFS dataset record associated.
+      - name: tu_name
+        description: Name from the trip updates GTFS dataset record associated.
+      - <<: *base64_url
+        name: tu_base64_url
+      - name: vp_name
+        description: Name from the vehicle positions GTFS dataset record associated.
+      - <<: *base64_url
+        name: vp_base64_url
+      - *day_type
+      - name: n_trips
+        description: *n_scheduled_trips_desc
+      - name: daily_trips
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - *ttl_service_hours
+      - *daily_service_hours
+      - name: n_routes
+        description: |
+          Total number of routes that had trips scheduled for this period.
+      - name: n_shapes
+        description: *n_scheduled_shapes_desc
+      - name: n_stops
+        description: *n_scheduled_stops_desc
+      - name: num_stop_times
+        description: '{{ doc("column_num_stop_times") }}'
+      - name: daily_arrivals
+        description: '{{ doc("column_daily_stop_arrivals") }}'
+      - *n_service_days
+      - *n_feed_keys
+      - name: vp_messages_per_minute
+        description: '{{ doc("column_rt_messages_per_minute") }}'
+      - name: n_vp_trips
+        description: '{{ doc("column_n_vp_trips") }}'
+      - name: daily_vp_trips
+        description: '{{ doc("column_n_vp_trips") }}'
+      - name: pct_vp_trips
+        description: '{{ doc("column_n_vp_trips") }}'
+      - name: pct_vp_routes
+        description: |
+          The percent of scheduled routes that have at least 1 trip with vehicle positions data.
+          n_vp_routes / n_schedule_routes
+      - name: daily_vp_extract_duration_minutes
+        description: |
+          Total vp_extract_duration_minutes / n_service_dates
+          See `vp_extract_duration_minutes`.
+      - name: tu_messages_per_minute
+        description: '{{ doc("column_rt_messages_per_minute") }}'
+      - name: n_tu_trips
+        description: '{{ doc("column_n_tu_trips") }}'
+      - name: daily_tu_trips
+        description: '{{ doc("column_n_tu_trips") }}'
+      - name: pct_tu_trips
+        description: '{{ doc("column_n_tu_trips") }}'
+      - name: pct_tu_routes
+        description: |
+          The percent of scheduled routes that have at least 1 trip with trip updates data.
+          n_tu_routes / n_schedule_routes
+      - name: daily_tu_extract_duration_minutes
+        description: |
+          Total tu_extract_duration_minutes / n_service_dates.
+          See `tu_extract_duration_minutes`.
+      - name: pct_tu_complete_minutes
+        description: '{{ doc("column_gtfs_rt__tu_complete_minutes") }}'
+      - name: pct_tu_accurate_minutes
+        description: '{{ doc("column_gtfs_rt__tu_accurate_minutes") }}'
+      - name: avg_prediction_spread_minutes
+        description: '{{ doc("column_gtfs_rt__tu_prediction_spread") }}'
+      - name: n_predictions
+        description: Total number of stoptimeupdate messages, or predictions.
+      - name: pct_predictions_early
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
+      - name: pct_predictions_ontime
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
+      - name: pct_predictions_late
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
+      - name: n_days_schedule_only
+        description: &n_days_by_gtfs_availability_desc |
+          Count of distinct service_dates for each gtfs_availability value in
+          ["schedule_only", "schedule_and_rt", "schedule_and_vp_only", "schedule_and_tu_only"].
+      - name: n_days_schedule_and_rt
+        description: *n_days_by_gtfs_availability_desc
+      - name: n_days_schedule_and_vp_only
+        description: *n_days_by_gtfs_availability_desc
+      - name: prediction_error_sec_array
+        description: '{{ doc("column_gtfs_rt__tu_prediction_error") }}'
+      - name: prediction_error_sec_percentile_array
+        description: &percentile_array_values_desc |
+          Values are [5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 95],
+          referring to the 5th, 10th, ..., 95th percentile
+
+          Must be unpacked in the same order as prediction_error_sec_array.
+          Example:
+          percentile_array: [5th, 10th, ...., 95th percentile]
+          prediction_error_sec_array: [-100, -70, ..., 400]
+          The 5th percentile corresponds to -100 seconds; the 95th percentile corresponds to 400 seconds.
+
+          This is a metric in the Greg Newmark paper. It requires using the
+          `prediction_error_by_minute_array` column that has the prediction error for
+          every service_date-trip-stop_id-stop_sequence-minute_until_arrival combination.
+      - name: scaled_prediction_error_sec_array
+        description: '{{ doc("column_gtfs_rt__tu_scaled_prediction_error") }}'
+      - name: pos_prediction_error_sec_array
+        description: |
+          Filter to only positive prediction errors, then find the
+          5th, 10th, ..., 95th percentile on that filtered array.
+
+          Must be unpacked in the same order as pos_prediction_error_sec_array.
+          Example:
+          percentile_array: [5th, 10th, ...., 95th percentile]
+          pos_prediction_error_sec_array: [10, 20, ..., 400]
+          The 5th percentile corresponds to 10 seconds; the 95th percentile corresponds to 400 seconds.
+
+          This is a metric in the Greg Newmark paper. It requires using the
+          `prediction_error_by_minute_array` column that has the prediction error for
+          every service_date-trip-stop_id-stop_sequence-minute_until_arrival combination.
+      - name: neg_prediction_error_sec_array
+        description: |
+          Filter to only negative prediction errors, then find the
+          5th, 10th, ..., 95th percentile on that filtered array.
+
+          Must be unpacked in the same order as neg_prediction_error_sec_array.
+          Example:
+          percentile_array: [5th, 10th, ...., 95th percentile]
+          neg_prediction_error_sec_array: [-400, -300, ..., -5]
+          The 5th percentile corresponds to -400 seconds; the 95th percentile corresponds to -5 seconds.
+
+          This is a metric in the Greg Newmark paper. It requires using the
+          `prediction_error_by_minute_array` column that has the prediction error for
+          every service_date-trip-stop_id-stop_sequence-minute_until_arrival combination.
+      - name: pos_prediction_error_sec_percentile_array
+        description: |
+          Values are [95, 90, 80, 75, 70, 60, 50, 40, 30, 25, 20, 10, 5],
+          referring to the 95th, 90th, ... , and 5th percentile.
+          Greg Newmark paper refers to reversed percentiles. Reverse the percentiles here and
+          make it explicit.
+
+  - name: fct_operator_hourly_summary
+    description: |
+      An hourly summary of trips and service hours by month, day_type
+      (weekday / Saturday / Sunday) and hour of day (0-23).
+    columns:
+      - *month_first_day
+      - name: name
+        description: *gtfs_dataset_name_desc
+      - *day_type
+      - name: departure_hour
+        description: |
+          The departure hour (0-23) of the trip, in the feed_timezone.
+          Since trips can travel into the next service_date, each
+          trip is categorized into the service_date of the trip's first departure.
+      - name: n_trips
+        description: *n_scheduled_trips_desc
+      - name: service_hours
+        description: '{{ doc("column_service_hours") }}'
+      - name: flex_service_hours
+        description: '{{ doc("column_flex_service_hours") }}'

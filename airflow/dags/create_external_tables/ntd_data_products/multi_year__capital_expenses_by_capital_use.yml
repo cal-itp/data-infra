@@ -34,7 +34,7 @@ schema_fields:
   - name: guideway
     type: NUMERIC
   - name: guideway_questionable
-    type: NUMERIC
+    type: STRING
   - name: maintenance_buildings
     type: NUMERIC
   - name: maintenance_buildings_1

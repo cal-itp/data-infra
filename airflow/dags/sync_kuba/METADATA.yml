@@ -2,11 +2,11 @@ description: "Capture the Kuba API to GCS"
 schedule_interval: "0 * * * *"
 tags:
   - kuba
+catchup: False
 default_args:
     owner: airflow
     depends_on_past: False
     start_date: "2025-07-14"
-    catchup: False
     email_on_failure: True
     pool: default_pool
     concurrency: 50

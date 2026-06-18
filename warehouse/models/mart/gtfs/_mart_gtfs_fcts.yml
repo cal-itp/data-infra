@@ -453,6 +453,23 @@ x-common-fields:
       a count of how many messages per minute this entity was present for,
       which can help give a sense for how continuously this trip was updated.
       This number should be equal to `num_distinct_extract_ts`.
+  - &rt_stu_actual_arrival
+    name: rt_stu_actual_arrival
+    description: |
+      Either last_trip_updates_arrival, or if that's null, use last_trip_updates_departure.
+      Often, either last_trip_updates_arrival or last_trip_updates_departure is null.
+  - &rt_stu_actual_departure
+    name: actual_departure
+    description: |
+      The later timestamp between last_trip_updates_arrival and last_trip_updates_departure.
+  - &rt_stu_actual_arrival_pacific
+    name: actual_arrival_pacific
+    description: |
+      actual_arrival converted to a DATETIME type in the "America/Los_Angeles" time zone.
+  - &rt_stu_actual_departure_pacific
+    name: actual_departure_pacific
+    description: |
+      actual_departure converted to a DATETIME type in the "America/Los_Angeles" time zone.
 
   - &service_date_for_summaries
     name: service_date
@@ -475,17 +492,17 @@ x-common-fields:
       Categorized based on the Pacific Time departure of the trip's first departure.
       Grouping each military hour into a time-of-day for transit service.
       Ex: Hours 0-3 are inclusive, from 12:00 AM to 3:59 AM.
-      Hours 0-3: Owl
-      Hours 4-6: Early AM
-      Hours 7-9: AM Peak
-      Hours 10-14: Midday
-      Hours 15-19: PM Peak
-      Hours 20-23: Evening
-
+      Hours 0-3: owl
+      Hours 4-6: early_am
+      Hours 7-9: am_peak
+      Hours 10-14: midday
+      Hours 15-19: pm_peak
+      Hours 20-23: evening
   - &shape_pt_array
     name: pt_array
     description: |
       Ordered array of WKT points that describe this shape.
+
 
 models:
   - name: fct_daily_schedule_feeds
@@ -872,23 +889,38 @@ models:
     columns:
       - *service_date_for_summaries
       - *feed_key
-      - name: ttl_service_hours
+      - &ttl_service_hours
+        name: ttl_service_hours
         description: |
           Total service hours across entire feed on date; can be 0 if no service
+      - &ttl_flex_service_hours
+        name: ttl_flex_service_hours
+        description: |
+          Total flex service hours across entire feed on date; can be 0 if no service
       - name: gtfs_dataset_key
         description: *gtfs_dataset_key_desc
+      - name: gtfs_dataset_name
+        description: *gtfs_dataset_name_desc
       - name: n_trips
-        description: Total number of trips ran on date; can be 0 if no scheduled trips
+        description: &n_scheduled_trips_desc |
+          Total number of trips ran on date; can be 0 if no scheduled trips
       - name: first_departure_sec
         description: Time of first departure on date; null when no trips scheduled
       - name: last_arrival_sec
         description: Time of last departure on date; null when no trips scheduled
       - name: num_stop_times
-        description: |
-          Total number of stop events observed; can be 0 if not scheduled trips
+        description: '{{ doc("column_num_stop_times") }}'
       - name: n_routes
-        description: |
+        description: &n_scheduled_routes_desc |
           Total number of routes that had trips scheduled on this day; can be 0
+          if no scheduled trips
+      - name: n_shapes
+        description: &n_scheduled_shapes_desc |
+          Total number of shapes that had trips scheduled on this day; can be 0
+          if no scheduled trips
+      - name: n_stops
+        description: &n_scheduled_stops_desc |
+          Total number of distinct stop_ids that had trips scheduled on this day; can be 0
           if no scheduled trips
       - name: contains_warning_duplicate_stop_times_primary_key
         description: |
@@ -903,12 +935,14 @@ models:
           quality issues were present in the stop times data that is being
           summarized here, and counts may be inflated due to multiple rows with
           identical identifiers.
-      - name: contains_warning_duplicate_trip_primary_key
+      - &contains_warning_duplicate_trip_primary_key
+        name: contains_warning_duplicate_trip_primary_key
         description: |
           Rows with `true` in this column indicate that `dim_trips` contains
           duplicates of this trip primary key.
           i.e., `trip_id` is duplicated within an individual feed instance.
-      - name: contains_warning_missing_foreign_key_stop_id
+      - &contains_warning_missing_foreign_key_stop_id
+        name: contains_warning_missing_foreign_key_stop_id
         description: |
           Rows with `true` in this column indicate that the columns in this table
           that are aggregated from stop times data (`n_stops`, `num_stop_times`,
@@ -1342,8 +1376,37 @@ models:
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
       - name: daily_arrivals
+        description: '{{ doc("column_daily_stop_arrivals") }}'
+      - name: _feed_valid_from
         description: |
-          The number of stop events associated with this stop on the given date.
+          Should not be used; exists to faciliate incremental materialization.
+      - name: n_hours_in_service
+        description: |
+          Number of hours in service. It is the distinct number of arrival hours based on a scheduled stop_time's arrival_time column.
+      - name: arrivals_per_hour_owl
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_per_hour_early_am
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_per_hour_am_peak
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_per_hour_midday
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_per_hour_pm_peak
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_per_hour_evening
+        description: '{{ doc("column_stop_arrivals_per_hour") }}'
+      - name: arrivals_owl
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: arrivals_early_am
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: arrivals_am_peak
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: arrivals_midday
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: arrivals_pm_peak
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+      - name: arrivals_evening
+        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
       - &route_type_0
         name: route_type_0
         description: |
@@ -1441,6 +1504,16 @@ models:
           quality issues were present in the trips data that is being summarized
           here, and counts may be inflated due to multiple rows with identical
           identifiers.
+      - name: route_id_array
+        description: |
+          An array of parsed route_ids.
+
+          See the macro: https://dbt-docs.dds.dot.ca.gov/#!/macro/macro.calitp_warehouse.parse_route_id
+
+      - name: route_type_array
+        description: '{{ doc("gtfs_routes__route_type") }}'
+      - name: n_route_types
+        description: Count of distinct route_types.
       - name: contains_warning_duplicate_stop_primary_key
         description: |
           Rows with `true` in this column have a duplicate primary key in dim_stops;
@@ -1526,13 +1599,13 @@ models:
           Name from the schedule GTFS dataset record associated
           with the RT feed(s) in which this trip appeared.
       - name: appeared_in_tu
-        description: |
+        description: &appeared_in_tu_desc |
           Boolean for whether this trip appeared in a trip updates feed.
           Can be false either because there is no trip updates feed for this
           data (see `dim_provider_gtfs_data` to confirm) or because there is a
           trip updates feed but this trip did not appear within it.
       - name: appeared_in_vp
-        description: |
+        description: &appeared_in_vp_desc |
           Boolean for whether this trip appeared in a vehicle positions feed.
           Can be false either because there is no vehicle positions feed for
           this data (see `dim_provider_gtfs_data` to confirm) or because there is
@@ -1859,6 +1932,7 @@ models:
           - not_null
       - *feed_key
       - name: name
+        description: *gtfs_dataset_name_desc
       - *base64_url
       - name: regional_feed_type
         description: |
@@ -2633,3 +2707,440 @@ models:
         description: |
           Number of vehicle location timestamps within 35 meters
           of the scheduled shape (path of travel)
+
+  - name: fct_stop_time_metrics
+    description: |
+      Prediction accuracy metrics calculated on GTFS RT StopTimeUpdates.
+      The grain is service_date-tu_base64-url-trip_id-stop_id_stop_sequence.
+      The StopTimeUpdate messages of the 30 minutes until the bus arrives is used to
+      calculate the metrics outlined in Professor Gregory Newmark's paper `Assessing GTFS Accuracy`.
+    columns:
+      - name: trip_key
+        description: |
+          Foreign key to int_gtfs_rt__trip_updates_trip_day_map_grouping.
+      - name: key
+      - *rt_service_date
+      - *base64_url
+      - *rt_schedule_base64_url
+      - *rt_trip_id
+      - *rt_trip_start_time
+      - *rt_stu_stop_id
+      - *rt_stu_stop_sequence
+      - <<: *rt_stu_actual_arrival
+        name: actual_arrival
+      - *rt_stu_actual_departure
+      - *rt_stu_actual_arrival_pacific
+      - *rt_stu_actual_departure_pacific
+      - name: avg_prediction_error_sec
+        description: '{{ doc("column_gtfs_rt__tu_prediction_error") }}'
+      - name: avg_scaled_prediction_error_sec
+        description: '{{ doc("column_gtfs_rt__tu_scaled_prediction_error") }}'
+      - name: n_tu_accurate_minutes
+        description: '{{ doc("column_gtfs_rt__tu_accurate_minutes") }}'
+      - name: n_predictions_early
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
+      - name: n_predictions_ontime
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
+      - name: n_predictions_late
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
+      - name: prediction_error_by_minute_array
+        description: '{{ doc("column_gtfs_rt__tu_prediction_error") }}'
+      - name: minutes_until_arrival_array
+        description: &rt_tu_minutes_until_arrival_desc |
+          The number of minutes before the actual_arrival is the difference, in minutes, between
+          the _extract_ts and last_trip_updates_arrival_time.
+          The max value of this is 30, as only the 30 minutes before the bus arrives is included.
+      - name: scaled_prediction_error_by_minute_array
+        description: '{{ doc("column_gtfs_rt__tu_scaled_prediction_error") }}'
+      - name: n_tu_complete_minutes
+        description: '{{ doc("column_gtfs_rt__tu_complete_minutes") }}'
+      - &n_tu_minutes_available
+        name: n_tu_minutes_available
+        description: |
+          The number of minutes with valid StopTimeUpdate messages, or predictions, for each service_date-trip-stop_id-stop_sequence combination. Only up the 30 minutes until the bus arrives is considered. Max value of this column is 30.
+      - name: sum_prediction_spread_seconds
+        description: '{{ doc("column_gtfs_rt__tu_prediction_spread") }}'
+      - name: max_minutes_until_arrival
+        description: *rt_tu_minutes_until_arrival_desc
+      - &rt_tu_n_predictions
+        name: n_predictions
+        description: Total number of stoptimeupdate messages, or predictions.
+
+  - name: fct_trip_updates_stop_metrics
+    description: |
+      Prediction accuracy metrics aggregated to service_date-base64_url-schedule_base64_url-stop_id.
+    columns:
+      - *base64_url
+      - *rt_schedule_base64_url
+      - *rt_service_date
+      - *rt_stu_stop_id
+      - name: avg_prediction_error_sec
+        description: '{{ doc("column_gtfs_rt__tu_prediction_error") }}'
+      - name: n_tu_accurate_minutes
+        description: '{{ doc("column_gtfs_rt__tu_accurate_minutes") }}'
+      - name: n_tu_complete_minutes
+        description: '{{ doc("column_gtfs_rt__tu_complete_minutes") }}'
+      - *n_tu_minutes_available
+      - name: n_predictions_early
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
+      - name: n_predictions_ontime
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
+      - name: n_predictions_late
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
+      - name: avg_prediction_spread_minutes
+        description: '{{ doc("column_gtfs_rt__tu_prediction_spread") }}'
+      - *rt_tu_n_predictions
+      - name: n_tu_trips
+      - name: prediction_error_by_minute_array
+        description: '{{ doc("column_gtfs_rt__tu_prediction_error") }}'
+      - name: scaled_prediction_error_by_minute_array
+        description: '{{ doc("column_gtfs_rt__tu_scaled_prediction_error") }}'
+      - name: minutes_until_arrival_array
+        description: *rt_tu_minutes_until_arrival_desc
+
+  - name: fct_trip_updates_trip_metrics
+    description: |
+      Prediction accuracy metrics aggregated to service_date-base64_url-schedule_base64_url-trip_id-trip_start_time.
+    columns:
+      - *base64_url
+      - *rt_service_date
+      - name: trip_key
+        description: |
+          Foreign key to int_gtfs_rt__trip_updates_trip_day_map_grouping.
+      - name: avg_prediction_error_sec
+        description: '{{ doc("column_gtfs_rt__tu_prediction_error") }}'
+      - name: n_tu_accurate_minutes
+        description: '{{ doc("column_gtfs_rt__tu_accurate_minutes") }}'
+      - name: n_tu_complete_minutes
+        description: '{{ doc("column_gtfs_rt__tu_complete_minutes") }}'
+      - *n_tu_minutes_available
+      - name: avg_prediction_spread_minutes
+        description: '{{ doc("column_gtfs_rt__tu_prediction_spread") }}'
+      - *rt_tu_n_predictions
+      - name: n_predictions_early
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
+      - name: n_predictions_ontime
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
+      - name: n_predictions_late
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
+      - name: n_tu_stops
+        description: Count of distinct trip-stop_id-stop_sequence combinations from the trip updates dataset.
+      - name: prediction_error_by_minute_array
+        description: '{{ doc("column_gtfs_rt__tu_prediction_error") }}'
+      - name: scaled_prediction_error_by_minute_array
+        description: '{{ doc("column_gtfs_rt__tu_scaled_prediction_error") }}'
+      - name: minutes_until_arrival_array
+        description: *rt_tu_minutes_until_arrival_desc
+
+  - name: fct_daily_schedule_rt_route_direction_summary
+    description: |
+      Daily schedule + RT (quartet of schedule, vp, tu, sa) service totals by feed.
+      Service summary is based on `fct_daily_scheduled_service_summary` (schedule) and
+      `fct_daily_rt_service_summary` (RT).
+      Metrics for service alerts not yet available.
+    columns:
+      - *service_date_for_summaries
+      - <<: *base64_url
+        name: schedule_base64_url
+      - name: schedule_name
+        description: Name from the schedule GTFS dataset record associated.
+      - name: schedule_gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
+      - *feed_key
+      - name: route_id
+        description: '{{ doc("gtfs_routes__route_id") }}'
+      - name: route_id_cleaned
+        description: |
+          Parsed and standardized combined form of `route_id`. See the macro: https://dbt-docs.dds.dot.ca.gov/#!/macro/macro.calitp_warehouse.parse_route_id
+      - name: route_name
+        description: '{{ doc("column_gtfs_route_name") }}'
+      - name: direction_id
+        description: '{{ doc("gtfs_trips__direction_id") }}'
+      - name: route_type
+        description: '{{ doc("gtfs_routes__route_type") }}'
+      # foreign keys
+      - name: tu_gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
+      - name: tu_name
+        description: Name from the trip updates GTFS dataset record associated.
+      - <<: *base64_url
+        name: tu_base64_url
+      - name: vp_gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
+      - name: vp_name
+        description: Name from the vehicle positions GTFS dataset record associated.
+      - <<: *base64_url
+        name: vp_base64_url
+      - name: n_trips
+        description: *n_scheduled_trips_desc
+      - name: n_routes
+        description: *n_scheduled_routes_desc
+      - name: n_shapes
+        description: *n_scheduled_shapes_desc
+      - name: avg_stops_served
+        description: *n_scheduled_stops_desc
+      - name: num_stop_times
+        description: '{{ doc("column_num_stop_times") }}'
+      - name: service_hours
+        description: '{{ doc("column_service_hours") }}'
+      - name: flex_service_hours
+        description: '{{ doc("column_flex_service_hours") }}'
+      - name: daily_trips_owl
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_early_am
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_am_peak
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_midday
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_pm_peak
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_evening
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_peak
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: daily_trips_offpeak
+        description: '{{ doc("column_daily_trips_by_time_of_day") }}'
+      - name: frequency_owl
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_early_am
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_am_peak
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_midday
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_pm_peak
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_evening
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_peak
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_offpeak
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: frequency_all_day
+        description: '{{ doc("column_frequency_trips_per_hour") }}'
+      - name: appeared_in_tu
+        description: *appeared_in_tu_desc
+      - name: appeared_in_vp
+        description: *appeared_in_vp_desc
+      - name: vp_num_distinct_updates
+        description: *rt_trip_num_distinct_updates_desc
+      - name: n_vp_trips
+        description: '{{ doc("column_n_vp_trips") }}'
+      - <<: *extract_duration_minutes
+        name: vp_extract_duration_minutes
+      - name: vp_messages_per_minute
+        description: '{{ doc("column_rt_messages_per_minute") }}'
+      - name: tu_num_distinct_updates
+        description: *rt_trip_num_distinct_updates_desc
+      - name: n_tu_trips
+        description: '{{ doc("column_n_tu_trips") }}'
+      - <<: *extract_duration_minutes
+        name: tu_extract_duration_minutes
+      - name: tu_messages_per_minute
+        description: '{{ doc("column_rt_messages_per_minute") }}'
+
+  - name: fct_daily_rt_service_summary
+    description: |
+      Daily RT service totals by feed. Service summary is based on fct_observed_trips,
+      grouped to the service_date and feed level (tu_base64_url, vp_base64_url).
+      Metrics for service alerts not yet available.
+    columns:
+      - *service_date_for_summaries
+      # foreign keys
+      - <<: *base64_url
+        name: schedule_base64_url
+      - name: schedule_name
+        description: Name from the schedule GTFS dataset record associated.
+      - name: schedule_gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
+      - *feed_key
+      - name: tu_gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
+      - name: tu_name
+        description: Name from the trip updates GTFS dataset record associated.
+      - <<: *base64_url
+        name: tu_base64_url
+      - name: vp_gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
+      - name: vp_name
+        description: Name from the vehicle positions GTFS dataset record associated.
+      - <<: *base64_url
+        name: vp_base64_url
+      - name: n_trips
+        description: *n_scheduled_trips_desc
+      - name: n_routes
+        description: *n_scheduled_routes_desc
+      - name: appeared_in_tu
+        description: *appeared_in_tu_desc
+      - name: appeared_in_vp
+        description: *appeared_in_vp_desc
+      - name: tu_num_distinct_updates
+        description: *rt_trip_num_distinct_updates_desc
+      - name: n_tu_trips
+        description: '{{ doc("column_n_tu_trips") }}'
+      - name: n_tu_routes
+        description: Count of distinct route_ids from the trip updates dataset.
+      - <<: *extract_duration_minutes
+        name: tu_extract_duration_minutes
+      - name: tu_messages_per_minute
+        description: '{{ doc("column_rt_messages_per_minute") }}'
+      - name: vp_num_distinct_updates
+        description: *rt_trip_num_distinct_updates_desc
+      - name: n_vp_trips
+        description: '{{ doc("column_n_vp_trips") }}'
+      - name: n_vp_routes
+        description: Count of distinct route_ids from the vehicle positions dataset.
+      - <<: *extract_duration_minutes
+        name: vp_extract_duration_minutes
+      - name: vp_messages_per_minute
+        description: '{{ doc("column_rt_messages_per_minute") }}'
+
+  - name: fct_daily_schedule_rt_operator_summary
+    description: |
+      Daily schedule + RT (quartet of schedule, vp, tu, sa) service totals by feed.
+      Service summary is based on `fct_daily_scheduled_service_summary` (schedule) and
+      `fct_daily_rt_service_summary` (RT).
+      Metrics for service alerts not yet available.
+    columns:
+      - *service_date_for_summaries
+      - *feed_key
+      - *ttl_service_hours
+      - *ttl_flex_service_hours
+      - name: n_trips
+        description: *n_scheduled_trips_desc
+      - name: first_departure_sec
+        description: Time of first departure on date; null when no trips scheduled
+      - name: last_arrival_sec
+        description: Time of last departure on date; null when no trips scheduled
+      - name: num_stop_times
+        description: '{{ doc("column_num_stop_times") }}'
+      - name: n_routes
+        description: *n_scheduled_routes_desc
+      - name: n_shapes
+        description: *n_scheduled_shapes_desc
+      - name: n_stops
+        description: *n_scheduled_stops_desc
+      - name: contains_warning_duplicate_stop_times_primary_key
+        description: '{{ doc("column_contains_warning_duplicate_stop_times_primary_key") }}'
+      - *contains_warning_duplicate_trip_primary_key
+      - *contains_warning_missing_foreign_key_stop_id
+        # foreign keys
+      - <<: *base64_url
+        name: schedule_base64_url
+      - name: schedule_name
+        description: Name from the schedule GTFS dataset record associated.
+      - name: schedule_gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
+      - name: tu_gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
+      - name: tu_name
+        description: Name from the trip updates GTFS dataset record associated.
+      - <<: *base64_url
+        name: tu_base64_url
+      - name: vp_gtfs_dataset_key
+        description: *gtfs_dataset_key_desc
+      - name: vp_name
+        description: Name from the vehicle positions GTFS dataset record associated.
+      - <<: *base64_url
+        name: vp_base64_url
+      - name: tu_num_distinct_updates
+        description: *rt_trip_num_distinct_updates_desc
+      - name: n_tu_trips
+        description: '{{ doc("column_n_tu_trips") }}'
+      - name: pct_tu_trips
+        description: '{{ doc("column_n_tu_trips") }}'
+      - name: n_tu_routes
+        description: Count of distinct route_ids from the trip updates dataset.
+      - name: pct_tu_routes
+        description: |
+          The percent of scheduled routes that have at least 1 trip with trip updates data.
+          n_tu_routes / n_schedule_routes
+      - <<: *extract_duration_minutes
+        name: tu_extract_duration_minutes
+      - name: tu_messages_per_minute
+        description: '{{ doc("column_rt_messages_per_minute") }}'
+      - name: pct_tu_complete_minutes
+        description: '{{ doc("column_gtfs_rt__tu_complete_minutes") }}'
+      - name: pct_tu_accurate_minutes
+        description: '{{ doc("column_gtfs_rt__tu_accurate_minutes") }}'
+      - name: avg_prediction_spread_minutes
+        description: '{{ doc("column_gtfs_rt__tu_prediction_spread") }}'
+      - *rt_tu_n_predictions
+      - name: pct_predictions_early
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
+      - name: pct_predictions_ontime
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
+      - name: pct_predictions_late
+        description: '{{ doc("column_gtfs_rt__tu_predictions_by_category") }}'
+      - name: prediction_error_sec_array
+        description: '{{ doc("column_gtfs_rt__tu_prediction_error") }}'
+      - name: prediction_error_sec_percentile_array
+        description: |
+          Values are [5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 95],
+          referring to the 5th, 10th, ..., 95th percentile
+
+          Must be unpacked in the same order as prediction_error_sec_array.
+          Example:
+          percentile_array: [5th, 10th, ...., 95th percentile]
+          prediction_error_sec_array: [-100, -70, ..., 400]
+          The 5th percentile corresponds to -100 seconds; the 95th percentile corresponds to 400 seconds.
+          This is a metric in the Greg Newmark paper. It requires using the
+          `prediction_error_by_minute_array` column that has the prediction error for
+          every service_date-trip-stop_id-stop_sequence-minute_until_arrival combination.
+      - name: scaled_prediction_error_sec_array
+        description: '{{ doc("column_gtfs_rt__tu_scaled_prediction_error") }}'
+      - name: scaled_prediction_error_sec_percentile_array
+        description: |
+          Values are [5, 10, 20, 25, 30, 40, 50, 60, 70, 75, 80, 90, 95],
+          referring to the 5th, 10th, ..., 95th percentile
+
+          Must be unpacked in the same order as scaled_prediction_error_sec_array.
+          Example:
+          percentile_array: [5th, 10th, ...., 95th percentile]
+          scaled_prediction_error_sec_array: [-100, -70, ..., 400]
+          The 5th percentile corresponds to -100 seconds; the 95th percentile corresponds to 400 seconds.
+          This is a metric in the Greg Newmark paper. It requires using the
+          `prediction_error_by_minute_array` column that has the prediction error for
+          every service_date-trip-stop_id-stop_sequence-minute_until_arrival combination.
+      - name: vp_num_distinct_updates
+        description: *rt_trip_num_distinct_updates_desc
+      - name: n_vp_trips
+        description: '{{ doc("column_n_vp_trips") }}'
+      - name: pct_vp_trips
+        description: '{{ doc("column_n_vp_trips") }}'
+      - name: n_vp_routes
+        description: Count of distinct route_ids from the vehicle positions dataset.
+      - name: pct_vp_routes
+        description: |
+          The percent of scheduled routes that have at least 1 trip with vehicle positions data.
+          n_vp_routes / n_schedule_routes
+      - <<: *extract_duration_minutes
+        name: vp_extract_duration_minutes
+      - name: vp_messages_per_minute
+        description: '{{ doc("column_rt_messages_per_minute") }}'
+      - name: in_obs_only
+        description: |
+          Boolean flagging whether this row only shows up in `fct_observed_trips`.
+          Use this to catch errors, as all RT datasets must have a corresponding schedule dataset.
+          Since schedule data and RT data come from two different data sources in our data pipeline,
+          this column helps detect errors that can come from:
+          (1) incorrect values in join keys - resolve in Airtable
+          (2) schedule feeds not being downloaded (RT has nothing to join on) - activate manual backfill
+          (3) quartet incorrectly put together (schedule + vp + tu + sa) - fix model
+      - name: gtfs_availability
+        description: |
+          This column describes the overall availability across schedule, trip updates, and vehicle positions data.
+          Each data source is ingested separately in our data pipeline, so this column helps us
+          monitor whether something was captured for each feed.
+
+          Valid values are: "schedule_only", "schedule_and_rt", "schedule_and_tu_only",
+          "schedule_and_vp_only", "no_active_service", "v1_warehouse", or "unknown".
+
+          schedule_only: has schedule trips, but zero vp and tu trips
+          schedule_and_rt: has schedule, vp, and tu trips
+          schedule_and_tu_only: has schedule and tu trips, but zero vp trips
+          schedule_and_vp_only: has schedule and vp trips, but zero tu trips
+          no_active_service: no schedule trips (do not consider vp or tu)
+          v1_warehouse: rows prior to 2022-10-01 have schedule feed_key, but are missing gtfs_dataset_name
+          unknown: none of the above conditions were met - need to investigate where error is

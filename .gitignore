@@ -147,3 +147,4 @@ dmypy.json
 
 # Local Netlify folder
 .netlify
+.aider*

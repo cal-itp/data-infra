@@ -24,7 +24,7 @@ schema_fields:
   - name: max_primary_uza_area_sq_miles
     type: STRING
   - name: max_primary_uza_code
-    type: NUMERIC
+    type: STRING
   - name: max_primary_uza_name
     type: STRING
   - name: max_primary_uza_population

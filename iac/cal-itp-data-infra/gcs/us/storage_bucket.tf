@@ -1111,36 +1111,6 @@ resource "google_storage_bucket" "tfer--us-west2-calitp-airflow2-pr-f6bb9855-buc
   }
 }
 
-resource "google_storage_bucket" "calitp-gtfs" {
-  location                    = "US-WEST2"
-  name                        = "calitp-gtfs"
-  project                     = "cal-itp-data-infra"
-  uniform_bucket_level_access = "true"
-  storage_class               = "STANDARD"
-  force_destroy               = "true"
-
-  website {
-    main_page_suffix = "index.html"
-    not_found_page   = "404.html"
-  }
-}
-
-resource "google_storage_bucket" "calitp-dbt-docs" {
-  default_event_based_hold    = "false"
-  force_destroy               = "true"
-  location                    = "US-WEST2"
-  name                        = "calitp-dbt-docs"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  website {
-    main_page_suffix = "index.html"
-  }
-}
-
 resource "google_storage_bucket" "calitp-composer" {
   default_event_based_hold    = "false"
   force_destroy               = "true"
@@ -1157,35 +1127,20 @@ resource "google_storage_bucket" "calitp-composer" {
   }
 }
 
-resource "google_storage_bucket" "calitp-reports" {
+# bucket for airflow managed by composer3
+resource "google_storage_bucket" "calitp-composer3" {
   default_event_based_hold    = "false"
   force_destroy               = "true"
   location                    = "US-WEST2"
-  name                        = "calitp-reports"
+  name                        = "calitp-composer3"
   project                     = "cal-itp-data-infra"
   public_access_prevention    = "inherited"
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
 
-  website {
-    main_page_suffix = "index.html"
-  }
-}
-
-resource "google_storage_bucket" "calitp-analysis" {
-  default_event_based_hold    = "false"
-  force_destroy               = "true"
-  location                    = "US-WEST2"
-  name                        = "calitp-analysis"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  website {
-    main_page_suffix = "index.html"
+  lifecycle {
+    ignore_changes = [labels]
   }
 }
 
@@ -1259,6 +1214,49 @@ resource "google_storage_bucket" "calitp" {
   project                     = "cal-itp-data-infra"
   public_access_prevention    = "inherited"
   requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-requester-pays" {
+  for_each                    = local.requester_pays_buckets
+  name                        = each.key
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  location                    = "US-WEST2"
+  project                     = "cal-itp-data-infra"
+  public_access_prevention    = "inherited"
+  requester_pays              = "true"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+}
+
+resource "google_storage_bucket" "calitp-site" {
+  for_each                    = local.site_buckets
+  name                        = each.key
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  location                    = "US-WEST2"
+  project                     = "cal-itp-data-infra"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+
+  website {
+    main_page_suffix = "index.html"
+  }
+}
+
+resource "google_storage_bucket" "calitp-tides" {
+  name     = "calitp-tides"
+  project  = "cal-itp-data-infra"
+  location = "US-WEST2"
+
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  public_access_prevention    = "inherited"
+  requester_pays              = "true"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
 }

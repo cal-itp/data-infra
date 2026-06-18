@@ -3,11 +3,11 @@ description: "Creates all external tables in BigQuery"
 schedule_interval: "0 11 * * *" # 11am UTC (4am PDT/3am PST) every day
 tags:
   - external_tables
+catchup: False
 default_args:
     owner: airflow
     depends_on_past: False
     start_date: "2025-07-06"
-    catchup: False
     email_on_failure: True
     email_on_retry: False
     retries: 0

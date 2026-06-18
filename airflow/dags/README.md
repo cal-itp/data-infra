@@ -17,8 +17,9 @@
 |             | Every<br>Hour:15 min                       || [parse_and_validate_rt](#parse_and_validate_rt)                                                                                  | Every Day  |
 |  2:00 PM    | 6:00 AM              | 7:00 AM              | [dbt_all](#dbt_all)                                                                                                              | Monday and Thursday |
 |  2:00 PM    | 6:00 AM              | 7:00 AM              | [dbt_daily](#dbt_daily)                                                                                                          | Sunday, Tuesday, Wednesday, Friday, and Saturday |
-|  2:00 PM    | 6:00 AM              | 6:00 AM              | [airtable_issue_management](#airtable_issue_management)                                                                          | Fridays    |
-|  -          | -                    | -                    | [dbt_manual](#dbt_manual)<br>[download_gtfs_schedule_v2](./download_gtfs_schedule_v2)<br>[unzip_and_validate_gtfs_schedule_hourly](./unzip_and_validate_gtfs_schedule_hourly)| Runs Only Manually |
+|  2:00 PM    | 6:00 AM              | 7:00 AM              | [airtable_issue_management](#airtable_issue_management)                                                                          | Fridays    |
+|  5:00 PM    | 9:00 AM              |10:00 AM              | [generate_tides](#generate_tides)                                                                                                      | Monday and Thursday |
+|  -          | -                    | -                    | [dbt_manual_run_with_args](#dbt_manual_run_with_args)<br>[download_gtfs_schedule_v2](./download_gtfs_schedule_v2)<br>[unzip_and_validate_gtfs_schedule_hourly](./unzip_and_validate_gtfs_schedule_hourly)| Runs Only Manually |
 
 ## dbt_all
 
@@ -30,9 +31,13 @@
    Runs specific dbt models on the days that are not covered by `dbt_all` (**Sundays**, **Tuesdays**, **Wednesdays**, **Fridays**, and **Saturdays**).
 
 
-## dbt_manual
+## dbt_manual_run_with_args
 
    Runs specific dbt models as needed. It needs to be triggered manually.
+
+   This DAG lets you pass relevant configuration while storing run information in Airflow and guaranteeing that you will run against the correct production target.
+
+   To run, open the DAG and click the "play" button icon in the upper right and select `Trigger DAG w/ config`. This will open a configuration screen where you can enter your information. You can enter dbt model selection logic, variables, etc. Use the `select` box for the [dbt node selection syntax](https://docs.getdbt.com/reference/node-selection/syntax?version=1.12), exclude for exclusions, `event-time-start` / `event-time-end` for those arguments, and the `vars` entry box for any dbt variables you want to pass.
 
 
 ## download_and_parse_littlepay
@@ -196,6 +201,13 @@
       To visualize the raw data from these files, you can query **external_gtfs_schedule.{filename}\_txt_parse_outcomes** or **staging.stg_gtfs_schedule__file_parse_outcomes** in BigQuery.
 
 
+## generate_tides
+
+   This DAG exports daily Transit Integrated Data Exchange Specification (TIDES) data as parquet files.
+
+   The `mart_tides.fct_tides_vehicle_locations` view converts GTFS-Realtime data to TIDES limited by base64 urls from `staging.tides_publication_keys` and date (using the current UTC date).
+
+
 ## parse_and_validate_rt
 
    This DAG orchestrates the parsing and validation of GTFS RT data downloaded by the [archiver](../../services/gtfs-rt-archiver-v3/README.md).
@@ -205,14 +217,15 @@
 
    This DAG orchestrates the publishing of data from the Cal-ITP data warehouse to the California Open Data Portal. Failures in this job may require coordination with the central data portal team if there is an issue with CKAN itself.
 
+
 ## airtable_issue_management
 
-This DAG automates the lifecycle management of Transit Data Quality (TDQ) issues related to GTFS feed expiration. It handles both:
+   This DAG automates the lifecycle management of Transit Data Quality (TDQ) issues related to GTFS feed expiration. It handles both:
 
-- closing issues that are no longer relevant
-- creating new issues for feeds that require attention
+   - closing issues that are no longer relevant
+   - creating new issues for feeds that require attention
 
-This helps keep Airtable synchronized with the current state of GTFS data quality.
+   This helps keep Airtable synchronized with the current state of GTFS data quality.
 
 
 ### Workflows Overview
