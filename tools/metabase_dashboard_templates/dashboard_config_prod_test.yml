@@ -1,0 +1,61 @@
+template_dashboards:
+  littlepay_contactless_metrics_dashboard_no_benefits:
+    template_dashboard_prod_id: 377
+    template_dashboard_new_name_no_prefix: "Contactless Payments Metrics Dashboard"
+  littlepay_contactless_metrics_dashboard_with_benefits:
+    template_dashboard_prod_id: 279
+    template_dashboard_new_name_no_prefix: "Contactless Payments Metrics Dashboard"
+  littlepay_elavon_reconciliation_dashboard:
+    template_dashboard_prod_id: 287
+    template_dashboard_new_name_no_prefix: "Reconciliation Dashboard (Littlepay to Elavon)"
+  elavon_merchant_service_charge_dashboard:
+    template_dashboard_prod_id: 280
+    template_dashboard_new_name_no_prefix: "Merchant Service Charge Tracking"
+  littlepay_benefits_dashboard:
+    template_dashboard_prod_id: 282
+    template_dashboard_new_name_no_prefix: "Benefits Dashboard"
+  enghouse_contactless_payments_metrics_dashboard:
+    template_dashboard_prod_id: 362
+    template_dashboard_new_name_no_prefix: "Contactless Payments Metrics Dashboard"
+agencies:
+  test_mst:
+    #acronym: "MST" ignore for now
+    name_prefix: "MST - "
+    collection_id: 489
+    database_id: 16
+    dashboards_required:
+      - littlepay_contactless_metrics_dashboard_no_benefits
+      - elavon_merchant_service_charge_dashboard
+      - littlepay_elavon_reconciliation_dashboard
+      - littlepay_benefits_dashboard
+  test_ccjpa:
+    #acronym: "CCJPA" ignore for now
+    name_prefix: "CCJPA - "
+    collection_id: 490
+    database_id: 19
+    dashboards_required:
+      - littlepay_contactless_metrics_dashboard_no_benefits
+      - elavon_merchant_service_charge_dashboard
+      - littlepay_elavon_reconciliation_dashboard
+  test_slorta:
+    #acronym: "CCJPA" ignore for now
+    name_prefix: "SLORTA - "
+    collection_id: 491
+    database_id: 35
+    dashboards_required:
+      - littlepay_contactless_metrics_dashboard_no_benefits
+      - elavon_merchant_service_charge_dashboard
+      - littlepay_elavon_reconciliation_dashboard
+  test_raba:
+    #acronym: "CCJPA" ignore for now
+    name_prefix: "RABA - "
+    collection_id: 492
+    database_id: 36
+    dashboards_required:
+      - enghouse_contactless_payments_metrics_dashboard
+      - elavon_merchant_service_charge_dashboard
+environments:
+  reader: "prod_payments_template_reader"
+  writer: "prod_payments_dashboard_writer"
+local_storage:
+  path: "prod_templates/"

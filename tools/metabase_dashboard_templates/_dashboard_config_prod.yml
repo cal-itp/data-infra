@@ -1,15 +1,13 @@
 template_dashboards:
   contactless_payments_metrics_dashboard:
     template_dashboard_prod_id: 279
-    template_dashboard_original_name: "() Contactless Payments Metrics Dashboard"
     template_dashboard_new_name_no_prefix: "Contactless Payments Metrics Dashboard"
   merchant_service_charge_dashboard:
     template_dashboard_prod_id: 280
-    template_dashboard_original_name: "(BLANK) Merchant Service Charge tracking  - Duplicate"
     template_dashboard_new_name_no_prefix: "Merchant Service Charge Tracking"
   reconciliation_dashboard:
-    template_dashboard_prod_id:
-    template_dashboard_new_name_no_prefix:
+    template_dashboard_prod_id: 287
+    template_dashboard_new_name_no_prefix: "Reconciliation Dashboard (Littlepay to Elavon)"
 agencies:
   mst:
     #acronym: "MST" ignore for now

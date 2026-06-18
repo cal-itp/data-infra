@@ -1,15 +1,31 @@
 template_dashboards:
-  reconciliation_dashboard:
+  littlepay_contactless_payments_metrics_dashboard:
+    template_dashboard_prod_id: 279
+    template_dashboard_new_name_no_prefix: "Contactless Payments Metrics Dashboard"
+  littlepay_elavon_reconciliation_dashboard:
     template_dashboard_prod_id: 287
-    template_dashboard_new_name_no_prefix: Reconciliation Dashboard (Littlepay to Elavon)
+    template_dashboard_new_name_no_prefix: "Reconciliation Dashboard (Littlepay to Elavon)"
+  elavon_merchant_service_charge_dashboard:
+    template_dashboard_prod_id: 280
+    template_dashboard_new_name_no_prefix: "Merchant Service Charge Tracking"
+  # littlepay_benefits_dashboard:
+  #   template_dashboard_prod_id: 282
+  #   template_dashboard_new_name_no_prefix: "Benefits Dashboard"
+  enghouse_contactless_payments_metrics_dashboard:
+    template_dashboard_prod_id: 362
+    template_dashboard_new_name_no_prefix: "Contactless Payments Metrics Dashboard (eh)"
 agencies:
   test_agency:
     #acronym: "MST" ignore for now
     name_prefix: "test1 - "
-    collection_id: 29
+    collection_id: 30
     database_id: 5
     dashboards_required:
-      - reconciliation_dashboard
+      - littlepay_elavon_reconciliation_dashboard
+      - elavon_merchant_service_charge_dashboard
+      - littlepay_elavon_reconciliation_dashboard
+      # - littlepay_benefits_dashboard
+      - enghouse_contactless_payments_metrics_dashboard
 environments:
   reader: "prod_payments_template_reader"
   writer: "staging_payments_writer"
