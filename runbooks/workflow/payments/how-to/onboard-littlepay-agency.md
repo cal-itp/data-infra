@@ -34,7 +34,7 @@ Verify you have:
 
 ### 1.1 Receive Credentials from Littlepay
 
-Littlepay should reach out to the DDS payment admin group ([dds_payments_data_admins@dds.dot.ca.gov]) when an agency's credentials are available. If an agency is about to soft launch and these credentials have not been received, they can be requested from the agency's project manager for onboarding. Typically, financial operations staff are able to provide emails for these contacts, who differ from agency to agency.
+Littlepay should reach out to the DDS payment admin group (\[dds_payments_data_admins@dds.dot.ca.gov\]) when an agency's credentials are available. If an agency is about to soft launch and these credentials have not been received, they can be requested from the agency's project manager for onboarding. Typically, financial operations staff are able to provide emails for these contacts, who differ from agency to agency.
 
 The credentials should inclide:
 
@@ -244,7 +244,7 @@ recysP9m9kjCJwHZe,receZJ9sEnP9vy3g0,mst,MST TAP TO RIDE,2000-01-01,2099-12-31
 - For agencies where this doesn't apply, use arbitrary distant `_in_use_from` and `_in_use_until` dates such as `2000-01-01`and `2099-12-31`
 
 **To find the source_record_ids:**
-Look for organization names and GTFS dataset names in the organizations and datasets tables respetively on [Airtable](https://airtable.com/appPnJWrQ7ui4UmIl?). Then, lookup the `source_record_id`s using on the [Onboarding Dashboard](https://airtable.com/appPnJWrQ7ui4UmIl?) or the below SQL query:
+Look for organization names and GTFS dataset names in the organizations and datasets tables respetively on [Airtable](https://airtable.com/appPnJWrQ7ui4UmIl?). Then, lookup the `source_record_id`s using the [Onboarding Dashboard](https://airtable.com/appPnJWrQ7ui4UmIl?) or the below SQL query:
 
 ```sql
 -- Find GTFS dataset source_record_id
@@ -356,7 +356,7 @@ WHERE participant_id = '<littlepay-participant-id>'
 
 ### 6.5 Verify dbt Transformations
 
-After the next scheduled run of the `dbt_all` or `dbt_daily` DAG, or reference the [Onboarding Dashboard](https://metabase.dds.dot.ca.gov/dashboard/369-agency-onboarding-dashboard):
+After the next scheduled run of the `dbt_all` or `dbt_daily` DAG, run the following SQL queries or reference the [Onboarding Dashboard](https://metabase.dds.dot.ca.gov/dashboard/369-agency-onboarding-dashboard):
 
 ```sql
 -- Check staging table
