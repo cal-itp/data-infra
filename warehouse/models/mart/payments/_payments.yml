@@ -824,6 +824,10 @@ models:
         description: Only relevant for time-based tickets.
       - name: ticket_code
         description: Additional information for the ticket or ticket type.
+      - name: dt
+        description: '{{ doc("enghouse_dt") }}'
+      - name: _line_number
+        description: '{{ doc("enghouse_line_number") }}'
       - name: mapping_terminal_id
         description: Not relevant for US projects.
       - name: mapping_merchant_id
@@ -971,5 +975,9 @@ models:
         description: '{{ doc("enghouse_settlement_type") }}'
       - name: end_of_month_date_pacific
       - name: end_of_month_date_utc
+      - name: dt
+        description: '{{ doc("enghouse_dt") }}'
+      - name: _line_number
+        description: '{{ doc("enghouse_line_number") }}'
       - name: _content_hash
         description: '{{ doc("enghouse_content_hash") }}'

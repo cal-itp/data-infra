@@ -107,6 +107,8 @@ models:
         description: Agency identifier parsed from the GCS path partition (e.g., "ventura", "raba", "camarillo").
       - name: dt
         description: Date partition parsed from the GCS path, corresponding to the date in the source filename.
+      - name: _line_number
+        description: Line number of this record within its source delivery file. Retained for lineage and data quality inspection.
       - name: _payments_key
         description: Surrogate key derived from tap_id and operator_id. Uniquely identifies one tap.
       - name: _content_hash
@@ -156,6 +158,8 @@ models:
         description: Agency identifier parsed from the GCS path partition (e.g., "ventura", "raba", "camarillo").
       - name: dt
         description: Date partition parsed from the GCS path, corresponding to the date in the source filename.
+      - name: _line_number
+        description: Line number of this record within its source delivery file. Retained for lineage and data quality inspection.
       - name: _payments_key
         description: Surrogate key derived from id and operator_id. Uniquely identifies one ticket result.
       - name: _content_hash
@@ -218,6 +222,8 @@ models:
         description: '{{ doc("enghouse_agency") }}'
       - name: dt
         description: '{{ doc("enghouse_dt") }}'
+      - name: _line_number
+        description: '{{ doc("enghouse_line_number") }}'
       - name: _payments_key
         description: '{{ doc("enghouse_payments_key") }}'
       - name: _content_hash
@@ -297,6 +303,8 @@ models:
         description: '{{ doc("enghouse_agency") }}'
       - name: dt
         description: '{{ doc("enghouse_dt") }}'
+      - name: _line_number
+        description: '{{ doc("enghouse_line_number") }}'
       - name: _payments_key
         description: '{{ doc("enghouse_payments_key") }}'
       - name: _content_hash
@@ -346,6 +354,8 @@ models:
         description: Agency identifier parsed from the GCS path partition (e.g., "ventura", "raba", "camarillo").
       - name: dt
         description: Date partition parsed from the GCS path, corresponding to the date in the source filename.
+      - name: _line_number
+        description: Line number of this record within its source delivery file. Retained for lineage and data quality inspection.
       - name: _payments_key
         description: Surrogate key derived from id and operator_id. Uniquely identifies one pay window.
       - name: _content_hash

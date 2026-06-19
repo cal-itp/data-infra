@@ -22,6 +22,7 @@ clean_columns AS (
         {{ trim_make_empty_string_null('ticket_code') }} AS ticket_code,
         agency,
         dt,
+        SAFE_CAST(_line_number AS INT64) AS _line_number,
         {{ dbt_utils.generate_surrogate_key(['id', 'operator_id']) }} AS _payments_key,
         {{ dbt_utils.generate_surrogate_key(['operator_id', 'id', 'ticket_id', 'station_name', 'amount', 'clearing_id',
             'reason', 'tap_id', 'ticket_type', 'created_dttm', 'line', 'start_station', 'end_station', 'start_dttm',
@@ -62,6 +63,7 @@ stg_enghouse__ticket_results AS (
         ticket_code,
         agency,
         dt,
+        _line_number,
         _payments_key,
         _content_hash
     FROM deduplicated
