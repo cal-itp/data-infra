@@ -25,7 +25,6 @@ sys.path.append(os.path.normpath(os.path.join(os.path.dirname(__file__), "..")))
 
 import gcsfs  # noqa: E402 type: ignore
 import pendulum  # noqa: E402
-import sentry_sdk  # noqa: E402
 import typer  # noqa: E402
 from calitp_data_infra.storage import (  # noqa: E402 type: ignore
     JSONL_GZIP_EXTENSION,
@@ -60,10 +59,6 @@ RT_VALIDATION_BUCKET = os.environ["CALITP_BUCKET__GTFS_RT_VALIDATION"]
 GTFS_RT_VALIDATOR_VERSION = os.environ["GTFS_RT_VALIDATOR_VERSION"]
 
 app = typer.Typer()
-
-# mypy: disable-error-code="attr-defined"
-sentry_sdk.utils.MAX_STRING_LENGTH = 2048  # default is 512 which will cut off validator stderr stacktrace; see https://stackoverflow.com/a/58124859
-sentry_sdk.init()
 
 
 class MissingMetadata(Exception):
@@ -578,7 +573,7 @@ class ValidationProcessor:
     def validator(self):
         return RtValidator()
 
-    def process(self, tmp_dir: str, scope) -> List[RTFileProcessingOutcome]:
+    def process(self, tmp_dir: str) -> List[RTFileProcessingOutcome]:
         outcomes: List[RTFileProcessingOutcome] = []
         fs = get_fs()
 
@@ -603,13 +598,6 @@ class ValidationProcessor:
             )
             typer.secho(e)
 
-            scope.fingerprint = [
-                type(e),
-                # convert back to url manually, I don't want to mess around with the hourly class
-                base64.urlsafe_b64decode(self.aggregation.base64_url.encode()).decode(),
-            ]
-            sentry_sdk.capture_exception(e, scope=scope)
-
             outcomes = [
                 RTFileProcessingOutcome(
                     step=self.aggregation.step,
@@ -627,26 +615,6 @@ class ValidationProcessor:
             # these are the only two types of errors we expect; let any others bubble up
             except subprocess.CalledProcessError as e:
                 stderr = e.stderr.decode("utf-8")
-
-                fingerprint: List[Any] = [
-                    type(e),
-                    # convert back to url manually, I don't want to mess around with the hourly class
-                    base64.urlsafe_b64decode(
-                        self.aggregation.base64_url.encode()
-                    ).decode(),
-                ]
-                fingerprint.append(e.returncode)
-
-                # we could also use a custom exception for this
-                if "Unexpected end of ZLIB input stream" in stderr:
-                    fingerprint.append("Unexpected end of ZLIB input stream")
-
-                scope.fingerprint = fingerprint
-
-                # get the end of stderr, just enough to fit in MAX_STRING_LENGTH defined above
-                scope.set_context("Process", {"stderr": stderr[-2000:]})
-
-                sentry_sdk.capture_exception(e, scope=scope)
 
                 outcomes = [
                     RTFileProcessingOutcome(
@@ -741,7 +709,7 @@ class ParseProcessor:
         self.aggregation = aggregation
         self.verbose = verbose
 
-    def process(self, tmp_dir: str, scope) -> List[RTFileProcessingOutcome]:
+    def process(self, tmp_dir: str) -> List[RTFileProcessingOutcome]:
         outcomes: List[RTFileProcessingOutcome] = []
         fs = get_fs()
         dst_path_rt = f"{tmp_dir}/rt_{self.aggregation.name_hash}/"
@@ -873,25 +841,17 @@ def parse_and_validate(
     verbose: bool = False,
 ) -> List[RTFileProcessingOutcome]:
     with tempfile.TemporaryDirectory() as tmp_dir:
-        with sentry_sdk.push_scope() as scope:
-            scope.set_tag(
-                "config_feed_type", aggregation.first_extract.config.feed_type
-            )
-            scope.set_tag("config_name", aggregation.first_extract.config.name)
-            scope.set_tag("config_url", aggregation.first_extract.config.url)
-            scope.set_context("RT Hourly Aggregation", json.loads(aggregation.json()))
+        if (
+            aggregation.step != RTProcessingStep.validate
+            and aggregation.step != RTProcessingStep.parse
+        ):
+            raise RuntimeError("we should not be here")
 
-            if (
-                aggregation.step != RTProcessingStep.validate
-                and aggregation.step != RTProcessingStep.parse
-            ):
-                raise RuntimeError("we should not be here")
+        if aggregation.step == RTProcessingStep.validate:
+            return ValidationProcessor(aggregation, verbose).process(tmp_dir)
 
-            if aggregation.step == RTProcessingStep.validate:
-                return ValidationProcessor(aggregation, verbose).process(tmp_dir, scope)
-
-            if aggregation.step == RTProcessingStep.parse:
-                return ParseProcessor(aggregation, verbose).process(tmp_dir, scope)
+        if aggregation.step == RTProcessingStep.parse:
+            return ParseProcessor(aggregation, verbose).process(tmp_dir)
 
 
 def make_dict_bq_safe(d: Dict[str, Any]) -> Dict[str, Any]:
@@ -978,7 +938,6 @@ def main(
                 err=True,
                 fg=typer.colors.RED,
             )
-            sentry_sdk.capture_exception(e)
             exceptions.append((e, aggregation.path, traceback.format_exc()))
 
     if aggregations_to_process:
@@ -1013,7 +972,6 @@ def main(
         raise RuntimeError(msg)
 
     typer.secho("fin.", fg=typer.colors.MAGENTA)
-    sentry_sdk.flush()
 
 
 if __name__ == "__main__":

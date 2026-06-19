@@ -55,8 +55,6 @@ After a loading period, the Airflow UI will become available at [`http://localho
 
 ### Windows (git-bash)
 
-*NOTE: This is broken as of now as `Visual Studio C++` is requried to compile python package `openlineage-sql`*
-
 #### Prerequisites
 
 - [Git for Windows](https://git-scm.com/install/windows) -- installing with `winget` is recommended.
@@ -113,20 +111,6 @@ Then source it:
 ```bash
 $ source ~/.bashrc
 ```
-
-#### Known Windows Issues
-
-**1. Unicode encoding errors in the terminal**
-
-The `rich` library may produce `UnicodeEncodeError` on Windows terminals. Set:
-
-```bash
-$ export PYTHONIOENCODING=utf-8
-```
-
-**2. `rsync` path syntax**
-
-When running `make sync` or `make start`, rsync may have issues with Windows path separators. The install from MSYS2 above resolves this. If you see rsync path errors, ensure the `msys-xxhash-0.dll` is in a PATH directory.
 
 ### PodOperators
 
