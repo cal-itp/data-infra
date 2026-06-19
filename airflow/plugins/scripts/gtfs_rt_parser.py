@@ -541,9 +541,9 @@ class FeedStorage:
         self, hour: datetime.datetime, base64_url: Optional[str] = None
     ) -> HourlyFeedFiles:
         pendulum_hour = pendulum.instance(hour, tz="Etc/UTC")
-        match_glob = "**/feed"
+        match_glob = "**/*"
         if base64_url is not None:
-            match_glob = f"**/base64_url={base64_url}/feed"
+            match_glob = f"**/base64_url={base64_url}/*"
         (
             files,
             files_missing_metadata,
