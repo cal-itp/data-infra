@@ -50,6 +50,8 @@ int_gtfs_datasets AS (
         type,
         private_dataset,
         analysis_name,
+        has_authentication,
+        authentication_contact_details,
         _is_current,
         _valid_from,
         _valid_to
