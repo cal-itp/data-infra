@@ -96,7 +96,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "Per-IP login rate limit (10/min then 10-min ban)"
     match {
       expr {
-        expression = "request.path.startsWith('/api/session')"
+        expression = "request.path.startsWith('/api/session') && request.method == 'POST' && !inIpRange(origin.ip, '149.136.0.0/16')"
       }
     }
     rate_limit_options {
@@ -120,9 +120,8 @@ resource "google_compute_security_policy" "metabase-staging" {
     action      = "throttle"
     description = "Per-IP global throttle (600/min)"
     match {
-      versioned_expr = "SRC_IPS_V1"
-      config {
-        src_ip_ranges = ["*"]
+      expr {
+        expression = "!inIpRange(origin.ip, '149.136.0.0/16')"
       }
     }
     rate_limit_options {
