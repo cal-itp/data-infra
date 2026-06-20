@@ -8,7 +8,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "OWASP SQLi"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('sqli-v33-stable')"
+        expression = "evaluatePreconfiguredWaf('sqli-v33-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v030301-id942420-sqli']})"
       }
     }
   }
