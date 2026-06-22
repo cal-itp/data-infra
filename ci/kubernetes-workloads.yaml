@@ -22,7 +22,3 @@ calitp:
         - jupyterhub_jupyterhub-gcloud-service-key
         - jupyterhub_jupyterhub-github-config
       timeout: 10m0s
-    - name: sftp-ingest-elavon
-      driver: kustomize
-      kustomize_dir: kubernetes/apps/overlays/prod-sftp-ingest-elavon
-      # TODO: sftp secrets

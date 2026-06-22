@@ -82,18 +82,6 @@ resource "google_storage_bucket_iam_binding" "tfer--calitp-dbt-python-models" {
   role    = "roles/storage.legacyBucketReader"
 }
 
-resource "google_storage_bucket_iam_binding" "tfer--calitp-elavon-parsed" {
-  bucket  = "b/calitp-elavon-parsed"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectOwner"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--calitp-elavon-raw" {
-  bucket  = "b/calitp-elavon-raw"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectReader"
-}
-
 resource "google_storage_bucket_iam_binding" "tfer--calitp-gtfs-download-config" {
   bucket  = "b/calitp-gtfs-download-config"
   members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
