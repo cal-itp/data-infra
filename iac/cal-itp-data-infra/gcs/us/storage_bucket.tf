@@ -246,30 +246,6 @@ resource "google_storage_bucket" "tfer--calitp-dbt-python-models" {
   uniform_bucket_level_access = "true"
 }
 
-resource "google_storage_bucket" "tfer--calitp-elavon-parsed" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "calitp-elavon-parsed"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-}
-
-resource "google_storage_bucket" "tfer--calitp-elavon-raw" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "calitp-elavon-raw"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-}
-
 resource "google_storage_bucket" "tfer--calitp-gtfs-download-config" {
   default_event_based_hold = "false"
   force_destroy            = "false"
