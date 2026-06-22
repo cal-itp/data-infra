@@ -8,17 +8,14 @@ This is **one of two independent backup mechanisms** for Metabase:
 
 | Doc                                            | Mechanism                              | What it produces                                                        |
 | ---------------------------------------------- | -------------------------------------- | ----------------------------------------------------------------------- |
-| [`BACKUP_CLOUD_SQL.md`](./BACKUP_CLOUD_SQL.md) | Cloud SQL **automated backups**        | Managed, in-place instance snapshots you restore *within* Cloud SQL     |
-| **`BACKUP_GCS_BUCKET.md`** (this doc)          | Cloud SQL **`instances.export`** → GCS | A portable `.sql.gz` dump you can download, inspect, or import anywhere |
+| [`backup-cloud-sql.md`](./backup-cloud-sql.md) | Cloud SQL **automated backups**        | Managed, in-place instance snapshots you restore *within* Cloud SQL     |
+| **`backup-gcs-export.md`** (this doc)          | Cloud SQL **`instances.export`** → GCS | A portable `.sql.gz` dump you can download, inspect, or import anywhere |
 
 They are complementary. Automated backups are the fast, low-effort recovery
 path; the GCS dumps are portable, long-lived, and survive even the loss of the
-Cloud SQL instance itself.
-
-> **Rollout status:** staging is implemented; production is a planned follow-up
-> that reuses the existing prod bucket (per the recommendation on
-> [issue #5098](https://github.com/cal-itp/data-infra/issues/5098)). See
-> [Per-environment configuration](#per-environment-configuration).
+Cloud SQL instance itself. Both staging and production are implemented (staging
+was rolled out first, per the recommendation on
+[issue #5098](https://github.com/cal-itp/data-infra/issues/5098)).
 
 ## What is backed up
 
@@ -60,11 +57,11 @@ finished dump.
 
 Three identities participate, per environment. Only the first is one we create.
 
-| Identity                                                | Role in the flow                                                                | Permission                                         | Where granted              |
-| ------------------------------------------------------- | ------------------------------------------------------------------------------- | -------------------------------------------------- | -------------------------- |
-| `metabase-backup` (created)                             | Scheduler authenticates as it; workflow **runs as** it and calls the export API | `roles/workflows.invoker`, `roles/cloudsql.editor` | `…/metabase/us/backups.tf` |
-| Cloud SQL **instance** service account (Google-managed) | Performs the dump and **writes** the object to the bucket                       | `roles/storage.objectAdmin` on the bucket          | `…/metabase/us/backups.tf` |
-| Cloud Scheduler **service agent** (Google-managed)      | Mints the OAuth token for `metabase-backup` at fire time                        | auto (`cloudscheduler.serviceAgent`)               | —                          |
+| Identity                                                | Role in the flow                                                                | Permission                                         |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------- | -------------------------------------------------- |
+| `metabase-backup` (created)                             | Scheduler authenticates as it; workflow **runs as** it and calls the export API | `roles/workflows.invoker`, `roles/cloudsql.editor` |
+| Cloud SQL **instance** service account (Google-managed) | Performs the dump and **writes** the object to the bucket                       | `roles/storage.objectAdmin` on the bucket          |
+| Cloud Scheduler **service agent** (Google-managed)      | Mints the OAuth token for `metabase-backup` at fire time                        | auto (`cloudscheduler.serviceAgent`)               |
 
 `metabase-backup` is **keyless** — no JSON key is generated or stored. Auth is
 entirely via GCP-managed identity binding (the workflow's `service_account` and
@@ -75,7 +72,7 @@ the scheduler's `oauth_token`). Each project (staging and prod) has its own
 
 |                        | Staging                                       | Production                                   |
 | ---------------------- | --------------------------------------------- | -------------------------------------------- |
-| **Status**             | Implemented                                   | Planned follow-up                            |
+| **Status**             | Implemented                                   | Implemented                                  |
 | **Project**            | `cal-itp-data-infra-staging`                  | `cal-itp-data-infra`                         |
 | **Instance**           | `metabase-staging`                            | `metabase`                                   |
 | **Destination bucket** | `calitp-backups-metabase-staging` (new)       | `calitp-backups-metabase` (existing, reused) |
@@ -97,22 +94,31 @@ Notes:
 
 ## Where it is configured (Terraform)
 
-Using staging paths as the example (prod mirrors these under
-`iac/cal-itp-data-infra/`):
+The runner service account, its project roles, the Workflow, and the Scheduler
+job all live in the `metabase` module so they plan and apply as a single unit.
+This is a deliberate deviation from the repo convention of defining service
+accounts in the `iam` module: keeping the SA here avoids a cross-module ordering
+dependency on a brand-new `iam`-module output that does not exist until `iam` is
+applied, which the parallel, unordered Terraform CI cannot guarantee.
 
-| Resource                                                                                           | File                                           |
-| -------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
-| Service account `metabase-backup` + its project roles, bucket, bucket IAM, Workflow, Scheduler job | `…/metabase/us/backups.tf`                     |
-| Workflow definition (export step)                                                                  | `…/metabase/us/workflows/metabase-backup.yaml` |
+| Resource                                              | Staging                                        | Production                                     |
+| ----------------------------------------------------- | ---------------------------------------------- | ---------------------------------------------- |
+| `metabase-backup` SA + roles, Workflow, Scheduler job | `…/metabase/us/backups.tf`                     | `…/metabase/us/backups.tf`                     |
+| Workflow definition (export step)                     | `…/metabase/us/workflows/metabase-backup.yaml` | `…/metabase/us/workflows/metabase-backup.yaml` |
+| Destination bucket                                    | created in `…/metabase/us/backups.tf`          | reused; defined in `…/gcs/us`                  |
+| Cloud SQL SA → bucket `objectAdmin` grant             | `…/metabase/us/backups.tf` (own bucket)        | `…/gcs/us` authoritative bucket IAM policy     |
 
-All of these resources live in the `metabase` module so they plan and apply as a
-single unit. This is a deliberate deviation from the repo convention of defining
-service accounts in the `iam` module: keeping the SA here avoids a cross-module
-ordering dependency — otherwise the `metabase` module would have to read a
-brand-new `iam`-module output from remote state that does not exist until `iam`
-is applied, which the parallel, unordered Terraform CI cannot guarantee. The
-Cloud Run service still consumes `metabase-service-account` from the `iam` module
-via `data.terraform_remote_state.iam`, as before.
+The one structural difference: in staging the bucket is new and lives in the
+`metabase` module, so the write grant is a simple additive `iam_member` there. In
+production the bucket is the shared, pre-existing `calitp-backups-metabase`,
+whose IAM is **authoritative** (`google_storage_bucket_iam_policy` in `gcs/us`).
+Write access to that bucket is not new — the `backup-metabase` service account
+has held `objectAdmin` since the old restic backups wrote as it. What changes is
+the *writer*: Cloud SQL's `instances.export` writes as the **instance's** own
+service identity (not as the invoking SA), so that identity is what needs the
+grant. It is added directly to the authoritative policy (an additive
+`iam_member` would be stripped on the next `gcs/us` apply), alongside the
+existing `backup-metabase` binding rather than replacing it.
 
 ## How to restore
 
@@ -132,17 +138,6 @@ gcloud storage ls gs://calitp-backups-metabase-staging/exports/
 gcloud storage ls gs://calitp-backups-metabase/exports/
 ```
 
-## Changing the policy
-
-Everything is managed through Terraform. Edit `backups.tf` (or the workflow
-YAML), open a PR, and the `Terraform Plan` workflow posts the plan as a PR
-comment. On merge to `main`, `Terraform Apply` applies it.
-
-- **Schedule:** the `schedule` / `time_zone` on `google_cloud_scheduler_job`.
-- **Bucket:** the bucket `name` and `location` are **immutable** — changing
-  either means creating a new bucket. Existing dumps are not migrated.
-- **Destination naming:** the `exports/…` path is built in the workflow YAML.
-
 ## What is NOT enabled
 
 - **No lifecycle / retention policy.** Dumps are kept **forever** for now —
@@ -153,5 +148,7 @@ comment. On merge to `main`, `Terraform Apply` applies it.
   for 04:00 PT (low activity) to minimize the impact of the brief locking the
   dump requires. Serverless offload could be added if export load becomes a
   concern.
-- **Production is not wired up yet** — see
-  [Per-environment configuration](#per-environment-configuration).
+
+Everything is managed through Terraform: edit `backups.tf` (or the workflow
+YAML) and open a PR. The bucket `name` and `location` are immutable, and the
+`exports/…` object path is built in the workflow YAML.

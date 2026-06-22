@@ -2,11 +2,11 @@ description: "Load data from Airtable"
 schedule_interval: "0 2 * * *"
 tags:
   - airtable
+catchup: False
 default_args:
     owner: airflow
     depends_on_past: False
     start_date: "2025-06-01"
-    catchup: False
     email_on_failure: True
     email_on_retry: False
     retries: 1

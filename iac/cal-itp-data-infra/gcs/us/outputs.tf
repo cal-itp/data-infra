@@ -1970,6 +1970,15 @@ output "google_storage_bucket_calitp-composer_id" {
   value = google_storage_bucket.calitp-composer.id
 }
 
+# bucket for airflow managed by composer3
+output "google_storage_bucket_calitp-composer3_name" {
+  value = google_storage_bucket.calitp-composer3.name
+}
+
+output "google_storage_bucket_calitp-composer3_id" {
+  value = google_storage_bucket.calitp-composer3.id
+}
+
 output "google_storage_bucket_calitp-kuba_name" {
   value = google_storage_bucket.calitp["calitp-kuba"].name
 }

@@ -12,7 +12,6 @@ from io import BytesIO
 from typing import ClassVar, Dict, List, Optional, Tuple
 
 import pendulum
-import sentry_sdk
 import typer
 from calitp_data_infra.storage import (
     GTFSFeedType,
@@ -173,10 +172,6 @@ def unzip_individual_feed(
         )
     except Exception as e:
         log(f"Can't process {extract.path}: {type(e)} {e}", pbar=pbar)
-        with sentry_sdk.push_scope() as scope:
-            scope.fingerprint = [extract.config.url, str(e)]
-            scope.set_context("extract", extract.dict())
-            sentry_sdk.capture_exception(e)
         return GTFSScheduleFeedExtractUnzipOutcome(
             success=False,
             extract=extract,
@@ -270,7 +265,6 @@ def airflow_unzip_extracts(
     data_interval_end: pendulum.DateTime,
     **kwargs,
 ):
-    sentry_sdk.init()
     unzip_extracts(
         data_interval_start,
         data_interval_end,
