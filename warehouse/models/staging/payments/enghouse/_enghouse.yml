@@ -170,51 +170,137 @@ models:
       delivery files, the row with a populated timestamp is preferred; otherwise the earliest delivery is kept.
     columns:
       - name: operator_id
-        description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
+        description: '{{ doc("enghouse_operator_id") }}'
       - name: id
-        description: Unique identifier for this transaction in the Enghouse system.
+        description: '{{ doc("enghouse_id") }}'
+        data_tests:
+          - unique
+          - not_null
       - name: operation
-        description: Type of transaction.
+        description: '{{ doc("enghouse_operation") }}'
       - name: terminal_id
-        description: Terminal identifier associated with the tap that triggered this transaction.
+        description: '{{ doc("enghouse_terminal_id") }}'
       - name: mapping_terminal_id
-        description: Not relevant for US projects.
+        description: '{{ doc("enghouse_mapping_terminal_id") }}'
       - name: mapping_merchant_id
-        description: Not relevant for US projects.
+        description: '{{ doc("enghouse_mapping_merchant_id") }}'
       - name: timestamp
-        description: Timestamp when the transaction occurred.
+        description: '{{ doc("enghouse_timestamp") }}'
       - name: amount
-        description: Transaction amount in USD dollars (converted from cents at source).
+        description: '{{ doc("enghouse_amount") }}'
+        data_tests:
+          - not_null
       - name: payment_reference
-        description: Payment reference number (PRN / variable symbol) linking this transaction to its tap.
+        description: '{{ doc("enghouse_payment_reference") }}'
       - name: spdh_response
-        description: SPDH protocol response code. Not relevant for transactions.
+        description: '{{ doc("enghouse_spdh_response") }}'
       - name: response_type
-        description: Type of response received from the acquirer.
+        description: '{{ doc("enghouse_response_type") }}'
       - name: response_message
-        description: Response message received from the acquirer.
+        description: '{{ doc("enghouse_response_message") }}'
       - name: token
-        description: Tokenized card number.
+        description: '{{ doc("enghouse_token") }}'
       - name: issuer_response
-        description: Response code from the card issuer (bank), if provided. Enghouse sends transactions to the acquirer (Cybersource / Elavon) who forwards to the issuer.
+        description: '{{ doc("enghouse_issuer_response") }}'
       - name: core_response
-        description: Enghouse internal response code. Not meaningful for downstream analysis.
+        description: '{{ doc("enghouse_core_response") }}'
       - name: rrn
-        description: Retrieval Reference Number (RRN).
+        description: '{{ doc("enghouse_rrn") }}'
+        data_tests:
+          - unique
       - name: authorization_code
-        description: Authorization code received from the acquirer.
+        description: '{{ doc("enghouse_authorization_code") }}'
       - name: par
-        description: Payment Account Reference (PAR).
+        description: '{{ doc("enghouse_par") }}'
       - name: brand
-        description: Card scheme (e.g., VISA, MC, AMEX, DISCOVER).
+        description: '{{ doc("enghouse_brand") }}'
       - name: agency
-        description: Agency identifier parsed from the GCS path partition (e.g., "ventura", "raba", "camarillo").
+        description: '{{ doc("enghouse_agency") }}'
       - name: dt
-        description: Date partition parsed from the GCS path, corresponding to the date in the source filename.
+        description: '{{ doc("enghouse_dt") }}'
       - name: _payments_key
-        description: Surrogate key derived from id and operator_id. Uniquely identifies one transaction.
+        description: '{{ doc("enghouse_payments_key") }}'
       - name: _content_hash
-        description: Hash of all data columns. Retained for data quality inspection; deduplication uses _payments_key.
+        description: '{{ doc("enghouse_content_hash") }}'
+
+  - name: stg_enghouse__deduped_transactions
+    description: |
+      One row per operator_id + payment_reference + settlement_type, built from
+      stg_enghouse__transactions. For each operator_id + payment_reference, the most recent
+      non-refund (DEBIT) and the most recent refund (CREDIT) are kept as separate rows
+      (payment_reference is not unique between operators; rows with a null payment_reference are all
+      retained).
+      Feeds fct_payments_settlements_enghouse.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - operator_id
+              - payment_reference
+              - settlement_type
+          config:
+            where: "payment_reference is not null"
+    columns:
+      - name: operator_id
+        description: '{{ doc("enghouse_operator_id") }}'
+      - name: id
+        description: '{{ doc("enghouse_id") }}'
+        data_tests:
+          - unique
+          - not_null
+      - name: operation
+        description: '{{ doc("enghouse_operation") }}'
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["CARD_VERIFY", "DEBT_RECOVERY_AUTO", "GET_PAR_MANUAL", "ONLINE_CLEARING", "DEBT_RECOVERY_MANUAL", "REFUND", "PREAUTH", "PREAUTH_FINAL"]
+      - name: terminal_id
+        description: '{{ doc("enghouse_terminal_id") }}'
+      - name: mapping_terminal_id
+        description: '{{ doc("enghouse_mapping_terminal_id") }}'
+      - name: mapping_merchant_id
+        description: '{{ doc("enghouse_mapping_merchant_id") }}'
+      - name: timestamp
+        description: '{{ doc("enghouse_timestamp") }}'
+      - name: amount
+        description: '{{ doc("enghouse_amount") }}'
+        data_tests:
+          - not_null
+      - name: payment_reference
+        description: '{{ doc("enghouse_payment_reference") }}'
+      - name: spdh_response
+        description: '{{ doc("enghouse_spdh_response") }}'
+      - name: response_type
+        description: '{{ doc("enghouse_response_type") }}'
+      - name: response_message
+        description: '{{ doc("enghouse_response_message") }}'
+      - name: token
+        description: '{{ doc("enghouse_token") }}'
+      - name: issuer_response
+        description: '{{ doc("enghouse_issuer_response") }}'
+      - name: core_response
+        description: '{{ doc("enghouse_core_response") }}'
+      - name: rrn
+        description: '{{ doc("enghouse_rrn") }}'
+        data_tests:
+          - unique
+      - name: authorization_code
+        description: '{{ doc("enghouse_authorization_code") }}'
+      - name: par
+        description: '{{ doc("enghouse_par") }}'
+      - name: brand
+        description: '{{ doc("enghouse_brand") }}'
+      - name: settlement_type
+        description: '{{ doc("enghouse_settlement_type") }}'
+      - name: agency
+        description: '{{ doc("enghouse_agency") }}'
+      - name: dt
+        description: '{{ doc("enghouse_dt") }}'
+      - name: _payments_key
+        description: '{{ doc("enghouse_payments_key") }}'
+      - name: _content_hash
+        description: '{{ doc("enghouse_content_hash") }}'
 
   - name: stg_enghouse__pay_windows
     description: |
