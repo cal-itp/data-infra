@@ -78,6 +78,13 @@ models:
           schedule_to_use_for_rt_validation_base64_url.
         meta:
           publish.include: true
+      - name: has_authentication
+        meta:
+          publish.include: true
+      - name: authentication_contact_details
+        meta:
+          publish.include: true
+
 
   - name: dim_organizations_latest_with_caltrans_district
     description: |
@@ -303,11 +310,5 @@ models:
         meta:
           publish.include: true
       - name: trip_updates_gtfs_dataset_name
-        meta:
-          publish.include: true
-      - name: has_authentication
-        meta:
-          publish.include: true
-      - name: authentication_contact_details
         meta:
           publish.include: true
