@@ -1,12 +1,29 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.177.0/containers/python-3
 {
   "name": "cal-itp/data-infra",
-  "dockerComposeFile": ["./compose.yml"],
-  "service": "dev",
-  "runServices": ["dev"],
-  "workspaceFolder": "/home/calitp/app",
-  "postAttachCommand": ["/bin/bash", ".devcontainer/postAttach.sh"],
+  "dockerFile": "Dockerfile",
+  "postCreateCommand": [
+    ".devcontainer/postCreate.sh"
+  ],
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:3.1.0": {
+      "version": "latest",
+      "enableNonRootDocker": false
+    }
+  },
+  "remoteUser": "calitp",
+  "containerEnv": {
+    "LC_ALL": "C.UTF-8",
+    "LANG": "C.UTF-8"
+  },
+  "forwardPorts": [
+    8080
+  ],
+  "portsAttributes": {
+    "8080": {
+      "label": "Airflow UI",
+      "onAutoForward": "notify"
+    }
+  },
   "customizations": {
     "vscode": {
       "settings": {
@@ -21,10 +38,10 @@
         "files.insertFinalNewline": true,
         "files.encoding": "utf8",
         "files.eol": "\n",
-        "python.languageServer": "Pylance"
+        "python.languageServer": "Pylance",
+        "git.useSystemGit": true,
+        "git.ssh.useLocalSsh": true
       },
-
-      // Add the IDs of extensions you want installed when the container is created.
       "extensions": [
         "ms-python.python",
         "ms-python.vscode-pylance",

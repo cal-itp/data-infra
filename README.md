@@ -14,24 +14,34 @@ Documentation for this codebase lives at [docs.calitp.org/data-infra](https://do
 - [./services](./services) contains apps that we write and deploy to kubernetes.
 - [./warehouse](./warehouse) contains our dbt project that builds and tests models in the BigQuery warehouse.
 
+## Development environment with VS-Code and devcontainer
+
+TODO: add docker (rancher-desktop) pre-requisit
+TODO: add gcloud auth
+TODO: add git config --add user.name "First Last"
+TODO: add git config --add user.email "<your_email@company.com>"
+TODO: add git-bash and ssh-agent
+TODO: add vs-code steps to clone repo into volume
+
 ## Contributing
 
 ### Pre-commit
 
 This repository uses pre-commit hooks to format code, including [Black](https://black.readthedocs.io/en/stable/index.html). This ensures baseline consistency in code formatting.
 
-> [!IMPORTANT]  
-> Before contributing to this project, please install pre-commit locally by running `pip install pre-commit` and `pre-commit install` in the root of the repo. 
+> [!IMPORTANT]
+> Before contributing to this project, please install pre-commit locally by running `pip install pre-commit` and `pre-commit install` in the root of the repo.
 
-Once installed, pre-commit checks will run before you can make commits locally. If a pre-commit check fails, it will need to be addressed before you can make your commit. Many formatting issues are fixed automatically within the pre-commit actions, so check the changes made by pre-commit on failure -- they may have automatically addressed the issues that caused the failure, in which case you can simply re-add the files, re-attempt the commit, and the checks will then succeed. 
+Once installed, pre-commit checks will run before you can make commits locally. If a pre-commit check fails, it will need to be addressed before you can make your commit. Many formatting issues are fixed automatically within the pre-commit actions, so check the changes made by pre-commit on failure -- they may have automatically addressed the issues that caused the failure, in which case you can simply re-add the files, re-attempt the commit, and the checks will then succeed.
 
 Installing pre-commit locally saves time dealing with formatting issues on pull requests. There is a [GitHub Action](./.github/workflows/lint.yml)
-that runs pre-commit on all files, not just changed ones, as part of our continuous integration. 
+that runs pre-commit on all files, not just changed ones, as part of our continuous integration.
 
-> [!NOTE]  
-> [SQLFluff](https://sqlfluff.com/) is currently disabled in the CI run due to flakiness, but it will still lint any SQL files you attempt to commit locally. You will need to manually correct SQLFluff errors because we found that SQLFluff's automated fixes could be too aggressive and could change the meaning and function of affected code. 
+> [!NOTE]
+> [SQLFluff](https://sqlfluff.com/) is currently disabled in the CI run due to flakiness, but it will still lint any SQL files you attempt to commit locally. You will need to manually correct SQLFluff errors because we found that SQLFluff's automated fixes could be too aggressive and could change the meaning and function of affected code.
 
 ### Pull requests
+
 - Use GitHub's *draft* status to indicate PRs that are not ready for review/merging
 - Do not use GitHub's "update branch" button or merge the `main` branch back into a PR branch to update it. Instead, rebase PR branches to update them and resolve any merge conflicts.
 - We use GitHub's "code owners" functionality to designate a person or group of people who are in the line of approval for changes to some parts of this repository - if one or more people are automatically tagged as reviewers by GitHub when you create a PR, an approving review from at least one of them is required to merge. This does not automatically place the PR review in somebody's list of priorities, so please reach out to a reviewer to get eyes on your PR if it's time-sensitive.

@@ -5,6 +5,8 @@
 .idea/
 .DS_Store
 .vscode/
+.aider*
+*~
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -147,4 +149,3 @@ dmypy.json
 
 # Local Netlify folder
 .netlify
-.aider*

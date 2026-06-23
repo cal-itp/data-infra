@@ -1,46 +1,67 @@
-FROM python:3.11-buster
+FROM python:3.11-slim-bookworm
 
-LABEL org.opencontainers.image.source=https://github.com/cal-itp/data-infra
+LABEL org.opencontainers.image.source="https://github.com/cal-itp/data-infra"
 
+# ---- Environment ------------------------------------------------------------
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
+    PYTHONIOENCODING=utf-8 \
+    UV_COMPILE_BYTECODE=1 \
+    UV_LINK_MODE=copy \
     USER=calitp
 
-# install gcloud CLI
-RUN apt-get update && apt-get install -y apt-transport-https ca-certificates curl gnupg
-RUN echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
-    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg && \
-    apt-get update -y && apt-get install -y google-cloud-cli
+# ---- System packages (single RUN, apt cache mount) -------------------------
+# BuildKit cache mount keeps the apt package archive between builds
+RUN --mount=type=cache,target=/var/cache/apt \
+    # Install packages that are already in default Debian repos
+    apt-get update && \
+    apt-get install -y --no-install-recommends \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    gnupg \
+    libgdal-dev \
+    tzdata \
+    ssh \
+    make \
+    rsync \
+    git \
+    gh && \
+    \
+    # Add Google Cloud SDK repository
+    curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg \
+    | gpg --dearmor -o /usr/share/keyrings/google-cloud-sdk.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/google-cloud-sdk.gpg] http://packages.cloud.google.com/apt cloud-sdk main" \
+    > /etc/apt/sources.list.d/google-cloud-sdk.list && \
+    \
+    # Update package list with new repo and install google-cloud-cli
+    apt-get update && \
+    apt-get install -y --no-install-recommends google-cloud-cli && \
+    \
+    # Add the official HashiCorp repository
+    curl -fsSL https://apt.releases.hashicorp.com/gpg \
+    | gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg && \
+    echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com bookworm main" \
+    > /etc/apt/sources.list.d/hashicorp.list && \
+    \
+    # Update package lists and install Terraform
+    apt-get update && \
+    apt-get install -y --no-install-recommends terraform && \
+    \
+    # Clean up apt lists
+    rm -rf /var/lib/apt/lists/*
 
-# install gdal deps
-RUN apt-get update && apt-get install -y libgdal-dev
-
-# create and switch to non-root user for devcontainer
+# ---- Non‑root user ---------------------------------------------------------
 RUN useradd --create-home --shell /bin/bash $USER && \
     chown -R $USER:$USER /home/$USER
+
 USER $USER
-
-# setup warehouse deps
-WORKDIR /home/$USER/app/warehouse
-# pip install location for non-root
+# ---- Python / uv -----------------------------------------------------------
 ENV PATH="$PATH:/home/$USER/.local/bin"
-# upgrade pip, install uv
-RUN python -m pip install --upgrade pip && pip install uv
+RUN python -m pip install --upgrade pip && \
+    pip install --no-cache-dir "uv==0.11.11"
+RUN uv tool install black && \
+    uv tool install memray && \
+    uv tool install pre-commit
 
-# copy source files
-COPY ./warehouse/pyproject.toml pyproject.toml
-COPY ./warehouse/uv.lock uv.lock
-COPY ./warehouse/dbt_project.yml dbt_project.yml
-COPY ./warehouse/packages.yml packages.yml
-
-# install warehouse deps
-RUN uv install
-RUN uv run dbt deps
-
-# install dev deps
-RUN pip install black memray pre-commit
-
-# switch back to app root
-WORKDIR /home/$USER/app
-# CMD for devcontainers
-CMD ["sleep", "infinity"]
+WORKDIR /workspaces/data-infra
