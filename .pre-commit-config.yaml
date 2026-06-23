@@ -77,3 +77,8 @@ repos:
       - mdformat-gfm==0.3.5
       - mdformat-frontmatter
       - mdformat-footnote
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.24.2
+    hooks:
+      - id: gitleaks
+        args: ['--config=.gitleaks.toml']
