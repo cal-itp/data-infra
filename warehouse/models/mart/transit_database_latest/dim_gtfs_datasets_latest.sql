@@ -17,6 +17,8 @@ dim_gtfs_datasets_latest AS (
         unfiltered_entries_latest.type,
         unfiltered_entries_latest.regional_feed_type,
         unfiltered_entries_latest.base64_url as base64_url,
+        unfiltered_entries_latest.has_authentication,
+        unfiltered_entries_latest.authentication_contact_details,
         CAST(FROM_BASE64(REPLACE(REPLACE(unfiltered_entries_latest.base64_url, '-', '+'), '_', '/')) as STRING) AS url,
         validation_schedule.base64_url AS schedule_to_use_for_rt_validation_base64_url,
         CAST(FROM_BASE64(REPLACE(REPLACE(validation_schedule.base64_url, '-', '+'), '_', '/')) as STRING) AS schedule_to_use_for_rt_validation_url

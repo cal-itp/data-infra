@@ -356,6 +356,12 @@ models:
       - *valid_from_actual
       - *valid_to_actual
       - *is_current_actual
+      - name: has_authentication
+        description: |
+          Authenticaion flag name for GTFS-feed level analyses and dashboards.
+      - name: authentication_contact_details
+        description: |
+          Authenticaion contact details for GTFS-feed level analyses and dashboards.
   - name: dim_gtfs_service_data
     description: '{{ doc("gtfs_service_data_table") }}'
     data_tests: *mutually_exclusive_ranges
