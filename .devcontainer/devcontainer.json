@@ -26,29 +26,21 @@
   },
   "customizations": {
     "vscode": {
-      "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash",
-        "terminal.integrated.profiles.linux": {
-          "bash": {
-            "path": "/bin/bash"
-          }
-        },
-        "editor.formatOnSave": true,
-        "files.trimTrailingWhitespace": true,
-        "files.insertFinalNewline": true,
-        "files.encoding": "utf8",
-        "files.eol": "\n",
-        "python.languageServer": "Pylance",
-        "git.useSystemGit": true,
-        "git.ssh.useLocalSsh": true
-      },
-      "extensions": [
-        "ms-python.python",
-        "ms-python.vscode-pylance",
-        "davidanson.vscode-markdownlint",
-        "bierner.markdown-mermaid",
-        "mhutchie.git-graph"
-      ]
-    }
+      "editor.formatOnSave": true,
+      "files.trimTrailingWhitespace": true,
+      "files.insertFinalNewline": true,
+      "files.encoding": "utf8",
+      "files.eol": "\n",
+      "python.languageServer": "Pylance",
+      "git.useSystemGit": true,
+      "git.ssh.useLocalSsh": true
+    },
+    "extensions": [
+      "ms-python.python",
+      "ms-python.vscode-pylance",
+      "davidanson.vscode-markdownlint",
+      "bierner.markdown-mermaid",
+      "mhutchie.git-graph"
+    ]
   }
 }
