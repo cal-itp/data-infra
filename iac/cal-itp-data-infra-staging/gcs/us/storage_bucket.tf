@@ -215,18 +215,32 @@ resource "google_storage_bucket" "calitp-staging" {
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
 
+  soft_delete_policy {
+    retention_duration_seconds = 0
+  }
+
   lifecycle_rule {
     action {
       type = "Delete"
     }
 
     condition {
-      age                        = "90"
+      age                        = "30"
       created_before             = ""
       days_since_custom_time     = "0"
       days_since_noncurrent_time = "0"
       num_newer_versions         = "0"
       with_state                 = "ANY"
+    }
+  }
+
+  lifecycle_rule {
+    action {
+      type = "AbortIncompleteMultipartUpload"
+    }
+
+    condition {
+      age                        = "1"
     }
   }
 }
