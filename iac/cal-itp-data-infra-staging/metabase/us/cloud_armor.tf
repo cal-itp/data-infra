@@ -3,12 +3,23 @@ resource "google_compute_security_policy" "metabase-staging" {
   description = "Cloud Armor policy protecting Metabase Cloud Run (staging)"
 
   rule {
+    priority    = 500
+    action      = "deny(403)"
+    description = "Geo-restrict to US and Canada"
+    match {
+      expr {
+        expression = "!(origin.region_code == 'US' || origin.region_code == 'CA')"
+      }
+    }
+  }
+
+  rule {
     priority    = 1000
     action      = "deny(403)"
     description = "OWASP SQLi"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('sqli-v33-stable')"
+        expression = "evaluatePreconfiguredWaf('sqli-v33-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v030301-id942420-sqli']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card')"
       }
     }
   }
@@ -19,7 +30,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "OWASP XSS"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('xss-v33-stable')"
+        expression = "evaluatePreconfiguredWaf('xss-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card')"
       }
     }
   }
@@ -30,7 +41,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "OWASP RCE"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('rce-v33-stable')"
+        expression = "evaluatePreconfiguredWaf('rce-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card')"
       }
     }
   }
@@ -41,7 +52,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "OWASP local file inclusion"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('lfi-v33-stable')"
+        expression = "evaluatePreconfiguredWaf('lfi-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card')"
       }
     }
   }
@@ -52,7 +63,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "OWASP remote file inclusion"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('rfi-v33-stable')"
+        expression = "evaluatePreconfiguredWaf('rfi-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card')"
       }
     }
   }
@@ -63,7 +74,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "Scanner / bot signatures"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('scannerdetection-v33-stable')"
+        expression = "evaluatePreconfiguredWaf('scannerdetection-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card')"
       }
     }
   }
@@ -74,7 +85,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "HTTP protocol attacks"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('protocolattack-v33-stable')"
+        expression = "evaluatePreconfiguredWaf('protocolattack-v33-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v030301-id921170-protocolattack']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card')"
       }
     }
   }
@@ -85,7 +96,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "Session fixation"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('sessionfixation-v33-stable')"
+        expression = "evaluatePreconfiguredWaf('sessionfixation-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card')"
       }
     }
   }
