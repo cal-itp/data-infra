@@ -10,32 +10,26 @@
 # pre-existing calitp-backups-metabase bucket, which is managed in the gcs/us
 # module. The bucket IAM grant that lets the Cloud SQL instance write its dumps
 # therefore lives with that bucket in gcs/us (added to its authoritative IAM
-# policy), not in this module. Everything else (the runner service account, its
-# roles, the workflow, and the scheduler) lives here so it plans and applies
-# together.
+# policy), not in this module.
 locals {
   backup_source_path = "${path.module}/workflows"
-  backup_runner_sa   = google_service_account.metabase-backup.email
+  backup_runner_sa   = data.google_service_account.backup-metabase.email
   backup_bucket      = "calitp-backups-metabase"
 }
 
-# Identity the Cloud Scheduler job authenticates as and the Cloud Workflow runs
-# as. It calls the Cloud SQL Admin instances.export API and triggers the workflow
-# execution. Keyless: no JSON key is generated (auth is via GCP identity binding).
-resource "google_service_account" "metabase-backup" {
-  account_id   = "metabase-backup"
-  description  = "Service account for the scheduled Metabase Cloud SQL to GCS export workflow"
-  display_name = "metabase-backup"
-  project      = "cal-itp-data-infra"
+# Existing backup SA (managed in iam/us); referenced, not created.
+data "google_service_account" "backup-metabase" {
+  account_id = "backup-metabase"
+  project    = "cal-itp-data-infra"
 }
 
-resource "google_project_iam_member" "metabase-backup" {
+resource "google_project_iam_member" "backup-metabase" {
   for_each = toset([
     "roles/cloudsql.editor",   # permission to call instances.export
     "roles/workflows.invoker", # scheduler -> workflow execution
   ])
   role    = each.key
-  member  = "serviceAccount:${google_service_account.metabase-backup.email}"
+  member  = "serviceAccount:${data.google_service_account.backup-metabase.email}"
   project = "cal-itp-data-infra"
 }
 
