@@ -240,7 +240,7 @@ resource "google_storage_bucket" "calitp-staging" {
     }
 
     condition {
-      age                        = "1"
+      age = "1"
     }
   }
 }
