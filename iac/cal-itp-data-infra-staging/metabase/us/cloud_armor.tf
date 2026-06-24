@@ -3,6 +3,17 @@ resource "google_compute_security_policy" "metabase-staging" {
   description = "Cloud Armor policy protecting Metabase Cloud Run (staging)"
 
   rule {
+    priority    = 500
+    action      = "deny(403)"
+    description = "Geo-restrict to US and Canada"
+    match {
+      expr {
+        expression = "!(origin.region_code == 'US' || origin.region_code == 'CA')"
+      }
+    }
+  }
+
+  rule {
     priority    = 1000
     action      = "deny(403)"
     description = "OWASP SQLi"
