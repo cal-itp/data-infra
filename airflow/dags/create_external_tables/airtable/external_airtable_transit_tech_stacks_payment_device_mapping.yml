@@ -23,9 +23,6 @@ schema_fields:
   - name: agency
     type: STRING
     mode: REPEATED
-  - name: organization_record_id
-    type: STRING
-    mode: NULLABLE
   - name: id
     type: STRING
     mode: NULLABLE
