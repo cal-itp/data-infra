@@ -1448,6 +1448,14 @@ output "google_storage_bucket_tfer--test-calitp-dbt-python-models_self_link" {
   value = google_storage_bucket.tfer--test-calitp-dbt-python-models.self_link
 }
 
+output "google_storage_bucket_tfer--calitp-elavon-parsed_name" {
+  value = google_storage_bucket.tfer--calitp-elavon-parsed.name
+}
+
+output "google_storage_bucket_tfer--calitp-elavon-parsed_self_link" {
+  value = google_storage_bucket.tfer--calitp-elavon-parsed.self_link
+}
+
 output "google_storage_bucket_tfer--test-calitp-gtfs-download-config_name" {
   value = google_storage_bucket.tfer--test-calitp-gtfs-download-config.name
 }
