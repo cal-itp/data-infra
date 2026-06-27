@@ -1,4 +1,11 @@
-{{ config(materialized='table') }}
+{{ config(
+    materialized='table',
+    partition_by={
+        'field': 'dt',
+        'data_type': 'date',
+        'granularity': 'day',
+    },
+) }}
 
 WITH unioned_outcomes AS (
     {% for file_outcome_table in [
