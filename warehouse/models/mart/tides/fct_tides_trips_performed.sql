@@ -2,6 +2,7 @@
     config(
         materialized='incremental',
         incremental_strategy='insert_overwrite',
+        partition_expiration_days=15,
         partition_by={
             'field': 'service_date',
             'data_type': 'date',
@@ -73,7 +74,7 @@ filtered_observed AS (
         AND o.vp_min_ts BETWEEN d._valid_from AND d._valid_to
 ),
 
-tides_trips_performed AS (
+tides_trips_performed_dup AS (
     SELECT
         o.service_date,
         o.trip_id AS trip_id_performed,
@@ -104,9 +105,9 @@ tides_trips_performed AS (
        AND v.trip_id_performed = o.trip_id
 ),
 
-deduped AS (
+fct_tides_trips_performed AS (
     SELECT *
-    FROM tides_trips_performed
+    FROM tides_trips_performed_dup
     QUALIFY ROW_NUMBER() OVER (
         PARTITION BY service_date, trip_id_performed, gtfs_dataset_key
         ORDER BY actual_trip_end DESC NULLS LAST,
@@ -114,4 +115,4 @@ deduped AS (
     ) = 1
 )
 
-SELECT * FROM deduped
+SELECT * FROM fct_tides_trips_performed

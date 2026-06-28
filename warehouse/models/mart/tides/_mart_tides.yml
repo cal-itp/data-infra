@@ -8,6 +8,7 @@ models:
       (https://tides-transit.org/main/). Sourced from `fct_vehicle_locations`
       and filtered via `dim_provider_gtfs_data` to public, customer-facing or
       regional-subfeed fixed-route feeds.
+      Data available for the last 15 days.
     columns:
       - name: location_ping_id
         description: |
@@ -99,6 +100,7 @@ models:
       route metadata and to `fct_tides_vehicle_locations` for canonical
       vehicle_id per trip. Filtered upstream to `appeared_in_vp = TRUE` so
       every row has a derivable vehicle_id.
+      Data available for the last 15 days.
     columns:
       - name: service_date
         description: TIDES PK (with trip_id_performed). From `fct_observed_trips.service_date`.
