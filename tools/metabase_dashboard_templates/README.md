@@ -39,17 +39,16 @@ A config is a YAML mapping with four top-level keys. See
 `dashboard_config_staging.yml` for a minimal working example.
 
 ```yaml
-template_dashboards:                # the source dashboards to replicate
-  <template_key>:                   # stable logical name, also the template filename
-    template_dashboard_prod_id: 377 # the dashboard's id on the READER instance (required)
+template_dashboards:                
+  <template_key>:                   # idenfitier for the dashboard, also the template filename
+    template_dashboard_prod_id: 388 # the dashboard's id, found in the dashboard URL (i.e. the id for the following dashboard is 388 https://metabase.dds.dot.ca.gov/dashboard/388-raba-merchant-service-charge-tracking)
     template_dashboard_new_name_no_prefix: "Contactless Payments Metrics Dashboard"  # required
-    template_dashboard_original_name: "..."   # optional, informational only
 
 agencies:                           # where each dashboard is copied to
-  <agency_key>:
-    name_prefix: "MST - "           # prepended to each dashboard name
-    collection_id: 489              # target collection on the WRITER (required)
-    database_id: 16                 # target database connection on the WRITER (required)
+  <agency_key>:                     # identifier for the agency
+    name_prefix: "RABA - "          # prefix for each dashboard name
+    collection_id: 492              # target collection id, found in the Metabase url (i.e. the id for the following collection is 492: https://metabase.dds.dot.ca.gov/collection/492-test-raba-copied-dashboards)
+    database_id: 16                 # target database connection, found in the Metabase url (i.e. the id for the following database connection is 16: https://metabase.dds.dot.ca.gov/browse/databases/16-payments-mst)
     dashboards_required:            # which template_keys to create for this agency (required, non-empty)
       - littlepay_contactless_metrics_dashboard_no_benefits
       - elavon_merchant_service_charge_dashboard
