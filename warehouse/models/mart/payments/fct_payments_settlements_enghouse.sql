@@ -19,6 +19,8 @@ WITH deduped_transactions AS (
         par,
         brand,
         settlement_type,
+        dt,
+        _line_number,
         _content_hash,
     FROM {{ ref('stg_enghouse__deduped_transactions') }}
 ),
@@ -59,6 +61,8 @@ join_orgs AS (
         deduped_transactions.par,
         deduped_transactions.brand,
         deduped_transactions.settlement_type,
+        deduped_transactions.dt,
+        deduped_transactions._line_number,
         deduped_transactions._content_hash,
         dim_orgs.name AS organization_name,
         direct_map.organization_source_record_id,
@@ -96,6 +100,8 @@ fct_payments_settlements_enghouse AS (
         organization_source_record_id,
         LAST_DAY(EXTRACT(DATE FROM timestamp AT TIME ZONE "America/Los_Angeles"), MONTH) AS end_of_month_date_pacific,
         LAST_DAY(EXTRACT(DATE FROM timestamp), MONTH) AS end_of_month_date_utc,
+        dt,
+        _line_number,
         _content_hash
     FROM join_orgs
 )
@@ -121,5 +127,7 @@ SELECT
     organization_source_record_id,
     end_of_month_date_pacific,
     end_of_month_date_utc,
+    dt,
+    _line_number,
     _content_hash
 FROM fct_payments_settlements_enghouse

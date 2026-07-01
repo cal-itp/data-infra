@@ -25,6 +25,7 @@ clean_columns AS (
         {{ trim_make_empty_string_null('brand') }} AS brand,
         agency,
         dt,
+        SAFE_CAST(_line_number AS INT64) AS _line_number,
         {{ dbt_utils.generate_surrogate_key(['id', 'operatorid']) }} AS _payments_key,
         {{ dbt_utils.generate_surrogate_key(['operatorid', 'id', 'operation', 'terminal_id', 'mapping_terminal_id', 'mapping_merchant_id',
             'timestamp', 'amount', 'payment_reference', 'spdh_response', 'response_type', 'response_message', 'token', 'issuer_response',
@@ -68,6 +69,7 @@ stg_enghouse__transactions AS (
         brand,
         agency,
         dt,
+        _line_number,
         _payments_key,
         _content_hash
     FROM deduplicated

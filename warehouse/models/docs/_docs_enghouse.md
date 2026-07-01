@@ -98,6 +98,10 @@ Date partition parsed from the GCS path, corresponding to the date in the source
 Surrogate key derived from id and operator_id. Uniquely identifies one transaction.
 {% enddocs %}
 
+{% docs enghouse_line_number %}
+Line number of this record within its source delivery file. Retained for lineage and data quality inspection.
+{% enddocs %}
+
 {% docs enghouse_content_hash %}
 Hash of all data columns. Retained for data quality inspection; deduplication uses _payments_key.
 {% enddocs %}

@@ -17,6 +17,7 @@ clean_columns AS (
         SAFE_CAST(close_date AS TIMESTAMP) AS close_date,
         agency,
         dt,
+        SAFE_CAST(_line_number AS INT64) AS _line_number,
         {{ dbt_utils.generate_surrogate_key(['id', 'operator_id']) }} AS _payments_key,
         {{ dbt_utils.generate_surrogate_key(['operator_id', 'id', 'token', 'amount_settled', 'amount_to_settle',
             'debt_settled', 'stage', 'payment_reference', 'terminal_id', 'open_date', 'close_date']) }} AS _content_hash
@@ -48,6 +49,7 @@ stg_enghouse__pay_windows AS (
         close_date,
         agency,
         dt,
+        _line_number,
         _payments_key,
         _content_hash
     FROM deduplicated

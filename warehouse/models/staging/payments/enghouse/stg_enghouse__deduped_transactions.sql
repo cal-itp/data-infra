@@ -21,6 +21,7 @@ WITH transactions AS (
         brand,
         agency,
         dt,
+        _line_number,
         _payments_key,
         _content_hash
     FROM {{ ref('stg_enghouse__transactions') }}
@@ -74,6 +75,7 @@ SELECT
     settlement_type,
     agency,
     dt,
+    _line_number,
     _payments_key,
     _content_hash
 FROM stg_enghouse__deduped_transactions
