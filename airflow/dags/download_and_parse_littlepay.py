@@ -51,6 +51,10 @@ LITTLEPAY_TRANSIT_PROVIDER_CONFIG = {
         "bucket": "littlepay-datafeed-prod-redwood-coast-transi-5c4dfde0",
         "prefix": "redwood-coast-transit/v3",
     },
+    "roseville-transit": {
+        "bucket": "s3://littlepay-datafeed-prod-roseville-transit-3a6af910",
+        "prefix": "roseville-transit/v3",
+    },
     "sacrt": {
         "bucket": "littlepay-datafeed-prod-sacrt-56af2970",
         "prefix": "sacrt/v3",
@@ -58,6 +62,10 @@ LITTLEPAY_TRANSIT_PROVIDER_CONFIG = {
     "sbmtd": {
         "bucket": "littlepay-datafeed-prod-sbmtd-58599230",
         "prefix": "sbmtd/v3",
+    },
+    "scmetro": {
+        "bucket": "s3://littlepay-datafeed-prod-scmetro-96277fd0",
+        "prefix": "scmetro/v3",
     },
     "scrra": {"bucket": "littlepay-datafeed-prod-scrra-ccb1a1b0", "prefix": "scrra/v3"},
     "slo-transit": {
