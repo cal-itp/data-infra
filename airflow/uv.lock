@@ -1175,7 +1175,7 @@ dev = [
     { name = "aiohttp", specifier = "<3.14" },
     { name = "ipdb", specifier = ">=0.13.13" },
     { name = "moto", extras = ["s3"], specifier = ">=5.1.21" },
-    { name = "pytest", specifier = ">=9.0.2" },
+    { name = "pytest", specifier = ">=9.0.3" },
     { name = "pytest-dotenv", specifier = ">=0.5.2" },
     { name = "pytest-freezegun", specifier = ">=0.4.2" },
     { name = "pytest-recording", specifier = ">=0.13.4" },
