@@ -312,8 +312,8 @@ resource "google_service_account" "scrra-payments-user" {
   project    = "cal-itp-data-infra"
 }
 
-resource "google_service_account" "roseville-transit-payments-user" {
-  account_id = "roseville-transit-payments-user"
+resource "google_service_account" "roseville-payments-user" {
+  account_id = "roseville-payments-user"
   disabled   = "false"
   project    = "cal-itp-data-infra"
 }
