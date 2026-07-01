@@ -1,0 +1,40 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__AIRTABLE') }}"
+post_hook: |
+  SELECT *
+  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_airtable.transit_technology_stacks__payment_device_mapping
+  LIMIT 1;
+source_objects:
+  - "transit_technology_stacks__payment_device_mapping/*.jsonl.gz"
+destination_project_dataset_table: "external_airtable.transit_technology_stacks__payment_device_mapping"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: AUTO
+  require_partition_filter: false
+  source_uri_prefix: "transit_technology_stacks__payment_device_mapping/"
+schema_fields:
+  - name: device_id
+    type: STRING
+    mode: NULLABLE
+  - name: littlepay_participant_id
+    type: STRING
+    mode: NULLABLE
+  - name: agency
+    type: STRING
+    mode: REPEATED
+  - name: id
+    type: STRING
+    mode: NULLABLE
+  - name: start_date
+    type: DATE
+    mode: NULLABLE
+  - name: end_date
+    type: DATE
+    mode: NULLABLE
+  - name: status
+    type: STRING
+    mode: NULLABLE
+  - name: notes
+    type: STRING
+    mode: NULLABLE
