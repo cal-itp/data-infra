@@ -4,6 +4,12 @@ resource "google_service_account_iam_member" "github-actions-terraform" {
   role               = "roles/iam.workloadIdentityUser"
 }
 
+resource "google_service_account_iam_member" "github-actions-terraform_tides-site" {
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github-actions.name}/attribute.repository/${local.tides-site_github_repository_name}"
+  service_account_id = google_service_account.github-actions-terraform.id
+  role               = "roles/iam.workloadIdentityUser"
+}
+
 resource "google_service_account_iam_member" "github-actions-service-account_data-infra" {
   member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github-actions.name}/attribute.repository/${local.data-infra_github_repository_name}"
   service_account_id = google_service_account.github-actions-service-account.id
