@@ -1,19 +1,28 @@
 {
-  "name": "cal-itp/data-infra",
-  "dockerFile": "Dockerfile",
-  "postCreateCommand": [
-    ".devcontainer/postCreate.sh"
-  ],
+  "name": "Cal-ITP Data Infra (Nix + DinD)",
+  "image": "mcr.microsoft.com/devcontainers/base:bookworm",
   "features": {
-    "ghcr.io/devcontainers/features/docker-in-docker:3.1.0": {
+    "ghcr.io/devcontainers/features/nix:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers-community/features/direnv:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:4.0.0": {
       "version": "latest",
-      "enableNonRootDocker": false
+      "moby": true
     }
   },
-  "remoteUser": "calitp",
+  "onCreateCommand": "sudo mkdir -p /etc/nix && echo 'experimental-features = nix-command flakes' | sudo tee -a /etc/nix/nix.conf && if [ -x $(command -v zsh) ]; then sudo mkdir -p /etc/zsh && echo 'eval \"$(direnv hook zsh)\"' | sudo tee -a /etc/zsh/zshrc; fi && if [ -x $(command -v fish) ]; then sudo mkdir -p /etc/fish/conf.d && echo 'direnv hook fish | source' | sudo tee /etc/fish/conf.d/direnv.fish; fi",
+  "postStartCommand": "direnv allow",
   "containerEnv": {
     "LC_ALL": "C.UTF-8",
-    "LANG": "C.UTF-8"
+    "LANG": "C.UTF-8",
+    "TZ": "America/Los_Angeles",
+    "DISPLAY": "",
+  },
+  "remoteEnv": {
+    "DISPLAY": "",
   },
   "forwardPorts": [
     8080
@@ -30,14 +39,14 @@
       "files.trimTrailingWhitespace": true,
       "files.insertFinalNewline": true,
       "files.encoding": "utf8",
-      "files.eol": "\n",
-      "python.languageServer": "Pylance",
-      "git.useSystemGit": true,
-      "git.ssh.useLocalSsh": true
+      "files.eol": "\n"
     },
     "extensions": [
+      "jnoortheen.nix-ide",
+      "mkhl.direnv",
       "ms-python.python",
-      "ms-python.vscode-pylance",
+      "tamasfe.even-better-toml",
+      "ms-azuretools.vscode-docker",
       "davidanson.vscode-markdownlint",
       "bierner.markdown-mermaid",
       "mhutchie.git-graph"
