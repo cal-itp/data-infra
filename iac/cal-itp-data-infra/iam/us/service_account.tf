@@ -312,6 +312,18 @@ resource "google_service_account" "scrra-payments-user" {
   project    = "cal-itp-data-infra"
 }
 
+resource "google_service_account" "roseville-transit-payments-user" {
+  account_id = "roseville-transit-payments-user"
+  disabled   = "false"
+  project    = "cal-itp-data-infra"
+}
+
+resource "google_service_account" "scmetro-payments-user" {
+  account_id = "scmetro-payments-user"
+  disabled   = "false"
+  project    = "cal-itp-data-infra"
+}
+
 resource "google_service_account" "enghouse-sftp-service-account" {
   account_id   = "enghouse-sftp-service-account"
   description  = "Service account for enghouse sftp server"
