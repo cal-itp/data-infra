@@ -1963,6 +1963,10 @@ output "google_storage_bucket_calitp-tides_name" {
   value = google_storage_bucket.calitp-requester-pays["calitp-tides"].name
 }
 
+output "google_storage_bucket_calitp-tides-logs_name" {
+  value = google_storage_bucket.calitp-tides-logs.name
+}
+
 output "google_storage_bucket_calitp-tides-site_name" {
   value = google_storage_bucket.calitp-site["calitp-tides-site"].name
 }
