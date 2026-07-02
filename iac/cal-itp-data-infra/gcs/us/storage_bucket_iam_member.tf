@@ -400,6 +400,12 @@ resource "google_storage_bucket_iam_member" "calitp-tides" {
   member = "allUsers"
 }
 
+resource "google_storage_bucket_iam_member" "calitp-tides-logs-storage-analytics" {
+  bucket = google_storage_bucket.calitp-tides-logs.name
+  role   = "roles/storage.objectCreator"
+  member = "group:cloud-storage-analytics@google.com"
+}
+
 resource "google_storage_bucket_iam_member" "calitp-site" {
   for_each = local.site_buckets
   bucket   = google_storage_bucket.calitp-site[each.key].name

@@ -1259,4 +1259,22 @@ resource "google_storage_bucket" "calitp-tides" {
   requester_pays              = "true"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  logging {
+    log_bucket        = google_storage_bucket.calitp-tides-logs.name
+    log_object_prefix = "calitp-tides"
+  }
+}
+
+resource "google_storage_bucket" "calitp-tides-logs" {
+  name     = "calitp-tides-logs"
+  project  = "cal-itp-data-infra"
+  location = "US-WEST2"
+
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  public_access_prevention    = "enforced"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
 }
