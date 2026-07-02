@@ -130,7 +130,7 @@ resource "google_compute_security_policy" "metabase" {
   rule {
     priority    = 9100
     action      = "throttle"
-    description = "Per-IP global throttle (600/min)"
+    description = "Per-IP global throttle (1200/min)"
     match {
       expr {
         expression = "!inIpRange(origin.ip, '149.136.0.0/16')"
@@ -141,7 +141,7 @@ resource "google_compute_security_policy" "metabase" {
       exceed_action  = "deny(429)"
       enforce_on_key = "IP"
       rate_limit_threshold {
-        count        = 600
+        count        = 1200
         interval_sec = 60
       }
     }
