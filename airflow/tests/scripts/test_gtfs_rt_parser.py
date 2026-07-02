@@ -179,7 +179,7 @@ class TestGtfsRtParser:
             in result.stdout
         )
         assert (
-            "found 23937 vehicle_positions files in 133 aggregations to process"
+            "found 25017 vehicle_positions files in 139 aggregations to process"
             in result.stdout
         )
         assert "limit of 3 feeds was set" in result.stdout
