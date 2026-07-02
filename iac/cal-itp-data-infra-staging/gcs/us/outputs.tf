@@ -274,6 +274,10 @@ output "google_storage_bucket_calitp-staging-enghouse-parsed_name" {
   value = google_storage_bucket.calitp-staging-enghouse-parsed.name
 }
 
+output "google_storage_bucket_calitp-staging-elavon-parsed_name" {
+  value = google_storage_bucket.calitp-staging-elavon-parsed.name
+}
+
 output "google_storage_bucket_calitp-staging-elavon-raw-v2_name" {
   value = google_storage_bucket.calitp-staging-elavon-raw-v2.name
 }
