@@ -1,0 +1,28 @@
+template_dashboards:
+  how_many_bus_routes:
+    template_dashboard_prod_id: 33
+    template_dashboard_new_name_no_prefix: "N Bus Routes"
+  favorite_bus_route:
+    template_dashboard_prod_id: 34
+    template_dashboard_new_name_no_prefix: "Favorite bus route?"
+agencies:
+  agency_a:
+    #acronym:
+    name_prefix: "A - "
+    collection_id: 29
+    database_id: 2
+    dashboards_required:
+      - favorite_bus_route
+  agency_b:
+    #acronym:
+    name_prefix: "B - "
+    collection_id: 30
+    database_id: 3
+    dashboards_required:
+      - how_many_bus_routes
+      - favorite_bus_route
+environments:
+  reader: "staging_payments_writer"
+  writer: "staging_payments_writer"
+local_storage:
+  path: "staging_templates/"

@@ -1,0 +1,25 @@
+[project]
+name = "metabase-dashboard-templates"
+version = "0.1.0"
+description = "Manage Metabase dashboards as Jinja-templated YAML files."
+requires-python = ">=3.11"
+dependencies = [
+    "Jinja2",
+    "PyYAML",
+    "click",
+    "google-cloud-secret-manager==2.16.1",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+]
+
+[tool.pytest.ini_options]
+# Put the tool root on sys.path so tests can `import cli` and
+# `import metabase_flow.*` (the package is run/tested from this directory).
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.uv]
+package = false
