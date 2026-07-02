@@ -18,11 +18,7 @@
   "containerEnv": {
     "LC_ALL": "C.UTF-8",
     "LANG": "C.UTF-8",
-    "TZ": "America/Los_Angeles",
-    "DISPLAY": "",
-  },
-  "remoteEnv": {
-    "DISPLAY": "",
+    "TZ": "America/Los_Angeles"
   },
   "forwardPorts": [
     8080
@@ -39,7 +35,10 @@
       "files.trimTrailingWhitespace": true,
       "files.insertFinalNewline": true,
       "files.encoding": "utf8",
-      "files.eol": "\n"
+      "files.eol": "\n",
+      "settings": {
+        "dev.containers.dockerCredentialHelper": false
+      }
     },
     "extensions": [
       "jnoortheen.nix-ide",

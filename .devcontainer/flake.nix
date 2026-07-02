@@ -33,6 +33,7 @@
             # Core Python & Packaging
             python311
             wrappedUv
+            # uv
 
             # Standalone Tools
             black

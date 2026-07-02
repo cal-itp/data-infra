@@ -10,8 +10,7 @@ COMPOSER_VERSION := composer-3-airflow-2.10.5-build.36
 # or with --from-source-environment $(COMPOSER_ENVIRONMENT_SOURCE) --location $(COMPOSER_LOCATION)
 # COMPOSER_ENVIRONMENT_SOURCE := calitp-staging-composer
 # COMPOSER_LOCATION := us-west2
-
-COMPOSER_CMD := uv run --no-project --with composer-dev composer-dev
+COMPOSER_CMD := uv run --no-project --with git+https://github.com/GoogleCloudPlatform/composer-local-dev.git@refs/pull/135/head composer-dev
 
 WAREHOUSE_PATH := ../warehouse
 WAREHOUSE_TARGET := staging
