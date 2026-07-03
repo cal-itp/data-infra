@@ -1096,3 +1096,26 @@ models:
       - name: service_name
       - name: service_record_id
       - name: organization_name
+  - name: dim_payment_device_mapping
+    description: |
+      Contains a manually maintained mapping of Cal-ITP payment device IDs to the
+      agency that owns each device. This table is sourced from the Transit Technology
+      Stacks Airtable base and is used to disambiguate regional payment agencies where
+      multiple transit agencies share the same Littlepay participant_id.
+      This model supports downstream payment analytics by providing device-level
+      attribution to the correct agency. Airtable is the source of truth because device
+      inventories may change over time as agencies acquire, retire, or reassign devices.
+    columns:
+      - name: key
+      - name: source_record_id
+      - name: device_id
+      - name: littlepay_participant_id
+      - name: agency_organization_source_record_id
+      - name: agency_name
+      - name: notes
+      - name: start_date
+      - name: end_date
+      - name: status
+      - name: _is_current
+      - name: _valid_from
+      - name: _valid_to
