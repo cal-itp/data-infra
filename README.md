@@ -6,6 +6,14 @@ Documentation for this codebase lives at [docs.calitp.org/data-infra](https://do
 
 ## Repository Structure
 
+- [./airflow](./airflow) contains the local dev setup and source code for Airflow DAGs (i.e. E# data-infra
+
+Welcome to the codebase for the Cal-ITP data warehouse and ETL pipeline.
+
+Documentation for this codebase lives at [docs.calitp.org/data-infra](https://docs.calitp.org/data-infra/)
+
+## Repository Structure
+
 - [./airflow](./airflow) contains the local dev setup and source code for Airflow DAGs (i.e. ETL).
 - [./ci](./ci) contains continuous integration and deployment scripts using GitHub Actions.
 - [./docs](./docs) builds the [docs site](https://docs.calitp.org/data-infra).
@@ -16,12 +24,33 @@ Documentation for this codebase lives at [docs.calitp.org/data-infra](https://do
 
 ## Development environment with VS-Code and devcontainer
 
-TODO: add docker (rancher-desktop) pre-requisit
-TODO: add gcloud auth
-TODO: add git config --add user.name "First Last"
-TODO: add git config --add user.email "<your_email@company.com>"
-TODO: add git-bash and ssh-agent
-TODO: add vs-code steps to clone repo into volume
+### Prerequisites
+
+1. **Visual Studio Code** – latest stable release.
+2. **Remote Containers (Dev Containers) extension** – install from the VS Code Marketplace.
+3. **Docker Engine**
+    - Docker Desktop (Windows/macOS) **or** Docker Engine (Linux) **or** Rancher Desktop for Caltrans Laptop.
+    - Ensure Docker is running and the current user has permission to run `docker` commands.
+5. (Optional) **GitHub authentication** – sign in to GitHub from VS Code (Accounts pane) so that `git push` works without configuring SSH keys or a personal access token.
+
+### Getting started
+
+1. **Open VS Code**.
+2. **Install the Remote Containers extension** if you haven’t already (`Ctrl+Shift+X` → search “Remote Containers”).
+3. From the Command Palette (`Ctrl+Shift+P`) run **`Remote‑Containers: Clone Repository in Container Volume…`**.
+    - Paste the repository URL: `https://github.com/cal-itp/data-infra`.
+    - VS Code will create a Docker volume named `cal-itp-data-infra`, pull the base image `mcr.microsoft.com/devcontainers/base:bookworm`, and run a temporary container that clones the repo **directly into the volume** (`/workspaces/data-infra`).
+4. Once the clone finishes, VS Code automatically starts the **devcontainer** defined in `.devcontainer/devcontainer.json`.
+    - The volume is mounted at `/workspaces/data-infra` inside the container, which becomes the workspace root.
+    - All tools (Nix, Direnv, Docker‑in‑Docker, etc.) are pre‑installed via the devcontainer features.
+    - **First‑time shell start:** The initial shell launch may be slow while Nix builds the development environment for the first time.
+    - **VS Code extensions:** Extensions such as **Direnv** and **Better TOML** are not pre‑installed in the devcontainer; install them        manually via the VS Code Extensions pane.
+
+5. **Develop**
+    - Use the VS Code UI or an integrated terminal (`Ctrl+` ``) to edit code, run tests, or start services.
+    - Git operations work out‑of‑the‑box; if you signed in to GitHub via the VS Code *Accounts* pane, `git push` will use the built‑in credential helper.
+6. **Stop / Re‑open**
+    - When you close the container, the Docker volume persists. Re‑opening the folder (`Remote‑Containers: Reopen in Container`) will reuse the same volume, giving you a fast start‑up with the existing checkout.
 
 ## Contributing
 

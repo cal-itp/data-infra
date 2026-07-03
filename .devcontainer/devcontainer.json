@@ -15,6 +15,9 @@
   },
   "onCreateCommand": "sudo mkdir -p /etc/nix && echo 'experimental-features = nix-command flakes' | sudo tee -a /etc/nix/nix.conf && if [ -x $(command -v zsh) ]; then sudo mkdir -p /etc/zsh && echo 'eval \"$(direnv hook zsh)\"' | sudo tee -a /etc/zsh/zshrc; fi && if [ -x $(command -v fish) ]; then sudo mkdir -p /etc/fish/conf.d && echo 'direnv hook fish | source' | sudo tee /etc/fish/conf.d/direnv.fish; fi",
   "postStartCommand": "direnv allow",
+  "mounts": [
+    "source=cal-itp-data-infra,target=/workspaces/data-infra,type=volume"
+  ],
   "containerEnv": {
     "LC_ALL": "C.UTF-8",
     "LANG": "C.UTF-8",
