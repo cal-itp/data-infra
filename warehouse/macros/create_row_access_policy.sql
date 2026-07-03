@@ -105,6 +105,18 @@ filter using (
 ) }};
 
 {{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = 'roseville-transit',
+    principals = ['serviceAccount:roseville-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = 'scmetro',
+    principals = ['serviceAccount:scmetro-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
     principals = [
         'serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
         'serviceAccount:metabase-payments-team@cal-itp-data-infra.iam.gserviceaccount.com',
@@ -224,6 +236,18 @@ filter using (
     filter_column = 'organization_name',
     filter_value = 'Southern California Regional Rail Authority',
     principals = ['serviceAccount:scrra-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = '<ELAVON_ORGANIZATION_NAME_ROSEVILLE_TRANSIT_PLACEHOLDER>',
+    principals = ['serviceAccount:roseville-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = '<ELAVON_ORGANIZATION_NAME_SCMETRO_PLACEHOLDER>',
+    principals = ['serviceAccount:scmetro-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }};
 
 {{ create_row_access_policy(
