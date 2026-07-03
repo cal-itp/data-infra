@@ -240,13 +240,13 @@ filter using (
 
 {{ create_row_access_policy(
     filter_column = 'organization_name',
-    filter_value = '<ELAVON_ORGANIZATION_NAME_ROSEVILLE_TRANSIT_PLACEHOLDER>',
+    filter_value = 'City of Roseville',
     principals = ['serviceAccount:roseville-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }};
 
 {{ create_row_access_policy(
     filter_column = 'organization_name',
-    filter_value = '<ELAVON_ORGANIZATION_NAME_SCMETRO_PLACEHOLDER>',
+    filter_value = 'Santa Cruz Metropolitan Transit District',
     principals = ['serviceAccount:scmetro-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }};
 
