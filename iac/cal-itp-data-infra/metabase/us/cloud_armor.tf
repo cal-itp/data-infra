@@ -5,7 +5,6 @@ resource "google_compute_security_policy" "metabase" {
   rule {
     priority    = 500
     action      = "deny(403)"
-    preview     = true
     description = "Geo-restrict to US/CA/GB/NL/HU"
     match {
       expr {
