@@ -5,7 +5,7 @@
     CASE
         WHEN {{ mode_abbrev_column }} = "AG" THEN "Automated Guideway"
         WHEN {{ mode_abbrev_column }} = "AR" THEN "Alaska Railroad"
-        WHEN {{ mode_abbrev_column }} = "CB"THEN "Commuter Bus"
+        WHEN {{ mode_abbrev_column }} = "CB" THEN "Commuter Bus"
         WHEN {{ mode_abbrev_column }} = "CC" THEN "Cable Car"
         WHEN {{ mode_abbrev_column }} = "CR" THEN "Commuter Rail"
         WHEN {{ mode_abbrev_column }} = "DR" THEN "Demand Response"
@@ -15,7 +15,7 @@
         WHEN {{ mode_abbrev_column }} = "IP" THEN "Inclined Plane"
         WHEN {{ mode_abbrev_column }} = "JT" THEN "Jitney"
         WHEN {{ mode_abbrev_column }} = "LR" THEN "Light Rail"
-        WHEN {{ mode_abbrev_column }} = "MB" THEN "Motor Bus"
+        WHEN {{ mode_abbrev_column }} = "MB" THEN "Bus" -- motor bus
         WHEN {{ mode_abbrev_column }} = "MG" THEN "Monorail / Automated Guideway" -- monorail/motorguideway
         WHEN {{ mode_abbrev_column }} = "MO" THEN "Monorail"
         WHEN {{ mode_abbrev_column }} = "PB" THEN "Publico"
