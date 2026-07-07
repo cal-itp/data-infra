@@ -37,7 +37,7 @@ Documentation for this codebase lives at [docs.calitp.org/data-infra](https://do
 
 1. **Open VS Code**.
 2. **Install the Remote Containers extension** if you haven’t already (`Ctrl+Shift+X` → search “Remote Containers”).
-3. From the Command Palette (`Ctrl+Shift+P`) run **`Remote‑Containers: Clone Repository in Container Volume…`** or you prefer to specify a named volume **`Remote‑Containers: Clone Repository in Named Container Volume…`**.
+3. From the Command Palette (`Ctrl+Shift+P`) run **`Remote‑Containers: Clone Repository in Container Volume…`** or, if you prefer to specify a named volume, **`Remote‑Containers: Clone Repository in Named Container Volume…`**.
     - Paste the repository URL: `https://github.com/cal-itp/data-infra`.
     - VS Code will create a Docker volume, pull the base image `mcr.microsoft.com/devcontainers/base:bookworm`, and clone the repo **directly into the volume** (`/workspaces/data-infra`).
 4. Once the clone finishes, VS Code automatically starts the **devcontainer** defined in `.devcontainer/devcontainer.json`.
