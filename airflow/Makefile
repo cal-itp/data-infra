@@ -12,7 +12,7 @@ COMPOSER_VERSION := composer-3-airflow-2.10.5-build.36
 # COMPOSER_LOCATION := us-west2
 
 # point COMPOSER_CMD to the PR until https://github.com/cal-itp/data-infra/issues/5310 is resolved
-COMPOSER_CMD := uv run --no-project --with git+https://github.com/GoogleCloudPlatform/composer-local-dev.git@refs/pull/135/head composer-dev
+COMPOSER_CMD := uv run composer-dev
 
 WAREHOUSE_PATH := ../warehouse
 WAREHOUSE_TARGET := staging

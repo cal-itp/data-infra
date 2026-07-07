@@ -5,6 +5,7 @@ description = "Airflow DAGs and plugins for cal-itp-data-infra"
 readme = "README.md"
 requires-python = ">=3.11.6"
 dependencies = [
+    "composer-dev",
     "apache-airflow-providers-amazon",
     "apache-airflow-providers-cncf-kubernetes",
     "apache-airflow-providers-google",
@@ -37,6 +38,10 @@ dev = [
     "pytest-recording>=0.13.4",
     "vcrpy>=8.0.0",
 ]
+
+[tool.uv.sources]
+# point COMPOSER_CMD to the PR until https://github.com/cal-itp/data-infra/issues/5310 is resolved
+composer-dev = { git = "https://github.com/GoogleCloudPlatform/composer-local-dev.git", tag = "refs/pull/135/head" }
 
 [tool.pytest.ini_options]
 testpaths = "tests"
