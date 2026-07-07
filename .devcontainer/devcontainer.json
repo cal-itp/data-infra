@@ -14,9 +14,7 @@
     }
   },
   "onCreateCommand": "sudo mkdir -p /etc/nix && echo 'experimental-features = nix-command flakes' | sudo tee -a /etc/nix/nix.conf && if [ -x $(command -v zsh) ]; then sudo mkdir -p /etc/zsh && echo 'eval \"$(direnv hook zsh)\"' | sudo tee -a /etc/zsh/zshrc; fi && if [ -x $(command -v fish) ]; then sudo mkdir -p /etc/fish/conf.d && echo 'direnv hook fish | source' | sudo tee /etc/fish/conf.d/direnv.fish; fi",
-  "postStartCommand": "bash -c '\nset -euo pipefail\n\n# Populate the volume only if it is empty\nif [ -z \"$(ls -A /home/vscode/data-infra 2>/dev/null)\" ]; then\n  echo \"🔧 Populating named volume with repository …\"\n  sudo cp -a \"${localWorkspaceFolder}/.\" /home/vscode/data-infra/ &&\n  sudo chown -R $(id -u vscode):$(id -g vscode) /home/vscode/data-infra &&\n  echo \"✅ Repository copied and ownership set.\"\nelse\n  echo \"✅ Volume already contains the repository – nothing to copy.\"\nfi\n' && direnv allow",
-  "workspaceMount": "source=cal-itp-data-infra,target=/home/vscode/data-infra,type=volume",
-  "workspaceFolder": "/home/vscode/data-infra",
+  "postStartCommand": "direnv allow",
   "containerEnv": {
     "LC_ALL": "C.UTF-8",
     "LANG": "C.UTF-8",
