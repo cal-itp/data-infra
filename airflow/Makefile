@@ -11,7 +11,6 @@ COMPOSER_VERSION := composer-3-airflow-2.10.5-build.36
 # COMPOSER_ENVIRONMENT_SOURCE := calitp-staging-composer
 # COMPOSER_LOCATION := us-west2
 
-# point COMPOSER_CMD to the PR until https://github.com/cal-itp/data-infra/issues/5310 is resolved
 COMPOSER_CMD := uv run composer-dev
 
 WAREHOUSE_PATH := ../warehouse
