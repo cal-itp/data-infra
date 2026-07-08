@@ -26,7 +26,7 @@ fct_capital_expenditures_time_series AS (
         COALESCE(int_total.year, int_rolling_stock.year, int_facilities.year, int_other.year) AS year,
         COALESCE(int_total.legacy_ntd_id, int_rolling_stock.legacy_ntd_id, int_facilities.legacy_ntd_id, int_other.legacy_ntd_id) AS legacy_ntd_id,
         COALESCE(int_total.mode, int_rolling_stock.mode, int_facilities.mode, int_other.mode) AS mode,
-        {{ generate_ntd_mode_full_name('int.mode') }} AS mode_full_name,
+        {{ generate_ntd_mode_full_name('int_total.mode') }} AS mode_full_name,
 
         int_total.agency_status,
         int_total.census_year,

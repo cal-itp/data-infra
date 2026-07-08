@@ -35,7 +35,7 @@ int_cap_fed AS (
 
 int_cap_state AS (
     SELECT *
-    FROM {{ ref('int_ntd__operating_and_capital_funding_time_series_operating_state') }}
+    FROM {{ ref('int_ntd__operating_and_capital_funding_time_series_capital_state') }}
 ),
 
 int_cap_local AS (
