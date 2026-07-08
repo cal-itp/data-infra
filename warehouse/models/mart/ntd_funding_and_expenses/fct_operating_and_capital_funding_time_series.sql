@@ -84,11 +84,11 @@ fct_operating_and_capital_funding_time_series AS (
         COALESCE(int_cap_other.capital_other, 0) AS capital_other,
 
     FROM int_op_total
+    FULL OUTER JOIN int_cap_total USING (key)
     LEFT JOIN int_op_fed USING (key)
     LEFT JOIN int_op_state USING (key)
     LEFT JOIN int_op_local USING (key)
     LEFT JOIN int_op_other USING (key)
-    FULL OUTER JOIN int_cap_total USING (key)
     LEFT JOIN int_cap_fed USING (key)
     LEFT JOIN int_cap_state USING (key)
     LEFT JOIN int_cap_local USING (key)
