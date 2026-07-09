@@ -1,9 +1,12 @@
 version: 2
 
 models:
-  - name: fct_capital_expenditures_time_series_facilities
+  - name: fct_capital_expenditures_time_series
     description: |
-      Add description
+      Total capital funds expended by type of capital asset
+      (total, rolling stock, facilities, other).
+      Grain is year-agency (ntd_id, legacy_ntd_id)-mode.
+      https://www.transit.dot.gov/ntd/data-product/ts31-capital-expenditures-time-series-2
     columns:
       - name: key
         description: |
@@ -11,129 +14,12 @@ models:
         data_tests:
           - not_null
           - unique
-  - name: fct_capital_expenditures_time_series_other
+  - name: fct_operating_and_capital_funding_time_series
     description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, and `mode`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_capital_expenditures_time_series_rolling_stock
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, and `mode`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_capital_expenditures_time_series_total
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, and `mode`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_operating_and_capital_funding_time_series_capital_federal
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_operating_and_capital_funding_time_series_capital_local
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_operating_and_capital_funding_time_series_capital_other
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_operating_and_capital_funding_time_series_capital_state
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_operating_and_capital_funding_time_series_capital_total
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_operating_and_capital_funding_time_series_operating_federal
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_operating_and_capital_funding_time_series_operating_local
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_operating_and_capital_funding_time_series_operating_other
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_operating_and_capital_funding_time_series_operating_state
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_operating_and_capital_funding_time_series_operating_total
-    description: |
-      Add description
+      Operating and capital revenues applied
+      by funding source (federal, state, local, and other).
+      Grain is year-agency (ntd_id, legacy_ntd_id).
+      https://www.transit.dot.gov/ntd/data-product/ts12-operating-funding-time-series-3
     columns:
       - name: key
         description: |
@@ -142,6 +28,10 @@ models:
           - not_null
           - unique
   - name: fct_operating_and_capital_funding_time_series_summary_total
+    description: |
+      Summary of operating and capital revenues applied
+      by funding source (total / national, federal, state, local, and other).
+      https://www.transit.dot.gov/ntd/data-product/ts12-operating-funding-time-series-3
   - name: fct_operating_and_capital_funding_time_series_decommissioned_operatingfares
     description: |
       Add description
@@ -162,123 +52,16 @@ models:
         data_tests:
           - not_null
           - unique
-  - name: fct_service_data_and_operating_expenses_time_series_by_mode_drm
+  - name: fct_service_data_and_operating_expenses_time_series_by_mode
     description: |
-      Add description
+      NTD annual time-series of service data and operating data statistics by
+      mode and type of service.
+      Grain is year-agency-mode-type_of_service.
+      https://www.transit.dot.gov/ntd/data-product/ts22-service-data-and-operating-expenses-time-series-system-0
     columns:
       - name: key
         description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_service_data_and_operating_expenses_time_series_by_mode_fares
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_service_data_and_operating_expenses_time_series_by_mode_opexp_ga
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_service_data_and_operating_expenses_time_series_by_mode_opexp_nvm
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_service_data_and_operating_expenses_time_series_by_mode_opexp_total
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_service_data_and_operating_expenses_time_series_by_mode_opexp_vm
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_service_data_and_operating_expenses_time_series_by_mode_opexp_vo
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_service_data_and_operating_expenses_time_series_by_mode_pmt
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_service_data_and_operating_expenses_time_series_by_mode_upt
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_service_data_and_operating_expenses_time_series_by_mode_voms
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_service_data_and_operating_expenses_time_series_by_mode_vrh
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
-        data_tests:
-          - not_null
-          - unique
-  - name: fct_service_data_and_operating_expenses_time_series_by_mode_vrm
-    description: |
-      Add description
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, `legacy_ntd_id`, `mode`, and `service`.
+          Synthetic primary key constructed from `ntd_id`, `year`, `mode`, and `type_of_service`.
         data_tests:
           - not_null
           - unique
