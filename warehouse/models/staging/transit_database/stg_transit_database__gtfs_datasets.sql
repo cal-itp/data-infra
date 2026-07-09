@@ -100,6 +100,7 @@ stg_transit_database__gtfs_datasets AS (
             WHEN data = "GTFS Alerts" THEN "service_alerts"
             WHEN data = "GTFS VehiclePositions" THEN "vehicle_positions"
             WHEN data = "GTFS TripUpdates" THEN "trip_updates"
+            WHEN data = "GTFS TripModifications" THEN "trip_modifications"
         END AS type,
         private_dataset,
         analysis_name,
