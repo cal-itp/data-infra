@@ -16,7 +16,7 @@ For in-place disaster-recovery against the prod instance itself, see [`metabase-
 ## Prerequisites
 
 - `gcloud` CLI authenticated against both `cal-itp-data-infra` (prod, read-only for the export step) and `cal-itp-data-infra-staging` (write, for the temp resources).
-- The prod Metabase Cloud SQL service agent has `roles/storage.objectAdmin` on `gs://calitp-backups-metabase` (provisioned by [`iac/cal-itp-data-infra/gcs/us/storage_bucket_iam_policy.tf`](../../iac/cal-itp-data-infra/gcs/us/storage_bucket_iam_policy.tf)). Without this the export in step 1 fails.
+- The prod Metabase Cloud SQL service agent has `roles/storage.objectAdmin` on `gs://calitp-backups-metabase` (provisioned by [`iac/cal-itp-data-infra/gcs/us/storage_bucket_iam_policy.tf`](../../iac/cal-itp-data-infra/gcs/us/storage_bucket_iam_policy.tf)). Without this a manual export in step 1 fails; it is not needed when reusing a nightly dump.
 - The unified Metabase image is published at `ghcr.io/cal-itp/data-infra/metabase:staging` (built from [`services/metabase/Dockerfile`](../../services/metabase/Dockerfile)). It auto-creates the Cloud SQL Unix-socket symlink at runtime based on the `CLOUD_SQL_INSTANCE_CONNECTION_NAME` env var, so the same image works against any Cloud SQL instance.
 
 A throwaway temp instance like the one this runbook produces costs roughly **$2–5/day** (db-g1-small Cloud SQL + Cloud Run min=1) — tear it down promptly with the cleanup section.
@@ -32,15 +32,25 @@ export REGION=us-west2
 export CONNECTION_NAME="${PROJECT}:${REGION}:${INSTANCE}"
 ```
 
-## 1. Export prod database to GCS
+## 1. Pick a prod database dump
 
-Server-side `pg_dump` from the prod Cloud SQL instance into the existing backups bucket. Off-peak hours (early morning Pacific) are best — the export reads the live database.
+A scheduled workflow already exports the prod database nightly to `gs://calitp-backups-metabase/exports/metabase-<YYYY-MM-DD>.sql.gz` (see [`services/metabase/backup-gcs-export.md`](../../services/metabase/backup-gcs-export.md)). Reusing the latest nightly dump is preferred — it avoids an extra export against the live prod database. Set `DUMP_URI` and skip to step 2:
+
+```bash
+DUMP_URI=$(gcloud storage ls "gs://calitp-backups-metabase/exports/metabase-*.sql.gz" | tail -1)
+echo "$DUMP_URI"
+```
+
+(`gcloud sql import sql` in step 6 decompresses `.gz` transparently.)
+
+Take a manual export only if you need a snapshot fresher than last night's. Name it with an `-adhoc` suffix — the nightly `metabase-<YYYY-MM-DD>.sql.gz` objects are real prod backups and must not be touched by this runbook's cleanup. Off-peak hours (early morning Pacific) are best — the export reads the live database.
 
 ### gcloud
 
 ```bash
-gcloud sql export sql metabase \
-  "gs://calitp-backups-metabase/exports/metabase-$(date -u +%Y-%m-%d).sql" \
+DUMP_URI="gs://calitp-backups-metabase/exports/metabase-$(date -u +%Y-%m-%d)-adhoc.sql"
+
+gcloud sql export sql metabase "$DUMP_URI" \
   --database=metabase \
   --project=cal-itp-data-infra
 ```
@@ -51,7 +61,7 @@ gcloud sql export sql metabase \
 2. Click **Export** in the toolbar.
 3. **File format**: SQL.
 4. **Database for export**: `metabase`.
-5. **Storage path**: `calitp-backups-metabase/exports/metabase-<YYYY-MM-DD>.sql`.
+5. **Storage path**: `calitp-backups-metabase/exports/metabase-<YYYY-MM-DD>-adhoc.sql`.
 6. Click **Export** and wait for it to finish (status shows in the **Operations** tab).
 
 ## 2. Create the temp Cloud SQL instance
@@ -155,7 +165,7 @@ gcloud storage buckets add-iam-policy-binding gs://calitp-backups-metabase \
 
 ```bash
 gcloud sql import sql "$INSTANCE" \
-  "gs://calitp-backups-metabase/exports/metabase-$(date -u +%Y-%m-%d).sql" \
+  "$DUMP_URI" \
   --database=metabase \
   --user=postgres \
   --project="$PROJECT" \
@@ -165,7 +175,7 @@ gcloud sql import sql "$INSTANCE" \
 ### Console
 
 1. From the temp instance page, click **Import** in the toolbar.
-2. **Source**: choose the SQL file in `gs://calitp-backups-metabase/exports/...`.
+2. **Source**: choose the dump picked in step 1 under `gs://calitp-backups-metabase/exports/...` (`.sql.gz` imports directly; no need to decompress).
 3. **File format**: SQL.
 4. **Database**: `metabase`.
 5. **User**: `postgres`.
@@ -241,7 +251,7 @@ echo "Ready: $URL"
 
 ## 9. Use it
 
-The temp instance has the same users, dashboards, and questions as prod at the moment of the export. You can log in with any prod user's credentials. Make whatever destructive changes you need — they are isolated to the temp instance.
+The temp instance has the same users, dashboards, and questions as prod at the moment the dump was taken. You can log in with any prod user's credentials. Make whatever destructive changes you need — they are isolated to the temp instance.
 
 To exercise the **restore runbook** against this instance instead of prod, follow [`metabase-restore.md`](metabase-restore.md) substituting `metabase-restore-test` for the prod instance/service names.
 
@@ -261,7 +271,10 @@ gcloud storage buckets remove-iam-policy-binding gs://calitp-backups-metabase \
   --role="roles/storage.objectViewer" \
   --project=cal-itp-data-infra
 
-gsutil rm "gs://calitp-backups-metabase/exports/metabase-$(date -u +%Y-%m-%d).sql"
+# Delete the dump only if you took a manual -adhoc export in step 1. The
+# nightly metabase-<YYYY-MM-DD>.sql.gz objects are real prod backups managed
+# by the scheduled workflow — never delete them here.
+if [[ "$DUMP_URI" == *-adhoc.sql ]]; then gcloud storage rm "$DUMP_URI"; fi
 
 rm "/tmp/${INSTANCE}-postgres-pass"
 ```
@@ -271,22 +284,22 @@ rm "/tmp/${INSTANCE}-postgres-pass"
 1. **Cloud Run** → `metabase-restore-test` → **Delete**.
 2. **Cloud SQL** → `metabase-restore-test` → **Delete**. (You may need to disable deletion protection first — see the **Edit** screen.)
 3. **GCS** → `calitp-backups-metabase` → **Permissions** tab → remove the temp instance's service account binding.
-4. **GCS** → `calitp-backups-metabase` → `exports/metabase-<date>.sql` → **Delete**.
+4. **GCS** → `calitp-backups-metabase` → `exports/metabase-<date>-adhoc.sql` → **Delete** — only if you took a manual export in step 1. Do **not** delete the nightly `metabase-<date>.sql.gz` objects; they are real prod backups.
 
 ## Expected timeline
 
 Measured from the validation run on 2026-05-07 (prod metabase ~800 MB SQL export, db-g1-small temp Cloud SQL, db-g1-small Cloud Run with 1 vCPU / 2 GiB).
 
-| Phase                                      | Measured duration              |
-| ------------------------------------------ | ------------------------------ |
-| Export prod DB to GCS (step 1)             | ~56 s                          |
-| Create Cloud SQL instance (step 2)         | ~2:17                          |
-| Set password + create database (steps 3–4) | seconds each                   |
-| IAM grant for cross-project read (step 5)  | seconds                        |
-| Import (step 6)                            | ~56 s                          |
-| Cloud Run deploy (step 7)                  | ~45 s                          |
-| Metabase first-boot startup (step 8)       | **~25–50 minutes** — see below |
-| **Total wall-clock to ready instance**     | **~30–55 minutes**             |
+| Phase                                                                  | Measured duration              |
+| ---------------------------------------------------------------------- | ------------------------------ |
+| Manual export of prod DB (step 1; skipped when reusing a nightly dump) | ~56 s                          |
+| Create Cloud SQL instance (step 2)                                     | ~2:17                          |
+| Set password + create database (steps 3–4)                             | seconds each                   |
+| IAM grant for cross-project read (step 5)                              | seconds                        |
+| Import (step 6)                                                        | ~56 s                          |
+| Cloud Run deploy (step 7)                                              | ~45 s                          |
+| Metabase first-boot startup (step 8)                                   | **~25–50 minutes** — see below |
+| **Total wall-clock to ready instance**                                 | **~30–55 minutes**             |
 
 The "Metabase first-boot startup" range reflects three components, listed in their measured order of impact:
 
