@@ -47,7 +47,10 @@ jobs:
         with:
           context: services/metabase
           file: services/metabase/Dockerfile
-          push: true
+          # Build-only on PRs: the mutable :staging/:production tags are what live
+          # Cloud Run services re-resolve on redeploy, so they must only ever be
+          # published from reviewed code on main.
+          push: ${{ github.event_name == 'push' }}
           tags: |
             ghcr.io/${{ github.repository }}/metabase:staging
             ghcr.io/${{ github.repository }}/metabase:production
