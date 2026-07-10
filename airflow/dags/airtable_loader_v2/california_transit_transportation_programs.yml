@@ -2,5 +2,5 @@ operator: operators.AirtableToGCSOperator
 
 air_base_id: appPnJWrQ7ui4UmIl
 air_base_name: california_transit
-air_table_name: Programs
+air_table_name: "Transportation Programs"
 bucket: "{{ env_var('CALITP_BUCKET__AIRTABLE') }}"
