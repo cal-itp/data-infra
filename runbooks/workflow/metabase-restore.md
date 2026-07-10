@@ -264,6 +264,9 @@ Confirm Metabase is back up:
 curl -s "$METABASE_URL/api/health"   # expect {"status":"ok"}
 ```
 
+If it returns `{"status":"initializing","progress":…}` instead, schema
+migrations are running — normal after a restore; see Notes.
+
 Then open the site and sanity-check the app: log in, confirm dashboards and
 questions render, and that collections and permissions look accurate. In a real
 recovery there is no prior dataset to diff against, so this visual check of the
@@ -321,15 +324,21 @@ Or run SQL in the browser with **Cloud SQL Studio** (Console → SQL →
 
 ## Expected timeline
 
-The Metabase metadata database is small (tens of MB), so operations are quick.
-Rough expectations:
+Staging's metadata database is small (tens of MB). Production's is substantially
+larger — its full SQL export ran **~800 MB** in the May 2026 recovery exercise
+(#4864) — but operations are still minutes, not hours. Rough expectations:
 
-| Step                              | Typical duration                                                     |
-| --------------------------------- | -------------------------------------------------------------------- |
-| Deactivate / reactivate (each)    | ~1–2 min (Cloud Run revision rollout)                                |
-| Path A — automated backup restore | ~10–20 min — can exceed the CLI's ~10-min wait; instance unavailable |
-| Path B — drop/recreate + import   | seconds to recreate; a few minutes to import                         |
-| First Metabase startup            | a few minutes if it runs schema migrations — watch Cloud Run logs    |
+| Step                              | Typical duration                                                                                   |
+| --------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Deactivate / reactivate (each)    | ~1–2 min (Cloud Run revision rollout)                                                              |
+| Path A — automated backup restore | ~5–20 min, scaling with instance storage — can exceed the CLI's ~10-min wait; instance unavailable |
+| Path B — drop/recreate + import   | seconds to recreate; a few minutes to import                                                       |
+| First Metabase startup            | a few minutes if it runs schema migrations — watch Cloud Run logs                                  |
+
+Measured reference points: the May 2026 #4864 exercise restored an ~800 MB
+database in **~4 min** (db-g1-small test instance), with the on-demand
+pre-restore backup taking ~60–80 s; the staging dry-run of this runbook measured
+**~15 min** for the restore step.
 
 Plan for a **~15–30 minute** maintenance window end-to-end including
 verification.
@@ -392,6 +401,10 @@ end up precisely where you started.
 
 - A restore affects **only** Metabase's app metadata. The BigQuery analytics
   data the dashboards query is untouched.
+- **No database password is needed for any path** — deactivate/reactivate,
+  Paths A/B/C, and verification are all server-side `gcloud` calls or Cloud Run
+  revision deploys. Only the optional direct-connection section reads the
+  Secret Manager password.
 - `deletion_protection = true` on the instance blocks accidental deletion but
   does **not** block an in-place backup restore (Path A).
 - **Point-in-time recovery (PITR) is not enabled**, so the available restore
@@ -401,7 +414,9 @@ end up precisely where you started.
   the running application version is newer than the restored database's schema
   version. This is common after a restore — the deployed image (`:staging` /
   `:production`) may be newer than the backup you restored — so the first startup
-  after reactivation can be slow. Watch the Cloud Run logs if so.
+  after reactivation can be slow. While migrating, `/api/health` returns
+  `{"status":"initializing","progress":…}` — leave it be and confirm `progress`
+  advances across polls; the Cloud Run logs show the migration detail.
 - For how the backups themselves are configured (retention, multi-region, the
   export workflow/scheduler), see the two backup docs linked at the top and
   [`services/metabase/README.md`](../../services/metabase/README.md).
