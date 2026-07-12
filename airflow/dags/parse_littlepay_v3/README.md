@@ -1,4 +1,4 @@
-# `parse_littlepay_v3`
+# DEPRECATED - `parse_littlepay_v3`
 
 Type: [Data interval processing  / Scheduled](https://docs.calitp.org/data-infra/airflow/dags-maintenance.html)
 
