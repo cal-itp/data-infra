@@ -1,0 +1,10 @@
+title = "calitp-data-infra gitleaks config"
+
+[extend]
+useDefault = true
+
+[allowlist]
+paths = [
+    ".*\\.msgpack",
+    "airflow/tests/operators/cassettes/.*\\.yaml",
+]
