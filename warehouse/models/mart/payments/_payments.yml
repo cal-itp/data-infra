@@ -917,6 +917,91 @@ models:
       - name: agency_name
         description: GTFS agency name, joined via route data. Null when no matching route exists.
 
+  - name: fct_payments_aggregations_enghouse
+    description: |
+      Each row in this table is a pay window.
+      A pay window is a group of taps processed together against a single payment token — the Enghouse equivalent of a Littlepay aggregation.
+      This table summarizes pay window activity and can be used to reconcile Enghouse payments information with Elavon deposit data.
+    columns:
+      - name: operator_id
+        description: Enghouse operator ID identifying the transit agency.
+      - *organization_name
+      - *organization_source_record_id
+      - name: end_of_month_date_pacific
+        description: |
+          The last day of the month of the pay window open_date in Pacific Time.
+          Primarily for use in BI tooling to support consistent date grouping across activity types.
+      - name: end_of_month_date_utc
+        description: The last day of the month of the pay window open_date in UTC.
+      - name: pay_window_id
+        description: Unique identifier for the pay window (Enghouse `id` from the pay_windows table).
+      - name: payment_reference
+        description: |
+          Payment reference associated with the pay window. This is the join key to Elavon deposit data (`purch_id`).
+      - name: token
+        description: Tokenized card identifier associated with the pay window.
+      - name: stage
+        description: |
+          Current stage of the pay window lifecycle. Known values: Open, Closed, Debt, DebtFinal, NoAuthDone.
+      - name: terminal_id
+        description: Terminal ID where the pay window was initiated.
+      - name: open_date
+        description: Timestamp when the pay window was opened (first tap).
+      - name: close_date
+        description: Timestamp when the pay window was closed and settled.
+      - name: agency
+        description: Agency identifier from the source file partition.
+      - name: amount_to_settle
+        description: Total fare amount that should be charged for this pay window.
+      - name: amount_settled
+        description: Amount actually settled for this pay window.
+      - name: debt_settled
+        description: Amount recovered through debt recovery for this pay window.
+      - name: num_taps
+        description: Number of distinct taps associated with this pay window's payment_reference.
+      - name: num_ticket_results
+        description: Number of ticket results associated with the taps in this pay window.
+      - name: total_fare_amount
+        description: Sum of fare amounts across all ticket results for this pay window.
+      - name: num_transactions
+        description: Total number of transaction records (all operation types) for this payment_reference.
+      - name: net_transaction_amount
+        description: Net amount across all transactions (charges minus refunds).
+      - name: latest_transaction_timestamp
+        description: Timestamp of the most recent transaction for this payment_reference.
+      - name: num_charges
+        description: Number of transactions with a positive amount (charges).
+      - name: num_refunds
+        description: Number of transactions with a negative amount (refunds).
+      - name: gross_charges
+        description: Sum of all positive transaction amounts for this pay window.
+      - name: gross_refunds
+        description: Sum of absolute values of all negative transaction amounts for this pay window.
+      - name: elavon_purch_id
+        description: |
+          Elavon purchase ID matched to this pay window via payment_reference. NULL if no Elavon match found.
+      - name: elavon_settlement_date
+        description: Settlement date from Elavon deposit data for this pay window.
+      - name: elavon_payment_date
+        description: Payment date from Elavon deposit data for this pay window.
+      - name: elavon_net_amount
+        description: Net amount from Elavon deposit data (sum of all Elavon transactions for this purch_id).
+      - name: elavon_sales
+        description: Total sales amount from Elavon deposit data for this pay window.
+      - name: elavon_refunds
+        description: Total refund amount from Elavon deposit data for this pay window.
+      - name: reconciliation_category
+        description: |
+          High-level reconciliation status derived from pay window stage and Elavon match.
+          Values:
+          - "Settled (with Elavon match)": stage=Closed and matched to an Elavon deposit record
+          - "Settled (no Elavon match)": stage=Closed but no corresponding Elavon deposit record found
+          - "Debt (recovery ongoing)": stage=Debt — cardholder was charged separately via debt recovery
+          - "Debt (unrecovered)": stage=DebtFinal — debt recovery was finalized with no full recovery
+          - "Open": stage=Open or NoAuthDone — pay window not yet settled
+          - "Authorization Declined": stage=AuthDeclined — authorization attempt was declined; terminal state, no money moved
+          - "Unknown": stage value not recognized
+
   - name: fct_payments_settlements_enghouse
     description: Enghouse settlements (completed transactions.)
     data_tests:
