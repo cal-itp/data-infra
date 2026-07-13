@@ -382,12 +382,6 @@ resource "google_storage_bucket_iam_member" "tfer--us-west2-calitp-airflow2-pr-8
   role   = "roles/storage.legacyBucketReader"
 }
 
-resource "google_storage_bucket_iam_member" "calitp-composer" {
-  bucket = google_storage_bucket.calitp-composer.name
-  member = "projectEditor:cal-itp-data-infra"
-  role   = "roles/storage.legacyBucketOwner"
-}
-
 resource "google_storage_bucket_iam_member" "calitp-composer3" {
   bucket = google_storage_bucket.calitp-composer3.name
   member = "projectEditor:cal-itp-data-infra"

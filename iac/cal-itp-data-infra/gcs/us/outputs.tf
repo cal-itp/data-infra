@@ -1910,15 +1910,6 @@ output "google_storage_bucket_calitp-state-geoportal-scrape_name" {
   value = google_storage_bucket.tfer--calitp-state-geoportal-scrape.name
 }
 
-output "google_storage_bucket_calitp-composer_name" {
-  value = google_storage_bucket.calitp-composer.name
-}
-
-output "google_storage_bucket_calitp-composer_id" {
-  value = google_storage_bucket.calitp-composer.id
-}
-
-# bucket for airflow managed by composer3
 output "google_storage_bucket_calitp-composer3_name" {
   value = google_storage_bucket.calitp-composer3.name
 }

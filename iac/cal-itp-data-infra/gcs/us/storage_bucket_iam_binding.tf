@@ -382,12 +382,6 @@ resource "google_storage_bucket_iam_binding" "tfer--us-west2-calitp-airflow2-pr-
   role    = "roles/storage.legacyObjectOwner"
 }
 
-resource "google_storage_bucket_iam_binding" "calitp-composer" {
-  bucket  = google_storage_bucket.calitp-composer.name
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra", "serviceAccount:${data.terraform_remote_state.iam.outputs.google_service_account_composer-service-account_email}"]
-  role    = "roles/storage.legacyBucketOwner"
-}
-
 resource "google_storage_bucket_iam_binding" "calitp-composer3" {
   bucket  = google_storage_bucket.calitp-composer3.name
   members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra", "serviceAccount:${data.terraform_remote_state.iam.outputs.google_service_account_composer-service-account_email}"]
