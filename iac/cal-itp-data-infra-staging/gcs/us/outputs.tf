@@ -106,15 +106,6 @@ output "google_storage_bucket_calitp-staging-cal-bc_name" {
   value = google_storage_bucket.calitp-staging-cal-bc.name
 }
 
-output "google_storage_bucket_calitp-staging-composer_name" {
-  value = google_storage_bucket.calitp-staging-composer.name
-}
-
-output "google_storage_bucket_calitp-staging-composer_id" {
-  value = google_storage_bucket.calitp-staging-composer.id
-}
-
-# bucket for airflow managed by composer3
 output "google_storage_bucket_calitp-staging-composer3_name" {
   value = google_storage_bucket.calitp-staging-composer3.name
 }
