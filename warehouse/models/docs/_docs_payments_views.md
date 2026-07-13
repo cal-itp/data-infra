@@ -13,3 +13,18 @@ additional context is available
 [here](https://github.com/cal-itp/data-infra/pull/3070#issue-1975056371).
 
 {% enddocs %}
+
+{% docs payments_organization_source_record_id %}
+
+`source_record_id` of the Cal-ITP defined organization (from `dim_organizations`) associated with this payments activity.
+The mapping of organization records to payments entities is manually maintained in seed files: `payments_entity_mapping`
+(participant-level), plus, for agencies that share a Littlepay `participant_id`, the device-level `dim_payment_device_mapping`.
+
+{% enddocs %}
+
+{% docs tap_organization_name %}
+
+Name of the Cal-ITP defined organization (from `dim_organizations`) associated with this tap.
+The mapping of organization records to payments entities is manually maintained in a seed file.
+
+{% enddocs %}
