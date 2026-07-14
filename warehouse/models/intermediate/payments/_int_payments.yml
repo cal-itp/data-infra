@@ -924,7 +924,7 @@ models:
       - name: micropayment_type
         description: '{{ doc("lp_mp_type") }}'
       - name: organization_source_record_id
-        description: '{{ doc("payments_organization_source_record_id") }}'
+        description: '{{ doc("lp_tap_organization_source_record_id") }}'
         data_tests:
           - not_null
 
@@ -938,4 +938,4 @@ models:
           - not_null
           - unique
       - name: first_tap_organization_source_record_id
-        description: '{{ doc("payments_first_tap_organization_source_record_id") }}'
+        description: '{{ doc("lp_payments_first_tap_organization_source_record_id") }}'

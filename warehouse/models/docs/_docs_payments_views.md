@@ -14,21 +14,6 @@ additional context is available
 
 {% enddocs %}
 
-{% docs payments_organization_source_record_id %}
-
-`source_record_id` of the Cal-ITP defined organization (from `dim_organizations`) associated with this payments activity.
-The mapping of organization records to payments entities is manually maintained in seed files: `payments_entity_mapping`
-(participant-level), plus, for agencies that share a Littlepay `participant_id`, the device-level `dim_payment_device_mapping`.
-
-{% enddocs %}
-
-{% docs tap_organization_name %}
-
-Name of the Cal-ITP defined organization (from `dim_organizations`) associated with this tap.
-The mapping of organization records to payments entities is manually maintained in a seed file.
-
-{% enddocs %}
-
 {% docs int_payments__regional_agencies_first_tap_by_aggregation %}
 
 One row per `aggregation_id` mapping it to the agency (organization) that operated the earliest
@@ -41,10 +26,11 @@ Intended to feed `first_tap_organization_source_record_id` into `fct_payments_ag
 
 {% enddocs %}
 
-{% docs payments_first_tap_organization_source_record_id %}
+{% docs payments_organization_source_record_id %}
 
-`source_record_id` of the organization (agency) that operated the earliest tap
-(by `transaction_date_time_utc`, tie-broken by `littlepay_transaction_id`) in this aggregation.
-NULL when the first tap's device/participant could not be mapped to an organization.
+`source_record_id` of the Cal-ITP defined organization (from `dim_organizations`) associated with this payments activity.
+The mapping of organization records to payments entities is manually maintained in seed files: `payments_entity_mapping`
+(participant-level).
 
 {% enddocs %}
+
