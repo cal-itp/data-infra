@@ -677,7 +677,7 @@ First six numbers of the PAN.
 {% enddocs %}
 
 {% docs lp_card_scheme %}
-Card scheme of this funding source. One of (`VISA`, `MASTERCARD`, `DISCOVER`, `AMEX`).
+Card scheme of this funding source. One of (`VISA`, `MASTERCARD`, `DISCOVER`, `AMEX`). 
 {% enddocs %}
 
 {% docs lp_payments_first_tap_organization_source_record_id %}

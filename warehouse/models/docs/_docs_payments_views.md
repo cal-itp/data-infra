@@ -20,7 +20,7 @@ One row per `aggregation_id` mapping it to the agency (organization) that operat
 tap in that aggregation, for regional agencies only -- participants that appear in
 `dim_payment_device_mapping`, where a single Littlepay `participant_id` can map to more than one
 organization. Built off `fct_payments_rides_v2`, which already resolves the device-level
-`organization_source_record_id` per ride alongside `aggregation_id` and `transaction_date_time_utc`.
+`organization_source_record_id` per ride alongside `aggregation_id` and `transaction_date_time_utc`. 
 
 Intended to feed `first_tap_organization_source_record_id` into `fct_payments_aggregations`.
 
@@ -33,4 +33,3 @@ The mapping of organization records to payments entities is manually maintained 
 (participant-level).
 
 {% enddocs %}
-
