@@ -202,6 +202,9 @@ models:
       - name: first_tap_organization_source_record_id
         description: |
           '{{ doc("lp_payments_first_tap_organization_source_record_id") }}'
+      - name: first_tap_organization_name
+        description: |
+          '{{ doc("lp_payments_first_tap_organization_name") }}'
       - name: end_of_month_date_pacific
         description: |
           The last day of the month of the aggregation_datetime in Pacific Time (involves conversion of aggregation_datetime to Pacific Time).

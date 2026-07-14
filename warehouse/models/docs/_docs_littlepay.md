@@ -688,6 +688,11 @@ Intended for estimating revenue splits between agencies that share a Littlepay
 `participant_id` (e.g. SLORTA / SLO City). Only populated for regional agencies.
 {% enddocs %}
 
+{% docs lp_payments_first_tap_organization_name %}
+Name of the Cal-ITP defined organization (from `dim_organizations`) associated with the
+`first_tap_organization_source_record_id` for this aggregation.
+{% enddocs %}
+
 {% docs lp_tap_organization_source_record_id %}
 `source_record_id` of the Cal-ITP defined organization (from `dim_organizations`) associated with this payments activity.
 The mapping of organization records to payments entities is manually maintained in seed files: `payments_entity_mapping`, 
