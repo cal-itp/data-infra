@@ -47,5 +47,3 @@ schema_fields:
   - name: found_website_for_program
     type: STRING
     mode: NULLABLE
-  
-  
