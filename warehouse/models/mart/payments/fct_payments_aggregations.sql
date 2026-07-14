@@ -43,7 +43,7 @@ customers AS (
 ),
 
 first_tap_agency AS (
-    SELECT * FROM {{ ref('int_payments__first_tap_agency_by_aggregation') }}
+    SELECT * FROM {{ ref('int_payments__regional_agencies_first_tap_by_aggregation') }}
 ),
 
 elavon_info AS (

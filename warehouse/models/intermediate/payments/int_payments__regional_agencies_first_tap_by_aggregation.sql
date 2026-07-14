@@ -23,7 +23,7 @@ rides AS (
 -- operated the earliest tap in the aggregation, keyed by transaction_date_time_utc.
 -- littlepay_transaction_id breaks ties so the pick is deterministic when two taps in
 -- the same aggregation share the earliest transaction_date_time_utc.
-int_payments__first_tap_agency_by_aggregation AS (
+int_payments__regional_agencies_first_tap_by_aggregation AS (
     SELECT
         aggregation_id,
         ARRAY_AGG(
@@ -35,4 +35,4 @@ int_payments__first_tap_agency_by_aggregation AS (
     GROUP BY aggregation_id
 )
 
-SELECT * FROM int_payments__first_tap_agency_by_aggregation
+SELECT * FROM int_payments__regional_agencies_first_tap_by_aggregation
