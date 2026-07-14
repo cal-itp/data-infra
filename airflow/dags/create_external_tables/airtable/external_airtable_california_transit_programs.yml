@@ -5,7 +5,7 @@ post_hook: |
   FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_airtable.california_transit__transportation_programs
   LIMIT 1;
 source_objects:
-  - "california_transit__programs/*.jsonl.gz"
+  - "california_transit__transportation_programs/*.jsonl.gz"
 destination_project_dataset_table: "external_airtable.california_transit__transportation_programs"
 source_format: NEWLINE_DELIMITED_JSON
 use_bq_client: true
@@ -29,9 +29,6 @@ schema_fields:
   - name: website
     type: STRING
     mode: NULLABLE
-  - name: qc_automations
-    type: STRING
-    mode: REPEATED
   - name: operating_county_geographies
     type: STRING
     mode: REPEATED
