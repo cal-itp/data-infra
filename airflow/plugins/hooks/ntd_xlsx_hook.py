@@ -4,17 +4,25 @@ from airflow.hooks.base import BaseHook
 from airflow.hooks.http_hook import HttpHook
 
 HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36",
-    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
+    "User-Agent": (
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/149.0.0.0 Safari/537.36"
+    ),
+    "Accept": (
+        "text/html,application/xhtml+xml,application/xml;q=0.9,"
+        "image/avif,image/webp,image/apng,*/*;q=0.8,"
+        "application/signed-exchange;v=b3;q=0.7"
+    ),
     "Accept-Language": "en-US,en;q=0.9",
     "Connection": "keep-alive",
     "Upgrade-Insecure-Requests": "1",
-    "Sec-Ch-Ua": '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145',
+    "Sec-Ch-Ua": '"Google Chrome";v="149", "Chromium";v="149", "Not_A Brand";v="24"',
     "Sec-Fetch-Dest": "document",
     "Sec-Fetch-Mode": "navigate",
     "Sec-Fetch-Site": "cross-site",
     "Sec-Fetch-User": "?1",
-    "Cache-Control": "max-age=0",
+    "Cache-Control": "no-cache",
 }
 
 
