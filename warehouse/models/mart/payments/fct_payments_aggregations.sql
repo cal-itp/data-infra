@@ -42,6 +42,10 @@ customers AS (
     SELECT * FROM {{ ref('int_payments__customers_vaults_to_aggregations') }}
 ),
 
+first_tap_agency AS (
+    SELECT * FROM {{ ref('int_payments__first_tap_agency_by_aggregation') }}
+),
+
 elavon_info AS (
   SELECT
     purch_id AS elavon_purch_id,
@@ -74,12 +78,14 @@ join_payments AS (
         settlements.retrieval_reference_number AS settlement_retrieval_reference_number,
         customers.principal_customer_id,
         customers.bin,
-        customers.card_scheme
+        customers.card_scheme,
+        first_tap_agency.first_tap_organization_source_record_id
     FROM micropayments
     FULL OUTER JOIN authorisations USING (aggregation_id)
     FULL OUTER JOIN settlements USING (aggregation_id)
     FULL OUTER JOIN refunds USING (aggregation_id)
     LEFT JOIN customers USING (aggregation_id)
+    LEFT JOIN first_tap_agency USING (aggregation_id)
 ),
 
 join_orgs AS (
@@ -103,6 +109,7 @@ fct_payments_aggregations AS (
         participant_id,
         organization_name,
         organization_source_record_id,
+        first_tap_organization_source_record_id,
         LAST_DAY(EXTRACT(DATE FROM aggregation_datetime AT TIME ZONE "America/Los_Angeles"), MONTH) AS end_of_month_date_pacific,
         LAST_DAY(EXTRACT(DATE FROM aggregation_datetime), MONTH) AS end_of_month_date_utc,
         aggregation_id,

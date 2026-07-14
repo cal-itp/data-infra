@@ -925,3 +925,35 @@ models:
         description: '{{ doc("lp_mp_type") }}'
       - name: organization_source_record_id
         description: '{{ doc("payments_organization_source_record_id") }}'
+        data_tests:
+          - not_null
+
+
+  - name: int_payments__first_tap_agency_by_aggregation
+    description: |
+      One row per `aggregation_id` mapping it to the agency (organization) that operated the
+      earliest tap in that aggregation. Built directly off `fct_payments_rides_v2` -- which already
+      joins device transactions to micropayments and exposes `organization_source_record_id`,
+      `aggregation_id`, and `transaction_date_time_utc` per ride -- so the device-transaction /
+      micropayment join is reused rather than repeated here. The `organization_source_record_id`
+      of the ride with the earliest `transaction_date_time_utc` is selected per aggregation. That
+      organization comes from the accurate device-level agency mapping, so it can disambiguate
+      agencies that share a Littlepay `participant_id` (e.g. SLORTA / SLO City).
+
+      Restricted to participants present in `dim_payment_device_mapping` -- the only participants
+      whose `participant_id` can map to multiple organizations. For every other participant the
+      device-level resolution collapses to the participant-level entity mapping already exposed as
+      `organization_source_record_id`, so they are intentionally excluded (keeps the join +
+      per-aggregation aggregation churning only the ambiguous volume). Intended to feed
+      `first_tap_organization_source_record_id` into `fct_payments_aggregations`.
+    columns:
+      - name: aggregation_id
+        description: Aggregation ID that uniquely identifies this aggregation.
+        data_tests:
+          - not_null
+          - unique
+      - name: first_tap_organization_source_record_id
+        description: |
+          `source_record_id` of the organization (agency) that operated the earliest tap
+          (by `transaction_date_time_utc`) in this aggregation. NULL when the first tap's
+          device/participant could not be mapped to an organization.
