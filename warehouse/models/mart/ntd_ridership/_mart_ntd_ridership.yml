@@ -59,33 +59,28 @@ models:
     columns:
       - name: key
         description: |
-          Surrogate key generated from ntd_id, mode, tos, period_month, and period_year.
+          Surrogate key generated from ntd_id, mode, type_of_service, month_first_day.
         data_tests:
           - not_null
           - unique
       - *ntd_id
       - *agency
-      - name: caltrans_district_current
-        description: |
-          Current Caltrans district number for the agency.
-      - name: caltrans_district_name_current
-        description: |
-          Current Caltrans district name for the agency.
       - name: date
         description: |
           The month (in Month-Year format) for which UPT, VRM, VRH and VOM was reported by the agency for the given Mode and TOS.
-      - name: period_month
+      - name: month_first_day
+        description: |
+          The first day of the month (in YYYY-MM-DD format) for which UPT, VRM, VRH and VOM was reported by the agency for the given Mode and TOS.
+      - name: month
         description: |
           The month portion extracted from the date field (MM format).
-      - name: period_year
+      - name: year
         description: |
           The year portion extracted from the date field (YYYY format).
-      - name: period_year_month
-        description: |
-          The year and month in YYYY-MM format extracted from the date field.
-      - *tos
+      - <<: *tos
+        name: type_of_service
       - *mode
-      - name: mode_name
+      - name: mode_full_name
         description: |
           Full name of the transit mode (e.g., "Bus" for mode "MB").
       - name: service_type
