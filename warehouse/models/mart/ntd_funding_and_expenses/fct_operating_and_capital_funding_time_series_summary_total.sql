@@ -5,24 +5,22 @@ WITH staging_operating_and_capital_funding_time_series_summary_total AS (
 
 fct_operating_and_capital_funding_time_series_summary_total AS (
     SELECT
-        local_operating,
-        state_operating,
-        federal_operating,
-        other_operating,
-        national_operating,
-        year,
-        national_capital,
-        national_total,
-        federal_capital,
-        federal_total,
-        state_capital,
-        state_total,
-        local_capital,
-        local_total,
+        stg.year,
+        stg.national_operating,
+        stg.national_capital,
+        stg.national_total,
+        stg.federal_operating,
+        stg.federal_capital,
+        stg.federal_total,
+        stg.state_operating,
+        stg.state_capital,
+        stg.state_total,
+        stg.local_operating,
+        stg.local_capital,
+        stg.local_total,
+        stg.other_operating,
         stg.other_capital,
-        stg.other_total,
-
-
+        stg.other_total
 
     FROM staging_operating_and_capital_funding_time_series_summary_total AS stg
 )
