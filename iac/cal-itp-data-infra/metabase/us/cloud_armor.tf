@@ -16,11 +16,10 @@ resource "google_compute_security_policy" "metabase" {
   rule {
     priority    = 1000
     action      = "deny(403)"
-    preview     = true
     description = "OWASP SQLi"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('sqli-v33-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v030301-id942420-sqli']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card')"
+        expression = "evaluatePreconfiguredWaf('sqli-v33-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v030301-id942420-sqli']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
       }
     }
   }
@@ -28,11 +27,10 @@ resource "google_compute_security_policy" "metabase" {
   rule {
     priority    = 1100
     action      = "deny(403)"
-    preview     = true
     description = "OWASP XSS"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('xss-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card')"
+        expression = "evaluatePreconfiguredWaf('xss-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
       }
     }
   }
@@ -40,11 +38,10 @@ resource "google_compute_security_policy" "metabase" {
   rule {
     priority    = 1200
     action      = "deny(403)"
-    preview     = true
     description = "OWASP RCE"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('rce-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card')"
+        expression = "evaluatePreconfiguredWaf('rce-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
       }
     }
   }
@@ -52,11 +49,10 @@ resource "google_compute_security_policy" "metabase" {
   rule {
     priority    = 1300
     action      = "deny(403)"
-    preview     = true
     description = "OWASP local file inclusion"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('lfi-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card')"
+        expression = "evaluatePreconfiguredWaf('lfi-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
       }
     }
   }
@@ -64,11 +60,10 @@ resource "google_compute_security_policy" "metabase" {
   rule {
     priority    = 1400
     action      = "deny(403)"
-    preview     = true
     description = "OWASP remote file inclusion"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('rfi-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card')"
+        expression = "evaluatePreconfiguredWaf('rfi-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
       }
     }
   }
@@ -76,11 +71,10 @@ resource "google_compute_security_policy" "metabase" {
   rule {
     priority    = 1500
     action      = "deny(403)"
-    preview     = true
     description = "Scanner / bot signatures"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('scannerdetection-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card')"
+        expression = "evaluatePreconfiguredWaf('scannerdetection-v33-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v030301-id913101-scannerdetection']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
       }
     }
   }
@@ -88,11 +82,10 @@ resource "google_compute_security_policy" "metabase" {
   rule {
     priority    = 1600
     action      = "deny(403)"
-    preview     = true
     description = "HTTP protocol attacks"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('protocolattack-v33-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v030301-id921170-protocolattack']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card')"
+        expression = "evaluatePreconfiguredWaf('protocolattack-v33-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v030301-id921170-protocolattack']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
       }
     }
   }
@@ -100,11 +93,10 @@ resource "google_compute_security_policy" "metabase" {
   rule {
     priority    = 1700
     action      = "deny(403)"
-    preview     = true
     description = "Session fixation"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('sessionfixation-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card')"
+        expression = "evaluatePreconfiguredWaf('sessionfixation-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
       }
     }
   }
@@ -112,7 +104,6 @@ resource "google_compute_security_policy" "metabase" {
   rule {
     priority    = 9000
     action      = "rate_based_ban"
-    preview     = true
     description = "Per-IP login rate limit (10/min then 10-min ban)"
     match {
       expr {
@@ -138,8 +129,7 @@ resource "google_compute_security_policy" "metabase" {
   rule {
     priority    = 9100
     action      = "throttle"
-    preview     = true
-    description = "Per-IP global throttle (600/min)"
+    description = "Per-IP global throttle (1200/min)"
     match {
       expr {
         expression = "!inIpRange(origin.ip, '149.136.0.0/16')"
@@ -150,7 +140,7 @@ resource "google_compute_security_policy" "metabase" {
       exceed_action  = "deny(429)"
       enforce_on_key = "IP"
       rate_limit_threshold {
-        count        = 600
+        count        = 1200
         interval_sec = 60
       }
     }
