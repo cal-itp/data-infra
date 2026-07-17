@@ -1,0 +1,372 @@
+version: 2
+
+# Reference tables for the published TIDES dataset (tag: tides_reference).
+#
+# These models resolve the opaque IDs carried on the published TIDES facts
+# (fct_tides_vehicle_locations / fct_tides_trips_performed) to human-readable
+# organizations, feeds, services, and agencies.
+#
+# The tides_reference tag drives the bucket export DAG: every tagged model is
+# exported to the TIDES bucket.
+
+models:
+  - name: tides_publication_organizations
+    description: |
+      Membership set for the TIDES reference publication: every organization
+      that has actually appeared in the published TIDES facts. Observed, not
+      eligibility-based -- an organization published in the past remains
+      resolvable even if it later leaves TIDES. Internal driver view (not
+      exported); every tides_* reference model filters through it.
+    columns:
+      - name: organization_source_record_id
+        description: |
+          Airtable source record ID of the organization, as carried on the
+          TIDES facts.
+        data_tests:
+          - unique
+          - not_null
+
+  - name: tides_organizations
+    description: |
+      Organization reference for the published TIDES dataset: every version of
+      every organization that appears in the TIDES facts. Resolves the
+      `organization_source_record_id` on vehicle_locations / trips_performed
+      to a human-readable organization for any service date
+      (_valid_from <= service_date < _valid_to). Columns follow the set
+      already published to data.ca.gov for
+      dim_organizations_latest_with_caltrans_district.
+    columns:
+      - name: key
+        description: Synthetic version surrogate; unique per organization version.
+        data_tests:
+          - unique
+          - not_null
+      - name: source_record_id
+        description: |
+          Airtable source record ID of the organization. Join key from the
+          TIDES facts' `organization_source_record_id`.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('tides_publication_organizations')
+                field: organization_source_record_id
+      - name: name
+        description: Organization name.
+        data_tests:
+          - not_null
+      - name: organization_type
+        description: Type of organization (e.g. city/town, county, independent agency, JPA).
+      - name: website
+        description: Organization website URL.
+      - name: is_public_entity
+        description: Whether the organization is a public entity.
+      - name: ntd_id
+        description: National Transit Database ID of the organization.
+      - name: ntd_agency_info_key
+        description: Key to NTD agency information for this organization.
+      - name: ntd_id_2022
+        description: 2022-era National Transit Database ID, where it differs from `ntd_id`.
+      - name: rtpa_key
+        description: Key of the Regional Transportation Planning Agency this organization belongs to.
+      - name: rtpa_name
+        description: Name of the Regional Transportation Planning Agency this organization belongs to.
+      - name: mpo_key
+        description: Key of the Metropolitan Planning Organization this organization belongs to.
+      - name: mpo_name
+        description: Name of the Metropolitan Planning Organization this organization belongs to.
+      - name: public_currently_operating
+        description: Whether the organization currently operates public transit service.
+      - name: public_currently_operating_fixed_route
+        description: Whether the organization currently operates public fixed-route transit service.
+      - name: caltrans_district
+        description: Caltrans district number of the organization's headquarters county.
+      - name: caltrans_district_name
+        description: Caltrans district name of the organization's headquarters county.
+      - name: _valid_from
+        description: Timestamp from which this record version is valid (inclusive).
+        data_tests:
+          - not_null
+      - name: _valid_to
+        description: Timestamp until which this record version is valid.
+        data_tests:
+          - not_null
+      - name: _is_current
+        description: Whether this is the current version of the record.
+
+  - name: tides_organizations_latest
+    description: |
+      Current-version cut of tides_organizations (`WHERE _is_current`).
+      Exported to the TIDES bucket at a stable path as the latest
+      organization reference snapshot.
+
+  - name: tides_provider_gtfs_data
+    description: |
+      Organization <-> GTFS feed crosswalk for the published TIDES dataset:
+      every version of every provider record belonging to an organization that
+      appears in the TIDES facts. Links an `organization_source_record_id` to
+      the organization's schedule / vehicle-positions / trip-updates /
+      service-alerts feeds for any service date
+      (_valid_from <= service_date < _valid_to). Columns follow the set
+      already published to data.ca.gov for dim_provider_gtfs_data_latest, plus
+      the four *_gtfs_dataset_key columns so the facts' `gtfs_dataset_key`
+      joins directly to tides_gtfs_datasets.
+    columns:
+      - name: key
+        description: Synthetic version surrogate; unique per record version.
+        data_tests:
+          - unique
+          - not_null
+      - name: organization_source_record_id
+        description: |
+          Airtable source record ID of the organization. Join key from the
+          TIDES facts' `organization_source_record_id`.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('tides_publication_organizations')
+                field: organization_source_record_id
+      - name: organization_name
+        description: Organization name.
+      - name: organization_ntd_id
+        description: National Transit Database ID of the organization.
+      - name: service_source_record_id
+        description: |
+          Airtable source record ID of the service. Joins to
+          tides_services.source_record_id.
+      - name: service_name
+        description: Service name.
+      - name: gtfs_service_data_customer_facing
+        description: Whether the GTFS service data relationship is customer facing.
+      - name: regional_feed_type
+        description: Type of regional feed relationship, if any (e.g. Combined Regional Feed).
+      - name: public_customer_facing_fixed_route
+        description: Whether this record is public, customer-facing, fixed-route service.
+      - name: public_customer_facing_or_regional_subfeed_fixed_route
+        description: |
+          Whether this record is public fixed-route service that is either
+          customer-facing or a regional subfeed. This is the eligibility flag
+          used to select feeds for TIDES publication.
+      - name: schedule_source_record_id
+        description: Airtable source record ID of the schedule GTFS dataset.
+      - name: schedule_gtfs_dataset_name
+        description: Name of the schedule GTFS dataset.
+      - name: schedule_gtfs_dataset_key
+        description: Version surrogate of the schedule GTFS dataset; joins to tides_gtfs_datasets.key.
+      - name: service_alerts_source_record_id
+        description: Airtable source record ID of the service alerts GTFS dataset.
+      - name: service_alerts_gtfs_dataset_name
+        description: Name of the service alerts GTFS dataset.
+      - name: service_alerts_gtfs_dataset_key
+        description: Version surrogate of the service alerts GTFS dataset; joins to tides_gtfs_datasets.key.
+      - name: vehicle_positions_source_record_id
+        description: Airtable source record ID of the vehicle positions GTFS dataset.
+      - name: vehicle_positions_gtfs_dataset_name
+        description: Name of the vehicle positions GTFS dataset.
+      - name: vehicle_positions_gtfs_dataset_key
+        description: |
+          Version surrogate of the vehicle positions GTFS dataset; joins to
+          tides_gtfs_datasets.key and matches the `gtfs_dataset_key` carried
+          on the TIDES facts.
+      - name: trip_updates_source_record_id
+        description: Airtable source record ID of the trip updates GTFS dataset.
+      - name: trip_updates_gtfs_dataset_name
+        description: Name of the trip updates GTFS dataset.
+      - name: trip_updates_gtfs_dataset_key
+        description: Version surrogate of the trip updates GTFS dataset; joins to tides_gtfs_datasets.key.
+      - name: _valid_from
+        description: Timestamp from which this record version is valid (inclusive).
+        data_tests:
+          - not_null
+      - name: _valid_to
+        description: Timestamp until which this record version is valid.
+        data_tests:
+          - not_null
+      - name: _is_current
+        description: Whether this is the current version of the record.
+
+  - name: tides_provider_gtfs_data_latest
+    description: |
+      Current-version cut of tides_provider_gtfs_data (`WHERE _is_current`).
+      Exported to the TIDES bucket at a stable path as the latest
+      organization <-> feed crosswalk snapshot.
+
+  - name: tides_gtfs_datasets
+    description: |
+      GTFS dataset (feed) reference for the published TIDES dataset: every
+      version of every dataset referenced by a member organization's provider
+      records or observed in the published facts. Resolves the
+      `gtfs_dataset_key` / `base64_url` on vehicle_locations /
+      trips_performed to a named feed for any service date
+      (_valid_from <= service_date < _valid_to). Columns follow the set
+      already published to data.ca.gov for dim_gtfs_datasets_latest;
+      `private_dataset` records are excluded from all versions, and feed URLs
+      are credential-scrubbed upstream before encoding.
+    columns:
+      - name: key
+        description: |
+          Synthetic version surrogate; unique per dataset version. Matches the
+          `gtfs_dataset_key` carried on the TIDES facts and the
+          *_gtfs_dataset_key columns on tides_provider_gtfs_data.
+        data_tests:
+          - unique
+          - not_null
+      - name: source_record_id
+        description: Airtable source record ID of the GTFS dataset.
+        data_tests:
+          - not_null
+      - name: name
+        description: GTFS dataset name.
+      - name: type
+        description: Feed type (schedule, vehicle_positions, trip_updates, service_alerts).
+      - name: regional_feed_type
+        description: Type of regional feed relationship, if any.
+      - name: base64_url
+        description: |
+          URL-safe base64 encoding of the feed URL, with authentication query
+          parameters stripped before encoding. Matches the `base64_url`
+          carried on the TIDES facts.
+        data_tests:
+          - not_null
+      - name: url
+        description: Decoded feed URL (convenience decode of `base64_url`).
+      - name: has_authentication
+        description: Whether the feed requires authentication to download.
+      - name: authentication_contact_details
+        description: Contact details for requesting feed authentication credentials.
+      - name: deprecated_date
+        description: |
+          Date the dataset was deprecated, if any. Historical versions of
+          deprecated feeds are retained so past service dates stay resolvable.
+      - name: _valid_from
+        description: Timestamp from which this record version is valid (inclusive).
+        data_tests:
+          - not_null
+      - name: _valid_to
+        description: Timestamp until which this record version is valid.
+        data_tests:
+          - not_null
+      - name: _is_current
+        description: Whether this is the current version of the record.
+
+  - name: tides_gtfs_datasets_latest
+    description: |
+      Current-version cut of tides_gtfs_datasets (`WHERE _is_current`).
+      Exported to the TIDES bucket at a stable path as the latest feed
+      reference snapshot.
+
+  - name: tides_services
+    description: |
+      Service reference for the published TIDES dataset: every version of
+      every service referenced by a member organization's provider records.
+      Gives the `service_source_record_id` on tides_provider_gtfs_data a
+      human-readable service for any service date
+      (_valid_from <= service_date < _valid_to). Columns follow the set
+      already published to data.ca.gov for dim_services_latest; array columns
+      are flattened to comma-separated strings.
+    columns:
+      - name: key
+        description: Synthetic version surrogate; unique per service version.
+        data_tests:
+          - unique
+          - not_null
+      - name: source_record_id
+        description: |
+          Airtable source record ID of the service. Join key from
+          tides_provider_gtfs_data.service_source_record_id.
+        data_tests:
+          - not_null
+      - name: name
+        description: Service name.
+      - name: service_type
+        description: Comma-separated service types (e.g. fixed-route, demand-response).
+      - name: mode
+        description: Comma-separated transit modes (e.g. bus, rail, ferry).
+      - name: operating_counties
+        description: Comma-separated counties in which the service operates.
+      - name: fixed_route
+        description: Whether the service is fixed route.
+      - name: is_public
+        description: Whether the service is public.
+      - name: public_currently_operating
+        description: Whether the service is currently operating public transit.
+      - name: public_currently_operating_fixed_route
+        description: Whether the service is currently operating public fixed-route transit.
+      - name: operational_status
+        description: Operational status of the service.
+      - name: _valid_from
+        description: Timestamp from which this record version is valid (inclusive).
+        data_tests:
+          - not_null
+      - name: _valid_to
+        description: Timestamp until which this record version is valid.
+        data_tests:
+          - not_null
+      - name: _is_current
+        description: Whether this is the current version of the record.
+
+  - name: tides_services_latest
+    description: |
+      Current-version cut of tides_services (`WHERE _is_current`). Exported to
+      the TIDES bucket at a stable path as the latest service reference
+      snapshot.
+
+  - name: tides_agency
+    description: |
+      GTFS agency reference for the published TIDES dataset: every version of
+      every agency.txt row from the schedule feeds of member organizations.
+      Provides the human-readable agency name behind a feed for any service
+      date (_valid_from <= service_date < _valid_to; validity comes from the
+      schedule feed version, dim_schedule_feeds). Columns follow the set
+      already published to data.ca.gov for dim_agency_latest.
+    columns:
+      - name: key
+        description: Synthetic row surrogate; unique per agency row per feed version.
+        data_tests:
+          - unique
+          - not_null
+      - name: feed_key
+        description: |
+          Surrogate key of the schedule feed version this agency row came
+          from (dim_schedule_feeds.key).
+        data_tests:
+          - not_null
+      - name: base64_url
+        description: |
+          URL-safe base64 encoding of the schedule feed URL. Joins to
+          tides_gtfs_datasets.base64_url.
+        data_tests:
+          - not_null
+      - name: agency_id
+        description: '{{ doc("gtfs_agency__agency_id") }}'
+      - name: agency_name
+        description: '{{ doc("gtfs_agency__agency_name") }}'
+      - name: agency_url
+        description: '{{ doc("gtfs_agency__agency_url") }}'
+      - name: agency_timezone
+        description: '{{ doc("gtfs_agency__agency_timezone") }}'
+      - name: agency_lang
+        description: '{{ doc("gtfs_agency__agency_lang") }}'
+      - name: agency_phone
+        description: '{{ doc("gtfs_agency__agency_phone") }}'
+      - name: agency_fare_url
+        description: '{{ doc("gtfs_agency__agency_fare_url") }}'
+      - name: agency_email
+        description: '{{ doc("gtfs_agency__agency_email") }}'
+      - name: _valid_from
+        description: Timestamp from which this feed version is valid (inclusive).
+        data_tests:
+          - not_null
+      - name: _valid_to
+        description: Timestamp until which this feed version is valid.
+        data_tests:
+          - not_null
+      - name: _is_current
+        description: Whether this is the current version of the schedule feed.
+
+  - name: tides_agency_latest
+    description: |
+      Current-version cut of tides_agency (`WHERE _is_current`). Exported to
+      the TIDES bucket at a stable path as the latest agency reference
+      snapshot.
