@@ -14,22 +14,29 @@ stg_ntd__operating_and_capital_funding_time_series__summary_total AS (
     SELECT
         -- Excel merged cells created unnamed columns, use visual inspection to match columns
         -- columns are operating total, capital total, grand total within each funding type
-        {{ trim_make_empty_string_null('local') }} AS local_operating,
-        {{ trim_make_empty_string_null('state') }} AS state_operating,
-        {{ trim_make_empty_string_null('federal') }} AS federal_operating,
-        {{ trim_make_empty_string_null('other') }} AS other_operating,
-        {{ trim_make_empty_string_null('national_total') }} AS national_operating,
-        {{ trim_make_empty_string_null('unnamed__0') }} AS year,
-        {{ trim_make_empty_string_null('unnamed__2') }} AS national_capital,
-        {{ trim_make_empty_string_null('unnamed__3') }} AS national_total,
-        {{ trim_make_empty_string_null('unnamed__5') }} AS federal_capital,
-        {{ trim_make_empty_string_null('unnamed__6') }} AS federal_total,
-        {{ trim_make_empty_string_null('unnamed__8') }} AS state_capital,
-        {{ trim_make_empty_string_null('unnamed__9') }} AS state_total,
-        {{ trim_make_empty_string_null('unnamed__11') }} AS local_capital,
-        {{ trim_make_empty_string_null('unnamed__12') }} AS local_total,
-        {{ trim_make_empty_string_null('unnamed__14') }} AS other_capital,
-        {{ trim_make_empty_string_null('unnamed__15') }} AS other_total,
+        -- consistent columns names as fct_operating_and_capital_funding_time_series
+
+        SAFE_CAST({{ trim_make_empty_string_null('unnamed__0') }} AS INT64) AS year,
+        SAFE_CAST({{ trim_make_empty_string_null('national_total') }} AS INT64) AS operating_national,
+        SAFE_CAST({{ trim_make_empty_string_null('unnamed__2') }} AS INT64) AS capital_national,
+        SAFE_CAST({{ trim_make_empty_string_null('unnamed__3') }} AS INT64) AS total_national,
+
+        SAFE_CAST({{ trim_make_empty_string_null('federal') }} AS INT64) AS operating_federal,
+        SAFE_CAST({{ trim_make_empty_string_null('unnamed__5') }} AS INT64) AS capital_federal,
+        SAFE_CAST({{ trim_make_empty_string_null('unnamed__6') }} AS INT64) AS total_federal,
+
+        SAFE_CAST({{ trim_make_empty_string_null('state') }} AS INT64) AS operating_state,
+        SAFE_CAST({{ trim_make_empty_string_null('unnamed__8') }} AS INT64) AS capital_state,
+        SAFE_CAST({{ trim_make_empty_string_null('unnamed__9') }} AS INT64) AS total_state,
+
+        SAFE_CAST({{ trim_make_empty_string_null('local') }} AS INT64) AS operating_local,
+        SAFE_CAST({{ trim_make_empty_string_null('unnamed__11') }} AS INT64) AS capital_local,
+        SAFE_CAST({{ trim_make_empty_string_null('unnamed__12') }} AS INT64) AS total_local,
+
+        SAFE_CAST({{ trim_make_empty_string_null('other') }} AS INT64) AS operating_other,
+        SAFE_CAST({{ trim_make_empty_string_null('unnamed__14') }} AS INT64) AS capital_other,
+        SAFE_CAST({{ trim_make_empty_string_null('unnamed__15') }} AS INT64) AS total_other,
+
         dt,
         execution_ts
     FROM get_latest_extract
