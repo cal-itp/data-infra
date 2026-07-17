@@ -48,6 +48,64 @@ models:
           - unique
       - *ntd_id
       - name: year
+        description: '{{ doc("ntd_period_year") }}'
+      - *legacy_ntd_id
+      - *mode
+      - <<: *mode
+        name: mode_full_name
+      - *tos
+      - name: agency_status
+        description: ''
+      - name: census_year
+        description: ''
+      - name: last_report_year
+        description: ''
+      - *reporter_type
+      - name: reporting_module
+        description: '{{ doc("ntd_reporting_module") }}'
+      - *uace_cd
+      - name: uza_area_sq_miles
+        description: '{{ doc("ntd_primary_uza_area_sq_miles") }}'
+      - *uza_name
+      - name: uza_population
+        description: '{{ doc("ntd_primary_uza_population") }}'
+      - name: total_capital_expenditures
+        description: Total capital funds spent on rolling stock, facilities, and other.
+      - name: rolling_stock_expenditures
+        description: |
+          Total capital funds spent on rolling stock
+          (Revenue Vehicles, Service Vehicles).
+      - name: facilities_expenditures
+        description: |
+          Total capital funds spent on facilities
+          (Passenger Stations, Administration Buildings,
+          Maintenance Buildings, Guideway).
+      - name: other_expenditures
+        description: |
+          Total capital funds spent on Communication-Information Systems,
+          Fare Revenue Collection Equipment, Other.
+      - name: _2024_mode_status
+      - name: source_agency
+        description: '{{ doc("ntd_agency") }}'
+      - name: source_city
+        description: '{{ doc("ntd_city") }}'
+      - name: source_state
+        description: '{{ doc("ntd_state") }}'
+  - name: fct_operating_and_capital_funding_time_series
+    description: |
+      Operating and capital revenues applied
+      by funding source (federal, state, local, and other).
+      Grain is year-agency (ntd_id, legacy_ntd_id).
+      https://www.transit.dot.gov/ntd/data-product/ts12-operating-funding-time-series-3
+    columns:
+      - name: key
+        description: |
+          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
+        data_tests:
+          - not_null
+          - unique
+      - *ntd_id
+      - name: year
         description: '{{ doc("ntd_period_year") }}' 
       - *legacy_ntd_id
       - *mode
@@ -69,21 +127,18 @@ models:
       - *uza_name
       - name: uza_population
         description: '{{ doc("ntd_primary_uza_population") }}'  
-      - name: total_capital_expenditures
-        description: Total capital funds spent on rolling stock, facilities, and other.
-      - name: rolling_stock_expenditures
+      - name: operating_total
+        description: Sum of operating funds from 
+      - name: operating_federal
         description: |
-          Total capital funds spent on rolling stock 
-          (Revenue Vehicles, Service Vehicles).
-      - name: facilities_expenditures
+          
+      - name: operating_state
         description: |
-          Total capital funds spent on facilities 
-          (Passenger Stations, Administration Buildings,
-          Maintenance Buildings, Guideway).
-      - name: other_expenditures
+          
+      - name: operating_local
         description: |
-          Total capital funds spent on Communication-Information Systems, 
-          Fare Revenue Collection Equipment, Other.
+      - name: operating_other
+        description: |          
       - name: _2024_mode_status
       - name: source_agency
         description: '{{ doc("ntd_agency") }}' 
@@ -91,19 +146,6 @@ models:
         description: '{{ doc("ntd_city") }}'
       - name: source_state
         description: '{{ doc("ntd_state") }}' 
-  - name: fct_operating_and_capital_funding_time_series
-    description: |
-      Operating and capital revenues applied
-      by funding source (federal, state, local, and other).
-      Grain is year-agency (ntd_id, legacy_ntd_id).
-      https://www.transit.dot.gov/ntd/data-product/ts12-operating-funding-time-series-3
-    columns:
-      - name: key
-        description: |
-          Synthetic primary key constructed from `ntd_id`, `year`, and `legacy_ntd_id`.
-        data_tests:
-          - not_null
-          - unique
   - name: fct_operating_and_capital_funding_time_series_summary_total
     description: |
       Summary of operating and capital revenues applied
@@ -114,7 +156,7 @@ models:
         description: '{{ doc("ntd_period_year") }}'
       - name: national_operating
         description: |
-          Sum of Federal Funding, State Funding, Local Funding, and 
+          Sum of Federal Funding, State Funding, Local Funding, and
           Other Sources of Funds applied to operations.
       - name: national_capital
         description: |
@@ -136,24 +178,24 @@ models:
         description: Sum of state_operating and state_capital.
       - name: local_operating
         description: |
-          Local funding applied to operations. 
-          Includes Sources of Funds such as revenues from the general fund. 
+          Local funding applied to operations.
+          Includes Sources of Funds such as revenues from the general fund.
           Also includes dedicated taxes levied directly by transit agencies.
       - name: local_capital
         description: |
-          Local funding applied to capital. 
-          Includes Sources of Funds such as revenues from the general fund. 
+          Local funding applied to capital.
+          Includes Sources of Funds such as revenues from the general fund.
           Also includes dedicated taxes levied directly by transit agencies.
       - name: local_total
         description: Sum of local_operating and local_capital.
       - name: other_operating
         description: |
-          Fare revenues and other funds directly generated by the agency applied to 
+          Fare revenues and other funds directly generated by the agency applied to
           operations, including:
           - Auxiliary Revenue (Advertising, Concessions, Other)
           - Park and Ride Revenue
           - Auxiliary Revenue (Advertising, Concessions, Other)
-          - Non-Transportation Revenues 
+          - Non-Transportation Revenues
           - Other Transportation revenues (i.e. charter service revenue)
           - Revenue from Purchased Transportation Agreements with NTD and non-NTD Reporters
           - Other Directly Generated Funds
@@ -164,12 +206,12 @@ models:
           - Contract Revenue (Reduced Reporters Only)
       - name: other_capital
         description: |
-          Fare revenues and Other directly generated funds applied to 
+          Fare revenues and Other directly generated funds applied to
           capital, including:
           - Auxiliary Revenue (Advertising, Concessions, Other)
           - Park and Ride Revenue
           - Auxiliary Revenue (Advertising, Concessions, Other)
-          - Non-Transportation Revenues 
+          - Non-Transportation Revenues
           - Other Transportation revenues (i.e. charter service revenue)
           - Revenue from Purchased Transportation Agreements with NTD and non-NTD Reporters
           - Other Directly Generated Funds
@@ -182,7 +224,7 @@ models:
         description: Sum of other_operating and other_capital.
       - *dt
       - *execution_ts
-        
+
   - name: fct_operating_and_capital_funding_time_series_decommissioned_operatingfares
     description: |
       TODO: deprecate DAG, stg, fct, column is no longer populated
@@ -219,7 +261,7 @@ models:
       - *ntd_id
       - *mode
       - name: year
-        description: '{{ doc("ntd_period_year") }}' 
+        description: '{{ doc("ntd_period_year") }}'
       - *tos
       - name: unlinked_passenger_trips
         description: '{{ doc("ntd_upt") }}'
@@ -244,8 +286,8 @@ models:
       - name: operating_expenses_total
         description: |
           Total operating expenses. The sum of operating costs related to:
-          vehicle operations, vehicle maintenance, 
-          non-vehicle maintenance, and general administration. 
+          vehicle operations, vehicle maintenance,
+          non-vehicle maintenance, and general administration.
       - name: fare_revenue
         description: Total fare revenues.
       - name: opex_per_vrh
@@ -259,7 +301,7 @@ models:
           Total operating expenses / vehicle revenue miles.
           A normalized metric of cost-efficiency.
       - name: opex_per_upt
-        description: '{{ doc("ntd_avg_cost_per_trip_fy") }}' 
+        description: '{{ doc("ntd_avg_cost_per_trip_fy") }}'
       - name: upt_per_vrh
         description: |
           Unlinked passenger trips per vehicle revenue hour.
@@ -272,7 +314,7 @@ models:
           A normalized metric of service-effectiveness.
       - name: farebox_recovery_ratio
         description: |
-          Farebox recovery ratio is the proportion of operating expenses 
+          Farebox recovery ratio is the proportion of operating expenses
           covered by fare revenues. It combines cost-efficiency and service-effectiveness
           into a single metric.
           Fare revenues / operating_expenses_total.
@@ -286,19 +328,19 @@ models:
         description: ""
       - *reporter_type
       - name: reporting_module
-        description: '{{ doc("ntd_reporting_module") }}'  
+        description: '{{ doc("ntd_reporting_module") }}'
       - *uace_cd
       - name: uza_area_sq_miles
-        description: '{{ doc("ntd_primary_uza_area_sq_miles") }}'  
+        description: '{{ doc("ntd_primary_uza_area_sq_miles") }}'
       - *uza_name
       - name: uza_population
-        description: '{{ doc("ntd_primary_uza_population") }}'  
+        description: '{{ doc("ntd_primary_uza_population") }}'
       - name: source_agency
-        description: '{{ doc("ntd_agency") }}' 
+        description: '{{ doc("ntd_agency") }}'
       - name: source_city
         description: '{{ doc("ntd_city") }}'
       - name: source_state
-        description: '{{ doc("ntd_state") }}' 
+        description: '{{ doc("ntd_state") }}'
       - name: upt_prior_year
         description: "Unlinked passenger trips from 1 year ago"
       - name: upt_change_1yr
@@ -308,12 +350,12 @@ models:
       - name: upt_pct_change_1yr
         description: |
           Percent change of the difference between current unlinked passenger trips and 1 year ago.
-          (current_upt - prior_year_upt) / prior_year_upt.        
+          (current_upt - prior_year_upt) / prior_year_upt.
       - name: mode_full_name
-        description: '{{ doc("ntd_mode_name") }}' 
+        description: '{{ doc("ntd_mode_name") }}'
       - name: type_of_service_full_name
-        description: '{{ doc("ntd_type_of_service") }}' 
+        description: '{{ doc("ntd_type_of_service") }}'
       - name: service_type
-        description: '{{ doc("ntd_ridership_service_type") }}' 
+        description: '{{ doc("ntd_ridership_service_type") }}'
       - *dt
       - *execution_ts
