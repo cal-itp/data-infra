@@ -110,9 +110,9 @@ service_data_and_operating_expenses_time_series_by_mode AS (
         int_upt.uza_area_sq_miles,
         int_upt.primary_uza_name,
         int_upt.uza_population,
-        int_upt.source_agency,
-        int_upt.source_city,
-        int_upt.source_state,
+        int_upt.agency_name AS source_agency,
+        int_upt.city AS source_city,
+        int_upt.state AS source_state,
         int_upt.dt,
         int_upt.execution_ts,
 

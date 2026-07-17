@@ -173,7 +173,8 @@ models:
           Local funding applied to capital.
           Includes Sources of Funds such as revenues from the general fund.
           Also includes dedicated taxes levied directly by transit agencies.
-      - name: capital_other
+      - &capital_other
+        name: capital_other
         description: |
           Fare revenues and Other directly generated funds applied to
           capital, including:
@@ -227,7 +228,7 @@ models:
       - name: total_local
         description: Sum of operating_local and capital_local.
       - *operating_other
-      - name: capital_other
+      - *capital_other
       - name: total_other
         description: Sum of operating_other and capital_other.
       - *dt
