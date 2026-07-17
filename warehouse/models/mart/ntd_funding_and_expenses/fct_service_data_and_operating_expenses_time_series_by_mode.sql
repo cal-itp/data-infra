@@ -61,11 +61,6 @@ int_fares AS (
     FROM {{ ref('int_ntd__service_data_and_operating_expenses_time_series_by_mode_fares') }}
 ),
 
-int_agency_information AS (
-    SELECT *
-    FROM {{ ref('int_ntd__service_data_and_operating_expenses_time_series_agency_identifiers') }}
-),
-
 service_data_and_operating_expenses_time_series_by_mode AS (
     SELECT
         COALESCE(int_upt.key, int_vrh.key, int_vrm.key, int_voms.key, int_pmt.key, int_drm.key,
@@ -103,19 +98,23 @@ service_data_and_operating_expenses_time_series_by_mode AS (
         SAFE_DIVIDE(int_upt.upt, int_vrm.vrm) AS upt_per_vrm,
         SAFE_DIVIDE(int_fares.fares, int_total.opexp_total) AS farebox_recovery_ratio,
 
-        int_agency_information.agency_status,
-        int_agency_information.census_year,
-        int_agency_information.last_report_year,
-        int_agency_information.mode_status,
-        int_agency_information.reporter_type,
-        int_agency_information.reporting_module,
-        int_agency_information.uace_code,
-        int_agency_information.uza_area_sq_miles,
-        int_agency_information.primary_uza_name,
-        int_agency_information.uza_population,
-        int_agency_information.source_agency,
-        int_agency_information.source_city,
-        int_agency_information.source_state,
+        -- same number of rows for all Excel sheets, left join is fine.
+        -- use upt to bring in agency indentifiers
+        int_upt.agency_status,
+        int_upt.census_year,
+        int_upt.last_report_year,
+        int_upt.mode_status,
+        int_upt.reporter_type,
+        int_upt.reporting_module,
+        int_upt.uace_code,
+        int_upt.uza_area_sq_miles,
+        int_upt.primary_uza_name,
+        int_upt.uza_population,
+        int_upt.source_agency,
+        int_upt.source_city,
+        int_upt.source_state,
+        int_upt.dt,
+        int_upt.execution_ts,
 
     FROM int_upt
     LEFT JOIN int_vrh USING (key)
@@ -129,7 +128,6 @@ service_data_and_operating_expenses_time_series_by_mode AS (
     LEFT JOIN int_ga USING (key)
     LEFT JOIN int_total USING (key)
     LEFT JOIN int_fares USING (key)
-    LEFT JOIN int_agency_information USING (key)
 ),
 
 fct_service_data_and_operating_expenses_time_series_by_mode AS (

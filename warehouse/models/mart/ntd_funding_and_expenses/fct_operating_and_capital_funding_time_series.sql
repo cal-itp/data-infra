@@ -83,6 +83,9 @@ fct_operating_and_capital_funding_time_series AS (
         COALESCE(int_cap_local.capital_local, 0) AS capital_local,
         COALESCE(int_cap_other.capital_other, 0) AS capital_other,
 
+        COALESCE(int_op_total.dt, int_cap_total.dt) AS dt,
+        COALESCE(int_op_total.execution_ts, int_cap_total.execution_ts) AS execution_ts,
+
     FROM int_op_total
     FULL OUTER JOIN int_cap_total USING (key)
     LEFT JOIN int_op_fed USING (key)

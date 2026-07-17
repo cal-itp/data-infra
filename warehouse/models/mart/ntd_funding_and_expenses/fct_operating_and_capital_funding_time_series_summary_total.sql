@@ -20,7 +20,9 @@ fct_operating_and_capital_funding_time_series_summary_total AS (
         stg.local_total,
         stg.other_operating,
         stg.other_capital,
-        stg.other_total
+        stg.other_total,
+        stg.dt,
+        stg.execution_ts
 
     FROM staging_operating_and_capital_funding_time_series_summary_total AS stg
 )
