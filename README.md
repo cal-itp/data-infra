@@ -44,7 +44,6 @@ Documentation for this codebase lives at [docs.calitp.org/data-infra](https://do
     - The volume is mounted at `/workspaces/data-infra` inside the container, which becomes the workspace root.
     - All tools (Nix, Direnv, Docker‑in‑Docker, etc.) are pre‑installed via the devcontainer features.
     - **First‑time shell start:** The initial shell launch may be slow while Nix builds the development environment for the first time.
-    - **VS Code extensions:** Extensions such as **Direnv** and **Better TOML** are not pre‑installed in the devcontainer; install them        manually via the VS Code Extensions pane.
 
 5. **Develop**
     - Use the VS Code UI or an integrated terminal (`Ctrl+` ``) to edit code, run tests, or start services.

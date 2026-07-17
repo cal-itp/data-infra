@@ -38,17 +38,17 @@
       "files.eol": "\n",
       "settings": {
         "dev.containers.dockerCredentialHelper": false
-      }
-    },
-    "extensions": [
-      "jnoortheen.nix-ide",
-      "mkhl.direnv",
-      "ms-python.python",
-      "tamasfe.even-better-toml",
-      "ms-azuretools.vscode-docker",
-      "davidanson.vscode-markdownlint",
-      "bierner.markdown-mermaid",
-      "mhutchie.git-graph"
-    ]
+      },
+      "extensions": [
+        "jnoortheen.nix-ide",
+        "mkhl.direnv",
+        "ms-python.python",
+        "tamasfe.even-better-toml",
+        "ms-azuretools.vscode-docker",
+        "davidanson.vscode-markdownlint",
+        "bierner.markdown-mermaid",
+        "mhutchie.git-graph"
+      ]
+    }
   }
 }
