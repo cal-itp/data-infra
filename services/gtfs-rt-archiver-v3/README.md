@@ -1,5 +1,7 @@
 # gtfs-rt-archiver-v3
 
+> **Status (2026-07): inactive.** This v3 archiver is not currently deployed or running. GTFS-RT archiving has moved off this Kubernetes deployment, and the dedicated `gtfsrt-v4` node pool in the `data-infra-apps` cluster was removed as unused (see [#5332](https://github.com/cal-itp/data-infra/issues/5332)). The code and manifests here are retained for reference; redeploying would require recreating a node pool (or nodes) that satisfies the `resource-domain=gtfsrtv3` affinity/taint.
+
 This is the third iteration of our [GTFS Realtime (RT)](https://gtfs.org/realtime/) downloader aka archiver.
 
 ## Architecture
