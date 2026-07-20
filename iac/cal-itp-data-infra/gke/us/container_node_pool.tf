@@ -67,7 +67,7 @@ resource "google_container_node_pool" "tfer--data-infra-apps_jupyterhub-users" {
     max_node_count       = "0"
     min_node_count       = "0"
     total_max_node_count = "12"
-    total_min_node_count = "6"
+    total_min_node_count = "3"
   }
 
   cluster            = google_container_cluster.tfer--data-infra-apps.name
