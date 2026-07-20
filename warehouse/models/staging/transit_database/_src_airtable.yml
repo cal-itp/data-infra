@@ -32,3 +32,4 @@ sources:
       - name: transit_technology_stacks__properties_and_features
       - name: transit_technology_stacks__services
       - name: transit_technology_stacks__organizations
+      - name: transit_technology_stacks__payment_device_mapping

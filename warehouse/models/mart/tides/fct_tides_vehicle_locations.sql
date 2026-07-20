@@ -2,6 +2,7 @@
     config(
         materialized='incremental',
         incremental_strategy='insert_overwrite',
+        partition_expiration_days=15,
         partition_by={
             'field': 'service_date',
             'data_type': 'date',
@@ -49,7 +50,7 @@ filtered_vehicle_locations AS (
         AND vp._extract_ts BETWEEN d._valid_from AND d._valid_to
 ),
 
-tides_vehicle_locations AS (
+fct_tides_vehicle_locations AS (
     SELECT
         vp.key AS location_ping_id,
         vp.service_date,
@@ -77,4 +78,4 @@ tides_vehicle_locations AS (
             AND {{ ranged_incremental_max_date() }}
 )
 
-SELECT * FROM tides_vehicle_locations
+SELECT * FROM fct_tides_vehicle_locations

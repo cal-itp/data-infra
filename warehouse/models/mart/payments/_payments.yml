@@ -51,6 +51,14 @@ models:
         description: '{{ doc("lp_funding_source_vault_id") }}'
       - name: customer_id
         description: '{{ doc("lp_customer_id") }}'
+      - name: organization_source_record_id
+        description: '{{ doc("lp_tap_organization_source_record_id") }}'
+        data_tests:
+          - not_null:
+              arguments:
+                where: "transaction_date_time_utc is not null"
+      - name: organization_name
+        description: '{{ doc("lp_tap_organization_name") }}'
       - name: principal_customer_id
         description: From payments.customer_funding_source.principal_customer_id (by participant_id).
       - name: bin
@@ -189,7 +197,14 @@ models:
         name: organization_source_record_id
         description: |
           `source_record_id` of the Cal-ITP defined organization (from `dim_organizations`) associated with this payments activity.
-          The mapping of organization records to payments entities is manually maintained in a seed file.
+          The mapping of organization records to payments entities is manually maintained in a seed file by `participant_id`.
+          This field is not guaranteed for regional agencies - use `first_tap_organization_source_record_id` for a more useful mapping.
+      - name: first_tap_organization_source_record_id
+        description: |
+          '{{ doc("lp_payments_first_tap_organization_source_record_id") }}'
+      - name: first_tap_organization_name
+        description: |
+          '{{ doc("lp_payments_first_tap_organization_name") }}'
       - name: end_of_month_date_pacific
         description: |
           The last day of the month of the aggregation_datetime in Pacific Time (involves conversion of aggregation_datetime to Pacific Time).
@@ -907,7 +922,7 @@ models:
       - name: organization_name
         description: Name of the agency's organization, joined from dim_organizations via the entity mapping.
       - name: organization_source_record_id
-        description: Source record ID for the agency's organization in the transit database.
+        description: '{{ doc("payments_organization_source_record_id") }}'
       - name: route_long_name
         description: Long name of the GTFS route, joined via line_public_number. Null when no matching route exists.
       - name: route_short_name
@@ -931,6 +946,7 @@ models:
     columns:
       - name: organization_name
       - name: organization_source_record_id
+        description: '{{ doc("payments_organization_source_record_id") }}'
       - name: operator_id
         description: '{{ doc("enghouse_operator_id") }}'
       - name: id

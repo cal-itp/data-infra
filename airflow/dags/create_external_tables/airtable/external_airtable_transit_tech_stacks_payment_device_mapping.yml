@@ -23,6 +23,9 @@ schema_fields:
   - name: agency
     type: STRING
     mode: REPEATED
+  - name: agency_name
+    type: STRING
+    mode: REPEATED
   - name: id
     type: STRING
     mode: NULLABLE

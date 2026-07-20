@@ -677,5 +677,29 @@ First six numbers of the PAN.
 {% enddocs %}
 
 {% docs lp_card_scheme %}
-Card scheme of this funding source. One of (`VISA`, `MASTERCARD`, `DISCOVER`, `AMEX`).
+Card scheme of this funding source. One of (`VISA`, `MASTERCARD`, `DISCOVER`, `AMEX`). 
+{% enddocs %}
+
+{% docs lp_payments_first_tap_organization_source_record_id %}
+`source_record_id` of the organization that operated the earliest tap
+(by `transaction_date_time_utc`) in this aggregation, resolved from the accurate
+device-level agency mapping in `int_payments__agency_joined_device_transactions`.
+Intended for estimating revenue splits between agencies that share a Littlepay
+`participant_id` (e.g. SLORTA / SLO City). Only populated for regional agencies.
+{% enddocs %}
+
+{% docs lp_payments_first_tap_organization_name %}
+Name of the Cal-ITP defined organization (from `dim_organizations`) associated with the
+`first_tap_organization_source_record_id` for this aggregation.
+{% enddocs %}
+
+{% docs lp_tap_organization_source_record_id %}
+`source_record_id` of the Cal-ITP defined organization (from `dim_organizations`) associated with this payments activity.
+The mapping of organization records to payments entities is manually maintained in seed files: `payments_entity_mapping`, 
+and for regional agencies, the device-level `dim_payment_device_mapping`.
+{% enddocs %}
+
+{% docs lp_tap_organization_name %}
+Name of the Cal-ITP defined organization (from `dim_organizations`) associated with this tap.
+The mapping of organization records to payments entities is manually maintained in a seed file.
 {% enddocs %}

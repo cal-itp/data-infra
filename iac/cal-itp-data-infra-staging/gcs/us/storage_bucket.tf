@@ -122,22 +122,6 @@ resource "google_storage_bucket" "calitp-staging-cal-bc" {
   }
 }
 
-resource "google_storage_bucket" "calitp-staging-composer" {
-  default_event_based_hold    = "false"
-  force_destroy               = "true"
-  location                    = "US-WEST2"
-  name                        = "calitp-staging-composer"
-  project                     = "cal-itp-data-infra-staging"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-
-  lifecycle {
-    ignore_changes = [labels]
-  }
-}
-
 # bucket for airflow managed by composer3
 resource "google_storage_bucket" "calitp-staging-composer3" {
   default_event_based_hold    = "false"

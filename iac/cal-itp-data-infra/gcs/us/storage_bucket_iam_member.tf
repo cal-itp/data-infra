@@ -382,12 +382,6 @@ resource "google_storage_bucket_iam_member" "tfer--us-west2-calitp-airflow2-pr-8
   role   = "roles/storage.legacyBucketReader"
 }
 
-resource "google_storage_bucket_iam_member" "calitp-composer" {
-  bucket = google_storage_bucket.calitp-composer.name
-  member = "projectEditor:cal-itp-data-infra"
-  role   = "roles/storage.legacyBucketOwner"
-}
-
 resource "google_storage_bucket_iam_member" "calitp-composer3" {
   bucket = google_storage_bucket.calitp-composer3.name
   member = "projectEditor:cal-itp-data-infra"
@@ -398,6 +392,12 @@ resource "google_storage_bucket_iam_member" "calitp-tides" {
   bucket = google_storage_bucket.calitp-tides.name
   role   = "roles/storage.objectViewer"
   member = "allUsers"
+}
+
+resource "google_storage_bucket_iam_member" "calitp-tides-logs-storage-analytics" {
+  bucket = google_storage_bucket.calitp-tides-logs.name
+  role   = "roles/storage.objectCreator"
+  member = "group:cloud-storage-analytics@google.com"
 }
 
 resource "google_storage_bucket_iam_member" "calitp-site" {

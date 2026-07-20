@@ -69,6 +69,13 @@ jupyterhub:
     userPods:
       nodeAffinity:
         matchNodePurpose: require
+  cull:
+    # Reclaim idle notebooks so their nodes can drain (chart default is 1h).
+    # 3h keeps a kernel alive over lunch / a long meeting while still freeing
+    # abandoned notebooks the same day. Works with the jupyterhub-users floor.
+    enabled: true
+    timeout: 10800   # 3h idle (chart default: 3600 = 1h)
+    every: 600       # check every 10m (chart default)
   hub:
     db:
       pvc:
