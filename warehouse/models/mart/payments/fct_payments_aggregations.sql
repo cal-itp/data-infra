@@ -42,6 +42,10 @@ customers AS (
     SELECT * FROM {{ ref('int_payments__customers_vaults_to_aggregations') }}
 ),
 
+first_tap_agency AS (
+    SELECT * FROM {{ ref('int_payments__regional_agencies_first_tap_by_aggregation') }}
+),
+
 elavon_info AS (
   SELECT
     purch_id AS elavon_purch_id,
@@ -74,12 +78,14 @@ join_payments AS (
         settlements.retrieval_reference_number AS settlement_retrieval_reference_number,
         customers.principal_customer_id,
         customers.bin,
-        customers.card_scheme
+        customers.card_scheme,
+        first_tap_agency.first_tap_organization_source_record_id
     FROM micropayments
     FULL OUTER JOIN authorisations USING (aggregation_id)
     FULL OUTER JOIN settlements USING (aggregation_id)
     FULL OUTER JOIN refunds USING (aggregation_id)
     LEFT JOIN customers USING (aggregation_id)
+    LEFT JOIN first_tap_agency USING (aggregation_id)
 ),
 
 join_orgs AS (
@@ -87,6 +93,7 @@ join_orgs AS (
         join_payments.*,
         orgs.name AS organization_name,
         orgs.source_record_id AS organization_source_record_id,
+        first_tap_orgs.name AS first_tap_organization_name,
     FROM join_payments
     LEFT JOIN payments_entity_mapping
         ON join_payments.participant_id = payments_entity_mapping.participant_id
@@ -96,6 +103,9 @@ join_orgs AS (
     LEFT JOIN orgs
         ON payments_entity_mapping.organization_source_record_id = orgs.source_record_id
         AND CAST(join_payments.aggregation_datetime AS TIMESTAMP) BETWEEN orgs._valid_from AND orgs._valid_to
+    LEFT JOIN orgs AS first_tap_orgs
+        ON join_payments.first_tap_organization_source_record_id = first_tap_orgs.source_record_id
+        AND CAST(join_payments.aggregation_datetime AS TIMESTAMP) BETWEEN first_tap_orgs._valid_from AND first_tap_orgs._valid_to
 ),
 
 fct_payments_aggregations AS (
@@ -103,6 +113,8 @@ fct_payments_aggregations AS (
         participant_id,
         organization_name,
         organization_source_record_id,
+        first_tap_organization_source_record_id,
+        first_tap_organization_name,
         LAST_DAY(EXTRACT(DATE FROM aggregation_datetime AT TIME ZONE "America/Los_Angeles"), MONTH) AS end_of_month_date_pacific,
         LAST_DAY(EXTRACT(DATE FROM aggregation_datetime), MONTH) AS end_of_month_date_utc,
         aggregation_id,

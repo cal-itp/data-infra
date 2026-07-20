@@ -36,10 +36,19 @@ fct_complete_monthly_ridership_with_adjustments_and_estimates AS (
         stg.mode_type_of_service_status,
         stg.vrh,
 
-        LAG(upt) OVER (PARTITION BY ntd_id, mode, type_of_service ORDER BY month_first_day) AS upt_prior_year_month,
-            upt - LAG(upt) OVER (PARTITION BY ntd_id, mode, type_of_service ORDER BY month_first_day) AS upt_change_1yr,
+        -- month-over-month change, change against prior month
+        LAG(upt, 1) OVER (PARTITION BY ntd_id, mode, type_of_service ORDER BY month_first_day) AS upt_prior_month,
+        upt - LAG(upt, 1) OVER (PARTITION BY ntd_id, mode, type_of_service ORDER BY month_first_day) AS upt_change_1mo,
         ROUND(SAFE_DIVIDE(
-            (upt - LAG(upt) OVER (PARTITION BY ntd_id, mode, type_of_service ORDER BY month_first_day)),
+            (upt - LAG(upt, 1) OVER (PARTITION BY ntd_id, mode, type_of_service ORDER BY month_first_day)),
+            LAG(upt) OVER (PARTITION BY ntd_id, mode, type_of_service ORDER BY month_first_day)
+        ), 4) AS upt_pct_change_1mo,
+
+        -- month-over-month change, change against last year-same month (Jan 2026 against Jan 2025)
+        LAG(upt, 12) OVER (PARTITION BY ntd_id, mode, type_of_service ORDER BY month_first_day) AS upt_prior_year, -- 12 months ago
+        upt - LAG(upt, 12) OVER (PARTITION BY ntd_id, mode, type_of_service ORDER BY month_first_day) AS upt_change_1yr,
+        ROUND(SAFE_DIVIDE(
+            (upt - LAG(upt, 12) OVER (PARTITION BY ntd_id, mode, type_of_service ORDER BY month_first_day)),
             LAG(upt) OVER (PARTITION BY ntd_id, mode, type_of_service ORDER BY month_first_day)
         ), 4) AS upt_pct_change_1yr,
 

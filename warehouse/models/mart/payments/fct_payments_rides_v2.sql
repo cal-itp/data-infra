@@ -19,6 +19,11 @@ dim_gtfs_datasets AS (
     SELECT * FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
+dim_organizations AS (
+    SELECT *
+    FROM {{ ref('dim_organizations') }}
+),
+
 payments_entity_mapping AS (
     SELECT * FROM {{ ref('payments_entity_mapping') }}
 ),
@@ -28,9 +33,9 @@ micropayments AS (
     FROM {{ ref('int_payments__micropayments_adjustments_refunds_joined') }}
 ),
 
-int_payments__matched_device_transactions AS (
+int_payments__agency_joined_device_transactions AS (
     SELECT *
-    FROM {{ ref('int_payments__matched_device_transactions') }}
+    FROM {{ ref('int_payments__agency_joined_device_transactions') }}
 
 ),
 
@@ -48,6 +53,7 @@ int_payments__dim_product_data AS (
     SELECT *
     FROM {{ ref('int_payments__dim_product_data') }}
 ),
+
 
 participants_to_routes_and_agency AS (
     SELECT
@@ -82,6 +88,8 @@ fct_payments_rides_v2 AS (
         -- Customer and funding source information
         micropayments.funding_source_vault_id,
         micropayments.customer_id,
+        device_transactions.organization_source_record_id,
+        organizations.name AS organization_name,
         customers.principal_customer_id,
         customers.earliest_tap,
         vaults.bin,
@@ -155,7 +163,7 @@ fct_payments_rides_v2 AS (
         AND micropayments.participant_id = vaults.participant_id
         AND micropayments.transaction_time >= vaults.calitp_valid_at
         AND micropayments.transaction_time < vaults.calitp_invalid_at
-    LEFT JOIN int_payments__matched_device_transactions AS device_transactions
+    LEFT JOIN int_payments__agency_joined_device_transactions AS device_transactions
         ON micropayments.participant_id = device_transactions.participant_id
             AND micropayments.micropayment_id = device_transactions.micropayment_id
     LEFT JOIN int_payments__dim_product_data AS products
@@ -171,7 +179,9 @@ fct_payments_rides_v2 AS (
             AND CAST(device_transactions.transaction_date_time_utc AS TIMESTAMP)
                 BETWEEN CAST(routes._in_use_from AS TIMESTAMP)
                 AND CAST(routes._in_use_until AS TIMESTAMP)
-
+    LEFT JOIN dim_organizations as organizations -- TODO: organization_name seems to be neutral in some cases - figure out why
+        ON device_transactions.organization_source_record_id = organizations.source_record_id
+            AND CAST(device_transactions.transaction_date_pacific AS TIMESTAMP) BETWEEN organizations._valid_from AND organizations._valid_to
 )
 
 SELECT * FROM fct_payments_rides_v2

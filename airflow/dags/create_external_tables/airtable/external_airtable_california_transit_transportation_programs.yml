@@ -1,0 +1,49 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__AIRTABLE') }}"
+post_hook: |
+  SELECT *
+  FROM `{{ env_var('GOOGLE_CLOUD_PROJECT') }}`.external_airtable.california_transit__transportation_programs
+  LIMIT 1;
+source_objects:
+  - "california_transit__transportation_programs/*.jsonl.gz"
+destination_project_dataset_table: "external_airtable.california_transit__transportation_programs"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: AUTO
+  require_partition_filter: false
+  source_uri_prefix: "california_transit__transportation_programs/"
+schema_fields:
+  - name: name
+    type: STRING
+    mode: NULLABLE
+  - name: program_type
+    type: STRING
+    mode: NULLABLE
+  - name: provider
+    type: STRING
+    mode: REPEATED
+  - name: rider_requirements
+    type: STRING
+    mode: REPEATED
+  - name: website
+    type: STRING
+    mode: NULLABLE
+  - name: operating_county_geographies
+    type: STRING
+    mode: REPEATED
+  - name: notes
+    type: STRING
+    mode: NULLABLE
+  - name: start_date
+    type: DATE
+    mode: NULLABLE
+  - name: end_date
+    type: DATE
+    mode: NULLABLE
+  - name: operational_status
+    type: STRING
+    mode: NULLABLE
+  - name: found_website_for_program
+    type: STRING
+    mode: NULLABLE

@@ -47,6 +47,8 @@ fct_capital_expenditures_time_series AS (
         int_total.agency_name AS source_agency,
         int_total.city AS source_city,
         int_total.state AS source_state,
+        int_total.dt,
+        int_total.execution_ts,
 
     FROM int_total
     LEFT JOIN int_rolling_stock USING (key)

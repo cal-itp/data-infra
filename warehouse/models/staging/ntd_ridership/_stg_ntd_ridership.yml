@@ -130,16 +130,17 @@ models:
       - name: date
         description: |
           The month (in Month-Year format) for which UPT, VRM, VRH and VOM was reported by the agency for the given Mode and TOS.
-      - name: period_month
+      - name: month_first_day
+        description: |
+          The first day of the month (in YYYY-MM-DD format) for which UPT, VRM, VRH and VOM was reported by the agency for the given Mode and TOS.
+      - name: month
         description: |
           The month portion extracted from the date field (MM format).
-      - name: period_year
+      - name: year
         description: |
           The year portion extracted from the date field (YYYY format).
-      - name: period_year_month
-        description: |
-          The year and month in YYYY-MM format extracted from the date field.
-      - *tos
+      - <<: *tos
+        name: type_of_service
       - *mode
       - name: agency_mode_tos_date
         description: |
