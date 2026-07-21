@@ -266,7 +266,6 @@ Airflow operators have dependencies on the following secrets, which are required
 - `airflow-connections-http_mobility_database`
 - `airflow-connections-http_ntd`
 - `airflow-connections-http_transitland`
-- `CALITP__ELAVON_SFTP_PASSWORD`
 
 The following are provided by Littlepay to DDS:
 
