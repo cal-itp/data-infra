@@ -30,7 +30,7 @@ resource "google_compute_security_policy" "metabase" {
     description = "OWASP XSS"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('xss-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
+        expression = "evaluatePreconfiguredWaf('xss-v33-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v030301-id941340-xss']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
       }
     }
   }
