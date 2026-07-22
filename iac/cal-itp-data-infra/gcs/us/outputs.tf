@@ -64,10 +64,6 @@ output "google_storage_bucket_acl_tfer--calitp-gtfs-rt-parsed_id" {
   value = google_storage_bucket_acl.tfer--calitp-gtfs-rt-parsed.id
 }
 
-output "google_storage_bucket_acl_tfer--calitp-gtfs-rt-raw-deprecated_id" {
-  value = google_storage_bucket_acl.tfer--calitp-gtfs-rt-raw-deprecated.id
-}
-
 output "google_storage_bucket_acl_tfer--calitp-gtfs-rt-raw-v2_id" {
   value = google_storage_bucket_acl.tfer--calitp-gtfs-rt-raw-v2.id
 }
@@ -192,14 +188,6 @@ output "google_storage_bucket_acl_tfer--littlepay-data-extract-prod_id" {
   value = google_storage_bucket_acl.tfer--littlepay-data-extract-prod.id
 }
 
-output "google_storage_bucket_acl_tfer--rt-parsed-deprecated_id" {
-  value = google_storage_bucket_acl.tfer--rt-parsed-deprecated.id
-}
-
-output "google_storage_bucket_acl_tfer--rt-parsed_id" {
-  value = google_storage_bucket_acl.tfer--rt-parsed.id
-}
-
 output "google_storage_bucket_acl_tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com_id" {
   value = google_storage_bucket_acl.tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com.id
 }
@@ -310,10 +298,6 @@ output "google_storage_bucket_iam_binding_tfer--calitp-gtfs-download-config_id" 
 
 output "google_storage_bucket_iam_binding_tfer--calitp-gtfs-rt-parsed_id" {
   value = google_storage_bucket_iam_binding.tfer--calitp-gtfs-rt-parsed.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--calitp-gtfs-rt-raw-deprecated_id" {
-  value = google_storage_bucket_iam_binding.tfer--calitp-gtfs-rt-raw-deprecated.id
 }
 
 output "google_storage_bucket_iam_binding_tfer--calitp-gtfs-rt-raw-v2_id" {
@@ -444,14 +428,6 @@ output "google_storage_bucket_iam_binding_tfer--littlepay-data-extract-prod_id" 
   value = google_storage_bucket_iam_binding.tfer--littlepay-data-extract-prod.id
 }
 
-output "google_storage_bucket_iam_binding_tfer--rt-parsed-deprecated_id" {
-  value = google_storage_bucket_iam_binding.tfer--rt-parsed-deprecated.id
-}
-
-output "google_storage_bucket_iam_binding_tfer--rt-parsed_id" {
-  value = google_storage_bucket_iam_binding.tfer--rt-parsed.id
-}
-
 output "google_storage_bucket_iam_binding_tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com_id" {
   value = google_storage_bucket_iam_binding.tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com.id
 }
@@ -558,10 +534,6 @@ output "google_storage_bucket_iam_member_tfer--calitp-gtfs-download-config_id" {
 
 output "google_storage_bucket_iam_member_tfer--calitp-gtfs-rt-parsed_id" {
   value = google_storage_bucket_iam_member.tfer--calitp-gtfs-rt-parsed.id
-}
-
-output "google_storage_bucket_iam_member_tfer--calitp-gtfs-rt-raw-deprecated_id" {
-  value = google_storage_bucket_iam_member.tfer--calitp-gtfs-rt-raw-deprecated.id
 }
 
 output "google_storage_bucket_iam_member_tfer--calitp-gtfs-rt-raw-v2_id" {
@@ -696,14 +668,6 @@ output "google_storage_bucket_iam_member_tfer--littlepay-data-extract-prod_id" {
   value = google_storage_bucket_iam_member.tfer--littlepay-data-extract-prod.id
 }
 
-output "google_storage_bucket_iam_member_tfer--rt-parsed-deprecated_id" {
-  value = google_storage_bucket_iam_member.tfer--rt-parsed-deprecated.id
-}
-
-output "google_storage_bucket_iam_member_tfer--rt-parsed_id" {
-  value = google_storage_bucket_iam_member.tfer--rt-parsed.id
-}
-
 output "google_storage_bucket_iam_member_tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com_id" {
   value = google_storage_bucket_iam_member.tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com.id
 }
@@ -814,10 +778,6 @@ output "google_storage_bucket_iam_policy_tfer--calitp-gtfs-download-config_id" {
 
 output "google_storage_bucket_iam_policy_tfer--calitp-gtfs-rt-parsed_id" {
   value = google_storage_bucket_iam_policy.tfer--calitp-gtfs-rt-parsed.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--calitp-gtfs-rt-raw-deprecated_id" {
-  value = google_storage_bucket_iam_policy.tfer--calitp-gtfs-rt-raw-deprecated.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--calitp-gtfs-rt-raw-v2_id" {
@@ -950,14 +910,6 @@ output "google_storage_bucket_iam_policy_tfer--gtfs-data_id" {
 
 output "google_storage_bucket_iam_policy_tfer--littlepay-data-extract-prod_id" {
   value = google_storage_bucket_iam_policy.tfer--littlepay-data-extract-prod.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--rt-parsed-deprecated_id" {
-  value = google_storage_bucket_iam_policy.tfer--rt-parsed-deprecated.id
-}
-
-output "google_storage_bucket_iam_policy_tfer--rt-parsed_id" {
-  value = google_storage_bucket_iam_policy.tfer--rt-parsed.id
 }
 
 output "google_storage_bucket_iam_policy_tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com_id" {
@@ -1134,14 +1086,6 @@ output "google_storage_bucket_tfer--calitp-gtfs-rt-parsed_name" {
 
 output "google_storage_bucket_tfer--calitp-gtfs-rt-parsed_self_link" {
   value = google_storage_bucket.tfer--calitp-gtfs-rt-parsed.self_link
-}
-
-output "google_storage_bucket_tfer--calitp-gtfs-rt-raw-deprecated_name" {
-  value = google_storage_bucket.tfer--calitp-gtfs-rt-raw-deprecated.name
-}
-
-output "google_storage_bucket_tfer--calitp-gtfs-rt-raw-deprecated_self_link" {
-  value = google_storage_bucket.tfer--calitp-gtfs-rt-raw-deprecated.self_link
 }
 
 output "google_storage_bucket_tfer--calitp-gtfs-rt-raw-v2_name" {
@@ -1408,22 +1352,6 @@ output "google_storage_bucket_tfer--littlepay-data-extract-prod_self_link" {
   value = google_storage_bucket.tfer--littlepay-data-extract-prod.self_link
 }
 
-output "google_storage_bucket_tfer--rt-parsed-deprecated_name" {
-  value = google_storage_bucket.tfer--rt-parsed-deprecated.name
-}
-
-output "google_storage_bucket_tfer--rt-parsed-deprecated_self_link" {
-  value = google_storage_bucket.tfer--rt-parsed-deprecated.self_link
-}
-
-output "google_storage_bucket_tfer--rt-parsed_name" {
-  value = google_storage_bucket.tfer--rt-parsed.name
-}
-
-output "google_storage_bucket_tfer--rt-parsed_self_link" {
-  value = google_storage_bucket.tfer--rt-parsed.self_link
-}
-
 output "google_storage_bucket_tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com_name" {
   value = google_storage_bucket.tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com.name
 }
@@ -1596,10 +1524,6 @@ output "google_storage_default_object_acl_tfer--calitp-gtfs-rt-parsed_id" {
   value = google_storage_default_object_acl.tfer--calitp-gtfs-rt-parsed.id
 }
 
-output "google_storage_default_object_acl_tfer--calitp-gtfs-rt-raw-deprecated_id" {
-  value = google_storage_default_object_acl.tfer--calitp-gtfs-rt-raw-deprecated.id
-}
-
 output "google_storage_default_object_acl_tfer--calitp-gtfs-rt-raw-v2_id" {
   value = google_storage_default_object_acl.tfer--calitp-gtfs-rt-raw-v2.id
 }
@@ -1722,14 +1646,6 @@ output "google_storage_default_object_acl_tfer--gtfs-data_id" {
 
 output "google_storage_default_object_acl_tfer--littlepay-data-extract-prod_id" {
   value = google_storage_default_object_acl.tfer--littlepay-data-extract-prod.id
-}
-
-output "google_storage_default_object_acl_tfer--rt-parsed-deprecated_id" {
-  value = google_storage_default_object_acl.tfer--rt-parsed-deprecated.id
-}
-
-output "google_storage_default_object_acl_tfer--rt-parsed_id" {
-  value = google_storage_default_object_acl.tfer--rt-parsed.id
 }
 
 output "google_storage_default_object_acl_tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com_id" {

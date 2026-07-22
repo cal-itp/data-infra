@@ -72,10 +72,6 @@ resource "google_storage_default_object_acl" "tfer--calitp-gtfs-rt-parsed" {
   bucket = "calitp-gtfs-rt-parsed"
 }
 
-resource "google_storage_default_object_acl" "tfer--calitp-gtfs-rt-raw-deprecated" {
-  bucket = "calitp-gtfs-rt-raw-deprecated"
-}
-
 resource "google_storage_default_object_acl" "tfer--calitp-gtfs-rt-raw-v2" {
   bucket = "calitp-gtfs-rt-raw-v2"
 }
@@ -202,14 +198,6 @@ resource "google_storage_default_object_acl" "tfer--gtfs-data-test" {
 
 resource "google_storage_default_object_acl" "tfer--littlepay-data-extract-prod" {
   bucket = "littlepay-data-extract-prod"
-}
-
-resource "google_storage_default_object_acl" "tfer--rt-parsed" {
-  bucket = "rt-parsed"
-}
-
-resource "google_storage_default_object_acl" "tfer--rt-parsed-deprecated" {
-  bucket = "rt-parsed-deprecated"
 }
 
 resource "google_storage_default_object_acl" "tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com" {

@@ -94,12 +94,6 @@ resource "google_storage_bucket_iam_binding" "tfer--calitp-gtfs-rt-parsed" {
   role    = "roles/storage.legacyObjectReader"
 }
 
-resource "google_storage_bucket_iam_binding" "tfer--calitp-gtfs-rt-raw-deprecated" {
-  bucket  = "b/calitp-gtfs-rt-raw-deprecated"
-  members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectOwner"
-}
-
 resource "google_storage_bucket_iam_binding" "tfer--calitp-gtfs-rt-raw-v2" {
   bucket  = "b/calitp-gtfs-rt-raw-v2"
   members = ["projectEditor:cal-itp-data-infra", "projectOwner:cal-itp-data-infra"]
@@ -296,18 +290,6 @@ resource "google_storage_bucket_iam_binding" "tfer--littlepay-data-extract-prod"
   bucket  = "b/littlepay-data-extract-prod"
   members = ["projectViewer:cal-itp-data-infra"]
   role    = "roles/storage.legacyObjectReader"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--rt-parsed" {
-  bucket  = "b/rt-parsed"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyObjectReader"
-}
-
-resource "google_storage_bucket_iam_binding" "tfer--rt-parsed-deprecated" {
-  bucket  = "b/rt-parsed-deprecated"
-  members = ["projectViewer:cal-itp-data-infra"]
-  role    = "roles/storage.legacyBucketReader"
 }
 
 resource "google_storage_bucket_iam_binding" "tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com" {

@@ -623,56 +623,6 @@ resource "google_storage_bucket_iam_policy" "tfer--calitp-gtfs-rt-parsed" {
 POLICY
 }
 
-resource "google_storage_bucket_iam_policy" "tfer--calitp-gtfs-rt-raw-deprecated" {
-  bucket = "b/calitp-gtfs-rt-raw-deprecated"
-
-  policy_data = <<POLICY
-{
-  "bindings": [
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra",
-        "serviceAccount:project-1005246706141@storage-transfer-service.iam.gserviceaccount.com"
-      ],
-      "role": "roles/storage.legacyBucketReader"
-    },
-    {
-      "members": [
-        "serviceAccount:project-1005246706141@storage-transfer-service.iam.gserviceaccount.com"
-      ],
-      "role": "roles/storage.legacyBucketWriter"
-    },
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectReader"
-    },
-    {
-      "members": [
-        "serviceAccount:project-1005246706141@storage-transfer-service.iam.gserviceaccount.com"
-      ],
-      "role": "roles/storage.objectAdmin"
-    }
-  ]
-}
-POLICY
-}
-
 resource "google_storage_bucket_iam_policy" "tfer--calitp-gtfs-rt-raw-v2" {
   bucket = "b/calitp-gtfs-rt-raw-v2"
 
@@ -1940,80 +1890,6 @@ resource "google_storage_bucket_iam_policy" "tfer--littlepay-data-extract-prod" 
         "serviceAccount:project-1005246706141@storage-transfer-service.iam.gserviceaccount.com"
       ],
       "role": "roles/storage.objectAdmin"
-    }
-  ]
-}
-POLICY
-}
-
-resource "google_storage_bucket_iam_policy" "tfer--rt-parsed" {
-  bucket = "b/rt-parsed"
-
-  policy_data = <<POLICY
-{
-  "bindings": [
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketReader"
-    },
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectReader"
-    }
-  ]
-}
-POLICY
-}
-
-resource "google_storage_bucket_iam_policy" "tfer--rt-parsed-deprecated" {
-  bucket = "b/rt-parsed-deprecated"
-
-  policy_data = <<POLICY
-{
-  "bindings": [
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyBucketReader"
-    },
-    {
-      "members": [
-        "projectEditor:cal-itp-data-infra",
-        "projectOwner:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectOwner"
-    },
-    {
-      "members": [
-        "projectViewer:cal-itp-data-infra"
-      ],
-      "role": "roles/storage.legacyObjectReader"
     }
   ]
 }
