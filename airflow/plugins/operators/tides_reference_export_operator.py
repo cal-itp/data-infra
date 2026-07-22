@@ -8,6 +8,18 @@ from airflow.providers.google.cloud.hooks.bigquery import BigQueryHook
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
 
 
+def reference_destination_prefix(model_name: str, dt: str) -> str:
+    """The bucket prefix a reference model is exported to.
+
+    *_latest models live at a stable path that is overwritten each run;
+    history models are stamped per run date (pass a template like
+    "{{ ds }}", or "*" to build a matching pattern).
+    """
+    if model_name.endswith("_latest"):
+        return os.path.join("reference", model_name) + "/"
+    return os.path.join("reference", model_name, f"dt={dt}") + "/"
+
+
 class TIDESReferenceExportOperator(BaseOperator):
     """Exports one whole reference table to the TIDES bucket, parquet + CSV.
 

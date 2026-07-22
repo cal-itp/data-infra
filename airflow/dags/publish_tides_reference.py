@@ -3,7 +3,14 @@ from datetime import datetime, timedelta
 
 from dags import email_on_failure, log_failure_to_slack
 from operators.dbt_manifest_to_models_operator import DBTManifestToModelsOperator
-from operators.tides_reference_export_operator import TIDESReferenceExportOperator
+from operators.tides_dcat_metadata_operator import TIDESDCATMetadataOperator
+from operators.tides_frictionless_metadata_operator import (
+    TIDESFrictionlessMetadataOperator,
+)
+from operators.tides_reference_export_operator import (
+    TIDESReferenceExportOperator,
+    reference_destination_prefix,
+)
 
 from airflow.decorators import dag
 from airflow.operators.latest_only import LatestOnlyOperator
@@ -34,6 +41,10 @@ def publish_tides_reference():
 
       * *_latest models  -> reference/<model>/ (stable path, overwritten)
       * history models   -> reference/<model>/dt=<run date>/
+
+    Machine-readable metadata (SAM 5160.1) is published in the same run: a
+    Frictionless datapackage.json next to each exported table, and a DCAT-US
+    data.json catalog covering the reference tables plus the fact tables.
     """
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=False)
 
@@ -45,16 +56,12 @@ def publish_tides_reference():
     )
 
     def create_export_kwargs(model):
-        if model["name"].endswith("_latest"):
-            destination_path_prefix = os.path.join("reference", model["name"]) + "/"
-        else:
-            destination_path_prefix = (
-                os.path.join("reference", model["name"], "dt={{ ds }}") + "/"
-            )
         return {
             "dataset_name": model["schema"],
             "table_name": model["name"],
-            "destination_path_prefix": destination_path_prefix,
+            "destination_path_prefix": reference_destination_prefix(
+                model["name"], "{{ ds }}"
+            ),
             "report_path": (
                 "reference_outcomes/dt={{ ds }}/ts={{ ts }}/"
                 f"{model['name']}_outcomes.jsonl"
@@ -71,7 +78,49 @@ def publish_tides_reference():
         map_index_template="{{ task.table_name }}",
     ).expand_kwargs(reference_models.output.map(create_export_kwargs))
 
-    latest_only >> reference_models >> export_reference_models
+    def create_datapackage_kwargs(model):
+        return {
+            "model_name": model["name"],
+            "destination_path_prefix": reference_destination_prefix(
+                model["name"], "{{ ds }}"
+            ),
+        }
+
+    write_datapackages = TIDESFrictionlessMetadataOperator.partial(
+        task_id="write_datapackages",
+        retries=1,
+        retry_delay=timedelta(seconds=10),
+        bucket_name=os.getenv("CALITP_BUCKET__DBT_DOCS"),
+        destination_bucket=os.environ.get("CALITP_BUCKET__TIDES"),
+        user_project=os.environ.get("GOOGLE_CLOUD_PROJECT"),
+        map_index_template="{{ task.model_name }}",
+    ).expand_kwargs(reference_models.output.map(create_datapackage_kwargs))
+
+    write_dcat_catalog = TIDESDCATMetadataOperator(
+        task_id="write_dcat_catalog",
+        retries=1,
+        retry_delay=timedelta(seconds=10),
+        bucket_name=os.getenv("CALITP_BUCKET__DBT_DOCS"),
+        models=reference_models.output,
+        extra_datasets=[
+            {
+                "model_name": "fct_tides_vehicle_locations",
+                "prefix": "vehicle_locations/",
+                "formats": ["parquet"],
+            },
+            {
+                "model_name": "fct_tides_trips_performed",
+                "prefix": "trips_performed/",
+                "formats": ["parquet"],
+            },
+        ],
+        destination_bucket=os.environ.get("CALITP_BUCKET__TIDES"),
+        user_project=os.environ.get("GOOGLE_CLOUD_PROJECT"),
+    )
+
+    latest_only >> reference_models
+    export_reference_models >> write_datapackages
+    export_reference_models >> write_dcat_catalog
 
 
 publish_tides_reference = publish_tides_reference()
