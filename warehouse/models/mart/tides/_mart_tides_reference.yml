@@ -35,7 +35,7 @@ models:
       (_valid_from <= service_date < _valid_to). Columns follow the set
       already published to data.ca.gov for
       dim_organizations_latest_with_caltrans_district.
-    columns:
+    columns: &tides_organizations_columns
       - name: key
         description: Synthetic version surrogate; unique per organization version.
         data_tests:
@@ -99,6 +99,7 @@ models:
       Current-version cut of tides_organizations (`WHERE _is_current`).
       Exported to the TIDES bucket at a stable path as the latest
       organization reference snapshot.
+    columns: *tides_organizations_columns
 
   - name: tides_provider_gtfs_data
     description: |
@@ -111,7 +112,7 @@ models:
       already published to data.ca.gov for dim_provider_gtfs_data_latest, plus
       the four *_gtfs_dataset_key columns so the facts' `gtfs_dataset_key`
       joins directly to tides_gtfs_datasets.
-    columns:
+    columns: &tides_provider_gtfs_data_columns
       - name: key
         description: Synthetic version surrogate; unique per record version.
         data_tests:
@@ -191,6 +192,7 @@ models:
       Current-version cut of tides_provider_gtfs_data (`WHERE _is_current`).
       Exported to the TIDES bucket at a stable path as the latest
       organization <-> feed crosswalk snapshot.
+    columns: *tides_provider_gtfs_data_columns
 
   - name: tides_gtfs_datasets
     description: |
@@ -203,7 +205,7 @@ models:
       already published to data.ca.gov for dim_gtfs_datasets_latest;
       `private_dataset` records are excluded from all versions, and feed URLs
       are credential-scrubbed upstream before encoding.
-    columns:
+    columns: &tides_gtfs_datasets_columns
       - name: key
         description: |
           Synthetic version surrogate; unique per dataset version. Matches the
@@ -255,6 +257,7 @@ models:
       Current-version cut of tides_gtfs_datasets (`WHERE _is_current`).
       Exported to the TIDES bucket at a stable path as the latest feed
       reference snapshot.
+    columns: *tides_gtfs_datasets_columns
 
   - name: tides_services
     description: |
@@ -265,7 +268,7 @@ models:
       (_valid_from <= service_date < _valid_to). Columns follow the set
       already published to data.ca.gov for dim_services_latest; array columns
       are flattened to comma-separated strings.
-    columns:
+    columns: &tides_services_columns
       - name: key
         description: Synthetic version surrogate; unique per service version.
         data_tests:
@@ -311,6 +314,7 @@ models:
       Current-version cut of tides_services (`WHERE _is_current`). Exported to
       the TIDES bucket at a stable path as the latest service reference
       snapshot.
+    columns: *tides_services_columns
 
   - name: tides_agency
     description: |
@@ -320,7 +324,7 @@ models:
       date (_valid_from <= service_date < _valid_to; validity comes from the
       schedule feed version, dim_schedule_feeds). Columns follow the set
       already published to data.ca.gov for dim_agency_latest.
-    columns:
+    columns: &tides_agency_columns
       - name: key
         description: Synthetic row surrogate; unique per agency row per feed version.
         data_tests:
@@ -370,3 +374,4 @@ models:
       Current-version cut of tides_agency (`WHERE _is_current`). Exported to
       the TIDES bucket at a stable path as the latest agency reference
       snapshot.
+    columns: *tides_agency_columns
