@@ -34,7 +34,9 @@ Verify you have:
 
 ### 1.1 Receive Credentials from Littlepay
 
-Littlepay should reach out to their Cal-ITP contacts when an agency's credentials are available. The credentials should inclide:
+Littlepay should reach out to the DDS payment admin group (\[dds_payments_data_admins@dds.dot.ca.gov\]) when an agency's credentials are available. If an agency is about to soft launch and these credentials have not been received, they can be requested from the agency's project manager for onboarding. Typically, financial operations staff are able to provide emails for these contacts, who differ from agency to agency.
+
+The credentials should inclide:
 
 - UserName (different from participant_id)
 - AccessKeyId
@@ -167,7 +169,7 @@ After the PR is merged and GitHub Actions succeed:
 1. Navigate to [IAM & Admin/ Service Accounts](https://console.cloud.google.com/iam-admin/serviceaccounts?project=cal-itp-data-infra)
 2. Click into the service account that you just created
 3. Navigate into the `Keys` section of the top menu
-4. Select `Add Key` --> `Select New Key` from the dropdown menu and select `JSON` as the format
+4. Select `Add Key` --> `Create New Key` from the dropdown menu and select `JSON` as the format
 5. Download the key to a secure location locally
 
 Store this file securely. You'll upload it to Metabase in a later step.
@@ -242,11 +244,7 @@ recysP9m9kjCJwHZe,receZJ9sEnP9vy3g0,mst,MST TAP TO RIDE,2000-01-01,2099-12-31
 - For agencies where this doesn't apply, use arbitrary distant `_in_use_from` and `_in_use_until` dates such as `2000-01-01`and `2099-12-31`
 
 **To find the source_record_ids:**
-Unfortunately, these are somewhat manual processes. Use the queries below to filter the results down, and then manually page through the results until you find the `name` value of the agency that you are looking for. Once you've found the correct name, copy that `source_record_id` for that row.
-
-**Note:**
-
-- When in doubt, reach out to the customer success team for clarity around the expected Organization and GTFS Feed names for the agency.
+Look for organization names and GTFS dataset names in the organizations and datasets tables respetively on [Airtable](https://airtable.com/appPnJWrQ7ui4UmIl?). Then, lookup the `source_record_id`s using the [Onboarding Dashboard](https://airtable.com/appPnJWrQ7ui4UmIl?) or the below SQL query:
 
 ```sql
 -- Find GTFS dataset source_record_id
@@ -358,7 +356,7 @@ WHERE participant_id = '<littlepay-participant-id>'
 
 ### 6.5 Verify dbt Transformations
 
-After the next scheduled run of the transform_warehouse DAG:
+After the next scheduled run of the `dbt_all` or `dbt_daily` DAG, run the following SQL queries or reference the [Onboarding Dashboard](https://metabase.dds.dot.ca.gov/dashboard/369-agency-onboarding-dashboard):
 
 ```sql
 -- Check staging table
