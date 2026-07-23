@@ -40,7 +40,8 @@ dev = [
 ]
 
 [tool.uv.sources]
-composer-dev = { git = "https://github.com/GoogleCloudPlatform/composer-local-dev.git", tag = "0.11.4" }
+# point COMPOSER_CMD to the PR until https://github.com/cal-itp/data-infra/issues/5310 is resolved
+composer-dev = { git = "https://github.com/GoogleCloudPlatform/composer-local-dev.git", tag = "refs/pull/135/head" }
 
 [tool.pytest.ini_options]
 testpaths = "tests"

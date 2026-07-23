@@ -1,0 +1,91 @@
+# -----------------------------------------------------------------
+# General IDE / OS artefacts
+# -----------------------------------------------------------------
+.git
+.gitignore
+.idea
+.vscode
+*.swp
+*~
+.DS_Store
+
+# -----------------------------------------------------------------
+# Python artefacts
+# -----------------------------------------------------------------
+**/__pycache__/
+**/*.py[cod]
+*.egg-info/
+*.dist-info/
+*.egg
+*.whl
+*.tox/
+.coverage
+htmlcov/
+.coverage.*
+.pytest_cache/
+.venv/
+venv/
+env/
+ENV/
+build/
+dist/
+*.pyd
+*.pyo
+
+# -----------------------------------------------------------------
+# Build artefacts / compiled output
+# -----------------------------------------------------------------
+node_modules/
+bower_components/
+*.log
+*.log.*
+*.tmp
+*.temp
+*.tsbuildinfo
+
+# -----------------------------------------------------------------
+# Terraform / IaC state that can be large or contain secrets
+# -----------------------------------------------------------------
+*.tfstate
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+
+# -----------------------------------------------------------------
+# GCP / secret files that should never be baked into the image
+# -----------------------------------------------------------------
+**/application_default_credentials.json
+**/login.json
+secrets/
+.secret*
+
+# -----------------------------------------------------------------
+# Large data / test fixtures that are mounted at runtime
+# -----------------------------------------------------------------
+data/
+fixtures/
+*.csv
+*.parquet
+*.avro
+*.jsonl
+*.h5
+*.db
+*.sqlite
+
+# -----------------------------------------------------------------
+# Miscellaneous / generated docs
+# -----------------------------------------------------------------
+docs/_build/
+site/
+*.html
+*.pdf
+*.docx
+*.xlsx
+
+# -----------------------------------------------------------------
+# Docker‑specific files that belong in the context but not in the image
+# -----------------------------------------------------------------
+Dockerfile
+docker-compose.yml
+docker-compose.*.yml
+*.dockerignore
