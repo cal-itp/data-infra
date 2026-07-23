@@ -164,11 +164,7 @@ recrAG7e0oOiR6FiP,rec7EN71rsZxDFxZd,253,VENTURA COUNTY TRANSPORTATION,Ventura Co
 - For agencies where this doesn't apply, use arbitrary distant dates: `_in_use_from = 2000-01-01`, `_in_use_until = 2099-12-31`
 
 **To find the source_record_ids:**
-Unfortunately, these are somewhat manual processes. Use the queries below to filter the results down, and then manually page through the results until you find the `name` value of the agency that you are looking for. Once you've found the correct name, copy that `source_record_id` for that row.
-
-**Note:**
-
-- When in doubt, reach out to the customer success team for clarity around the expected Organization and GTFS Feed names for the agency.
+Look for organization names and GTFS dataset names in the organizations and datasets tables respetively on [Airtable](https://airtable.com/appPnJWrQ7ui4UmIl?). Then, lookup the `source_record_id`s using the [Onboarding Dashboard](https://airtable.com/appPnJWrQ7ui4UmIl?) or the below SQL query:
 
 ```sql
 -- Find GTFS dataset source_record_id
@@ -183,6 +179,10 @@ FROM `cal-itp-data-infra.mart_transit_database.dim_organizations`
 WHERE _is_current = TRUE
 ORDER BY name ASC -- or DESC, depending on the agency's name is towards the front or end of the alphabet
 ```
+
+**Note:**
+
+- When in doubt, reference the issue or reach out to the customer success team for clarity around the expected Organization and GTFS Feed names for the agency.
 
 ### 3.2 Commit Entity Mapping
 
@@ -252,7 +252,7 @@ WHERE operator_id = '<enghouse-operator-id>'
 
 ### 5.2 Verify dbt Transformations
 
-After the next scheduled run of the transform_warehouse DAG:
+After the next scheduled run of the `dbt_all` or `dbt_daily` DAG, run these queries, or check the [Onboarding Dashboard](https://metabase.dds.dot.ca.gov/dashboard/369-agency-onboarding-dashboard):
 
 ```sql
 -- Check staging table
