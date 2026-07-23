@@ -1,10 +1,10 @@
 resource "google_container_node_pool" "tfer--data-infra-apps_apps-v2" {
   autoscaling {
     location_policy      = "BALANCED"
-    max_node_count       = "2"
-    min_node_count       = "1"
-    total_max_node_count = "0"
-    total_min_node_count = "0"
+    max_node_count       = "0"
+    min_node_count       = "0"
+    total_max_node_count = "3"
+    total_min_node_count = "1"
   }
 
   cluster            = google_container_cluster.tfer--data-infra-apps.name
