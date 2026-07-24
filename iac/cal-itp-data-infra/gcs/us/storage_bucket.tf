@@ -300,23 +300,6 @@ resource "google_storage_bucket" "tfer--calitp-gtfs-rt-parsed" {
   uniform_bucket_level_access = "true"
 }
 
-resource "google_storage_bucket" "tfer--calitp-gtfs-rt-raw-deprecated" {
-  default_event_based_hold = "false"
-  force_destroy            = "false"
-
-  labels = {
-    deprecated = "true"
-  }
-
-  location                    = "US-WEST2"
-  name                        = "calitp-gtfs-rt-raw-deprecated"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "ARCHIVE"
-  uniform_bucket_level_access = "true"
-}
-
 resource "google_storage_bucket" "tfer--calitp-gtfs-rt-raw-v2" {
   default_event_based_hold = "false"
   force_destroy            = "false"
@@ -789,35 +772,6 @@ resource "google_storage_bucket" "tfer--littlepay-data-extract-prod" {
   public_access_prevention    = "inherited"
   requester_pays              = "false"
   storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-}
-
-resource "google_storage_bucket" "tfer--rt-parsed" {
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  name                        = "rt-parsed"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
-  requester_pays              = "false"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
-}
-
-resource "google_storage_bucket" "tfer--rt-parsed-deprecated" {
-  default_event_based_hold = "false"
-  force_destroy            = "false"
-
-  labels = {
-    deprecated = ""
-  }
-
-  location                    = "US-WEST2"
-  name                        = "rt-parsed-deprecated"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "enforced"
-  requester_pays              = "false"
-  storage_class               = "ARCHIVE"
   uniform_bucket_level_access = "true"
 }
 

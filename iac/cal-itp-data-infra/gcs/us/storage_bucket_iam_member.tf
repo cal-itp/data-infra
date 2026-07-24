@@ -94,12 +94,6 @@ resource "google_storage_bucket_iam_member" "tfer--calitp-gtfs-rt-parsed" {
   role   = "roles/storage.legacyBucketOwner"
 }
 
-resource "google_storage_bucket_iam_member" "tfer--calitp-gtfs-rt-raw-deprecated" {
-  bucket = "b/calitp-gtfs-rt-raw-deprecated"
-  member = "projectOwner:cal-itp-data-infra"
-  role   = "roles/storage.legacyObjectOwner"
-}
-
 resource "google_storage_bucket_iam_member" "tfer--calitp-gtfs-rt-raw-v2" {
   bucket = "b/calitp-gtfs-rt-raw-v2"
   member = "projectViewer:cal-itp-data-infra"
@@ -296,18 +290,6 @@ resource "google_storage_bucket_iam_member" "tfer--littlepay-data-extract-prod" 
   bucket = "b/littlepay-data-extract-prod"
   member = "serviceAccount:project-1005246706141@storage-transfer-service.iam.gserviceaccount.com"
   role   = "roles/storage.objectAdmin"
-}
-
-resource "google_storage_bucket_iam_member" "tfer--rt-parsed" {
-  bucket = "b/rt-parsed"
-  member = "projectEditor:cal-itp-data-infra"
-  role   = "roles/storage.legacyObjectOwner"
-}
-
-resource "google_storage_bucket_iam_member" "tfer--rt-parsed-deprecated" {
-  bucket = "b/rt-parsed-deprecated"
-  member = "projectOwner:cal-itp-data-infra"
-  role   = "roles/storage.legacyObjectOwner"
 }
 
 resource "google_storage_bucket_iam_member" "tfer--staging-002E-cal-itp-data-infra-002E-appspot-002E-com" {
