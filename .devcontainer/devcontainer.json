@@ -1,33 +1,50 @@
-// For format details, see https://aka.ms/devcontainer.json. For config options, see the README at:
-// https://github.com/microsoft/vscode-dev-containers/tree/v0.177.0/containers/python-3
 {
-  "name": "cal-itp/data-infra",
-  "dockerComposeFile": ["./compose.yml"],
-  "service": "dev",
-  "runServices": ["dev"],
-  "workspaceFolder": "/home/calitp/app",
-  "postAttachCommand": ["/bin/bash", ".devcontainer/postAttach.sh"],
+  "name": "Cal-ITP Data Infra (Nix + DinD)",
+  "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+  "features": {
+    "ghcr.io/devcontainers/features/nix:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers-community/features/direnv:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:4.0.0": {
+      "version": "latest",
+      "moby": true
+    }
+  },
+  "onCreateCommand": "sudo mkdir -p /etc/nix && echo 'experimental-features = nix-command flakes' | sudo tee -a /etc/nix/nix.conf && if [ -x $(command -v zsh) ]; then sudo mkdir -p /etc/zsh && echo 'eval \"$(direnv hook zsh)\"' | sudo tee -a /etc/zsh/zshrc; fi && if [ -x $(command -v fish) ]; then sudo mkdir -p /etc/fish/conf.d && echo 'direnv hook fish | source' | sudo tee /etc/fish/conf.d/direnv.fish; fi",
+  "postStartCommand": "direnv allow",
+  "containerEnv": {
+    "LC_ALL": "C.UTF-8",
+    "LANG": "C.UTF-8",
+    "TZ": "America/Los_Angeles"
+  },
+  "forwardPorts": [
+    8080
+  ],
+  "portsAttributes": {
+    "8080": {
+      "label": "Airflow UI",
+      "onAutoForward": "notify"
+    }
+  },
   "customizations": {
     "vscode": {
+      "editor.formatOnSave": true,
+      "files.trimTrailingWhitespace": true,
+      "files.insertFinalNewline": true,
+      "files.encoding": "utf8",
+      "files.eol": "\n",
       "settings": {
-        "terminal.integrated.defaultProfile.linux": "bash",
-        "terminal.integrated.profiles.linux": {
-          "bash": {
-            "path": "/bin/bash"
-          }
-        },
-        "editor.formatOnSave": true,
-        "files.trimTrailingWhitespace": true,
-        "files.insertFinalNewline": true,
-        "files.encoding": "utf8",
-        "files.eol": "\n",
-        "python.languageServer": "Pylance"
+        "dev.containers.dockerCredentialHelper": false
       },
-
-      // Add the IDs of extensions you want installed when the container is created.
       "extensions": [
+        "jnoortheen.nix-ide",
+        "mkhl.direnv",
         "ms-python.python",
-        "ms-python.vscode-pylance",
+        "tamasfe.even-better-toml",
+        "ms-azuretools.vscode-docker",
         "davidanson.vscode-markdownlint",
         "bierner.markdown-mermaid",
         "mhutchie.git-graph"

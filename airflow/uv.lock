@@ -1007,7 +1007,7 @@ wheels = [
 [[package]]
 name = "composer-dev"
 version = "0.11.4"
-source = { git = "https://github.com/GoogleCloudPlatform/composer-local-dev.git?tag=0.11.4#4a6e6a86c35f9c8b4c90367f5a20ec3b2aea01b4" }
+source = { git = "https://github.com/GoogleCloudPlatform/composer-local-dev.git?tag=refs%2Fpull%2F135%2Fhead#d24d8a456612fefcbf985e196a2a2f6ebd9f5dd4" }
 dependencies = [
     { name = "click" },
     { name = "docker" },
@@ -1159,7 +1159,7 @@ requires-dist = [
     { name = "beautifulsoup4" },
     { name = "boto3" },
     { name = "ckanapi" },
-    { name = "composer-dev", git = "https://github.com/GoogleCloudPlatform/composer-local-dev.git?tag=0.11.4" },
+    { name = "composer-dev", git = "https://github.com/GoogleCloudPlatform/composer-local-dev.git?tag=refs%2Fpull%2F135%2Fhead" },
     { name = "google-cloud-storage", specifier = "==2.19.0" },
     { name = "gtfs-realtime-bindings" },
     { name = "gusty" },
