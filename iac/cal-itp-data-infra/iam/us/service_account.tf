@@ -324,6 +324,30 @@ resource "google_service_account" "scmetro-payments-user" {
   project    = "cal-itp-data-infra"
 }
 
+resource "google_service_account" "simi-payments-user" {
+  account_id = "simi-payments-user"
+  disabled   = "false"
+  project    = "cal-itp-data-infra"
+}
+
+resource "google_service_account" "thousandoaks-payments-user" {
+  account_id = "thousandoaks-payments-user"
+  disabled   = "false"
+  project    = "cal-itp-data-infra"
+}
+
+resource "google_service_account" "moorpark-payments-user" {
+  account_id = "moorpark-payments-user"
+  disabled   = "false"
+  project    = "cal-itp-data-infra"
+}
+
+resource "google_service_account" "goldcoast-payments-user" {
+  account_id = "goldcoast-payments-user"
+  disabled   = "false"
+  project    = "cal-itp-data-infra"
+}
+
 resource "google_service_account" "enghouse-sftp-service-account" {
   account_id   = "enghouse-sftp-service-account"
   description  = "Service account for enghouse sftp server"

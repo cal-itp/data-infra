@@ -118,6 +118,30 @@ resource "google_project_iam_member" "tfer--projects-002F-cal-itp-data-infra-002
   role    = "projects/cal-itp-data-infra/roles/AgencyPaymentsServiceReader"
 }
 
+resource "google_project_iam_member" "tfer--projects-002F-cal-itp-data-infra-002F-roles-002F-AgencyPaymentsServiceReaderserviceAccount-003A-simi-payments-user-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
+  member  = "serviceAccount:simi-payments-user@cal-itp-data-infra.iam.gserviceaccount.com"
+  project = "cal-itp-data-infra"
+  role    = "projects/cal-itp-data-infra/roles/AgencyPaymentsServiceReader"
+}
+
+resource "google_project_iam_member" "tfer--projects-002F-cal-itp-data-infra-002F-roles-002F-AgencyPaymentsServiceReaderserviceAccount-003A-thousandoaks-payments-user-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
+  member  = "serviceAccount:thousandoaks-payments-user@cal-itp-data-infra.iam.gserviceaccount.com"
+  project = "cal-itp-data-infra"
+  role    = "projects/cal-itp-data-infra/roles/AgencyPaymentsServiceReader"
+}
+
+resource "google_project_iam_member" "tfer--projects-002F-cal-itp-data-infra-002F-roles-002F-AgencyPaymentsServiceReaderserviceAccount-003A-moorpark-payments-user-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
+  member  = "serviceAccount:moorpark-payments-user@cal-itp-data-infra.iam.gserviceaccount.com"
+  project = "cal-itp-data-infra"
+  role    = "projects/cal-itp-data-infra/roles/AgencyPaymentsServiceReader"
+}
+
+resource "google_project_iam_member" "tfer--projects-002F-cal-itp-data-infra-002F-roles-002F-AgencyPaymentsServiceReaderserviceAccount-003A-goldcoast-payments-user-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
+  member  = "serviceAccount:goldcoast-payments-user@cal-itp-data-infra.iam.gserviceaccount.com"
+  project = "cal-itp-data-infra"
+  role    = "projects/cal-itp-data-infra/roles/AgencyPaymentsServiceReader"
+}
+
 resource "google_project_iam_member" "tfer--roles-002F-appengine-002E-serviceAgentserviceAccount-003A-service-1005246706141-0040-gcp-gae-service-002E-iam-002E-gserviceaccount-002E-com" {
   member  = "serviceAccount:service-1005246706141@gcp-gae-service.iam.gserviceaccount.com"
   project = "cal-itp-data-infra"
