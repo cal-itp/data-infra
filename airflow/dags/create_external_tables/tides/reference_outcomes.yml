@@ -1,0 +1,20 @@
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__TIDES') }}"
+source_objects:
+  - "reference_outcomes/*.jsonl"
+destination_project_dataset_table: "external_tides.reference_outcomes"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "reference_outcomes/{dt:DATE}/{ts:TIMESTAMP}"
+schema_fields:
+  - name: dataset_name
+    type: STRING
+  - name: table_name
+    type: STRING
+  - name: destination_parquet_path
+    type: STRING
+  - name: destination_csv_path
+    type: STRING
