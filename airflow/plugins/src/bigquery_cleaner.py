@@ -18,11 +18,17 @@ class BigQueryValueCleaner:
         result = self.value
 
         if isinstance(result, dict):
+            cleaned_dict = {}
             for k, v in result.items():
                 if isinstance(v, dict):
-                    result[k] = BigQueryRowCleaner(v).clean()
+                    cleaned_dict[BigQueryKeyCleaner(k).clean()] = BigQueryRowCleaner(
+                        v
+                    ).clean()
                 else:
-                    result[k] = BigQueryValueCleaner(v).clean()
+                    cleaned_dict[BigQueryKeyCleaner(k).clean()] = BigQueryValueCleaner(
+                        v
+                    ).clean()
+            result = cleaned_dict
         elif isinstance(result, list):
             types = set(type(entry) for entry in result if entry is not None)
             if not types:
@@ -49,23 +55,26 @@ class BigQueryKeyCleaner:
         Add underscore if starts with a number.  Also sometimes excel has columns names that are
         all numbers, not even strings of numbers (ﾉﾟ0ﾟ)ﾉ~
         """
-        if not isinstance(self.key, str):
-            self.key = str(self.key)
-        if self.key[:1].isdigit():
-            self.key = "_" + self.key
-        return str.lower(re.sub(r"[^\w]", "_", self.key))
+        result = self.key
+        if not isinstance(result, str):
+            result = str(result)
+        if result[:1].isdigit():
+            result = "_" + result
+        result = str.lower(re.sub(r"[^\w]", "_", result))
+        return result
 
 
 class BigQueryRowCleaner:
     row: dict
 
-    def __init__(self, row: dict):
-        self.row = row
+    def __init__(self, row: dict, preserve_nones: bool = False):
+        self.row: dict = row
+        self.preserve_nones: bool = preserve_nones
 
     def clean(self) -> dict:
         columns = {}
         for key, value in self.row.items():
-            if value is not None and value != "":
+            if (value is not None or self.preserve_nones) and value != "":
                 columns[BigQueryKeyCleaner(key).clean()] = BigQueryValueCleaner(
                     value
                 ).clean()
@@ -75,8 +84,11 @@ class BigQueryRowCleaner:
 class BigQueryCleaner:
     rows: list
 
-    def __init__(self, rows: list):
+    def __init__(self, rows: list, preserve_nones: bool = False):
         self.rows = rows
+        self.preserve_nones: bool = preserve_nones
 
     def clean(self) -> list:
-        return [BigQueryRowCleaner(row).clean() for row in self.rows]
+        return [
+            BigQueryRowCleaner(row, self.preserve_nones).clean() for row in self.rows
+        ]
