@@ -246,10 +246,6 @@ output "google_project_iam_member_tfer--roles-002F-firestore-002E-serviceAgentse
   value = google_project_iam_member.tfer--roles-002F-firestore-002E-serviceAgentserviceAccount-003A-service-1005246706141-0040-gcp-sa-firestore-002E-iam-002E-gserviceaccount-002E-com.id
 }
 
-output "google_project_iam_member_tfer--roles-002F-ownerserviceAccount-003A-cc-jarvus-airflow-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com_id" {
-  value = google_project_iam_member.tfer--roles-002F-ownerserviceAccount-003A-cc-jarvus-airflow-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com.id
-}
-
 output "google_project_iam_member_tfer--roles-002F-run-002E-serviceAgentserviceAccount-003A-service-1005246706141-0040-serverless-robot-prod-002E-iam-002E-gserviceaccount-002E-com_id" {
   value = google_project_iam_member.tfer--roles-002F-run-002E-serviceAgentserviceAccount-003A-service-1005246706141-0040-serverless-robot-prod-002E-iam-002E-gserviceaccount-002E-com.id
 }
@@ -376,10 +372,6 @@ output "google_service_account_tfer--104296524238941538670_id" {
 
 output "google_service_account_tfer--104433253766206552796_id" {
   value = google_service_account.tfer--104433253766206552796.id
-}
-
-output "google_service_account_tfer--105781789064132478524_id" {
-  value = google_service_account.tfer--105781789064132478524.id
 }
 
 output "google_service_account_tfer--108192824187785555345_id" {

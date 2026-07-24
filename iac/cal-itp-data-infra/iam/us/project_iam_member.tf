@@ -442,12 +442,6 @@ resource "google_project_iam_member" "tfer--roles-002F-firestore-002E-serviceAge
   role    = "roles/firestore.serviceAgent"
 }
 
-resource "google_project_iam_member" "tfer--roles-002F-ownerserviceAccount-003A-cc-jarvus-airflow-0040-cal-itp-data-infra-002E-iam-002E-gserviceaccount-002E-com" {
-  member  = "serviceAccount:cc-jarvus-airflow@cal-itp-data-infra.iam.gserviceaccount.com"
-  project = "cal-itp-data-infra"
-  role    = "roles/viewer"
-}
-
 resource "google_project_iam_member" "tfer--roles-002F-run-002E-serviceAgentserviceAccount-003A-service-1005246706141-0040-serverless-robot-prod-002E-iam-002E-gserviceaccount-002E-com" {
   member  = "serviceAccount:service-1005246706141@serverless-robot-prod.iam.gserviceaccount.com"
   project = "cal-itp-data-infra"
