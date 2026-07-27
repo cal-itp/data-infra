@@ -348,7 +348,13 @@ models:
           Category for reconciliation purposes (whether the aggregation is settled and whether it has an Elavon match.)
 
   - name: fct_payments_settlements
-    description: Littlepay settlements (completed transactions.)
+    description: Littlepay settlements (completed transactions.) One row per settlement, carrying its most recent record.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - participant_id
+              - settlement_id
     columns:
       - name: settlement_id
         description: '{{ doc("lp_settlement_id") }}'

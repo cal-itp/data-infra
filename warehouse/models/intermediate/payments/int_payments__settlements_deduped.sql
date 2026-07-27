@@ -7,12 +7,18 @@ int_payments__settlements_deduped AS (
     SELECT
         *
     FROM settlements_unioned
-    -- see: https://github.com/cal-itp/data-infra/issues/4552
+    -- see: https://github.com/cal-itp/data-infra/issues/4552 and
+    -- https://github.com/cal-itp/data-infra/issues/5584
     -- we have cases where same settlement comes in with two statuses
     -- only want to keep one instance -- the more recent one
+    -- partition on settlement_id directly rather than on _payments_key: the staging
+    -- _payments_key is generate_surrogate_key(['settlement_id', 'settlement_status']),
+    -- so partitioning on it puts the PENDING and SETTLED versions of one settlement in
+    -- separate partitions and both survive. transaction_amount is likewise excluded so
+    -- that a settlement whose amount changed between statuses still collapses to one row.
     QUALIFY ROW_NUMBER() OVER
-        (PARTITION BY participant_id, _payments_key, transaction_amount
-        ORDER BY record_updated_timestamp_utc DESC, _line_number ASC) = 1
+        (PARTITION BY participant_id, settlement_id
+        ORDER BY record_updated_timestamp_utc DESC, littlepay_export_ts DESC, _line_number ASC) = 1
 )
 
 SELECT * FROM int_payments__settlements_deduped
