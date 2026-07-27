@@ -580,7 +580,16 @@ models:
 
   - name: int_payments__settlements_deduped
     description: >
-      Settlements records deduplicated so that each `_payments_key` (`settlement_id`) appears only once.
+      Settlements records deduplicated so that each `settlement_id` appears only once, carrying its most
+      recent record. A settlement that was exported as `PENDING` and later as `SETTLED` collapses to the
+      `SETTLED` row. Note that this is deliberately *not* keyed on `_payments_key`, which for settlements
+      includes `settlement_status` and so differs between the two versions of one settlement.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - participant_id
+              - settlement_id
     columns:
       - name: settlement_id
         description: '{{ doc("lp_settlement_id") }}'
