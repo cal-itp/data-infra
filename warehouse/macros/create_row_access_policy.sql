@@ -251,6 +251,30 @@ filter using (
 ) }};
 
 {{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = 'City of Simi Valley',
+    principals = ['serviceAccount:simi-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = 'City of Thousand Oaks',
+    principals = ['serviceAccount:thousandoaks-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = 'City of Moorpark',
+    principals = ['serviceAccount:moorpark-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = 'Gold Coast Transit District',
+    principals = ['serviceAccount:goldcoast-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
     principals = [
         'serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
         'serviceAccount:metabase-payments-team@cal-itp-data-infra.iam.gserviceaccount.com',
@@ -289,6 +313,30 @@ filter using (
     filter_column = 'operator_id',
     filter_value = '279',
     principals = ['serviceAccount:valley-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'operator_id',
+    filter_value = '288',
+    principals = ['serviceAccount:simi-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'operator_id',
+    filter_value = '289',
+    principals = ['serviceAccount:thousandoaks-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'operator_id',
+    filter_value = '290',
+    principals = ['serviceAccount:moorpark-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'operator_id',
+    filter_value = '291',
+    principals = ['serviceAccount:goldcoast-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }};
 
 {{ create_row_access_policy(
