@@ -78,6 +78,24 @@ pivoted_timeofday AS (
     )
 ),
 
+common_shape AS (
+    SELECT
+        service_date,
+        feed_key,
+        route_id,
+        direction_id,
+        shape_id,
+        shape_array_key,
+        COUNT(DISTINCT trip_instance_key) AS n_trips
+
+    FROM gtfs_join
+    GROUP BY 1, 2, 3, 4, 5, 6
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY
+            service_date, feed_key, route_id, direction_id
+        ORDER BY n_trips DESC) = 1
+),
+
 schedule_aggregation AS (
     SELECT
         service_date,
@@ -165,9 +183,12 @@ vp_aggregation AS (
 schedule_with_quartet AS (
     SELECT
         schedule_aggregation.*,
+        common_shape.shape_id,
+        common_shape.shape_array_key,
         dim_provider_gtfs_data.trip_updates_gtfs_dataset_key,
         dim_provider_gtfs_data.vehicle_positions_gtfs_dataset_key,
     FROM schedule_aggregation
+    INNER JOIN common_shape USING (service_date, feed_key, route_id, direction_id)
     INNER JOIN dim_provider_gtfs_data USING (schedule_gtfs_dataset_key)
 ),
 
@@ -184,6 +205,8 @@ route_direction_aggregation AS (
         schedule.route_name,
         schedule.direction_id,
         schedule.route_type,
+        schedule.shape_id,
+        schedule.shape_array_key,
 
         tu.tu_gtfs_dataset_key,
         tu.tu_name,
