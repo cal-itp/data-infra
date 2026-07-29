@@ -320,3 +320,16 @@ schema_fields:
   - name: holiday_website_condition
     type: STRING
     mode: NULLABLE
+  - name: complementary_paratransit_service
+    type: STRING
+    mode: REPEATED
+  - name: reservation_methods
+    type: STRING
+    mode: NULLABLE
+  - name: booking_lead_time
+    type: STRING
+    mode: NULLABLE
+  - name: paratransit_exemption_notes
+    type: STRING
+    mode: NULLABLE
+    
