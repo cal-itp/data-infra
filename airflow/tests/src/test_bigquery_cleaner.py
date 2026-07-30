@@ -26,3 +26,20 @@ class TestBigQueryCleaner:
         assert cleaner.clean() == [
             {"id": 0, "score": -2, "amount": 123.00055556, "total": 0.5}
         ]
+
+    def test_cleaning_a_nested_value(self):
+        rows = [{"headers": {"CDN-Date": "Fri, 01 May 2026 00:00:00 GMT"}}]
+        cleaner = BigQueryCleaner(rows)
+        assert cleaner.clean() == [
+            {"headers": {"cdn_date": "Fri, 01 May 2026 00:00:00 GMT"}}
+        ]
+
+    def test_discarding_null_values(self):
+        rows = [{"key": None}]
+        cleaner = BigQueryCleaner(rows, preserve_nones=False)
+        assert cleaner.clean() == [{}]
+
+    def test_preserving_null_values(self):
+        rows = [{"key": None}]
+        cleaner = BigQueryCleaner(rows, preserve_nones=True)
+        assert cleaner.clean() == [{"key": None}]

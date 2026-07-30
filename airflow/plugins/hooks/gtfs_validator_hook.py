@@ -73,7 +73,7 @@ class GTFSValidatorResult:
         }
 
 
-class GTSFValidatorVersion:
+class GTFSValidatorVersion:
     JAR_PATH = os.path.normpath(
         os.path.join(os.path.dirname(os.path.realpath(__file__)), "../gtfs_validator")
     )
@@ -186,7 +186,7 @@ class GTFSValidatorHook(BaseHook):
         self.current_date = current_date
 
     def version(self) -> str:
-        return GTSFValidatorVersion.find(current_date=self.current_date)
+        return GTFSValidatorVersion.find(current_date=self.current_date)
 
     def run(
         self, input_zip: str, download_schedule_feed_results: dict
