@@ -18,10 +18,13 @@ class Heartbeat:
         self, logger: logging.Logger
     ) -> Callable[[pubsub_v1.publisher.futures.Future], None]:
         def callback(publish_future: pubsub_v1.publisher.futures.Future) -> None:
-            logger.info(
+            # Per-message publish logs are demoted to DEBUG (one pair per feed per
+            # tick, same ~4M/day cardinality as the service success logs). The
+            # per-tick count in run() covers throughput; failures stay at ERROR.
+            logger.debug(
                 json.dumps(
                     {
-                        "severity": "Default",
+                        "severity": "Debug",
                         "message": "Started",
                         "message_id": self.message_id,
                         "publish_time": self.publish_time.isoformat(),
@@ -31,10 +34,10 @@ class Heartbeat:
             )
             try:
                 result = publish_future.result(timeout=PUBLISH_TIMEOUT)
-                logger.info(
+                logger.debug(
                     json.dumps(
                         {
-                            "severity": "Default",
+                            "severity": "Debug",
                             "message": f"Finished - {result}",
                             "message_id": self.message_id,
                             "publish_time": self.publish_time.isoformat(),
@@ -117,9 +120,25 @@ class Heartbeat:
         ][slice(0, self.limit)]
 
     def run(
-        self, publisher=pubsub_v1.PublisherClient()
+        self,
+        publisher=pubsub_v1.PublisherClient(),
+        logger=logging.getLogger(__name__),
     ) -> list[pubsub_v1.publisher.futures.Future]:
+        messages = self.messages()
+        # One summary line per tick (~4.3k/day in prod) so a feed count dropping
+        # out stays visible without the per-feed INFO firehose.
+        logger.info(
+            json.dumps(
+                {
+                    "severity": "Default",
+                    "message": f"Dispatched {len(messages)} feeds",
+                    "count": len(messages),
+                    "message_id": self.message_id,
+                    "publish_time": self.publish_time.isoformat(),
+                    "batch_at": self.batch_at().isoformat(),
+                }
+            )
+        )
         return [
-            publisher.publish(self.topic_name(), data=message)
-            for message in self.messages()
+            publisher.publish(self.topic_name(), data=message) for message in messages
         ]
