@@ -332,4 +332,3 @@ schema_fields:
   - name: paratransit_exemption_notes
     type: STRING
     mode: NULLABLE
-    
