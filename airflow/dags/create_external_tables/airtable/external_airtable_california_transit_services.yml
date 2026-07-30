@@ -146,6 +146,9 @@ schema_fields:
   - name: paratransit_for
     type: STRING
     mode: REPEATED
+  - name: complementary_paratransit_service
+    type: STRING
+    mode: REPEATED
   - name: gtfs_schedule_status
     type: STRING
     mode: NULLABLE
@@ -287,6 +290,15 @@ schema_fields:
   - name: public_currently_operating_fixed_route
     type: STRING
     mode: NULLABLE
+  - name: reservation_methods
+    type: STRING
+    mode: NULLABLE
+  - name: booking_lead_time
+    type: STRING
+    mode: NULLABLE
+  - name: paratransit_exemption_notes
+    type: STRING
+    mode: NULLABLE
   - name: holiday_schedule___veterans_day__observed_
     type: STRING
     mode: NULLABLE
@@ -318,17 +330,5 @@ schema_fields:
     type: STRING
     mode: NULLABLE
   - name: holiday_website_condition
-    type: STRING
-    mode: NULLABLE
-  - name: complementary_paratransit_service
-    type: STRING
-    mode: REPEATED
-  - name: reservation_methods
-    type: STRING
-    mode: NULLABLE
-  - name: booking_lead_time
-    type: STRING
-    mode: NULLABLE
-  - name: paratransit_exemption_notes
     type: STRING
     mode: NULLABLE
