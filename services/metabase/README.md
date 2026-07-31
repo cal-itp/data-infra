@@ -12,8 +12,10 @@ The service is deployed via Terraform in `iac/`:
 
 This directory holds the container build for the service:
 
-- [`Dockerfile.production`](./Dockerfile.production) / [`Dockerfile.staging`](./Dockerfile.staging) — image builds
-- [`entrypoint.sh`](./entrypoint.sh) — container entrypoint
+- [`Dockerfile`](./Dockerfile) — unified image build, tagged `:staging` and `:production`
+- [`entrypoint.sh`](./entrypoint.sh) — container entrypoint; resolves the Cloud SQL
+  Unix-socket symlink at runtime from `CLOUD_SQL_INSTANCE_CONNECTION_NAME` (or
+  auto-detects when a single instance is mounted at `/cloudsql/`)
 
 ## Backups
 
