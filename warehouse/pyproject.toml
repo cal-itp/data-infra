@@ -30,7 +30,7 @@ dependencies = [
     "typer>=0.4.0,<0.5",
     "dbt-core==1.10.8",
     "dbt-bigquery==1.10.2",
-    "pyarrow==19.0.0",
+    "pyarrow==23.0.1",
 ]
 
 [dependency-groups]
