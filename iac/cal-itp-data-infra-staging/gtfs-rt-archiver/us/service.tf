@@ -98,7 +98,7 @@ resource "google_cloudfunctions2_function" "gtfs-rt-archiver" {
     environment_variables = {
       CALITP_BUCKET__GTFS_RT_RAW = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-rt-raw-v2_name}"
       REQUEST_CONNECT_TIMEOUT    = 1
-      REQUEST_READ_TIMEOUT       = 30
+      REQUEST_READ_TIMEOUT       = 10
     }
   }
 
