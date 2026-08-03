@@ -10,6 +10,7 @@ from google.auth import default
 from google.cloud import pubsub_v1, storage
 
 PUBLISH_TIMEOUT = int(os.environ.get("PUBLISH_TIMEOUT", "10"))
+# Supports all currently archived GTFS-Realtime feed types.
 GTFS_RT_FEED_TYPES = [
     "service_alerts",
     "trip_updates",
