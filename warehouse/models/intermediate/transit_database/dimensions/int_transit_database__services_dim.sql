@@ -22,7 +22,7 @@ int_transit_database__services_dim AS (
         currently_operating,
         -- demand response and paratransit fields
         paratransit_for,
-        complementary_paratransit_for,
+        complementary_paratransit_service,
         rider_requirements,
         reservation_methods,
         booking_lead_time,
