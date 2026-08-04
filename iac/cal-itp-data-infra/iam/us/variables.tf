@@ -5,4 +5,6 @@ locals {
   reports_github_repository_name         = "cal-itp/reports"
   analysis_github_repository_name        = "cal-itp/data-analyses"
   tides-site_github_repository_name      = "cal-itp/tides.dds.dot.ca.gov"
+  gtfs-curator_github_repository_name    = "cal-itp/gtfs-curator"
+  ntd-snapshot_github_repository_name    = "cal-itp/ntd-snapshot"
 }
