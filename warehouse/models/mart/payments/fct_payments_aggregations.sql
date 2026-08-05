@@ -158,6 +158,8 @@ fct_payments_aggregations AS (
         contains_refund AS settlement_contains_refund,
         debit_amount AS settlement_debit_amount,
         credit_amount AS settlement_credit_amount,
+        littlepay_settled_credit_amount,
+        littlepay_unsettled_credit_amount,
         debit_amount > 0 AS contains_nonzero_sales,
         CASE
             WHEN aggregation_is_settled IS NOT NULL THEN aggregation_is_settled
