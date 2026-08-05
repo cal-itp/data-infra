@@ -63,3 +63,15 @@ resource "google_service_account_iam_member" "elavon-sftp-service-account" {
   role               = "roles/iam.workloadIdentityUser"
   member             = "serviceAccount:cal-itp-data-infra.svc.id.goog[default/elavon-sftp-service-account]"
 }
+
+resource "google_service_account_iam_member" "github-actions-service-account_gtfs-curator" {
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github-actions.name}/attribute.repository/${local.gtfs-curator_github_repository_name}"
+  service_account_id = google_service_account.github-actions-service-account.id
+  role               = "roles/iam.workloadIdentityUser"
+}
+
+resource "google_service_account_iam_member" "github-actions-service-account_ntd-snapshot" {
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github-actions.name}/attribute.repository/${local.ntd-snapshot_github_repository_name}"
+  service_account_id = google_service_account.github-actions-service-account.id
+  role               = "roles/iam.workloadIdentityUser"
+}

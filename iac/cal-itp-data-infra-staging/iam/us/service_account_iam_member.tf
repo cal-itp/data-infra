@@ -45,3 +45,15 @@ resource "google_service_account_iam_member" "github-actions-service-account_dat
   role               = "roles/iam.workloadIdentityUser"
   member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github-actions.name}/attribute.repository/${local.data-analyses_github_repository_name}"
 }
+
+resource "google_service_account_iam_member" "github-actions-service-account_gtfs-curator" {
+  service_account_id = google_service_account.github-actions-service-account.id
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github-actions.name}/attribute.repository/${local.gtfs-curator_github_repository_name}"
+}
+
+resource "google_service_account_iam_member" "github-actions-service-account_ntd-snapshot" {
+  service_account_id = google_service_account.github-actions-service-account.id
+  role               = "roles/iam.workloadIdentityUser"
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github-actions.name}/attribute.repository/${local.ntd-snapshot_github_repository_name}"
+}
