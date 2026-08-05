@@ -170,6 +170,19 @@ Numbers in this column are negative because they represent amounts credited (ref
 i.e., these values represent costs for the participant (agency).
 {% enddocs %}
 
+{% docs lp_littlepay_settled_credit_amount %}
+The portion of this aggregation's credit (refund) settlement amount that has `settlement_status = SETTLED`.
+
+Numbers in this column are negative, like the total credit amount.
+{% enddocs %}
+
+{% docs lp_littlepay_unsettled_credit_amount %}
+The portion of this aggregation's credit (refund) settlement amount whose `settlement_status` is present but is not `SETTLED`
+(i.e., `PENDING`, `REJECTED`, or `FAILED`).
+
+Numbers in this column are negative, like the total credit amount.
+{% enddocs %}
+
 {% docs lp_aggregation_is_settled %}
 Boolean indicating whether all settlements in this aggregation have `settlement_status = SETTLED`.
 

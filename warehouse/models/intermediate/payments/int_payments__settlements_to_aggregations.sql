@@ -17,7 +17,9 @@ summarize_by_type AS (
         LOGICAL_OR(imputed_type) AS type_contains_imputed_type,
         MAX(record_updated_timestamp_utc) AS type_latest_update_timestamp,
         SUM(transaction_amount) AS total_amount,
-        LOGICAL_AND(settlement_status = "SETTLED") AS is_settled
+        LOGICAL_AND(settlement_status = "SETTLED") AS is_settled,
+        SUM(CASE WHEN settlement_status = "SETTLED" THEN transaction_amount ELSE 0 END) AS settled_amount,
+        SUM(CASE WHEN settlement_status != "SETTLED" THEN transaction_amount ELSE 0 END) AS unsettled_amount
     FROM settlements
     GROUP BY 1, 2, 3, 4
 ),
@@ -50,7 +52,9 @@ int_payments__settlements_to_aggregations AS (
         COALESCE(debit.total_amount,0) AS debit_amount,
         debit.is_settled AS debit_is_settled,
         COALESCE(credit.total_amount,0) AS credit_amount,
-        credit.is_settled AS credit_is_settled
+        credit.is_settled AS credit_is_settled,
+        COALESCE(credit.settled_amount,0) AS littlepay_settled_credit_amount,
+        COALESCE(credit.unsettled_amount,0) AS littlepay_unsettled_credit_amount
     FROM summarize_overall AS summary
     LEFT JOIN summarize_by_type AS debit
         ON summary.aggregation_id = debit.aggregation_id
