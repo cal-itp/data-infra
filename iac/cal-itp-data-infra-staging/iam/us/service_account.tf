@@ -89,3 +89,11 @@ resource "google_service_account" "elavon-sftp-service-account" {
   display_name = "elavon-sftp-service-account"
   project      = "cal-itp-data-infra-staging"
 }
+
+resource "google_service_account" "nocodb-service-account" {
+  account_id   = "nocodb-service-account"
+  description  = "Service account for NocoDB"
+  disabled     = "false"
+  display_name = "nocodb"
+  project      = "cal-itp-data-infra-staging"
+}
