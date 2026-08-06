@@ -6,19 +6,6 @@ resource "google_service_account" "tfer--101455296324690994963" {
   project      = "cal-itp-data-infra-staging"
 }
 
-resource "google_service_account" "tfer--111242760977002129583" {
-  account_id   = "amplitude"
-  disabled     = "true"
-  display_name = "Amplitude"
-  project      = "cal-itp-data-infra-staging"
-}
-
-resource "google_service_account" "tfer--111824761856041678305" {
-  account_id = "local-airflow-dev"
-  disabled   = "false"
-  project    = "cal-itp-data-infra-staging"
-}
-
 resource "google_service_account" "tfer--111881979116192190399" {
   account_id   = "metabase"
   disabled     = "false"

@@ -69,14 +69,6 @@ resource "google_service_account" "tfer--104433253766206552796" {
   project      = "cal-itp-data-infra"
 }
 
-resource "google_service_account" "tfer--105781789064132478524" {
-  account_id   = "cc-jarvus-airflow"
-  description  = "Chris's service account for Airflow"
-  disabled     = "false"
-  display_name = "cc-jarvus-airflow"
-  project      = "cal-itp-data-infra"
-}
-
 resource "google_service_account" "tfer--108192824187785555345" {
   account_id   = "jupyterlab"
   description  = "warehouse access for jupyterlab cloud"

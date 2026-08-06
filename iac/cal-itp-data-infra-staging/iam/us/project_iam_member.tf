@@ -136,18 +136,6 @@ resource "google_project_iam_member" "tfer--roles-002F-editorserviceAccount-003A
   role    = "roles/editor"
 }
 
-resource "google_project_iam_member" "tfer--roles-002F-ownerserviceAccount-003A-amplitude-0040-cal-itp-data-infra-staging-002E-iam-002E-gserviceaccount-002E-com" {
-  member  = "serviceAccount:amplitude@cal-itp-data-infra-staging.iam.gserviceaccount.com"
-  project = "cal-itp-data-infra-staging"
-  role    = "roles/viewer"
-}
-
-resource "google_project_iam_member" "tfer--roles-002F-ownerserviceAccount-003A-local-airflow-dev-0040-cal-itp-data-infra-staging-002E-iam-002E-gserviceaccount-002E-com" {
-  member  = "serviceAccount:local-airflow-dev@cal-itp-data-infra-staging.iam.gserviceaccount.com"
-  project = "cal-itp-data-infra-staging"
-  role    = "roles/viewer"
-}
-
 resource "google_project_iam_member" "tfer--roles-002F-pubsub-002E-serviceAgentserviceAccount-003A-service-473674835135-0040-gcp-sa-pubsub-002E-iam-002E-gserviceaccount-002E-com" {
   member  = "serviceAccount:service-473674835135@gcp-sa-pubsub.iam.gserviceaccount.com"
   project = "cal-itp-data-infra-staging"
