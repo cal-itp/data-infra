@@ -1,5 +1,26 @@
-functions-framework==3.*
-google-cloud-secret-manager==2.*
-google-cloud-storage==3.*
-google-cloud-logging==3.*
-google-cloud-pubsub==2.*
+functions-framework==3.10.1
+google-cloud-secret-manager==2.27.0
+google-cloud-storage==3.10.1
+google-cloud-logging==3.15.0
+google-cloud-pubsub==2.37.0
+# Full Google / gRPC / proto / TLS stack pinned to the pre-2026-08-05 (revision
+# 00001) resolution. The unpinned Aug-5 rebuild drifted these (google-auth
+# 2.49->2.56, protobuf 6->7, google-cloud-storage 3.10->3.13, cryptography
+# 47->50, ...) and roughly doubled the archiver's per-fetch latency and compute
+# cost. Staging canary to confirm the dependency-drift regression; revert once
+# verified.
+google-auth==2.49.2
+google-api-core==2.30.3
+google-cloud-core==2.5.1
+google-cloud-appengine-logging==1.9.0
+google-cloud-audit-log==0.5.0
+google-resumable-media==2.8.2
+googleapis-common-protos==1.74.0
+grpc-google-iam-v1==0.14.3
+proto-plus==1.27.2
+protobuf==6.33.6
+grpcio==1.80.0
+grpcio-status==1.80.0
+cryptography==47.0.0
+requests==2.33.1
+urllib3==2.6.3
