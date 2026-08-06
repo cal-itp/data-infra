@@ -1,54 +1,297 @@
 # Upgrading Metabase
 
-Metabase upgrades happen in two phases: validation and release.
+Metabase runs on Cloud Run in both environments, built from a single image
+([`services/metabase/Dockerfile`](../../services/metabase/Dockerfile)) whose
+`FROM` line pins the Metabase version. An upgrade is therefore three things: a
+version bump merged to `main`, a deploy to staging, and a deploy to production.
 
-## Validation
+The version running is whatever the pinned base image says, so the pin on `main`
+is the source of truth and every upgrade starts with a pull request.
 
-When Metabase detects a version change, it runs a set of database migrations. In order to prevent this migration from causing an outage, you should validate the new version against the `metabase-test` namespace. There are three steps involved: retrieving a `metabase` database snapshot, restoring the snapshot to the `metabase-test` database, and setting the Docker image tag version. It is important to run the Validation steps below in the `metabase-test` namespace in order to prevent data loss.
+> ⚠️ **Metabase upgrades run irreversible schema migrations** against the
+> application database on first boot of the new version. Downgrading the image
+> afterwards is *not* a rollback — the old version may refuse to start against
+> the migrated schema. A real rollback restores the database (see
+> [Rollback](#rollback)). Take the pre-upgrade backup seriously.
 
-### Prerequisites
+## Scope of this runbook
 
-- Lens (https://k8slens.dev)
-- Restic (https://restic.net)
-- A copy of the secrets for the GCloud service account
+| Change                                                                          | Use this runbook | Rehearse against prod data first |
+| ------------------------------------------------------------------------------- | ---------------- | -------------------------------- |
+| Patch bump within a minor line (`v0.58.7` → `v0.58.22`)                         | ✅               | Not required                     |
+| Minor or major jump (`v0.58.x` → `v0.63.x`)                                     | ✅               | **Yes**                          |
+| OSS → Enterprise cutover (`metabase/metabase` → `metabase/metabase-enterprise`) | ✅               | **Yes**                          |
 
-### Service Credentials
+"Rehearse against prod data" means
+[`metabase-test-instance-from-prod.md`](metabase-test-instance-from-prod.md):
+stand up a throwaway instance seeded with a prod dump and let the new version
+migrate it. Do that **before** step 1 for anything other than a patch bump.
 
-1. Log into GCloud from the repository directory: `gcloud auth login --login-config=iac/login.json`
-2. List the clusters you can access: `gcloud container clusters list`
-3. Pull Kubernetes credentials for the `data-infra-apps` cluster to your local machine: `gcloud container clusters get-credentials data-infra-apps --location us-west1`
+> **Staging is not a substitute for that rehearsal.** The `metabase-staging`
+> database is a small test environment, not a copy of prod. A clean staging
+> upgrade proves the image boots, the config is right, and migrations run — it
+> does *not* prove they survive prod's data volume and content.
 
-### Replicating the database
+## Prerequisites
 
-1. Retrieve environment variables for one of the `metabase-test` `postgresql-backup` pods
-2. Set the `GOOGLE_APPLICATION_CREDENTIALS`, `GOOGLE_PROJECT_ID`, `RESTIC_REPOSITORY` and `RESTIC_PASSWORD` environment variables in a shell
-3. List available Restic snapshots using `restic snapshots` and note the latest SHA
-4. Download the latest snapshot `restic dump -t pg_dumpall.sql.gz <SHA> /pg_dumpall.sql.gz`
-5. Uncompress the dump and make sure it is a complete dump including both schema and data
+- `gcloud` CLI authenticated with `roles/run.admin` on the target project, plus
+  `roles/cloudsql.admin` for the backup and rollback steps.
+- Write access to the repo, to open and merge the bump PR.
+- A Metabase admin login for each environment, for the post-deploy checks.
 
-### Restoring the database
+## 0. Set environment for the target instance
 
-> ⚠️**IMPORTANT**⚠️ Every step here should be run against the `metabase-test` namespace to prevent data loss in production.
+Every command below is parameterized. Paste **one** block, for whichever
+environment you are deploying to. These use the same variable names as
+[`metabase-restore.md`](metabase-restore.md), so the two runbooks compose.
 
-1. Visit the test instance at https://metabase-test.k8s.calitp.jarv.us/ to see that login and reporting work as expected
-2. Connect to the database instance `kubectl -n metabase-test exec -it database-0 -- bash`
-3. Ensure that `psql` can connect: `psql -U admin postgres`
-4. Scale the `metabase` ReplicaSet to zero: `kubectl -n metabase-test scale deployment metabase --replicas=0`
-5. Restore the dump to the test database: `cat pg_dumpall.sql | kubectl -n metabase-test exec -it database-0 -- psql -U admin postgres`
-6. Scale the `metabase ReplicaSet` to 1: `kubectl -n metabase-test scale deployment metabase --replicas=1`
-7. Ensure that the test instance still works
+```bash
+# ---- Staging ----
+export PROJECT_ID=cal-itp-data-infra-staging
+export REGION=us-west2
+export RUN_SERVICE=metabase-staging
+export SQL_INSTANCE=metabase-staging
+export IMAGE_TAG=us-west2-docker.pkg.dev/cal-itp-data-infra-staging/ghcr/cal-itp/data-infra/metabase:staging
+export METABASE_URL=https://metabase-staging.dds.dot.ca.gov
+```
 
-### Upgrading Metabase
+```bash
+# ---- Production ----
+export PROJECT_ID=cal-itp-data-infra
+export REGION=us-west2
+export RUN_SERVICE=metabase
+export SQL_INSTANCE=metabase
+export IMAGE_TAG=us-west2-docker.pkg.dev/cal-itp-data-infra/ghcr/cal-itp/data-infra/metabase:production
+export METABASE_URL=https://metabase.dds.dot.ca.gov
+```
 
-1. Manually edit the ReplicaSet configuration for the `metabase` ReplicaSet to set the version number
-2. Save the configuration
-3. Watch the logs for the `metabase` pod until the migrations run: `kubectl -n metabase-test logs deployment/metabase --follow`
-4. Visit the test instance to see that login and reporting work as expected
+Both `IMAGE_TAG`s point at Artifact Registry *remote repositories* that proxy
+`ghcr.io/cal-itp/data-infra/metabase`: CI builds and pushes to GHCR, and
+Artifact Registry pulls through on demand.
 
-## Release
+## 1. Choose the target version
 
-1. Update the test version in `kubernetes/apps/values/metabase-test.yaml` to the version specified when editing above
-2. Update the production version in `kubernetes/apps/values/metabase.yaml` to the same
-3. Create a pull request
-4. Wait for the `preview-kubernetes` Github Action to run and display a diff for the Docker image tags
-5. Ensure those tags match the intended updates to `metabase` and `metabase-test`
+Metabase publishes OSS as `v0.x.y` (`metabase/metabase`) and Enterprise as
+`v1.x.y` (`metabase/metabase-enterprise`) — **two different Docker repos**, with
+matching minor and patch numbers between them.
+
+List what is available on the line you are on:
+
+```bash
+curl -s "https://hub.docker.com/v2/repositories/metabase/metabase/tags?page_size=100&ordering=last_updated" \
+  | python3 -c "import json,sys; print(*sorted({t['name'] for t in json.load(sys.stdin)['results'] if t['name'].startswith('v0.')}), sep='\n')"
+```
+
+Prefer the **highest patch on the minor line already running**: that picks up
+security fixes with the smallest migration surface. Move to a new minor line only
+deliberately, and only after the prod-data rehearsal above.
+
+Pin an **exact patch version**. Do not use floating tags (`v0.58.x`,
+`v1.58-lts`) — they move on their own, which means the running version can change
+with no pull request and no record in git.
+
+## 2. Bump the pin and merge
+
+Edit the `FROM` line in [`services/metabase/Dockerfile`](../../services/metabase/Dockerfile):
+
+```dockerfile
+FROM metabase/metabase:v0.58.22
+```
+
+Open a pull request. On the PR the `Metabase Docker image` workflow
+([`build-metabase.yml`](../../.github/workflows/build-metabase.yml)) **builds the
+image without pushing it** — that is the gate catching a bad base image (for
+instance one that no longer has `apk`, which would break the `socat` install)
+before anything is published.
+
+Merging to `main` runs the same workflow with pushing enabled, publishing the
+`:staging` and `:production` tags from a single build. Wait for it to finish
+before continuing.
+
+> Both tags always point at the same digest. Staging and production differ only
+> in *when* each service is redeployed to pick it up, which is what the rest of
+> this runbook controls.
+
+## 3. Record the digest you intend to deploy
+
+The tags are mutable, so capture the digest now and verify it after each deploy.
+This is what makes the deploy auditable.
+
+```bash
+gcloud artifacts docker images describe "$IMAGE_TAG" \
+  --project="$PROJECT_ID" --format='value(image_summary.digest)'
+```
+
+```bash
+export TARGET_DIGEST=sha256:...   # paste the value printed above
+```
+
+Record what is running now too, so you can put the image back:
+
+```bash
+gcloud run services describe "$RUN_SERVICE" \
+  --region="$REGION" --project="$PROJECT_ID" \
+  --format='value(spec.template.spec.containers[0].image)'
+```
+
+## 4. Take a pre-upgrade backup
+
+Both instances have Cloud SQL automated backups enabled (60 retained), and prod
+additionally gets a nightly GCS export at 04:00 PT. Neither is necessarily
+*recent* at the moment you upgrade, so take an on-demand one:
+
+```bash
+gcloud sql backups create \
+  --instance="$SQL_INSTANCE" \
+  --project="$PROJECT_ID" \
+  --description="pre-upgrade $(date +%F)"
+```
+
+Confirm it succeeded before deploying — this is the artifact
+[Rollback](#rollback) depends on:
+
+```bash
+gcloud sql backups list --instance="$SQL_INSTANCE" --project="$PROJECT_ID" --limit=3
+```
+
+**Required for production.** Skip it for staging only if you would genuinely not
+care about losing that database.
+
+## 5. Deploy
+
+Deploying the **tag** keeps the service aligned with what Terraform declares in
+`service.tf`, the same reasoning as the reactivate step in `metabase-restore.md`.
+Cloud Run resolves the tag to a digest when it creates the revision and pins the
+revision to it.
+
+**CLI**
+
+```bash
+gcloud run services update "$RUN_SERVICE" \
+  --image="$IMAGE_TAG" \
+  --region="$REGION" \
+  --project="$PROJECT_ID"
+```
+
+**Console**
+
+1. Cloud Run → **`$RUN_SERVICE`** → **Edit & deploy new revision**.
+2. Leave the container image URL as it is (already the tag) and **Deploy**. This
+   creates a new revision that re-resolves the tag.
+
+Then confirm you got the digest you meant to:
+
+```bash
+REVISION=$(gcloud run services describe "$RUN_SERVICE" \
+  --region="$REGION" --project="$PROJECT_ID" \
+  --format='value(status.latestCreatedRevisionName)')
+
+gcloud run revisions describe "$REVISION" \
+  --region="$REGION" --project="$PROJECT_ID" \
+  --format='value(status.imageDigest)'
+```
+
+If that digest is **not** `$TARGET_DIGEST`, the tag moved between steps 3 and 5 —
+someone else merged to `main`. Stop and reconcile rather than continuing. You can
+deploy the exact intended build with
+`--image="${IMAGE_TAG%:*}@${TARGET_DIGEST}"`, but that leaves the service holding
+a digest where Terraform declares a tag, so the next `terraform apply` on that
+directory will show a diff and reset it. Fine as a deliberate temporary state;
+don't leave it there.
+
+## 6. Watch the migrations
+
+The new revision will not serve traffic until Metabase finishes its schema
+migrations. Watch them:
+
+```bash
+gcloud beta run services logs tail "$RUN_SERVICE" \
+  --region="$REGION" --project="$PROJECT_ID"
+```
+
+The health endpoint reports progress meanwhile:
+
+```bash
+curl -s "$METABASE_URL/api/health"
+```
+
+- `{"status":"initializing","progress":…}` — migrations running. Normal; prod
+  takes longer than staging.
+- `{"status":"ok"}` — up and serving.
+
+If the revision fails its startup probe, Cloud Run keeps the previous revision
+serving and the site stays up on the old version. Read the failed revision's logs
+first; go to [Rollback](#rollback) only if the database was already migrated.
+
+## 7. Verify
+
+```bash
+curl -s "$METABASE_URL/api/health"   # expect {"status":"ok"}
+```
+
+Then log in and check the things a migration would plausibly break:
+
+1. Dashboards render, including ones with filters and custom expressions.
+2. A question runs against BigQuery and returns rows — this exercises the
+   database connection and query processor, not just the app metadata.
+3. Collections and permissions look right, and a non-admin account sees what it
+   should.
+4. Admin → Troubleshooting shows the version you deployed.
+
+Do all of this on staging before touching production, and leave enough time that
+someone would have noticed a problem — a day is reasonable for a minor-version
+jump, less for a patch.
+
+## 8. Production
+
+Repeat steps 0 and 3–7 with the production block. Nothing else changes: the image
+is already built and published, since both tags came from the same merge.
+
+Prefer a low-traffic window. The outage itself is brief — the old revision serves
+until the new one passes its startup probe — but the migration is the risky part
+and you want to be watching when it runs.
+
+______________________________________________________________________
+
+## Rollback
+
+**If the new revision never became ready** (startup probe failed, migrations
+errored), the old revision is still serving and the database may or may not have
+been migrated. The logs tell you how far migrations got.
+
+**If the database was not migrated**, redeploy the image reference recorded in
+step 3:
+
+```bash
+gcloud run services update "$RUN_SERVICE" \
+  --image="<previous image from step 3>" \
+  --region="$REGION" --project="$PROJECT_ID"
+```
+
+**If the database was migrated**, an image downgrade is not enough — the old
+Metabase will not run against the newer schema. Restore the pre-upgrade backup
+from step 4 and *then* redeploy the old image, following **Path A** of
+[`metabase-restore.md`](metabase-restore.md), which covers the deactivate →
+restore → reactivate sequence in full.
+
+Afterwards revert the Dockerfile pin on `main`, so the next deploy doesn't
+silently re-apply the upgrade.
+
+## Notes
+
+- **Nothing here happens automatically.** Merging a version bump publishes the
+  image but does not deploy it: `terraform-apply` only triggers on
+  `iac/**/*.tf`, and the image string in `service.tf` is an unchanging mutable
+  tag, so Terraform sees no diff and creates no revision. Step 5 is what actually
+  ships an upgrade. See
+  [issue #4928](https://github.com/cal-itp/data-infra/issues/4928) for the
+  discussion about formalizing this further.
+- Because the deploy is manual and the tag is mutable, **the running version can
+  lag `main`**. Step 3's digest check is how you confirm what is actually
+  serving.
+- The OSS (`v0.x`) and Enterprise (`v1.x`) images share a base layout (Alpine,
+  `/app/run_metabase.sh` entrypoint, same `JAVA_HOME`), so the `Dockerfile`'s
+  `socat` layer and [`entrypoint.sh`](../../services/metabase/entrypoint.sh)
+  carry across the OSS → Enterprise cutover unchanged. The Enterprise image
+  additionally needs a license token supplied from Secret Manager, which is a
+  `service.tf` change not covered here.
