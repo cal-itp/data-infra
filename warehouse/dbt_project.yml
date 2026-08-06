@@ -95,10 +95,6 @@ models:
         +labels:
           domain: staging
           dataset: payments
-      rt:
-        +labels:
-          domain: staging
-          dataset: gtfs
       state_geoportal:
         +labels:
           domain: staging
