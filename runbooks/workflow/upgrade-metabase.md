@@ -18,7 +18,7 @@ is the source of truth and every upgrade starts with a pull request.
 
 | Change                                                                          | Use this runbook | Rehearse against prod data first |
 | ------------------------------------------------------------------------------- | ---------------- | -------------------------------- |
-| Patch bump within a minor line (`v0.58.7` → `v0.58.22`)                         | ✅               | Not required                     |
+| Patch bump within a minor line (`v0.58.7` → `v0.58.24`)                         | ✅               | Not required                     |
 | Minor or major jump (`v0.58.x` → `v0.63.x`)                                     | ✅               | **Yes**                          |
 | OSS → Enterprise cutover (`metabase/metabase` → `metabase/metabase-enterprise`) | ✅               | **Yes**                          |
 
@@ -95,7 +95,7 @@ with no pull request and no record in git.
 Edit the `FROM` line in [`services/metabase/Dockerfile`](../../services/metabase/Dockerfile):
 
 ```dockerfile
-FROM metabase/metabase:v0.58.22
+FROM metabase/metabase:v0.58.24
 ```
 
 Open a pull request. On the PR the `Metabase Docker image` workflow
