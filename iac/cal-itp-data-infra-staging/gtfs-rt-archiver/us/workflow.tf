@@ -52,7 +52,7 @@ resource "google_cloud_scheduler_job" "gtfs-rt-archiver-staging-clock" {
   description = "GTFS-RT Archiver Heartbeat"
   region      = "us-west2"
   project     = "cal-itp-data-infra-staging"
-  schedule    = "0 * * * *"
+  schedule    = "* * * * *" # TEMP (dep A/B experiment): every-minute; REVERT to "0 * * * *"
   time_zone   = "America/Los_Angeles"
 
   pubsub_target {
