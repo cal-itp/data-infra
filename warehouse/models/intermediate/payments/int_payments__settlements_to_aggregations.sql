@@ -39,6 +39,15 @@ summarize_overall AS (
     GROUP BY 1, 2, 3
 ),
 
+-- group by rrn to detect duplicates
+summarize_by_rrn AS (
+    SELECT
+        retrieval_reference_number,
+        COUNT(*) as n_retrieval_reference_number_copies
+    FROM summarize_overall
+    GROUP BY 1
+),
+
 int_payments__settlements_to_aggregations AS (
     SELECT
         summary.participant_id,
@@ -54,7 +63,8 @@ int_payments__settlements_to_aggregations AS (
         COALESCE(credit.total_amount,0) AS credit_amount,
         credit.is_settled AS credit_is_settled,
         COALESCE(credit.settled_amount,0) AS littlepay_settled_credit_amount,
-        COALESCE(credit.unsettled_amount,0) AS littlepay_unsettled_credit_amount
+        COALESCE(credit.unsettled_amount,0) AS littlepay_unsettled_credit_amount,
+        summary_rrn.n_retrieval_reference_number_copies
     FROM summarize_overall AS summary
     LEFT JOIN summarize_by_type AS debit
         ON summary.aggregation_id = debit.aggregation_id
@@ -64,6 +74,8 @@ int_payments__settlements_to_aggregations AS (
         ON summary.aggregation_id = credit.aggregation_id
         AND summary.retrieval_reference_number = credit.retrieval_reference_number
         AND credit.settlement_type = "CREDIT"
+    LEFT JOIN summarize_by_rrn AS summary_rrn
+        ON summary.retrieval_reference_number = summary_rrn.retrieval_reference_number
 )
 
 SELECT * FROM int_payments__settlements_to_aggregations

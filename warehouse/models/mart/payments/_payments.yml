@@ -351,6 +351,16 @@ models:
         description: |
           Category for reconciliation purposes (whether the aggregation is settled and whether it has an Elavon match.)
 
+          Possible Values:
+          - `Zero-dollar value sales`: Indicates that the aggregation has 0 value, so no charge is expected
+          - `Settled non-zero sales (with Elavon match)`: Indicates that the aggregation is flagged as settled in the Littlepay data and appears in the Elavon data.
+          - `Settled non-sero sales (no Elavon match)`: Indicates that the aggregation is flagged as settled in the Littlepay data, but does not appear in the Elavon data.
+          - `Unsettled non-zero sales`: Indicates that the aggregation is flagged as unsettled in the Littlepay data with a status that does not correspond to a declined transaction.
+          - `Declined Sales`: Indicates that the aggregation is flagged as unsettled in the Littlepay data with a status that corresponds to a declined transaction.
+          - `Duplicate RRN`: Indicates that the Retrieval Reference Number (RRN) associated with this transaction appears in another aggregation.
+          - `UNKNOWN`: None of these conditions are met
+
+
   - name: fct_payments_settlements
     description: Littlepay settlements (completed transactions.) One row per settlement, carrying its most recent record.
     data_tests:
