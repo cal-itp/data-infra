@@ -9,7 +9,7 @@ google-cloud-pubsub==2.37.0
 # 47->50, ...) and roughly doubled the archiver's per-fetch latency and compute
 # cost. Staging canary to confirm the dependency-drift regression; revert once
 # verified.
-google-auth==2.49.2
+google-auth==2.56.2
 google-api-core==2.30.3
 google-cloud-core==2.5.1
 google-cloud-appengine-logging==1.9.0
