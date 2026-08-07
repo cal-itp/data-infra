@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'iac/**'
+      - 'services/gtfs-rt-archiver/**'
 
 env:
   SERVICE_ACCOUNT: 'github-actions-terraform@cal-itp-data-infra.iam.gserviceaccount.com'
@@ -19,8 +20,8 @@ jobs:
     runs-on: ubuntu-latest
 
     outputs:
-      staging: ${{ steps.staging-changes.outputs.all_changed_files }}
-      production: ${{ steps.production-changes.outputs.all_changed_files }}
+      staging: ${{ steps.compute.outputs.staging }}
+      production: ${{ steps.compute.outputs.production }}
 
     steps:
       - name: Checkout
@@ -42,17 +43,32 @@ jobs:
           dir_names: true
           files: 'iac/cal-itp-data-infra/**/*.tf'
 
-      - name: Print Staging changed files
-        env:
-          CHANGED_FILES: ${{ steps.staging-changes.outputs.all_changed_files }}
-        run: |
-          echo "List Staging changed files: $CHANGED_FILES"
+      # A pure source change under services/gtfs-rt-archiver does not touch any
+      # *.tf, but it bumps the archive zip hash, so the archiver iac dir must be
+      # planned to surface the Cloud Functions redeploy.
+      - name: Archiver source changes
+        uses: tj-actions/changed-files@v46
+        id: archiver-changes
+        with:
+          files: 'services/gtfs-rt-archiver/**'
 
-      - name: Print Production changed files
+      - name: Compute targets
+        id: compute
         env:
-          CHANGED_FILES: ${{ steps.production-changes.outputs.all_changed_files }}
+          STAGING_TF: ${{ steps.staging-changes.outputs.all_changed_files }}
+          PRODUCTION_TF: ${{ steps.production-changes.outputs.all_changed_files }}
+          ARCHIVER_CHANGED: ${{ steps.archiver-changes.outputs.any_changed }}
         run: |
-          echo "List Production changed files: $CHANGED_FILES"
+          staging="${STAGING_TF:-[]}"
+          production="${PRODUCTION_TF:-[]}"
+          if [ "$ARCHIVER_CHANGED" = "true" ]; then
+            staging=$(echo "$staging" | jq -c '. + ["iac/cal-itp-data-infra-staging/gtfs-rt-archiver/us"] | unique')
+            production=$(echo "$production" | jq -c '. + ["iac/cal-itp-data-infra/gtfs-rt-archiver/us"] | unique')
+          fi
+          echo "staging=$staging" >> "$GITHUB_OUTPUT"
+          echo "production=$production" >> "$GITHUB_OUTPUT"
+          echo "Staging targets: $staging"
+          echo "Production targets: $production"
 
   staging:
     name: Staging
@@ -94,6 +110,10 @@ jobs:
         uses: dflook/terraform-validate@v1
         with:
           path: ${{ matrix.path }}
+
+      - name: Note archiver redeploy
+        if: contains(matrix.path, 'gtfs-rt-archiver')
+        run: echo "::notice title=Archiver redeploy::Planning ${{ matrix.path }} — GTFS-RT archiver source (services/gtfs-rt-archiver) changed; zip hash bumped, so the Cloud Functions redeploy."
 
       - name: Terraform Plan
         uses: dflook/terraform-plan@v1
@@ -145,6 +165,10 @@ jobs:
         uses: dflook/terraform-validate@v1
         with:
           path: ${{ matrix.path }}
+
+      - name: Note archiver redeploy
+        if: contains(matrix.path, 'gtfs-rt-archiver')
+        run: echo "::notice title=Archiver redeploy::Planning ${{ matrix.path }} — GTFS-RT archiver source (services/gtfs-rt-archiver) changed; zip hash bumped, so the Cloud Functions redeploy."
 
       - name: Terraform Plan
         uses: dflook/terraform-plan@v1
