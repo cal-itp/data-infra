@@ -168,6 +168,7 @@ fct_payments_aggregations AS (
         debit_is_settled,
         credit_is_settled,
         CASE
+            WHEN n_retrieval_reference_number_copies > 1 THEN 'Duplicate RRN'
             WHEN net_micropayment_amount_dollars = 0 THEN 'Zero-dollar value sales'
             WHEN net_micropayment_amount_dollars > 0 AND aggregation_is_settled AND elavon_purch_id IS NOT NULL THEN 'Settled non-zero sales (with Elavon match)'
             WHEN net_micropayment_amount_dollars > 0 AND aggregation_is_settled AND elavon_purch_id IS NULL THEN 'Settled non-zero sales (no Elavon match)'
