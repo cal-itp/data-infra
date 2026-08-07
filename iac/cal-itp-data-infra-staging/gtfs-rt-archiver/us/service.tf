@@ -1,3 +1,7 @@
+# Canary redeploy 2026-08-06: rebuild the staging archiver against the pinned
+# (pre-2026-08-05) dependency stack in services/gtfs-rt-archiver/requirements.txt
+# to confirm the per-fetch latency/cost regression. No resource change here; this
+# only forces terraform to re-zip the source. Revert once verified.
 resource "google_pubsub_topic" "gtfs-rt-archiver-staging" {
   name    = "gtfs-rt-archiver-staging"
   project = "cal-itp-data-infra-staging"
