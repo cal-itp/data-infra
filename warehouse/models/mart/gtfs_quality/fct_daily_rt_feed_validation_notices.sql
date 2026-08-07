@@ -1,4 +1,19 @@
-{{ config(materialized='table') }}
+{{
+    config(
+        materialized='incremental',
+        incremental_strategy='microbatch',
+        event_time='date',
+        batch_size='day',
+        begin=var('GTFS_RT_START'),
+        lookback=var('DBT_ALL_INCREMENTAL_LOOKBACK_DAYS'),
+        partition_by={
+            'field': 'date',
+            'data_type': 'date',
+            'granularity': 'day',
+        },
+        full_refresh=false,
+    )
+}}
 
 WITH
 outcomes_notices AS (
