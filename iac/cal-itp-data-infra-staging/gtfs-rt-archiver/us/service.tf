@@ -1,7 +1,7 @@
-# Canary redeploy 2026-08-07 (Arm B): rebuild staging with only google-auth
-# drifted to 2.56.2 (rest of the stack pinned old) to isolate whether google-auth
-# is the per-fetch latency culprit. No resource change here; this only forces
-# terraform to re-zip services/gtfs-rt-archiver. Revert once verified.
+# Canary redeploy 2026-08-07 (Arm D): full dependency drift (main's wildcard
+# requirements) PLUS the client-reuse fix, to prove reuse absorbs the entire prod
+# regression, not just the google-auth slice. No resource change here; this only
+# forces terraform to re-zip services/gtfs-rt-archiver. Revert once verified.
 resource "google_pubsub_topic" "gtfs-rt-archiver-staging" {
   name    = "gtfs-rt-archiver-staging"
   project = "cal-itp-data-infra-staging"
