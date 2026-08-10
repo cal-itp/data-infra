@@ -71,7 +71,11 @@ models:
       - name: retrieval_reference_number
         data_tests:
           - not_null
-          - unique
+          # see issue #5278
+          - unique:
+              arguments:
+                config:
+                  where: "latest_update_timestamp >= TIMESTAMP('2026-06-01')"
       - &participant_id
         name: participant_id
         description: '{{ doc("lp_participant_id") }}'
