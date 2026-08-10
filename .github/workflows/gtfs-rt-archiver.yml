@@ -67,3 +67,63 @@ jobs:
 
       - name: Run Pytest
         run: uv run pytest
+
+  targets:
+    name: Find targets
+    runs-on: ubuntu-latest
+
+    outputs:
+      staging: ${{ steps.staging-changes.outputs.all_changed_files }}
+      source_changed: ${{ steps.source-changes.outputs.any_changed }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Staging Changes
+        uses: tj-actions/changed-files@v46
+        id: staging-changes
+        with:
+          dir_names: true
+          files: 'iac/cal-itp-data-infra-staging/gtfs-rt-archiver/us/**/*.tf'
+
+      - name: Source Changes
+        uses: tj-actions/changed-files@v46
+        id: source-changes
+        with:
+          files: 'services/gtfs-rt-archiver/**'
+
+  staging-apply:
+    name: Staging Apply
+    needs: [targets]
+    runs-on: ubuntu-latest
+    # Deploy staging branches to staging environment for testing
+
+    if: ${{ contains(github.ref, 'refs/heads/staging') && (needs.targets.outputs.source_changed == 'true') }}
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: true
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.TERRAFORM_SERVICE_ACCOUNT }}
+
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v3
+
+      - name: Terraform Apply
+        uses: dflook/terraform-apply@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          path: iac/cal-itp-data-infra-staging/gtfs-rt-archiver/us
+          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
