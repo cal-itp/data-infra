@@ -1,12 +1,30 @@
 import logging
 import math
 import os
+import threading
 from base64 import urlsafe_b64encode
 from datetime import datetime
 from typing import Self, Type
 
 from google.auth import default
 from google.cloud.secretmanager import SecretManagerServiceClient
+
+# One Secret Manager client per warm instance, same rationale as the GCS client
+# in archiver.py: single-tenant Google API calls with this service's own
+# credentials, so sharing it across requests is safe and avoids a per-read token
+# round-trip. Only auth feeds hit this path.
+_secret_client: SecretManagerServiceClient | None = None
+_secret_client_lock = threading.Lock()
+
+
+def shared_secret_client() -> SecretManagerServiceClient:
+    global _secret_client
+    if _secret_client is None:
+        with _secret_client_lock:
+            if _secret_client is None:
+                _secret_client = SecretManagerServiceClient()
+    return _secret_client
+
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36",
@@ -29,7 +47,7 @@ class Secret:
         self.name: str = name
 
     def client(self) -> SecretManagerServiceClient:
-        return SecretManagerServiceClient()
+        return shared_secret_client()
 
     def secret_name(self) -> str:
         return os.path.join(
