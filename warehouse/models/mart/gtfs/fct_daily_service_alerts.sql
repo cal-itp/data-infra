@@ -1,13 +1,26 @@
 {{
     config(
-        materialized='table',
+        materialized='incremental',
+        incremental_strategy='insert_overwrite',
+        partition_by={
+            'field': 'active_date',
+            'data_type': 'date',
+            'granularity': 'day',
+        },
         cluster_by='base64_url',
+        on_schema_change='append_new_columns',
     )
 }}
 
 WITH service_alerts AS (
     SELECT *
     FROM {{ ref('int_gtfs_rt__service_alerts_day_map_grouping') }}
+    WHERE active_date
+        BETWEEN {{ ranged_incremental_min_date(
+            default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"),
+            data_earliest_start=var("GTFS_RT_START")
+        ) }}
+        AND {{ ranged_incremental_max_date() }}
 ),
 
 header_timestamps AS (
