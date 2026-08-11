@@ -4,6 +4,7 @@ locals {
     "calitp-staging-airtable",
     "calitp-staging-amplitude-benefits-events",
     "calitp-staging-analysis-output-models",
+    "calitp-staging-frankenforce",
     "calitp-staging-gtfs-rt-archiver",
     "calitp-staging-gtfs-download-config",
     "calitp-staging-gtfs-download-config-test",
