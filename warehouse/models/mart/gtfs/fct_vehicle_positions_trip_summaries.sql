@@ -1,12 +1,26 @@
 {{
     config(
-        materialized='table',
+        materialized='incremental',
+        incremental_strategy='insert_overwrite',
+        partition_by={
+            'field': 'service_date',
+            'data_type': 'date',
+            'granularity': 'day',
+        },
         cluster_by='base64_url',
+        on_schema_change='append_new_columns',
     )
 }}
 
 WITH vehicle_positions AS ( --noqa: ST03
-    SELECT * FROM {{ ref('int_gtfs_rt__vehicle_positions_trip_day_map_grouping') }}
+    SELECT *
+    FROM {{ ref('int_gtfs_rt__vehicle_positions_trip_day_map_grouping') }}
+    WHERE service_date
+        BETWEEN {{ ranged_incremental_min_date(
+            default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"),
+            data_earliest_start=var("GTFS_RT_START")
+        ) }}
+        AND {{ ranged_incremental_max_date() }}
 ),
 
 vehicle_positions_no_lat_long AS ( --noqa: ST03
