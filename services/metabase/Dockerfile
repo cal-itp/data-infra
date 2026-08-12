@@ -1,4 +1,4 @@
-FROM metabase/metabase:v0.58.7
+FROM metabase/metabase:v0.58.24
 
 RUN apk update && apk add --no-cache socat
 
