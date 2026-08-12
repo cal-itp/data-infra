@@ -122,7 +122,7 @@ resource "google_cloudfunctions2_function" "gtfs-rt-archiver" {
     trigger_region        = "us-west2"
     event_type            = "google.cloud.pubsub.topic.v1.messagePublished"
     pubsub_topic          = google_pubsub_topic.gtfs-rt-archiver.id
-    retry_policy          = "RETRY_POLICY_RETRY"
+    retry_policy          = "RETRY_POLICY_DO_NOT_RETRY"
     service_account_email = data.terraform_remote_state.iam.outputs.google_service_account_gtfs-rt-archiver_email
   }
 }
