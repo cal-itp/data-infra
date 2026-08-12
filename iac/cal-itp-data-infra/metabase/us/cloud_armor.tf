@@ -13,6 +13,23 @@ resource "google_compute_security_policy" "metabase" {
     }
   }
 
+  # Interim mitigation for CVE-2026-72898 (GHSA-vwf4-m7j8-wcjf): unauthenticated
+  # SQL injection via /api/session/reset_password leading to full admin access.
+  # Added out-of-band on 2026-08-11 and codified here so that a terraform apply
+  # cannot silently drop it while the service is still on a vulnerable version.
+  # Remove only after v0.58.24 is confirmed serving. Blocks self-serve password
+  # reset while in place.
+  rule {
+    priority    = 600
+    action      = "deny(403)"
+    description = "TEMP: block CVE-2026-72898 pending v0.58.24 upgrade"
+    match {
+      expr {
+        expression = "request.path.startsWith('/api/session/reset_password')"
+      }
+    }
+  }
+
   rule {
     priority    = 1000
     action      = "deny(403)"
