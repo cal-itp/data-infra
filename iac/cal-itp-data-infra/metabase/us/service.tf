@@ -63,6 +63,15 @@ resource "google_cloud_run_v2_service" "metabase" {
         mount_path = "/cloudsql"
       }
 
+      # Required by entrypoint.sh to build the Cloud SQL Unix-socket symlink.
+      # Must be set explicitly: the entrypoint's fallback enumerates /cloudsql,
+      # but on Cloud Run that directory is not listable even though the socket
+      # beneath it is connectable, so the fallback always fails here.
+      env {
+        name  = "CLOUD_SQL_INSTANCE_CONNECTION_NAME"
+        value = google_sql_database_instance.metabase.connection_name
+      }
+
       env {
         name  = "MB_DB_TYPE"
         value = "postgres"
