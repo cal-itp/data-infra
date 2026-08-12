@@ -766,10 +766,10 @@ models:
               arguments:
                 to: ref('dim_organizations')
                 field: key
-  - name: bridge_paratransit_services
+  - name: bridge_services_x_paratransit
     description: |
-      Mapping table between services and services for which
-      they provide paratransit service
+      Mapping table between services and their complementary
+      paratransit services records
       (map between two service records.)
       This is a versioned, many-to-many relationship.
       Joins via this table can result in fanout.
@@ -778,7 +778,7 @@ models:
           arguments:
             combination_of_columns:
               - service_key
-              - paratransit_for_service_key
+              - complementary_paratransit_service_key
     columns:
       - name: service_key
         data_tests:
@@ -786,7 +786,7 @@ models:
               arguments:
                 to: ref('dim_services')
                 field: key
-      - name: paratransit_for_service_key
+      - name: complementary_paratransit_service_key
         data_tests:
           - relationships:
               arguments:
