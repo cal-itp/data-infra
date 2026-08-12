@@ -14,8 +14,11 @@ This directory holds the container build for the service:
 
 - [`Dockerfile`](./Dockerfile) — unified image build, tagged `:staging` and `:production`
 - [`entrypoint.sh`](./entrypoint.sh) — container entrypoint; resolves the Cloud SQL
-  Unix-socket symlink at runtime from `CLOUD_SQL_INSTANCE_CONNECTION_NAME` (or
-  auto-detects when a single instance is mounted at `/cloudsql/`)
+  Unix-socket symlink at runtime from `CLOUD_SQL_INSTANCE_CONNECTION_NAME`,
+  which every deployment **must** set. The entrypoint falls back to enumerating
+  `/cloudsql/`, but that does not work on Cloud Run — the directory is not
+  listable there even though the socket beneath it is connectable, so the
+  fallback always fails and the container exits 1.
 
 ## Backups
 
