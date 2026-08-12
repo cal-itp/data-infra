@@ -39,10 +39,21 @@ resource "google_cloud_run_v2_service" "metabase" {
         container_port = 3000
       }
 
+      # Metabase runs Liquibase schema migrations on first boot of a new version,
+      # and does not serve / until they finish. If the startup probe gives up
+      # mid-migration the container is killed while holding the
+      # DATABASECHANGELOGLOCK row, and the next boot hangs waiting on a lock
+      # nobody holds — recoverable only by clearing it by hand.
+      #
+      # failure_threshold * period_seconds is capped at 240s by Cloud Run, so
+      # 48 * 5 is the most probing time available; with the 60s initial delay
+      # that is a 300s budget. Staging's v0.58.7 -> v0.58.24 migration took 65s.
+      # This is a ceiling, not a wait: a healthy container goes Ready on its
+      # first successful probe, so normal starts and autoscaling are unaffected.
       startup_probe {
         timeout_seconds       = 2
         period_seconds        = 5
-        failure_threshold     = 10
+        failure_threshold     = 48
         initial_delay_seconds = 60
 
         http_get {
@@ -61,6 +72,15 @@ resource "google_cloud_run_v2_service" "metabase" {
       volume_mounts {
         name       = "cloudsql"
         mount_path = "/cloudsql"
+      }
+
+      # Required by entrypoint.sh to build the Cloud SQL Unix-socket symlink.
+      # Must be set explicitly: the entrypoint's fallback enumerates /cloudsql,
+      # but on Cloud Run that directory is not listable even though the socket
+      # beneath it is connectable, so the fallback always fails here.
+      env {
+        name  = "CLOUD_SQL_INSTANCE_CONNECTION_NAME"
+        value = google_sql_database_instance.metabase.connection_name
       }
 
       env {

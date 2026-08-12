@@ -117,9 +117,16 @@ before continuing.
 The tags are mutable, so capture the digest now and verify it after each deploy.
 This is what makes the deploy auditable.
 
+> ⚠️ Not `gcloud artifacts docker images describe` — on a *remote repository* it
+> reads cached inventory and can lag by days (2026-08-12: reported a May digest
+> while a real pull returned the current one). Ask the registry for the manifest,
+> which is the path Cloud Run takes:
+
 ```bash
-gcloud artifacts docker images describe "$IMAGE_TAG" \
-  --project="$PROJECT_ID" --format='value(image_summary.digest)'
+curl -sI -H "Authorization: Bearer $(gcloud auth print-access-token)" \
+  -H "Accept: application/vnd.oci.image.index.v1+json,application/vnd.docker.distribution.manifest.list.v2+json,application/vnd.oci.image.manifest.v1+json,application/vnd.docker.distribution.manifest.v2+json" \
+  "https://us-west2-docker.pkg.dev/v2/${PROJECT_ID}/ghcr/cal-itp/data-infra/metabase/manifests/${IMAGE_TAG##*:}" \
+  | grep -i docker-content-digest
 ```
 
 ```bash
@@ -151,8 +158,17 @@ Confirm it succeeded before deploying — this is the artifact
 [Rollback](#rollback) depends on:
 
 ```bash
-gcloud sql backups list --instance="$SQL_INSTANCE" --project="$PROJECT_ID" --limit=3
+gcloud sql backups list --instance="$SQL_INSTANCE" --project="$PROJECT_ID" \
+  --sort-by=~startTime --limit=3 \
+  --format='table(id,startTime,type,status,description)'
 ```
+
+`--sort-by=~startTime` matters — default ordering is not guaranteed. Note the
+**ID**; [Rollback](#rollback) passes it to `gcloud sql backups restore`.
+
+Take it *immediately* before deploying. Anything written in between — dashboard
+edits, saved questions — is what a restore loses. Backups are disk snapshots, so
+the instance keeps serving; production takes ~70s and already runs one nightly.
 
 **Required for production.** Skip it for staging only if you would genuinely not
 care about losing that database.
@@ -163,6 +179,11 @@ Deploying the **tag** keeps the service aligned with what Terraform declares in
 `service.tf`, the same reasoning as the reactivate step in `metabase-restore.md`.
 Cloud Run resolves the tag to a digest when it creates the revision and pins the
 revision to it.
+
+> **If the upgrade also changes a `.tf` file in the module, skip this step.**
+> `terraform-apply` runs on merge, and the resulting revision re-resolves the tag
+> by itself — no deploy command runs at all. That is how v0.58.24 shipped on
+> 2026-08-12. It also changes rollback: see [Rollback](#rollback).
 
 **CLI**
 
@@ -202,7 +223,19 @@ don't leave it there.
 ## 6. Watch the migrations
 
 The new revision will not serve traffic until Metabase finishes its schema
-migrations. Watch them:
+migrations.
+
+> ⚠️ **The migration must finish inside the startup probe budget.** Metabase does
+> not serve `/` until Liquibase is done, so if the probe expires first Cloud Run
+> kills the container *mid-migration* while it holds the `DATABASECHANGELOGLOCK`
+> row, and the next boot blocks on a lock nobody owns — see [Rollback](#rollback).
+>
+> Budget is `initial_delay_seconds + (failure_threshold × period_seconds)`, with
+> Cloud Run capping that product at 240s. Production: 60 + 48×5 = **300s**.
+> Staging: 60 + 10×5 = **110s**. Staging's v0.58.7 → v0.58.24 took **65s**
+> (2026-08-12). Check `service.tf` before a larger jump.
+
+Watch them:
 
 ```bash
 gcloud beta run services logs tail "$RUN_SERVICE" \
@@ -255,12 +288,15 @@ ______________________________________________________________________
 
 ## Rollback
 
-**If the new revision never became ready** (startup probe failed, migrations
-errored), the old revision is still serving and the database may or may not have
-been migrated. The logs tell you how far migrations got.
+Traffic never moves to a revision that failed its startup probe, so the site
+stays up throughout. **Restore is the last resort, not the first move** — which
+case you are in depends on how far migrations got, so read the logs first.
 
-**If the database was not migrated**, redeploy the image reference recorded in
-step 3:
+### The database was never migrated
+
+Metabase died before reaching Liquibase — failed entrypoint, crash, probe timeout
+during JVM startup. Nothing to restore; diagnose, fix, redeploy. If you deployed
+by image reference, put back the one from step 3:
 
 ```bash
 gcloud run services update "$RUN_SERVICE" \
@@ -268,14 +304,47 @@ gcloud run services update "$RUN_SERVICE" \
   --region="$REGION" --project="$PROJECT_ID"
 ```
 
-**If the database was migrated**, an image downgrade is not enough — the old
-Metabase will not run against the newer schema. Restore the pre-upgrade backup
-from step 4 and *then* redeploy the old image, following **Path A** of
-[`metabase-restore.md`](metabase-restore.md), which covers the deactivate →
-restore → reactivate sequence in full.
+### Migrations were interrupted partway
 
-Afterwards revert the Dockerfile pin on `main`, so the next deploy doesn't
-silently re-apply the upgrade.
+**Do not restore.** Liquibase is resumable: each changeset commits in its own
+transaction and is recorded in `databasechangelog`, so re-running picks up where
+it stopped. Restoring discards correctly-applied work and puts you back at the
+start of a migration you already know is slow.
+
+Connect to the database (step 6 of [`metabase-restore.md`](metabase-restore.md)
+covers the Cloud SQL Auth Proxy) and check:
+
+```sql
+SELECT * FROM databasechangeloglock;
+SELECT id, filename, dateexecuted, orderexecuted
+  FROM databasechangelog ORDER BY orderexecuted DESC LIMIT 10;
+```
+
+If `locked` is true and no container is running, clear it:
+
+```sql
+UPDATE databasechangeloglock
+   SET locked = false, lockgranted = null, lockedby = null
+ WHERE id = 1;
+```
+
+Then redeploy and let the migration finish. Widen the startup probe budget first
+(see step 6) if that is what killed it, or you will land here again.
+
+### Migrations completed, but the app is broken
+
+**This is the case that needs a restore.** The schema is now the new version's
+and the old Metabase will not run against it, so reverting the image alone leaves
+you worse off. Restore the step 4 backup, *then* redeploy the old image —
+**Path A** of [`metabase-restore.md`](metabase-restore.md) covers the sequence.
+
+### Afterwards
+
+Revert the Dockerfile pin on `main`, so the next deploy doesn't silently re-apply
+the upgrade. **If the upgrade shipped via `terraform-apply`** (a `.tf` change
+rather than a `gcloud run services update` — see step 5), rolling back the
+service means reverting that commit, not redeploying a digest: the next apply
+would otherwise put the change straight back.
 
 ## Notes
 
@@ -287,8 +356,18 @@ silently re-apply the upgrade.
   [issue #4928](https://github.com/cal-itp/data-infra/issues/4928) for the
   discussion about formalizing this further.
 - Because the deploy is manual and the tag is mutable, **the running version can
-  lag `main`**. Step 3's digest check is how you confirm what is actually
-  serving.
+  lag `main`**, and by a long way — on 2026-08-12 staging was still serving an
+  image built on 2026-05-29. Step 3's digest check is how you confirm what is
+  actually serving.
+- **Every deployment must set `CLOUD_SQL_INSTANCE_CONNECTION_NAME`.**
+  `entrypoint.sh` falls back to enumerating `/cloudsql/`, which never works on
+  Cloud Run — the socket is connectable but the directory is not listable, so the
+  container exits 1. Both services set it in `service.tf`; new ones need it too.
+- **Codify emergency Cloud Armor rules before relying on them.** `rule` blocks are
+  authoritative with no `ignore_changes`, so a rule added via `gcloud` is deleted
+  by the next apply — including the one shipping an upgrade. The policy and the
+  service are independent resources applied in parallel, so a mitigation can be
+  removed while the service update fails and leaves the old version serving.
 - The OSS (`v0.x`) and Enterprise (`v1.x`) images share a base layout (Alpine,
   `/app/run_metabase.sh` entrypoint, same `JAVA_HOME`), so the `Dockerfile`'s
   `socat` layer and [`entrypoint.sh`](../../services/metabase/entrypoint.sh)
