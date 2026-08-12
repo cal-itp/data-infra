@@ -213,7 +213,7 @@ After completing Littlepay onboarding:
 
 **Solutions:**
 
-- Check `elavon_littlepay__transaction_reconciliation` table
+- Check the `fct_payments_aggregations` table
 - Verify entity mapping links correct organizations
 - Review pipeline schedule timing for mismatches (this could happen if a DAG schedule was modified)
 
