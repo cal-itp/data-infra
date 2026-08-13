@@ -127,7 +127,7 @@ day_counts_by_availability AS (
         *
     FROM (
         SELECT
-            COALESCE(gtfs_dataset_name, schedule_name) AS schedule_name,
+            schedule_name,
             schedule_base64_url,
             vp_base64_url,
             tu_base64_url,
@@ -170,7 +170,7 @@ monthly_summary AS (
         EXTRACT(year FROM daily_summary2.month_first_day) AS year,
         daily_summary2.month_first_day,
 
-        COALESCE(daily_summary2.gtfs_dataset_name, daily_summary2.schedule_name) AS schedule_name,
+        daily_summary2.schedule_name,
         daily_summary2.schedule_base64_url,
         vp_name,
         daily_summary2.vp_base64_url,

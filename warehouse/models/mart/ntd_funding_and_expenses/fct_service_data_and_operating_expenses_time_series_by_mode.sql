@@ -81,7 +81,7 @@ service_data_and_operating_expenses_time_series_by_mode AS (
         int_vrm.vrm AS vehicle_revenue_miles,
         int_voms.voms AS vehicles_operated_in_maxiumum_service,
         int_pmt.pmt AS passenger_miles_traveled,
-        int_drm.drm AS direction_route_miles,
+        int_drm.drm AS directional_route_miles,
 
         int_vo.opexp_vo AS operating_expenses_vehicle_operations,
         int_vm.opexp_vm AS operating_expenses_vehicle_maintenance,
