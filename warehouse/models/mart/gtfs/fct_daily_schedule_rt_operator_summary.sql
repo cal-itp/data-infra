@@ -80,8 +80,11 @@ daily_summary AS (
     SELECT
         COALESCE(daily_schedule.service_date, daily_rt.service_date) AS service_date,
         daily_schedule.feed_key,
-        daily_schedule.gtfs_dataset_key, -- should get rid of a set of these so schedule keys aren't doubled up...once we figure out how to tag cases
-        daily_schedule.gtfs_dataset_name,
+        COALESCE(daily_schedule.gtfs_dataset_key, daily_rt.schedule_gtfs_dataset_key) AS schedule_gtfs_dataset_key,
+        COALESCE(daily_schedule.gtfs_dataset_name, daily_rt.schedule_name) AS schedule_name,
+        daily_rt.schedule_base64_url,
+        daily_schedule._feed_valid_from,
+
         ROUND(daily_schedule.ttl_service_hours, 2) AS ttl_service_hours,
         ROUND(daily_schedule.ttl_flex_service_hours, 2) AS ttl_flex_service_hours,
         COALESCE(daily_schedule.n_trips, 0) AS n_trips,
@@ -95,9 +98,6 @@ daily_summary AS (
         daily_schedule.contains_warning_duplicate_trip_primary_key,
         daily_schedule.contains_warning_missing_foreign_key_stop_id,
 
-        daily_rt.schedule_base64_url,
-        daily_rt.schedule_gtfs_dataset_key,
-        daily_rt.schedule_name,
         daily_rt.vp_gtfs_dataset_key,
         daily_rt.vp_name,
         daily_rt.vp_base64_url,
