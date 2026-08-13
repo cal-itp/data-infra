@@ -160,7 +160,7 @@ daily_summary2 AS (
             WHEN n_trips > 0 AND n_tu_trips = 0 AND n_vp_trips > 0 THEN "schedule_and_vp_only"
             WHEN n_trips = 0 THEN "no_active_service"
             -- there are rows with active service but quartet hasn't been implemented yet, these cover 2022-10-01 values and before
-            WHEN gtfs_dataset_name IS NULL AND feed_key IS NOT NULL THEN "v1_warehouse"
+            WHEN schedule_name IS NULL AND feed_key IS NOT NULL THEN "v1_warehouse"
             ELSE "unknown"
         END AS gtfs_availability,
     FROM daily_summary
