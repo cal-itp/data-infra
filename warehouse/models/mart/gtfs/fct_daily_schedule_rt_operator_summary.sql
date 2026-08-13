@@ -135,7 +135,7 @@ daily_summary AS (
         daily_rt.vp_messages_per_minute,
 
         -- figure out which ones are missing
-        IF(gtfs_dataset_name IS NULL AND daily_schedule.feed_key IS NULL AND schedule_name IS NOT NULL, 1, 0) AS in_obs_only,
+        IF(daily_schedule.gtfs_dataset_name IS NULL AND daily_schedule.feed_key IS NULL AND daily_rt.schedule_name IS NOT NULL, 1, 0) AS in_obs_only,
 
     FROM daily_schedule
     FULL OUTER JOIN daily_rt -- full outer join to see which ones don't match up
