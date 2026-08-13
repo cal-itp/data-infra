@@ -210,9 +210,13 @@ class DownloadConfigToGCSOperator(BaseOperator):
     def execute(self, context: Context) -> dict:
         ti = context["task_instance"]
         extract = self.download().extract()
-        exception = (
+
+        download_exception = (
             str(self.download().exception) if self.download().exception else None
         )
+
+        task_exception = download_exception
+
         schedule_feed_path = os.path.join(
             self.destination_path,
             self.download().filename(),
@@ -233,15 +237,19 @@ class DownloadConfigToGCSOperator(BaseOperator):
             )
 
         if (
-            exception is not None and not ti.try_number - 1 == ti.max_tries
+            download_exception is not None and not ti.try_number - 1 == ti.max_tries
         ):  # last retry
             schedule_feed_path = os.path.join(
                 self.destination_path,
                 self.manual_download().filename(),
             )
             extract = self.manual_download().extract()
-            exception = None
+
+            # The source download failed, but the manual fallback allows
+            # downstream processing to continue successfully.
+            task_exception = None
             download_type = "Manual Download"
+
             self.gcs_hook().upload(
                 bucket_name=self.destination_name(),
                 object_name=schedule_feed_path,
@@ -254,8 +262,8 @@ class DownloadConfigToGCSOperator(BaseOperator):
 
         download_schedule_feed_results = {
             "backfilled": False,
-            "success": exception is None,
-            "exception": exception,
+            "success": task_exception is None,
+            "exception": download_exception,
             "config": self.download_config,
             "extract": extract,
             "download_type": download_type,
@@ -279,8 +287,8 @@ class DownloadConfigToGCSOperator(BaseOperator):
             },
         )
 
-        if exception is not None:
-            raise AirflowException(exception)
+        if task_exception is not None:
+            raise AirflowException(task_exception)
 
         return {
             "dt": self.dt,

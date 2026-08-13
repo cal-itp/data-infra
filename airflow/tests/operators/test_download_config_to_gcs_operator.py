@@ -744,6 +744,7 @@ class TestDownloadConfigToGCSOperator:
         task = manual_download_dag.get_task("manual_gtfs_download_config_to_gcs")
         task_instance = TaskInstance(task, execution_date=execution_date)
         xcom_value = task_instance.xcom_pull()
+        download_exception = "404:Not Found"
         assert xcom_value == {
             "dt": "2025-06-02",
             "ts": "2025-06-02T00:00:00+00:00",
@@ -758,7 +759,7 @@ class TestDownloadConfigToGCSOperator:
             "download_schedule_feed_results": {
                 "backfilled": False,
                 "config": manual_download_config,
-                "exception": None,
+                "exception": download_exception,
                 "download_type": "Manual Download",
                 "extract": {
                     "filename": "gtfs.zip",
@@ -801,7 +802,7 @@ class TestDownloadConfigToGCSOperator:
         result = json.loads(decompressed_result)
         assert result == {
             "success": True,
-            "exception": None,
+            "exception": download_exception,
             "download_type": "Manual Download",
             "config": manual_download_config,
             "extract": {
