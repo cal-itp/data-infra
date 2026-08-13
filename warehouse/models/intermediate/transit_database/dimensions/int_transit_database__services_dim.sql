@@ -5,7 +5,7 @@ WITH dim AS (
         once_daily_staging_table = 'stg_transit_database__services',
         date_col = 'dt',
         record_id_col = 'id',
-        array_cols = ['service_type', 'fare_systems', 'mode', 'primary_mode', 'paratransit_for', 'complementary_paratransit_service', 'rider_requirements',  
+        array_cols = ['service_type', 'fare_systems', 'mode', 'primary_mode', 'paratransit_for', 'complementary_paratransit_service', 'rider_requirements',
             'provider', 'operator', 'funding_sources', 'operating_counties', 'operating_county_geographies']
         ) }}
 ),
@@ -27,7 +27,6 @@ int_transit_database__services_dim AS (
         reservation_methods,
         booking_lead_time,
         paratransit_exemption_notes,
-    
         provider,
         operator,
         funding_sources,

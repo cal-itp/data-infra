@@ -3,7 +3,7 @@ with services as (
     from {{ ref('int_transit_database__services_dim') }}
 ),
 
--- unnest rixed-route service's linked complementary paratransit services 
+-- unnest rixed-route service's linked complementary paratransit services
 -- (may add fixed-route filter later)
 unnest_complementary_paratransit_services as (
   select key AS service_key,
