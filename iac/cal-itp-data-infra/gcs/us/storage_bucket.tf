@@ -256,6 +256,22 @@ resource "google_storage_bucket" "tfer--calitp-elavon-parsed" {
   requester_pays              = "false"
   storage_class               = "STANDARD"
   uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age                        = "14"
+      created_before             = ""
+      days_since_custom_time     = "0"
+      days_since_noncurrent_time = "0"
+      matches_prefix             = ["transactions/"]
+      num_newer_versions         = "0"
+      with_state                 = "ANY"
+    }
+  }
 }
 
 resource "google_storage_bucket" "tfer--calitp-elavon-raw" {
