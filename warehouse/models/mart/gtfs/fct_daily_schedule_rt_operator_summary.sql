@@ -80,8 +80,11 @@ daily_summary AS (
     SELECT
         COALESCE(daily_schedule.service_date, daily_rt.service_date) AS service_date,
         daily_schedule.feed_key,
-        daily_schedule.gtfs_dataset_key, -- should get rid of a set of these so schedule keys aren't doubled up...once we figure out how to tag cases
-        daily_schedule.gtfs_dataset_name,
+        COALESCE(daily_schedule.gtfs_dataset_key, daily_rt.schedule_gtfs_dataset_key) AS schedule_gtfs_dataset_key,
+        COALESCE(daily_schedule.gtfs_dataset_name, daily_rt.schedule_name) AS schedule_name,
+        daily_rt.schedule_base64_url,
+        daily_schedule._feed_valid_from,
+
         ROUND(daily_schedule.ttl_service_hours, 2) AS ttl_service_hours,
         ROUND(daily_schedule.ttl_flex_service_hours, 2) AS ttl_flex_service_hours,
         COALESCE(daily_schedule.n_trips, 0) AS n_trips,
@@ -95,9 +98,6 @@ daily_summary AS (
         daily_schedule.contains_warning_duplicate_trip_primary_key,
         daily_schedule.contains_warning_missing_foreign_key_stop_id,
 
-        daily_rt.schedule_base64_url,
-        daily_rt.schedule_gtfs_dataset_key,
-        daily_rt.schedule_name,
         daily_rt.vp_gtfs_dataset_key,
         daily_rt.vp_name,
         daily_rt.vp_base64_url,
@@ -135,7 +135,7 @@ daily_summary AS (
         daily_rt.vp_messages_per_minute,
 
         -- figure out which ones are missing
-        IF(gtfs_dataset_name IS NULL AND daily_schedule.feed_key IS NULL AND schedule_name IS NOT NULL, 1, 0) AS in_obs_only,
+        IF(daily_schedule.gtfs_dataset_name IS NULL AND daily_schedule.feed_key IS NULL AND daily_rt.schedule_name IS NOT NULL, 1, 0) AS in_obs_only,
 
     FROM daily_schedule
     FULL OUTER JOIN daily_rt -- full outer join to see which ones don't match up
@@ -160,7 +160,7 @@ daily_summary2 AS (
             WHEN n_trips > 0 AND n_tu_trips = 0 AND n_vp_trips > 0 THEN "schedule_and_vp_only"
             WHEN n_trips = 0 THEN "no_active_service"
             -- there are rows with active service but quartet hasn't been implemented yet, these cover 2022-10-01 values and before
-            WHEN gtfs_dataset_name IS NULL AND feed_key IS NOT NULL THEN "v1_warehouse"
+            WHEN schedule_name IS NULL AND feed_key IS NOT NULL THEN "v1_warehouse"
             ELSE "unknown"
         END AS gtfs_availability,
     FROM daily_summary

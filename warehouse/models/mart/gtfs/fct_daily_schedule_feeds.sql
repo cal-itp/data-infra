@@ -28,6 +28,7 @@ fct_daily_schedule_feeds AS (
         t2.key AS feed_key,
         t2.feed_timezone,
         t2.base64_url,
+        t2._valid_from AS _feed_valid_from,
         urls_to_gtfs_datasets.gtfs_dataset_key AS gtfs_dataset_key,
         urls_to_gtfs_datasets.gtfs_dataset_name AS gtfs_dataset_name,
     FROM make_noon_pacific AS t1
