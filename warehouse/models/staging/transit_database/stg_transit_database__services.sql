@@ -21,7 +21,13 @@ stg_transit_database__services AS (
         public_currently_operating_fixed_route = "Yes" AS public_currently_operating_fixed_route,
         start_date,
         operational_status,
+        -- demand response and paratransit fields
         paratransit_for,
+        complementary_paratransit_service,
+        rider_requirements,
+        {{ trim_make_empty_string_null(column_name = "reservation_methods") }} AS reservation_methods,
+        {{ trim_make_empty_string_null(column_name = "booking_lead_time") }} AS booking_lead_time,
+        {{ trim_make_empty_string_null(column_name = "paratransit_exemption_notes") }} AS paratransit_exemption_notes,
         provider,
         operator,
         funding_sources,
