@@ -54,3 +54,32 @@ class TestHeartbeat:
             "projects/cal-itp-data-infra-staging/topics/example",
             data=heartbeat.messages()[0],
         )
+
+    def test_should_publish_non_service_alerts(self, heartbeat: Heartbeat) -> None:
+        assert heartbeat.should_publish("trip_updates")
+        assert heartbeat.should_publish("vehicle_positions")
+
+    @pytest.mark.parametrize(
+        ("batch_at", "expected"),
+        [
+            ("2025-06-02T00:00:00+00:00", True),
+            ("2025-06-02T00:00:20+00:00", False),
+            ("2025-06-02T00:00:40+00:00", False),
+            ("2025-06-02T00:01:00+00:00", False),
+            ("2025-06-02T00:05:00+00:00", True),
+            ("2025-06-02T00:10:00+00:00", True),
+        ],
+    )
+    def test_should_publish_service_alerts(
+        self,
+        batch_at: str,
+        expected: bool,
+        publish_time: datetime,
+    ) -> None:
+        heartbeat = Heartbeat(
+            data=json.dumps({"batch_at": batch_at}),
+            publish_time=publish_time,
+            message_id="1",
+        )
+
+        assert heartbeat.should_publish("service_alerts") is expected
