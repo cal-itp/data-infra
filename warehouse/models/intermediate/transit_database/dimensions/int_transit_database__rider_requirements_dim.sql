@@ -6,7 +6,7 @@ WITH dim AS (
         date_col = 'dt',
         record_id_col = 'id',
         array_cols = ['services',
-                      'eligibility_programs']
+                      'programs']
         ) }}
 ),
 int_transit_database__rider_requirements_dim AS (
@@ -17,7 +17,7 @@ int_transit_database__rider_requirements_dim AS (
         category,
         description,
         services,
-        eligibility_programs,
+        programs,
         _is_current,
         _valid_from,
         _valid_to

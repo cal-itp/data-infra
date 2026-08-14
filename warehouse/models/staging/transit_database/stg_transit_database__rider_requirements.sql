@@ -14,7 +14,7 @@ stg_transit_database__rider_requirements AS (
         category,
         description,
         services,
-        eligibility_programs,
+        programs,
         dt
     FROM once_daily_rider_requirements
 )
