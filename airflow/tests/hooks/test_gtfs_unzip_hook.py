@@ -173,7 +173,7 @@ class TestGTFSUnzipHook:
                 },
             ],
             "zipfile_dirs": [],
-            "zipfile_extract_md5hash": "4f72c84bd3f053ddb929289fa2de7879",
+            "zipfile_extract_md5hash": "88b2be5e1460b725daf971fa4ccd0059",
             "zipfile_files": [
                 "agency.txt",
                 "calendar.txt",
@@ -478,7 +478,7 @@ class TestGTFSUnzipHook:
             },
             "extracted_files": [],
             "zipfile_dirs": [],
-            "zipfile_extract_md5hash": "4f72c84bd3f053ddb929289fa2de7879",
+            "zipfile_extract_md5hash": "88b2be5e1460b725daf971fa4ccd0059",
             "zipfile_files": [
                 "agency.txt",
                 "calendar.txt",
