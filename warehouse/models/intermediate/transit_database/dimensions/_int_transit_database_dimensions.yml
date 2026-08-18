@@ -141,3 +141,9 @@ models:
           this record.
           Because this table has not actually been fully versioned,
           this will always be True.
+  - name: int_transit_database__rider_requirements_dim
+    description: |
+        Rider requirements data in slowly-changing-dimension format.
+    data_tests: *mutually_exclusive_ranges
+    columns:
+        - *key
