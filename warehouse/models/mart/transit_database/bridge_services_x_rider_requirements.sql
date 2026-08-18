@@ -1,10 +1,10 @@
 {{ config(materialized='table') }}
 
-WITH services AS (
+WITH services AS ( --noqa
     SELECT *
     FROM {{ ref('int_transit_database__services_dim') }}
 ),
-rider_requirements AS (
+rider_requirements AS ( --noqa
     SELECT *
     FROM {{ ref('int_transit_database__rider_requirements_dim') }}
 ),
