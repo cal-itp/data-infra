@@ -290,6 +290,9 @@ schema_fields:
   - name: public_currently_operating_fixed_route
     type: STRING
     mode: NULLABLE
+  - name: public_conditional_currently_operating
+    type: STRING
+    mode: NULLABLE
   - name: reservation_methods
     type: STRING
     mode: NULLABLE
