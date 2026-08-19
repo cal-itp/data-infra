@@ -1119,3 +1119,39 @@ models:
       - name: _is_current
       - name: _valid_from
       - name: _valid_to
+  - name: dim_rider_requirements
+    description: |
+        Rider requirements from the California Transit Database.
+    data_tests: *mutually_exclusive_ranges
+    columns:
+      - name: key
+      - name: source_record_id
+      - name: requirement
+      - name: category
+      - name: description
+      - name: _is_current
+      - name: _valid_from
+      - name: _valid_to
+  - name: bridge_services_x_rider_requirements
+    description: |
+      Mapping table between services and their rider requirements.
+      This is a versioned, many-to-many relationship.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - service_key
+              - rider_requirement_key
+    columns:
+      - name: service_key
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_services')
+                field: key
+      - name: rider_requirement_key
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('dim_rider_requirements')
+                field: key

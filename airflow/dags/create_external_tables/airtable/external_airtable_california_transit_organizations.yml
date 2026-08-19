@@ -247,6 +247,9 @@ schema_fields:
   - name: public_currently_operating_fixed_route
     type: STRING
     mode: NULLABLE
+  - name: public_conditional_currently_operating
+    type: STRING
+    mode: NULLABLE
   - name: is_public_entity
     type: STRING
     mode: NULLABLE

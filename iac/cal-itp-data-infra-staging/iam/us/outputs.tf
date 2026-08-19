@@ -94,14 +94,6 @@ output "google_project_iam_member_tfer--roles-002F-editorserviceAccount-003A-473
   value = google_project_iam_member.tfer--roles-002F-editorserviceAccount-003A-473674835135-compute-0040-developer-002E-gserviceaccount-002E-com.id
 }
 
-output "google_project_iam_member_tfer--roles-002F-ownerserviceAccount-003A-amplitude-0040-cal-itp-data-infra-staging-002E-iam-002E-gserviceaccount-002E-com_id" {
-  value = google_project_iam_member.tfer--roles-002F-ownerserviceAccount-003A-amplitude-0040-cal-itp-data-infra-staging-002E-iam-002E-gserviceaccount-002E-com.id
-}
-
-output "google_project_iam_member_tfer--roles-002F-ownerserviceAccount-003A-local-airflow-dev-0040-cal-itp-data-infra-staging-002E-iam-002E-gserviceaccount-002E-com_id" {
-  value = google_project_iam_member.tfer--roles-002F-ownerserviceAccount-003A-local-airflow-dev-0040-cal-itp-data-infra-staging-002E-iam-002E-gserviceaccount-002E-com.id
-}
-
 output "google_project_iam_member_tfer--roles-002F-pubsub-002E-serviceAgentserviceAccount-003A-service-473674835135-0040-gcp-sa-pubsub-002E-iam-002E-gserviceaccount-002E-com_id" {
   value = google_project_iam_member.tfer--roles-002F-pubsub-002E-serviceAgentserviceAccount-003A-service-473674835135-0040-gcp-sa-pubsub-002E-iam-002E-gserviceaccount-002E-com.id
 }
@@ -124,14 +116,6 @@ output "google_project_iam_member_tfer--roles-002F-storage-002E-objectViewerserv
 
 output "google_service_account_tfer--101455296324690994963_id" {
   value = google_service_account.tfer--101455296324690994963.id
-}
-
-output "google_service_account_tfer--111242760977002129583_id" {
-  value = google_service_account.tfer--111242760977002129583.id
-}
-
-output "google_service_account_tfer--111824761856041678305_id" {
-  value = google_service_account.tfer--111824761856041678305.id
 }
 
 output "google_service_account_tfer--111881979116192190399_id" {

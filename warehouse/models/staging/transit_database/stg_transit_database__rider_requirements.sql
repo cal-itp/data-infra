@@ -14,10 +14,9 @@ stg_transit_database__rider_requirements AS (
         category,
         description,
         services,
-        unnested_eligibility_programs AS eligibility_program_key,
+        programs,
         dt
     FROM once_daily_rider_requirements
-    LEFT JOIN UNNEST(once_daily_rider_requirements.eligibility_programs) AS unnested_eligibility_programs
 )
 
 SELECT * FROM stg_transit_database__rider_requirements
