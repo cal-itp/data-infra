@@ -109,11 +109,19 @@ class Heartbeat:
             for download_config in decompressed_result.decode().split("\n")
         ]
 
+    def should_publish(self, feed_type: str) -> bool:
+        if feed_type != "service_alerts":
+            return True
+
+        batch_at = self.batch_at()
+        return batch_at.minute % 5 == 0 and batch_at.second == 0
+
     def messages(self) -> list[str]:
         return [
             json.dumps(download_config, separators=(",", ":")).encode()
             for download_config in self.download_configs()
             if download_config["feed_type"] in GTFS_RT_FEED_TYPES
+            and self.should_publish(download_config["feed_type"])
         ][slice(0, self.limit)]
 
     def run(
