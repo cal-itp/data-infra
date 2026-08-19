@@ -20,7 +20,7 @@ resource "google_monitoring_alert_policy" "gtfs_low_write_alert" {
   severity     = "WARNING" # Options: "WARNING", "ERROR", "CRITICAL"
 
   conditions {
-    display_name = "GCS Write Count below 5000 in 5m (MQL)"
+    display_name = "GCS Write Count below 4000 in 5m (MQL)"
 
     condition_monitoring_query_language {
       query = <<-EOT
@@ -34,7 +34,7 @@ resource "google_monitoring_alert_policy" "gtfs_low_write_alert" {
         | mul 300
         | cast_units("")
         | time_shift 5m
-        | condition val() < 5000
+        | condition val() < 4000
       EOT
       # time_shift due to the metrics data delay
       # effectively, every 5 mins, checking the total writes between 10 mins ago and 5 mins ago.
@@ -62,7 +62,7 @@ resource "google_monitoring_alert_policy" "gtfs_low_write_alert" {
 
   # Metadata to help Vivian or other team members when they receive the alert
   documentation {
-    content   = "The GTFS Realtime raw bucket has dropped below 5000 writes in the last 5 minutes. This usually indicates the ingestion pipeline is stalled or a feed provider is down."
+    content   = "The GTFS Realtime raw bucket has dropped below 4000 writes in the last 5 minutes. This usually indicates the ingestion pipeline is stalled or a feed provider is down."
     mime_type = "text/markdown"
   }
 
