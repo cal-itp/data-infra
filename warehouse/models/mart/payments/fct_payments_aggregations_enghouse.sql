@@ -34,7 +34,8 @@ ticket_results_by_payment_reference AS (
         taps.operator_id,
         COUNT(DISTINCT taps.tap_id) AS num_taps,
         COUNT(ticket_results.id) AS num_ticket_results,
-        SUM(ticket_results.amount) AS total_fare_amount
+        SUM(ticket_results.amount) AS total_fare_amount,
+        MAX(taps.terminal_date) AS latest_tap_terminal_date
     FROM taps
     LEFT JOIN ticket_results
         ON taps.tap_id = ticket_results.tap_id
@@ -89,6 +90,7 @@ join_all AS (
         ticket_results_by_payment_reference.num_taps,
         ticket_results_by_payment_reference.num_ticket_results,
         ticket_results_by_payment_reference.total_fare_amount,
+        ticket_results_by_payment_reference.latest_tap_terminal_date,
 
         transactions_by_payment_reference.num_transactions,
         transactions_by_payment_reference.net_transaction_amount,
@@ -97,6 +99,13 @@ join_all AS (
         transactions_by_payment_reference.num_refunds,
         transactions_by_payment_reference.gross_charges,
         transactions_by_payment_reference.gross_refunds,
+
+        COALESCE(
+            pay_windows.close_date,
+            transactions_by_payment_reference.latest_transaction_timestamp,
+            pay_windows.open_date,
+            ticket_results_by_payment_reference.latest_tap_terminal_date
+        ) AS aggregation_datetime,
 
         elavon_info.elavon_purch_id,
         elavon_info.elavon_settlement_date,
@@ -133,8 +142,8 @@ fct_payments_aggregations_enghouse AS (
         operator_id,
         organization_name,
         organization_source_record_id,
-        LAST_DAY(EXTRACT(DATE FROM open_date AT TIME ZONE "America/Los_Angeles"), MONTH) AS end_of_month_date_pacific,
-        LAST_DAY(EXTRACT(DATE FROM open_date), MONTH) AS end_of_month_date_utc,
+        LAST_DAY(EXTRACT(DATE FROM aggregation_datetime AT TIME ZONE "America/Los_Angeles"), MONTH) AS end_of_month_date_pacific,
+        LAST_DAY(EXTRACT(DATE FROM aggregation_datetime), MONTH) AS end_of_month_date_utc,
         pay_window_id,
         payment_reference,
         token,
@@ -142,6 +151,7 @@ fct_payments_aggregations_enghouse AS (
         terminal_id,
         open_date,
         close_date,
+        aggregation_datetime,
         agency,
         amount_to_settle,
         amount_settled,
@@ -163,13 +173,12 @@ fct_payments_aggregations_enghouse AS (
         elavon_sales,
         elavon_refunds,
         CASE
-            WHEN stage = 'Closed' AND elavon_purch_id IS NOT NULL THEN 'Settled (with Elavon match)'
-            WHEN stage = 'Closed' AND elavon_purch_id IS NULL THEN 'Settled (no Elavon match)'
-            WHEN stage = 'Debt' THEN 'Debt (recovery ongoing)'
-            WHEN stage = 'DebtFinal' THEN 'Debt (unrecovered)'
-            WHEN stage IN ('Open', 'NoAuthDone') THEN 'Open'
-            WHEN stage = 'AuthDeclined' THEN 'Authorization Declined'
-            ELSE 'Unknown'
+            WHEN net_transaction_amount = 0 THEN 'Zero-dollar value sales'
+            WHEN stage = 'Closed' AND elavon_purch_id IS NOT NULL THEN 'Settled non-zero sales (with Elavon match)'
+            WHEN stage = 'Closed' AND elavon_purch_id IS NULL THEN 'Settled non-zero sales (no Elavon match)'
+            WHEN stage in ('Debt', 'DebtFinal', 'Open', 'NoAuthDone') THEN 'Unsettled non-zero Sales'
+            WHEN stage = 'AuthDeclined' THEN 'Declined Sales'
+            ELSE 'UNKNOWN'
         END AS reconciliation_category
     FROM join_all
 )
