@@ -957,6 +957,12 @@ models:
       Each row in this table is a pay window.
       A pay window is a group of taps processed together against a single payment token — the Enghouse equivalent of a Littlepay aggregation.
       This table summarizes pay window activity and can be used to reconcile Enghouse payments information with Elavon deposit data.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - operator_id
+              - pay_window_id
     columns:
       - name: operator_id
         description: Enghouse operator ID identifying the transit agency.
@@ -966,10 +972,16 @@ models:
         description: |
           The last day of the month of the pay window open_date in Pacific Time.
           Primarily for use in BI tooling to support consistent date grouping across activity types.
+        data_tests:
+          - not_null
       - name: end_of_month_date_utc
         description: The last day of the month of the pay window open_date in UTC.
+        data_tests:
+          - not_null
       - name: pay_window_id
         description: Unique identifier for the pay window (Enghouse `id` from the pay_windows table).
+        data_tests:
+          - not_null
       - name: payment_reference
         description: |
           Payment reference associated with the pay window. This is the join key to Elavon deposit data (`purch_id`).
@@ -1073,6 +1085,11 @@ models:
           - not_null
       - name: payment_reference
         description: '{{ doc("enghouse_payment_reference") }}'
+        data_tests:
+            - relationships:
+                arguments:
+                  to: ref('fct_payments_aggregations_enghouse')
+                  field: payment_reference
       - name: response_type
         description: '{{ doc("enghouse_response_type") }}'
       - name: response_message
