@@ -970,12 +970,12 @@ models:
       - *organization_source_record_id
       - name: end_of_month_date_pacific
         description: |
-          The last day of the month of the pay window open_date in Pacific Time.
+          The last day of the month of the aggregation_datetime in Pacific Time.
           Primarily for use in BI tooling to support consistent date grouping across activity types.
         data_tests:
           - not_null
       - name: end_of_month_date_utc
-        description: The last day of the month of the pay window open_date in UTC.
+        description: The last day of the month of the aggregation_datetime in UTC.
         data_tests:
           - not_null
       - name: pay_window_id
@@ -996,6 +996,14 @@ models:
         description: Timestamp when the pay window was opened (first tap).
       - name: close_date
         description: Timestamp when the pay window was closed and settled.
+      - name: aggregation_datetime
+        description: |
+          Datetime of pay window close if present, otherwise falls back to the latest transaction,
+          otherwise to the pay window open, otherwise to the latest terminal-recorded tap time.
+          This can be used to represent the most recent update for the pay window, and is the
+          Enghouse analogue of `aggregation_datetime` in `fct_payments_aggregations`.
+        data_tests:
+          - not_null
       - name: agency
         description: Agency identifier from the source file partition.
       - name: amount_to_settle
