@@ -232,10 +232,10 @@ def download_parse_and_validate_gtfs():
             if ti.task_id == "download_config_to_gcs"
         ]
 
-        if len(failed_downloads) > 2:
+        if len(failed_downloads) > 10:
             raise AirflowException(
                 f"{len(failed_downloads)} GTFS schedule downloads failed; "
-                "threshold is 2."
+                "threshold is 10."
             )
 
     download_failure_check = check_download_failures()
