@@ -56,6 +56,7 @@ int_transit_database__organizations_dim AS (
         mpo,
         public_currently_operating,
         public_currently_operating_fixed_route,
+        public_conditional_currently_operating,
         _is_current,
         _valid_from,
         _valid_to
