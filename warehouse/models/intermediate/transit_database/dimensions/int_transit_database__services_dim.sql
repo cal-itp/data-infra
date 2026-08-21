@@ -44,6 +44,7 @@ int_transit_database__services_dim AS (
         is_public,
         public_currently_operating,
         public_currently_operating_fixed_route,
+        public_conditional_currently_operating,
         start_date,
         operational_status,
         _is_current,
