@@ -116,7 +116,8 @@ jobs:
             git config --global --add safe.directory $GITHUB_WORKSPACE
         with:
           path: ${{ matrix.path }}
-          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
+          # Auto‑approve only for the GTFS‑RT archiver when on the official staging branch
+          auto_approve: ${{ github.ref == 'refs/heads/staging/official' }}
 
   production:
     name: Production
