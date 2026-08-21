@@ -16,9 +16,12 @@ from operators.validate_gtfs_to_gcs_operator import ValidateGTFSToGCSOperator
 
 from airflow import XComArg
 from airflow.decorators import dag, task
+from airflow.exceptions import AirflowException
 from airflow.operators.dummy import DummyOperator
 from airflow.operators.latest_only import LatestOnlyOperator
+from airflow.operators.python import get_current_context
 from airflow.providers.google.cloud.hooks.gcs import GCSHook
+from airflow.utils.state import TaskInstanceState
 from airflow.utils.trigger_rule import TriggerRule
 
 GTFS_SCHEDULE_FILENAMES = {
@@ -106,6 +109,8 @@ def download_parse_and_validate_gtfs():
 
     downloads = DownloadConfigToGCSOperator.partial(
         task_id="download_config_to_gcs",
+        email_on_failure=False,
+        on_failure_callback=None,
         retries=1,
         retry_delay=timedelta(seconds=10),
         dt="{{ dag_run.start_date | ds }}",
@@ -216,11 +221,32 @@ def download_parse_and_validate_gtfs():
         pool="schedule_parse_pool",
     ).expand_kwargs(unzip.output.map(list_unzipped_files))
 
+    @task(trigger_rule=TriggerRule.ALL_DONE)
+    def check_download_failures():
+        context = get_current_context()
+        dag_run = context["dag_run"]
+
+        failed_downloads = [
+            ti
+            for ti in dag_run.get_task_instances(state=[TaskInstanceState.FAILED])
+            if ti.task_id == "download_config_to_gcs"
+        ]
+
+        if len(failed_downloads) > 10:
+            raise AirflowException(
+                f"{len(failed_downloads)} GTFS schedule downloads failed; "
+                "threshold is 10."
+            )
+
+    download_failure_check = check_download_failures()
+
     (latest_only >> download_config_exists >> (download_config, skip_download_config))
 
     ((download_config, skip_download_config) >> schedule_download_configs)
 
     (schedule_download_configs >> downloads >> (validate, (unzip >> convert)))
+
+    downloads >> download_failure_check
 
 
 download_parse_and_validate_gtfs_instance = download_parse_and_validate_gtfs()
