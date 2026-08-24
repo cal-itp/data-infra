@@ -202,9 +202,10 @@ models:
       `gtfs_dataset_key` / `base64_url` on vehicle_locations /
       trips_performed to a named feed for any service date
       (_valid_from <= service_date < _valid_to). Columns follow the set
-      already published to data.ca.gov for dim_gtfs_datasets_latest;
-      `private_dataset` records are excluded from all versions, and feed URLs
-      are credential-scrubbed upstream before encoding.
+      already published to data.ca.gov for dim_gtfs_datasets_latest.
+      `private_dataset` records are excluded from all versions, as are specific
+      historical feed versions whose URL carried an inline auth credential, so
+      no feed key is published to the open-data bucket.
     columns: &tides_gtfs_datasets_columns
       - name: key
         description: |

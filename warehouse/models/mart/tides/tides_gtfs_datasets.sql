@@ -39,6 +39,21 @@ member_dataset_ids AS (
     WHERE key IN (SELECT gtfs_dataset_key FROM referenced_dataset_keys)
 ),
 
+-- Historical feed versions whose URL carried an inline auth credential (?key=),
+-- excluded so no feed key reaches the open-data bucket. Only these versions are
+-- dropped; current versions are clean. Guarded by the no_url_credentials test.
+credential_bearing_versions AS (
+    SELECT deny_source_record_id, deny_valid_from
+    FROM UNNEST([
+        STRUCT('recYNhwWlgv0xEQvQ' AS deny_source_record_id, TIMESTAMP '2025-10-15 00:00:00+00' AS deny_valid_from),  -- Bear Alerts
+        STRUCT('rec50UrBVphNmIiTz', TIMESTAMP '2025-10-15 00:00:00+00'),  -- Bear Schedule
+        STRUCT('recVwM5CcUf67mOsz', TIMESTAMP '2025-10-15 00:00:00+00'),  -- Bear Trip Updates
+        STRUCT('reclEUVQ0e7JlwdB8', TIMESTAMP '2025-10-15 00:00:00+00'),  -- Bear Vehicle Positions
+        STRUCT('recYDXYPHTZXX17DI', TIMESTAMP '2022-06-29 00:00:00+00'),  -- San Diego Trip Updates (v1)
+        STRUCT('recYDXYPHTZXX17DI', TIMESTAMP '2022-08-09 00:00:00+00')   -- San Diego Trip Updates (v2)
+    ])
+),
+
 tides_gtfs_datasets AS (
     SELECT
         key,
@@ -57,6 +72,12 @@ tides_gtfs_datasets AS (
     FROM {{ ref('dim_gtfs_datasets') }}
     WHERE source_record_id IN (SELECT source_record_id FROM member_dataset_ids)
         AND private_dataset IS NOT TRUE
+        AND NOT EXISTS (
+            SELECT 1
+            FROM credential_bearing_versions
+            WHERE deny_source_record_id = source_record_id
+                AND deny_valid_from = _valid_from
+        )
 )
 
 SELECT * FROM tides_gtfs_datasets
