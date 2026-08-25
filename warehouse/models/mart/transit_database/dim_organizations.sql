@@ -46,6 +46,7 @@ dim_organizations AS (
         mr_mpo.name AS mpo_name,
         public_currently_operating,
         public_currently_operating_fixed_route,
+        public_conditional_currently_operating,
         _is_current,
         _valid_from,
         _valid_to

@@ -19,6 +19,7 @@ stg_transit_database__services AS (
         is_public,
         public_currently_operating = "Yes" AS public_currently_operating,
         public_currently_operating_fixed_route = "Yes" AS public_currently_operating_fixed_route,
+        public_conditional_currently_operating = "Yes" AS public_conditional_currently_operating,
         start_date,
         operational_status,
         -- demand response and paratransit fields

@@ -22,6 +22,7 @@ dim_services AS (
         is_public,
         public_currently_operating,
         public_currently_operating_fixed_route,
+        public_conditional_currently_operating,
         start_date,
         operational_status,
         reservation_methods,

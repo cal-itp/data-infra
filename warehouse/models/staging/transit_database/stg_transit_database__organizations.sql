@@ -45,6 +45,7 @@ stg_transit_database__organizations AS (
         unnested_mpo as mpo,
         public_currently_operating = "Yes" AS public_currently_operating,
         public_currently_operating_fixed_route = "Yes" AS public_currently_operating_fixed_route,
+        public_conditional_currently_operating = "Yes" AS public_conditional_currently_operating
     FROM once_daily_organizations
     LEFT JOIN UNNEST(once_daily_organizations.ntd_id) as unnested_ntd_records
     LEFT JOIN UNNEST(once_daily_organizations.rtpa) AS unnested_rtpa
