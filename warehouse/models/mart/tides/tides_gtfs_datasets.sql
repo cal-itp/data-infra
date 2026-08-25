@@ -41,7 +41,7 @@ member_dataset_ids AS (
 
 -- Historical feed versions whose URL carried an inline auth credential (?key=),
 -- excluded so no feed key reaches the open-data bucket. Only these versions are
--- dropped; current versions are clean. Guarded by the no_url_credentials test.
+-- dropped; current versions are clean.
 credential_bearing_versions AS (
     SELECT deny_source_record_id, deny_valid_from
     FROM UNNEST([
