@@ -115,10 +115,10 @@ models:
                 where: validation_validator_version = 'v5.0.0'
           - dbt_utils.accepted_range:
                 min_value: "DATE'2026-02-25'"
-                max_value: "DATE'2026-08-26'"
+                max_value: "DATE'2026-08-22'"
                 where: validation_validator_version = 'v7.1.0'
           - dbt_utils.accepted_range:
-                min_value: "DATE'2026-08-27'"
+                min_value: "DATE'2026-08-23'"
                 where: validation_validator_version = 'v8.0.1'
       - &schedule_feed_key
         name: feed_key
