@@ -25,7 +25,7 @@ class TestGTFSValidatorHook:
 
     def test_validator_8_0_1(self):
         assert (
-            GTFSValidatorHook(current_date=pendulum.datetime(2026, 8, 29))
+            GTFSValidatorHook(current_date=pendulum.datetime(2026, 8, 31, 3))
             .version()
             .number
             == "8.0.1"
