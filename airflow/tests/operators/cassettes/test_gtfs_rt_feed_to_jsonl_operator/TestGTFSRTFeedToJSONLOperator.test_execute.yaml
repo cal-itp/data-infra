@@ -1,0 +1,1726 @@
+interactions:
+- request:
+    body: !!binary |
+      LS09PT09PT09PT09PT09PT0xNjY5NTkzNTg2OTM4MTk2MjA4PT0NCmNvbnRlbnQtdHlwZTogYXBw
+      bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAic2VydmljZV9hbGVydHMv
+      ZHQ9MjAyNi0wNS0wMS9ob3VyPTIwMjYtMDUtMDFUMDA6MDA6MDArMDA6MDAvdHM9MjAyNi0wNS0w
+      MVQwMDowMDowMCswMDowMC9iYXNlNjRfdXJsPWFIUjBjRG92TDJkMFpuTXVZbWxuWW14MVpXSjFj
+      eTVqYjIwdllXeGxjblJ6TG1KcGJnPT0vZmVlZCIsICJtZXRhZGF0YSI6IHsiUEFSVElUSU9ORURf
+      QVJUSUZBQ1RfTUVUQURBVEEiOiAie1wiZmlsZW5hbWVcIjpcImZlZWRcIixcInRzXCI6XCIyMDI2
+      LTA1LTAxVDAwOjAwOjAwKzAwOjAwXCIsXCJjb25maWdcIjp7XCJhdXRoX2hlYWRlcnNcIjp7fSxc
+      ImF1dGhfcXVlcnlfcGFyYW1zXCI6e30sXCJjb21wdXRlZFwiOmZhbHNlLFwiZXh0cmFjdGVkX2F0
+      XCI6XCIyMDI2LTA0LTMwVDAzOjAwOjAwKzAwOjAwXCIsXCJmZWVkX3R5cGVcIjpcInNlcnZpY2Vf
+      YWxlcnRzXCIsXCJuYW1lXCI6XCJCaWcgQmx1ZSBCdXMgQWxlcnRzXCIsXCJzY2hlZHVsZV91cmxf
+      Zm9yX3ZhbGlkYXRpb25cIjpcImh0dHBzOi8vd3d3LmJpZ2JsdWVidXMuY29tL2d0ZnMvY3VycmVu
+      dC56aXBcIixcInVybFwiOlwiaHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpblwi
+      fSxcInJlc3BvbnNlX2NvZGVcIjoyMDAsXCJyZXNwb25zZV9oZWFkZXJzXCI6e1wiRXRhZ1wiOlwi
+      Vy9cXFwiMzNmMmYxNTdmZGQ4ZGMxOjBcXFwiXCIsXCJMYXN0LU1vZGlmaWVkXCI6XCJUaHUsIDMw
+      IEFwciAyMDI2IDIzOjU5OjEyIEdNVFwiLFwiQ29udGVudC1UeXBlXCI6XCJhcHBsaWNhdGlvbi9v
+      Y3RldC1zdHJlYW1cIixcIkNvbnRlbnQtTGVuZ3RoXCI6XCIzMjQzXCIsXCJDYWNoZS1Db250cm9s
+      XCI6XCJtYXgtYWdlPTEsIHB1YmxpY1wiLFwiRXhwaXJlc1wiOlwiRnJpLCAwMSBNYXkgMjAyNiAw
+      MDowMDowMSBHTVRcIixcIkRhdGVcIjpcIkZyaSwgMDEgTWF5IDIwMjYgMDA6MDA6MDAgR01UXCIs
+      XCJTZXQtQ29va2llXCI6XCJ2aXNpZF9pbmNhcF8zMTAwNTEwPWdDUVFnVEF4UUI2RllEdnpyM0k0
+      S0FEdDgya0FBQUFBUVVJUEFBQUFBQUJ3WFlaU2d0L1RBaHhndjhVaEduOGc7IGV4cGlyZXM9RnJp
+      LCAzMCBBcHIgMjAyNyAwNjoyMDoxOCBHTVQ7IEh0dHBPbmx5OyBwYXRoPS87IERvbWFpbj0uYmln
+      Ymx1ZWJ1cy5jb20sIGluY2FwX3Nlc18xMDJfMzEwMDUxMD1pYkExWEhKaTIybkt3ekZzcEdCcUFR
+      RHQ4MmtBQUFBQUwrT2pzejJ5VEhCYVZUMk9XMk5VNEE9PTsgcGF0aD0vOyBEb21haW49LmJpZ2Js
+      dWVidXMuY29tXCIsXCJYLUNETlwiOlwiSW1wZXJ2YVwiLFwiWC1JaW5mb1wiOlwiNDUtMTg1NzMw
+      NDMxLTAgMGNOTiBSVCgxNzc3NTkzNjAxNjU5IDApIHEoMCAtMSAtMSAwKSByKDAgLTEpXCJ9fSJ9
+      LCAiY3JjMzJjIjogIjZza1BUdz09In0NCi0tPT09PT09PT09PT09PT09MTY2OTU5MzU4NjkzODE5
+      NjIwOD09DQpjb250ZW50LXR5cGU6IHRleHQvcGxhaW4NCg0KCg0KAzIuMBAAGNDZz88GEq4CCiRj
+      MzVkZDg5Zi04YWYyLTQxNTUtYWRhYy0yZjI1ZjAwMmFlOWUqhQIKDAjIpb7PBhDwtvvPBioJCgc2
+      MjE2MTc5MAI4B0IeChwKGmh0dHBzOi8vd3d3LmJpZ2JsdWVidXMuY29tUkAKPgo8U3R1ZGVudHMg
+      UmlkZSBCQkIgRnJlZSBEdXJpbmcgQmlrZSBJdCwgV2FsayBJdCwgQnVzIEl0IFdlZWshWoMBCoAB
+      Cn5TdHVkZW50cyBjYW4gcmlkZSBCaWcgQmx1ZSBCdXMgZm9yIGZyZWUgZHVyaW5nIEJpa2UgSXQs
+      IFdhbGsgSXQsIEJ1cyBJdCBXZWVrLCBNYXkgNC04LCAyMDI2LiBMZWFybiBtb3JlIGF0IHd3dy5i
+      aWdibHVlYnVzLmNvbS4SzAMKJDY5MWE0YzJiLWU2NjAtNGRmZC05OGM5LTQ5OGYwMzhhMjRiMCqj
+      AwoMCMC8v88GEMDS3s8GKgMSATEqAxIBMioDEgE4KgMSATkqBBICNDMwAjgEQiwKKgooaHR0cHM6
+      Ly93d3cuYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JGCkQKQlJvdXRlcyAxLCAyLCA4LCA5
+      LCAmIDQzOiBEZXRvdXIgb24gTWFpbiBTdC4gaW4gU2FudGEgTW9uaWNhIG9uIDUvM1r+AQr7AQr4
+      AVJvdXRlcyAxLCAyLCA4LCA5LCBhbmQgNDMgd2lsbCBiZSBvbiBkZXRvdXIgaW4gU2FudGEgTW9u
+      aWNhIG9uIFNhdHVyZGF5LCBPY3RvYmVyIDExLCBiZXR3ZWVuIDQ6MzAgYS5tLiBhbmQgYXBwcm94
+      aW1hdGVseSAxMjozMCBwLm0uLCBkdWUgdG8gdGhlIEphbmUncyBNaWxlIFJ1bi4gRm9yIHN0b3Bz
+      IG1pc3NlZCBhbmQgYWx0ZXJuYXRlIGJvYXJkaW5nIGxvY2F0aW9ucywgdmlzaXQ6IGJpZ2JsdWVi
+      dXMuY29tL3NlcnZpY2VhbGVydHMuEt4CCiRjODg5OTljNS0zN2IwLTQ2Y2YtYWZkNC00ZDljNjhj
+      YzM1OWIqtQIKDAjwtvvPBhDwq6DQBioJCgc2MjE2MTc5MAI4B0IeChwKGmh0dHBzOi8vd3d3LmJp
+      Z2JsdWVidXMuY29tUk8KTQpLUmlkZSBmcmVlIG9uIEJCQiB3aXRoIGEgYmlrZSBvciBoZWxtZXQg
+      b24gQmlrZSBBbnl3aGVyZSBEYXksIE1heSAxNSwgMjAyNi4gWqQBCqEBCp4BQmlnIEJsdWUgQmlz
+      IHJpZGVycyBib2FyZGluZyB3aXRoIGEgYmlrZSBvciBoZWxtZXQgY2FuIGVuam95IEZSRUUgcmlk
+      ZXMgb24gTWF5IDE1LCAyMDI2LCBpbiBjZWxlYnJhdGlvbiBvZiBCaWtlIEFueXdoZXJlIERheSEg
+      TGVhcm4gbW9yZSBhdCB3d3cuYmlnYmx1ZWJ1cy5jb20S3wIKJDE2NzkxYmZkLWU0MDctNGM5Ni1h
+      MjYzLWMwMWJkNGU1OWE4NSq2AgoMCMDG/s4GEPCBqNIGKgMSATcwCjgHQiwKKgooaHR0cHM6Ly93
+      d3cuYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JCCkAKPlJvYWR3b3JrIG9uIFBpY28gQmx2
+      ZC4gYmV0d2VlbiBQYXRyaWNpYSBBdmUuICYgU2VwdWx2ZWRhIEJsdmQuWqoBCqcBCqQBU2Vydmlj
+      ZSBvbiBTYW50YSBNb25pY2EgQmx2ZC4gYmV0d2VlbiBQYXRyaWNpYSBhbmQgU2VwdWx2ZWRhIG1h
+      eSBiZSBpbXBhY3RlZCBkdWUgdG8gb25nb2luZyByb2Fkd29yay4gUGxhbiBhaGVhZCBhbmQgdmlz
+      aXQgYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0cyBmb3IgdXBkYXRlcy4S4QIKJDRlM2E0YzY2
+      LTI5YzktNDUzNy1iYjljLWMzOWJiODNiMWJjYSq4AgoMCMzZ7M0GEPCPsdMGKgMSATEqBRIDUjEw
+      MAo4B0IsCioKKGh0dHBzOi8vd3d3LmJpZ2JsdWVidXMuY29tL3NlcnZpY2VhbGVydHNSQQo/Cj1S
+      b2Fkd29yayBvbiBTYW50YSBNb25pY2EgQmx2ZC4gYmV0d2VlbiBCdW5keSAmIFNhd3RlbGxlIEJs
+      dmQuWqYBCqMBCqABU2VydmljZSBvbiBTYW50YSBNb25pY2EgQmx2ZC4gYmV0d2VlbiBCdW5keSBh
+      bmQgU2F3dGVsbGUgbWF5IGJlIGltcGFjdGVkIGR1ZSB0byBvbmdvaW5nIHJvYWR3b3JrLiBQbGFu
+      IGFoZWFkIGFuZCB2aXNpdCBiaWdibHVlYnVzLmNvbS9zZXJ2aWNlYWxlcnRzIGZvciB1cGRhdGVz
+      LhKzAwokYmUyZGY3MjUtNDI1MS00N2M0LTlhZjAtMmI1NjUxYmYwY2FjKooDCgYI9JbSzQYqCBIB
+      MioDNDAxKgkSAjE4KgM0MDEwCjgJQiwKKgooaHR0cHM6Ly93d3cuYmlnYmx1ZWJ1cy5jb20vc2Vy
+      dmljZWFsZXJ0c1JDCkEKP1JvdXRlcyAyICYgMTg6IFN0b3AgQ2xvc3VyZSBvbiBXQiBXaWxzaGly
+      ZSBCbHZkLiAmIEJvbnNhbGwgQXZlLlrzAQrwAQrtAVJvdXRlcyAyICYgMTggc3RvcCBsb2NhdGVk
+      IG9uIFdCIFdpbHNoaXJlIEJsdmQuIGF0IEJvbnNhbGwgQXZlLiB3aWxsIGJlIGNsb3NlZCB1bnRp
+      bCBmdXJ0aGVyIG5vdGljZSwgZHVlIHRvIGNvbnN0cnVjdGlvbi4gUGxlYXNlIGJvYXJkIGF0IHRo
+      ZSB0ZW1wb3Jhcnkgc3RvcCBhcHByb3guMTAwIGZ0LiB3ZXN0IGluc3RlYWQu4oCvRm9yIGRldGFp
+      bHMsIHZpc2l0OiBiaWdibHVlYnVzLmNvbS9zZXJ2aWNlYWxlcnRzIBKxAwokMmMzZmIxNDEtODVi
+      ZS00ZjZiLTg2NzgtMTNmNmQ2NDEzYjg1KogDCgYI3PedzQYqCBIBMSoDNTEwMAo4CUIoCiYKJGh0
+      dHBzOi8vYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JECkIKQFJvdXRlIDE6IFN0b3AgQ2xv
+      c3VyZSBvbiBFQiBTYW50YSBNb25pY2EgQmx2ZC4gJiBCYXJyaW5ndG9uIEF2ZS5a/wEK/AEK+QFU
+      aGUgUm91dGUgMSBidXMgc3RvcCBsb2NhdGVkIG9uIEVCIFNhbnRhIE1vbmljYSBCbHZkLiBhdCBC
+      YXJyaW5ndG9uIEF2ZS4gd2lsbCBiZSB0ZW1wb3JhcmlseSBjbG9zZWQgdW50aWwgZnVydGhlciBu
+      b3RpY2UsIGR1ZSB0byByb2FkIHdvcmsuIOKAr1BsZWFzZSB1c2UgdGhlIHRlbXBvcmFyeSBzdG9w
+      IGF0IEVCIFNhbnRhIE1vbmljYSBCbHZkLiAmIEJhcnJpbmd0b24gQXZlLiAoYWZ0ZXIgdGhlIGlu
+      dGVyc2VjdGlvbikgaW5zdGVhZC4SiAQKJDg5ZTEyMjM5LTEwMmQtNGM4Yi1iMjU2LWE3ZWY5OTRi
+      NTEyYirfAwoMCKjbvcwGEPCV6tAGKggSAjE3KgI3MSoJEgNSMTIqAjcxMAo4CUIsCioKKGh0dHBz
+      Oi8vd3d3LmJpZ2JsdWVidXMuY29tL3NlcnZpY2VhbGVydHNSUApOCkxSYXBpZCAxMiAmIFJvdXRl
+      IDE3OiBTdG9wIENsb3N1cmUgb24gU0IgV2VzdHdvb2QgUGxhemEgJiBVQ0xBIE1lZGljYWwgQ2Vu
+      dGVyWrUCCrICCq8CVGhlIFJhcGlkIDEyIGFuZCBSb3V0ZSAxNyBzdG9wIGxvY2F0ZWQgb24gU0Ig
+      V2VzdHdvb2QgUGxhemEgYXQgVUNMQSBNZWRpY2FsIENlbnRlciB3aWxsIGJlIHRlbXBvcmFyaWx5
+      IGNsb3NlZCBiZWdpbm5pbmcgTW9uZGF5LCBGZWJydWFyeSAxNiwgdW50aWwgZnVydGhlciBub3Rp
+      Y2UsIGR1ZSB0byBjb25zdHJ1Y3Rpb24u4oCvUGxlYXNlIGJvYXJkIGF0IHRoZSB0ZW1wb3Jhcnkg
+      c3RvcCBhcHByb3guIDIwMCBmdC4gbm9ydGggaW5zdGVhZC7igK9Gb3IgZGV0YWlscywgdmlzaXQ6
+      IGJpZ2JsdWVidXMuY29tL3NlcnZpY2VhbGVydHMuDQotLT09PT09PT09PT09PT09PTE2Njk1OTM1
+      ODY5MzgxOTYyMDg9PS0t
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '4803'
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/501885be-1998-4369-a8de-16214e203a7b
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0xNjY5NTkzNTg2OTM4
+        MTk2MjA4PT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - text/plain
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/service_alerts/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/ts=2026-05-01T00:00:00+00:00/base64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==/feed/1778042350750964\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fts=2026-05-01T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==%2Ffeed\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fts=2026-05-01T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==%2Ffeed?generation=1778042350750964&alt=media\",\n
+        \ \"name\": \"service_alerts/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/ts=2026-05-01T00:00:00+00:00/base64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==/feed\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1778042350750964\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"text/plain\",\n  \"storageClass\":
+        \"STANDARD\",\n  \"size\": \"3243\",\n  \"md5Hash\": \"w+h3W5iia+bs+/0ngIGCbw==\",\n
+        \ \"crc32c\": \"6skPTw==\",\n  \"etag\": \"CPSZ2fXro5QDEAE=\",\n  \"timeCreated\":
+        \"2026-05-06T04:39:10.760Z\",\n  \"updated\": \"2026-05-06T04:39:10.760Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-05-06T04:39:10.760Z\",\n  \"timeFinalized\":
+        \"2026-05-06T04:39:10.760Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \"{\\\"filename\\\":\\\"feed\\\",\\\"ts\\\":\\\"2026-05-01T00:00:00+00:00\\\",\\\"config\\\":{\\\"auth_headers\\\":{},\\\"auth_query_params\\\":{},\\\"computed\\\":false,\\\"extracted_at\\\":\\\"2026-04-30T03:00:00+00:00\\\",\\\"feed_type\\\":\\\"service_alerts\\\",\\\"name\\\":\\\"Big
+        Blue Bus Alerts\\\",\\\"schedule_url_for_validation\\\":\\\"https://www.bigbluebus.com/gtfs/current.zip\\\",\\\"url\\\":\\\"http://gtfs.bigbluebus.com/alerts.bin\\\"},\\\"response_code\\\":200,\\\"response_headers\\\":{\\\"Etag\\\":\\\"W/\\\\\\\"33f2f157fdd8dc1:0\\\\\\\"\\\",\\\"Last-Modified\\\":\\\"Thu,
+        30 Apr 2026 23:59:12 GMT\\\",\\\"Content-Type\\\":\\\"application/octet-stream\\\",\\\"Content-Length\\\":\\\"3243\\\",\\\"Cache-Control\\\":\\\"max-age=1,
+        public\\\",\\\"Expires\\\":\\\"Fri, 01 May 2026 00:00:01 GMT\\\",\\\"Date\\\":\\\"Fri,
+        01 May 2026 00:00:00 GMT\\\",\\\"Set-Cookie\\\":\\\"visid_incap_3100510=gCQQgTAxQB6FYDvzr3I4KADt82kAAAAAQUIPAAAAAABwXYZSgt/TAhxgv8UhGn8g;
+        expires=Fri, 30 Apr 2027 06:20:18 GMT; HttpOnly; path=/; Domain=.bigbluebus.com,
+        incap_ses_102_3100510=ibA1XHJi22nKwzFspGBqAQDt82kAAAAAL+Ojsz2yTHBaVT2OW2NU4A==;
+        path=/; Domain=.bigbluebus.com\\\",\\\"X-CDN\\\":\\\"Imperva\\\",\\\"X-Iinfo\\\":\\\"45-185730431-0
+        0cNN RT(1777593601659 0) q(0 -1 -1 0) r(0 -1)\\\"}}\"\n  }\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '2608'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 06 May 2026 04:39:10 GMT
+      ETag:
+      - CPSZ2fXro5QDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEjQLD1DUxUWxSJjx9UYCO7KorVritzZ0-a2mFc_r-FxpQk55fDw228iadkd7qdx3cN1AME_XtM
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!binary |
+      LS09PT09PT09PT09PT09PT0yNzIwODI2NjU4Mzg0OTYzMTcwPT0NCmNvbnRlbnQtdHlwZTogYXBw
+      bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAic2VydmljZV9hbGVydHMv
+      ZHQ9MjAyNi0wNS0wMS9ob3VyPTIwMjYtMDUtMDFUMDA6MDA6MDArMDA6MDAvdHM9MjAyNi0wNS0w
+      MVQwMDowMDoyMCswMDowMC9iYXNlNjRfdXJsPWFIUjBjRG92TDJkMFpuTXVZbWxuWW14MVpXSjFj
+      eTVqYjIwdllXeGxjblJ6TG1KcGJnPT0vZmVlZCIsICJtZXRhZGF0YSI6IHsiUEFSVElUSU9ORURf
+      QVJUSUZBQ1RfTUVUQURBVEEiOiAie1wiZmlsZW5hbWVcIjpcImZlZWRcIixcInRzXCI6XCIyMDI2
+      LTA1LTAxVDAwOjAwOjIwKzAwOjAwXCIsXCJjb25maWdcIjp7XCJhdXRoX2hlYWRlcnNcIjp7fSxc
+      ImF1dGhfcXVlcnlfcGFyYW1zXCI6e30sXCJjb21wdXRlZFwiOmZhbHNlLFwiZXh0cmFjdGVkX2F0
+      XCI6XCIyMDI2LTA0LTMwVDAzOjAwOjAwKzAwOjAwXCIsXCJmZWVkX3R5cGVcIjpcInNlcnZpY2Vf
+      YWxlcnRzXCIsXCJuYW1lXCI6XCJCaWcgQmx1ZSBCdXMgQWxlcnRzXCIsXCJzY2hlZHVsZV91cmxf
+      Zm9yX3ZhbGlkYXRpb25cIjpcImh0dHBzOi8vd3d3LmJpZ2JsdWVidXMuY29tL2d0ZnMvY3VycmVu
+      dC56aXBcIixcInVybFwiOlwiaHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpblwi
+      fSxcInJlc3BvbnNlX2NvZGVcIjoyMDAsXCJyZXNwb25zZV9oZWFkZXJzXCI6e1wiRXRhZ1wiOlwi
+      Vy9cXFwiZGNhYjNhNjNmZGQ4ZGMxOjBcXFwiXCIsXCJMYXN0LU1vZGlmaWVkXCI6XCJUaHUsIDMw
+      IEFwciAyMDI2IDIzOjU5OjMxIEdNVFwiLFwiQ29udGVudC1UeXBlXCI6XCJhcHBsaWNhdGlvbi9v
+      Y3RldC1zdHJlYW1cIixcIkNvbnRlbnQtTGVuZ3RoXCI6XCIzMjQzXCIsXCJDYWNoZS1Db250cm9s
+      XCI6XCJtYXgtYWdlPTEsIHB1YmxpY1wiLFwiRXhwaXJlc1wiOlwiRnJpLCAwMSBNYXkgMjAyNiAw
+      MDowMDoyMSBHTVRcIixcIkRhdGVcIjpcIkZyaSwgMDEgTWF5IDIwMjYgMDA6MDA6MjAgR01UXCIs
+      XCJTZXQtQ29va2llXCI6XCJ2aXNpZF9pbmNhcF8zMTAwNTEwPXZUenpGOTF1U0RhNzZMWXBRemJE
+      bGhUdDgya0FBQUFBUVVJUEFBQUFBQUJoakJaTzJ0YkRJa0JVWkRwb1prekM7IGV4cGlyZXM9RnJp
+      LCAzMCBBcHIgMjAyNyAwNjo0NzowNyBHTVQ7IEh0dHBPbmx5OyBwYXRoPS87IERvbWFpbj0uYmln
+      Ymx1ZWJ1cy5jb20sIGluY2FwX3Nlc185Ml8zMTAwNTEwPXBlbDhkbU5HM1RoRXJvNnZyOWxHQVJU
+      dDgya0FBQUFBbDc5aU9vQTlTTXc1bDQ0c2tuRHRqZz09OyBwYXRoPS87IERvbWFpbj0uYmlnYmx1
+      ZWJ1cy5jb21cIixcIlgtQ0ROXCI6XCJJbXBlcnZhXCIsXCJYLUlpbmZvXCI6XCI0NS0yMTA1MjU2
+      MTctMCAwY05OIFJUKDE3Nzc1OTM2MjEwMzMgMCkgcSgwIC0xIC0xIDApIHIoMSAtMSlcIn19In0s
+      ICJjcmMzMmMiOiAiSG1KRUpnPT0ifQ0KLS09PT09PT09PT09PT09PT0yNzIwODI2NjU4Mzg0OTYz
+      MTcwPT0NCmNvbnRlbnQtdHlwZTogdGV4dC9wbGFpbg0KDQoKDQoDMi4wEAAY49nPzwYSrgIKJGMz
+      NWRkODlmLThhZjItNDE1NS1hZGFjLTJmMjVmMDAyYWU5ZSqFAgoMCMilvs8GEPC2+88GKgkKBzYy
+      MTYxNzkwAjgHQh4KHAoaaHR0cHM6Ly93d3cuYmlnYmx1ZWJ1cy5jb21SQAo+CjxTdHVkZW50cyBS
+      aWRlIEJCQiBGcmVlIER1cmluZyBCaWtlIEl0LCBXYWxrIEl0LCBCdXMgSXQgV2VlayFagwEKgAEK
+      flN0dWRlbnRzIGNhbiByaWRlIEJpZyBCbHVlIEJ1cyBmb3IgZnJlZSBkdXJpbmcgQmlrZSBJdCwg
+      V2FsayBJdCwgQnVzIEl0IFdlZWssIE1heSA0LTgsIDIwMjYuIExlYXJuIG1vcmUgYXQgd3d3LmJp
+      Z2JsdWVidXMuY29tLhLMAwokNjkxYTRjMmItZTY2MC00ZGZkLTk4YzktNDk4ZjAzOGEyNGIwKqMD
+      CgwIwLy/zwYQwNLezwYqAxIBMSoDEgEyKgMSATgqAxIBOSoEEgI0MzACOARCLAoqCihodHRwczov
+      L3d3dy5iaWdibHVlYnVzLmNvbS9zZXJ2aWNlYWxlcnRzUkYKRApCUm91dGVzIDEsIDIsIDgsIDks
+      ICYgNDM6IERldG91ciBvbiBNYWluIFN0LiBpbiBTYW50YSBNb25pY2Egb24gNS8zWv4BCvsBCvgB
+      Um91dGVzIDEsIDIsIDgsIDksIGFuZCA0MyB3aWxsIGJlIG9uIGRldG91ciBpbiBTYW50YSBNb25p
+      Y2Egb24gU2F0dXJkYXksIE9jdG9iZXIgMTEsIGJldHdlZW4gNDozMCBhLm0uIGFuZCBhcHByb3hp
+      bWF0ZWx5IDEyOjMwIHAubS4sIGR1ZSB0byB0aGUgSmFuZSdzIE1pbGUgUnVuLiBGb3Igc3RvcHMg
+      bWlzc2VkIGFuZCBhbHRlcm5hdGUgYm9hcmRpbmcgbG9jYXRpb25zLCB2aXNpdDogYmlnYmx1ZWJ1
+      cy5jb20vc2VydmljZWFsZXJ0cy4S3gIKJGM4ODk5OWM1LTM3YjAtNDZjZi1hZmQ0LTRkOWM2OGNj
+      MzU5Yiq1AgoMCPC2+88GEPCroNAGKgkKBzYyMTYxNzkwAjgHQh4KHAoaaHR0cHM6Ly93d3cuYmln
+      Ymx1ZWJ1cy5jb21STwpNCktSaWRlIGZyZWUgb24gQkJCIHdpdGggYSBiaWtlIG9yIGhlbG1ldCBv
+      biBCaWtlIEFueXdoZXJlIERheSwgTWF5IDE1LCAyMDI2LiBapAEKoQEKngFCaWcgQmx1ZSBCaXMg
+      cmlkZXJzIGJvYXJkaW5nIHdpdGggYSBiaWtlIG9yIGhlbG1ldCBjYW4gZW5qb3kgRlJFRSByaWRl
+      cyBvbiBNYXkgMTUsIDIwMjYsIGluIGNlbGVicmF0aW9uIG9mIEJpa2UgQW55d2hlcmUgRGF5ISBM
+      ZWFybiBtb3JlIGF0IHd3dy5iaWdibHVlYnVzLmNvbRLfAgokMTY3OTFiZmQtZTQwNy00Yzk2LWEy
+      NjMtYzAxYmQ0ZTU5YTg1KrYCCgwIwMb+zgYQ8IGo0gYqAxIBNzAKOAdCLAoqCihodHRwczovL3d3
+      dy5iaWdibHVlYnVzLmNvbS9zZXJ2aWNlYWxlcnRzUkIKQAo+Um9hZHdvcmsgb24gUGljbyBCbHZk
+      LiBiZXR3ZWVuIFBhdHJpY2lhIEF2ZS4gJiBTZXB1bHZlZGEgQmx2ZC5aqgEKpwEKpAFTZXJ2aWNl
+      IG9uIFNhbnRhIE1vbmljYSBCbHZkLiBiZXR3ZWVuIFBhdHJpY2lhIGFuZCBTZXB1bHZlZGEgbWF5
+      IGJlIGltcGFjdGVkIGR1ZSB0byBvbmdvaW5nIHJvYWR3b3JrLiBQbGFuIGFoZWFkIGFuZCB2aXNp
+      dCBiaWdibHVlYnVzLmNvbS9zZXJ2aWNlYWxlcnRzIGZvciB1cGRhdGVzLhLhAgokNGUzYTRjNjYt
+      MjljOS00NTM3LWJiOWMtYzM5YmI4M2IxYmNhKrgCCgwIzNnszQYQ8I+x0wYqAxIBMSoFEgNSMTAw
+      CjgHQiwKKgooaHR0cHM6Ly93d3cuYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JBCj8KPVJv
+      YWR3b3JrIG9uIFNhbnRhIE1vbmljYSBCbHZkLiBiZXR3ZWVuIEJ1bmR5ICYgU2F3dGVsbGUgQmx2
+      ZC5apgEKowEKoAFTZXJ2aWNlIG9uIFNhbnRhIE1vbmljYSBCbHZkLiBiZXR3ZWVuIEJ1bmR5IGFu
+      ZCBTYXd0ZWxsZSBtYXkgYmUgaW1wYWN0ZWQgZHVlIHRvIG9uZ29pbmcgcm9hZHdvcmsuIFBsYW4g
+      YWhlYWQgYW5kIHZpc2l0IGJpZ2JsdWVidXMuY29tL3NlcnZpY2VhbGVydHMgZm9yIHVwZGF0ZXMu
+      ErMDCiRiZTJkZjcyNS00MjUxLTQ3YzQtOWFmMC0yYjU2NTFiZjBjYWMqigMKBgj0ltLNBioIEgEy
+      KgM0MDEqCRICMTgqAzQwMTAKOAlCLAoqCihodHRwczovL3d3dy5iaWdibHVlYnVzLmNvbS9zZXJ2
+      aWNlYWxlcnRzUkMKQQo/Um91dGVzIDIgJiAxODogU3RvcCBDbG9zdXJlIG9uIFdCIFdpbHNoaXJl
+      IEJsdmQuICYgQm9uc2FsbCBBdmUuWvMBCvABCu0BUm91dGVzIDIgJiAxOCBzdG9wIGxvY2F0ZWQg
+      b24gV0IgV2lsc2hpcmUgQmx2ZC4gYXQgQm9uc2FsbCBBdmUuIHdpbGwgYmUgY2xvc2VkIHVudGls
+      IGZ1cnRoZXIgbm90aWNlLCBkdWUgdG8gY29uc3RydWN0aW9uLiBQbGVhc2UgYm9hcmQgYXQgdGhl
+      IHRlbXBvcmFyeSBzdG9wIGFwcHJveC4xMDAgZnQuIHdlc3QgaW5zdGVhZC7igK9Gb3IgZGV0YWls
+      cywgdmlzaXQ6IGJpZ2JsdWVidXMuY29tL3NlcnZpY2VhbGVydHMgErEDCiQyYzNmYjE0MS04NWJl
+      LTRmNmItODY3OC0xM2Y2ZDY0MTNiODUqiAMKBgjc953NBioIEgExKgM1MTAwCjgJQigKJgokaHR0
+      cHM6Ly9iaWdibHVlYnVzLmNvbS9zZXJ2aWNlYWxlcnRzUkQKQgpAUm91dGUgMTogU3RvcCBDbG9z
+      dXJlIG9uIEVCIFNhbnRhIE1vbmljYSBCbHZkLiAmIEJhcnJpbmd0b24gQXZlLlr/AQr8AQr5AVRo
+      ZSBSb3V0ZSAxIGJ1cyBzdG9wIGxvY2F0ZWQgb24gRUIgU2FudGEgTW9uaWNhIEJsdmQuIGF0IEJh
+      cnJpbmd0b24gQXZlLiB3aWxsIGJlIHRlbXBvcmFyaWx5IGNsb3NlZCB1bnRpbCBmdXJ0aGVyIG5v
+      dGljZSwgZHVlIHRvIHJvYWQgd29yay4g4oCvUGxlYXNlIHVzZSB0aGUgdGVtcG9yYXJ5IHN0b3Ag
+      YXQgRUIgU2FudGEgTW9uaWNhIEJsdmQuICYgQmFycmluZ3RvbiBBdmUuIChhZnRlciB0aGUgaW50
+      ZXJzZWN0aW9uKSBpbnN0ZWFkLhKIBAokODllMTIyMzktMTAyZC00YzhiLWIyNTYtYTdlZjk5NGI1
+      MTJiKt8DCgwIqNu9zAYQ8JXq0AYqCBICMTcqAjcxKgkSA1IxMioCNzEwCjgJQiwKKgooaHR0cHM6
+      Ly93d3cuYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JQCk4KTFJhcGlkIDEyICYgUm91dGUg
+      MTc6IFN0b3AgQ2xvc3VyZSBvbiBTQiBXZXN0d29vZCBQbGF6YSAmIFVDTEEgTWVkaWNhbCBDZW50
+      ZXJatQIKsgIKrwJUaGUgUmFwaWQgMTIgYW5kIFJvdXRlIDE3IHN0b3AgbG9jYXRlZCBvbiBTQiBX
+      ZXN0d29vZCBQbGF6YSBhdCBVQ0xBIE1lZGljYWwgQ2VudGVyIHdpbGwgYmUgdGVtcG9yYXJpbHkg
+      Y2xvc2VkIGJlZ2lubmluZyBNb25kYXksIEZlYnJ1YXJ5IDE2LCB1bnRpbCBmdXJ0aGVyIG5vdGlj
+      ZSwgZHVlIHRvIGNvbnN0cnVjdGlvbi7igK9QbGVhc2UgYm9hcmQgYXQgdGhlIHRlbXBvcmFyeSBz
+      dG9wIGFwcHJveC4gMjAwIGZ0LiBub3J0aCBpbnN0ZWFkLuKAr0ZvciBkZXRhaWxzLCB2aXNpdDog
+      YmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0cy4NCi0tPT09PT09PT09PT09PT09MjcyMDgyNjY1
+      ODM4NDk2MzE3MD09LS0=
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '4802'
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/6f46fe37-9d71-426f-b4d4-c8b6634f9671
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0yNzIwODI2NjU4Mzg0
+        OTYzMTcwPT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - text/plain
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/service_alerts/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/ts=2026-05-01T00:00:20+00:00/base64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==/feed/1778042351475561\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fts=2026-05-01T00:00:20%2B00:00%2Fbase64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==%2Ffeed\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fts=2026-05-01T00:00:20%2B00:00%2Fbase64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==%2Ffeed?generation=1778042351475561&alt=media\",\n
+        \ \"name\": \"service_alerts/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/ts=2026-05-01T00:00:20+00:00/base64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==/feed\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1778042351475561\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"text/plain\",\n  \"storageClass\":
+        \"STANDARD\",\n  \"size\": \"3243\",\n  \"md5Hash\": \"bWe/HolwWnVEiKjamnDSUA==\",\n
+        \ \"crc32c\": \"HmJEJg==\",\n  \"etag\": \"COm2hfbro5QDEAE=\",\n  \"timeCreated\":
+        \"2026-05-06T04:39:11.484Z\",\n  \"updated\": \"2026-05-06T04:39:11.484Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-05-06T04:39:11.484Z\",\n  \"timeFinalized\":
+        \"2026-05-06T04:39:11.484Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \"{\\\"filename\\\":\\\"feed\\\",\\\"ts\\\":\\\"2026-05-01T00:00:20+00:00\\\",\\\"config\\\":{\\\"auth_headers\\\":{},\\\"auth_query_params\\\":{},\\\"computed\\\":false,\\\"extracted_at\\\":\\\"2026-04-30T03:00:00+00:00\\\",\\\"feed_type\\\":\\\"service_alerts\\\",\\\"name\\\":\\\"Big
+        Blue Bus Alerts\\\",\\\"schedule_url_for_validation\\\":\\\"https://www.bigbluebus.com/gtfs/current.zip\\\",\\\"url\\\":\\\"http://gtfs.bigbluebus.com/alerts.bin\\\"},\\\"response_code\\\":200,\\\"response_headers\\\":{\\\"Etag\\\":\\\"W/\\\\\\\"dcab3a63fdd8dc1:0\\\\\\\"\\\",\\\"Last-Modified\\\":\\\"Thu,
+        30 Apr 2026 23:59:31 GMT\\\",\\\"Content-Type\\\":\\\"application/octet-stream\\\",\\\"Content-Length\\\":\\\"3243\\\",\\\"Cache-Control\\\":\\\"max-age=1,
+        public\\\",\\\"Expires\\\":\\\"Fri, 01 May 2026 00:00:21 GMT\\\",\\\"Date\\\":\\\"Fri,
+        01 May 2026 00:00:20 GMT\\\",\\\"Set-Cookie\\\":\\\"visid_incap_3100510=vTzzF91uSDa76LYpQzbDlhTt82kAAAAAQUIPAAAAAABhjBZO2tbDIkBUZDpoZkzC;
+        expires=Fri, 30 Apr 2027 06:47:07 GMT; HttpOnly; path=/; Domain=.bigbluebus.com,
+        incap_ses_92_3100510=pel8dmNG3ThEro6vr9lGARTt82kAAAAAl79iOoA9SMw5l44sknDtjg==;
+        path=/; Domain=.bigbluebus.com\\\",\\\"X-CDN\\\":\\\"Imperva\\\",\\\"X-Iinfo\\\":\\\"45-210525617-0
+        0cNN RT(1777593621033 0) q(0 -1 -1 0) r(1 -1)\\\"}}\"\n  }\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '2607'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 06 May 2026 04:39:11 GMT
+      ETag:
+      - COm2hfbro5QDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEhwFssnKki8aS-Xu70eaAOMUSzLTs7KPgHq8f0QPDVOBmpjNJjwiPl-SGdDPU54wBLD
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/08cfb279-692c-43ad-91cc-c012eeacfe93
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt%3D2026-05-01%2Fhour%3D2026-05-01T00%3A00%3A00%2B00%3A00%2Fts%3D2026-05-01T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg%3D%3D%2Ffeed?alt=media
+  response:
+    body:
+      string: !!binary |
+        Cg0KAzIuMBAAGNDZz88GEq4CCiRjMzVkZDg5Zi04YWYyLTQxNTUtYWRhYy0yZjI1ZjAwMmFlOWUq
+        hQIKDAjIpb7PBhDwtvvPBioJCgc2MjE2MTc5MAI4B0IeChwKGmh0dHBzOi8vd3d3LmJpZ2JsdWVi
+        dXMuY29tUkAKPgo8U3R1ZGVudHMgUmlkZSBCQkIgRnJlZSBEdXJpbmcgQmlrZSBJdCwgV2FsayBJ
+        dCwgQnVzIEl0IFdlZWshWoMBCoABCn5TdHVkZW50cyBjYW4gcmlkZSBCaWcgQmx1ZSBCdXMgZm9y
+        IGZyZWUgZHVyaW5nIEJpa2UgSXQsIFdhbGsgSXQsIEJ1cyBJdCBXZWVrLCBNYXkgNC04LCAyMDI2
+        LiBMZWFybiBtb3JlIGF0IHd3dy5iaWdibHVlYnVzLmNvbS4SzAMKJDY5MWE0YzJiLWU2NjAtNGRm
+        ZC05OGM5LTQ5OGYwMzhhMjRiMCqjAwoMCMC8v88GEMDS3s8GKgMSATEqAxIBMioDEgE4KgMSATkq
+        BBICNDMwAjgEQiwKKgooaHR0cHM6Ly93d3cuYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JG
+        CkQKQlJvdXRlcyAxLCAyLCA4LCA5LCAmIDQzOiBEZXRvdXIgb24gTWFpbiBTdC4gaW4gU2FudGEg
+        TW9uaWNhIG9uIDUvM1r+AQr7AQr4AVJvdXRlcyAxLCAyLCA4LCA5LCBhbmQgNDMgd2lsbCBiZSBv
+        biBkZXRvdXIgaW4gU2FudGEgTW9uaWNhIG9uIFNhdHVyZGF5LCBPY3RvYmVyIDExLCBiZXR3ZWVu
+        IDQ6MzAgYS5tLiBhbmQgYXBwcm94aW1hdGVseSAxMjozMCBwLm0uLCBkdWUgdG8gdGhlIEphbmUn
+        cyBNaWxlIFJ1bi4gRm9yIHN0b3BzIG1pc3NlZCBhbmQgYWx0ZXJuYXRlIGJvYXJkaW5nIGxvY2F0
+        aW9ucywgdmlzaXQ6IGJpZ2JsdWVidXMuY29tL3NlcnZpY2VhbGVydHMuEt4CCiRjODg5OTljNS0z
+        N2IwLTQ2Y2YtYWZkNC00ZDljNjhjYzM1OWIqtQIKDAjwtvvPBhDwq6DQBioJCgc2MjE2MTc5MAI4
+        B0IeChwKGmh0dHBzOi8vd3d3LmJpZ2JsdWVidXMuY29tUk8KTQpLUmlkZSBmcmVlIG9uIEJCQiB3
+        aXRoIGEgYmlrZSBvciBoZWxtZXQgb24gQmlrZSBBbnl3aGVyZSBEYXksIE1heSAxNSwgMjAyNi4g
+        WqQBCqEBCp4BQmlnIEJsdWUgQmlzIHJpZGVycyBib2FyZGluZyB3aXRoIGEgYmlrZSBvciBoZWxt
+        ZXQgY2FuIGVuam95IEZSRUUgcmlkZXMgb24gTWF5IDE1LCAyMDI2LCBpbiBjZWxlYnJhdGlvbiBv
+        ZiBCaWtlIEFueXdoZXJlIERheSEgTGVhcm4gbW9yZSBhdCB3d3cuYmlnYmx1ZWJ1cy5jb20S3wIK
+        JDE2NzkxYmZkLWU0MDctNGM5Ni1hMjYzLWMwMWJkNGU1OWE4NSq2AgoMCMDG/s4GEPCBqNIGKgMS
+        ATcwCjgHQiwKKgooaHR0cHM6Ly93d3cuYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JCCkAK
+        PlJvYWR3b3JrIG9uIFBpY28gQmx2ZC4gYmV0d2VlbiBQYXRyaWNpYSBBdmUuICYgU2VwdWx2ZWRh
+        IEJsdmQuWqoBCqcBCqQBU2VydmljZSBvbiBTYW50YSBNb25pY2EgQmx2ZC4gYmV0d2VlbiBQYXRy
+        aWNpYSBhbmQgU2VwdWx2ZWRhIG1heSBiZSBpbXBhY3RlZCBkdWUgdG8gb25nb2luZyByb2Fkd29y
+        ay4gUGxhbiBhaGVhZCBhbmQgdmlzaXQgYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0cyBmb3Ig
+        dXBkYXRlcy4S4QIKJDRlM2E0YzY2LTI5YzktNDUzNy1iYjljLWMzOWJiODNiMWJjYSq4AgoMCMzZ
+        7M0GEPCPsdMGKgMSATEqBRIDUjEwMAo4B0IsCioKKGh0dHBzOi8vd3d3LmJpZ2JsdWVidXMuY29t
+        L3NlcnZpY2VhbGVydHNSQQo/Cj1Sb2Fkd29yayBvbiBTYW50YSBNb25pY2EgQmx2ZC4gYmV0d2Vl
+        biBCdW5keSAmIFNhd3RlbGxlIEJsdmQuWqYBCqMBCqABU2VydmljZSBvbiBTYW50YSBNb25pY2Eg
+        Qmx2ZC4gYmV0d2VlbiBCdW5keSBhbmQgU2F3dGVsbGUgbWF5IGJlIGltcGFjdGVkIGR1ZSB0byBv
+        bmdvaW5nIHJvYWR3b3JrLiBQbGFuIGFoZWFkIGFuZCB2aXNpdCBiaWdibHVlYnVzLmNvbS9zZXJ2
+        aWNlYWxlcnRzIGZvciB1cGRhdGVzLhKzAwokYmUyZGY3MjUtNDI1MS00N2M0LTlhZjAtMmI1NjUx
+        YmYwY2FjKooDCgYI9JbSzQYqCBIBMioDNDAxKgkSAjE4KgM0MDEwCjgJQiwKKgooaHR0cHM6Ly93
+        d3cuYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JDCkEKP1JvdXRlcyAyICYgMTg6IFN0b3Ag
+        Q2xvc3VyZSBvbiBXQiBXaWxzaGlyZSBCbHZkLiAmIEJvbnNhbGwgQXZlLlrzAQrwAQrtAVJvdXRl
+        cyAyICYgMTggc3RvcCBsb2NhdGVkIG9uIFdCIFdpbHNoaXJlIEJsdmQuIGF0IEJvbnNhbGwgQXZl
+        LiB3aWxsIGJlIGNsb3NlZCB1bnRpbCBmdXJ0aGVyIG5vdGljZSwgZHVlIHRvIGNvbnN0cnVjdGlv
+        bi4gUGxlYXNlIGJvYXJkIGF0IHRoZSB0ZW1wb3Jhcnkgc3RvcCBhcHByb3guMTAwIGZ0LiB3ZXN0
+        IGluc3RlYWQu4oCvRm9yIGRldGFpbHMsIHZpc2l0OiBiaWdibHVlYnVzLmNvbS9zZXJ2aWNlYWxl
+        cnRzIBKxAwokMmMzZmIxNDEtODViZS00ZjZiLTg2NzgtMTNmNmQ2NDEzYjg1KogDCgYI3PedzQYq
+        CBIBMSoDNTEwMAo4CUIoCiYKJGh0dHBzOi8vYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JE
+        CkIKQFJvdXRlIDE6IFN0b3AgQ2xvc3VyZSBvbiBFQiBTYW50YSBNb25pY2EgQmx2ZC4gJiBCYXJy
+        aW5ndG9uIEF2ZS5a/wEK/AEK+QFUaGUgUm91dGUgMSBidXMgc3RvcCBsb2NhdGVkIG9uIEVCIFNh
+        bnRhIE1vbmljYSBCbHZkLiBhdCBCYXJyaW5ndG9uIEF2ZS4gd2lsbCBiZSB0ZW1wb3JhcmlseSBj
+        bG9zZWQgdW50aWwgZnVydGhlciBub3RpY2UsIGR1ZSB0byByb2FkIHdvcmsuIOKAr1BsZWFzZSB1
+        c2UgdGhlIHRlbXBvcmFyeSBzdG9wIGF0IEVCIFNhbnRhIE1vbmljYSBCbHZkLiAmIEJhcnJpbmd0
+        b24gQXZlLiAoYWZ0ZXIgdGhlIGludGVyc2VjdGlvbikgaW5zdGVhZC4SiAQKJDg5ZTEyMjM5LTEw
+        MmQtNGM4Yi1iMjU2LWE3ZWY5OTRiNTEyYirfAwoMCKjbvcwGEPCV6tAGKggSAjE3KgI3MSoJEgNS
+        MTIqAjcxMAo4CUIsCioKKGh0dHBzOi8vd3d3LmJpZ2JsdWVidXMuY29tL3NlcnZpY2VhbGVydHNS
+        UApOCkxSYXBpZCAxMiAmIFJvdXRlIDE3OiBTdG9wIENsb3N1cmUgb24gU0IgV2VzdHdvb2QgUGxh
+        emEgJiBVQ0xBIE1lZGljYWwgQ2VudGVyWrUCCrICCq8CVGhlIFJhcGlkIDEyIGFuZCBSb3V0ZSAx
+        NyBzdG9wIGxvY2F0ZWQgb24gU0IgV2VzdHdvb2QgUGxhemEgYXQgVUNMQSBNZWRpY2FsIENlbnRl
+        ciB3aWxsIGJlIHRlbXBvcmFyaWx5IGNsb3NlZCBiZWdpbm5pbmcgTW9uZGF5LCBGZWJydWFyeSAx
+        NiwgdW50aWwgZnVydGhlciBub3RpY2UsIGR1ZSB0byBjb25zdHJ1Y3Rpb24u4oCvUGxlYXNlIGJv
+        YXJkIGF0IHRoZSB0ZW1wb3Jhcnkgc3RvcCBhcHByb3guIDIwMCBmdC4gbm9ydGggaW5zdGVhZC7i
+        gK9Gb3IgZGV0YWlscywgdmlzaXQ6IGJpZ2JsdWVidXMuY29tL3NlcnZpY2VhbGVydHMu
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '3243'
+      Content-Type:
+      - text/plain
+      Date:
+      - Wed, 06 May 2026 04:39:12 GMT
+      ETag:
+      - CPSZ2fXro5QDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Wed, 06 May 2026 04:39:10 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEiNTPOXBMuyr_K1goUihKpy7aIFqA_MJQfO-FHxRiiD56egmZ2oslBkUPDrgs3_SVSW
+      X-Goog-Generation:
+      - '1778042350750964'
+      X-Goog-Hash:
+      - crc32c=6skPTw==,md5=w+h3W5iia+bs+/0ngIGCbw==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '3243'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/bc8c4230-9ce7-4a2c-97a2-fee7aa8df036
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt%3D2026-05-01%2Fhour%3D2026-05-01T00%3A00%3A00%2B00%3A00%2Fts%3D2026-05-01T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg%3D%3D%2Ffeed?prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/service_alerts/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/ts=2026-05-01T00:00:00+00:00/base64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==/feed/1778042350750964","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fts=2026-05-01T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==%2Ffeed","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fts=2026-05-01T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==%2Ffeed?generation=1778042350750964&alt=media","name":"service_alerts/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/ts=2026-05-01T00:00:00+00:00/base64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==/feed","bucket":"calitp-staging-pytest","generation":"1778042350750964","metageneration":"1","contentType":"text/plain","storageClass":"STANDARD","size":"3243","md5Hash":"w+h3W5iia+bs+/0ngIGCbw==","crc32c":"6skPTw==","etag":"CPSZ2fXro5QDEAE=","timeCreated":"2026-05-06T04:39:10.760Z","updated":"2026-05-06T04:39:10.760Z","timeStorageClassUpdated":"2026-05-06T04:39:10.760Z","timeFinalized":"2026-05-06T04:39:10.760Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":\"feed\",\"ts\":\"2026-05-01T00:00:00+00:00\",\"config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"extracted_at\":\"2026-04-30T03:00:00+00:00\",\"feed_type\":\"service_alerts\",\"name\":\"Big
+        Blue Bus Alerts\",\"schedule_url_for_validation\":\"https://www.bigbluebus.com/gtfs/current.zip\",\"url\":\"http://gtfs.bigbluebus.com/alerts.bin\"},\"response_code\":200,\"response_headers\":{\"Etag\":\"W/\\\"33f2f157fdd8dc1:0\\\"\",\"Last-Modified\":\"Thu,
+        30 Apr 2026 23:59:12 GMT\",\"Content-Type\":\"application/octet-stream\",\"Content-Length\":\"3243\",\"Cache-Control\":\"max-age=1,
+        public\",\"Expires\":\"Fri, 01 May 2026 00:00:01 GMT\",\"Date\":\"Fri, 01
+        May 2026 00:00:00 GMT\",\"Set-Cookie\":\"visid_incap_3100510=gCQQgTAxQB6FYDvzr3I4KADt82kAAAAAQUIPAAAAAABwXYZSgt/TAhxgv8UhGn8g;
+        expires=Fri, 30 Apr 2027 06:20:18 GMT; HttpOnly; path=/; Domain=.bigbluebus.com,
+        incap_ses_102_3100510=ibA1XHJi22nKwzFspGBqAQDt82kAAAAAL+Ojsz2yTHBaVT2OW2NU4A==;
+        path=/; Domain=.bigbluebus.com\",\"X-CDN\":\"Imperva\",\"X-Iinfo\":\"45-185730431-0
+        0cNN RT(1777593601659 0) q(0 -1 -1 0) r(0 -1)\"}}"}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '2521'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 06 May 2026 04:39:13 GMT
+      ETag:
+      - CPSZ2fXro5QDEAE=
+      Expires:
+      - Wed, 06 May 2026 04:39:13 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEgtbhRGM6Z7ioVc2uEOWW-ALWbiidUcY4WQvIWuzDGl-_zOeUrFVvSqx7qNzNx7sdbGnMjnuSU
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/3dd22dbd-4855-4951-aba2-ae7d43130dd7
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt%3D2026-05-01%2Fhour%3D2026-05-01T00%3A00%3A00%2B00%3A00%2Fts%3D2026-05-01T00%3A00%3A20%2B00%3A00%2Fbase64_url%3DaHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg%3D%3D%2Ffeed?alt=media
+  response:
+    body:
+      string: !!binary |
+        Cg0KAzIuMBAAGOPZz88GEq4CCiRjMzVkZDg5Zi04YWYyLTQxNTUtYWRhYy0yZjI1ZjAwMmFlOWUq
+        hQIKDAjIpb7PBhDwtvvPBioJCgc2MjE2MTc5MAI4B0IeChwKGmh0dHBzOi8vd3d3LmJpZ2JsdWVi
+        dXMuY29tUkAKPgo8U3R1ZGVudHMgUmlkZSBCQkIgRnJlZSBEdXJpbmcgQmlrZSBJdCwgV2FsayBJ
+        dCwgQnVzIEl0IFdlZWshWoMBCoABCn5TdHVkZW50cyBjYW4gcmlkZSBCaWcgQmx1ZSBCdXMgZm9y
+        IGZyZWUgZHVyaW5nIEJpa2UgSXQsIFdhbGsgSXQsIEJ1cyBJdCBXZWVrLCBNYXkgNC04LCAyMDI2
+        LiBMZWFybiBtb3JlIGF0IHd3dy5iaWdibHVlYnVzLmNvbS4SzAMKJDY5MWE0YzJiLWU2NjAtNGRm
+        ZC05OGM5LTQ5OGYwMzhhMjRiMCqjAwoMCMC8v88GEMDS3s8GKgMSATEqAxIBMioDEgE4KgMSATkq
+        BBICNDMwAjgEQiwKKgooaHR0cHM6Ly93d3cuYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JG
+        CkQKQlJvdXRlcyAxLCAyLCA4LCA5LCAmIDQzOiBEZXRvdXIgb24gTWFpbiBTdC4gaW4gU2FudGEg
+        TW9uaWNhIG9uIDUvM1r+AQr7AQr4AVJvdXRlcyAxLCAyLCA4LCA5LCBhbmQgNDMgd2lsbCBiZSBv
+        biBkZXRvdXIgaW4gU2FudGEgTW9uaWNhIG9uIFNhdHVyZGF5LCBPY3RvYmVyIDExLCBiZXR3ZWVu
+        IDQ6MzAgYS5tLiBhbmQgYXBwcm94aW1hdGVseSAxMjozMCBwLm0uLCBkdWUgdG8gdGhlIEphbmUn
+        cyBNaWxlIFJ1bi4gRm9yIHN0b3BzIG1pc3NlZCBhbmQgYWx0ZXJuYXRlIGJvYXJkaW5nIGxvY2F0
+        aW9ucywgdmlzaXQ6IGJpZ2JsdWVidXMuY29tL3NlcnZpY2VhbGVydHMuEt4CCiRjODg5OTljNS0z
+        N2IwLTQ2Y2YtYWZkNC00ZDljNjhjYzM1OWIqtQIKDAjwtvvPBhDwq6DQBioJCgc2MjE2MTc5MAI4
+        B0IeChwKGmh0dHBzOi8vd3d3LmJpZ2JsdWVidXMuY29tUk8KTQpLUmlkZSBmcmVlIG9uIEJCQiB3
+        aXRoIGEgYmlrZSBvciBoZWxtZXQgb24gQmlrZSBBbnl3aGVyZSBEYXksIE1heSAxNSwgMjAyNi4g
+        WqQBCqEBCp4BQmlnIEJsdWUgQmlzIHJpZGVycyBib2FyZGluZyB3aXRoIGEgYmlrZSBvciBoZWxt
+        ZXQgY2FuIGVuam95IEZSRUUgcmlkZXMgb24gTWF5IDE1LCAyMDI2LCBpbiBjZWxlYnJhdGlvbiBv
+        ZiBCaWtlIEFueXdoZXJlIERheSEgTGVhcm4gbW9yZSBhdCB3d3cuYmlnYmx1ZWJ1cy5jb20S3wIK
+        JDE2NzkxYmZkLWU0MDctNGM5Ni1hMjYzLWMwMWJkNGU1OWE4NSq2AgoMCMDG/s4GEPCBqNIGKgMS
+        ATcwCjgHQiwKKgooaHR0cHM6Ly93d3cuYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JCCkAK
+        PlJvYWR3b3JrIG9uIFBpY28gQmx2ZC4gYmV0d2VlbiBQYXRyaWNpYSBBdmUuICYgU2VwdWx2ZWRh
+        IEJsdmQuWqoBCqcBCqQBU2VydmljZSBvbiBTYW50YSBNb25pY2EgQmx2ZC4gYmV0d2VlbiBQYXRy
+        aWNpYSBhbmQgU2VwdWx2ZWRhIG1heSBiZSBpbXBhY3RlZCBkdWUgdG8gb25nb2luZyByb2Fkd29y
+        ay4gUGxhbiBhaGVhZCBhbmQgdmlzaXQgYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0cyBmb3Ig
+        dXBkYXRlcy4S4QIKJDRlM2E0YzY2LTI5YzktNDUzNy1iYjljLWMzOWJiODNiMWJjYSq4AgoMCMzZ
+        7M0GEPCPsdMGKgMSATEqBRIDUjEwMAo4B0IsCioKKGh0dHBzOi8vd3d3LmJpZ2JsdWVidXMuY29t
+        L3NlcnZpY2VhbGVydHNSQQo/Cj1Sb2Fkd29yayBvbiBTYW50YSBNb25pY2EgQmx2ZC4gYmV0d2Vl
+        biBCdW5keSAmIFNhd3RlbGxlIEJsdmQuWqYBCqMBCqABU2VydmljZSBvbiBTYW50YSBNb25pY2Eg
+        Qmx2ZC4gYmV0d2VlbiBCdW5keSBhbmQgU2F3dGVsbGUgbWF5IGJlIGltcGFjdGVkIGR1ZSB0byBv
+        bmdvaW5nIHJvYWR3b3JrLiBQbGFuIGFoZWFkIGFuZCB2aXNpdCBiaWdibHVlYnVzLmNvbS9zZXJ2
+        aWNlYWxlcnRzIGZvciB1cGRhdGVzLhKzAwokYmUyZGY3MjUtNDI1MS00N2M0LTlhZjAtMmI1NjUx
+        YmYwY2FjKooDCgYI9JbSzQYqCBIBMioDNDAxKgkSAjE4KgM0MDEwCjgJQiwKKgooaHR0cHM6Ly93
+        d3cuYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JDCkEKP1JvdXRlcyAyICYgMTg6IFN0b3Ag
+        Q2xvc3VyZSBvbiBXQiBXaWxzaGlyZSBCbHZkLiAmIEJvbnNhbGwgQXZlLlrzAQrwAQrtAVJvdXRl
+        cyAyICYgMTggc3RvcCBsb2NhdGVkIG9uIFdCIFdpbHNoaXJlIEJsdmQuIGF0IEJvbnNhbGwgQXZl
+        LiB3aWxsIGJlIGNsb3NlZCB1bnRpbCBmdXJ0aGVyIG5vdGljZSwgZHVlIHRvIGNvbnN0cnVjdGlv
+        bi4gUGxlYXNlIGJvYXJkIGF0IHRoZSB0ZW1wb3Jhcnkgc3RvcCBhcHByb3guMTAwIGZ0LiB3ZXN0
+        IGluc3RlYWQu4oCvRm9yIGRldGFpbHMsIHZpc2l0OiBiaWdibHVlYnVzLmNvbS9zZXJ2aWNlYWxl
+        cnRzIBKxAwokMmMzZmIxNDEtODViZS00ZjZiLTg2NzgtMTNmNmQ2NDEzYjg1KogDCgYI3PedzQYq
+        CBIBMSoDNTEwMAo4CUIoCiYKJGh0dHBzOi8vYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JE
+        CkIKQFJvdXRlIDE6IFN0b3AgQ2xvc3VyZSBvbiBFQiBTYW50YSBNb25pY2EgQmx2ZC4gJiBCYXJy
+        aW5ndG9uIEF2ZS5a/wEK/AEK+QFUaGUgUm91dGUgMSBidXMgc3RvcCBsb2NhdGVkIG9uIEVCIFNh
+        bnRhIE1vbmljYSBCbHZkLiBhdCBCYXJyaW5ndG9uIEF2ZS4gd2lsbCBiZSB0ZW1wb3JhcmlseSBj
+        bG9zZWQgdW50aWwgZnVydGhlciBub3RpY2UsIGR1ZSB0byByb2FkIHdvcmsuIOKAr1BsZWFzZSB1
+        c2UgdGhlIHRlbXBvcmFyeSBzdG9wIGF0IEVCIFNhbnRhIE1vbmljYSBCbHZkLiAmIEJhcnJpbmd0
+        b24gQXZlLiAoYWZ0ZXIgdGhlIGludGVyc2VjdGlvbikgaW5zdGVhZC4SiAQKJDg5ZTEyMjM5LTEw
+        MmQtNGM4Yi1iMjU2LWE3ZWY5OTRiNTEyYirfAwoMCKjbvcwGEPCV6tAGKggSAjE3KgI3MSoJEgNS
+        MTIqAjcxMAo4CUIsCioKKGh0dHBzOi8vd3d3LmJpZ2JsdWVidXMuY29tL3NlcnZpY2VhbGVydHNS
+        UApOCkxSYXBpZCAxMiAmIFJvdXRlIDE3OiBTdG9wIENsb3N1cmUgb24gU0IgV2VzdHdvb2QgUGxh
+        emEgJiBVQ0xBIE1lZGljYWwgQ2VudGVyWrUCCrICCq8CVGhlIFJhcGlkIDEyIGFuZCBSb3V0ZSAx
+        NyBzdG9wIGxvY2F0ZWQgb24gU0IgV2VzdHdvb2QgUGxhemEgYXQgVUNMQSBNZWRpY2FsIENlbnRl
+        ciB3aWxsIGJlIHRlbXBvcmFyaWx5IGNsb3NlZCBiZWdpbm5pbmcgTW9uZGF5LCBGZWJydWFyeSAx
+        NiwgdW50aWwgZnVydGhlciBub3RpY2UsIGR1ZSB0byBjb25zdHJ1Y3Rpb24u4oCvUGxlYXNlIGJv
+        YXJkIGF0IHRoZSB0ZW1wb3Jhcnkgc3RvcCBhcHByb3guIDIwMCBmdC4gbm9ydGggaW5zdGVhZC7i
+        gK9Gb3IgZGV0YWlscywgdmlzaXQ6IGJpZ2JsdWVidXMuY29tL3NlcnZpY2VhbGVydHMu
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '3243'
+      Content-Type:
+      - text/plain
+      Date:
+      - Wed, 06 May 2026 04:39:14 GMT
+      ETag:
+      - COm2hfbro5QDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Wed, 06 May 2026 04:39:11 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEht-Dv0s9C4Eub7qido99idq5rOJnWfyKMQtnzcWBGOaHJagXw8fh5OE6AdTV8pecAKumu8MYs
+      X-Goog-Generation:
+      - '1778042351475561'
+      X-Goog-Hash:
+      - crc32c=HmJEJg==,md5=bWe/HolwWnVEiKjamnDSUA==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '3243'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/004776ac-417c-4d27-8036-ba292b609177
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt%3D2026-05-01%2Fhour%3D2026-05-01T00%3A00%3A00%2B00%3A00%2Fts%3D2026-05-01T00%3A00%3A20%2B00%3A00%2Fbase64_url%3DaHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg%3D%3D%2Ffeed?prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/service_alerts/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/ts=2026-05-01T00:00:20+00:00/base64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==/feed/1778042351475561","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fts=2026-05-01T00:00:20%2B00:00%2Fbase64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==%2Ffeed","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fts=2026-05-01T00:00:20%2B00:00%2Fbase64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==%2Ffeed?generation=1778042351475561&alt=media","name":"service_alerts/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/ts=2026-05-01T00:00:20+00:00/base64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==/feed","bucket":"calitp-staging-pytest","generation":"1778042351475561","metageneration":"1","contentType":"text/plain","storageClass":"STANDARD","size":"3243","md5Hash":"bWe/HolwWnVEiKjamnDSUA==","crc32c":"HmJEJg==","etag":"COm2hfbro5QDEAE=","timeCreated":"2026-05-06T04:39:11.484Z","updated":"2026-05-06T04:39:11.484Z","timeStorageClassUpdated":"2026-05-06T04:39:11.484Z","timeFinalized":"2026-05-06T04:39:11.484Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":\"feed\",\"ts\":\"2026-05-01T00:00:20+00:00\",\"config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"extracted_at\":\"2026-04-30T03:00:00+00:00\",\"feed_type\":\"service_alerts\",\"name\":\"Big
+        Blue Bus Alerts\",\"schedule_url_for_validation\":\"https://www.bigbluebus.com/gtfs/current.zip\",\"url\":\"http://gtfs.bigbluebus.com/alerts.bin\"},\"response_code\":200,\"response_headers\":{\"Etag\":\"W/\\\"dcab3a63fdd8dc1:0\\\"\",\"Last-Modified\":\"Thu,
+        30 Apr 2026 23:59:31 GMT\",\"Content-Type\":\"application/octet-stream\",\"Content-Length\":\"3243\",\"Cache-Control\":\"max-age=1,
+        public\",\"Expires\":\"Fri, 01 May 2026 00:00:21 GMT\",\"Date\":\"Fri, 01
+        May 2026 00:00:20 GMT\",\"Set-Cookie\":\"visid_incap_3100510=vTzzF91uSDa76LYpQzbDlhTt82kAAAAAQUIPAAAAAABhjBZO2tbDIkBUZDpoZkzC;
+        expires=Fri, 30 Apr 2027 06:47:07 GMT; HttpOnly; path=/; Domain=.bigbluebus.com,
+        incap_ses_92_3100510=pel8dmNG3ThEro6vr9lGARTt82kAAAAAl79iOoA9SMw5l44sknDtjg==;
+        path=/; Domain=.bigbluebus.com\",\"X-CDN\":\"Imperva\",\"X-Iinfo\":\"45-210525617-0
+        0cNN RT(1777593621033 0) q(0 -1 -1 0) r(1 -1)\"}}"}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '2520'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 06 May 2026 04:39:15 GMT
+      ETag:
+      - COm2hfbro5QDEAE=
+      Expires:
+      - Wed, 06 May 2026 04:39:15 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEg4_qZky0oKrRXxNF03Moi5dKIR_Yl1wGJJgPYpS_S4rfA84u0HtnfCFI-gYm4uvvo4
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!binary |
+      LS09PT09PT09PT09PT09PT0wNDU4MDkxMjU4NTE1MTMxNjQ1PT0NCmNvbnRlbnQtdHlwZTogYXBw
+      bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAic2VydmljZV9hbGVydHMv
+      ZHQ9MjAyNi0wNS0wMS9ob3VyPTIwMjYtMDUtMDFUMDA6MDA6MDArMDA6MDAvYmFzZTY0X3VybD1h
+      SFIwY0RvdkwyZDBabk11WW1sbllteDFaV0oxY3k1amIyMHZZV3hsY25SekxtSnBiZz09L3NlcnZp
+      Y2VfYWxlcnRzX2FIUjBjRG92TDJkMFpuTXVZbWxuWW14MVpXSjFjeTVqYjIwdllXeGxjblJ6TG1K
+      cGJnPT0uanNvbmwuZ3oiLCAiY3JjMzJjIjogIm80ckRJdz09In0NCi0tPT09PT09PT09PT09PT09
+      MDQ1ODA5MTI1ODUxNTEzMTY0NT09DQpjb250ZW50LXR5cGU6IGFwcGxpY2F0aW9uL2pzb25sDQoN
+      Ch+LCAD0xfppAv/tmtty4zYShu/zFIgudpOKKJPgWXeWLddOahy7JDlzkWypQLBpYYciFRC0orj8
+      7mmQkk/yOLRnszvjgmvKYxFAN0798QfU170FsBRkb3jdu1RZNQGWK7GEn0FWoix6wx4d2L1+TxRc
+      whIKxXKhNvj45OL9+/nx4exwOp5huW5TKbZcYZEThqEfu75Pezf93hIUS5li2gP8riTjaq4qbdim
+      gWX7lu3MbHvY/Puh+Y3mdhV5WWTiUjdltVrM275i42s03Dz5rQa5ma+YZMvtY14uV7WCtDfMWF7B
+      rS1I50zduvUs157Z7iO3GWAttVkB1qtAXgkOc5aDxP72ewVb6ucjcUlGeQ1kVFfkcFdY8QWkdQ7z
+      WubzrJTzK5woHHY7hwulVtXw4GC9Xg8ScZlg86SuBtjVAz3pB7yWEud28IdYoS00sW2DTXT54zZt
+      l/Bp0bvBEQsca4+7fppGcWZFLKOW5/i+hdPOLZpRP7NtyiAGtN00beaTK3EF5yBFic1/ue7h6umS
+      ZvVcO3KDZh2KtH0UuY6NP72bf+u9gANcQjouVLMXsDG7hIJv3unKAXUCJ4ybmpzVlZ6zs9m/xpP5
+      0eHFdKyNZhlwdft4fHIyPprtxn3dw9Uqqnw7dWhb4QI+O4foCmeh3RuzpvInjUxVneJEV2QiUlzB
+      0YicSAByXEtR4LKKj0DeqT75wPKPzR96jd8p8gHg47etmxQqLsVKG+7qi7OCyMbf/a2Dc0gy7Tzt
+      4LxPTtmGeFbUJ3r/Dsh7YLIgy1ICYYrsz8lA9/bm5ptrE99vI76D2GEep4kFQWBbXpqlVhzx2PLi
+      KLPdiFEvsbvHNw2D6EF8Y4BH3qfjW5Y45U14O7jm9z/TR5+jR5/jR589twsZjsezs4vJZzDhYLu8
+      29XtToiJ7mlFHAy0PsFwi/vkH8Rzh+QYVFlLUhYYiqIgUzUg+j+GIUNOy0Jwpsv8A/elnHjCIytS
+      9EnWIs9JAtpu2np/wuOUqVqmbNMnZ1yVCUjioKkE1BqgIN7QtQkbLAeNTbZayfJ3sWQK8g1xqC5c
+      YWEfIQRElUQtgPzICvhnRU5FDmRSFwNygqSqVLmqyFJUFaStqVyBLNAQSUomU02wvOTN4Ko+uRKV
+      UEPy3JoYQr01BRJFcRxz33LDBAkV8MxiWeohq2IeRBwFSpx0JdRObtxXILHjRV+/AmmER/Pex9jV
+      AmQt1IIwDBV8/WOgLSDH/doU6ieHxWa9AHzLH+sI1yLA8Xca4KWguds3omoEiazugvfpbmjpAsV/
+      yg05mYzHTaOqReBdR/qaShxySGTjkpTZft+//UvFYnDwtnDgBGHsJChTwLNDy+NxYDEauBa3nST1
+      wI9Z5HfFQUAD7yEOIpe6z+HgTnCEDzhwdPbTdDa5OJq9O/vpbwDBZ8gOlq5L+VEH17ngJa7oVTq4
+      fY2fMyUFF4wcXsEABckUVnV+BSlr6734aNL2spUP9+TEJ5zq9/2dxyXGPooSsVw1m3gnHcristQg
+      kduRDMh5jvRgeviNhUYTPCsJmjNRvcJdCkYevDUeeODiASYILBrrY4vvhlaSxNzibpwkkZs4CWdd
+      eeBGoec+OMBEvhc59DUHmIljf3WEeCZoR3WRbjQh2BpFPkr4vxEQra+GDjtvBg4GDq+AQwI0zULq
+      Wx71HcsLuWfFLLMtmviBjyrC5ox3hoPnxlHQgQRUjxzPte29hP0YDE60V94BE9PZ2fn89Ozn8fH/
+      8faCIgCcaEim2HtylJdVLZtY/jAiH0ReLYTccgHrjfDAzvK8URavvLpo3TV3BO0lAAb+k95Q+N93
+      d3vBwbGL2KbGVcpJVkuFxwZSlAqn4PZqAoOpUrLmug8aH8Cq7d2DNqsvLhQsV6VkctP2pL3sGOBB
+      kmQKfWGE40mlUjiPg19rDKRMX2ykGODYyU5XFsRg521hh3I3SxzPsSI/AcvLgsSKgjCyHDcL0sBz
+      3KT7GYX6kRt3EyD3sOJ3VB+vwMp/EynE2YfJePSUNkCgMKm/0FBY5TVMmWEkb30S7PseVZ52q8ny
+      0O8tXHZYEPmmE2i0RiGtSGkxsWUNLtCTmFFdZ4J8xzKF/rQRUeBfFTQ0+/4WS4Yvb4svUQwOpW5s
+      OTZNLY9HiZVQP7BYCFkce4nv0M5XovgeC72HdyC2Q71uX9qE95kT7h+B6OPyL1/psJVIiaOlx5YW
+      4T6ipqhAMALWZZnqA8cfDGtfHL0/JKeQYqDm5Ah0HL4KUTv/+vSy68EerPY7gLh4ogfPwSqBS1EU
+      +vSEeGm+6DmBRNYaQE7Qf4FoekCzDsqJ0K10Kko0/pna6X/BtmZjv4Bt1LDNJJyYhJOvJuHExLdJ
+      ODEJJybh5MtNODGEMgknJuHEJJwYHJiEE5NwYhJODA9MwolJODEJJwYOJuHEJJyYhJMvMOHEYMck
+      nJiEE5NwYvhiEk5MwolJOHljCSd/ApHKswDhRAAADQotLT09PT09PT09PT09PT09PTA0NTgwOTEy
+      NTg1MTUxMzE2NDU9PS0t
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '2295'
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/a28e9859-953e-4e0a-900f-796d2d57a6b3
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0wNDU4MDkxMjU4NTE1
+        MTMxNjQ1PT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/jsonl
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest-parsed/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest-parsed/service_alerts/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/base64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==/service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl.gz/1778042356546955\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest-parsed/o/service_alerts%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==%2Fservice_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl.gz\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest-parsed/o/service_alerts%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==%2Fservice_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl.gz?generation=1778042356546955&alt=media\",\n
+        \ \"name\": \"service_alerts/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/base64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==/service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl.gz\",\n
+        \ \"bucket\": \"calitp-staging-pytest-parsed\",\n  \"generation\": \"1778042356546955\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1853\",\n  \"md5Hash\": \"pfE9mFm/EYV5LWZEZQmIDg==\",\n
+        \ \"crc32c\": \"o4rDIw==\",\n  \"etag\": \"CIv7uvjro5QDEAE=\",\n  \"timeCreated\":
+        \"2026-05-06T04:39:16.573Z\",\n  \"updated\": \"2026-05-06T04:39:16.573Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-05-06T04:39:16.573Z\",\n  \"timeFinalized\":
+        \"2026-05-06T04:39:16.573Z\"\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1629'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 06 May 2026 04:39:16 GMT
+      ETag:
+      - CIv7uvjro5QDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEhbLr0NVFU5m90fauy-NhMayVrpkC4WR_LbtIA_JaOI8biI3MmLXN9NqNUgh_emsyDXcBpaEMg
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "--===============6511301923031680833==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"service_alerts_outcomes/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl\",
+      \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"feed_type\\\":\\\"service_alerts\\\",\\\"filename\\\":\\\"service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl\\\",\\\"step\\\":\\\"parse\\\",\\\"hour\\\":\\\"2026-05-01T00:00:00+00:00\\\"}\"},
+      \"crc32c\": \"Rscvcg==\"}\r\n--===============6511301923031680833==\r\ncontent-type:
+      application/jsonl\r\n\r\n{\"step\":\"parse\",\"success\":true,\"header\":{\"gtfsrealtimeversion\":\"2.0\",\"incrementality\":\"FULL_DATASET\",\"timestamp\":\"1777593552\"},\"exception\":null,\"blob_path\":null,\"aggregation\":{\"step\":\"parse\",\"filename\":\"service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl.gz\",\"first_extract\":{\"filename\":\"feed\",\"ts\":\"2026-05-01T00:00:00+00:00\",\"config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"extracted_at\":\"2026-04-30T03:00:00+00:00\",\"feed_type\":\"service_alerts\",\"name\":\"Big
+      Blue Bus Alerts\",\"schedule_url_for_validation\":\"https://www.bigbluebus.com/gtfs/current.zip\",\"url\":\"http://gtfs.bigbluebus.com/alerts.bin\"},\"response_code\":200,\"response_headers\":{\"etag\":\"W/\\\"33f2f157fdd8dc1:0\\\"\",\"last_modified\":\"Thu,
+      30 Apr 2026 23:59:12 GMT\",\"content_type\":\"application/octet-stream\",\"content_length\":\"3243\",\"cache_control\":\"max-age=1,
+      public\",\"expires\":\"Fri, 01 May 2026 00:00:01 GMT\",\"date\":\"Fri, 01 May
+      2026 00:00:00 GMT\",\"set_cookie\":\"visid_incap_3100510=gCQQgTAxQB6FYDvzr3I4KADt82kAAAAAQUIPAAAAAABwXYZSgt/TAhxgv8UhGn8g;
+      expires=Fri, 30 Apr 2027 06:20:18 GMT; HttpOnly; path=/; Domain=.bigbluebus.com,
+      incap_ses_102_3100510=ibA1XHJi22nKwzFspGBqAQDt82kAAAAAL+Ojsz2yTHBaVT2OW2NU4A==;
+      path=/; Domain=.bigbluebus.com\",\"x_cdn\":\"Imperva\",\"x_iinfo\":\"45-185730431-0
+      0cNN RT(1777593601659 0) q(0 -1 -1 0) r(0 -1)\"}}},\"extract\":{\"filename\":\"feed\",\"ts\":\"2026-05-01T00:00:00+00:00\",\"config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"extracted_at\":\"2026-04-30T03:00:00+00:00\",\"feed_type\":\"service_alerts\",\"name\":\"Big
+      Blue Bus Alerts\",\"schedule_url_for_validation\":\"https://www.bigbluebus.com/gtfs/current.zip\",\"url\":\"http://gtfs.bigbluebus.com/alerts.bin\"},\"response_code\":200,\"response_headers\":{\"etag\":\"W/\\\"33f2f157fdd8dc1:0\\\"\",\"last_modified\":\"Thu,
+      30 Apr 2026 23:59:12 GMT\",\"content_type\":\"application/octet-stream\",\"content_length\":\"3243\",\"cache_control\":\"max-age=1,
+      public\",\"expires\":\"Fri, 01 May 2026 00:00:01 GMT\",\"date\":\"Fri, 01 May
+      2026 00:00:00 GMT\",\"set_cookie\":\"visid_incap_3100510=gCQQgTAxQB6FYDvzr3I4KADt82kAAAAAQUIPAAAAAABwXYZSgt/TAhxgv8UhGn8g;
+      expires=Fri, 30 Apr 2027 06:20:18 GMT; HttpOnly; path=/; Domain=.bigbluebus.com,
+      incap_ses_102_3100510=ibA1XHJi22nKwzFspGBqAQDt82kAAAAAL+Ojsz2yTHBaVT2OW2NU4A==;
+      path=/; Domain=.bigbluebus.com\",\"x_cdn\":\"Imperva\",\"x_iinfo\":\"45-185730431-0
+      0cNN RT(1777593601659 0) q(0 -1 -1 0) r(0 -1)\"}},\"process_stderr\":null}\n{\"step\":\"parse\",\"success\":true,\"header\":{\"gtfsrealtimeversion\":\"2.0\",\"incrementality\":\"FULL_DATASET\",\"timestamp\":\"1777593571\"},\"exception\":null,\"blob_path\":null,\"aggregation\":{\"step\":\"parse\",\"filename\":\"service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl.gz\",\"first_extract\":{\"filename\":\"feed\",\"ts\":\"2026-05-01T00:00:00+00:00\",\"config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"extracted_at\":\"2026-04-30T03:00:00+00:00\",\"feed_type\":\"service_alerts\",\"name\":\"Big
+      Blue Bus Alerts\",\"schedule_url_for_validation\":\"https://www.bigbluebus.com/gtfs/current.zip\",\"url\":\"http://gtfs.bigbluebus.com/alerts.bin\"},\"response_code\":200,\"response_headers\":{\"etag\":\"W/\\\"33f2f157fdd8dc1:0\\\"\",\"last_modified\":\"Thu,
+      30 Apr 2026 23:59:12 GMT\",\"content_type\":\"application/octet-stream\",\"content_length\":\"3243\",\"cache_control\":\"max-age=1,
+      public\",\"expires\":\"Fri, 01 May 2026 00:00:01 GMT\",\"date\":\"Fri, 01 May
+      2026 00:00:00 GMT\",\"set_cookie\":\"visid_incap_3100510=gCQQgTAxQB6FYDvzr3I4KADt82kAAAAAQUIPAAAAAABwXYZSgt/TAhxgv8UhGn8g;
+      expires=Fri, 30 Apr 2027 06:20:18 GMT; HttpOnly; path=/; Domain=.bigbluebus.com,
+      incap_ses_102_3100510=ibA1XHJi22nKwzFspGBqAQDt82kAAAAAL+Ojsz2yTHBaVT2OW2NU4A==;
+      path=/; Domain=.bigbluebus.com\",\"x_cdn\":\"Imperva\",\"x_iinfo\":\"45-185730431-0
+      0cNN RT(1777593601659 0) q(0 -1 -1 0) r(0 -1)\"}}},\"extract\":{\"filename\":\"feed\",\"ts\":\"2026-05-01T00:00:20+00:00\",\"config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"extracted_at\":\"2026-04-30T03:00:00+00:00\",\"feed_type\":\"service_alerts\",\"name\":\"Big
+      Blue Bus Alerts\",\"schedule_url_for_validation\":\"https://www.bigbluebus.com/gtfs/current.zip\",\"url\":\"http://gtfs.bigbluebus.com/alerts.bin\"},\"response_code\":200,\"response_headers\":{\"etag\":\"W/\\\"dcab3a63fdd8dc1:0\\\"\",\"last_modified\":\"Thu,
+      30 Apr 2026 23:59:31 GMT\",\"content_type\":\"application/octet-stream\",\"content_length\":\"3243\",\"cache_control\":\"max-age=1,
+      public\",\"expires\":\"Fri, 01 May 2026 00:00:21 GMT\",\"date\":\"Fri, 01 May
+      2026 00:00:20 GMT\",\"set_cookie\":\"visid_incap_3100510=vTzzF91uSDa76LYpQzbDlhTt82kAAAAAQUIPAAAAAABhjBZO2tbDIkBUZDpoZkzC;
+      expires=Fri, 30 Apr 2027 06:47:07 GMT; HttpOnly; path=/; Domain=.bigbluebus.com,
+      incap_ses_92_3100510=pel8dmNG3ThEro6vr9lGARTt82kAAAAAl79iOoA9SMw5l44sknDtjg==;
+      path=/; Domain=.bigbluebus.com\",\"x_cdn\":\"Imperva\",\"x_iinfo\":\"45-210525617-0
+      0cNN RT(1777593621033 0) q(0 -1 -1 0) r(1 -1)\"}},\"process_stderr\":null}\r\n--===============6511301923031680833==--"
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '5414'
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/7f9dca27-efd8-4d25-9dc7-62914f18da71
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT02NTExMzAxOTIzMDMx
+        NjgwODMzPT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/jsonl
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest-parsed/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest-parsed/service_alerts_outcomes/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl/1778042357458354\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest-parsed/o/service_alerts_outcomes%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fservice_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest-parsed/o/service_alerts_outcomes%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fservice_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl?generation=1778042357458354&alt=media\",\n
+        \ \"name\": \"service_alerts_outcomes/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl\",\n
+        \ \"bucket\": \"calitp-staging-pytest-parsed\",\n  \"generation\": \"1778042357458354\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"4796\",\n  \"md5Hash\": \"jw3CFJtOS7mCGUgWkJTpYg==\",\n
+        \ \"crc32c\": \"Rscvcg==\",\n  \"etag\": \"CLLL8vjro5QDEAE=\",\n  \"timeCreated\":
+        \"2026-05-06T04:39:17.470Z\",\n  \"updated\": \"2026-05-06T04:39:17.470Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-05-06T04:39:17.470Z\",\n  \"timeFinalized\":
+        \"2026-05-06T04:39:17.470Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \"{\\\"feed_type\\\":\\\"service_alerts\\\",\\\"filename\\\":\\\"service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl\\\",\\\"step\\\":\\\"parse\\\",\\\"hour\\\":\\\"2026-05-01T00:00:00+00:00\\\"}\"\n
+        \ }\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1637'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 06 May 2026 04:39:17 GMT
+      ETag:
+      - CLLL8vjro5QDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEg34JrPow8NU_yyvRsT13uaSbbb59eEH3GSDuBB56y-93j1vsyVQWfrzq-ECREt1nl3
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/06a1018a-1bb2-4acd-81ac-ea7f5459edfe
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt%3D2026-05-01%2Fhour%3D2026-05-01T00%3A00%3A00%2B00%3A00%2Fts%3D2026-05-01T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg%3D%3D%2Ffeed?alt=media
+  response:
+    body:
+      string: !!binary |
+        Cg0KAzIuMBAAGNDZz88GEq4CCiRjMzVkZDg5Zi04YWYyLTQxNTUtYWRhYy0yZjI1ZjAwMmFlOWUq
+        hQIKDAjIpb7PBhDwtvvPBioJCgc2MjE2MTc5MAI4B0IeChwKGmh0dHBzOi8vd3d3LmJpZ2JsdWVi
+        dXMuY29tUkAKPgo8U3R1ZGVudHMgUmlkZSBCQkIgRnJlZSBEdXJpbmcgQmlrZSBJdCwgV2FsayBJ
+        dCwgQnVzIEl0IFdlZWshWoMBCoABCn5TdHVkZW50cyBjYW4gcmlkZSBCaWcgQmx1ZSBCdXMgZm9y
+        IGZyZWUgZHVyaW5nIEJpa2UgSXQsIFdhbGsgSXQsIEJ1cyBJdCBXZWVrLCBNYXkgNC04LCAyMDI2
+        LiBMZWFybiBtb3JlIGF0IHd3dy5iaWdibHVlYnVzLmNvbS4SzAMKJDY5MWE0YzJiLWU2NjAtNGRm
+        ZC05OGM5LTQ5OGYwMzhhMjRiMCqjAwoMCMC8v88GEMDS3s8GKgMSATEqAxIBMioDEgE4KgMSATkq
+        BBICNDMwAjgEQiwKKgooaHR0cHM6Ly93d3cuYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JG
+        CkQKQlJvdXRlcyAxLCAyLCA4LCA5LCAmIDQzOiBEZXRvdXIgb24gTWFpbiBTdC4gaW4gU2FudGEg
+        TW9uaWNhIG9uIDUvM1r+AQr7AQr4AVJvdXRlcyAxLCAyLCA4LCA5LCBhbmQgNDMgd2lsbCBiZSBv
+        biBkZXRvdXIgaW4gU2FudGEgTW9uaWNhIG9uIFNhdHVyZGF5LCBPY3RvYmVyIDExLCBiZXR3ZWVu
+        IDQ6MzAgYS5tLiBhbmQgYXBwcm94aW1hdGVseSAxMjozMCBwLm0uLCBkdWUgdG8gdGhlIEphbmUn
+        cyBNaWxlIFJ1bi4gRm9yIHN0b3BzIG1pc3NlZCBhbmQgYWx0ZXJuYXRlIGJvYXJkaW5nIGxvY2F0
+        aW9ucywgdmlzaXQ6IGJpZ2JsdWVidXMuY29tL3NlcnZpY2VhbGVydHMuEt4CCiRjODg5OTljNS0z
+        N2IwLTQ2Y2YtYWZkNC00ZDljNjhjYzM1OWIqtQIKDAjwtvvPBhDwq6DQBioJCgc2MjE2MTc5MAI4
+        B0IeChwKGmh0dHBzOi8vd3d3LmJpZ2JsdWVidXMuY29tUk8KTQpLUmlkZSBmcmVlIG9uIEJCQiB3
+        aXRoIGEgYmlrZSBvciBoZWxtZXQgb24gQmlrZSBBbnl3aGVyZSBEYXksIE1heSAxNSwgMjAyNi4g
+        WqQBCqEBCp4BQmlnIEJsdWUgQmlzIHJpZGVycyBib2FyZGluZyB3aXRoIGEgYmlrZSBvciBoZWxt
+        ZXQgY2FuIGVuam95IEZSRUUgcmlkZXMgb24gTWF5IDE1LCAyMDI2LCBpbiBjZWxlYnJhdGlvbiBv
+        ZiBCaWtlIEFueXdoZXJlIERheSEgTGVhcm4gbW9yZSBhdCB3d3cuYmlnYmx1ZWJ1cy5jb20S3wIK
+        JDE2NzkxYmZkLWU0MDctNGM5Ni1hMjYzLWMwMWJkNGU1OWE4NSq2AgoMCMDG/s4GEPCBqNIGKgMS
+        ATcwCjgHQiwKKgooaHR0cHM6Ly93d3cuYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JCCkAK
+        PlJvYWR3b3JrIG9uIFBpY28gQmx2ZC4gYmV0d2VlbiBQYXRyaWNpYSBBdmUuICYgU2VwdWx2ZWRh
+        IEJsdmQuWqoBCqcBCqQBU2VydmljZSBvbiBTYW50YSBNb25pY2EgQmx2ZC4gYmV0d2VlbiBQYXRy
+        aWNpYSBhbmQgU2VwdWx2ZWRhIG1heSBiZSBpbXBhY3RlZCBkdWUgdG8gb25nb2luZyByb2Fkd29y
+        ay4gUGxhbiBhaGVhZCBhbmQgdmlzaXQgYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0cyBmb3Ig
+        dXBkYXRlcy4S4QIKJDRlM2E0YzY2LTI5YzktNDUzNy1iYjljLWMzOWJiODNiMWJjYSq4AgoMCMzZ
+        7M0GEPCPsdMGKgMSATEqBRIDUjEwMAo4B0IsCioKKGh0dHBzOi8vd3d3LmJpZ2JsdWVidXMuY29t
+        L3NlcnZpY2VhbGVydHNSQQo/Cj1Sb2Fkd29yayBvbiBTYW50YSBNb25pY2EgQmx2ZC4gYmV0d2Vl
+        biBCdW5keSAmIFNhd3RlbGxlIEJsdmQuWqYBCqMBCqABU2VydmljZSBvbiBTYW50YSBNb25pY2Eg
+        Qmx2ZC4gYmV0d2VlbiBCdW5keSBhbmQgU2F3dGVsbGUgbWF5IGJlIGltcGFjdGVkIGR1ZSB0byBv
+        bmdvaW5nIHJvYWR3b3JrLiBQbGFuIGFoZWFkIGFuZCB2aXNpdCBiaWdibHVlYnVzLmNvbS9zZXJ2
+        aWNlYWxlcnRzIGZvciB1cGRhdGVzLhKzAwokYmUyZGY3MjUtNDI1MS00N2M0LTlhZjAtMmI1NjUx
+        YmYwY2FjKooDCgYI9JbSzQYqCBIBMioDNDAxKgkSAjE4KgM0MDEwCjgJQiwKKgooaHR0cHM6Ly93
+        d3cuYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JDCkEKP1JvdXRlcyAyICYgMTg6IFN0b3Ag
+        Q2xvc3VyZSBvbiBXQiBXaWxzaGlyZSBCbHZkLiAmIEJvbnNhbGwgQXZlLlrzAQrwAQrtAVJvdXRl
+        cyAyICYgMTggc3RvcCBsb2NhdGVkIG9uIFdCIFdpbHNoaXJlIEJsdmQuIGF0IEJvbnNhbGwgQXZl
+        LiB3aWxsIGJlIGNsb3NlZCB1bnRpbCBmdXJ0aGVyIG5vdGljZSwgZHVlIHRvIGNvbnN0cnVjdGlv
+        bi4gUGxlYXNlIGJvYXJkIGF0IHRoZSB0ZW1wb3Jhcnkgc3RvcCBhcHByb3guMTAwIGZ0LiB3ZXN0
+        IGluc3RlYWQu4oCvRm9yIGRldGFpbHMsIHZpc2l0OiBiaWdibHVlYnVzLmNvbS9zZXJ2aWNlYWxl
+        cnRzIBKxAwokMmMzZmIxNDEtODViZS00ZjZiLTg2NzgtMTNmNmQ2NDEzYjg1KogDCgYI3PedzQYq
+        CBIBMSoDNTEwMAo4CUIoCiYKJGh0dHBzOi8vYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JE
+        CkIKQFJvdXRlIDE6IFN0b3AgQ2xvc3VyZSBvbiBFQiBTYW50YSBNb25pY2EgQmx2ZC4gJiBCYXJy
+        aW5ndG9uIEF2ZS5a/wEK/AEK+QFUaGUgUm91dGUgMSBidXMgc3RvcCBsb2NhdGVkIG9uIEVCIFNh
+        bnRhIE1vbmljYSBCbHZkLiBhdCBCYXJyaW5ndG9uIEF2ZS4gd2lsbCBiZSB0ZW1wb3JhcmlseSBj
+        bG9zZWQgdW50aWwgZnVydGhlciBub3RpY2UsIGR1ZSB0byByb2FkIHdvcmsuIOKAr1BsZWFzZSB1
+        c2UgdGhlIHRlbXBvcmFyeSBzdG9wIGF0IEVCIFNhbnRhIE1vbmljYSBCbHZkLiAmIEJhcnJpbmd0
+        b24gQXZlLiAoYWZ0ZXIgdGhlIGludGVyc2VjdGlvbikgaW5zdGVhZC4SiAQKJDg5ZTEyMjM5LTEw
+        MmQtNGM4Yi1iMjU2LWE3ZWY5OTRiNTEyYirfAwoMCKjbvcwGEPCV6tAGKggSAjE3KgI3MSoJEgNS
+        MTIqAjcxMAo4CUIsCioKKGh0dHBzOi8vd3d3LmJpZ2JsdWVidXMuY29tL3NlcnZpY2VhbGVydHNS
+        UApOCkxSYXBpZCAxMiAmIFJvdXRlIDE3OiBTdG9wIENsb3N1cmUgb24gU0IgV2VzdHdvb2QgUGxh
+        emEgJiBVQ0xBIE1lZGljYWwgQ2VudGVyWrUCCrICCq8CVGhlIFJhcGlkIDEyIGFuZCBSb3V0ZSAx
+        NyBzdG9wIGxvY2F0ZWQgb24gU0IgV2VzdHdvb2QgUGxhemEgYXQgVUNMQSBNZWRpY2FsIENlbnRl
+        ciB3aWxsIGJlIHRlbXBvcmFyaWx5IGNsb3NlZCBiZWdpbm5pbmcgTW9uZGF5LCBGZWJydWFyeSAx
+        NiwgdW50aWwgZnVydGhlciBub3RpY2UsIGR1ZSB0byBjb25zdHJ1Y3Rpb24u4oCvUGxlYXNlIGJv
+        YXJkIGF0IHRoZSB0ZW1wb3Jhcnkgc3RvcCBhcHByb3guIDIwMCBmdC4gbm9ydGggaW5zdGVhZC7i
+        gK9Gb3IgZGV0YWlscywgdmlzaXQ6IGJpZ2JsdWVidXMuY29tL3NlcnZpY2VhbGVydHMu
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '3243'
+      Content-Type:
+      - text/plain
+      Date:
+      - Wed, 06 May 2026 04:39:18 GMT
+      ETag:
+      - CPSZ2fXro5QDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Wed, 06 May 2026 04:39:10 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEiJHGf9FUx9wYm7OXoJBNXBN4P6w-fonD_YfhXU4NzgQU9VcWG8xyfZVeR2ZbkP-Oh9
+      X-Goog-Generation:
+      - '1778042350750964'
+      X-Goog-Hash:
+      - crc32c=6skPTw==,md5=w+h3W5iia+bs+/0ngIGCbw==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '3243'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/1c4abc07-36e0-42c6-a5bd-b90240050047
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt%3D2026-05-01%2Fhour%3D2026-05-01T00%3A00%3A00%2B00%3A00%2Fts%3D2026-05-01T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg%3D%3D%2Ffeed?prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/service_alerts/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/ts=2026-05-01T00:00:00+00:00/base64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==/feed/1778042350750964","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fts=2026-05-01T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==%2Ffeed","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fts=2026-05-01T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==%2Ffeed?generation=1778042350750964&alt=media","name":"service_alerts/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/ts=2026-05-01T00:00:00+00:00/base64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==/feed","bucket":"calitp-staging-pytest","generation":"1778042350750964","metageneration":"1","contentType":"text/plain","storageClass":"STANDARD","size":"3243","md5Hash":"w+h3W5iia+bs+/0ngIGCbw==","crc32c":"6skPTw==","etag":"CPSZ2fXro5QDEAE=","timeCreated":"2026-05-06T04:39:10.760Z","updated":"2026-05-06T04:39:10.760Z","timeStorageClassUpdated":"2026-05-06T04:39:10.760Z","timeFinalized":"2026-05-06T04:39:10.760Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":\"feed\",\"ts\":\"2026-05-01T00:00:00+00:00\",\"config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"extracted_at\":\"2026-04-30T03:00:00+00:00\",\"feed_type\":\"service_alerts\",\"name\":\"Big
+        Blue Bus Alerts\",\"schedule_url_for_validation\":\"https://www.bigbluebus.com/gtfs/current.zip\",\"url\":\"http://gtfs.bigbluebus.com/alerts.bin\"},\"response_code\":200,\"response_headers\":{\"Etag\":\"W/\\\"33f2f157fdd8dc1:0\\\"\",\"Last-Modified\":\"Thu,
+        30 Apr 2026 23:59:12 GMT\",\"Content-Type\":\"application/octet-stream\",\"Content-Length\":\"3243\",\"Cache-Control\":\"max-age=1,
+        public\",\"Expires\":\"Fri, 01 May 2026 00:00:01 GMT\",\"Date\":\"Fri, 01
+        May 2026 00:00:00 GMT\",\"Set-Cookie\":\"visid_incap_3100510=gCQQgTAxQB6FYDvzr3I4KADt82kAAAAAQUIPAAAAAABwXYZSgt/TAhxgv8UhGn8g;
+        expires=Fri, 30 Apr 2027 06:20:18 GMT; HttpOnly; path=/; Domain=.bigbluebus.com,
+        incap_ses_102_3100510=ibA1XHJi22nKwzFspGBqAQDt82kAAAAAL+Ojsz2yTHBaVT2OW2NU4A==;
+        path=/; Domain=.bigbluebus.com\",\"X-CDN\":\"Imperva\",\"X-Iinfo\":\"45-185730431-0
+        0cNN RT(1777593601659 0) q(0 -1 -1 0) r(0 -1)\"}}"}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '2521'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 06 May 2026 04:39:19 GMT
+      ETag:
+      - CPSZ2fXro5QDEAE=
+      Expires:
+      - Wed, 06 May 2026 04:39:19 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEjLlIc2_EUBMTaKM7rHwu8Nk30K8j4fbfKK2AdUueJGlt9ZjavIjNBIcZhUDlFhuqsP
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/287483a8-7a5a-4532-87ee-a7f7bb6d75a8
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt%3D2026-05-01%2Fhour%3D2026-05-01T00%3A00%3A00%2B00%3A00%2Fts%3D2026-05-01T00%3A00%3A20%2B00%3A00%2Fbase64_url%3DaHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg%3D%3D%2Ffeed?alt=media
+  response:
+    body:
+      string: !!binary |
+        Cg0KAzIuMBAAGOPZz88GEq4CCiRjMzVkZDg5Zi04YWYyLTQxNTUtYWRhYy0yZjI1ZjAwMmFlOWUq
+        hQIKDAjIpb7PBhDwtvvPBioJCgc2MjE2MTc5MAI4B0IeChwKGmh0dHBzOi8vd3d3LmJpZ2JsdWVi
+        dXMuY29tUkAKPgo8U3R1ZGVudHMgUmlkZSBCQkIgRnJlZSBEdXJpbmcgQmlrZSBJdCwgV2FsayBJ
+        dCwgQnVzIEl0IFdlZWshWoMBCoABCn5TdHVkZW50cyBjYW4gcmlkZSBCaWcgQmx1ZSBCdXMgZm9y
+        IGZyZWUgZHVyaW5nIEJpa2UgSXQsIFdhbGsgSXQsIEJ1cyBJdCBXZWVrLCBNYXkgNC04LCAyMDI2
+        LiBMZWFybiBtb3JlIGF0IHd3dy5iaWdibHVlYnVzLmNvbS4SzAMKJDY5MWE0YzJiLWU2NjAtNGRm
+        ZC05OGM5LTQ5OGYwMzhhMjRiMCqjAwoMCMC8v88GEMDS3s8GKgMSATEqAxIBMioDEgE4KgMSATkq
+        BBICNDMwAjgEQiwKKgooaHR0cHM6Ly93d3cuYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JG
+        CkQKQlJvdXRlcyAxLCAyLCA4LCA5LCAmIDQzOiBEZXRvdXIgb24gTWFpbiBTdC4gaW4gU2FudGEg
+        TW9uaWNhIG9uIDUvM1r+AQr7AQr4AVJvdXRlcyAxLCAyLCA4LCA5LCBhbmQgNDMgd2lsbCBiZSBv
+        biBkZXRvdXIgaW4gU2FudGEgTW9uaWNhIG9uIFNhdHVyZGF5LCBPY3RvYmVyIDExLCBiZXR3ZWVu
+        IDQ6MzAgYS5tLiBhbmQgYXBwcm94aW1hdGVseSAxMjozMCBwLm0uLCBkdWUgdG8gdGhlIEphbmUn
+        cyBNaWxlIFJ1bi4gRm9yIHN0b3BzIG1pc3NlZCBhbmQgYWx0ZXJuYXRlIGJvYXJkaW5nIGxvY2F0
+        aW9ucywgdmlzaXQ6IGJpZ2JsdWVidXMuY29tL3NlcnZpY2VhbGVydHMuEt4CCiRjODg5OTljNS0z
+        N2IwLTQ2Y2YtYWZkNC00ZDljNjhjYzM1OWIqtQIKDAjwtvvPBhDwq6DQBioJCgc2MjE2MTc5MAI4
+        B0IeChwKGmh0dHBzOi8vd3d3LmJpZ2JsdWVidXMuY29tUk8KTQpLUmlkZSBmcmVlIG9uIEJCQiB3
+        aXRoIGEgYmlrZSBvciBoZWxtZXQgb24gQmlrZSBBbnl3aGVyZSBEYXksIE1heSAxNSwgMjAyNi4g
+        WqQBCqEBCp4BQmlnIEJsdWUgQmlzIHJpZGVycyBib2FyZGluZyB3aXRoIGEgYmlrZSBvciBoZWxt
+        ZXQgY2FuIGVuam95IEZSRUUgcmlkZXMgb24gTWF5IDE1LCAyMDI2LCBpbiBjZWxlYnJhdGlvbiBv
+        ZiBCaWtlIEFueXdoZXJlIERheSEgTGVhcm4gbW9yZSBhdCB3d3cuYmlnYmx1ZWJ1cy5jb20S3wIK
+        JDE2NzkxYmZkLWU0MDctNGM5Ni1hMjYzLWMwMWJkNGU1OWE4NSq2AgoMCMDG/s4GEPCBqNIGKgMS
+        ATcwCjgHQiwKKgooaHR0cHM6Ly93d3cuYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JCCkAK
+        PlJvYWR3b3JrIG9uIFBpY28gQmx2ZC4gYmV0d2VlbiBQYXRyaWNpYSBBdmUuICYgU2VwdWx2ZWRh
+        IEJsdmQuWqoBCqcBCqQBU2VydmljZSBvbiBTYW50YSBNb25pY2EgQmx2ZC4gYmV0d2VlbiBQYXRy
+        aWNpYSBhbmQgU2VwdWx2ZWRhIG1heSBiZSBpbXBhY3RlZCBkdWUgdG8gb25nb2luZyByb2Fkd29y
+        ay4gUGxhbiBhaGVhZCBhbmQgdmlzaXQgYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0cyBmb3Ig
+        dXBkYXRlcy4S4QIKJDRlM2E0YzY2LTI5YzktNDUzNy1iYjljLWMzOWJiODNiMWJjYSq4AgoMCMzZ
+        7M0GEPCPsdMGKgMSATEqBRIDUjEwMAo4B0IsCioKKGh0dHBzOi8vd3d3LmJpZ2JsdWVidXMuY29t
+        L3NlcnZpY2VhbGVydHNSQQo/Cj1Sb2Fkd29yayBvbiBTYW50YSBNb25pY2EgQmx2ZC4gYmV0d2Vl
+        biBCdW5keSAmIFNhd3RlbGxlIEJsdmQuWqYBCqMBCqABU2VydmljZSBvbiBTYW50YSBNb25pY2Eg
+        Qmx2ZC4gYmV0d2VlbiBCdW5keSBhbmQgU2F3dGVsbGUgbWF5IGJlIGltcGFjdGVkIGR1ZSB0byBv
+        bmdvaW5nIHJvYWR3b3JrLiBQbGFuIGFoZWFkIGFuZCB2aXNpdCBiaWdibHVlYnVzLmNvbS9zZXJ2
+        aWNlYWxlcnRzIGZvciB1cGRhdGVzLhKzAwokYmUyZGY3MjUtNDI1MS00N2M0LTlhZjAtMmI1NjUx
+        YmYwY2FjKooDCgYI9JbSzQYqCBIBMioDNDAxKgkSAjE4KgM0MDEwCjgJQiwKKgooaHR0cHM6Ly93
+        d3cuYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JDCkEKP1JvdXRlcyAyICYgMTg6IFN0b3Ag
+        Q2xvc3VyZSBvbiBXQiBXaWxzaGlyZSBCbHZkLiAmIEJvbnNhbGwgQXZlLlrzAQrwAQrtAVJvdXRl
+        cyAyICYgMTggc3RvcCBsb2NhdGVkIG9uIFdCIFdpbHNoaXJlIEJsdmQuIGF0IEJvbnNhbGwgQXZl
+        LiB3aWxsIGJlIGNsb3NlZCB1bnRpbCBmdXJ0aGVyIG5vdGljZSwgZHVlIHRvIGNvbnN0cnVjdGlv
+        bi4gUGxlYXNlIGJvYXJkIGF0IHRoZSB0ZW1wb3Jhcnkgc3RvcCBhcHByb3guMTAwIGZ0LiB3ZXN0
+        IGluc3RlYWQu4oCvRm9yIGRldGFpbHMsIHZpc2l0OiBiaWdibHVlYnVzLmNvbS9zZXJ2aWNlYWxl
+        cnRzIBKxAwokMmMzZmIxNDEtODViZS00ZjZiLTg2NzgtMTNmNmQ2NDEzYjg1KogDCgYI3PedzQYq
+        CBIBMSoDNTEwMAo4CUIoCiYKJGh0dHBzOi8vYmlnYmx1ZWJ1cy5jb20vc2VydmljZWFsZXJ0c1JE
+        CkIKQFJvdXRlIDE6IFN0b3AgQ2xvc3VyZSBvbiBFQiBTYW50YSBNb25pY2EgQmx2ZC4gJiBCYXJy
+        aW5ndG9uIEF2ZS5a/wEK/AEK+QFUaGUgUm91dGUgMSBidXMgc3RvcCBsb2NhdGVkIG9uIEVCIFNh
+        bnRhIE1vbmljYSBCbHZkLiBhdCBCYXJyaW5ndG9uIEF2ZS4gd2lsbCBiZSB0ZW1wb3JhcmlseSBj
+        bG9zZWQgdW50aWwgZnVydGhlciBub3RpY2UsIGR1ZSB0byByb2FkIHdvcmsuIOKAr1BsZWFzZSB1
+        c2UgdGhlIHRlbXBvcmFyeSBzdG9wIGF0IEVCIFNhbnRhIE1vbmljYSBCbHZkLiAmIEJhcnJpbmd0
+        b24gQXZlLiAoYWZ0ZXIgdGhlIGludGVyc2VjdGlvbikgaW5zdGVhZC4SiAQKJDg5ZTEyMjM5LTEw
+        MmQtNGM4Yi1iMjU2LWE3ZWY5OTRiNTEyYirfAwoMCKjbvcwGEPCV6tAGKggSAjE3KgI3MSoJEgNS
+        MTIqAjcxMAo4CUIsCioKKGh0dHBzOi8vd3d3LmJpZ2JsdWVidXMuY29tL3NlcnZpY2VhbGVydHNS
+        UApOCkxSYXBpZCAxMiAmIFJvdXRlIDE3OiBTdG9wIENsb3N1cmUgb24gU0IgV2VzdHdvb2QgUGxh
+        emEgJiBVQ0xBIE1lZGljYWwgQ2VudGVyWrUCCrICCq8CVGhlIFJhcGlkIDEyIGFuZCBSb3V0ZSAx
+        NyBzdG9wIGxvY2F0ZWQgb24gU0IgV2VzdHdvb2QgUGxhemEgYXQgVUNMQSBNZWRpY2FsIENlbnRl
+        ciB3aWxsIGJlIHRlbXBvcmFyaWx5IGNsb3NlZCBiZWdpbm5pbmcgTW9uZGF5LCBGZWJydWFyeSAx
+        NiwgdW50aWwgZnVydGhlciBub3RpY2UsIGR1ZSB0byBjb25zdHJ1Y3Rpb24u4oCvUGxlYXNlIGJv
+        YXJkIGF0IHRoZSB0ZW1wb3Jhcnkgc3RvcCBhcHByb3guIDIwMCBmdC4gbm9ydGggaW5zdGVhZC7i
+        gK9Gb3IgZGV0YWlscywgdmlzaXQ6IGJpZ2JsdWVidXMuY29tL3NlcnZpY2VhbGVydHMu
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '3243'
+      Content-Type:
+      - text/plain
+      Date:
+      - Wed, 06 May 2026 04:39:20 GMT
+      ETag:
+      - COm2hfbro5QDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Wed, 06 May 2026 04:39:11 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEi2stDmO49dAiK1jEgZdIQd3gJF2skm52K4R_w6uveMt2vOzddIp0Auz_TxPiymNznX
+      X-Goog-Generation:
+      - '1778042351475561'
+      X-Goog-Hash:
+      - crc32c=HmJEJg==,md5=bWe/HolwWnVEiKjamnDSUA==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '3243'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/52fb0da3-13c2-41f4-b9e5-84e543b78911
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt%3D2026-05-01%2Fhour%3D2026-05-01T00%3A00%3A00%2B00%3A00%2Fts%3D2026-05-01T00%3A00%3A20%2B00%3A00%2Fbase64_url%3DaHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg%3D%3D%2Ffeed?prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/service_alerts/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/ts=2026-05-01T00:00:20+00:00/base64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==/feed/1778042351475561","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fts=2026-05-01T00:00:20%2B00:00%2Fbase64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==%2Ffeed","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fts=2026-05-01T00:00:20%2B00:00%2Fbase64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==%2Ffeed?generation=1778042351475561&alt=media","name":"service_alerts/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/ts=2026-05-01T00:00:20+00:00/base64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==/feed","bucket":"calitp-staging-pytest","generation":"1778042351475561","metageneration":"1","contentType":"text/plain","storageClass":"STANDARD","size":"3243","md5Hash":"bWe/HolwWnVEiKjamnDSUA==","crc32c":"HmJEJg==","etag":"COm2hfbro5QDEAE=","timeCreated":"2026-05-06T04:39:11.484Z","updated":"2026-05-06T04:39:11.484Z","timeStorageClassUpdated":"2026-05-06T04:39:11.484Z","timeFinalized":"2026-05-06T04:39:11.484Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":\"feed\",\"ts\":\"2026-05-01T00:00:20+00:00\",\"config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"extracted_at\":\"2026-04-30T03:00:00+00:00\",\"feed_type\":\"service_alerts\",\"name\":\"Big
+        Blue Bus Alerts\",\"schedule_url_for_validation\":\"https://www.bigbluebus.com/gtfs/current.zip\",\"url\":\"http://gtfs.bigbluebus.com/alerts.bin\"},\"response_code\":200,\"response_headers\":{\"Etag\":\"W/\\\"dcab3a63fdd8dc1:0\\\"\",\"Last-Modified\":\"Thu,
+        30 Apr 2026 23:59:31 GMT\",\"Content-Type\":\"application/octet-stream\",\"Content-Length\":\"3243\",\"Cache-Control\":\"max-age=1,
+        public\",\"Expires\":\"Fri, 01 May 2026 00:00:21 GMT\",\"Date\":\"Fri, 01
+        May 2026 00:00:20 GMT\",\"Set-Cookie\":\"visid_incap_3100510=vTzzF91uSDa76LYpQzbDlhTt82kAAAAAQUIPAAAAAABhjBZO2tbDIkBUZDpoZkzC;
+        expires=Fri, 30 Apr 2027 06:47:07 GMT; HttpOnly; path=/; Domain=.bigbluebus.com,
+        incap_ses_92_3100510=pel8dmNG3ThEro6vr9lGARTt82kAAAAAl79iOoA9SMw5l44sknDtjg==;
+        path=/; Domain=.bigbluebus.com\",\"X-CDN\":\"Imperva\",\"X-Iinfo\":\"45-210525617-0
+        0cNN RT(1777593621033 0) q(0 -1 -1 0) r(1 -1)\"}}"}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '2520'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 06 May 2026 04:39:21 GMT
+      ETag:
+      - COm2hfbro5QDEAE=
+      Expires:
+      - Wed, 06 May 2026 04:39:21 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEhZKD2_XbS8cEw70ncO9FbefcRv8saBl65R0RvoHYWcDC_BG6bzskZFj_lppA8hVUlG
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!binary |
+      LS09PT09PT09PT09PT09PT0xODY5Mjg4MTQ1MjU4MDkzNTc1PT0NCmNvbnRlbnQtdHlwZTogYXBw
+      bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAic2VydmljZV9hbGVydHMv
+      ZHQ9MjAyNi0wNS0wMS9ob3VyPTIwMjYtMDUtMDFUMDA6MDA6MDArMDA6MDAvYmFzZTY0X3VybD1h
+      SFIwY0RvdkwyZDBabk11WW1sbllteDFaV0oxY3k1amIyMHZZV3hsY25SekxtSnBiZz09L3NlcnZp
+      Y2VfYWxlcnRzX2FIUjBjRG92TDJkMFpuTXVZbWxuWW14MVpXSjFjeTVqYjIwdllXeGxjblJ6TG1K
+      cGJnPT0uanNvbmwuZ3oiLCAiY3JjMzJjIjogIksxVEZydz09In0NCi0tPT09PT09PT09PT09PT09
+      MTg2OTI4ODE0NTI1ODA5MzU3NT09DQpjb250ZW50LXR5cGU6IGFwcGxpY2F0aW9uL2pzb25sDQoN
+      Ch+LCAD6xfppAv/tmtty4zYShu/zFIgudpOKKJPgWXeWLddOahy7JDlzkWypQLBpYYciFRC0orj8
+      7mmQkk/yOLRnszvjgmvKYxFAN0798QfU170FsBRkb3jdu1RZNQGWK7GEn0FWoix6wx4d2L1+TxRc
+      whIKxXKhNvj45OL9+/nx4exwOp5huW5TKbZcYZEThqEfu75Pezf93hIUS5li2gP8riTjaq4qbdim
+      gWX7lu3MbHvY/Puh+Y3mdhV5WWTiUjdltVrM275i42s03Dz5rQa5ma+YZMvtY14uV7WCtDfMWF7B
+      rS1I50zduvUs157Z7iO3GWAttVkB1qtAXgkOc5aDxP72ewVb6ucjcUlGeQ1kVFfkcFdY8QWkdQ7z
+      WubzrJTzK5woHHY7hwulVtXw4GC9Xg8ScZlg86SuBtjVAz3pB7yWEud28IdYoS00sW2DTXT54zZt
+      l/Bp0bvBEQsca4+7fppGcWZFLKOW5/i+hdPOLZpRP7NtyiAGtN00beaTK3EF5yBFic1/ue7h6umS
+      ZvVcO3KDZh2KtH0UuY6NP72bf+u9gANcQjouVLMXsDG7hIJv3unKAXUCJ4ybmpzVlZ6zs9m/xpP5
+      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
+      NDUyNTgwOTM1NzU9PS0t
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '2295'
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/1087fc27-9e35-4423-b95c-76ef3c944436
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0xODY5Mjg4MTQ1MjU4
+        MDkzNTc1PT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/jsonl
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest-parsed/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest-parsed/service_alerts/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/base64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==/service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl.gz/1778042362475226\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest-parsed/o/service_alerts%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==%2Fservice_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl.gz\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest-parsed/o/service_alerts%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fbase64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==%2Fservice_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl.gz?generation=1778042362475226&alt=media\",\n
+        \ \"name\": \"service_alerts/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/base64_url=aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==/service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl.gz\",\n
+        \ \"bucket\": \"calitp-staging-pytest-parsed\",\n  \"generation\": \"1778042362475226\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"1853\",\n  \"md5Hash\": \"YKAqnSeuVMnUrBKaiszT6w==\",\n
+        \ \"crc32c\": \"K1TFrw==\",\n  \"etag\": \"CNrlpPvro5QDEAE=\",\n  \"timeCreated\":
+        \"2026-05-06T04:39:22.484Z\",\n  \"updated\": \"2026-05-06T04:39:22.484Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-05-06T04:39:22.484Z\",\n  \"timeFinalized\":
+        \"2026-05-06T04:39:22.484Z\"\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1629'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 06 May 2026 04:39:22 GMT
+      ETag:
+      - CNrlpPvro5QDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEhSbjVpxQSWwASHwjbwwaTv0GoHxujXOiloO01KS9h6D125-rDS38SVX2_jjm8qP9NWZdI1kkA
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "--===============1763099767746033897==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"service_alerts_outcomes/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl\",
+      \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"feed_type\\\":\\\"service_alerts\\\",\\\"filename\\\":\\\"service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl\\\",\\\"step\\\":\\\"parse\\\",\\\"hour\\\":\\\"2026-05-01T00:00:00+00:00\\\"}\"},
+      \"crc32c\": \"Rscvcg==\"}\r\n--===============1763099767746033897==\r\ncontent-type:
+      application/jsonl\r\n\r\n{\"step\":\"parse\",\"success\":true,\"header\":{\"gtfsrealtimeversion\":\"2.0\",\"incrementality\":\"FULL_DATASET\",\"timestamp\":\"1777593552\"},\"exception\":null,\"blob_path\":null,\"aggregation\":{\"step\":\"parse\",\"filename\":\"service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl.gz\",\"first_extract\":{\"filename\":\"feed\",\"ts\":\"2026-05-01T00:00:00+00:00\",\"config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"extracted_at\":\"2026-04-30T03:00:00+00:00\",\"feed_type\":\"service_alerts\",\"name\":\"Big
+      Blue Bus Alerts\",\"schedule_url_for_validation\":\"https://www.bigbluebus.com/gtfs/current.zip\",\"url\":\"http://gtfs.bigbluebus.com/alerts.bin\"},\"response_code\":200,\"response_headers\":{\"etag\":\"W/\\\"33f2f157fdd8dc1:0\\\"\",\"last_modified\":\"Thu,
+      30 Apr 2026 23:59:12 GMT\",\"content_type\":\"application/octet-stream\",\"content_length\":\"3243\",\"cache_control\":\"max-age=1,
+      public\",\"expires\":\"Fri, 01 May 2026 00:00:01 GMT\",\"date\":\"Fri, 01 May
+      2026 00:00:00 GMT\",\"set_cookie\":\"visid_incap_3100510=gCQQgTAxQB6FYDvzr3I4KADt82kAAAAAQUIPAAAAAABwXYZSgt/TAhxgv8UhGn8g;
+      expires=Fri, 30 Apr 2027 06:20:18 GMT; HttpOnly; path=/; Domain=.bigbluebus.com,
+      incap_ses_102_3100510=ibA1XHJi22nKwzFspGBqAQDt82kAAAAAL+Ojsz2yTHBaVT2OW2NU4A==;
+      path=/; Domain=.bigbluebus.com\",\"x_cdn\":\"Imperva\",\"x_iinfo\":\"45-185730431-0
+      0cNN RT(1777593601659 0) q(0 -1 -1 0) r(0 -1)\"}}},\"extract\":{\"filename\":\"feed\",\"ts\":\"2026-05-01T00:00:00+00:00\",\"config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"extracted_at\":\"2026-04-30T03:00:00+00:00\",\"feed_type\":\"service_alerts\",\"name\":\"Big
+      Blue Bus Alerts\",\"schedule_url_for_validation\":\"https://www.bigbluebus.com/gtfs/current.zip\",\"url\":\"http://gtfs.bigbluebus.com/alerts.bin\"},\"response_code\":200,\"response_headers\":{\"etag\":\"W/\\\"33f2f157fdd8dc1:0\\\"\",\"last_modified\":\"Thu,
+      30 Apr 2026 23:59:12 GMT\",\"content_type\":\"application/octet-stream\",\"content_length\":\"3243\",\"cache_control\":\"max-age=1,
+      public\",\"expires\":\"Fri, 01 May 2026 00:00:01 GMT\",\"date\":\"Fri, 01 May
+      2026 00:00:00 GMT\",\"set_cookie\":\"visid_incap_3100510=gCQQgTAxQB6FYDvzr3I4KADt82kAAAAAQUIPAAAAAABwXYZSgt/TAhxgv8UhGn8g;
+      expires=Fri, 30 Apr 2027 06:20:18 GMT; HttpOnly; path=/; Domain=.bigbluebus.com,
+      incap_ses_102_3100510=ibA1XHJi22nKwzFspGBqAQDt82kAAAAAL+Ojsz2yTHBaVT2OW2NU4A==;
+      path=/; Domain=.bigbluebus.com\",\"x_cdn\":\"Imperva\",\"x_iinfo\":\"45-185730431-0
+      0cNN RT(1777593601659 0) q(0 -1 -1 0) r(0 -1)\"}},\"process_stderr\":null}\n{\"step\":\"parse\",\"success\":true,\"header\":{\"gtfsrealtimeversion\":\"2.0\",\"incrementality\":\"FULL_DATASET\",\"timestamp\":\"1777593571\"},\"exception\":null,\"blob_path\":null,\"aggregation\":{\"step\":\"parse\",\"filename\":\"service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl.gz\",\"first_extract\":{\"filename\":\"feed\",\"ts\":\"2026-05-01T00:00:00+00:00\",\"config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"extracted_at\":\"2026-04-30T03:00:00+00:00\",\"feed_type\":\"service_alerts\",\"name\":\"Big
+      Blue Bus Alerts\",\"schedule_url_for_validation\":\"https://www.bigbluebus.com/gtfs/current.zip\",\"url\":\"http://gtfs.bigbluebus.com/alerts.bin\"},\"response_code\":200,\"response_headers\":{\"etag\":\"W/\\\"33f2f157fdd8dc1:0\\\"\",\"last_modified\":\"Thu,
+      30 Apr 2026 23:59:12 GMT\",\"content_type\":\"application/octet-stream\",\"content_length\":\"3243\",\"cache_control\":\"max-age=1,
+      public\",\"expires\":\"Fri, 01 May 2026 00:00:01 GMT\",\"date\":\"Fri, 01 May
+      2026 00:00:00 GMT\",\"set_cookie\":\"visid_incap_3100510=gCQQgTAxQB6FYDvzr3I4KADt82kAAAAAQUIPAAAAAABwXYZSgt/TAhxgv8UhGn8g;
+      expires=Fri, 30 Apr 2027 06:20:18 GMT; HttpOnly; path=/; Domain=.bigbluebus.com,
+      incap_ses_102_3100510=ibA1XHJi22nKwzFspGBqAQDt82kAAAAAL+Ojsz2yTHBaVT2OW2NU4A==;
+      path=/; Domain=.bigbluebus.com\",\"x_cdn\":\"Imperva\",\"x_iinfo\":\"45-185730431-0
+      0cNN RT(1777593601659 0) q(0 -1 -1 0) r(0 -1)\"}}},\"extract\":{\"filename\":\"feed\",\"ts\":\"2026-05-01T00:00:20+00:00\",\"config\":{\"auth_headers\":{},\"auth_query_params\":{},\"computed\":false,\"extracted_at\":\"2026-04-30T03:00:00+00:00\",\"feed_type\":\"service_alerts\",\"name\":\"Big
+      Blue Bus Alerts\",\"schedule_url_for_validation\":\"https://www.bigbluebus.com/gtfs/current.zip\",\"url\":\"http://gtfs.bigbluebus.com/alerts.bin\"},\"response_code\":200,\"response_headers\":{\"etag\":\"W/\\\"dcab3a63fdd8dc1:0\\\"\",\"last_modified\":\"Thu,
+      30 Apr 2026 23:59:31 GMT\",\"content_type\":\"application/octet-stream\",\"content_length\":\"3243\",\"cache_control\":\"max-age=1,
+      public\",\"expires\":\"Fri, 01 May 2026 00:00:21 GMT\",\"date\":\"Fri, 01 May
+      2026 00:00:20 GMT\",\"set_cookie\":\"visid_incap_3100510=vTzzF91uSDa76LYpQzbDlhTt82kAAAAAQUIPAAAAAABhjBZO2tbDIkBUZDpoZkzC;
+      expires=Fri, 30 Apr 2027 06:47:07 GMT; HttpOnly; path=/; Domain=.bigbluebus.com,
+      incap_ses_92_3100510=pel8dmNG3ThEro6vr9lGARTt82kAAAAAl79iOoA9SMw5l44sknDtjg==;
+      path=/; Domain=.bigbluebus.com\",\"x_cdn\":\"Imperva\",\"x_iinfo\":\"45-210525617-0
+      0cNN RT(1777593621033 0) q(0 -1 -1 0) r(1 -1)\"}},\"process_stderr\":null}\r\n--===============1763099767746033897==--"
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '5414'
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/6dae3ff0-0fe9-4dd1-b9a0-a5f7d5f07a34
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0xNzYzMDk5NzY3NzQ2
+        MDMzODk3PT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/jsonl
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest-parsed/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest-parsed/service_alerts_outcomes/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl/1778042363519293\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest-parsed/o/service_alerts_outcomes%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fservice_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest-parsed/o/service_alerts_outcomes%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fservice_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl?generation=1778042363519293&alt=media\",\n
+        \ \"name\": \"service_alerts_outcomes/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl\",\n
+        \ \"bucket\": \"calitp-staging-pytest-parsed\",\n  \"generation\": \"1778042363519293\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"4796\",\n  \"md5Hash\": \"jw3CFJtOS7mCGUgWkJTpYg==\",\n
+        \ \"crc32c\": \"Rscvcg==\",\n  \"etag\": \"CL3C5Pvro5QDEAE=\",\n  \"timeCreated\":
+        \"2026-05-06T04:39:23.528Z\",\n  \"updated\": \"2026-05-06T04:39:23.528Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-05-06T04:39:23.528Z\",\n  \"timeFinalized\":
+        \"2026-05-06T04:39:23.528Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \"{\\\"feed_type\\\":\\\"service_alerts\\\",\\\"filename\\\":\\\"service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl\\\",\\\"step\\\":\\\"parse\\\",\\\"hour\\\":\\\"2026-05-01T00:00:00+00:00\\\"}\"\n
+        \ }\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1637'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 06 May 2026 04:39:23 GMT
+      ETag:
+      - CL3C5Pvro5QDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEg5kWK8i_Hrro3qphUjgjniLf0LS4BRCaIZLWeVg8rAqd3KP_8fvXqIjgFJgjIiYjAu
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/180c705a-9c2c-4a15-836d-636b2079605d
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest-parsed/o/service_alerts%2Fdt%3D2026-05-01%2Fhour%3D2026-05-01T00%3A00%3A00%2B00%3A00%2Fbase64_url%3DaHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg%3D%3D%2Fservice_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg%3D%3D.jsonl.gz?alt=media
+  response:
+    body:
+      string: !!binary |
+        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
+        mIQTk3Bi+GISTkzCiUk4eWMJJ38CkcqzAOFEAAA=
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '1853'
+      Content-Type:
+      - application/jsonl
+      Date:
+      - Wed, 06 May 2026 04:39:23 GMT
+      ETag:
+      - CNrlpPvro5QDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Wed, 06 May 2026 04:39:22 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEiaLkTwMTmcnPcE9kLM39O9ouZtUmvsLLAfhQZPird1Eg4c-sSeOW41VfbdlphjuL-EDW3t0zY
+      X-Goog-Generation:
+      - '1778042362475226'
+      X-Goog-Hash:
+      - crc32c=K1TFrw==,md5=YKAqnSeuVMnUrBKaiszT6w==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '1853'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/cbfc8b67-5a8d-4681-8e51-171178d3abdb
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest-parsed/o/service_alerts_outcomes%2Fdt%3D2026-05-01%2Fhour%3D2026-05-01T00%3A00%3A00%2B00%3A00%2Fservice_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg%3D%3D.jsonl?alt=media
+  response:
+    body:
+      string: '{"step":"parse","success":true,"header":{"gtfsrealtimeversion":"2.0","incrementality":"FULL_DATASET","timestamp":"1777593552"},"exception":null,"blob_path":null,"aggregation":{"step":"parse","filename":"service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl.gz","first_extract":{"filename":"feed","ts":"2026-05-01T00:00:00+00:00","config":{"auth_headers":{},"auth_query_params":{},"computed":false,"extracted_at":"2026-04-30T03:00:00+00:00","feed_type":"service_alerts","name":"Big
+        Blue Bus Alerts","schedule_url_for_validation":"https://www.bigbluebus.com/gtfs/current.zip","url":"http://gtfs.bigbluebus.com/alerts.bin"},"response_code":200,"response_headers":{"etag":"W/\"33f2f157fdd8dc1:0\"","last_modified":"Thu,
+        30 Apr 2026 23:59:12 GMT","content_type":"application/octet-stream","content_length":"3243","cache_control":"max-age=1,
+        public","expires":"Fri, 01 May 2026 00:00:01 GMT","date":"Fri, 01 May 2026
+        00:00:00 GMT","set_cookie":"visid_incap_3100510=gCQQgTAxQB6FYDvzr3I4KADt82kAAAAAQUIPAAAAAABwXYZSgt/TAhxgv8UhGn8g;
+        expires=Fri, 30 Apr 2027 06:20:18 GMT; HttpOnly; path=/; Domain=.bigbluebus.com,
+        incap_ses_102_3100510=ibA1XHJi22nKwzFspGBqAQDt82kAAAAAL+Ojsz2yTHBaVT2OW2NU4A==;
+        path=/; Domain=.bigbluebus.com","x_cdn":"Imperva","x_iinfo":"45-185730431-0
+        0cNN RT(1777593601659 0) q(0 -1 -1 0) r(0 -1)"}}},"extract":{"filename":"feed","ts":"2026-05-01T00:00:00+00:00","config":{"auth_headers":{},"auth_query_params":{},"computed":false,"extracted_at":"2026-04-30T03:00:00+00:00","feed_type":"service_alerts","name":"Big
+        Blue Bus Alerts","schedule_url_for_validation":"https://www.bigbluebus.com/gtfs/current.zip","url":"http://gtfs.bigbluebus.com/alerts.bin"},"response_code":200,"response_headers":{"etag":"W/\"33f2f157fdd8dc1:0\"","last_modified":"Thu,
+        30 Apr 2026 23:59:12 GMT","content_type":"application/octet-stream","content_length":"3243","cache_control":"max-age=1,
+        public","expires":"Fri, 01 May 2026 00:00:01 GMT","date":"Fri, 01 May 2026
+        00:00:00 GMT","set_cookie":"visid_incap_3100510=gCQQgTAxQB6FYDvzr3I4KADt82kAAAAAQUIPAAAAAABwXYZSgt/TAhxgv8UhGn8g;
+        expires=Fri, 30 Apr 2027 06:20:18 GMT; HttpOnly; path=/; Domain=.bigbluebus.com,
+        incap_ses_102_3100510=ibA1XHJi22nKwzFspGBqAQDt82kAAAAAL+Ojsz2yTHBaVT2OW2NU4A==;
+        path=/; Domain=.bigbluebus.com","x_cdn":"Imperva","x_iinfo":"45-185730431-0
+        0cNN RT(1777593601659 0) q(0 -1 -1 0) r(0 -1)"}},"process_stderr":null}
+
+        {"step":"parse","success":true,"header":{"gtfsrealtimeversion":"2.0","incrementality":"FULL_DATASET","timestamp":"1777593571"},"exception":null,"blob_path":null,"aggregation":{"step":"parse","filename":"service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl.gz","first_extract":{"filename":"feed","ts":"2026-05-01T00:00:00+00:00","config":{"auth_headers":{},"auth_query_params":{},"computed":false,"extracted_at":"2026-04-30T03:00:00+00:00","feed_type":"service_alerts","name":"Big
+        Blue Bus Alerts","schedule_url_for_validation":"https://www.bigbluebus.com/gtfs/current.zip","url":"http://gtfs.bigbluebus.com/alerts.bin"},"response_code":200,"response_headers":{"etag":"W/\"33f2f157fdd8dc1:0\"","last_modified":"Thu,
+        30 Apr 2026 23:59:12 GMT","content_type":"application/octet-stream","content_length":"3243","cache_control":"max-age=1,
+        public","expires":"Fri, 01 May 2026 00:00:01 GMT","date":"Fri, 01 May 2026
+        00:00:00 GMT","set_cookie":"visid_incap_3100510=gCQQgTAxQB6FYDvzr3I4KADt82kAAAAAQUIPAAAAAABwXYZSgt/TAhxgv8UhGn8g;
+        expires=Fri, 30 Apr 2027 06:20:18 GMT; HttpOnly; path=/; Domain=.bigbluebus.com,
+        incap_ses_102_3100510=ibA1XHJi22nKwzFspGBqAQDt82kAAAAAL+Ojsz2yTHBaVT2OW2NU4A==;
+        path=/; Domain=.bigbluebus.com","x_cdn":"Imperva","x_iinfo":"45-185730431-0
+        0cNN RT(1777593601659 0) q(0 -1 -1 0) r(0 -1)"}}},"extract":{"filename":"feed","ts":"2026-05-01T00:00:20+00:00","config":{"auth_headers":{},"auth_query_params":{},"computed":false,"extracted_at":"2026-04-30T03:00:00+00:00","feed_type":"service_alerts","name":"Big
+        Blue Bus Alerts","schedule_url_for_validation":"https://www.bigbluebus.com/gtfs/current.zip","url":"http://gtfs.bigbluebus.com/alerts.bin"},"response_code":200,"response_headers":{"etag":"W/\"dcab3a63fdd8dc1:0\"","last_modified":"Thu,
+        30 Apr 2026 23:59:31 GMT","content_type":"application/octet-stream","content_length":"3243","cache_control":"max-age=1,
+        public","expires":"Fri, 01 May 2026 00:00:21 GMT","date":"Fri, 01 May 2026
+        00:00:20 GMT","set_cookie":"visid_incap_3100510=vTzzF91uSDa76LYpQzbDlhTt82kAAAAAQUIPAAAAAABhjBZO2tbDIkBUZDpoZkzC;
+        expires=Fri, 30 Apr 2027 06:47:07 GMT; HttpOnly; path=/; Domain=.bigbluebus.com,
+        incap_ses_92_3100510=pel8dmNG3ThEro6vr9lGARTt82kAAAAAl79iOoA9SMw5l44sknDtjg==;
+        path=/; Domain=.bigbluebus.com","x_cdn":"Imperva","x_iinfo":"45-210525617-0
+        0cNN RT(1777593621033 0) q(0 -1 -1 0) r(1 -1)"}},"process_stderr":null}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '4796'
+      Content-Type:
+      - application/jsonl
+      Date:
+      - Wed, 06 May 2026 04:39:23 GMT
+      ETag:
+      - CL3C5Pvro5QDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Wed, 06 May 2026 04:39:23 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEglhK8t0zU7kOd8rxRRX64IY-JESCLs1fdESdX3HGMsqGNJ_8bBu_XsIJVTeW-LKtmDK8Nbj4g
+      X-Goog-Generation:
+      - '1778042363519293'
+      X-Goog-Hash:
+      - crc32c=Rscvcg==,md5=jw3CFJtOS7mCGUgWkJTpYg==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '4796'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0
+      X-Goog-API-Client:
+      - gcloud-python/3.7.0  gl-python/3.11.6 grpc/1.76.0 gax/2.28.1 gccl/3.7.0 gccl-invocation-id/369f6a96-6009-49ec-a4b1-b79d4bcfe18c
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest-parsed/o/service_alerts_outcomes%2Fdt%3D2026-05-01%2Fhour%3D2026-05-01T00%3A00%3A00%2B00%3A00%2Fservice_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg%3D%3D.jsonl?prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest-parsed/service_alerts_outcomes/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl/1778042363519293","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest-parsed/o/service_alerts_outcomes%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fservice_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest-parsed/o/service_alerts_outcomes%2Fdt=2026-05-01%2Fhour=2026-05-01T00:00:00%2B00:00%2Fservice_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl?generation=1778042363519293&alt=media","name":"service_alerts_outcomes/dt=2026-05-01/hour=2026-05-01T00:00:00+00:00/service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl","bucket":"calitp-staging-pytest-parsed","generation":"1778042363519293","metageneration":"1","contentType":"application/jsonl","storageClass":"STANDARD","size":"4796","md5Hash":"jw3CFJtOS7mCGUgWkJTpYg==","crc32c":"Rscvcg==","etag":"CL3C5Pvro5QDEAE=","timeCreated":"2026-05-06T04:39:23.528Z","updated":"2026-05-06T04:39:23.528Z","timeStorageClassUpdated":"2026-05-06T04:39:23.528Z","timeFinalized":"2026-05-06T04:39:23.528Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"feed_type\":\"service_alerts\",\"filename\":\"service_alerts_aHR0cDovL2d0ZnMuYmlnYmx1ZWJ1cy5jb20vYWxlcnRzLmJpbg==.jsonl\",\"step\":\"parse\",\"hour\":\"2026-05-01T00:00:00+00:00\"}"}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '1550'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 06 May 2026 04:39:23 GMT
+      ETag:
+      - CL3C5Pvro5QDEAE=
+      Expires:
+      - Wed, 06 May 2026 04:39:23 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AAVLpEjQhWqH4D-R18065JyS3xrYaGV-1BzwNPxplsqQk1fY26rrwzZZWUCza77Hps5SpI7S
+    status:
+      code: 200
+      message: OK
+version: 1
