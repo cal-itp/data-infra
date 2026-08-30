@@ -36,7 +36,7 @@ dev = [
     "pytest-dotenv>=0.5.2",
     "pytest-freezegun>=0.4.2",
     "pytest-recording>=0.13.4",
-    "vcrpy>=8.0.0",
+    "vcrpy>=8.2.1",
 ]
 
 [tool.uv.sources]
