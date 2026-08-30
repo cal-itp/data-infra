@@ -1,5 +1,5 @@
 description: "Parse feed v3 Littlepay files into JSONL"
-schedule_interval: "30 * * * *"
+schedule_interval: null
 tags:
   - littlepay
   - payments
