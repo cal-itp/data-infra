@@ -11,32 +11,7 @@
     )
 }}
 
-WITH fct_scheduled_trips AS (
-    SELECT
-        service_date,
-        feed_key,
-        feed_timezone,
-        trip_id,
-        contains_warning_duplicate_stop_times_primary_key,
-        contains_warning_duplicate_trip_primary_key,
-        contains_warning_missing_foreign_key_stop_id
-    FROM {{ ref('fct_scheduled_trips') }}
-    WHERE service_date
-        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_SCHEDULE_START")) }}
-            AND {{ ranged_incremental_max_date() }}
-),
-
-dim_stops AS (
-    SELECT *
-    FROM {{ ref('dim_stops') }}
-),
-
-dim_stop_arrivals AS (
-    SELECT *
-    FROM {{ ref('dim_stop_arrivals') }}
-),
-
-stops_on_day_by_route_and_hour AS (
+with stops_on_day_by_route_and_hour AS (
     SELECT
         trips.service_date,
         trips.feed_key,
@@ -67,12 +42,15 @@ stops_on_day_by_route_and_hour AS (
         ) AS contains_warning_duplicate_trip_primary_key,
         LOGICAL_OR(
             trips.contains_warning_missing_foreign_key_stop_id
-        ) AS contains_warning_missing_foreign_key_stop_id,
+        ) AS contains_warning_missing_foreign_key_stop_id
 
-    FROM fct_scheduled_trips AS trips
-    INNER JOIN dim_stop_arrivals
-        ON trips.feed_key = dim_stop_arrivals.feed_key
-        AND trips.trip_id = dim_stop_arrivals.trip_id
+    FROM {{ ref('fct_scheduled_trips') }} AS trips
+    INNER JOIN {{ ref('dim_stop_arrivals') }} AS dim_stop_arrivals
+       ON trips.feed_key = dim_stop_arrivals.feed_key
+      AND trips.trip_id = dim_stop_arrivals.trip_id
+    WHERE trips.service_date
+        BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_SCHEDULE_START")) }}
+            AND {{ ranged_incremental_max_date() }}
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
 ),
 
@@ -100,7 +78,7 @@ stops_on_day AS (
         ) AS contains_warning_duplicate_trip_primary_key,
         LOGICAL_OR(
             contains_warning_missing_foreign_key_stop_id
-        ) AS contains_warning_missing_foreign_key_stop_id,
+        ) AS contains_warning_missing_foreign_key_stop_id
     FROM stops_on_day_by_route_and_hour
     GROUP BY 1, 2, 3, 4, 5
 ),
@@ -110,7 +88,7 @@ stop_counts_by_route_type AS (
         feed_key,
         stop_id,
         route_type,
-        COUNT(*) AS arrivals
+        SUM(arrivals) AS arrivals_by_route_type
     FROM stops_on_day_by_route_and_hour
     GROUP BY 1, 2, 3
 ),
@@ -124,11 +102,11 @@ pivot_to_route_type AS (
             feed_key,
             stop_id,
             route_type,
-            arrivals,
+            arrivals_by_route_type
 
         FROM stop_counts_by_route_type)
     PIVOT(
-        SUM(arrivals) AS route_type
+        SUM(arrivals_by_route_type) AS route_type
         FOR route_type IN
         (0, 1, 2, 3, 4, 5, 6, 7, 11, 12, 1000)
     )
@@ -141,7 +119,7 @@ stop_counts_by_time_of_day AS (
         time_of_day,
         {{ generate_time_of_day_hours('time_of_day') }} AS n_hours,
 
-        COUNT(*) AS arrivals
+        SUM(arrivals) AS arrivals_by_time_of_day
     FROM stops_on_day_by_route_and_hour
     GROUP BY 1, 2, 3, 4
 ),
@@ -155,12 +133,12 @@ pivot_to_time_of_day AS (
             feed_key,
             stop_id,
             time_of_day,
-            arrivals,
+            arrivals_by_time_of_day,
             n_hours
 
         FROM stop_counts_by_time_of_day)
     PIVOT(
-        SUM(arrivals) AS arrivals,
+        SUM(arrivals_by_time_of_day) AS arrivals,
         SUM(n_hours) AS n_hours
         FOR time_of_day IN
         ("owl", "early_am", "am_peak", "midday", "pm_peak", "evening")
@@ -233,10 +211,10 @@ fct_daily_scheduled_stops AS (
         stops.stop_desc,
         stops.location_type,
         stops.stop_timezone_coalesced,
-        stops.wheelchair_boarding,
+        stops.wheelchair_boarding
 
     FROM stops_on_day
-    INNER JOIN dim_stops AS stops
+    INNER JOIN {{ ref('dim_stops') }} AS stops
         ON stops_on_day.feed_key = stops.feed_key
         AND stops_on_day.stop_id = stops.stop_id
     LEFT JOIN pivot_to_time_of_day AS p_time
