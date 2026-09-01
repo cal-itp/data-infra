@@ -78,6 +78,7 @@ class Configuration:
         schedule_url_for_validation: str,
         url: str,
         computed: bool,
+        batch_at: str = None,
         secret_resolver: Type = Secret,
         **extras,
     ) -> None:
@@ -92,6 +93,14 @@ class Configuration:
         self.schedule_url_for_validation: str = schedule_url_for_validation
         self.url: str = url
         self.computed: bool = computed
+        # Only the high-frequency clock stamps batch_at onto its messages. When it
+        # is present it is the authoritative timestamp: batch times sit on an exact
+        # grid, so partitions cannot collide no matter how much fan-out jitter a
+        # tick picks up. Production messages carry no batch_at and keep the legacy
+        # 20-second floor below.
+        self.batch_at: datetime | None = (
+            datetime.fromisoformat(batch_at) if batch_at else None
+        )
         self.secret_resolver: Type = secret_resolver
         if extras:
             logging.warning(f"Unsupported keys {list(extras.keys())}")
@@ -102,15 +111,24 @@ class Configuration:
 
         return self.name == other.name and self.extracted_at == other.extracted_at
 
+    def timestamp(self) -> datetime:
+        return self.batch_at or self.publish_time
+
     def dt(self) -> str:
-        return self.publish_time.date().isoformat()
+        return self.timestamp().date().isoformat()
 
     def hour(self) -> str:
-        return self.publish_time.replace(minute=0, second=0, microsecond=0).isoformat()
+        return self.timestamp().replace(minute=0, second=0, microsecond=0).isoformat()
 
     def ts(self) -> str:
-        seconds = math.floor(self.publish_time.second / 20) * 20
-        return self.publish_time.replace(microsecond=0, second=seconds).isoformat()
+        # dt/hour/ts must all derive from the same instant. A tick that straddles an
+        # hour (published 12:59:59, batched 13:00:02) would otherwise write
+        # hour=12:00.../ts=13:00:02, which the RT parser cross-checks and rejects.
+        if self.batch_at is not None:
+            return self.batch_at.isoformat()
+
+        seconds = math.floor(self.timestamp().second / 20) * 20
+        return self.timestamp().replace(microsecond=0, second=seconds).isoformat()
 
     def base64_url(self) -> str:
         return urlsafe_b64encode(self.url.encode()).decode()
