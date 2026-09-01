@@ -1365,11 +1365,6 @@ models:
         description: |
           Synthetic primary key constructed from `stop_arrival_date_pacific` and
           `stop_key`.
-        data_tests:
-          - unique:
-              arguments:
-                where: "not contains_warning_duplicate_trip_primary_key AND not contains_warning_duplicate_stop_times_primary_key AND not contains_warning_duplicate_stop_primary_key"
-          - not_null
       - *service_date_for_summaries
       - *feed_key
       - *feed_timezone_no_tests
@@ -1545,6 +1540,56 @@ models:
         description: '{{ doc("gtfs_schedule_stop_timezone_coalesced") }}'
       - name: wheelchair_boarding
         description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
+      - name: contains_warning_duplicate_trip_primary_key
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                where: "contains_warning_duplicate_trip_primary_key"
+      - name: contains_warning_duplicate_stop_primary_key
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                where: "contains_warning_duplicate_stop_primary_key"
+      - name: contains_warning_duplicate_stop_times_primary_key
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                where: "contains_warning_duplicate_stop_times_primary_key"
+      - name: contains_warning_hours_in_service_more_than_24
+        description: |
+          Rows with `true` in this column indicate that the count of
+          `arrival_hour` was more than 24 hours.
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                where: "contains_warning_hours_in_service_more_than_24"
+      - name: contains_warning_wrong_total_arrivals_time_of_day
+        description: |
+          Rows with `true` in this column indicate that the sum of
+          all time of day columns (`arrivals_owl`, `arrivals_early_am`,
+          `arrivals_am_peak`, `arrivals_midday`, `arrivals_pm_peak`,
+          and `arrivals_evening`) does not match `daily_arrivals`.
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                where: "contains_warning_wrong_total_arrivals_time_of_day"
+      - name: contains_warning_wrong_total_arrivals_route_type
+        description: |
+          Rows with `true` in this column indicate that the sum of
+          all route type columns (route_type_0, route_type_1, route_type_2 +
+          route_type_3, route_type_4, route_type_5, route_type_6, route_type_7,
+          route_type_11, route_type_12, and missing_route_type)
+          does not match `daily_arrivals`.
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                where: "contains_warning_wrong_total_arrivals_route_type"
 
   - name: fct_observed_trips
     description: |

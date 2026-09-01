@@ -198,13 +198,10 @@ fct_daily_scheduled_stops AS (
         COALESCE(p_route.route_type_12, 0) AS route_type_12,
         COALESCE(p_route.route_type_1000, 0) AS missing_route_type,
 
-        stops_on_day.contains_warning_duplicate_stop_times_primary_key,
-        stops_on_day.contains_warning_duplicate_trip_primary_key,
         stops_on_day.route_id_array,
         stops_on_day.route_type_array,
         ARRAY_LENGTH(stops_on_day.route_type_array) AS n_route_types,
 
-        stops.warning_duplicate_gtfs_key AS contains_warning_duplicate_stop_primary_key,
 
         stops.key AS stop_key,
         stops.tts_stop_name,
@@ -215,7 +212,25 @@ fct_daily_scheduled_stops AS (
         stops.stop_desc,
         stops.location_type,
         stops.stop_timezone_coalesced,
-        stops.wheelchair_boarding
+        stops.wheelchair_boarding,
+
+        stops_on_day.contains_warning_duplicate_stop_times_primary_key,
+        stops_on_day.contains_warning_duplicate_trip_primary_key,
+
+        stops.warning_duplicate_gtfs_key AS contains_warning_duplicate_stop_primary_key,
+
+        (stops_on_day.n_hours_in_service > 24) AS contains_warning_hours_in_service_more_than_24,
+
+        ( arrivals_owl + arrivals_early_am
+          + arrivals_am_peak + arrivals_midday
+          + arrivals_pm_peak + arrivals_evening
+        ) != daily_arrivals AS contains_warning_wrong_total_arrivals_time_of_day,
+
+        ( route_type_0 + route_type_1 + route_type_2
+          + route_type_3 + route_type_4 + route_type_5
+          + route_type_6 + route_type_7 + route_type_11
+          + route_type_12 + route_type_1000
+        ) != daily_arrivals AS contains_warning_wrong_total_arrivals_route_type
 
     FROM stops_on_day
     INNER JOIN {{ ref('dim_stops') }} AS stops
