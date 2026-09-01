@@ -85,12 +85,13 @@ stops_on_day AS (
 
 stop_counts_by_route_type AS (
     SELECT
+        service_date,
         feed_key,
         stop_id,
         route_type,
         SUM(arrivals) AS arrivals_by_route_type
     FROM stops_on_day_by_route_and_hour
-    GROUP BY 1, 2, 3
+    GROUP BY 1, 2, 3, 4
 ),
 
 pivot_to_route_type AS (
@@ -99,6 +100,7 @@ pivot_to_route_type AS (
     FROM
         (SELECT
 
+            service_date,
             feed_key,
             stop_id,
             route_type,
@@ -114,6 +116,7 @@ pivot_to_route_type AS (
 
 stop_counts_by_time_of_day AS (
     SELECT
+        service_date,
         feed_key,
         stop_id,
         time_of_day,
@@ -121,7 +124,7 @@ stop_counts_by_time_of_day AS (
 
         SUM(arrivals) AS arrivals_by_time_of_day
     FROM stops_on_day_by_route_and_hour
-    GROUP BY 1, 2, 3, 4
+    GROUP BY 1, 2, 3, 4, 5
 ),
 
 pivot_to_time_of_day AS (
@@ -130,6 +133,7 @@ pivot_to_time_of_day AS (
     FROM
         (SELECT
 
+            service_date,
             feed_key,
             stop_id,
             time_of_day,
@@ -164,7 +168,7 @@ fct_daily_scheduled_stops AS (
             ELSE stops_on_day.n_hours_in_service
         END AS n_hours_in_service,
 
-       -- operators can have arrivals in certain time-of-day periods and not others
+        -- operators can have arrivals in certain time-of-day periods and not others
         -- arrivals_per_hour averaged with these values will differ than
         -- daily arrivals / 24.
         -- n_hours_in_service shows just how many unique arrival_hours the operator does have service
@@ -220,9 +224,11 @@ fct_daily_scheduled_stops AS (
     LEFT JOIN pivot_to_time_of_day AS p_time
         ON stops_on_day.feed_key = p_time.feed_key
         AND stops_on_day.stop_id = p_time.stop_id
+        AND stops_on_day.service_date = p_time.service_date
     LEFT JOIN pivot_to_route_type AS p_route
         ON stops_on_day.feed_key = p_route.feed_key
         AND stops_on_day.stop_id = p_route.stop_id
+        AND stops_on_day.service_date = p_route.service_date
 )
 
 SELECT * FROM fct_daily_scheduled_stops
