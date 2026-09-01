@@ -12,6 +12,19 @@ from google.cloud import pubsub_v1, storage
 PUBLISH_TIMEOUT = int(os.environ.get("PUBLISH_TIMEOUT", "10"))
 GTFS_RT_FEED_TYPES = ["service_alerts", "trip_updates", "vehicle_positions"]
 
+# Set only on the high-frequency heartbeat. Holds a JSON array of download config
+# names -- JSON rather than a comma-separated string because these names come from
+# Airtable free text and may themselves contain commas.
+HIGH_FREQUENCY_COHORT = "CALITP_GTFS_RT_HIGH_FREQUENCY_COHORT"
+
+_UNSET = object()
+
+
+def normalize(value: str) -> str:
+    # Collapse internal whitespace runs rather than just stripping, so a name
+    # pasted out of Airtable with a doubled space still matches.
+    return " ".join((value or "").split()).casefold()
+
 
 class Heartbeat:
     def future_callback(
@@ -69,6 +82,7 @@ class Heartbeat:
         self.publish_time: datetime = publish_time
         self.message_id: str = message_id
         self.limit: int = limit
+        self._cohort = _UNSET
 
     def batch_at(self) -> datetime.datetime:
         return datetime.datetime.fromisoformat(json.loads(self.data)["batch_at"])
@@ -109,18 +123,78 @@ class Heartbeat:
             for download_config in decompressed_result.decode().split("\n")
         ]
 
+    def cohort(self) -> set[str] | None:
+        """The high-frequency cohort, or None when this is the standard archiver.
+
+        Three states, deliberately distinct:
+          env var absent -> None      -- no filtering, production behavior
+          env var "[]"   -> set()     -- fail closed, publish nothing
+          env var a list -> {names}   -- publish only those feeds
+
+        Failing closed on an empty list matters: treating "present but empty" as
+        "no filter" would fan the entire feed list out on the high-frequency
+        clock, a ~20x load spike against every agency in the system.
+        """
+        if self._cohort is _UNSET:
+            raw = os.environ.get(HIGH_FREQUENCY_COHORT)
+            if raw is None:
+                self._cohort = None
+            elif raw.strip():
+                self._cohort = {normalize(name) for name in json.loads(raw)}
+            else:
+                self._cohort = set()
+        return self._cohort
+
+    def in_cohort(self, download_config: dict) -> bool:
+        cohort = self.cohort()
+        if cohort is None:
+            return True
+        return normalize(download_config.get("name")) in cohort
+
     def should_publish(self, feed_type: str) -> bool:
+        # The cohort runs on its own clock, so the 5-minute service_alerts throttle
+        # -- which assumes batch times land on 20-second boundaries -- must not
+        # apply to it.
+        if self.cohort() is not None:
+            return True
+
         if feed_type != "service_alerts":
             return True
 
         batch_at = self.batch_at()
         return batch_at.minute % 5 == 0 and batch_at.second == 0
 
+    def payload(self, download_config: dict) -> dict:
+        if self.cohort() is None:
+            return download_config
+        return download_config | {"batch_at": self.batch_at().isoformat()}
+
+    def warn_on_unmatched(self, download_configs: list[dict]) -> None:
+        cohort = self.cohort()
+        if not cohort:
+            return
+
+        matched = {normalize(config.get("name")) for config in download_configs}
+        if missing := cohort - matched:
+            logging.warning(
+                json.dumps(
+                    {
+                        "severity": "Warning",
+                        "message": f"High-frequency cohort matched no download config: {sorted(missing)}",
+                        "message_id": self.message_id,
+                    }
+                )
+            )
+
     def messages(self) -> list[str]:
+        download_configs = self.download_configs()
+        self.warn_on_unmatched(download_configs)
+
         return [
-            json.dumps(download_config, separators=(",", ":")).encode()
-            for download_config in self.download_configs()
+            json.dumps(self.payload(download_config), separators=(",", ":")).encode()
+            for download_config in download_configs
             if download_config["feed_type"] in GTFS_RT_FEED_TYPES
+            and self.in_cohort(download_config)
             and self.should_publish(download_config["feed_type"])
         ][slice(0, self.limit)]
 
