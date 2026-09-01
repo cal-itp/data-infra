@@ -1,0 +1,76 @@
+# High-frequency clock for the study cohort (see issue #5566).
+#
+# A sibling of clock.yaml rather than a parameterization of it: clock.yaml has no
+# test coverage, and converting production from its three-branch `parallel` block
+# to a loop cannot be verified before it reaches prod. Consolidating the two behind
+# templatefile variables is a reasonable follow-up once this has soaked.
+#
+# Rendered through templatefile(). A single-dollar interpolation is substituted by
+# Terraform; a double-dollar one is escaped down to a single dollar and evaluated
+# by Workflows at runtime. templatefile() parses comments too, so do not write a
+# bare single-dollar interpolation in one unless it names a real variable.
+#
+# Timing: batch times are currentMinute + 60 + tick * cadence. At a 3s cadence that
+# is M+60 .. M+117, and the next execution starts at M+120 -- consecutive ticks are
+# exactly one cadence apart across the execution boundary, with no gap and no
+# overlap. Each sleep targets an absolute time, so a slow publish does not
+# accumulate drift; a late iteration simply returns immediately from a past-dated
+# sleep_until and the schedule self-corrects.
+#
+# The loop is sequential, not `parallel`: Workflows caps concurrent branches at 20,
+# and a 3s cadence is exactly 20 branches, which would sit right on that limit.
+main:
+  params: [event]
+  steps:
+    - init:
+        assign:
+          - currentTime: $${sys.now()}
+          - currentMinute: $${math.floor(currentTime / 60) * 60}
+          - limit: null
+
+    # The Cloud Scheduler payload is a live control surface: publishing
+    # {"limit": 1} throttles the cohort to a single feed with no redeploy, which is
+    # how the first production enablement is canaried. A missing or malformed
+    # payload must not take the clock down, hence the catch.
+    - readSchedulerPayload:
+        try:
+          steps:
+            - decode:
+                assign:
+                  - payload: $${json.decode(base64.decode(event.data.message.data))}
+                  - limit: $${map.get(payload, "limit")}
+        except:
+          as: e
+          steps:
+            - useNoLimit:
+                assign:
+                  - limit: null
+
+    - publishMessages:
+        for:
+          value: tick
+          # Block style rather than a flow sequence: a Terraform interpolation
+          # cannot sit inside `[ ]`, since `{` is not permitted in a plain scalar
+          # in flow context, and the pre-commit check-yaml hook parses this file
+          # before templatefile() renders it.
+          range:
+            - 0
+            - ${max_tick_index}
+          steps:
+            - batchAssign:
+                assign:
+                  - batchTime: $${currentMinute + 60 + tick * ${cadence_seconds}}
+                  - data:
+                      batch_at: $${time.format(batchTime)}
+                      limit: $${limit}
+            - sleep:
+                call: sys.sleep_until
+                args:
+                  time: $${time.format(batchTime - ${cadence_seconds})}
+            - publish:
+                call: googleapis.pubsub.v1.projects.topics.publish
+                args:
+                  topic: $${sys.get_env("CALITP_TOPIC__GTFS_RT_ARCHIVER_HEARTBEAT")}
+                  body:
+                    messages:
+                      - data: $${base64.encode(json.encode(data))}
