@@ -19,8 +19,17 @@ with stops_on_day_by_route_and_hour AS (
         dim_stop_arrivals._feed_valid_from,
         dim_stop_arrivals.stop_id,
 
-        dim_stop_arrivals.route_id,
+        {{ parse_route_id('name', 'dim_stop_arrivals.route_id') }} AS route_id,
         dim_stop_arrivals.route_type,
+
+        (SELECT CASE
+              WHEN dim_stop_arrivals.route_type IN (0, 1, 2) THEN "rail"
+              WHEN dim_stop_arrivals.route_type = 3 THEN "bus"
+              WHEN dim_stop_arrivals.route_type = 4 THEN "ferry"
+              WHEN dim_stop_arrivals.route_type IN (5, 6, 7, 12) THEN "other_rail"
+              WHEN dim_stop_arrivals.route_type = 11 THEN "trolleybus"
+            END) AS transit_mode,
+
         dim_stop_arrivals.arrival_hour,
         {{ generate_time_of_day_column('arrival_hour') }} AS time_of_day,
 
@@ -51,7 +60,7 @@ with stops_on_day_by_route_and_hour AS (
     WHERE trips.service_date
         BETWEEN {{ ranged_incremental_min_date(default_lookback=var("DBT_ALL_INCREMENTAL_LOOKBACK_DAYS"), data_earliest_start=var("GTFS_SCHEDULE_START")) }}
             AND {{ ranged_incremental_max_date() }}
-    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9
+    GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 ),
 
 stops_on_day AS (
@@ -67,8 +76,9 @@ stops_on_day AS (
         MAX(last_stop_departure_datetime_pacific) AS last_stop_departure_datetime_pacific,
         COUNT(DISTINCT arrival_hour) AS n_hours_in_service,
 
-        ARRAY_AGG(DISTINCT route_id) AS route_id_array,
-        ARRAY_AGG(DISTINCT route_type) AS route_type_array,
+        ARRAY_AGG(DISTINCT route_id ORDER BY route_id) AS route_id_array,
+        ARRAY_AGG(DISTINCT route_type ORDER BY route_type) AS route_type_array,
+        ARRAY_AGG(DISTINCT transit_mode ORDER BY transit_mode) AS transit_mode_array,
 
         LOGICAL_OR(
             contains_warning_duplicate_stop_times_primary_key
@@ -202,6 +212,7 @@ fct_daily_scheduled_stops AS (
         stops_on_day.route_type_array,
         ARRAY_LENGTH(stops_on_day.route_type_array) AS n_route_types,
 
+        stops_on_day.transit_mode_array,
 
         stops.key AS stop_key,
         stops.tts_stop_name,
