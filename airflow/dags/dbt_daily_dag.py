@@ -132,6 +132,7 @@ with DAG(
         },
         default_args={
             "retries": 1,
+            "email": os.getenv("AIRFLOW_ALERTS_PAYMENTS_EMAIL"),
         },
     )
 
