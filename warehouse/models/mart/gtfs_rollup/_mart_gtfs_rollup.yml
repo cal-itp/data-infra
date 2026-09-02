@@ -32,52 +32,6 @@ x-common-fields:
     description: '{{ doc("column_rt_schedule_feed_key") }}'
 
   # GTFS schedule tables: dim_routes, dim_stops, dim_shapes, etc
-  - &route_type_0
-    name: route_type_0
-    description: |
-      The count of stop events associated with route_type 0 - Tram,
-      Streetcar, Light rail
-  - &route_type_1
-    name: route_type_1
-    description: |
-      The count of stop events associated with route_type 1 - Subway, Metro
-  - &route_type_2
-    name: route_type_2
-    description: |
-      The count of stop events associated with route_type 2 - Rail
-  - &route_type_3
-    name: route_type_3
-    description: |
-      The count of stop events associated with route_type 3 - Bus
-  - &route_type_4
-    name: route_type_4
-    description: |
-      The count of stop events associated with route_type 4 - Ferry
-  - &route_type_5
-    name: route_type_5
-    description: |
-      The count of stop events associated with route_type 5 - Cable Tram
-  - &route_type_6
-    name: route_type_6
-    description: |
-      The count of stop events associated with route_type 6 - Aerial lift,
-      suspended cable car (e.g., gondola lift, aerial tramway)
-  - &route_type_7
-    name: route_type_7
-    description: |
-      The count of stop events associated with route_type 7 - Cable Tram
-  - &route_type_11
-    name: route_type_11
-    description: |
-      The count of stop events associated with route_type 11 - Trolleybus
-  - &route_type_12
-    name: route_type_12
-    description: |
-      The count of stop events associated with route_type 12 - Monorail
-  - &missing_route_type
-    name: missing_route_type
-    description: |
-      The count of stop events associated with a `stop_id` that had a null `route_type` value in `dim_routes`
   - &stop_pt_geom
     name: pt_geom
     description:  |
@@ -91,7 +45,7 @@ x-common-fields:
   - &day_type
     name: day_type
     description: |
-      Days of the week are categorized into weekday / Saturday / Sunday.
+      Days of the week are categorized into Weekday / Saturday / Sunday.
   - &month
     name: month
     description: |
@@ -206,61 +160,95 @@ models:
   - name: fct_monthly_scheduled_stops
     description: |
       An aggregation of GTFS schedule stops with stop time activity in a given month
-      and day_type (weekday / Saturday / Sunday).
+      and day_type (Weekday / Saturday / Sunday).
 
       Totals and daily metrics are provided to normalize across potential differences in GTFS
       schedule or RT data availability.
     columns:
       - name: name
         description: *gtfs_dataset_name_desc
+      - *month_first_day
       - *year
       - *month
       - *day_type
       - name: stop_id
         description: '{{ doc("gtfs_stops__stop_id") }}'
       - name: total_stop_arrivals
-        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
+        description: '{{ doc("column_monthly_stop_arrivals") }}'
       - name: daily_stop_arrivals
-        description: '{{ doc("column_daily_stop_arrivals") }}'
-      - name: n_hours_in_service
-        description: |
-          Number of hours in service.
-          It is the distinct number of arrival hours based on a scheduled stop_time's arrival_time column.
-      - name: arrivals_per_hour_owl
-        description: '{{ doc("column_stop_arrivals_per_hour") }}'
-      - name: arrivals_per_hour_early_am
-        description: '{{ doc("column_stop_arrivals_per_hour") }}'
-      - name: arrivals_per_hour_am_peak
-        description: '{{ doc("column_stop_arrivals_per_hour") }}'
-      - name: arrivals_per_hour_midday
-        description: '{{ doc("column_stop_arrivals_per_hour") }}'
-      - name: arrivals_per_hour_pm_peak
-        description: '{{ doc("column_stop_arrivals_per_hour") }}'
-      - name: arrivals_per_hour_evening
-        description: '{{ doc("column_stop_arrivals_per_hour") }}'
-      - name: arrivals_owl
-        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
-      - name: arrivals_early_am
-        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
-      - name: arrivals_am_peak
-        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
-      - name: arrivals_midday
-        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
-      - name: arrivals_pm_peak
-        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
-      - name: arrivals_evening
-        description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
-      - *route_type_0
-      - *route_type_1
-      - *route_type_2
-      - *route_type_3
-      - *route_type_4
-      - *route_type_5
-      - *route_type_6
-      - *route_type_7
-      - *route_type_11
-      - *route_type_12
-      - *missing_route_type
+        description: '{{ doc("column_avg_daily_stop_arrivals") }}'
+      - name: total_n_hours_in_service
+        description: '{{ doc("column_monthly_hours_in_service") }}'
+      - name: daily_n_hours_in_service
+        description: '{{ doc("column_hours_in_service") }}'
+      - name: daily_arrivals_per_hour_owl
+        description: 'Daily average per month. {{ doc("column_stop_arrivals_per_hour") }}'
+      - name: daily_arrivals_per_hour_early_am
+        description: 'Daily average per month. {{ doc("column_stop_arrivals_per_hour") }}'
+      - name: daily_arrivals_per_hour_am_peak
+        description: 'Daily average per month. {{ doc("column_stop_arrivals_per_hour") }}'
+      - name: daily_arrivals_per_hour_midday
+        description: 'Daily average per month. {{ doc("column_stop_arrivals_per_hour") }}'
+      - name: daily_arrivals_per_hour_pm_peak
+        description: 'Daily average per month. {{ doc("column_stop_arrivals_per_hour") }}'
+      - name: daily_arrivals_per_hour_evening
+        description: 'Daily average per month. {{ doc("column_stop_arrivals_per_hour") }}'
+      - name: total_arrivals_owl
+        description: '{{ doc("column_monthly_stop_arrivals_by_time_of_day") }}'
+      - name: total_arrivals_early_am
+        description: '{{ doc("column_monthly_stop_arrivals_by_time_of_day") }}'
+      - name: total_arrivals_am_peak
+        description: '{{ doc("column_monthly_stop_arrivals_by_time_of_day") }}'
+      - name: total_arrivals_midday
+        description: '{{ doc("column_monthly_stop_arrivals_by_time_of_day") }}'
+      - name: total_arrivals_pm_peak
+        description: '{{ doc("column_monthly_stop_arrivals_by_time_of_day") }}'
+      - name: total_arrivals_evening
+        description: '{{ doc("column_monthly_stop_arrivals_by_time_of_day") }}'
+      - name: total_route_type_0
+        description: 'Total per month. {{ doc("gtfs_schedule_route_type_0") }}'
+      - name: total_route_type_1
+        description: 'Total per month. {{ doc("gtfs_schedule_route_type_1") }}'
+      - name: total_route_type_2
+        description: 'Total per month. {{ doc("gtfs_schedule_route_type_2") }}'
+      - name: total_route_type_3
+        description: 'Total per month. {{ doc("gtfs_schedule_route_type_3") }}'
+      - name: total_route_type_4
+        description: 'Total per month. {{ doc("gtfs_schedule_route_type_4") }}'
+      - name: total_route_type_5
+        description: 'Total per month. {{ doc("gtfs_schedule_route_type_5") }}'
+      - name: total_route_type_6
+        description: 'Total per month. {{ doc("gtfs_schedule_route_type_6") }}'
+      - name: total_route_type_7
+        description: 'Total per month. {{ doc("gtfs_schedule_route_type_7") }}'
+      - name: total_route_type_11
+        description: 'Total per month. {{ doc("gtfs_schedule_route_type_11") }}'
+      - name: total_route_type_12
+        description: 'Total per month. {{ doc("gtfs_schedule_route_type_12") }}'
+      - name: total_missing_route_type
+        description: 'Total per month. {{ doc("gtfs_schedule_missing_route_type") }}'
+      - name: daily_route_type_0
+        description: 'Daily average per month. {{ doc("gtfs_schedule_route_type_0") }}'
+      - name: daily_route_type_1
+        description: 'Daily average per month. {{ doc("gtfs_schedule_route_type_1") }}'
+      - name: daily_route_type_2
+        description: 'Daily average per month. {{ doc("gtfs_schedule_route_type_2") }}'
+      - name: daily_route_type_3
+        description: 'Daily average per month. {{ doc("gtfs_schedule_route_type_3") }}'
+      - name: daily_route_type_4
+        description: 'Daily average per month. {{ doc("gtfs_schedule_route_type_4") }}'
+      - name: daily_route_type_5
+        description: 'Daily average per month. {{ doc("gtfs_schedule_route_type_5") }}'
+      - name: daily_route_type_6
+        description: 'Daily average per month. {{ doc("gtfs_schedule_route_type_6") }}'
+      - name: daily_route_type_7
+        description: 'Daily average per month. {{ doc("gtfs_schedule_route_type_7") }}'
+      - name: daily_route_type_11
+        description: 'Daily average per month. {{ doc("gtfs_schedule_route_type_11") }}'
+      - name: daily_route_type_12
+        description: 'Daily average per month. {{ doc("gtfs_schedule_route_type_12") }}'
+      - name: daily_missing_route_type
+        description: 'Daily average per month. {{ doc("gtfs_schedule_missing_route_type") }}'
       - name: route_type_array
         description: '{{ doc("gtfs_routes__route_type") }}'
       - name: route_id_array

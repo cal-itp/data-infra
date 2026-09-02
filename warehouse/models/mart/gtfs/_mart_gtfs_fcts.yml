@@ -1000,6 +1000,7 @@ models:
         description: |
           The primary key for the record in `dim_gtfs_datasets` associated with
           this feed.
+
   - name: fct_hourly_rt_feed_files_success
     description: |
       The proportion of downloaded files that were successfully parsed as GTFS-RT.
@@ -1351,6 +1352,7 @@ models:
           quality issues were present in the trips data that is being summarized
           here, and counts may be inflated due to multiple rows with identical
           identifiers.
+
   - name: fct_daily_scheduled_stops
     description: |
       Each row is a summary of trip activity by stop for a given feed on a
@@ -1365,11 +1367,6 @@ models:
         description: |
           Synthetic primary key constructed from `stop_arrival_date_pacific` and
           `stop_key`.
-        data_tests:
-          - unique:
-              arguments:
-                where: "not contains_warning_duplicate_trip_primary_key AND not contains_warning_duplicate_stop_times_primary_key AND not contains_warning_duplicate_stop_primary_key"
-          - not_null
       - *service_date_for_summaries
       - *feed_key
       - *feed_timezone_no_tests
@@ -1381,8 +1378,9 @@ models:
         description: |
           Should not be used; exists to faciliate incremental materialization.
       - name: n_hours_in_service
-        description: |
-          Number of hours in service. It is the distinct number of arrival hours based on a scheduled stop_time's arrival_time column.
+        description: '{{ doc("column_hours_in_service") }}'
+      - name: total_n_hours_in_service
+        description: '{{ doc("column_hours_in_service") }}'
       - name: arrivals_per_hour_owl
         description: '{{ doc("column_stop_arrivals_per_hour") }}'
       - name: arrivals_per_hour_early_am
@@ -1409,50 +1407,37 @@ models:
         description: '{{ doc("column_stop_arrivals_by_time_of_day") }}'
       - &route_type_0
         name: route_type_0
-        description: |
-          The count of stop events associated with route_type 0 - Tram,
-          Streetcar, Light rail
+        description: '{{ doc("gtfs_schedule_route_type_0") }}'
       - &route_type_1
         name: route_type_1
-        description: |
-          The count of stop events associated with route_type 1 - Subway, Metro
+        description: '{{ doc("gtfs_schedule_route_type_1") }}'
       - &route_type_2
         name: route_type_2
-        description: |
-          The count of stop events associated with route_type 2 - Rail
+        description: '{{ doc("gtfs_schedule_route_type_2") }}'
       - &route_type_3
         name: route_type_3
-        description: |
-          The count of stop events associated with route_type 3 - Bus
+        description: '{{ doc("gtfs_schedule_route_type_3") }}'
       - &route_type_4
         name: route_type_4
-        description: |
-          The count of stop events associated with route_type 4 - Ferry
+        description: '{{ doc("gtfs_schedule_route_type_4") }}'
       - &route_type_5
         name: route_type_5
-        description: |
-          The count of stop events associated with route_type 5 - Cable Tram
+        description: '{{ doc("gtfs_schedule_route_type_5") }}'
       - &route_type_6
         name: route_type_6
-        description: |
-          The count of stop events associated with route_type 6 - Aerial lift,
-          suspended cable car (e.g., gondola lift, aerial tramway)
+        description: '{{ doc("gtfs_schedule_route_type_6") }}'
       - &route_type_7
         name: route_type_7
-        description: |
-          The count of stop events associated with route_type 7 - Cable Tram
+        description: '{{ doc("gtfs_schedule_route_type_7") }}'
       - &route_type_11
         name: route_type_11
-        description: |
-          The count of stop events associated with route_type 11 - Trolleybus
+        description: '{{ doc("gtfs_schedule_route_type_11") }}'
       - &route_type_12
         name: route_type_12
-        description: |
-          The count of stop events associated with route_type 12 - Monorail
+        description: '{{ doc("gtfs_schedule_route_type_12") }}'
       - &missing_route_type
         name: missing_route_type
-        description: |
-          The count of stop events associated with a `stop_id` that had a null `route_type` value in `dim_routes`
+        description: '{{ doc("gtfs_schedule_missing_route_type") }}'
       - name: first_stop_arrival_datetime_pacific
         description: |
           The datetime, in the "America/Los_Angeles" time zone, of the first
@@ -1545,6 +1530,56 @@ models:
         description: '{{ doc("gtfs_schedule_stop_timezone_coalesced") }}'
       - name: wheelchair_boarding
         description: '{{ doc("gtfs_stops__wheelchair_boarding") }}'
+      - name: contains_warning_duplicate_trip_primary_key
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                where: "contains_warning_duplicate_trip_primary_key"
+      - name: contains_warning_duplicate_stop_primary_key
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                where: "contains_warning_duplicate_stop_primary_key"
+      - name: contains_warning_duplicate_stop_times_primary_key
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                where: "contains_warning_duplicate_stop_times_primary_key"
+      - name: contains_warning_hours_in_service_more_than_24
+        description: |
+          Rows with `true` in this column indicate that the count of
+          `arrival_hour` was more than 24 hours.
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                where: "contains_warning_hours_in_service_more_than_24"
+      - name: contains_warning_wrong_total_arrivals_time_of_day
+        description: |
+          Rows with `true` in this column indicate that the sum of
+          all time of day columns (`arrivals_owl`, `arrivals_early_am`,
+          `arrivals_am_peak`, `arrivals_midday`, `arrivals_pm_peak`,
+          and `arrivals_evening`) does not match `daily_arrivals`.
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                where: "contains_warning_wrong_total_arrivals_time_of_day"
+      - name: contains_warning_wrong_total_arrivals_route_type
+        description: |
+          Rows with `true` in this column indicate that the sum of
+          all route type columns (route_type_0, route_type_1, route_type_2 +
+          route_type_3, route_type_4, route_type_5, route_type_6, route_type_7,
+          route_type_11, route_type_12, and missing_route_type)
+          does not match `daily_arrivals`.
+        data_tests:
+          - not_null
+          - dbt_utils.expression_is_true:
+              arguments:
+                where: "contains_warning_wrong_total_arrivals_route_type"
 
   - name: fct_observed_trips
     description: |

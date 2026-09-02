@@ -264,6 +264,8 @@ data_tests:
       payments:
         +enabled: true
     mart:
+      # gtfs:
+      #   +enabled: true
       payments:
         +enabled: true
       tides:
