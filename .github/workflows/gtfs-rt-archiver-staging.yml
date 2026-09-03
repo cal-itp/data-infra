@@ -126,4 +126,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: iac/cal-itp-data-infra-staging/gtfs-rt-archiver/us
-          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
+          # Auto‑approve only on the official staging branch
+          auto_approve: ${{ github.ref == 'refs/heads/staging/official' }}
