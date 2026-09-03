@@ -17,6 +17,18 @@ class BigQueryValueCleaner:
         """
         result = self.value
 
+        # Airtable returns a sentinel object for computed (formula/rollup)
+        # fields that evaluate to a non-finite number or an error, e.g.
+        # {"specialValue": "NaN"} or {"error": "#ERROR!"}. These are not real
+        # values and break BigQuery's typed JSON parser (autodetect infers the
+        # column numeric, then chokes on the object), so coerce them to null.
+        if (
+            isinstance(result, dict)
+            and result
+            and set(result) <= {"specialValue", "error"}
+        ):
+            return None
+
         if isinstance(result, dict):
             for k, v in result.items():
                 if isinstance(v, dict):
