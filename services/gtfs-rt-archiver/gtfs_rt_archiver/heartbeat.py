@@ -18,11 +18,11 @@ class Heartbeat:
         self, logger: logging.Logger
     ) -> Callable[[pubsub_v1.publisher.futures.Future], None]:
         def callback(publish_future: pubsub_v1.publisher.futures.Future) -> None:
-            logger.info(
+            logger.debug(
                 json.dumps(
                     {
-                        "severity": "Default",
-                        "message": "Started",
+                        "severity": "Debug",
+                        "message": "Publishing batch",
                         "message_id": self.message_id,
                         "publish_time": self.publish_time.isoformat(),
                         "batch_at": self.batch_at().isoformat(),
@@ -30,18 +30,7 @@ class Heartbeat:
                 )
             )
             try:
-                result = publish_future.result(timeout=PUBLISH_TIMEOUT)
-                logger.info(
-                    json.dumps(
-                        {
-                            "severity": "Default",
-                            "message": f"Finished - {result}",
-                            "message_id": self.message_id,
-                            "publish_time": self.publish_time.isoformat(),
-                            "batch_at": self.batch_at().isoformat(),
-                        }
-                    )
-                )
+                publish_future.result(timeout=PUBLISH_TIMEOUT)
             except Exception as e:
                 logger.error(
                     json.dumps(
