@@ -80,7 +80,7 @@ join_orgs AS (
 fct_payments_settlements_enghouse AS (
     SELECT
         operator_id,
-        id,
+        id AS settlement_id,
         operation,
         terminal_id,
         timestamp,
@@ -108,7 +108,7 @@ fct_payments_settlements_enghouse AS (
 
 SELECT
     operator_id,
-    id,
+    settlement_id,
     operation,
     terminal_id,
     timestamp,
