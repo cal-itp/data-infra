@@ -109,3 +109,40 @@ Hash of all data columns. Retained for data quality inspection; deduplication us
 {% docs enghouse_settlement_type %}
 Type of settlement that occurred. `CREDIT` for refunds (operation = `REFUND`); `DEBIT` for all other operations.
 {% enddocs %}
+
+--------------------------------  AGGREGATION FIELDS --------------------------------
+
+These describe columns used for fct_payments_aggregations_enghouse
+
+{% docs eh_latest_settlement_update_timestamp %}
+The timestamp of the latest settlement in the aggregation
+{% enddocs %}
+
+{% docs eh_num_settlements %}
+The number of settlements in the aggregation. 
+Note that there can also be multiple transaction entries per settlements, when this occurs, this will be the number of settlement IDs.
+{% enddocs %}
+
+{% docs eh_net_settlement_amount_dollars %}
+The net amount of settlements in the aggregation (debit - credit)
+{% enddocs %}
+
+{% docs eh_contains_refund %}
+`TRUE` if the aggregation contains a refund, `FALSE` otherwise
+{% enddocs %}
+
+{% docs eh_num_debit_settlements %}
+The number of debit (sale) settlements in the aggregation
+{% enddocs %}
+
+{% docs eh_num_credit_settlements %}
+The number of credit (refund) settlements in the aggregation
+{% enddocs %}
+
+{% docs eh_debit_amount %}
+The total debit (sale) amount in the aggregation (in USD)
+{% enddocs %}
+
+{% docs eh_credit_amount %}
+The total credit (refund) amount in the aggregation (in USD)
+{% enddocs %}
