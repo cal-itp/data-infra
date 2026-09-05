@@ -108,6 +108,40 @@ models:
         description: '{{ doc("lp_debit_is_settled") }}'
       - name: credit_is_settled
         description: '{{ doc("lp_credit_is_settled") }}'
+
+  - name: int_payments__settlements_to_aggregations_enghouse
+    description: |
+      This model contains Enghouse settlements aggregated to the `operator_id + payment_reference` level.
+      `payment_reference` is the only key available to link Enghouse pay windows to transactions, and is
+      also the join key from Enghouse to Elavon, so it stands in for Littlepay's
+      `aggregation_id + retrieval_reference_number` grain used in `int_payments__settlements_to_aggregations`.
+      Amounts are inherited from `fct_payments_settlements_enghouse`, which negates refunds
+      (`settlement_type = 'CREDIT'`), so `debit_amount + credit_amount = net_settlement_amount_dollars`
+      and `credit_amount` is zero or negative.
+      Unlike the Littlepay model, there is no settlement status available here, so this model has no
+      `aggregation_is_settled` / `debit_is_settled` / `credit_is_settled` equivalents.
+    columns:
+      - name: operator_id
+        description: '{{ doc("enghouse_operator_id") }}'
+      - name: payment_reference
+        description: '{{ doc("enghouse_payment_reference") }}'
+      - name: latest_settlement_update_timestamp
+        description: '{{ doc("eh_latest_settlement_update_timestamp") }}'
+      - name: num_settlements
+        description: '{{ doc("eh_num_settlements") }}'
+      - name: net_settlement_amount_dollars
+        description: '{{ doc("eh_net_settlement_amount_dollars") }}'
+      - name: contains_refund
+        description: '{{ doc("eh_contains_refund") }}'
+      - name: num_debit_settlements
+        description: '{{ doc("eh_num_debit_settlements") }}'
+      - name: num_credit_settlements
+        description: '{{ doc("eh_num_credit_settlements") }}'
+      - name: debit_amount
+        description: '{{ doc("eh_debit_amount") }}'
+      - name: credit_amount
+        description: '{{ doc("eh_credit_amount") }}'
+
   - name: int_payments__micropayments_to_aggregations
     description: |
       Littlepay micropayments grouped to the aggregation (`aggregation_id`) level.
