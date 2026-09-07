@@ -120,17 +120,47 @@ models:
       and `credit_amount` is zero or negative.
       Unlike the Littlepay model, there is no settlement status available here, so this model has no
       `aggregation_is_settled` / `debit_is_settled` / `credit_is_settled` equivalents.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - operator_id
+              - payment_reference
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "debit_amount + credit_amount = net_settlement_amount_dollars"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "contains_refund = (credit_amount < 0)"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "num_debit_settlements + num_credit_settlements = num_settlements"
     columns:
       - name: operator_id
         description: '{{ doc("enghouse_operator_id") }}'
+        data_tests:
+          - not_null
       - name: payment_reference
         description: '{{ doc("enghouse_payment_reference") }}'
+        data_tests:
+          # note lack of uniqueness test here - enghouse payment_reference is unique given operator_id
+          # but not on its own, unlike littlepay rrn
+          - not_null
       - name: latest_settlement_update_timestamp
         description: '{{ doc("eh_latest_settlement_update_timestamp") }}'
+        data_tests:
+          - not_null
       - name: num_settlements
         description: '{{ doc("eh_num_settlements") }}'
       - name: net_settlement_amount_dollars
         description: '{{ doc("eh_net_settlement_amount_dollars") }}'
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: true
+                error_if: ">10"
+                warn_if: ">0"
       - name: contains_refund
         description: '{{ doc("eh_contains_refund") }}'
       - name: num_debit_settlements
@@ -139,8 +169,18 @@ models:
         description: '{{ doc("eh_num_credit_settlements") }}'
       - name: debit_amount
         description: '{{ doc("eh_debit_amount") }}'
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: true
       - name: credit_amount
         description: '{{ doc("eh_credit_amount") }}'
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                max_value: 0
+                inclusive: true
 
   - name: int_payments__micropayments_to_aggregations
     description: |
