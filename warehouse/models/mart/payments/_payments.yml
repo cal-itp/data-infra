@@ -965,97 +965,87 @@ models:
               - pay_window_id
     columns:
       - name: operator_id
-        description: Enghouse operator ID identifying the transit agency.
+        description: '{{ doc("enghouse_operator_id") }}'
       - *organization_name
       - *organization_source_record_id
       - name: end_of_month_date_pacific
-        description: |
-          The last day of the month of the aggregation_datetime in Pacific Time.
-          Primarily for use in BI tooling to support consistent date grouping across activity types.
+        description: '{{ doc("eh_end_of_month_date_pacific") }}'
         data_tests:
           - not_null
       - name: end_of_month_date_utc
-        description: The last day of the month of the aggregation_datetime in UTC.
+        description: '{{ doc("eh_end_of_month_date_utc") }}'
         data_tests:
           - not_null
       - name: pay_window_id
-        description: Unique identifier for the pay window (Enghouse `id` from the pay_windows table).
+        description: '{{ doc("eh_pay_window_id") }}'
         data_tests:
           - not_null
       - name: payment_reference
-        description: |
-          Payment reference associated with the pay window. This is the join key to Elavon deposit data (`purch_id`).
+        description: '{{ doc("enghouse_payment_reference") }}'
       - name: token
-        description: Tokenized card identifier associated with the pay window.
+        description: '{{ doc("enghouse_token") }}'
       - name: stage
-        description: |
-          Current stage of the pay window lifecycle. Known values: Open, Closed, Debt, DebtFinal, NoAuthDone.
+        description: '{{ doc("eh_stage") }}'
       - name: terminal_id
-        description: Terminal ID where the pay window was initiated.
+        description: '{{ doc("eh_pay_window_terminal_id") }}'
       - name: open_date
-        description: Timestamp when the pay window was opened (first tap).
+        description: '{{ doc("eh_open_date") }}'
       - name: close_date
-        description: Timestamp when the pay window was closed and settled.
+        description: '{{ doc("eh_close_date") }}'
       - name: aggregation_datetime
-        description: |
-          Datetime of pay window close if present, otherwise falls back to the latest transaction,
-          otherwise to the pay window open, otherwise to the latest terminal-recorded tap time.
-          This can be used to represent the most recent update for the pay window, and is the
-          Enghouse analogue of `aggregation_datetime` in `fct_payments_aggregations`.
+        description: '{{ doc("eh_aggregation_datetime") }}'
         data_tests:
           - not_null
       - name: agency
-        description: Agency identifier from the source file partition.
+        description: '{{ doc("enghouse_agency") }}'
       - name: amount_to_settle
-        description: Total fare amount that should be charged for this pay window.
+        description: '{{ doc("eh_amount_to_settle") }}'
       - name: amount_settled
-        description: Amount actually settled for this pay window.
+        description: '{{ doc("eh_amount_settled") }}'
       - name: debt_settled
-        description: Amount recovered through debt recovery for this pay window.
+        description: '{{ doc("eh_debt_settled") }}'
       - name: num_taps
-        description: Number of distinct taps associated with this pay window's payment_reference.
+        description: '{{ doc("eh_num_taps") }}'
       - name: num_ticket_results
-        description: Number of ticket results associated with the taps in this pay window.
+        description: '{{ doc("eh_num_ticket_results") }}'
       - name: total_fare_amount
-        description: Sum of fare amounts across all ticket results for this pay window.
-      - name: num_transactions
-        description: Total number of transaction records (all operation types) for this payment_reference.
-      - name: net_transaction_amount
-        description: Net amount across all transactions (charges minus refunds).
-      - name: latest_transaction_timestamp
-        description: Timestamp of the most recent transaction for this payment_reference.
-      - name: num_charges
-        description: Number of transactions with a positive amount (charges).
-      - name: num_refunds
-        description: Number of transactions with a negative amount (refunds).
-      - name: gross_charges
-        description: Sum of all positive transaction amounts for this pay window.
-      - name: gross_refunds
-        description: Sum of absolute values of all negative transaction amounts for this pay window.
+        description: '{{ doc("eh_total_fare_amount") }}'
+      - name: has_settlement
+        description: '{{ doc("eh_has_settlement") }}'
+      - name: latest_settlement_update_datetime
+        description: '{{ doc("eh_latest_settlement_update_timestamp") }}'
+      - name: latest_settlement_update_datetime_pacific
+        description: '{{ doc("eh_latest_settlement_update_datetime_pacific") }}'
+      - name: num_settlements
+        description: '{{ doc("eh_num_settlements") }}'
+      - name: num_debit_settlements
+        description: '{{ doc("eh_num_debit_settlements") }}'
+      - name: num_credit_settlements
+        description: '{{ doc("eh_num_credit_settlements") }}'
+      - name: net_settled_amount_dollars
+        description: '{{ doc("eh_net_settlement_amount_dollars") }}'
+      - name: settlement_contains_refund
+        description: '{{ doc("eh_contains_refund") }}'
+      - name: settlement_debit_amount
+        description: '{{ doc("eh_debit_amount") }}'
+      - name: settlement_credit_amount
+        description: '{{ doc("eh_credit_amount") }}'
+      - name: contains_nonzero_sales
+        description: '{{ doc("eh_contains_nonzero_sales") }}'
       - name: elavon_purch_id
-        description: |
-          Elavon purchase ID matched to this pay window via payment_reference. NULL if no Elavon match found.
+        description: '{{ doc("eh_elavon_purch_id") }}'
       - name: elavon_settlement_date
-        description: Settlement date from Elavon deposit data for this pay window.
+        description: '{{ doc("eh_elavon_settlement_date") }}'
       - name: elavon_payment_date
-        description: Payment date from Elavon deposit data for this pay window.
+        description: '{{ doc("eh_elavon_payment_date") }}'
       - name: elavon_net_amount
-        description: Net amount from Elavon deposit data (sum of all Elavon transactions for this purch_id).
+        description: '{{ doc("eh_elavon_net_amount") }}'
       - name: elavon_sales
-        description: Total sales amount from Elavon deposit data for this pay window.
+        description: '{{ doc("eh_elavon_sales") }}'
       - name: elavon_refunds
-        description: Total refund amount from Elavon deposit data for this pay window.
+        description: '{{ doc("eh_elavon_refunds") }}'
       - name: reconciliation_category
-        description: |
-          High-level reconciliation status derived from pay window stage and Elavon match.
-          Values:
-          - "Settled (with Elavon match)": stage=Closed and matched to an Elavon deposit record
-          - "Settled (no Elavon match)": stage=Closed but no corresponding Elavon deposit record found
-          - "Debt (recovery ongoing)": stage=Debt — cardholder was charged separately via debt recovery
-          - "Debt (unrecovered)": stage=DebtFinal — debt recovery was finalized with no full recovery
-          - "Open": stage=Open or NoAuthDone — pay window not yet settled
-          - "Authorization Declined": stage=AuthDeclined — authorization attempt was declined; terminal state, no money moved
-          - "Unknown": stage value not recognized
+        description: '{{ doc("eh_reconciliation_category") }}'
 
   - name: fct_payments_settlements_enghouse
     description: Enghouse settlements (completed transactions.)

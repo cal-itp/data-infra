@@ -13,8 +13,8 @@ ticket_results AS (
     SELECT * FROM {{ ref('stg_enghouse__ticket_results') }}
 ),
 
-transactions AS (
-    SELECT * FROM {{ ref('stg_enghouse__transactions') }}
+settlements_to_aggregations AS (
+    SELECT * FROM {{ ref('int_payments__settlements_to_aggregations_enghouse') }}
 ),
 
 payments_entity_mapping AS (
@@ -41,22 +41,6 @@ ticket_results_by_payment_reference AS (
         ON taps.tap_id = ticket_results.tap_id
     WHERE taps.payment_reference IS NOT NULL
     GROUP BY taps.payment_reference, taps.operator_id
-),
-
-transactions_by_payment_reference AS (
-    SELECT
-        payment_reference,
-        operator_id,
-        COUNT(*) AS num_transactions,
-        SUM(amount) AS net_transaction_amount,
-        MAX(timestamp) AS latest_transaction_timestamp,
-        COUNTIF(amount > 0) AS num_charges,
-        COUNTIF(amount < 0) AS num_refunds,
-        SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END) AS gross_charges,
-        SUM(CASE WHEN amount < 0 THEN ABS(amount) ELSE 0 END) AS gross_refunds
-    FROM transactions
-    WHERE payment_reference IS NOT NULL
-    GROUP BY payment_reference, operator_id
 ),
 
 elavon_info AS (
@@ -92,17 +76,19 @@ join_all AS (
         ticket_results_by_payment_reference.total_fare_amount,
         ticket_results_by_payment_reference.latest_tap_terminal_date,
 
-        transactions_by_payment_reference.num_transactions,
-        transactions_by_payment_reference.net_transaction_amount,
-        transactions_by_payment_reference.latest_transaction_timestamp,
-        transactions_by_payment_reference.num_charges,
-        transactions_by_payment_reference.num_refunds,
-        transactions_by_payment_reference.gross_charges,
-        transactions_by_payment_reference.gross_refunds,
+        settlements_to_aggregations.payment_reference IS NOT NULL AS has_settlement,
+        settlements_to_aggregations.latest_settlement_update_timestamp,
+        settlements_to_aggregations.num_settlements,
+        settlements_to_aggregations.net_settlement_amount_dollars AS net_settled_amount_dollars,
+        settlements_to_aggregations.contains_refund AS settlement_contains_refund,
+        settlements_to_aggregations.num_debit_settlements,
+        settlements_to_aggregations.num_credit_settlements,
+        settlements_to_aggregations.debit_amount AS settlement_debit_amount,
+        settlements_to_aggregations.credit_amount AS settlement_credit_amount,
 
         COALESCE(
             pay_windows.close_date,
-            transactions_by_payment_reference.latest_transaction_timestamp,
+            settlements_to_aggregations.latest_settlement_update_timestamp,
             pay_windows.open_date,
             ticket_results_by_payment_reference.latest_tap_terminal_date
         ) AS aggregation_datetime,
@@ -121,9 +107,9 @@ join_all AS (
     LEFT JOIN ticket_results_by_payment_reference
         ON pay_windows.payment_reference = ticket_results_by_payment_reference.payment_reference
             AND pay_windows.operator_id = ticket_results_by_payment_reference.operator_id
-    LEFT JOIN transactions_by_payment_reference
-        ON pay_windows.payment_reference = transactions_by_payment_reference.payment_reference
-            AND pay_windows.operator_id = transactions_by_payment_reference.operator_id
+    LEFT JOIN settlements_to_aggregations
+        ON pay_windows.payment_reference = settlements_to_aggregations.payment_reference
+            AND pay_windows.operator_id = settlements_to_aggregations.operator_id
     LEFT JOIN elavon_info
         ON pay_windows.payment_reference = elavon_info.elavon_purch_id
     LEFT JOIN payments_entity_mapping AS entity_map
@@ -159,13 +145,17 @@ fct_payments_aggregations_enghouse AS (
         num_taps,
         num_ticket_results,
         total_fare_amount,
-        num_transactions,
-        net_transaction_amount,
-        latest_transaction_timestamp,
-        num_charges,
-        num_refunds,
-        gross_charges,
-        gross_refunds,
+        has_settlement,
+        DATETIME(latest_settlement_update_timestamp, "UTC") AS latest_settlement_update_datetime,
+        DATETIME(latest_settlement_update_timestamp, "America/Los_Angeles") AS latest_settlement_update_datetime_pacific,
+        num_settlements,
+        num_debit_settlements,
+        num_credit_settlements,
+        net_settled_amount_dollars,
+        settlement_contains_refund,
+        settlement_debit_amount,
+        settlement_credit_amount,
+        settlement_debit_amount > 0 AS contains_nonzero_sales,
         elavon_purch_id,
         elavon_settlement_date,
         elavon_payment_date,
@@ -173,11 +163,11 @@ fct_payments_aggregations_enghouse AS (
         elavon_sales,
         elavon_refunds,
         CASE
-            WHEN net_transaction_amount = 0 THEN 'Zero-dollar value sales'
+            WHEN net_settled_amount_dollars = 0 THEN 'Zero-dollar value sales'
             WHEN stage = 'Closed' AND elavon_purch_id IS NOT NULL THEN 'Settled non-zero sales (with Elavon match)'
             WHEN stage = 'Closed' AND elavon_purch_id IS NULL THEN 'Settled non-zero sales (no Elavon match)'
-            WHEN stage in ('Debt', 'DebtFinal', 'Open', 'NoAuthDone') THEN 'Unsettled non-zero Sales'
-            WHEN stage = 'AuthDeclined' THEN 'Declined Sales'
+            WHEN stage in ('Debt', 'DebtFinal', 'Open', 'NoAuthDone') THEN 'Unsettled non-zero sales'
+            WHEN stage = 'AuthDeclined' THEN 'Declined sales'
             ELSE 'UNKNOWN'
         END AS reconciliation_category
     FROM join_all
