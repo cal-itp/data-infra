@@ -831,8 +831,14 @@ models:
         description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
       - name: id
         description: Unique identifier for this ticket in the Enghouse system.
+        data_tests:
+          - unique # enforces that there is no fan out from ticket_results to rides
+          - not_null
       - name: ticket_id
         description: Unique identifier for this ticket in the Enghouse system.
+        data_tests:
+          - unique
+          - not_null
       - name: station_name
         description: Zone in which the ticket was created.
       - name: amount
@@ -843,6 +849,8 @@ models:
         description: Explanation of how the fare was calculated.
       - name: tap_id
         description: Identifier of the tap that generated this ticket result.
+        data_tests: # there should always be a tap associated with a ticket
+          - not_null
       - name: ticket_type
         description: Type of ticket.
       - name: created_dttm
