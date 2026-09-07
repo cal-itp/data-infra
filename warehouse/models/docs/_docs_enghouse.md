@@ -146,3 +146,109 @@ The total debit (sale) amount in the aggregation (in USD)
 {% docs eh_credit_amount %}
 The total credit (refund) amount in the aggregation (in USD)
 {% enddocs %}
+
+{% docs eh_has_settlement %}
+If "true", there is at least one settlement in `int_payments__settlements_to_aggregations_enghouse`
+for this pay window's `operator_id` + `payment_reference`.
+{% enddocs %}
+
+{% docs eh_latest_settlement_update_datetime_pacific %}
+`latest_settlement_update_datetime` in Pacific Time.
+{% enddocs %}
+
+{% docs eh_contains_nonzero_sales %}
+Boolean flag for whether this pay window contains a debit (sales) amount greater than 0.
+{% enddocs %}
+
+{% docs eh_pay_window_id %}
+Unique identifier for the pay window (Enghouse `id` from the pay_windows table).
+{% enddocs %}
+
+{% docs eh_aggregation_datetime %}
+Datetime of pay window close if present, otherwise falls back to the latest settlement,
+otherwise to the pay window open, otherwise to the latest terminal-recorded tap time.
+{% enddocs %}
+
+{% docs eh_end_of_month_date_pacific %}
+The last day of the month of the `aggregation_datetime` in Pacific Time.
+{% enddocs %}
+
+{% docs eh_end_of_month_date_utc %}
+The last day of the month of the `aggregation_datetime` in UTC.
+{% enddocs %}
+
+{% docs eh_stage %}
+Current stage of the pay window lifecycle. Known values: Open, Closed, Debt, DebtFinal, NoAuthDone.
+{% enddocs %}
+
+{% docs eh_pay_window_terminal_id %}
+Terminal ID where the pay window was initiated.
+{% enddocs %}
+
+{% docs eh_open_date %}
+Timestamp when the pay window was opened (first tap).
+{% enddocs %}
+
+{% docs eh_close_date %}
+Timestamp when the pay window was closed and settled.
+{% enddocs %}
+
+{% docs eh_amount_to_settle %}
+Total fare amount that should be charged for this pay window.
+{% enddocs %}
+
+{% docs eh_amount_settled %}
+Amount actually settled for this pay window.
+{% enddocs %}
+
+{% docs eh_debt_settled %}
+Amount recovered through debt recovery for this pay window.
+{% enddocs %}
+
+{% docs eh_num_taps %}
+Number of distinct taps associated with this pay window's `payment_reference`.
+{% enddocs %}
+
+{% docs eh_num_ticket_results %}
+Number of ticket results associated with the taps in this pay window.
+{% enddocs %}
+
+{% docs eh_total_fare_amount %}
+Sum of fare amounts across all ticket results for this pay window.
+{% enddocs %}
+
+{% docs eh_elavon_purch_id %}
+Elavon purchase ID matched to this pay window via `payment_reference`. NULL if no Elavon match found.
+{% enddocs %}
+
+{% docs eh_elavon_settlement_date %}
+Settlement date from Elavon deposit data for this pay window.
+{% enddocs %}
+
+{% docs eh_elavon_payment_date %}
+Payment date from Elavon deposit data for this pay window.
+{% enddocs %}
+
+{% docs eh_elavon_net_amount %}
+Net amount from Elavon deposit data (sum of all Elavon transactions for this `purch_id`).
+{% enddocs %}
+
+{% docs eh_elavon_sales %}
+Total sales amount from Elavon deposit data for this pay window.
+{% enddocs %}
+
+{% docs eh_elavon_refunds %}
+Total refund amount from Elavon deposit data for this pay window.
+{% enddocs %}
+
+{% docs eh_reconciliation_category %}
+The state of the aggregation
+
+Possible Values:
+- `Zero-dollar value sales`: the pay window settled to 0 value, so no charge is expected
+- `Settled non-zero sales (with Elavon match)`: stage is `Closed` and the pay window matched an Elavon deposit record
+- `Settled non-zero sales (no Elavon match)`: stage is `Closed` but no corresponding Elavon deposit record was found
+- `Unsettled non-zero sales`: stage is `Debt`, `DebtFinal`, `Open` or `NoAuthDone` — the pay window is not settled - stage has more context
+- `Declined sales`: stage is `AuthDeclined` — the authorization attempt was declined
+- `UNKNOWN`: none of these conditions are met
+{% enddocs %}
