@@ -32,7 +32,7 @@ resource "google_storage_bucket" "gtfs-rt-raw-high-frequency" {
       type = "Delete"
     }
     condition {
-      age = 180
+      age = 365
     }
   }
 }
