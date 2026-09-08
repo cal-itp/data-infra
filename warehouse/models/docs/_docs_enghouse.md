@@ -209,6 +209,14 @@ Amount recovered through debt recovery for this pay window.
 Number of distinct taps associated with this pay window's `payment_reference`.
 {% enddocs %}
 
+{% docs eh_latest_tap_terminal_date %}
+The `terminal_date` (terminal-recorded tap time) of the most recent tap in the pay window.
+{% enddocs %}
+
+{% docs eh_masked_pan %}
+Masked primary account number.
+{% enddocs %}
+
 {% docs eh_num_ticket_results %}
 Number of ticket results associated with the taps in this pay window.
 {% enddocs %}
