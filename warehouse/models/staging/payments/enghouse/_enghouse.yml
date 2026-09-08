@@ -23,8 +23,13 @@ models:
     columns:
       - name: operator_id
         description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
+        data_tests:
+          - not_null
       - name: tap_id
         description: Unique identifier for this tap in the Enghouse system.
+        data_tests:
+          - not_null
+          - unique
       - name: mapping_terminal_id
         description: Not relevant for US projects.
       - name: mapping_merchant_id
@@ -33,18 +38,23 @@ models:
         description: Identifier of the terminal where the tap was created.
       - name: token
         description: Tokenized card number.
+          - not_null
       - name: masked_pan
         description: Masked primary account number.
       - name: server_date
         description: Timestamp when the tap was received on the Enghouse server.
       - name: terminal_date
         description: Timestamp when the tap was created on the terminal.
+        data_tests:
+          - not_null
       - name: tx_number
         description: Enghouse internal tap status code. Not meaningful for downstream analysis.
       - name: tx_status
         description: Enghouse internal tap status code. Not meaningful for downstream analysis.
       - name: payment_reference
         description: Payment reference number (PRN / variable symbol) linking the tap to its transaction.
+        data_tests:
+          - not_null
       - name: terminal_spdh_code
         description: SPDH terminal protocol response code. 000 indicates approved.
       - name: denylist_version
