@@ -182,6 +182,35 @@ models:
                 max_value: 0
                 inclusive: true
 
+  - name: int_payments__taps_to_aggregations_enghouse
+    description: |
+      Enghouse taps aggregated to the `operator_id + payment_reference` level,
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - operator_id
+              - payment_reference
+    columns:
+      - name: operator_id
+        description: '{{ doc("enghouse_operator_id") }}'
+        data_tests:
+          - not_null
+      - name: payment_reference
+        description: '{{ doc("enghouse_payment_reference") }}'
+        data_tests:
+          - not_null
+      - name: num_taps
+        description: '{{ doc("eh_num_taps") }}'
+      - name: latest_tap_terminal_date
+        description: '{{ doc("eh_latest_tap_terminal_date") }}'
+      - name: masked_pan
+        description: '{{ doc("eh_masked_pan") }}'
+      - name: par
+        description: '{{ doc("enghouse_par") }}'
+      - name: token
+        description: '{{ doc("enghouse_token") }}'
+
   - name: int_payments__micropayments_to_aggregations
     description: |
       Littlepay micropayments grouped to the aggregation (`aggregation_id`) level.
