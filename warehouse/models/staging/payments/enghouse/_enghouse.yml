@@ -38,9 +38,23 @@ models:
         description: Identifier of the terminal where the tap was created.
       - name: token
         description: Tokenized card number.
+        data_tests:
           - not_null
+          # all taps sharing an operator_id + payment_reference are expected to be
+          # made with the same pan
+          # guards assumptions in int_payments__taps_to_aggregations_enghouse
+          - &one_card_identifier_per_payment_reference
+            single_value_per_group:
+              arguments:
+                group_by_columns: [operator_id, payment_reference]
+                config:
+                  # taps with no payment_reference cannot be attributed to a pay window and are
+                  # excluded from int_payments__taps_to_aggregations_enghouse
+                  where: "payment_reference IS NOT NULL"
       - name: masked_pan
         description: Masked primary account number.
+        data_tests:
+          - *one_card_identifier_per_payment_reference
       - name: server_date
         description: Timestamp when the tap was received on the Enghouse server.
       - name: terminal_date
@@ -65,6 +79,8 @@ models:
         description: ISO 4217 numeric currency code (840 = USD).
       - name: par
         description: Payment Account Reference (PAR).
+        data_tests:
+          - *one_card_identifier_per_payment_reference
       - name: fare_mode
         description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: fare_type
