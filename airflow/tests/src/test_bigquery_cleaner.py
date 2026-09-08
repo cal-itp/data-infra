@@ -26,3 +26,22 @@ class TestBigQueryCleaner:
         assert cleaner.clean() == [
             {"id": 0, "score": -2, "amount": 123.00055556, "total": 0.5}
         ]
+
+    def test_cleaning_airtable_special_value(self):
+        # Airtable emits {"specialValue": "NaN"} for formula fields that
+        # evaluate to a non-finite number; it must not leak into BigQuery.
+        rows = [{"id": "abc123", "days_open": {"specialValue": "NaN"}}]
+        cleaner = BigQueryCleaner(rows)
+        assert cleaner.clean() == [{"id": "abc123", "days_open": None}]
+
+    def test_cleaning_airtable_error_object(self):
+        rows = [{"id": "abc123", "computed": {"error": "#ERROR!"}}]
+        cleaner = BigQueryCleaner(rows)
+        assert cleaner.clean() == [{"id": "abc123", "computed": None}]
+
+    def test_preserves_legitimate_nested_object(self):
+        rows = [{"id": "abc", "user": {"id": "u1", "email": "a@b.c", "name": "A"}}]
+        cleaner = BigQueryCleaner(rows)
+        assert cleaner.clean() == [
+            {"id": "abc", "user": {"id": "u1", "email": "a@b.c", "name": "A"}}
+        ]
