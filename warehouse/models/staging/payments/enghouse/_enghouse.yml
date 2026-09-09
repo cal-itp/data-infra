@@ -355,6 +355,12 @@ models:
 
       Rows are deduplicated by id and operator_id. When the same pay window appears in multiple
       delivery files, the earliest delivery is kept.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - operator_id
+              - payment_reference
     columns:
       - name: operator_id
         description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
@@ -364,6 +370,7 @@ models:
         description: Unique identifier for this pay window in the Enghouse system.
         data_tests:
           - unique
+          - not_null
       - name: token
         description: Tokenized card number associated with this pay window.
         data_tests:
