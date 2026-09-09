@@ -1009,12 +1009,20 @@ models:
         description: '{{ doc("eh_stage") }}'
       - name: terminal_id
         description: '{{ doc("eh_pay_window_terminal_id") }}'
-      - name: open_date
-        description: '{{ doc("eh_open_date") }}'
-      - name: close_date
-        description: '{{ doc("eh_close_date") }}'
+      - name: open_datetime
+        description: '{{ doc("eh_open_datetime") }}'
+      - name: open_datetime_pacific
+        description: '{{ doc("eh_open_datetime_pacific") }}'
+      - name: close_datetime
+        description: '{{ doc("eh_close_datetime") }}'
+      - name: close_datetime_pacific
+        description: '{{ doc("eh_close_datetime_pacific") }}'
       - name: aggregation_datetime
         description: '{{ doc("eh_aggregation_datetime") }}'
+        data_tests:
+          - not_null
+      - name: aggregation_datetime_pacific
+        description: '{{ doc("eh_aggregation_datetime_pacific") }}'
         data_tests:
           - not_null
       - name: agency
@@ -1027,14 +1035,18 @@ models:
         description: '{{ doc("eh_debt_settled") }}'
       - name: num_taps
         description: '{{ doc("eh_num_taps") }}'
-      - name: latest_tap_terminal_date
-        description: '{{ doc("eh_latest_tap_terminal_date") }}'
+      - name: latest_tap_terminal_datetime
+        description: '{{ doc("eh_latest_tap_terminal_datetime") }}'
+      - name: latest_tap_terminal_datetime_pacific
+        description: '{{ doc("eh_latest_tap_terminal_datetime_pacific") }}'
       - name: num_ticket_results
         description: '{{ doc("eh_num_ticket_results") }}'
       - name: total_fare_amount
         description: '{{ doc("eh_total_fare_amount") }}'
-      - name: latest_ticket_result_update_timestamp
-        description: '{{ doc("eh_latest_ticket_result_update_timestamp") }}'
+      - name: latest_ticket_result_update_datetime
+        description: '{{ doc("eh_latest_ticket_result_update_datetime") }}'
+      - name: latest_ticket_result_update_datetime_pacific
+        description: '{{ doc("eh_latest_ticket_result_update_datetime_pacific") }}'
       - name: has_settlement
         description: '{{ doc("eh_has_settlement") }}'
       - name: latest_settlement_update_datetime

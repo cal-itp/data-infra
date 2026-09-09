@@ -405,9 +405,9 @@ models:
           - not_null
       - name: terminal_id
         description: Identifier of the terminal where the pay window was opened.
-      - name: open_date
+      - name: open_timestamp
         description: Timestamp when the pay window was opened.
-      - name: close_date
+      - name: close_timestamp
         description: Timestamp when the pay window was closed.
       - name: agency
         description: Agency identifier parsed from the GCS path partition (e.g., "ventura", "raba", "camarillo").
