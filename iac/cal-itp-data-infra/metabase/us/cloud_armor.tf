@@ -5,10 +5,10 @@ resource "google_compute_security_policy" "metabase" {
   rule {
     priority    = 500
     action      = "deny(403)"
-    description = "Geo-restrict to US/CA/GB/NL/HU"
+    description = "Geo-restrict to US/CA/GB/NL/HU/NZ"
     match {
       expr {
-        expression = "!(origin.region_code == 'US' || origin.region_code == 'CA' || origin.region_code == 'GB' || origin.region_code == 'NL' || origin.region_code == 'HU')"
+        expression = "!(origin.region_code == 'US' || origin.region_code == 'CA' || origin.region_code == 'GB' || origin.region_code == 'NL' || origin.region_code == 'HU' || origin.region_code == 'NZ')"
       }
     }
   }

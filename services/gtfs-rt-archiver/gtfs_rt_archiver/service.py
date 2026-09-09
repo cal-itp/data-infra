@@ -30,11 +30,11 @@ class Service:
         return Archiver(configuration=self.configuration())
 
     def run(self, logger=logging.getLogger(__name__)):
-        logger.info(
+        logger.debug(
             json.dumps(
                 {
-                    "severity": "Default",
-                    "message": f"Started {self.configuration().url}",
+                    "severity": "Debug",
+                    "message": f"Processing {self.configuration().url}",
                     "url": self.configuration().url,
                     "message_id": self.message_id,
                     "publish_time": self.publish_time.isoformat(),
@@ -43,17 +43,6 @@ class Service:
         )
         try:
             self.archiver().save(result=self.downloader().get())
-            logger.info(
-                json.dumps(
-                    {
-                        "severity": "Default",
-                        "message": f"Finished {self.configuration().url}",
-                        "url": self.configuration().url,
-                        "message_id": self.message_id,
-                        "publish_time": self.publish_time.isoformat(),
-                    }
-                )
-            )
         except Exception as e:
             logger.error(
                 json.dumps(

@@ -39,8 +39,8 @@ resource "google_workflows_workflow" "gtfs-rt-archiver-staging-clock" {
   service_account = data.terraform_remote_state.iam.outputs.google_service_account_gtfs-rt-archiver_email
   source_contents = templatefile("${local.source_path}/clock.yaml", {})
 
-  call_log_level          = "LOG_ALL_CALLS"
-  execution_history_level = "EXECUTION_HISTORY_DETAILED"
+  call_log_level          = "LOG_ERRORS_ONLY"
+  execution_history_level = "EXECUTION_HISTORY_BASIC"
 
   user_env_vars = {
     "CALITP_TOPIC__GTFS_RT_ARCHIVER_HEARTBEAT" = google_pubsub_topic.gtfs-rt-archiver-staging-heartbeat.id
