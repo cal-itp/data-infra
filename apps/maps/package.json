@@ -45,7 +45,7 @@
     "color-convert": "^2.0.1",
     "deck.gl": "^8.9.14",
     "deck.gl-leaflet": "^1.2.1",
-    "fflate": "^0.7.4",
+    "fflate": "^0.7.5",
     "js-base64": "^3.7.5",
     "json-schema-to-typescript": "^13.0.1",
     "leaflet-loading": "^0.1.24",
