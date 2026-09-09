@@ -18,7 +18,7 @@
     "bulma": "^0.9.4",
     "colormap": "^2.3.2",
     "leaflet": "^1.9.3",
-    "maplibre-gl": "^2.4.0",
+    "maplibre-gl": "^6.4.1",
     "pako": "^2.1.0",
     "prettier": "^2.8.8",
     "prettier-plugin-svelte": "^2.10.0",
