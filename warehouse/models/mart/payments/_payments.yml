@@ -1096,7 +1096,7 @@ models:
           config:
             where: "payment_reference is not null"
     columns:
-      - name: organization_name
+      - *organization_name
       - name: organization_source_record_id
         description: '{{ doc("payments_organization_source_record_id") }}'
       - name: operator_id
@@ -1147,7 +1147,9 @@ models:
       - name: settlement_type
         description: '{{ doc("enghouse_settlement_type") }}'
       - name: end_of_month_date_pacific
+        description: '{{ doc("eh_end_of_month_date_pacific") }}'
       - name: end_of_month_date_utc
+        description: '{{ doc("eh_end_of_month_date_utc") }}'
       - name: dt
         description: '{{ doc("enghouse_dt") }}'
       - name: _line_number
