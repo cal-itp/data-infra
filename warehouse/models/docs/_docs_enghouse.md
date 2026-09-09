@@ -179,6 +179,10 @@ Datetime of pay window close if present, otherwise falls back to the latest sett
 otherwise to the pay window open, otherwise to the latest terminal-recorded tap time.
 {% enddocs %}
 
+{% docs eh_aggregation_datetime_pacific %}
+`aggregation_datetime` in Pacific Time.
+{% enddocs %}
+
 {% docs eh_end_of_month_date_pacific %}
 The last day of the month of the `aggregation_datetime` in Pacific Time.
 {% enddocs %}
@@ -195,12 +199,20 @@ Current stage of the pay window lifecycle. Known values: Open, Closed, Debt, Deb
 Terminal ID where the pay window was initiated.
 {% enddocs %}
 
-{% docs eh_open_date %}
-Timestamp when the pay window was opened (first tap).
+{% docs eh_open_datetime %}
+Datetime when the pay window was opened (first tap).
 {% enddocs %}
 
-{% docs eh_close_date %}
-Timestamp when the pay window was closed and settled.
+{% docs eh_open_datetime_pacific %}
+`open_datetime` in Pacific Time.
+{% enddocs %}
+
+{% docs eh_close_datetime %}
+Datetime when the pay window was closed and settled.
+{% enddocs %}
+
+{% docs eh_close_datetime_pacific %}
+`close_datetime` in Pacific Time.
 {% enddocs %}
 
 {% docs eh_amount_to_settle %}
@@ -223,12 +235,28 @@ Number of distinct taps associated with this pay window's `payment_reference`.
 The `terminal_date` (terminal-recorded tap time) of the most recent tap in the pay window.
 {% enddocs %}
 
+{% docs eh_latest_tap_terminal_datetime %}
+The `terminal_date` (terminal-recorded tap time) of the most recent tap in the pay window.
+{% enddocs %}
+
+{% docs eh_latest_tap_terminal_datetime_pacific %}
+`latest_tap_terminal_datetime` in Pacific Time.
+{% enddocs %}
+
 {% docs eh_masked_pan %}
 Masked primary account number.
 {% enddocs %}
 
 {% docs eh_latest_ticket_result_update_timestamp %}
 The most recent ticket result timestamp in the pay window
+{% enddocs %}
+
+{% docs eh_latest_ticket_result_update_datetime %}
+The most recent ticket result datetime in the pay window
+{% enddocs %}
+
+{% docs eh_latest_ticket_result_update_datetime_pacific %}
+`latest_ticket_result_update_datetime` in Pacific Time.
 {% enddocs %}
 
 {% docs eh_num_ticket_results %}

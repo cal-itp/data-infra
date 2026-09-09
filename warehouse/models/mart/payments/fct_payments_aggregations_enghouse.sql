@@ -45,8 +45,8 @@ join_all AS (
         pay_windows.payment_reference,
         pay_windows.stage,
         pay_windows.terminal_id,
-        pay_windows.open_date,
-        pay_windows.close_date,
+        pay_windows.open_timestamp,
+        pay_windows.close_timestamp,
         -- the pay_windows table provides amount_to_settle and amount_settled in cents, rather than dollars
         pay_windows.amount_to_settle / 100 AS amount_to_settle_dollars,
         pay_windows.amount_settled / 100 AS amount_settled_dollars,
@@ -75,9 +75,9 @@ join_all AS (
         settlements_to_aggregations.credit_amount AS settlement_credit_amount,
 
         COALESCE(
-            pay_windows.close_date,
+            pay_windows.close_timestamp,
             settlements_to_aggregations.latest_settlement_update_timestamp,
-            pay_windows.open_date,
+            pay_windows.open_timestamp,
             taps_to_aggregations.latest_tap_terminal_date
         ) AS aggregation_datetime, -- Q: what is the type here?
 
@@ -103,12 +103,12 @@ join_all AS (
         and pay_windows.operator_id = elavon_info.enghouse_operator_id
     LEFT JOIN payments_entity_mapping AS entity_map
         ON pay_windows.operator_id = entity_map.operator_id
-            AND CAST(pay_windows.open_date AS TIMESTAMP)
+            AND CAST(pay_windows.open_timestamp AS TIMESTAMP)
                 BETWEEN CAST(entity_map._in_use_from AS TIMESTAMP)
                 AND CAST(entity_map._in_use_until AS TIMESTAMP)
     LEFT JOIN dim_orgs
         ON entity_map.organization_source_record_id = dim_orgs.source_record_id
-            AND CAST(pay_windows.open_date AS TIMESTAMP)
+            AND CAST(pay_windows.open_timestamp AS TIMESTAMP)
                 BETWEEN dim_orgs._valid_from AND dim_orgs._valid_to
 ),
 
@@ -126,18 +126,23 @@ fct_payments_aggregations_enghouse AS (
         token,
         stage,
         terminal_id,
-        open_date,
-        close_date,
-        aggregation_datetime,
+        DATETIME(open_timestamp, "UTC") AS open_datetime,
+        DATETIME(open_timestamp, "America/Los_Angeles") AS open_datetime_pacific,
+        DATETIME(close_timestamp, "UTC") AS close_datetime,
+        DATETIME(close_timestamp, "America/Los_Angeles") AS close_datetime_pacific,
+        DATETIME(aggregation_datetime, "UTC") AS aggregation_datetime,
+        DATETIME(aggregation_datetime, "America/Los_Angeles") AS aggregation_datetime_pacific,
         agency,
         amount_to_settle_dollars,
         amount_settled_dollars,
         debt_settled,
         num_taps,
-        latest_tap_terminal_date,
+        DATETIME(latest_tap_terminal_date, "UTC") AS latest_tap_terminal_datetime,
+        DATETIME(latest_tap_terminal_date, "America/Los_Angeles") AS latest_tap_terminal_datetime_pacific,
         num_ticket_results,
         total_fare_amount,
-        latest_ticket_result_update_timestamp,
+        DATETIME(latest_ticket_result_update_timestamp, "UTC") AS latest_ticket_result_update_datetime,
+        DATETIME(latest_ticket_result_update_timestamp, "America/Los_Angeles") AS latest_ticket_result_update_datetime_pacific,
         has_settlement,
         DATETIME(latest_settlement_update_timestamp, "UTC") AS latest_settlement_update_datetime,
         DATETIME(latest_settlement_update_timestamp, "America/Los_Angeles") AS latest_settlement_update_datetime_pacific,
