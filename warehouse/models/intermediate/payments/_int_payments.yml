@@ -163,6 +163,10 @@ models:
                 warn_if: ">0"
       - name: contains_refund
         description: '{{ doc("eh_contains_refund") }}'
+      - name: par
+        description: '{{ doc("enghouse_par") }}'
+      - name: token
+        description: '{{ doc("enghouse_token") }}'
       - name: num_debit_settlements
         description: '{{ doc("eh_num_debit_settlements") }}'
       - name: num_credit_settlements
@@ -185,6 +189,7 @@ models:
   - name: int_payments__taps_to_aggregations_enghouse
     description: |
       Enghouse taps aggregated to the `operator_id + payment_reference` level,
+      joined to ticket_results for additional fields
     data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
@@ -210,6 +215,12 @@ models:
         description: '{{ doc("enghouse_par") }}'
       - name: token
         description: '{{ doc("enghouse_token") }}'
+      - name: num_ticket_results
+        description: '{{ doc("eh_num_ticket_results") }}'
+      - name: total_fare_amount
+        description: '{{ doc("eh_total_fare_amount") }}'
+      - name: latest_ticket_result_update_timestamp
+        description: '{{ doc("eh_latest_ticket_result_update_timestamp") }}'
 
   - name: int_payments__micropayments_to_aggregations
     description: |

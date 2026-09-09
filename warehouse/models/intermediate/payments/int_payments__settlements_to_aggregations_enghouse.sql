@@ -7,6 +7,8 @@ summarize_by_type AS (
         operator_id,
         payment_reference,
         settlement_type,
+        ANY_VALUE(par) AS par,
+        ANY_VALUE(token) AS token,
         SUM(amount) AS total_amount,
         MAX(timestamp) AS type_latest_settlement_update_timestamp,
         COUNT(*) AS num_settlements_type
@@ -23,7 +25,9 @@ summarize_overall AS (
         MAX(type_latest_settlement_update_timestamp) AS latest_settlement_update_timestamp,
         SUM(num_settlements_type) AS num_settlements,
         SUM(total_amount) AS net_amount,
-        COUNTIF(settlement_type = "CREDIT") > 0 AS contains_refund
+        COUNTIF(settlement_type = "CREDIT") > 0 AS contains_refund,
+        ANY_VALUE(par) AS par,
+        ANY_VALUE(token) AS token
     FROM summarize_by_type
     GROUP BY operator_id, payment_reference
 ), -- TODO - we can't determine duplicate payment_reference values here - is there any validation checking like that we need to consider here?
@@ -36,6 +40,8 @@ int_payments__settlements_to_aggregations_enghouse AS (
         summary.num_settlements,
         summary.net_amount AS net_settlement_amount_dollars,
         summary.contains_refund,
+        summary.par,
+        summary.token,
         COALESCE(debit.num_settlements_type, 0) AS num_debit_settlements,
         COALESCE(credit.num_settlements_type, 0) AS num_credit_settlements,
         COALESCE(debit.total_amount,0) AS debit_amount,
@@ -58,6 +64,8 @@ SELECT
     num_settlements,
     net_settlement_amount_dollars,
     contains_refund,
+    par,
+    token,
     num_debit_settlements,
     num_credit_settlements,
     debit_amount,

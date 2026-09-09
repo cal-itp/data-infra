@@ -990,7 +990,20 @@ models:
           - not_null
       - name: payment_reference
         description: '{{ doc("enghouse_payment_reference") }}'
-      - name: token
+      - name: masked_pan
+        description: '{{ doc("eh_masked_pan") }}'
+      - &matches_taps_to_aggregations
+        name: par
+        description: '{{ doc("enghouse_par") }}'
+        data_tests:
+          # par and token are taken from the transactions side; they should agree with the
+          # values recorded on the taps that produced those transactions
+          - matches_column_in_model:
+              arguments:
+                to: ref('int_payments__taps_to_aggregations_enghouse')
+                join_columns: [operator_id, payment_reference]
+      - <<: *matches_taps_to_aggregations
+        name: token
         description: '{{ doc("enghouse_token") }}'
       - name: stage
         description: '{{ doc("eh_stage") }}'
@@ -1006,18 +1019,22 @@ models:
           - not_null
       - name: agency
         description: '{{ doc("enghouse_agency") }}'
-      - name: amount_to_settle
+      - name: amount_to_settle_dollars
         description: '{{ doc("eh_amount_to_settle") }}'
-      - name: amount_settled
+      - name: amount_settled_dollars
         description: '{{ doc("eh_amount_settled") }}'
       - name: debt_settled
         description: '{{ doc("eh_debt_settled") }}'
       - name: num_taps
         description: '{{ doc("eh_num_taps") }}'
+      - name: latest_tap_terminal_date
+        description: '{{ doc("eh_latest_tap_terminal_date") }}'
       - name: num_ticket_results
         description: '{{ doc("eh_num_ticket_results") }}'
       - name: total_fare_amount
         description: '{{ doc("eh_total_fare_amount") }}'
+      - name: latest_ticket_result_update_timestamp
+        description: '{{ doc("eh_latest_ticket_result_update_timestamp") }}'
       - name: has_settlement
         description: '{{ doc("eh_has_settlement") }}'
       - name: latest_settlement_update_datetime
