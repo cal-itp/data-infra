@@ -118,6 +118,16 @@ These describe columns used for fct_payments_aggregations_enghouse
 The timestamp of the latest settlement in the aggregation
 {% enddocs %}
 
+{% docs eh_latest_debit_operation %}
+The `operation` of the most recent DEBIT settlement in the aggregation.
+Null when the pay window has no debit settlements.
+{% enddocs %}
+
+{% docs eh_latest_credit_operation %}
+The `operation` of the most recent CREDIT settlement (refund) in the aggregation.
+Null when the pay window has no credit settlements.
+{% enddocs %}
+
 {% docs eh_num_settlements %}
 The number of settlements in the aggregation. 
 Note that there can also be multiple transaction entries per settlements, when this occurs, this will be the number of settlement IDs.
