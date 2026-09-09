@@ -161,8 +161,8 @@ fct_payments_aggregations_enghouse AS (
             WHEN total_fare_amount = 0 THEN 'Zero-dollar value sales'
             WHEN stage = 'Closed' AND elavon_purch_id IS NOT NULL THEN 'Settled non-zero sales (with Elavon match)'
             WHEN stage = 'Closed' AND elavon_purch_id IS NULL THEN 'Settled non-zero sales (no Elavon match)'
-            WHEN stage in ('Debt', 'DebtFinal', 'Open', 'NoAuthDone') THEN 'Unsettled non-zero sales'
-            WHEN stage = 'AuthDeclined' THEN 'Declined sales'
+            WHEN stage in ('Debt', 'Open', 'NoAuthDone') THEN 'Unsettled non-zero sales'
+            WHEN stage in ('AuthDeclined', 'DebtFinal') THEN 'Declined sales'
             ELSE 'UNKNOWN'
         END AS reconciliation_category
     FROM join_all
