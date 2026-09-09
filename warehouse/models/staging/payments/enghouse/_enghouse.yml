@@ -309,6 +309,15 @@ models:
         description: '{{ doc("enghouse_response_message") }}'
       - name: token
         description: '{{ doc("enghouse_token") }}'
+        data_tests:
+          # int_payments__settlements_to_aggregations_enghouse picks par and token with
+          # ANY_VALUE() per operator_id + payment_reference, so there must be only one option
+          - &one_card_identifier_per_payment_reference_transactions
+            single_value_per_group:
+              arguments:
+                group_by_columns: [operator_id, payment_reference]
+                config:
+                  where: "payment_reference IS NOT NULL"
       - name: issuer_response
         description: '{{ doc("enghouse_issuer_response") }}'
       - name: core_response
@@ -321,6 +330,8 @@ models:
         description: '{{ doc("enghouse_authorization_code") }}'
       - name: par
         description: '{{ doc("enghouse_par") }}'
+        data_tests:
+          - *one_card_identifier_per_payment_reference_transactions
       - name: brand
         description: '{{ doc("enghouse_brand") }}'
       - name: settlement_type
@@ -347,10 +358,16 @@ models:
     columns:
       - name: operator_id
         description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
+        data_tests:
+          - not_null
       - name: id
         description: Unique identifier for this pay window in the Enghouse system.
+        data_tests:
+          - unique
       - name: token
         description: Tokenized card number associated with this pay window.
+        data_tests:
+          - not_null
       - name: amount_settled
         description: Amount successfully charged for this pay window, as delivered by Enghouse.
       - name: amount_to_settle
@@ -368,8 +385,17 @@ models:
           - `Debt`: debt recorded and recovery attempts ongoing
           - `DebtFinal`: debt recorded and all recovery attempts exhausted
           - `NoAuthDone`: same as Open, but card verification was skipped because the card was used on previous days
+          - `DebtManual`: Unknown
+          - `AuthDeclined`: Unknown
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["Open", "Closed", "Debt", "DebtFinal", "NoAuthDone", "DebtManual", "AuthDeclined"]
       - name: payment_reference
         description: Payment reference number (PRN / variable symbol) for this pay window.
+        data_tests:
+          - not_null
       - name: terminal_id
         description: Identifier of the terminal where the pay window was opened.
       - name: open_date

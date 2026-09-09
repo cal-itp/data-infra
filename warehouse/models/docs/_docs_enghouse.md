@@ -194,11 +194,11 @@ Timestamp when the pay window was closed and settled.
 {% enddocs %}
 
 {% docs eh_amount_to_settle %}
-Total fare amount that should be charged for this pay window.
+Total fare amount that should be charged for this pay window, in dollars.
 {% enddocs %}
 
 {% docs eh_amount_settled %}
-Amount actually settled for this pay window.
+Amount actually settled for this pay window, in dollars.
 {% enddocs %}
 
 {% docs eh_debt_settled %}
@@ -215,6 +215,10 @@ The `terminal_date` (terminal-recorded tap time) of the most recent tap in the p
 
 {% docs eh_masked_pan %}
 Masked primary account number.
+{% enddocs %}
+
+{% docs eh_latest_ticket_result_update_timestamp %}
+The most recent ticket result timestamp in the pay window
 {% enddocs %}
 
 {% docs eh_num_ticket_results %}
