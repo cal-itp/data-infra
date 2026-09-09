@@ -47,7 +47,8 @@ join_all AS (
         pay_windows.terminal_id,
         pay_windows.open_date,
         pay_windows.close_date,
-        pay_windows.amount_to_settle / 100 AS amount_to_settle_dollars, --the pay_windows table provides figures in cents, rather than dollars
+        -- the pay_windows table provides amount_to_settle and amount_settled in cents, rather than dollars
+        pay_windows.amount_to_settle / 100 AS amount_to_settle_dollars,
         pay_windows.amount_settled / 100 AS amount_settled_dollars,
         pay_windows.debt_settled,
         pay_windows.agency,
@@ -61,6 +62,8 @@ join_all AS (
 
         settlements_to_aggregations.payment_reference IS NOT NULL AS has_settlement,
         settlements_to_aggregations.latest_settlement_update_timestamp,
+        settlements_to_aggregations.latest_debit_operation,
+        settlements_to_aggregations.latest_credit_operation,
         settlements_to_aggregations.num_settlements,
         settlements_to_aggregations.net_settlement_amount_dollars AS net_settled_amount_dollars,
         settlements_to_aggregations.contains_refund AS settlement_contains_refund,
@@ -138,6 +141,8 @@ fct_payments_aggregations_enghouse AS (
         has_settlement,
         DATETIME(latest_settlement_update_timestamp, "UTC") AS latest_settlement_update_datetime,
         DATETIME(latest_settlement_update_timestamp, "America/Los_Angeles") AS latest_settlement_update_datetime_pacific,
+        latest_debit_operation,
+        latest_credit_operation,
         num_settlements,
         num_debit_settlements,
         num_credit_settlements,

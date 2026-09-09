@@ -1041,6 +1041,18 @@ models:
         description: '{{ doc("eh_latest_settlement_update_timestamp") }}'
       - name: latest_settlement_update_datetime_pacific
         description: '{{ doc("eh_latest_settlement_update_datetime_pacific") }}'
+      - name: latest_debit_operation
+        description: '{{ doc("eh_latest_debit_operation") }}'
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["DEBT_RECOVERY_AUTO", "GET_PAR_MANUAL", "ONLINE_CLEARING", "DEBT_RECOVERY_MANUAL", "REFUND", "PREAUTH_FINAL"]
+      - name: latest_credit_operation
+        description: '{{ doc("eh_latest_credit_operation") }}'
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["DEBT_RECOVERY_AUTO", "GET_PAR_MANUAL", "ONLINE_CLEARING", "DEBT_RECOVERY_MANUAL", "REFUND", "PREAUTH_FINAL"]
       - name: num_settlements
         description: '{{ doc("eh_num_settlements") }}'
       - name: num_debit_settlements
