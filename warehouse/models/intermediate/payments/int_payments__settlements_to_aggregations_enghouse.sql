@@ -11,6 +11,9 @@ summarize_by_type AS (
         ANY_VALUE(token) AS token,
         ANY_VALUE(brand) AS brand,
         SUM(amount) AS total_amount,
+        LOGICAL_AND(response_type = "OK") AS is_settled, --todo: this is imherited from LPay logic, where all settlements must be settled for a transaction to be settled. Since the settlements table also includes authorisations, could this cause issues?
+        SUM(CASE WHEN response_type = "OK" THEN amount ELSE 0 END) AS settled_amount,
+        SUM(CASE WHEN response_type != "OK" THEN amount ELSE 0 END) AS unsettled_amount,
         MAX(timestamp) AS type_latest_settlement_update_timestamp,
         COUNT(*) AS num_settlements_type,
         -- TODO: guarding against null timestamps, simplify when 5694 is resolved
@@ -31,7 +34,8 @@ summarize_overall AS (
         COUNTIF(settlement_type = "CREDIT") > 0 AS contains_refund,
         ANY_VALUE(par) AS par,
         ANY_VALUE(token) AS token,
-        ANY_VALUE(brand) AS brand
+        ANY_VALUE(brand) AS brand,
+        LOGICAL_AND(is_settled) AS is_settled
     FROM summarize_by_type
     GROUP BY operator_id, payment_reference
 ), -- TODO - we can't determine duplicate payment_reference values here - is there any validation checking like that we need to consider here?
@@ -49,10 +53,15 @@ int_payments__settlements_to_aggregations_enghouse AS (
         summary.par,
         summary.token,
         summary.brand,
+        summary.is_settled AS aggregation_is_settled,
         COALESCE(debit.num_settlements_type, 0) AS num_debit_settlements,
         COALESCE(credit.num_settlements_type, 0) AS num_credit_settlements,
         COALESCE(debit.total_amount,0) AS debit_amount,
-        COALESCE(credit.total_amount,0) AS credit_amount
+        debit.is_settled AS debit_is_settled,
+        COALESCE(credit.total_amount,0) AS credit_amount,
+        credit.is_settled AS credit_is_settled,
+        COALESCE(credit.settled_amount,0) AS settled_credit_amount,
+        COALESCE(credit.unsettled_amount,0) AS unsettled_credit_amount
     FROM summarize_overall AS summary
     LEFT JOIN summarize_by_type AS debit
         ON summary.payment_reference = debit.payment_reference
@@ -76,8 +85,13 @@ SELECT
     par,
     token,
     brand,
+    aggregation_is_settled,
     num_debit_settlements,
     num_credit_settlements,
     debit_amount,
-    credit_amount
+    debit_is_settled,
+    credit_amount,
+    credit_is_settled,
+    settled_credit_amount,
+    unsettled_credit_amount
 FROM int_payments__settlements_to_aggregations_enghouse
