@@ -2,26 +2,75 @@
     post_hook="{{ payments_enghouse_row_access_policy() }}") }}
 
 WITH pay_windows AS (
-    SELECT * FROM {{ ref('stg_enghouse__pay_windows') }}
+    SELECT
+        operator_id,
+        id,
+        amount_settled,
+        amount_to_settle,
+        debt_settled,
+        stage,
+        payment_reference,
+        terminal_id,
+        open_timestamp,
+        close_timestamp,
+        agency
+    FROM {{ ref('stg_enghouse__pay_windows') }}
 ),
 
 taps_to_aggregations AS (
-    SELECT * FROM {{ ref('int_payments__taps_to_aggregations_enghouse') }}
+    SELECT
+        payment_reference,
+        operator_id,
+        num_taps,
+        latest_tap_terminal_date,
+        masked_pan,
+        num_ticket_results,
+        total_fare_amount,
+        latest_ticket_result_update_timestamp
+    FROM {{ ref('int_payments__taps_to_aggregations_enghouse') }}
 ),
 
 settlements_to_aggregations AS (
-    SELECT * FROM {{ ref('int_payments__settlements_to_aggregations_enghouse') }}
+    SELECT
+        operator_id,
+        payment_reference,
+        latest_settlement_update_timestamp,
+        latest_debit_operation,
+        latest_credit_operation,
+        num_settlements,
+        net_settlement_amount_dollars,
+        contains_refund,
+        par,
+        token,
+        brand,
+        aggregation_is_settled,
+        num_debit_settlements,
+        num_credit_settlements,
+        debit_amount,
+        debit_is_settled,
+        credit_amount,
+        credit_is_settled,
+        settled_credit_amount,
+        unsettled_credit_amount
+    FROM {{ ref('int_payments__settlements_to_aggregations_enghouse') }}
 ),
 
 payments_entity_mapping AS (
     SELECT
-        * EXCEPT(enghouse_operator_id),
-        enghouse_operator_id AS operator_id
+        organization_source_record_id,
+        enghouse_operator_id AS operator_id,
+        _in_use_from,
+        _in_use_until
     FROM {{ ref('payments_entity_mapping_enghouse') }}
 ),
 
 dim_orgs AS (
-    SELECT * FROM {{ ref('dim_organizations') }}
+    SELECT
+        source_record_id,
+        name,
+        _valid_from,
+        _valid_to
+    FROM {{ ref('dim_organizations') }}
 ),
 
 elavon_info AS (
