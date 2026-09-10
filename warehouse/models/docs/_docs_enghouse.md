@@ -323,10 +323,10 @@ Total refund amount from Elavon deposit data for this pay window.
 The state of the aggregation
 
 Possible Values:
-- `Zero-dollar value sales`: the pay window settled to 0 value, so no charge is expected
-- `Settled non-zero sales (with Elavon match)`: stage is `Closed` and the pay window matched an Elavon deposit record
-- `Settled non-zero sales (no Elavon match)`: stage is `Closed` but no corresponding Elavon deposit record was found
-- `Unsettled non-zero sales`: stage is `Debt`, `DebtFinal`, `Open` or `NoAuthDone` — the pay window is not settled - stage has more context
-- `Declined sales`: stage is `AuthDeclined` — the authorization attempt was declined
+- `Zero-dollar value sales`: `total_fare_amount` is 0, indicating that no settlement or Elavon deposit is expected
+- `Settled non-zero sales (with Elavon match)`: the associated settlement is settled, and a corresponding Elavon deposit record was found
+- `Settled non-zero sales (no Elavon match)`: the associated settlement is settled, and a corresponding Elavon deposit record was found
+- `Unsettled non-zero sales`: stage is `Debt`, `Open` or `NoAuthDone` — the pay window is not settled
+- `Declined sales`: stage is `AuthDeclined` or `DebtFinal` — the authorization attempt was declined or marked unrecoverable
 - `UNKNOWN`: none of these conditions are met
 {% enddocs %}
