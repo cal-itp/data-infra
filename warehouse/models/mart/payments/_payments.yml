@@ -1014,6 +1014,8 @@ models:
       - <<: *matches_taps_to_aggregations
         name: token
         description: '{{ doc("enghouse_token") }}'
+      - name: brand
+        description: '{{ doc("enghouse_brand") }}'
       - name: stage
         description: '{{ doc("eh_stage") }}'
       - name: terminal_id

@@ -134,6 +134,8 @@ models:
         description: '{{ doc("enghouse_par") }}'
       - name: token
         description: '{{ doc("enghouse_token") }}'
+      - name: brand
+        description: '{{ doc("enghouse_brand") }}'
       - name: num_debit_settlements
         description: '{{ doc("eh_num_debit_settlements") }}'
       - name: num_credit_settlements
