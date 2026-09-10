@@ -334,6 +334,8 @@ models:
           - *one_card_identifier_per_payment_reference_transactions
       - name: brand
         description: '{{ doc("enghouse_brand") }}'
+        data_tests:
+          - *one_card_identifier_per_payment_reference_transactions
       - name: settlement_type
         description: '{{ doc("enghouse_settlement_type") }}'
       - name: agency
