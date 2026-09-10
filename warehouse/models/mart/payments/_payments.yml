@@ -1005,8 +1005,8 @@ models:
         name: par
         description: '{{ doc("enghouse_par") }}'
         data_tests:
-          # par and token are taken from the transactions side; they should agree with the
-          # values recorded on the taps that produced those transactions
+          # par and token are available on both transactions and pay_windows
+          # test that the two models do not have conflicting data
           - matches_column_in_model:
               arguments:
                 to: ref('int_payments__taps_to_aggregations_enghouse')
