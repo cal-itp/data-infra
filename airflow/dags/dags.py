@@ -74,7 +74,6 @@ def log_failure_to_slack(context):
             Try {ti.try_number} of {ti.max_tries}
 
             <{sso_log_url}| Check Log (Caltrans SSO) >
-            <{ti.log_url}| Check Log (Google account) >
             """  # noqa: E221, E222
 
             requests.post(CALITP_SLACK_URL, json={"text": message})
