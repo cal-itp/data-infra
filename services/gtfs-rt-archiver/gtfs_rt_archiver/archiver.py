@@ -48,7 +48,16 @@ class Archiver:
                 result.metadata(), separators=(",", ":")
             )
         }
+        # Enabled only on the high-frequency service, where a colliding path means
+        # silent data loss and there is no bucket retention policy to turn it into
+        # a visible failure. Left off in production, where benign Pub/Sub
+        # redelivery legitimately rewrites the same object.
+        options = {}
+        if os.environ.get("CALITP_GTFS_RT_FAIL_ON_OVERWRITE") == "true":
+            options["if_generation_match"] = 0
+
         blob.upload_from_string(
             result.content(),
             content_type=result.mime_type(),
+            **options,
         )
