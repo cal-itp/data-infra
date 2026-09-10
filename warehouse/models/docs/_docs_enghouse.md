@@ -141,6 +141,34 @@ The net amount of settlements in the aggregation (debit - credit)
 `TRUE` if the aggregation contains a refund, `FALSE` otherwise
 {% enddocs %}
 
+{% docs eh_settled_credit_amount %}
+The portion of this aggregation's credit (refund) settlement amount that has `response_status = OK`.
+
+Numbers in this column are negative, like the total credit amount.
+{% enddocs %}
+
+{% docs eh_unsettled_credit_amount %}
+The portion of this aggregation's credit (refund) settlement amount whose `response` is present but is not `OK`.
+
+Numbers in this column are negative, like the total credit amount.
+{% enddocs %}
+
+{% docs eh_aggregation_is_settled %}
+Boolean indicating whether all settlements in this aggregation have `response_type = OK`.
+
+If `false`, there was a settlement present that has a `response_type` other than `OK`*or* the given aggregation does not have settlement information (yet).
+
+{% enddocs %}
+
+{% docs eh_debit_is_settled %}
+Similar to `aggregation_is_settled` but only includes the aggregation's debit (fare payment) settlements. This will be null (rather than false) if the given aggregation does not have settlement information yet.
+{% enddocs %}
+
+{% docs eh_credit_is_settled %}
+Similar to `aggregation_is_settled` but only includes the aggregation's credit (refund) settlements.
+This will be null (rather than false) if the given aggregation does not have settlement information yet.
+{% enddocs %}
+
 {% docs eh_num_debit_settlements %}
 The number of debit (sale) settlements in the aggregation
 {% enddocs %}

@@ -1093,6 +1093,8 @@ models:
                 warn_if: ">0"
       - name: settlement_contains_refund
         description: '{{ doc("eh_contains_refund") }}'
+      - name: aggregation_is_settled
+        description: '{{ doc("eh_aggregation_is_settled") }}'
       - name: settlement_debit_amount
         description: '{{ doc("eh_debit_amount") }}'
         data_tests:
@@ -1100,6 +1102,8 @@ models:
               arguments:
                 min_value: 0
                 inclusive: true
+      - name: debit_is_settled
+        description: '{{ doc("eh_debit_is_settled") }}'
       - name: settlement_credit_amount
         description: '{{ doc("eh_credit_amount") }}'
         data_tests:
@@ -1107,6 +1111,12 @@ models:
               arguments:
                 max_value: 0
                 inclusive: true
+      - name: credit_is_settled
+        description: '{{ doc("eh_credit_is_settled") }}'
+      - name: settled_credit_amount
+        description: '{{ doc("eh_settled_credit_amount") }}'
+      - name: unsettled_credit_amount
+        description: '{{ doc("eh_unsettled_credit_amount") }}'
       - name: contains_nonzero_sales
         description: '{{ doc("eh_contains_nonzero_sales") }}'
       - name: elavon_purch_id
