@@ -73,7 +73,8 @@ jobs:
   staging:
     name: Staging
     needs: [targets]
-    if: ${{ needs.targets.outputs.staging != '[]' && needs.targets.outputs.staging != '' }}
+    # Run only when the PR targets the official staging branch and there are staging targets
+    if: ${{ github.base_ref == 'staging/official' && needs.targets.outputs.staging != '[]' && needs.targets.outputs.staging != '' }}
     runs-on: ubuntu-latest
 
     permissions:
