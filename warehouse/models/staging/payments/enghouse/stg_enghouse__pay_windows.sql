@@ -51,6 +51,10 @@ stg_enghouse__pay_windows AS (
         dt,
         _line_number,
         _payments_key,
+        -- built from the cleaned columns rather than the raw source ones, so the key
+        -- matches across every enghouse staging model regardless of how each source
+        -- table spells or formats them
+        {{ dbt_utils.generate_surrogate_key(['payment_reference', 'operator_id']) }} AS _payment_reference_key,
         _content_hash
     FROM deduplicated
 )

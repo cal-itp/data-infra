@@ -13,7 +13,8 @@ WITH pay_windows AS (
         terminal_id,
         open_timestamp,
         close_timestamp,
-        agency
+        agency,
+        _payment_reference_key
     FROM {{ ref('stg_enghouse__pay_windows') }}
 ),
 
@@ -96,11 +97,12 @@ join_all AS (
         pay_windows.terminal_id,
         pay_windows.open_timestamp,
         pay_windows.close_timestamp,
-        -- the pay_windows table provides amount_to_settle and amount_settled in cents, rather than dollars
+        -- the pay_windows table provides amount_to_settle, amount_settled, and debt_settled in cents, rather than dollars
         pay_windows.amount_to_settle / 100 AS amount_to_settle_dollars,
         pay_windows.amount_settled / 100 AS amount_settled_dollars,
-        pay_windows.debt_settled,
+        pay_windows.debt_settled / 100 as debt_settled_amount_dollars,
         pay_windows.agency,
+        pay_windows._payment_reference_key,
 
         taps_to_aggregations.num_taps,
         taps_to_aggregations.latest_tap_terminal_date,
@@ -134,7 +136,7 @@ join_all AS (
             settlements_to_aggregations.latest_settlement_update_timestamp,
             pay_windows.open_timestamp,
             taps_to_aggregations.latest_tap_terminal_date
-        ) AS aggregation_datetime, -- Q: what is the type here?
+        ) AS aggregation_datetime,
 
         elavon_info.elavon_purch_id,
         elavon_info.elavon_settlement_date,
@@ -191,7 +193,7 @@ fct_payments_aggregations_enghouse AS (
         agency,
         amount_to_settle_dollars,
         amount_settled_dollars,
-        debt_settled,
+        debt_settled_amount_dollars,
         num_taps,
         DATETIME(latest_tap_terminal_date, "UTC") AS latest_tap_terminal_datetime,
         DATETIME(latest_tap_terminal_date, "America/Los_Angeles") AS latest_tap_terminal_datetime_pacific,
@@ -225,12 +227,13 @@ fct_payments_aggregations_enghouse AS (
         elavon_refunds,
         CASE
             WHEN total_fare_amount = 0 THEN 'Zero-dollar value sales'
-            WHEN total_fare_amount > 0 AND aggregation_is_settled AND elavon_purch_id IS NOT NULL THEN 'Settled non-zero sales (with Elavon match)'
-            WHEN total_fare_amount > 0 AND aggregation_is_settled AND elavon_purch_id IS NULL THEN 'Settled non-zero sales (no Elavon match)'
-            WHEN total_fare_amount > 0 AND stage in ('Debt', 'Open', 'NoAuthDone') THEN 'Unsettled non-zero sales'
-            WHEN total_fare_amount > 0 AND stage in ('AuthDeclined', 'DebtFinal') THEN 'Declined sales'
+            WHEN aggregation_is_settled AND elavon_purch_id IS NOT NULL THEN 'Settled non-zero sales (with Elavon match)'
+            WHEN aggregation_is_settled AND elavon_purch_id IS NULL THEN 'Settled non-zero sales (no Elavon match)'
+            WHEN stage in ('Debt', 'Open', 'NoAuthDone') THEN 'Unsettled non-zero sales'
+            WHEN stage in ('AuthDeclined', 'DebtFinal') THEN 'Declined sales'
             ELSE 'UNKNOWN'
-        END AS reconciliation_category
+        END AS reconciliation_category,
+        _payment_reference_key
     FROM join_all
 )
 

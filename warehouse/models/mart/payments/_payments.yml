@@ -999,6 +999,8 @@ models:
           - not_null
       - name: payment_reference
         description: '{{ doc("enghouse_payment_reference") }}'
+        data_tests:
+          - not_null
       - name: masked_pan
         description: '{{ doc("eh_masked_pan") }}'
       - &matches_taps_to_aggregations
@@ -1133,6 +1135,8 @@ models:
         description: '{{ doc("eh_elavon_refunds") }}'
       - name: reconciliation_category
         description: '{{ doc("eh_reconciliation_category") }}'
+      - name: _payment_reference_key
+        description: '{{ doc("enghouse_payment_reference_key") }}'
 
   - name: fct_payments_settlements_enghouse
     description: Enghouse settlements (completed transactions.)
@@ -1178,10 +1182,6 @@ models:
         description: '{{ doc("enghouse_payment_reference") }}'
         data_tests:
             - not_null
-            - relationships:
-                arguments:
-                  to: ref('fct_payments_aggregations_enghouse')
-                  field: payment_reference
       - name: response_type
         description: '{{ doc("enghouse_response_type") }}'
       - name: response_message
@@ -1211,5 +1211,17 @@ models:
         description: '{{ doc("enghouse_dt") }}'
       - name: _line_number
         description: '{{ doc("enghouse_line_number") }}'
+      - name: _payment_reference_key
+        description: '{{ doc("enghouse_payment_reference_key") }}'
+        data_tests:
+          # every settlement is expected to belong to a pay window we have received
+          - relationships:
+              arguments:
+                to: ref('fct_payments_aggregations_enghouse')
+                field: _payment_reference_key
+              config:
+                # settlements with no payment_reference have no pay window to match
+                # this behavior is confirmed in a test on payment_reference
+                where: "payment_reference IS NOT NULL"
       - name: _content_hash
         description: '{{ doc("enghouse_content_hash") }}'

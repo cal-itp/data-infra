@@ -30,6 +30,11 @@ models:
         data_tests:
           - not_null
           - unique
+          # every tap is expected to produce at least one ticket result
+          - relationships:
+              arguments:
+                to: ref('stg_enghouse__ticket_results')
+                field: tap_id
       - name: mapping_terminal_id
         description: Not relevant for US projects.
       - name: mapping_merchant_id
@@ -46,7 +51,7 @@ models:
           - &one_card_identifier_per_payment_reference
             single_value_per_group:
               arguments:
-                group_by_columns: [operator_id, payment_reference]
+                group_by_columns: [_payment_reference_key]
                 config:
                   # taps with no payment_reference cannot be attributed to a pay window and are
                   # excluded from int_payments__taps_to_aggregations_enghouse
@@ -137,6 +142,8 @@ models:
         description: Line number of this record within its source delivery file. Retained for lineage and data quality inspection.
       - name: _payments_key
         description: Surrogate key derived from tap_id and operator_id. Uniquely identifies one tap.
+      - name: _payment_reference_key
+        description: '{{ doc("enghouse_payment_reference_key") }}'
       - name: _content_hash
         description: Hash of all data columns. Retained for data quality inspection; deduplication uses _payments_key.
 
@@ -164,6 +171,13 @@ models:
         description: Explanation of how the fare was calculated.
       - name: tap_id
         description: Identifier of the tap that generated this ticket result.
+        data_tests:
+          # every ticket result is expected to belong to a tap we have received
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_enghouse__taps')
+                field: tap_id
       - name: ticket_type
         description: Type of ticket.
       - name: created_dttm
@@ -222,6 +236,8 @@ models:
           - not_null
       - name: payment_reference
         description: '{{ doc("enghouse_payment_reference") }}'
+        data_tests:
+          - not_null
       - name: spdh_response
         description: '{{ doc("enghouse_spdh_response") }}'
       - name: response_type
@@ -252,6 +268,16 @@ models:
         description: '{{ doc("enghouse_line_number") }}'
       - name: _payments_key
         description: '{{ doc("enghouse_payments_key") }}'
+      - name: _payment_reference_key
+        description: '{{ doc("enghouse_payment_reference_key") }}'
+        data_tests:
+          # every transaction is expected to belong to a pay window we have received
+          - relationships:
+              arguments:
+                to: ref('stg_enghouse__pay_windows')
+                field: _payment_reference_key
+              config:
+                where: "payment_reference IS NOT NULL"
       - name: _content_hash
         description: '{{ doc("enghouse_content_hash") }}'
 
@@ -267,8 +293,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
-              - operator_id
-              - payment_reference
+              - _payment_reference_key
               - settlement_type
           config:
             where: "payment_reference is not null"
@@ -315,7 +340,7 @@ models:
           - &one_card_identifier_per_payment_reference_transactions
             single_value_per_group:
               arguments:
-                group_by_columns: [operator_id, payment_reference]
+                group_by_columns: [_payment_reference_key]
                 config:
                   where: "payment_reference IS NOT NULL"
       - name: issuer_response
@@ -346,6 +371,8 @@ models:
         description: '{{ doc("enghouse_line_number") }}'
       - name: _payments_key
         description: '{{ doc("enghouse_payments_key") }}'
+      - name: _payment_reference_key
+        description: '{{ doc("enghouse_payment_reference_key") }}'
       - name: _content_hash
         description: '{{ doc("enghouse_content_hash") }}'
 
@@ -361,8 +388,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
-              - operator_id
-              - payment_reference
+              - _payment_reference_key
     columns:
       - name: operator_id
         description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
@@ -419,5 +445,7 @@ models:
         description: Line number of this record within its source delivery file. Retained for lineage and data quality inspection.
       - name: _payments_key
         description: Surrogate key derived from id and operator_id. Uniquely identifies one pay window.
+      - name: _payment_reference_key
+        description: '{{ doc("enghouse_payment_reference_key") }}'
       - name: _content_hash
         description: Hash of all data columns. Retained for data quality inspection; deduplication uses _payments_key.
