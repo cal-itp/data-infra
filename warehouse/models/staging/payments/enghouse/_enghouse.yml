@@ -23,8 +23,18 @@ models:
     columns:
       - name: operator_id
         description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
+        data_tests:
+          - not_null
       - name: tap_id
         description: Unique identifier for this tap in the Enghouse system.
+        data_tests:
+          - not_null
+          - unique
+          # every tap is expected to produce at least one ticket result
+          - relationships:
+              arguments:
+                to: ref('stg_enghouse__ticket_results')
+                field: tap_id
       - name: mapping_terminal_id
         description: Not relevant for US projects.
       - name: mapping_merchant_id
@@ -33,18 +43,37 @@ models:
         description: Identifier of the terminal where the tap was created.
       - name: token
         description: Tokenized card number.
+        data_tests:
+          - not_null
+          # all taps sharing an operator_id + payment_reference are expected to be
+          # made with the same pan
+          # guards assumptions in int_payments__taps_to_aggregations_enghouse
+          - &one_card_identifier_per_payment_reference
+            single_value_per_group:
+              arguments:
+                group_by_columns: [_payment_reference_key]
+                config:
+                  # taps with no payment_reference cannot be attributed to a pay window and are
+                  # excluded from int_payments__taps_to_aggregations_enghouse
+                  where: "payment_reference IS NOT NULL"
       - name: masked_pan
         description: Masked primary account number.
+        data_tests:
+          - *one_card_identifier_per_payment_reference
       - name: server_date
         description: Timestamp when the tap was received on the Enghouse server.
       - name: terminal_date
         description: Timestamp when the tap was created on the terminal.
+        data_tests:
+          - not_null
       - name: tx_number
         description: Enghouse internal tap status code. Not meaningful for downstream analysis.
       - name: tx_status
         description: Enghouse internal tap status code. Not meaningful for downstream analysis.
       - name: payment_reference
         description: Payment reference number (PRN / variable symbol) linking the tap to its transaction.
+        data_tests:
+          - not_null
       - name: terminal_spdh_code
         description: SPDH terminal protocol response code. 000 indicates approved.
       - name: denylist_version
@@ -55,6 +84,8 @@ models:
         description: ISO 4217 numeric currency code (840 = USD).
       - name: par
         description: Payment Account Reference (PAR).
+        data_tests:
+          - *one_card_identifier_per_payment_reference
       - name: fare_mode
         description: Transit data from the validator. See Enghouse documentation for full explanation.
       - name: fare_type
@@ -111,6 +142,8 @@ models:
         description: Line number of this record within its source delivery file. Retained for lineage and data quality inspection.
       - name: _payments_key
         description: Surrogate key derived from tap_id and operator_id. Uniquely identifies one tap.
+      - name: _payment_reference_key
+        description: '{{ doc("enghouse_payment_reference_key") }}'
       - name: _content_hash
         description: Hash of all data columns. Retained for data quality inspection; deduplication uses _payments_key.
 
@@ -138,6 +171,13 @@ models:
         description: Explanation of how the fare was calculated.
       - name: tap_id
         description: Identifier of the tap that generated this ticket result.
+        data_tests:
+          # every ticket result is expected to belong to a tap we have received
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_enghouse__taps')
+                field: tap_id
       - name: ticket_type
         description: Type of ticket.
       - name: created_dttm
@@ -196,6 +236,8 @@ models:
           - not_null
       - name: payment_reference
         description: '{{ doc("enghouse_payment_reference") }}'
+        data_tests:
+          - not_null
       - name: spdh_response
         description: '{{ doc("enghouse_spdh_response") }}'
       - name: response_type
@@ -226,6 +268,16 @@ models:
         description: '{{ doc("enghouse_line_number") }}'
       - name: _payments_key
         description: '{{ doc("enghouse_payments_key") }}'
+      - name: _payment_reference_key
+        description: '{{ doc("enghouse_payment_reference_key") }}'
+        data_tests:
+          # every transaction is expected to belong to a pay window we have received
+          - relationships:
+              arguments:
+                to: ref('stg_enghouse__pay_windows')
+                field: _payment_reference_key
+              config:
+                where: "payment_reference IS NOT NULL"
       - name: _content_hash
         description: '{{ doc("enghouse_content_hash") }}'
 
@@ -241,8 +293,7 @@ models:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
-              - operator_id
-              - payment_reference
+              - _payment_reference_key
               - settlement_type
           config:
             where: "payment_reference is not null"
@@ -283,6 +334,15 @@ models:
         description: '{{ doc("enghouse_response_message") }}'
       - name: token
         description: '{{ doc("enghouse_token") }}'
+        data_tests:
+          # int_payments__settlements_to_aggregations_enghouse picks par and token with
+          # ANY_VALUE() per operator_id + payment_reference, so there must be only one option
+          - &one_card_identifier_per_payment_reference_transactions
+            single_value_per_group:
+              arguments:
+                group_by_columns: [_payment_reference_key]
+                config:
+                  where: "payment_reference IS NOT NULL"
       - name: issuer_response
         description: '{{ doc("enghouse_issuer_response") }}'
       - name: core_response
@@ -295,8 +355,12 @@ models:
         description: '{{ doc("enghouse_authorization_code") }}'
       - name: par
         description: '{{ doc("enghouse_par") }}'
+        data_tests:
+          - *one_card_identifier_per_payment_reference_transactions
       - name: brand
         description: '{{ doc("enghouse_brand") }}'
+        data_tests:
+          - *one_card_identifier_per_payment_reference_transactions
       - name: settlement_type
         description: '{{ doc("enghouse_settlement_type") }}'
       - name: agency
@@ -307,6 +371,8 @@ models:
         description: '{{ doc("enghouse_line_number") }}'
       - name: _payments_key
         description: '{{ doc("enghouse_payments_key") }}'
+      - name: _payment_reference_key
+        description: '{{ doc("enghouse_payment_reference_key") }}'
       - name: _content_hash
         description: '{{ doc("enghouse_content_hash") }}'
 
@@ -318,13 +384,25 @@ models:
 
       Rows are deduplicated by id and operator_id. When the same pay window appears in multiple
       delivery files, the earliest delivery is kept.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - _payment_reference_key
     columns:
       - name: operator_id
         description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
+        data_tests:
+          - not_null
       - name: id
         description: Unique identifier for this pay window in the Enghouse system.
+        data_tests:
+          - unique
+          - not_null
       - name: token
         description: Tokenized card number associated with this pay window.
+        data_tests:
+          - not_null
       - name: amount_settled
         description: Amount successfully charged for this pay window, as delivered by Enghouse.
       - name: amount_to_settle
@@ -342,13 +420,22 @@ models:
           - `Debt`: debt recorded and recovery attempts ongoing
           - `DebtFinal`: debt recorded and all recovery attempts exhausted
           - `NoAuthDone`: same as Open, but card verification was skipped because the card was used on previous days
+          - `DebtManual`: Unknown
+          - `AuthDeclined`: Unknown
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["Open", "Closed", "Debt", "DebtFinal", "NoAuthDone", "DebtManual", "AuthDeclined"]
       - name: payment_reference
         description: Payment reference number (PRN / variable symbol) for this pay window.
+        data_tests:
+          - not_null
       - name: terminal_id
         description: Identifier of the terminal where the pay window was opened.
-      - name: open_date
+      - name: open_timestamp
         description: Timestamp when the pay window was opened.
-      - name: close_date
+      - name: close_timestamp
         description: Timestamp when the pay window was closed.
       - name: agency
         description: Agency identifier parsed from the GCS path partition (e.g., "ventura", "raba", "camarillo").
@@ -358,5 +445,7 @@ models:
         description: Line number of this record within its source delivery file. Retained for lineage and data quality inspection.
       - name: _payments_key
         description: Surrogate key derived from id and operator_id. Uniquely identifies one pay window.
+      - name: _payment_reference_key
+        description: '{{ doc("enghouse_payment_reference_key") }}'
       - name: _content_hash
         description: Hash of all data columns. Retained for data quality inspection; deduplication uses _payments_key.

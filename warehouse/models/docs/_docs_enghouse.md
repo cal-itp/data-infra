@@ -98,6 +98,10 @@ Date partition parsed from the GCS path, corresponding to the date in the source
 Surrogate key derived from id and operator_id. Uniquely identifies one transaction.
 {% enddocs %}
 
+{% docs enghouse_payment_reference_key %}
+Surrogate key for payment_reference and operator_id, used for tests. NOT currently used for joins, to avoid odd behavior where payment_reference is null
+{% enddocs %}
+
 {% docs enghouse_line_number %}
 Line number of this record within its source delivery file. Retained for lineage and data quality inspection.
 {% enddocs %}
@@ -108,4 +112,225 @@ Hash of all data columns. Retained for data quality inspection; deduplication us
 
 {% docs enghouse_settlement_type %}
 Type of settlement that occurred. `CREDIT` for refunds (operation = `REFUND`); `DEBIT` for all other operations.
+{% enddocs %}
+
+--------------------------------  AGGREGATION FIELDS --------------------------------
+
+These describe columns used for fct_payments_aggregations_enghouse
+
+{% docs eh_latest_settlement_update_timestamp %}
+The timestamp of the latest settlement in the aggregation
+{% enddocs %}
+
+{% docs eh_latest_debit_operation %}
+The `operation` of the most recent DEBIT settlement in the aggregation.
+Null when the pay window has no debit settlements.
+{% enddocs %}
+
+{% docs eh_latest_credit_operation %}
+The `operation` of the most recent CREDIT settlement (refund) in the aggregation.
+Null when the pay window has no credit settlements.
+{% enddocs %}
+
+{% docs eh_num_settlements %}
+The number of settlements in the aggregation. 
+Note that there can also be multiple transaction entries per settlements, when this occurs, this will be the number of settlement IDs.
+{% enddocs %}
+
+{% docs eh_net_settlement_amount_dollars %}
+The net amount of settlements in the aggregation (debit - credit)
+{% enddocs %}
+
+{% docs eh_contains_refund %}
+`TRUE` if the aggregation contains a refund, `FALSE` otherwise
+{% enddocs %}
+
+{% docs eh_settled_credit_amount %}
+The portion of this aggregation's credit (refund) settlement amount that has `response_status = OK`.
+
+Numbers in this column are negative, like the total credit amount.
+{% enddocs %}
+
+{% docs eh_unsettled_credit_amount %}
+The portion of this aggregation's credit (refund) settlement amount whose `response` is present but is not `OK`.
+
+Numbers in this column are negative, like the total credit amount.
+{% enddocs %}
+
+{% docs eh_aggregation_is_settled %}
+Boolean indicating whether all settlements in this aggregation have `response_type = OK`.
+
+If `false`, there was a settlement present that has a `response_type` other than `OK`*or* the given aggregation does not have settlement information (yet).
+
+{% enddocs %}
+
+{% docs eh_debit_is_settled %}
+Similar to `aggregation_is_settled` but only includes the aggregation's debit (fare payment) settlements. This will be null (rather than false) if the given aggregation does not have settlement information yet.
+{% enddocs %}
+
+{% docs eh_credit_is_settled %}
+Similar to `aggregation_is_settled` but only includes the aggregation's credit (refund) settlements.
+This will be null (rather than false) if the given aggregation does not have settlement information yet.
+{% enddocs %}
+
+{% docs eh_num_debit_settlements %}
+The number of debit (sale) settlements in the aggregation
+{% enddocs %}
+
+{% docs eh_num_credit_settlements %}
+The number of credit (refund) settlements in the aggregation
+{% enddocs %}
+
+{% docs eh_debit_amount %}
+The total debit (sale) amount in the aggregation (in USD)
+{% enddocs %}
+
+{% docs eh_credit_amount %}
+The total credit (refund) amount in the aggregation (in USD)
+{% enddocs %}
+
+{% docs eh_has_settlement %}
+If "true", there is at least one settlement in `int_payments__settlements_to_aggregations_enghouse`
+for this pay window's `operator_id` + `payment_reference`.
+{% enddocs %}
+
+{% docs eh_latest_settlement_update_datetime_pacific %}
+`latest_settlement_update_datetime` in Pacific Time.
+{% enddocs %}
+
+{% docs eh_contains_nonzero_sales %}
+Boolean flag for whether this pay window contains a debit (sales) amount greater than 0.
+{% enddocs %}
+
+{% docs eh_pay_window_id %}
+Unique identifier for the pay window (Enghouse `id` from the pay_windows table).
+{% enddocs %}
+
+{% docs eh_aggregation_datetime %}
+Datetime of pay window close if present, otherwise falls back to the latest settlement,
+otherwise to the pay window open, otherwise to the latest terminal-recorded tap time.
+{% enddocs %}
+
+{% docs eh_aggregation_datetime_pacific %}
+`aggregation_datetime` in Pacific Time.
+{% enddocs %}
+
+{% docs eh_end_of_month_date_pacific %}
+The last day of the month of the `aggregation_datetime` in Pacific Time.
+{% enddocs %}
+
+{% docs eh_end_of_month_date_utc %}
+The last day of the month of the `aggregation_datetime` in UTC.
+{% enddocs %}
+
+{% docs eh_stage %}
+Current stage of the pay window lifecycle. Known values: Open, Closed, Debt, DebtFinal, NoAuthDone.
+{% enddocs %}
+
+{% docs eh_pay_window_terminal_id %}
+Terminal ID where the pay window was initiated.
+{% enddocs %}
+
+{% docs eh_open_datetime %}
+Datetime when the pay window was opened (first tap).
+{% enddocs %}
+
+{% docs eh_open_datetime_pacific %}
+`open_datetime` in Pacific Time.
+{% enddocs %}
+
+{% docs eh_close_datetime %}
+Datetime when the pay window was closed and settled.
+{% enddocs %}
+
+{% docs eh_close_datetime_pacific %}
+`close_datetime` in Pacific Time.
+{% enddocs %}
+
+{% docs eh_amount_to_settle %}
+Total fare amount that should be charged for this pay window, in dollars.
+{% enddocs %}
+
+{% docs eh_amount_settled %}
+Amount actually settled for this pay window, in dollars.
+{% enddocs %}
+
+{% docs eh_debt_settled %}
+Amount recovered through debt recovery for this pay window.
+{% enddocs %}
+
+{% docs eh_num_taps %}
+Number of distinct taps associated with this pay window's `payment_reference`.
+{% enddocs %}
+
+{% docs eh_latest_tap_terminal_date %}
+The `terminal_date` (terminal-recorded tap time) of the most recent tap in the pay window.
+{% enddocs %}
+
+{% docs eh_latest_tap_terminal_datetime %}
+The `terminal_date` (terminal-recorded tap time) of the most recent tap in the pay window.
+{% enddocs %}
+
+{% docs eh_latest_tap_terminal_datetime_pacific %}
+`latest_tap_terminal_datetime` in Pacific Time.
+{% enddocs %}
+
+{% docs eh_masked_pan %}
+Masked primary account number.
+{% enddocs %}
+
+{% docs eh_latest_ticket_result_update_timestamp %}
+The most recent ticket result timestamp in the pay window
+{% enddocs %}
+
+{% docs eh_latest_ticket_result_update_datetime %}
+The most recent ticket result datetime in the pay window
+{% enddocs %}
+
+{% docs eh_latest_ticket_result_update_datetime_pacific %}
+`latest_ticket_result_update_datetime` in Pacific Time.
+{% enddocs %}
+
+{% docs eh_num_ticket_results %}
+Number of ticket results associated with the taps in this pay window.
+{% enddocs %}
+
+{% docs eh_total_fare_amount %}
+Sum of fare amounts across all ticket results for this pay window.
+{% enddocs %}
+
+{% docs eh_elavon_purch_id %}
+Elavon purchase ID matched to this pay window via `payment_reference`. NULL if no Elavon match found.
+{% enddocs %}
+
+{% docs eh_elavon_settlement_date %}
+Settlement date from Elavon deposit data for this pay window.
+{% enddocs %}
+
+{% docs eh_elavon_payment_date %}
+Payment date from Elavon deposit data for this pay window.
+{% enddocs %}
+
+{% docs eh_elavon_net_amount %}
+Net amount from Elavon deposit data (sum of all Elavon transactions for this `purch_id`).
+{% enddocs %}
+
+{% docs eh_elavon_sales %}
+Total sales amount from Elavon deposit data for this pay window.
+{% enddocs %}
+
+{% docs eh_elavon_refunds %}
+Total refund amount from Elavon deposit data for this pay window.
+{% enddocs %}
+
+{% docs eh_reconciliation_category %}
+The state of the aggregation
+
+Possible Values:
+- `Zero-dollar value sales`: `total_fare_amount` is 0, indicating that no settlement or Elavon deposit is expected
+- `Settled non-zero sales (with Elavon match)`: the associated settlement is settled, and a corresponding Elavon deposit record was found
+- `Settled non-zero sales (no Elavon match)`: the associated settlement is settled, and a corresponding Elavon deposit record was found
+- `Unsettled non-zero sales`: stage is `Debt`, `Open` or `NoAuthDone` — the pay window is not settled
+- `Declined sales`: stage is `AuthDeclined` or `DebtFinal` — the authorization attempt was declined or marked unrecoverable
+- `UNKNOWN`: none of these conditions are met
 {% enddocs %}

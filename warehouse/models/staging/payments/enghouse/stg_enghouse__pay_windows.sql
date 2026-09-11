@@ -13,8 +13,8 @@ clean_columns AS (
         {{ trim_make_empty_string_null('stage') }} AS stage,
         {{ trim_make_empty_string_null('payment_reference') }} AS payment_reference,
         SAFE_CAST(terminal_id AS INT64) AS terminal_id,
-        SAFE_CAST(open_date AS TIMESTAMP) AS open_date,
-        SAFE_CAST(close_date AS TIMESTAMP) AS close_date,
+        SAFE_CAST(open_date AS TIMESTAMP) AS open_timestamp,
+        SAFE_CAST(close_date AS TIMESTAMP) AS close_timestamp,
         agency,
         dt,
         SAFE_CAST(_line_number AS INT64) AS _line_number,
@@ -45,12 +45,16 @@ stg_enghouse__pay_windows AS (
         stage,
         payment_reference,
         terminal_id,
-        open_date,
-        close_date,
+        open_timestamp,
+        close_timestamp,
         agency,
         dt,
         _line_number,
         _payments_key,
+        -- built from the cleaned columns rather than the raw source ones, so the key
+        -- matches across every enghouse staging model regardless of how each source
+        -- table spells or formats them
+        {{ dbt_utils.generate_surrogate_key(['payment_reference', 'operator_id']) }} AS _payment_reference_key,
         _content_hash
     FROM deduplicated
 )
