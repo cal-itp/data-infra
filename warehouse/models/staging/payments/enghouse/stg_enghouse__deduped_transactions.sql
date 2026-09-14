@@ -23,6 +23,7 @@ WITH transactions AS (
         dt,
         _line_number,
         _payments_key,
+        _payment_reference_key,
         _content_hash
     FROM {{ ref('stg_enghouse__transactions') }}
 ),
@@ -77,5 +78,6 @@ SELECT
     dt,
     _line_number,
     _payments_key,
+    _payment_reference_key,
     _content_hash
 FROM stg_enghouse__deduped_transactions

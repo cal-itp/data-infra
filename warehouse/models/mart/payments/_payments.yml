@@ -831,8 +831,14 @@ models:
         description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
       - name: id
         description: Unique identifier for this ticket in the Enghouse system.
+        data_tests:
+          - unique # enforces that there is no fan out from ticket_results to rides
+          - not_null
       - name: ticket_id
         description: Unique identifier for this ticket in the Enghouse system.
+        data_tests:
+          - unique
+          - not_null
       - name: station_name
         description: Zone in which the ticket was created.
       - name: amount
@@ -843,6 +849,8 @@ models:
         description: Explanation of how the fare was calculated.
       - name: tap_id
         description: Identifier of the tap that generated this ticket result.
+        data_tests: # there should always be a tap associated with a ticket
+          - not_null
       - name: ticket_type
         description: Type of ticket.
       - name: created_dttm
@@ -952,6 +960,184 @@ models:
       - name: agency_name
         description: GTFS agency name, joined via route data. Null when no matching route exists.
 
+  - name: fct_payments_aggregations_enghouse
+    description: |
+      Each row in this table is a pay window.
+      A pay window is a group of taps processed together against a single payment token — the Enghouse equivalent of a Littlepay aggregation.
+      This table summarizes pay window activity and can be used to reconcile Enghouse payments information with Elavon deposit data.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - operator_id
+              - pay_window_id
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "settlement_debit_amount + settlement_credit_amount = net_settled_amount_dollars"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "settlement_contains_refund = (settlement_credit_amount < 0)"
+      - dbt_utils.expression_is_true:
+          arguments:
+            expression: "num_debit_settlements + num_credit_settlements = num_settlements"
+    columns:
+      - name: operator_id
+        description: '{{ doc("enghouse_operator_id") }}'
+      - *organization_name
+      - *organization_source_record_id
+      - name: end_of_month_date_pacific
+        description: '{{ doc("eh_end_of_month_date_pacific") }}'
+        data_tests:
+          - not_null
+      - name: end_of_month_date_utc
+        description: '{{ doc("eh_end_of_month_date_utc") }}'
+        data_tests:
+          - not_null
+      - name: pay_window_id
+        description: '{{ doc("eh_pay_window_id") }}'
+        data_tests:
+          - not_null
+      - name: payment_reference
+        description: '{{ doc("enghouse_payment_reference") }}'
+        data_tests:
+          - not_null
+      - name: masked_pan
+        description: '{{ doc("eh_masked_pan") }}'
+      - &matches_taps_to_aggregations
+        name: par
+        description: '{{ doc("enghouse_par") }}'
+        data_tests:
+          # par and token are available on both transactions and pay_windows
+          # test that the two models do not have conflicting data
+          - matches_column_in_model:
+              arguments:
+                to: ref('int_payments__taps_to_aggregations_enghouse')
+                join_columns: [operator_id, payment_reference]
+      - <<: *matches_taps_to_aggregations
+        name: token
+        description: '{{ doc("enghouse_token") }}'
+      - name: brand
+        description: '{{ doc("enghouse_brand") }}'
+      - name: stage
+        description: '{{ doc("eh_stage") }}'
+      - name: terminal_id
+        description: '{{ doc("eh_pay_window_terminal_id") }}'
+      - name: open_datetime
+        description: '{{ doc("eh_open_datetime") }}'
+      - name: open_datetime_pacific
+        description: '{{ doc("eh_open_datetime_pacific") }}'
+      - name: close_datetime
+        description: '{{ doc("eh_close_datetime") }}'
+      - name: close_datetime_pacific
+        description: '{{ doc("eh_close_datetime_pacific") }}'
+      - name: aggregation_datetime
+        description: '{{ doc("eh_aggregation_datetime") }}'
+        data_tests:
+          - not_null
+      - name: aggregation_datetime_pacific
+        description: '{{ doc("eh_aggregation_datetime_pacific") }}'
+        data_tests:
+          - not_null
+      - name: agency
+        description: '{{ doc("enghouse_agency") }}'
+      - name: amount_to_settle_dollars
+        description: '{{ doc("eh_amount_to_settle") }}'
+      - name: amount_settled_dollars
+        description: '{{ doc("eh_amount_settled") }}'
+      - name: debt_settled
+        description: '{{ doc("eh_debt_settled") }}'
+      - name: num_taps
+        description: '{{ doc("eh_num_taps") }}'
+      - name: latest_tap_terminal_datetime
+        description: '{{ doc("eh_latest_tap_terminal_datetime") }}'
+      - name: latest_tap_terminal_datetime_pacific
+        description: '{{ doc("eh_latest_tap_terminal_datetime_pacific") }}'
+      - name: num_ticket_results
+        description: '{{ doc("eh_num_ticket_results") }}'
+      - name: total_fare_amount
+        description: '{{ doc("eh_total_fare_amount") }}'
+      - name: latest_ticket_result_update_datetime
+        description: '{{ doc("eh_latest_ticket_result_update_datetime") }}'
+      - name: latest_ticket_result_update_datetime_pacific
+        description: '{{ doc("eh_latest_ticket_result_update_datetime_pacific") }}'
+      - name: has_settlement
+        description: '{{ doc("eh_has_settlement") }}'
+      - name: latest_settlement_update_datetime
+        description: '{{ doc("eh_latest_settlement_update_timestamp") }}'
+      - name: latest_settlement_update_datetime_pacific
+        description: '{{ doc("eh_latest_settlement_update_datetime_pacific") }}'
+      - name: latest_debit_operation
+        description: '{{ doc("eh_latest_debit_operation") }}'
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["DEBT_RECOVERY_AUTO", "GET_PAR_MANUAL", "ONLINE_CLEARING", "DEBT_RECOVERY_MANUAL", "REFUND", "PREAUTH_FINAL"]
+      - name: latest_credit_operation
+        description: '{{ doc("eh_latest_credit_operation") }}'
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ["DEBT_RECOVERY_AUTO", "GET_PAR_MANUAL", "ONLINE_CLEARING", "DEBT_RECOVERY_MANUAL", "REFUND", "PREAUTH_FINAL"]
+      - name: num_settlements
+        description: '{{ doc("eh_num_settlements") }}'
+      - name: num_debit_settlements
+        description: '{{ doc("eh_num_debit_settlements") }}'
+      - name: num_credit_settlements
+        description: '{{ doc("eh_num_credit_settlements") }}'
+      - name: net_settled_amount_dollars
+        description: '{{ doc("eh_net_settlement_amount_dollars") }}'
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: true
+                error_if: ">10"
+                warn_if: ">0"
+      - name: settlement_contains_refund
+        description: '{{ doc("eh_contains_refund") }}'
+      - name: aggregation_is_settled
+        description: '{{ doc("eh_aggregation_is_settled") }}'
+      - name: settlement_debit_amount
+        description: '{{ doc("eh_debit_amount") }}'
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                min_value: 0
+                inclusive: true
+      - name: debit_is_settled
+        description: '{{ doc("eh_debit_is_settled") }}'
+      - name: settlement_credit_amount
+        description: '{{ doc("eh_credit_amount") }}'
+        data_tests:
+          - dbt_utils.accepted_range:
+              arguments:
+                max_value: 0
+                inclusive: true
+      - name: credit_is_settled
+        description: '{{ doc("eh_credit_is_settled") }}'
+      - name: settled_credit_amount
+        description: '{{ doc("eh_settled_credit_amount") }}'
+      - name: unsettled_credit_amount
+        description: '{{ doc("eh_unsettled_credit_amount") }}'
+      - name: contains_nonzero_sales
+        description: '{{ doc("eh_contains_nonzero_sales") }}'
+      - name: elavon_purch_id
+        description: '{{ doc("eh_elavon_purch_id") }}'
+      - name: elavon_settlement_date
+        description: '{{ doc("eh_elavon_settlement_date") }}'
+      - name: elavon_payment_date
+        description: '{{ doc("eh_elavon_payment_date") }}'
+      - name: elavon_net_amount
+        description: '{{ doc("eh_elavon_net_amount") }}'
+      - name: elavon_sales
+        description: '{{ doc("eh_elavon_sales") }}'
+      - name: elavon_refunds
+        description: '{{ doc("eh_elavon_refunds") }}'
+      - name: reconciliation_category
+        description: '{{ doc("eh_reconciliation_category") }}'
+      - name: _payment_reference_key
+        description: '{{ doc("enghouse_payment_reference_key") }}'
+
   - name: fct_payments_settlements_enghouse
     description: Enghouse settlements (completed transactions.)
     data_tests:
@@ -964,11 +1150,13 @@ models:
           config:
             where: "payment_reference is not null"
     columns:
-      - name: organization_name
+      - *organization_name
       - name: organization_source_record_id
         description: '{{ doc("payments_organization_source_record_id") }}'
       - name: operator_id
         description: '{{ doc("enghouse_operator_id") }}'
+        data_tests:
+          - not_null
       - name: id
         description: '{{ doc("enghouse_id") }}'
       - name: operation
@@ -982,12 +1170,18 @@ models:
         description: '{{ doc("enghouse_terminal_id") }}'
       - name: timestamp
         description: '{{ doc("enghouse_timestamp") }}'
+        data_tests:
+          # tracked by #5694; int_payments__settlements_to_aggregations_enghouse works around
+          # this with COALESCE(timestamp, TIMESTAMP(dt)) when ordering settlements
+          - not_null
       - name: amount
         description: '{{ doc("enghouse_amount") }}'
         data_tests:
           - not_null
       - name: payment_reference
         description: '{{ doc("enghouse_payment_reference") }}'
+        data_tests:
+            - not_null
       - name: response_type
         description: '{{ doc("enghouse_response_type") }}'
       - name: response_message
@@ -1010,10 +1204,24 @@ models:
       - name: settlement_type
         description: '{{ doc("enghouse_settlement_type") }}'
       - name: end_of_month_date_pacific
+        description: '{{ doc("eh_end_of_month_date_pacific") }}'
       - name: end_of_month_date_utc
+        description: '{{ doc("eh_end_of_month_date_utc") }}'
       - name: dt
         description: '{{ doc("enghouse_dt") }}'
       - name: _line_number
         description: '{{ doc("enghouse_line_number") }}'
+      - name: _payment_reference_key
+        description: '{{ doc("enghouse_payment_reference_key") }}'
+        data_tests:
+          # every settlement is expected to belong to a pay window we have received
+          - relationships:
+              arguments:
+                to: ref('fct_payments_aggregations_enghouse')
+                field: _payment_reference_key
+              config:
+                # settlements with no payment_reference have no pay window to match
+                # this behavior is confirmed in a test on payment_reference
+                where: "payment_reference IS NOT NULL"
       - name: _content_hash
         description: '{{ doc("enghouse_content_hash") }}'
