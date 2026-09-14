@@ -373,6 +373,8 @@ models:
         description: '{{ doc("enghouse_payments_key") }}'
       - name: _payment_reference_key
         description: '{{ doc("enghouse_payment_reference_key") }}'
+        data_tests:
+          - not_null
       - name: _content_hash
         description: '{{ doc("enghouse_content_hash") }}'
 
@@ -384,11 +386,6 @@ models:
 
       Rows are deduplicated by id and operator_id. When the same pay window appears in multiple
       delivery files, the earliest delivery is kept.
-    data_tests:
-      - dbt_utils.unique_combination_of_columns:
-          arguments:
-            combination_of_columns:
-              - _payment_reference_key
     columns:
       - name: operator_id
         description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
@@ -447,5 +444,8 @@ models:
         description: Surrogate key derived from id and operator_id. Uniquely identifies one pay window.
       - name: _payment_reference_key
         description: '{{ doc("enghouse_payment_reference_key") }}'
+        data_tests:
+          - unique
+          - not_null
       - name: _content_hash
         description: Hash of all data columns. Retained for data quality inspection; deduplication uses _payments_key.
