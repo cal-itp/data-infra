@@ -340,6 +340,12 @@ resource "google_service_account" "goldcoast-payments-user" {
   project    = "cal-itp-data-infra"
 }
 
+resource "google_service_account" "yolobus-payments-user" {
+  account_id = "yolobus-payments-user"
+  disabled   = "false"
+  project    = "cal-itp-data-infra"
+}
+
 resource "google_service_account" "enghouse-sftp-service-account" {
   account_id   = "enghouse-sftp-service-account"
   description  = "Service account for enghouse sftp server"

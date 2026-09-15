@@ -1,5 +1,5 @@
 import os
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from dags import email_on_failure, log_failure_to_slack
 from operators.gcs_to_gtfs_rt_command_operator import GCSToGTFSRTCommandOperator
@@ -35,4 +35,6 @@ with DAG(
                 pool=f"rt_{process}_pool",
                 append_env=True,
                 do_xcom_push=False,
+                retries=4,
+                retry_delay=timedelta(minutes=5),
             ).expand(bash_command=XComArg(commands))

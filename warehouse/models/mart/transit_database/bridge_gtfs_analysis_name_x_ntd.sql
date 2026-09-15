@@ -48,8 +48,8 @@ deduped_provider AS (
 
     FROM dim_provider_gtfs_data
     QUALIFY ROW_NUMBER() OVER(
-        PARTITION BY schedule_source_record_id
-        ORDER BY _valid_from DESC
+        PARTITION BY schedule_source_record_id, organization_name
+    ORDER BY _valid_from DESC
     ) = 1
 ),
 
@@ -110,7 +110,7 @@ gtfs_to_orgs AS (
         orgs_with_geog.county_name,
         orgs_with_geog.caltrans_district,
         orgs_with_geog.caltrans_district_name,
-        CONCAT(CAST(caltrans_district AS STRING FORMAT '00'), " - ", caltrans_district_name) AS caltrans_district_full,
+        TRIM(CONCAT(CAST(caltrans_district AS STRING FORMAT '00'), " - ", caltrans_district_name)) AS caltrans_district_full,
         orgs_with_geog.ntd_id,
         orgs_with_geog.ntd_id_2022,
         orgs_with_geog.rtpa_name,
