@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - 'main'
-      - 'staging/**'
+      - 'staging/official'
     paths:
       - 'iac/**'
       - 'services/gtfs-rt-archiver/**'
@@ -16,6 +16,11 @@ env:
   STAGING_SERVICE_ACCOUNT: 'github-actions-terraform@cal-itp-data-infra-staging.iam.gserviceaccount.com'
   STAGING_WORKLOAD_IDENTITY_PROVIDER: 'projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra'
   STAGING_PROJECT_ID: 'cal-itp-data-infra-staging'
+
+# Optional concurrency guard – ensures only one apply runs per branch at a time
+concurrency:
+  group: terraform-apply-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   targets:
@@ -77,7 +82,8 @@ jobs:
   staging:
     name: Staging
     needs: [targets]
-    if: ${{ needs.targets.outputs.staging != '[]' && needs.targets.outputs.staging != '' }}
+    # Run only for the official staging branch and when there are staging targets
+    if: ${{ github.ref == 'refs/heads/staging/official' && needs.targets.outputs.staging != '[]' && needs.targets.outputs.staging != '' }}
     runs-on: ubuntu-latest
 
     permissions:
@@ -116,7 +122,8 @@ jobs:
             git config --global --add safe.directory $GITHUB_WORKSPACE
         with:
           path: ${{ matrix.path }}
-          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
+          # Auto‑approve only for the GTFS‑RT archiver when on the official staging branch
+          auto_approve: ${{ github.ref == 'refs/heads/staging/official' }}
 
   production:
     name: Production
