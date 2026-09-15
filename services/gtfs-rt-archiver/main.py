@@ -1,5 +1,6 @@
 import base64
 import datetime
+import json
 import logging
 from concurrent import futures
 
@@ -18,12 +19,17 @@ client.setup_logging()
 
 @functions_framework.cloud_event
 def process_clock_event(cloud_event: CloudEvent) -> None:
+    data = base64.b64decode(cloud_event.data["message"]["data"])
     clock = Heartbeat(
-        data=base64.b64decode(cloud_event.data["message"]["data"]),
+        data=data,
         publish_time=datetime.datetime.fromisoformat(
             cloud_event.data["message"]["publish_time"]
         ),
         message_id=cloud_event.data["message"]["message_id"],
+        # The production clock emits only batch_at, so this stays None there. The
+        # high-frequency clock forwards the scheduler payload, making `limit` a
+        # live control surface for canarying a single feed without a redeploy.
+        limit=json.loads(data).get("limit"),
     )
     publish_futures = clock.run()
     for publish_future in publish_futures:
