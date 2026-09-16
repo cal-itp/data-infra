@@ -305,6 +305,11 @@ resource "google_project_iam_member" "ms-entra-id-DDS_Cloud_Admins" {
 
 resource "google_project_iam_member" "ms-entra-id-DDS_Payments_Admins" {
   for_each = toset([
+    "roles/bigquery.metadataViewer",
+    "roles/bigquery.user",
+    "roles/secretmanager.secretAccessor",
+    "roles/secretmanager.viewer",
+    "roles/storage.objectUser",
     "roles/viewer",
   ])
   role    = each.key
@@ -314,7 +319,8 @@ resource "google_project_iam_member" "ms-entra-id-DDS_Payments_Admins" {
 
 resource "google_project_iam_member" "ms-entra-id-DDS_Warehouse_Users_Flex" {
   for_each = toset([
-    "roles/viewer",
+    "roles/bigquery.metadataViewer",
+    "roles/bigquery.user",
   ])
   role    = each.key
   member  = "principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DDS_Warehouse_Users_Flex"
