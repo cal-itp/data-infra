@@ -8,6 +8,7 @@ locals {
     "calitp-staging-gtfs-rt-archiver",
     "calitp-staging-gtfs-download-config",
     "calitp-staging-gtfs-download-config-test",
+    "calitp-staging-gtfs-rt-raw-compacted",
     "calitp-staging-gtfs-rt-parsed",
     "calitp-staging-gtfs-rt-raw-v2",
     "calitp-staging-gtfs-rt-validation",
