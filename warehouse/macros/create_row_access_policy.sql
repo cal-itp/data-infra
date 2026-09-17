@@ -117,6 +117,12 @@ filter using (
 ) }};
 
 {{ create_row_access_policy(
+    filter_column = 'participant_id',
+    filter_value = 'yolobus',
+    principals = ['serviceAccount:yolobus-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
     principals = [
         'serviceAccount:metabase@cal-itp-data-infra.iam.gserviceaccount.com',
         'serviceAccount:metabase-payments-team@cal-itp-data-infra.iam.gserviceaccount.com',
@@ -272,6 +278,12 @@ filter using (
     filter_column = 'organization_name',
     filter_value = 'Gold Coast Transit District',
     principals = ['serviceAccount:goldcoast-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
+) }};
+
+{{ create_row_access_policy(
+    filter_column = 'organization_name',
+    filter_value = 'Yolo County Transportation District',
+    principals = ['serviceAccount:yolobus-payments-user@cal-itp-data-infra.iam.gserviceaccount.com']
 ) }};
 
 {{ create_row_access_policy(
