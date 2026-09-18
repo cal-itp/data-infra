@@ -62,8 +62,8 @@ class TestTIDESDCATMetadataOperator:
         bucket = os.environ.get("CALITP_BUCKET__TIDES")
         history, latest, fact = operator.catalog()["dataset"]
 
-        # history models are dt-stamped, latest models live at a stable path
-        assert history["identifier"] == f"{bucket}/reference/tides_organizations/dt=*/"
+        # history and latest models both live at stable paths
+        assert history["identifier"] == f"{bucket}/reference/tides_organizations/"
         assert latest["identifier"] == f"{bucket}/reference/tides_organizations_latest/"
         assert fact["identifier"] == f"{bucket}/vehicle_locations/"
 
