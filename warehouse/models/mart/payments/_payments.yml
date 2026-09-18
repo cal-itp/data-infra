@@ -1157,7 +1157,7 @@ models:
         description: '{{ doc("enghouse_operator_id") }}'
         data_tests:
           - not_null
-      - name: id
+      - name: settlement_id
         description: '{{ doc("enghouse_id") }}'
       - name: operation
         description: '{{ doc("enghouse_operation") }}'
