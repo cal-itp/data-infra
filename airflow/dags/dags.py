@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 import requests
+from alert_urls import caltrans_sso_log_url
 from gusty import create_dag
 
 import airflow  # noqa
@@ -41,13 +42,14 @@ def log_failure_to_slack(context):
     else:
         try:
             ti = context["ti"]
+            sso_log_url = caltrans_sso_log_url(ti.log_url)
             message = f"""
             Task Failed: {ti.dag_id}.{ti.task_id}
             Execution Date: {ti.execution_date}
             Run: {ti.run_id}
             Try {ti.try_number} of {ti.max_tries}
 
-            <{ti.log_url}| Check Log >
+            <{sso_log_url}| Check Log (Caltrans SSO) >
             """  # noqa: E221, E222
 
             requests.post(CALITP_SLACK_URL, json={"text": message})
