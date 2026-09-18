@@ -82,7 +82,7 @@ class TIDESDCATMetadataOperator(BaseOperator):
         specs = [
             {
                 "model_name": model["name"],
-                "prefix": reference_destination_prefix(model["name"], "*"),
+                "prefix": reference_destination_prefix(model["name"]),
                 "formats": ["parquet", "csv"],
             }
             for model in self.models
