@@ -71,6 +71,7 @@ stg_enghouse__transactions AS (
         dt,
         _line_number,
         _payments_key,
+        {{ dbt_utils.generate_surrogate_key(['payment_reference', 'operator_id']) }} AS _payment_reference_key,
         _content_hash
     FROM deduplicated
 )

@@ -21,6 +21,7 @@ WITH deduped_transactions AS (
         settlement_type,
         dt,
         _line_number,
+        _payment_reference_key,
         _content_hash,
     FROM {{ ref('stg_enghouse__deduped_transactions') }}
 ),
@@ -63,6 +64,7 @@ join_orgs AS (
         deduped_transactions.settlement_type,
         deduped_transactions.dt,
         deduped_transactions._line_number,
+        deduped_transactions._payment_reference_key,
         deduped_transactions._content_hash,
         dim_orgs.name AS organization_name,
         direct_map.organization_source_record_id,
@@ -80,7 +82,7 @@ join_orgs AS (
 fct_payments_settlements_enghouse AS (
     SELECT
         operator_id,
-        id,
+        id AS settlement_id,
         operation,
         terminal_id,
         timestamp,
@@ -102,13 +104,14 @@ fct_payments_settlements_enghouse AS (
         LAST_DAY(EXTRACT(DATE FROM timestamp), MONTH) AS end_of_month_date_utc,
         dt,
         _line_number,
+        _payment_reference_key,
         _content_hash
     FROM join_orgs
 )
 
 SELECT
     operator_id,
-    id,
+    settlement_id,
     operation,
     terminal_id,
     timestamp,
@@ -129,5 +132,6 @@ SELECT
     end_of_month_date_utc,
     dt,
     _line_number,
+    _payment_reference_key,
     _content_hash
 FROM fct_payments_settlements_enghouse

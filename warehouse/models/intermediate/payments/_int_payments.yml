@@ -108,6 +108,79 @@ models:
         description: '{{ doc("lp_debit_is_settled") }}'
       - name: credit_is_settled
         description: '{{ doc("lp_credit_is_settled") }}'
+
+  - name: int_payments__settlements_to_aggregations_enghouse
+    description: |
+      Enghouse settlements aggregated to the `operator_id + payment_reference` level.
+
+    columns:
+      - name: operator_id
+        description: '{{ doc("enghouse_operator_id") }}'
+      - name: payment_reference
+        description: '{{ doc("enghouse_payment_reference") }}'
+      - name: latest_settlement_update_timestamp
+        description: '{{ doc("eh_latest_settlement_update_timestamp") }}'
+      - name: latest_debit_operation
+        description: '{{ doc("eh_latest_debit_operation") }}'
+      - name: latest_credit_operation
+        description: '{{ doc("eh_latest_credit_operation") }}'
+      - name: num_settlements
+        description: '{{ doc("eh_num_settlements") }}'
+      - name: net_settlement_amount_dollars
+        description: '{{ doc("eh_net_settlement_amount_dollars") }}'
+      - name: contains_refund
+        description: '{{ doc("eh_contains_refund") }}'
+      - name: par
+        description: '{{ doc("enghouse_par") }}'
+      - name: token
+        description: '{{ doc("enghouse_token") }}'
+      - name: brand
+        description: '{{ doc("enghouse_brand") }}'
+      - name: aggregation_is_settled
+        description: '{{ doc("eh_aggregation_is_settled") }}'
+      - name: num_debit_settlements
+        description: '{{ doc("eh_num_debit_settlements") }}'
+      - name: num_credit_settlements
+        description: '{{ doc("eh_num_credit_settlements") }}'
+      - name: debit_amount
+        description: '{{ doc("eh_debit_amount") }}'
+      - name: debit_is_settled
+        description: '{{ doc("eh_debit_is_settled") }}'
+      - name: credit_amount
+        description: '{{ doc("eh_credit_amount") }}'
+      - name: credit_is_settled
+        description: '{{ doc("eh_credit_is_settled") }}'
+      - name: settled_credit_amount
+        description: '{{ doc("eh_settled_credit_amount") }}'
+      - name: unsettled_credit_amount
+        description: '{{ doc("eh_unsettled_credit_amount") }}'
+
+  - name: int_payments__taps_to_aggregations_enghouse
+    description: |
+      Enghouse taps aggregated to the `operator_id + payment_reference` level,
+      joined to ticket_results for additional fields.
+    columns:
+      - name: operator_id
+        description: '{{ doc("enghouse_operator_id") }}'
+      - name: payment_reference
+        description: '{{ doc("enghouse_payment_reference") }}'
+      - name: num_taps
+        description: '{{ doc("eh_num_taps") }}'
+      - name: latest_tap_terminal_date
+        description: '{{ doc("eh_latest_tap_terminal_date") }}'
+      - name: masked_pan
+        description: '{{ doc("eh_masked_pan") }}'
+      - name: par
+        description: '{{ doc("enghouse_par") }}'
+      - name: token
+        description: '{{ doc("enghouse_token") }}'
+      - name: num_ticket_results
+        description: '{{ doc("eh_num_ticket_results") }}'
+      - name: total_fare_amount
+        description: '{{ doc("eh_total_fare_amount") }}'
+      - name: latest_ticket_result_update_timestamp
+        description: '{{ doc("eh_latest_ticket_result_update_timestamp") }}'
+
   - name: int_payments__micropayments_to_aggregations
     description: |
       Littlepay micropayments grouped to the aggregation (`aggregation_id`) level.
