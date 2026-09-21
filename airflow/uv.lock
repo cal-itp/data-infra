@@ -445,79 +445,174 @@ wheels = [
 
 [[package]]
 name = "apache-airflow-providers-google"
+version = "21.0.0"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.14' and sys_platform == 'win32'",
+    "python_full_version >= '3.14' and sys_platform == 'emscripten'",
+    "python_full_version >= '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
+    "python_full_version == '3.13.*' and sys_platform == 'win32'",
+    "python_full_version == '3.13.*' and sys_platform == 'emscripten'",
+    "python_full_version == '3.13.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
+]
+dependencies = [
+    { name = "apache-airflow", marker = "python_full_version >= '3.13'" },
+    { name = "apache-airflow-providers-common-compat", marker = "python_full_version >= '3.13'" },
+    { name = "apache-airflow-providers-common-sql", marker = "python_full_version >= '3.13'" },
+    { name = "asgiref", marker = "python_full_version >= '3.13'" },
+    { name = "dill", marker = "python_full_version >= '3.13'" },
+    { name = "gcloud-aio-auth", marker = "python_full_version >= '3.13'" },
+    { name = "gcloud-aio-bigquery", marker = "python_full_version >= '3.13'" },
+    { name = "gcloud-aio-storage", marker = "python_full_version >= '3.13'" },
+    { name = "gcsfs", marker = "python_full_version >= '3.13'" },
+    { name = "google-ads", marker = "python_full_version >= '3.13'" },
+    { name = "google-analytics-admin", marker = "python_full_version >= '3.13'" },
+    { name = "google-api-core", marker = "python_full_version >= '3.13'" },
+    { name = "google-api-python-client", marker = "python_full_version >= '3.13'" },
+    { name = "google-auth", marker = "python_full_version >= '3.13'" },
+    { name = "google-auth-httplib2", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-aiplatform", version = "1.142.0", source = { registry = "https://pypi.org/simple" }, extra = ["evaluation"], marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-alloydb", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-automl", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-batch", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-bigquery", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-bigquery-datatransfer", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-bigquery-storage", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-bigtable", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-build", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-compute", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-container", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-datacatalog", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-dataflow-client", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-dataform", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-dataplex", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-dataproc", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-dataproc-metastore", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-dlp", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-kms", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-language", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-logging", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-managedkafka", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-memcache", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-monitoring", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-orchestration-airflow", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-os-login", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-pubsub", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-redis", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-run", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-secret-manager", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-spanner", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-speech", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-storage", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-storage-transfer", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-tasks", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-texttospeech", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-translate", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-videointelligence", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-vision", marker = "python_full_version >= '3.13'" },
+    { name = "google-cloud-workflows", marker = "python_full_version >= '3.13'" },
+    { name = "grpcio-gcp", marker = "python_full_version >= '3.13'" },
+    { name = "httpx", marker = "python_full_version >= '3.13'" },
+    { name = "immutabledict", marker = "python_full_version >= '3.13'" },
+    { name = "looker-sdk", marker = "python_full_version >= '3.13'" },
+    { name = "pandas", marker = "python_full_version >= '3.13'" },
+    { name = "pandas-gbq", marker = "python_full_version >= '3.13'" },
+    { name = "proto-plus", marker = "python_full_version >= '3.13'" },
+    { name = "pyarrow", marker = "python_full_version >= '3.13'" },
+    { name = "python-slugify", marker = "python_full_version >= '3.13'" },
+    { name = "ray", extra = ["default"], marker = "python_full_version == '3.13.*'" },
+    { name = "sqlalchemy-bigquery", marker = "python_full_version >= '3.13'" },
+    { name = "sqlalchemy-spanner", marker = "python_full_version >= '3.13'" },
+    { name = "tenacity", marker = "python_full_version >= '3.13'" },
+    { name = "types-protobuf", marker = "python_full_version >= '3.13'" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ca/27/d106a53991299a82277235b87cbfddc3b3a65ee5df94c5e2204d16db0ceb/apache_airflow_providers_google-21.0.0.tar.gz", hash = "sha256:59d02deb93d1da6524034140ff3867b80161833b30a3a63014f552cfdd4b7235", size = 2106521, upload-time = "2026-03-28T10:59:31.782Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/14/21/dc4cfa248512b5c6818274ec59dc9050c85ad7b99c9dcfb3a3d6f705c4da/apache_airflow_providers_google-21.0.0-py3-none-any.whl", hash = "sha256:7402ba888b0357f699e3e57799ac629dc8848de05aa9bf8ccfcb00519c1af90e", size = 1067533, upload-time = "2026-03-28T10:57:40.434Z" },
+]
+
+[[package]]
+name = "apache-airflow-providers-google"
 version = "22.0.0"
 source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version == '3.12.*' and sys_platform == 'win32'",
+    "python_full_version == '3.12.*' and sys_platform == 'emscripten'",
+    "python_full_version == '3.12.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
+    "python_full_version < '3.12' and sys_platform == 'win32'",
+    "python_full_version < '3.12' and sys_platform == 'emscripten'",
+    "python_full_version < '3.12' and sys_platform != 'emscripten' and sys_platform != 'win32'",
+]
 dependencies = [
-    { name = "apache-airflow" },
-    { name = "apache-airflow-providers-common-compat" },
-    { name = "apache-airflow-providers-common-sql" },
-    { name = "asgiref" },
-    { name = "dill" },
-    { name = "gcloud-aio-auth" },
-    { name = "gcloud-aio-bigquery" },
-    { name = "gcloud-aio-storage" },
-    { name = "gcsfs" },
-    { name = "google-ads" },
-    { name = "google-analytics-admin" },
-    { name = "google-api-core" },
-    { name = "google-api-python-client" },
-    { name = "google-auth" },
-    { name = "google-auth-httplib2" },
-    { name = "google-cloud-aiplatform", version = "1.148.1", source = { registry = "https://pypi.org/simple" }, extra = ["evaluation"], marker = "python_full_version >= '3.13'" },
+    { name = "apache-airflow", marker = "python_full_version < '3.13'" },
+    { name = "apache-airflow-providers-common-compat", marker = "python_full_version < '3.13'" },
+    { name = "apache-airflow-providers-common-sql", marker = "python_full_version < '3.13'" },
+    { name = "asgiref", marker = "python_full_version < '3.13'" },
+    { name = "dill", marker = "python_full_version < '3.13'" },
+    { name = "gcloud-aio-auth", marker = "python_full_version < '3.13'" },
+    { name = "gcloud-aio-bigquery", marker = "python_full_version < '3.13'" },
+    { name = "gcloud-aio-storage", marker = "python_full_version < '3.13'" },
+    { name = "gcsfs", marker = "python_full_version < '3.13'" },
+    { name = "google-ads", marker = "python_full_version < '3.13'" },
+    { name = "google-analytics-admin", marker = "python_full_version < '3.13'" },
+    { name = "google-api-core", marker = "python_full_version < '3.13'" },
+    { name = "google-api-python-client", marker = "python_full_version < '3.13'" },
+    { name = "google-auth", marker = "python_full_version < '3.13'" },
+    { name = "google-auth-httplib2", marker = "python_full_version < '3.13'" },
     { name = "google-cloud-aiplatform", version = "1.156.0", source = { registry = "https://pypi.org/simple" }, extra = ["evaluation"], marker = "python_full_version < '3.13'" },
-    { name = "google-cloud-alloydb" },
-    { name = "google-cloud-automl" },
-    { name = "google-cloud-batch" },
-    { name = "google-cloud-bigquery" },
-    { name = "google-cloud-bigquery-datatransfer" },
-    { name = "google-cloud-bigquery-storage" },
-    { name = "google-cloud-bigtable" },
-    { name = "google-cloud-build" },
-    { name = "google-cloud-compute" },
-    { name = "google-cloud-container" },
-    { name = "google-cloud-datacatalog" },
-    { name = "google-cloud-dataflow-client" },
-    { name = "google-cloud-dataform" },
-    { name = "google-cloud-dataplex" },
-    { name = "google-cloud-dataproc" },
-    { name = "google-cloud-dataproc-metastore" },
-    { name = "google-cloud-dlp" },
-    { name = "google-cloud-kms" },
-    { name = "google-cloud-language" },
-    { name = "google-cloud-logging" },
-    { name = "google-cloud-managedkafka" },
-    { name = "google-cloud-memcache" },
-    { name = "google-cloud-monitoring" },
-    { name = "google-cloud-orchestration-airflow" },
-    { name = "google-cloud-os-login" },
-    { name = "google-cloud-pubsub" },
-    { name = "google-cloud-redis" },
-    { name = "google-cloud-run" },
-    { name = "google-cloud-secret-manager" },
-    { name = "google-cloud-spanner" },
-    { name = "google-cloud-speech" },
-    { name = "google-cloud-storage" },
-    { name = "google-cloud-storage-transfer" },
-    { name = "google-cloud-tasks" },
-    { name = "google-cloud-texttospeech" },
-    { name = "google-cloud-translate" },
-    { name = "google-cloud-videointelligence" },
-    { name = "google-cloud-vision" },
-    { name = "google-cloud-workflows" },
-    { name = "grpcio-gcp" },
-    { name = "httpx" },
-    { name = "immutabledict" },
-    { name = "looker-sdk" },
-    { name = "pandas" },
-    { name = "pandas-gbq" },
-    { name = "proto-plus" },
-    { name = "pyarrow" },
-    { name = "python-slugify" },
-    { name = "ray", extra = ["default"], marker = "python_full_version < '3.14'" },
-    { name = "sqlalchemy-bigquery" },
-    { name = "sqlalchemy-spanner" },
-    { name = "tenacity" },
-    { name = "types-protobuf" },
+    { name = "google-cloud-alloydb", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-automl", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-batch", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-bigquery", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-bigquery-datatransfer", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-bigquery-storage", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-bigtable", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-build", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-compute", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-container", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-datacatalog", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-dataflow-client", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-dataform", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-dataplex", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-dataproc", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-dataproc-metastore", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-dlp", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-kms", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-language", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-logging", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-managedkafka", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-memcache", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-monitoring", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-orchestration-airflow", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-os-login", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-pubsub", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-redis", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-run", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-secret-manager", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-spanner", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-speech", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-storage", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-storage-transfer", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-tasks", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-texttospeech", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-translate", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-videointelligence", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-vision", marker = "python_full_version < '3.13'" },
+    { name = "google-cloud-workflows", marker = "python_full_version < '3.13'" },
+    { name = "grpcio-gcp", marker = "python_full_version < '3.13'" },
+    { name = "httpx", marker = "python_full_version < '3.13'" },
+    { name = "immutabledict", marker = "python_full_version < '3.13'" },
+    { name = "looker-sdk", marker = "python_full_version < '3.13'" },
+    { name = "pandas", marker = "python_full_version < '3.13'" },
+    { name = "pandas-gbq", marker = "python_full_version < '3.13'" },
+    { name = "proto-plus", marker = "python_full_version < '3.13'" },
+    { name = "pyarrow", marker = "python_full_version < '3.13'" },
+    { name = "python-slugify", marker = "python_full_version < '3.13'" },
+    { name = "ray", extra = ["default"], marker = "python_full_version < '3.13'" },
+    { name = "sqlalchemy-bigquery", marker = "python_full_version < '3.13'" },
+    { name = "sqlalchemy-spanner", marker = "python_full_version < '3.13'" },
+    { name = "tenacity", marker = "python_full_version < '3.13'" },
+    { name = "types-protobuf", marker = "python_full_version < '3.13'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/55/8b/80f033d346c596412a90b56ec057a06bb2d6c52eac04b80dd11fd57fd465/apache_airflow_providers_google-22.0.0.tar.gz", hash = "sha256:4db55919baf84e30054aa5628ca3305be3031e00129067cd62ee32995e47b3cf", size = 2116122, upload-time = "2026-05-23T12:32:36.917Z" }
 wheels = [
@@ -1122,7 +1217,8 @@ source = { virtual = "." }
 dependencies = [
     { name = "apache-airflow-providers-amazon" },
     { name = "apache-airflow-providers-cncf-kubernetes" },
-    { name = "apache-airflow-providers-google" },
+    { name = "apache-airflow-providers-google", version = "21.0.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13'" },
+    { name = "apache-airflow-providers-google", version = "22.0.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.13'" },
     { name = "astronomer-cosmos" },
     { name = "beautifulsoup4" },
     { name = "boto3" },
@@ -1871,7 +1967,7 @@ wheels = [
 
 [[package]]
 name = "google-cloud-aiplatform"
-version = "1.148.1"
+version = "1.142.0"
 source = { registry = "https://pypi.org/simple" }
 resolution-markers = [
     "python_full_version >= '3.14' and sys_platform == 'win32'",
@@ -1895,15 +1991,15 @@ dependencies = [
     { name = "pydantic", marker = "python_full_version >= '3.13'" },
     { name = "typing-extensions", marker = "python_full_version >= '3.13'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/c9/f3/b2a9417014c93858a2e3266134f931eefd972c2d410b25d7b8782fc6f143/google_cloud_aiplatform-1.148.1.tar.gz", hash = "sha256:75d605fba34e68714bd08e1e482755d0a6e3ae972805f809d088e686c30879e7", size = 10278758, upload-time = "2026-04-17T23:45:26.738Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/41/0d/3063a0512d60cf18854a279e00ccb796429545464345ef821cf77cb93d05/google_cloud_aiplatform-1.142.0.tar.gz", hash = "sha256:87b49e002703dc14885093e9b264587db84222bef5f70f5a442d03f41beecdd1", size = 10207993, upload-time = "2026-03-20T22:49:13.797Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/56/5b/e3515d7bbba602c2b0f6a0da5431785e897252443682e4735d0e6873dc8f/google_cloud_aiplatform-1.148.1-py2.py3-none-any.whl", hash = "sha256:035101e2d8e65c6a706cc3930b2452de7ddcbde50dd130320fcea0d8b03b0c5a", size = 8434481, upload-time = "2026-04-17T23:45:22.919Z" },
+    { url = "https://files.pythonhosted.org/packages/59/8b/f29646d3fa940f0e38cfcc12137f4851856b50d7486a3c05103ebc78d82d/google_cloud_aiplatform-1.142.0-py2.py3-none-any.whl", hash = "sha256:17c91db9b613cbbafb2c36335b123686aeb2b4b8448be5134b565ae07165a39a", size = 8388991, upload-time = "2026-03-20T22:49:10.334Z" },
 ]
 
 [package.optional-dependencies]
 evaluation = [
     { name = "jsonschema", marker = "python_full_version >= '3.13'" },
-    { name = "litellm", version = "1.82.6", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.13'" },
+    { name = "litellm", marker = "python_full_version >= '3.13'" },
     { name = "pandas", marker = "python_full_version >= '3.13'" },
     { name = "pyyaml", marker = "python_full_version >= '3.13'" },
     { name = "ruamel-yaml", marker = "python_full_version >= '3.13'" },
@@ -1945,7 +2041,7 @@ wheels = [
 [package.optional-dependencies]
 evaluation = [
     { name = "jsonschema", marker = "python_full_version < '3.13'" },
-    { name = "litellm", version = "1.85.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.13'" },
+    { name = "litellm", marker = "python_full_version < '3.13'" },
     { name = "pandas", marker = "python_full_version < '3.13'" },
     { name = "pyyaml", marker = "python_full_version < '3.13'" },
     { name = "ruamel-yaml", marker = "python_full_version < '3.13'" },
@@ -3603,64 +3699,25 @@ wheels = [
 
 [[package]]
 name = "litellm"
-version = "1.82.6"
+version = "1.84.0"
 source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version >= '3.14' and sys_platform == 'win32'",
-    "python_full_version >= '3.14' and sys_platform == 'emscripten'",
-    "python_full_version >= '3.14' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-    "python_full_version == '3.13.*' and sys_platform == 'win32'",
-    "python_full_version == '3.13.*' and sys_platform == 'emscripten'",
-    "python_full_version == '3.13.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-]
 dependencies = [
-    { name = "aiohttp", marker = "python_full_version >= '3.13'" },
-    { name = "click", marker = "python_full_version >= '3.13'" },
-    { name = "fastuuid", marker = "python_full_version >= '3.13'" },
-    { name = "httpx", marker = "python_full_version >= '3.13'" },
-    { name = "importlib-metadata", marker = "python_full_version >= '3.13'" },
-    { name = "jinja2", marker = "python_full_version >= '3.13'" },
-    { name = "jsonschema", marker = "python_full_version >= '3.13'" },
-    { name = "openai", marker = "python_full_version >= '3.13'" },
-    { name = "pydantic", marker = "python_full_version >= '3.13'" },
-    { name = "python-dotenv", marker = "python_full_version >= '3.13'" },
-    { name = "tiktoken", marker = "python_full_version >= '3.13'" },
-    { name = "tokenizers", marker = "python_full_version >= '3.13'" },
+    { name = "aiohttp" },
+    { name = "click" },
+    { name = "fastuuid" },
+    { name = "httpx" },
+    { name = "importlib-metadata" },
+    { name = "jinja2" },
+    { name = "jsonschema" },
+    { name = "openai" },
+    { name = "pydantic" },
+    { name = "python-dotenv" },
+    { name = "tiktoken" },
+    { name = "tokenizers" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/29/75/1c537aa458426a9127a92bc2273787b2f987f4e5044e21f01f2eed5244fd/litellm-1.82.6.tar.gz", hash = "sha256:2aa1c2da21fe940c33613aa447119674a3ad4d2ad5eb064e4d5ce5ee42420136", size = 17414147, upload-time = "2026-03-22T06:36:00.452Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/dd/e9/8941b7e72a187000561d932c0f2f2ed2b0fd080dfc33ba6e05961d45ca7d/litellm-1.84.0.tar.gz", hash = "sha256:b8ad0cbea11a5941b18d5af973017a340abd3d3ab41cb86e5401b970626d71a6", size = 15103206, upload-time = "2026-05-14T05:45:53.017Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/02/6c/5327667e6dbe9e98cbfbd4261c8e91386a52e38f41419575854248bbab6a/litellm-1.82.6-py3-none-any.whl", hash = "sha256:164a3ef3e19f309e3cabc199bef3d2045212712fefdfa25fc7f75884a5b5b205", size = 15591595, upload-time = "2026-03-22T06:35:56.795Z" },
-]
-
-[[package]]
-name = "litellm"
-version = "1.85.4"
-source = { registry = "https://pypi.org/simple" }
-resolution-markers = [
-    "python_full_version == '3.12.*' and sys_platform == 'win32'",
-    "python_full_version == '3.12.*' and sys_platform == 'emscripten'",
-    "python_full_version == '3.12.*' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-    "python_full_version < '3.12' and sys_platform == 'win32'",
-    "python_full_version < '3.12' and sys_platform == 'emscripten'",
-    "python_full_version < '3.12' and sys_platform != 'emscripten' and sys_platform != 'win32'",
-]
-dependencies = [
-    { name = "aiohttp", marker = "python_full_version < '3.13'" },
-    { name = "click", marker = "python_full_version < '3.13'" },
-    { name = "fastuuid", marker = "python_full_version < '3.13'" },
-    { name = "httpx", marker = "python_full_version < '3.13'" },
-    { name = "importlib-metadata", marker = "python_full_version < '3.13'" },
-    { name = "jinja2", marker = "python_full_version < '3.13'" },
-    { name = "jsonschema", marker = "python_full_version < '3.13'" },
-    { name = "openai", marker = "python_full_version < '3.13'" },
-    { name = "pydantic", marker = "python_full_version < '3.13'" },
-    { name = "python-dotenv", marker = "python_full_version < '3.13'" },
-    { name = "tiktoken", marker = "python_full_version < '3.13'" },
-    { name = "tokenizers", marker = "python_full_version < '3.13'" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/ec/fa/6ac3984c7d57c6a7b0dd18cfae3dfaf509b7f3eb80075b38fac357ef45b9/litellm-1.85.4.tar.gz", hash = "sha256:f4cb776b7ae2a57e63f64092933641b837d7516ef878ddca93d6dac890282ae4", size = 15350215, upload-time = "2026-06-04T04:58:03.495Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/d1/95/11d405f6841f3ddfa4f20229a119bc8e4210ba4842dc1b206d473ccb7e14/litellm-1.85.4-py3-none-any.whl", hash = "sha256:66ba162d61478fc9607fbdab73e2e528f9c518382f087788074e605f562f5c9d", size = 16984328, upload-time = "2026-06-04T04:57:59.234Z" },
+    { url = "https://files.pythonhosted.org/packages/01/a6/77fa1bbf5e42eb596b06318b3f7e6af5d0f44028046d1d598c6a595d028f/litellm-1.84.0-py3-none-any.whl", hash = "sha256:2a58d6041e6aa27d1a28dc8d8828ab500fef1a00ef74ca65e60899035010c2f2", size = 16735062, upload-time = "2026-05-14T05:45:49.927Z" },
 ]
 
 [[package]]
