@@ -10,7 +10,7 @@ clean_columns AS (
         SAFE_CAST(terminal_id AS INT64) AS terminal_id,
         {{ trim_make_empty_string_null('mapping_terminal_id') }} AS mapping_terminal_id,
         {{ trim_make_empty_string_null('mapping_merchant_id') }} AS mapping_merchant_id,
-        SAFE_CAST(timestamp AS TIMESTAMP) AS timestamp,
+        {{ parse_enghouse_timestamp('timestamp') }} AS timestamp,
         ROUND(SAFE_CAST(amount AS NUMERIC) / 100.0, 2) AS amount,
         {{ trim_make_empty_string_null('payment_reference') }} AS payment_reference,
         SAFE_CAST(spdh_response AS INT64) AS spdh_response,

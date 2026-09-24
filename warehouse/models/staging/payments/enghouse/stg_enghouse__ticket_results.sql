@@ -17,7 +17,7 @@ clean_columns AS (
         {{ trim_make_empty_string_null('line') }} AS line,
         {{ trim_make_empty_string_null('start_station') }} AS start_station,
         {{ trim_make_empty_string_null('end_station') }} AS end_station,
-        SAFE_CAST(start_dttm AS TIMESTAMP) AS start_dttm,
+        {{ parse_enghouse_timestamp('start_dttm') }} AS start_dttm,
         SAFE_CAST(end_dttm AS TIMESTAMP) AS end_dttm,
         {{ trim_make_empty_string_null('ticket_code') }} AS ticket_code,
         agency,
