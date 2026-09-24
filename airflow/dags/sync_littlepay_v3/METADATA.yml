@@ -1,5 +1,5 @@
 description: "Syncs feed V3 Littlepay data from S3 bucket to our buckets"
-schedule_interval: "0 * * * *"
+schedule_interval: null
 tags:
   - littlepay
   - payments
