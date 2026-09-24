@@ -51,6 +51,8 @@ models:
         description: '{{ doc("lp_funding_source_vault_id") }}'
       - name: customer_id
         description: '{{ doc("lp_customer_id") }}'
+        data_tests:
+          - not_null
       - name: organization_source_record_id
         description: '{{ doc("lp_tap_organization_source_record_id") }}'
         data_tests:
@@ -64,11 +66,14 @@ models:
         data_tests:
           # a micropayment has a single customer_id, so the join to int_payments__customers
           # should not fan out into multiple principal_customer_id values
+          - not_null
           - single_value_per_group:
               arguments:
                 group_by_columns: [participant_id, micropayment_id]
       - name: bin
         description: From payments.customer_funding_source.bin
+        data_tests:
+          - not_null
       - name: masked_pan
         description: From payments.customer_funding_source.masked_pan
       - name: card_scheme
