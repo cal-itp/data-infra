@@ -61,6 +61,12 @@ models:
         description: '{{ doc("lp_tap_organization_name") }}'
       - name: principal_customer_id
         description: From payments.customer_funding_source.principal_customer_id (by participant_id).
+        data_tests:
+          # a micropayment has a single customer_id, so the join to int_payments__customers
+          # should not fan out into multiple principal_customer_id values
+          - single_value_per_group:
+              arguments:
+                group_by_columns: [participant_id, micropayment_id]
       - name: bin
         description: From payments.customer_funding_source.bin
       - name: masked_pan
