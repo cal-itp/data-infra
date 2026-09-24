@@ -192,7 +192,10 @@ models:
       - name: start_dttm
         description: Timestamp when the ticket started.
         data_tests:
-          - not_null
+          - not_null:
+              arguments:
+                config:
+                  where: "dt >= '2026-01-11'"
       - name: end_dttm
         description: Only relevant for time-based tickets.
       - name: ticket_code
