@@ -12,7 +12,7 @@ clean_columns AS (
         {{ trim_make_empty_string_null('token') }} AS token,
         {{ trim_make_empty_string_null('masked_pan') }} AS masked_pan,
         SAFE_CAST(server_date AS TIMESTAMP) AS server_date,
-        SAFE_CAST(terminal_date AS TIMESTAMP) AS terminal_date,
+        {{ parse_enghouse_timestamp('terminal_date') }} AS terminal_date,
         SAFE_CAST(tx_number AS INT64) AS tx_number,
         SAFE_CAST(tx_status AS INT64) AS tx_status,
         {{ trim_make_empty_string_null('payment_reference') }} AS payment_reference,
