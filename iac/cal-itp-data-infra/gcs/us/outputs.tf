@@ -1746,6 +1746,10 @@ output "google_storage_bucket_calitp-gtfs-rt-parsed_name" {
   value = google_storage_bucket.tfer--calitp-gtfs-rt-parsed.name
 }
 
+output "google_storage_bucket_calitp-gtfs-rt-raw-compacted_name" {
+  value = google_storage_bucket.calitp-gtfs-rt-raw-compacted.name
+}
+
 output "google_storage_bucket_calitp-gtfs-rt-raw-v2_name" {
   value = google_storage_bucket.tfer--calitp-gtfs-rt-raw-v2.name
 }
