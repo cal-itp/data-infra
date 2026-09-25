@@ -61,13 +61,20 @@ class Result:
         return filename
 
     def metadata(self) -> dict:
-        return {
+        metadata = {
             "filename": self.filename(),
             "ts": self.configuration.ts(),
             "config": self.configuration.json(),
             "response_code": self.code(),
             "response_headers": self.headers(),
         }
+        # On the high-frequency path `ts` is the scheduled tick, not the moment we
+        # actually fetched -- under backlog the grid stays clean while reality
+        # drifts, which would quietly mislead a timing analysis. Record the real
+        # instant alongside it. Production metadata is left untouched.
+        if self.configuration.batch_at is not None:
+            metadata["published_at"] = self.configuration.publish_time.isoformat()
+        return metadata
 
 
 class Downloader:
