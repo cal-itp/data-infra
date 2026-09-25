@@ -6397,14 +6397,14 @@ wheels = [
 
 [[package]]
 name = "sql-metadata"
-version = "2.20.0"
+version = "3.0.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "sqlparse" },
+    { name = "sqlglot" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/0e/7d/5fd64d153e93001387693ede6fbdb223a519a982b1d513ad4774ad6dda3f/sql_metadata-2.20.0.tar.gz", hash = "sha256:d680dc58a82daa30e50c136b61463b2cc49c3fc092d251f21e327a327bb91dc1", size = 22275, upload-time = "2026-03-04T20:35:13.554Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/e0/47/310341f7d21df7cc73e6f66bb8c10f87919e9723bf1341387544ed36e5dd/sql_metadata-3.0.1.tar.gz", hash = "sha256:4c83a48ddd1c6c4076eec2021347cb1311f0a190f18aabef7c2c6fd64d3afbc2", size = 48642, upload-time = "2026-06-30T22:10:18.821Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1d/75/a18df908807154008f565d2ab6e9a835c986da965f5af530b6ad08930544/sql_metadata-2.20.0-py3-none-any.whl", hash = "sha256:86a47cc0a7c2d715c92328fe0c87926fba07e70c8280f9d96f77f8c771fb43a6", size = 22687, upload-time = "2026-03-04T20:35:12.176Z" },
+    { url = "https://files.pythonhosted.org/packages/c7/71/4b1029ab855e9ff79a907cf0b8e3ea08346ab0aa4d3b268042461667bde0/sql_metadata-3.0.1-py3-none-any.whl", hash = "sha256:33b17891a149bfd851f5927d38fe6f133c63fca5955c016925dbc67113a07f7d", size = 52797, upload-time = "2026-06-30T22:10:17.445Z" },
 ]
 
 [[package]]
@@ -6483,12 +6483,21 @@ wheels = [
 ]
 
 [[package]]
-name = "sqlparse"
-version = "0.5.5"
+name = "sqlglot"
+version = "30.17.0"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/90/76/437d71068094df0726366574cf3432a4ed754217b436eb7429415cf2d480/sqlparse-0.5.5.tar.gz", hash = "sha256:e20d4a9b0b8585fdf63b10d30066c7c94c5d7a7ec47c889a2d83a3caa93ff28e", size = 120815, upload-time = "2025-12-19T07:17:45.073Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/56/d4/da49abcc81beebbb25f29ddf87f2980c63c949569d7f2da40c06d95fa415/sqlglot-30.17.0.tar.gz", hash = "sha256:2d6b8def93304fa300f4d20f48e3909e7f436fda56ca1fafd8975f6c561ef62c", size = 5999019, upload-time = "2026-08-12T19:36:50.587Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/49/4b/359f28a903c13438ef59ebeee215fb25da53066db67b305c125f1c6d2a25/sqlparse-0.5.5-py3-none-any.whl", hash = "sha256:12a08b3bf3eec877c519589833aed092e2444e68240a3577e8e26148acc7b1ba", size = 46138, upload-time = "2025-12-19T07:17:46.573Z" },
+    { url = "https://files.pythonhosted.org/packages/f3/bc/2a07cef49046e6cf5d1a8b1de553aaef8491b4170dbfe254c8687c764408/sqlglot-30.17.0-py3-none-any.whl", hash = "sha256:84435ac283a60173da31b5fd7d11a725037a1c3fd6ed1e21fb065de74ddb579f", size = 741795, upload-time = "2026-08-12T19:36:48.699Z" },
+]
+
+[[package]]
+name = "sqlparse"
+version = "0.6.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/5f/d3/3f06a1006f2261d1342aefb3c71eed02f5d4ca5bdbecd86ebc12ad38306e/sqlparse-0.6.0.tar.gz", hash = "sha256:113c35c75365ab9cc9c7231d68c6428fb11c085fc8e9eb1ad659b7ddbf6cd2b9", size = 178477, upload-time = "2026-08-13T19:16:06.396Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d9/50/f00935da0ec7cbf325f8dc4f772ae46fbc7b672dd62876e73f0a94adda57/sqlparse-0.6.0-py3-none-any.whl", hash = "sha256:b861c0288ce2fa56209a9a6412d2e066ac664b3873b89c26c9d8415e8e32996f", size = 50070, upload-time = "2026-08-13T19:16:04.062Z" },
 ]
 
 [[package]]
