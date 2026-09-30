@@ -334,6 +334,40 @@ resource "google_storage_bucket" "tfer--calitp-gtfs-rt-raw-v2" {
   uniform_bucket_level_access = "true"
 }
 
+resource "google_storage_bucket" "calitp-gtfs-rt-raw-compacted" {
+  name     = "calitp-gtfs-rt-raw-compacted"
+  project  = "cal-itp-data-infra"
+  location = "US-WEST2"
+
+  default_event_based_hold    = "false"
+  force_destroy               = "false"
+  public_access_prevention    = "inherited"
+  requester_pays              = "false"
+  storage_class               = "STANDARD"
+  uniform_bucket_level_access = "true"
+
+  lifecycle_rule {
+    action {
+      type          = "SetStorageClass"
+      storage_class = "ARCHIVE"
+    }
+
+    condition {
+      age = "30"
+    }
+  }
+
+  lifecycle_rule {
+    action {
+      type = "Delete"
+    }
+
+    condition {
+      age = "1825"
+    }
+  }
+}
+
 resource "google_storage_bucket" "tfer--calitp-gtfs-rt-validation" {
   default_event_based_hold    = "false"
   force_destroy               = "false"
