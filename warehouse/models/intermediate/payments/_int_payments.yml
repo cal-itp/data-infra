@@ -590,6 +590,55 @@ models:
       - name: has_mismatched_mode
       - name: has_mismatched_direction
       - name: has_mismatched_vehicle_id
+  - name: int_payments__deduped_customer_funding_sources
+    description: |
+      Deduplicated customer_funding_source records.
+      Full duplicate rows (identical `_content_hash`) are removed, then only the latest record
+      per `participant_id` + `funding_source_id` + `customer_id` is kept.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - participant_id
+              - funding_source_id
+              - customer_id
+    columns:
+      - name: funding_source_id
+        description: Unique identifier representing the funding source; a guid internal to Littlepay.
+      - name: customer_id
+        description: '{{ doc("customer_funding_source_customer_id") }}'
+      - name: funding_source_vault_id
+        description: Identifies the funding source (for example, card) that the micropayment will be charged to. This is always the card that was tapped. A registered customer can have multiple funding sources linked to them.
+      - name: principal_customer_id
+        description: '{{ doc("customer_funding_source_principal_customer_id") }}'
+      - name: participant_id
+        description: '{{ doc("lp_participant_id") }}'
+      - name: calitp_funding_source_id_rank
+        description: A ranking of the records using the `funding_source_id`, ordered newest to oldest
+      - name: calitp_funding_source_vault_id_rank
+        description: A ranking of the records using the `funding_source_vault_id`, ordered newest to oldest
+      - name: calitp_customer_id_rank
+        description: A ranking of the records using the `customer_id`, ordered newest to oldest
+      - name: littlepay_export_ts
+        description: '{{ doc("lp_export_ts") }}'
+        data_tests:
+          - not_null
+      - name: _key
+        description: '{{ doc("lp_input_row_key") }}'
+        data_tests:
+          - not_null
+          - unique
+      - name: _payments_key
+        description: '{{ doc("lp_payments_key") }}'
+        data_tests:
+          - not_null
+          - unique
+      - name: _content_hash
+        description: '{{ doc("lp_content_hash") }}'
+        data_tests:
+          - not_null
+          - unique
+
   - name: int_payments__customer_funding_source_vaults
     description: |
       Derived from customer_funding_source records.
