@@ -1,7 +1,16 @@
 name: GTFS-RT Archiver
 
 on:
+  # Run on a direct push to the listed branches
   push:
+    branches:
+      - 'main'
+      - 'staging/official'
+    paths:
+      - services/gtfs-rt-archiver/**
+
+  # Also run when a PR is opened, synchronized, or reopened that touches the same paths
+  pull_request:
     branches:
       - 'main'
       - 'staging/official'
