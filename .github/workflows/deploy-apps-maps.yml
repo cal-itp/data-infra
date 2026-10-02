@@ -31,6 +31,8 @@ jobs:
         npm install
         npm run build
       working-directory: apps/maps
+      env:
+        VITE_CARTO_BASEMAP_API_KEY: ${{ github.ref == 'refs/heads/main' && secrets.CARTO_BASEMAP_API_KEY || '' }}
 
     # Production
     - name: Deploy apps/maps production to Netlify
