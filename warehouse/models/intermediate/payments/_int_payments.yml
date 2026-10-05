@@ -593,15 +593,14 @@ models:
   - name: int_payments__deduped_customer_funding_sources
     description: |
       Deduplicated customer_funding_source records.
-      Full duplicate rows (identical `_content_hash`) are removed, then only the latest record
-      per `participant_id` + `funding_source_id` + `customer_id` is kept.
+      Only the latest record per `participant_id`
+      + `funding_source_id`  is kept
     data_tests:
       - dbt_utils.unique_combination_of_columns:
           arguments:
             combination_of_columns:
               - participant_id
               - funding_source_id
-              - customer_id
     columns:
       - name: funding_source_id
         description: Unique identifier representing the funding source; a guid internal to Littlepay.

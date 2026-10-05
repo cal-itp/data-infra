@@ -105,7 +105,7 @@ fct_payments_rides_v2 AS (
         micropayments.customer_id,
         device_transactions.organization_source_record_id,
         organizations.name AS organization_name,
-        vaults.principal_customer_id,
+        customers.principal_customer_id,
         customers.earliest_tap,
         vaults.bin,
         vaults.masked_pan,
