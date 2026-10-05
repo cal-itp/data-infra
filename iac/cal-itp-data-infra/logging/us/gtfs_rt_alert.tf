@@ -73,3 +73,59 @@ resource "google_monitoring_alert_policy" "gtfs_low_write_alert" {
 
   enabled = true
 }
+
+# 3. Define the GTFS-RT archiver latency alert
+resource "google_monitoring_alert_policy" "gtfs_rt_archiver_high_latency_alert" {
+  display_name = "High Fetch Latency - GTFS-RT Archiver"
+  project      = data.google_project.project.project_id
+  combiner     = "OR"
+  severity     = "WARNING"
+
+  conditions {
+    display_name = "GTFS-RT Archiver p50 latency above 1.0s for 15m"
+
+    condition_threshold {
+      filter = <<-EOT
+        resource.type = "cloud_run_revision"
+        AND resource.labels.service_name = "gtfs-rt-archiver"
+        AND metric.type = "run.googleapis.com/request_latencies"
+      EOT
+
+      comparison      = "COMPARISON_GT"
+      threshold_value = 1000
+      duration        = "900s"
+
+      aggregations {
+        alignment_period     = "60s"
+        per_series_aligner   = "ALIGN_DELTA"
+        cross_series_reducer = "REDUCE_PERCENTILE_50"
+      }
+
+      evaluation_missing_data = "EVALUATION_MISSING_DATA_INACTIVE"
+
+      trigger {
+        count = 1
+      }
+    }
+  }
+
+  alert_strategy {
+    auto_close = "43200s"
+  }
+
+  notification_channels = [
+    google_monitoring_notification_channel.email_dds_notify.name,
+  ]
+
+  documentation {
+    content   = "The GTFS-RT archiver p50 request latency has exceeded 1.0 second for 15 minutes. This can indicate a performance regression that may also increase Cloud Run costs."
+    mime_type = "text/markdown"
+  }
+
+  user_labels = {
+    environment = "production"
+    managed_by  = "terraform"
+  }
+
+  enabled = true
+}
