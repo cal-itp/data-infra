@@ -30,6 +30,7 @@ clean_columns AS (
         -- these are new fields in v3, excluding for now to faciliate union with feed v1
         -- record_updated_timestamp_utc,
         -- channel,
+        {{ safe_cast('record_updated_timestamp_utc', type_timestamp()) }} as record_updated_timestamp_utc,
 
         CAST(_line_number AS INTEGER) AS _line_number,
         `instance`,
@@ -85,6 +86,7 @@ stg_littlepay__customer_funding_source_v3 AS (
         _key,
         _payments_key,
         _content_hash,
+        record_updated_timestamp_utc,
     FROM add_keys_drop_full_dupes
 )
 
