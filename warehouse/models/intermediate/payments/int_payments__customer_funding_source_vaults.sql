@@ -7,7 +7,7 @@
 WITH deduped_by_vault_and_extract AS (
     SELECT *
     FROM {{ ref('int_payments__deduped_customer_funding_sources') }}
-    WHERE calitp_funding_source_id_rank = 1 and calitp_funding_source_vault_id_rank = 1
+    WHERE calitp_funding_source_vault_id_rank = 1
 ),
 
 int_payments__customer_funding_source_vaults AS (
