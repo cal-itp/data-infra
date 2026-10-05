@@ -601,6 +601,25 @@ models:
             combination_of_columns:
               - participant_id
               - funding_source_id
+      - dbt_utils.unique_combination_of_columns:
+           arguments:
+             combination_of_columns:
+               - participant_id
+               - funding_source_id
+               - calitp_funding_source_id_rank
+      - dbt_utils.unique_combination_of_columns:
+           arguments:
+             combination_of_columns:
+               - participant_id
+               - funding_source_vault_id
+               - calitp_funding_source_vault_id_rank
+      - dbt_utils.unique_combination_of_columns:
+           arguments:
+             combination_of_columns:
+               - participant_id
+               - customer_id
+               - calitp_customer_id_rank
+
     columns:
       - name: funding_source_id
         description: Unique identifier representing the funding source; a guid internal to Littlepay.

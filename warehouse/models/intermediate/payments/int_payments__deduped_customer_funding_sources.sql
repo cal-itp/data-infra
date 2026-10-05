@@ -17,13 +17,13 @@ add_ranks AS (
         -- flag in reverse order, since we usually want the latest
         DENSE_RANK() OVER (
             PARTITION BY participant_id, funding_source_id
-            ORDER BY littlepay_export_ts DESC) AS calitp_funding_source_id_rank,
+            ORDER BY littlepay_export_ts DESC, record_updated_timestamp_utc DESC) AS calitp_funding_source_id_rank,
         DENSE_RANK() OVER (
             PARTITION BY participant_id, funding_source_vault_id
-            ORDER BY littlepay_export_ts DESC) AS calitp_funding_source_vault_id_rank,
+            ORDER BY littlepay_export_ts DESC, record_updated_timestamp_utc DESC, funding_source_id ASC) AS calitp_funding_source_vault_id_rank,
         DENSE_RANK() OVER (
             PARTITION BY participant_id, customer_id
-            ORDER BY littlepay_export_ts DESC) AS calitp_customer_id_rank,
+            ORDER BY littlepay_export_ts DESC, record_updated_timestamp_utc DESC, funding_source_id ASC ) AS calitp_customer_id_rank,
     FROM drop_full_dupes
 ),
 
@@ -57,13 +57,14 @@ int_payments__deduped_customer_funding_sources AS (
     -- Some funding sources have incomplete information when first present in data, like missing
     -- values for form_factor or issuer_country that are filled in during later exports.
     -- Additionally, sometimes a filled column value is updated in newer exports for a given entry.
-    QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY
-            participant_id,
-            funding_source_id,
-            customer_id
-        ORDER BY littlepay_export_ts DESC
-    ) = 1
+    -- QUALIFY ROW_NUMBER() OVER (
+    --     PARTITION BY
+    --         participant_id,
+    --         funding_source_id,
+    --         customer_id
+    --     ORDER BY littlepay_export_ts DESC
+    -- ) = 1
+    WHERE calitp_funding_source_id_rank = 1
 )
 
 SELECT * FROM int_payments__deduped_customer_funding_sources
