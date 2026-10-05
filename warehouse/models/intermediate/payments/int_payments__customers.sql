@@ -11,7 +11,7 @@ select_first_rank AS (
         principal_customer_id
     FROM int_payments__deduped_customer_funding_sources
     WHERE calitp_customer_id_rank = 1
-        AND calitp_funding_source_id_rank = 1
+         AND calitp_funding_source_id_rank = 1
 ),
 
 find_earliest_tap AS (
