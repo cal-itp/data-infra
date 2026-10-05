@@ -20,6 +20,10 @@ A GitHub Action workflow exists to build the package and publish it to PyPi. Be 
 ## Developing the maps app
 
 You can run a development server locally; use the calitp-map-utils CLI to generate a valid state URL for testing.
+Copy `.env.example` to `.env.local` and set the CARTO basemap API key before running the app. The key is included in browser
+requests, so restrict it to the sites that host the map. Production builds receive the key from the
+`CARTO_BASEMAP_API_KEY` GitHub Actions secret. Preview builds intentionally omit the key and may display CARTO's
+API-key watermark.
 
 ```bash
 npm run dev

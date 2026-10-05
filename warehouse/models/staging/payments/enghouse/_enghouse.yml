@@ -61,6 +61,7 @@ models:
         data_tests:
           - *one_card_identifier_per_payment_reference
       - name: server_date
+      # Not used anywhere, so not addinga not null test
         description: Timestamp when the tap was received on the Enghouse server.
       - name: terminal_date
         description: Timestamp when the tap was created on the terminal.
@@ -190,6 +191,11 @@ models:
         description: Zone where the trip ended.
       - name: start_dttm
         description: Timestamp when the ticket started.
+        data_tests:
+          - not_null:
+              arguments:
+                config:
+                  where: "dt >= '2026-01-11'"
       - name: end_dttm
         description: Only relevant for time-based tickets.
       - name: ticket_code
@@ -230,6 +236,8 @@ models:
         description: '{{ doc("enghouse_mapping_merchant_id") }}'
       - name: timestamp
         description: '{{ doc("enghouse_timestamp") }}'
+        data_tests:
+          - not_null
       - name: amount
         description: '{{ doc("enghouse_amount") }}'
         data_tests:
@@ -432,8 +440,15 @@ models:
         description: Identifier of the terminal where the pay window was opened.
       - name: open_timestamp
         description: Timestamp when the pay window was opened.
+        data_tests:
+          - not_null
       - name: close_timestamp
         description: Timestamp when the pay window was closed.
+        data_tests:
+          - not_null:
+              arguments:
+                config:
+                  where: "STAGE = 'Closed'"
       - name: agency
         description: Agency identifier parsed from the GCS path partition (e.g., "ventura", "raba", "camarillo").
       - name: dt
