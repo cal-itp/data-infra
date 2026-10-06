@@ -1,0 +1,352 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/3.10.1  gl-python/3.11.13 grpc/1.78.0 gax/2.30.0 gccl/3.10.1
+      X-Goog-API-Client:
+      - gcloud-python/3.10.1  gl-python/3.11.13 grpc/1.78.0 gax/2.30.0 gccl/3.10.1
+        gccl-invocation-id/9badb33f-70a9-44d2-a0c8-b26584a28edd
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt%3D2026-04-01%2Fhour%3D2026-04-01T00%3A00%3A00%2B00%3A00%2Fts%3D2026-04-01T00%3A01%3A20%2B00%3A00%2Fbase64_url%3DaHR0cDovL2F2bC55Y3RkLm9yZy9SZWFsVGltZS9HVEZTX1NlcnZpY2VBbGVydHMucGI%3D%2Ffeed?prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/service_alerts/dt=2026-04-01/hour=2026-04-01T00:00:00+00:00/ts=2026-04-01T00:01:20+00:00/base64_url=aHR0cDovL2F2bC55Y3RkLm9yZy9SZWFsVGltZS9HVEZTX1NlcnZpY2VBbGVydHMucGI=/feed/1775601378177275","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt=2026-04-01%2Fhour=2026-04-01T00:00:00%2B00:00%2Fts=2026-04-01T00:01:20%2B00:00%2Fbase64_url=aHR0cDovL2F2bC55Y3RkLm9yZy9SZWFsVGltZS9HVEZTX1NlcnZpY2VBbGVydHMucGI=%2Ffeed","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt=2026-04-01%2Fhour=2026-04-01T00:00:00%2B00:00%2Fts=2026-04-01T00:01:20%2B00:00%2Fbase64_url=aHR0cDovL2F2bC55Y3RkLm9yZy9SZWFsVGltZS9HVEZTX1NlcnZpY2VBbGVydHMucGI=%2Ffeed?generation=1775601378177275&alt=media","name":"service_alerts/dt=2026-04-01/hour=2026-04-01T00:00:00+00:00/ts=2026-04-01T00:01:20+00:00/base64_url=aHR0cDovL2F2bC55Y3RkLm9yZy9SZWFsVGltZS9HVEZTX1NlcnZpY2VBbGVydHMucGI=/feed","bucket":"calitp-staging-pytest","generation":"1775601378177275","metageneration":"1","contentType":"application/x-protobuf","storageClass":"STANDARD","size":"2960","md5Hash":"nsldHszJclEtmThTpcBnBA==","crc32c":"Zcgjag==","etag":"CPvhosvm3JMDEAE=","timeCreated":"2026-04-07T22:36:18.186Z","updated":"2026-04-07T22:36:18.186Z","timeStorageClassUpdated":"2026-04-07T22:36:18.186Z","timeFinalized":"2026-04-07T22:36:18.186Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"filename\":\"feed\",\"ts\":\"2026-04-01T00:01:20+00:00\",\"config\":{\"extracted_at\":\"2026-04-01T00:00:00+00:00\",\"name\":\"Example\",\"url\":\"http://avl.yctd.org/RealTime/GTFS_ServiceAlerts.pb\",\"feed_type\":\"service_alerts\",\"schedule_url_for_validation\":\"http://www.yolobus.com/GTFS/google_transit.zip\",\"auth_query_params\":{},\"auth_headers\":{}},\"response_code\":200,\"response_headers\":{\"Last-Modified\":\"Tue,
+        07 Apr 2026 22:36:11 GMT\",\"Date\":\"Tue, 07 Apr 2026 22:36:16 GMT\",\"Server\":\"Microsoft-IIS/10.0\",\"Content-Type\":\"application/x-protobuf\",\"X-Powered-By\":\"ASP.NET\",\"Accept-Ranges\":\"bytes\",\"Content-Length\":\"2960\",\"ETag\":\"\\\"422da1efdec6dc1:0\\\"\"}}"}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '2187'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 07 Apr 2026 22:36:27 GMT
+      ETag:
+      - CPvhosvm3JMDEAE=
+      Expires:
+      - Tue, 07 Apr 2026 22:36:27 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AMNfjG0ZG6IY6DOk8xOTUitn6syPqvnMURZuhGQogJCPuq--vdHqetNtJQT7r1bbohtz5DQ6clutlkA
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+      Accept-Encoding:
+      - gzip, deflate
+      Accept-Language:
+      - en-US,en;q=0.9
+      Cache-Control:
+      - max-age=0
+      Connection:
+      - keep-alive
+      Sec-Ch-Ua:
+      - '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145'
+      Sec-Fetch-Dest:
+      - document
+      Sec-Fetch-Mode:
+      - navigate
+      Sec-Fetch-Site:
+      - cross-site
+      Sec-Fetch-User:
+      - ?1
+      Upgrade-Insecure-Requests:
+      - '1'
+      User-Agent:
+      - Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML,
+        like Gecko) Chrome/145.0.0.0 Safari/537.36
+    method: GET
+    uri: http://avl.yctd.org/RealTime/GTFS_ServiceAlerts.pb
+  response:
+    body:
+      string: '<head><title>Document Moved</title></head>
+
+        <body><h1>Object Moved</h1>This document may be found <a HREF="https://avl.yctd.org/RealTime/GTFS_ServiceAlerts.pb">here</a></body>'
+    headers:
+      Content-Length:
+      - '174'
+      Content-Type:
+      - text/html; charset=UTF-8
+      Date:
+      - Tue, 07 Apr 2026 22:36:27 GMT
+      Location:
+      - https://avl.yctd.org/RealTime/GTFS_ServiceAlerts.pb
+      Server:
+      - Microsoft-IIS/10.0
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 303
+      message: See Other
+- request:
+    body: null
+    headers:
+      Accept:
+      - text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+      Accept-Encoding:
+      - gzip, deflate
+      Accept-Language:
+      - en-US,en;q=0.9
+      Cache-Control:
+      - max-age=0
+      Connection:
+      - keep-alive
+      Sec-Ch-Ua:
+      - '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145'
+      Sec-Fetch-Dest:
+      - document
+      Sec-Fetch-Mode:
+      - navigate
+      Sec-Fetch-Site:
+      - cross-site
+      Sec-Fetch-User:
+      - ?1
+      Upgrade-Insecure-Requests:
+      - '1'
+      User-Agent:
+      - Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML,
+        like Gecko) Chrome/145.0.0.0 Safari/537.36
+    method: GET
+    uri: https://avl.yctd.org/RealTime/GTFS_ServiceAlerts.pb
+  response:
+    body:
+      string: !!binary |
+        CgsKAzIuMBjqjdbOBhLJBwoDMTU4KsEHCgwIiKzmzgYQ3L/nzgYqDRICMzcqBTIzMzg2MAAqDRIC
+        MzcqBTIzNTM1MAAqDRICMzcqBTIzMzg5MAAqDRICMzcqBTIzNTMxMAAqDRICMzcqBTIzMzg4MAAq
+        DRICMzcqBTIzMzg3MAAqDRICMzcqBTIzMzk3MAAqDRICMzcqBTIzMzk4MAAqDRICMzcqBTIzMzg1
+        MAAqDRICMzcqBTIzNDAwMAAqDRICNDAqBTIzNTYzMAAqDRICNDAqBTIzMzkxMAAqDRICNDAqBTIz
+        NjAwMAAqDRICNDEqBTIzNTYzMAAqDRICNDEqBTIzMzkxMAAqDRICNDEqBTIzNjAwMAAqDhIDNDJB
+        KgUyMzM5NzAAKg0SAjQzKgUyMzM5MTABKg0SAjQzKgUyMzYwMDABKg0SAjQzKgUyMzQxMTABKg0S
+        AjQ0KgUyMzM5NTABKg0SAjQ0KgUyMzM5MTABKg0SAjQ0KgUyMzYwMDABKg0SAjQ0KgUyMzQxMTAB
+        Kg4SAzIzMCoFMjMzOTUwACoOEgMyMzAqBTIzMzkxMAAqDhIDMjMwKgUyMzYwMDAAKg4SAzIzMCoF
+        MjM0MTEwACoOEgMyNDAqBTIzNTYzMAAqDhIDMjQwKgUyMzM5MTAAKg4SAzI0MCoFMjM2MDAwACoO
+        EgM0MkEqBTIzMzk4MAAqDhIDNDJBKgUyMzM4NTAAKg4SAzQyQSoFMjM0MDAwACoOEgM0MkEqBTIz
+        NDExMAAqDhIDNDJCKgUyMzQxMjAAKg4SAzQyQioFMjMzODcwACoOEgM0MkIqBTIzMzk3MAAqDhID
+        NDJCKgUyMzM5ODAAKg4SAzQyQioFMjMzODUwACoOEgM0MkIqBTIzNDAwMAAqDRICNDMqBTIzMzk1
+        MAEwATgEQggKBgoAEgJlblIWChQKDjQvMTAvMjYgRGV0b3VyEgJlbloYChYKEEtpbmdzIEdhbWUg
+        KyBTSFASAmVuYggKBgoAEgJlbmrcAQrZAQrSAU9uIEZyaWRheSwgQXByaWwgMywgMjAyNiwgWW9s
+        b2J1cyBSb3V0ZXMgNDJBL0IsIDM3LCA0MCwgNDEsIDI0MCwgNDMgUE0sIDQ0IFBNLCBhbmQgMjMw
+        IFBNIG9wZXJhdGluZyBpbiBEb3dudG93biBTYWNyYW1lbnRvIHdpbGwgYmUgcmVyb3V0ZWQgZHVl
+        IHRvIHRoZSBLaW5ncyBHYW1lIGF0IHRoZSBHb2xkZW4gMSBDZW50ZXIgZnJvbSA1OjMwIFBNIHRv
+        IDEwOjQ1IFBNLhICZW5wAxKlBgoDMTU5Kp0GCgwI4KfpzgYQ4KvwzgYqDRICNDAqBTIzNTc4MAAq
+        DRICNDAqBTIzNTc2MAAqDRICNDAqBTIzNTc1MAAqDRICNDAqBTIzNDEyMAAqDRICNDAqBTIzNTYz
+        MAAqDRICNDAqBTIzMzkxMAAqDRICNDAqBTIzNjAwMAAqDRICNDAqBTIzNDExMAAqDRICNDAqBTIz
+        NTc0MAAqDRICNDAqBTIzNTc3MAAqDhIDNDJBKgUyMzQxMTAAKg4SAzQyQSoFMjM1NzQwACoOEgM0
+        MkEqBTIzNTc3MAAqDhIDNDJCKgUyMzU3ODAAKg4SAzQyQioFMjM1NzYwACoOEgM0MkIqBTIzNTc1
+        MAAqDhIDNDJCKgUyMzQxMjAAKg4SAzQyQioFMjMzODcwACoOEgM0MkIqBTIzMzk3MAAqDhIDNDJC
+        KgUyMzM5ODAAKg4SAzQyQioFMjMzODUwACoOEgM0MkIqBTIzNDAwMAAqDhIDMjQwKgUyMzU3ODAA
+        Kg4SAzI0MCoFMjM1NzYwACoOEgMyNDAqBTIzNTc1MAAqDhIDMjQwKgUyMzQxMjAAKg4SAzI0MCoF
+        MjM1NjMwACoOEgMyNDAqBTIzMzkxMAAqDhIDMjQwKgUyMzYwMDAAKg4SAzI0MCoFMjM0MTEwACoO
+        EgMyNDAqBTIzNTc0MAAqDhIDMjQwKgUyMzU3NzAAMAE4BEIICgYKABICZW5SGQoXChE0LzExLzI2
+        ICYgNC8xMi8yNhICZW5aEwoRCgtTYWN0b3duIFJ1bhICZW5iCAoGCgASAmVuaswBCskBCsIBRnJv
+        bSBTYXR1cmRheSBBcHJpbCAxMSBhdCA3OjAwIEFNIHRvIFN1bmRheSwgQXByaWwgMTIgYXQgMzow
+        MCBQTSwgWW9sb2J1cyBSb3V0ZXMgNDJBL0IsIDQwLCBhbmQgMjQwIG9wZXJhdGluZyBpbiBEb3du
+        dG93biBTYWNyYW1lbnRvIHdpbGwgYmUgcmVyb3V0ZWQgZHVlIHRvIHRoZSBTYWNUb3duIFJ1biBl
+        dmVudCBvbiBDYXBpdGFsIE1hbGwSAmVucAMSjAkKAzE2MCqECQoMCODO9c4GELDb9s4GKg0SAjQ0
+        KgUyMzYwMDABKg4SAzIzMCoFMjMzOTUwACoOEgMyMzAqBTIzMzkxMAAqDhIDMjMwKgUyMzYwMDAA
+        Kg0SAjQ1KgUyMzM5NTABKg0SAjQ1KgUyMzM5MTABKg0SAjQ1KgUyMzYwMDABKg0SAjQ1KgUyMzM4
+        NzABKg0SAjQ1KgUyMzM4NDABKg0SAjM3KgUyMzM4NjAAKg0SAjM3KgUyMzUzNTAAKg0SAjM3KgUy
+        MzM4OTAAKg0SAjM3KgUyMzUzMTAAKg0SAjM3KgUyMzM4ODAAKg0SAjM3KgUyMzM4NzAAKg0SAjM3
+        KgUyMzM5NzAAKg0SAjM3KgUyMzM5ODAAKg0SAjM3KgUyMzM4NTAAKg0SAjM3KgUyMzQwMDAAKg0S
+        AjQwKgUyMzU2MzAAKg0SAjQwKgUyMzM5MTAAKg0SAjQwKgUyMzYwMDAAKg0SAjQwKgUyMzM4ODAA
+        Kg0SAjQwKgUyMzM4OTAAKg0SAjQwKgUyMzM4NjAAKg0SAjQxKgUyMzU2MzAAKg0SAjQxKgUyMzM5
+        MTAAKg0SAjQxKgUyMzYwMDAAKg0SAjQxKgUyMzM4ODAAKg0SAjQxKgUyMzM4OTAAKg0SAjQxKgUy
+        MzM4NjAAKg4SAzQyQSoFMjMzOTcwACoOEgM0MkEqBTIzMzk4MAAqDhIDNDJBKgUyMzM4NTAAKg4S
+        AzQyQSoFMjM0MDAwACoOEgM0MkEqBTIzNDExMAAqDhIDNDJCKgUyMzQxMjAAKg4SAzQyQioFMjMz
+        ODcwACoOEgM0MkIqBTIzMzk3MAAqDhIDNDJCKgUyMzM5ODAAKg4SAzQyQioFMjMzODUwACoOEgM0
+        MkIqBTIzNDAwMAAqDhIDNDJCKgUyMzM5NjAAKg4SAzI0MCoFMjM1NjMwACoOEgMyNDAqBTIzMzkx
+        MAAqDhIDMjQwKgUyMzYwMDAAKg4SAzI0MCoFMjMzODgwACoOEgMyNDAqBTIzMzg5MAAqDhIDMjQw
+        KgUyMzM4NjAAKg0SAjQzKgUyMzM5NTABKg0SAjQzKgUyMzM5MTABKg0SAjQzKgUyMzYwMDABKg0S
+        AjQ0KgUyMzM5NTABKg0SAjQ0KgUyMzM5MTABMAE4BEIICgYKABICZW5SFgoUCg40LzEzLzI2IERl
+        dG91chICZW5aIwohChtHb2xkZW4gMSBDZW50ZXIgRXZlbnQgKyBTSFASAmVuYggKBgoAEgJlbmrd
+        AQraAQrTAU9uIE1vbmRheSwgQXByaWwgMTMsIDIwMjYsIFlvbG9idXMgUm91dGVzIDQyQS9CLCAz
+        NywgNDAsIDQxLCAyNDAsIDQzIFBNLCA0NCBQTSwgMjMwIFBNLCBhbmQgNDUgUE0gb3BlcmF0aW5n
+        IGluIERvd250b3duIFNhY3JhbWVudG8gd2lsbCBiZSByZXJvdXRlZCBkdWUgdG8gYW4gZXZlbnQg
+        YXQgdGhlIEdvbGRlbiAxIENlbnRlciBmcm9tIDM6MDAgUE0gdG8gODowMCBQTS4SAmVucAM=
+    headers:
+      Accept-Ranges:
+      - bytes
+      Content-Length:
+      - '2960'
+      Content-Type:
+      - application/x-protobuf
+      Date:
+      - Tue, 07 Apr 2026 22:36:27 GMT
+      ETag:
+      - W/"556a91f8dec6dc1:0"
+      Last-Modified:
+      - Tue, 07 Apr 2026 22:36:26 GMT
+      Server:
+      - Microsoft-IIS/10.0
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!binary |
+      LS09PT09PT09PT09PT09PT0yNTczMzU0ODAxMzExNjA4MDMxPT0NCmNvbnRlbnQtdHlwZTogYXBw
+      bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAic2VydmljZV9hbGVydHMv
+      ZHQ9MjAyNi0wNC0wMS9ob3VyPTIwMjYtMDQtMDFUMDA6MDA6MDArMDA6MDAvdHM9MjAyNi0wNC0w
+      MVQwMDowMToyMCswMDowMC9iYXNlNjRfdXJsPWFIUjBjRG92TDJGMmJDNTVZM1JrTG05eVp5OVNa
+      V0ZzVkdsdFpTOUhWRVpUWDFObGNuWnBZMlZCYkdWeWRITXVjR0k9L2ZlZWQiLCAibWV0YWRhdGEi
+      OiB7IlBBUlRJVElPTkVEX0FSVElGQUNUX01FVEFEQVRBIjogIntcImZpbGVuYW1lXCI6XCJmZWVk
+      XCIsXCJ0c1wiOlwiMjAyNi0wNC0wMVQwMDowMToyMCswMDowMFwiLFwiY29uZmlnXCI6e1wiZXh0
+      cmFjdGVkX2F0XCI6XCIyMDI2LTA0LTAxVDAwOjAwOjAwKzAwOjAwXCIsXCJuYW1lXCI6XCJFeGFt
+      cGxlXCIsXCJ1cmxcIjpcImh0dHA6Ly9hdmwueWN0ZC5vcmcvUmVhbFRpbWUvR1RGU19TZXJ2aWNl
+      QWxlcnRzLnBiXCIsXCJmZWVkX3R5cGVcIjpcInNlcnZpY2VfYWxlcnRzXCIsXCJzY2hlZHVsZV91
+      cmxfZm9yX3ZhbGlkYXRpb25cIjpcImh0dHA6Ly93d3cueW9sb2J1cy5jb20vR1RGUy9nb29nbGVf
+      dHJhbnNpdC56aXBcIixcImF1dGhfcXVlcnlfcGFyYW1zXCI6e30sXCJhdXRoX2hlYWRlcnNcIjp7
+      fX0sXCJyZXNwb25zZV9jb2RlXCI6MjAwLFwicmVzcG9uc2VfaGVhZGVyc1wiOntcIlNlcnZlclwi
+      OlwiTWljcm9zb2Z0LUlJUy8xMC4wXCIsXCJFVGFnXCI6XCJXL1xcXCI1NTZhOTFmOGRlYzZkYzE6
+      MFxcXCJcIixcIkxhc3QtTW9kaWZpZWRcIjpcIlR1ZSwgMDcgQXByIDIwMjYgMjI6MzY6MjYgR01U
+      XCIsXCJBY2NlcHQtUmFuZ2VzXCI6XCJieXRlc1wiLFwiQ29udGVudC1MZW5ndGhcIjpcIjI5NjBc
+      IixcIlgtUG93ZXJlZC1CeVwiOlwiQVNQLk5FVFwiLFwiRGF0ZVwiOlwiVHVlLCAwNyBBcHIgMjAy
+      NiAyMjozNjoyNyBHTVRcIixcIkNvbnRlbnQtVHlwZVwiOlwiYXBwbGljYXRpb24veC1wcm90b2J1
+      ZlwifX0ifSwgImNyYzMyYyI6ICI3SEZ2dmc9PSJ9DQotLT09PT09PT09PT09PT09PTI1NzMzNTQ4
+      MDEzMTE2MDgwMzE9PQ0KY29udGVudC10eXBlOiBhcHBsaWNhdGlvbi94LXByb3RvYnVmDQoNCgoL
+      CgMyLjAY6o3WzgYSyQcKAzE1OCrBBwoMCIis5s4GENy/584GKg0SAjM3KgUyMzM4NjAAKg0SAjM3
+      KgUyMzUzNTAAKg0SAjM3KgUyMzM4OTAAKg0SAjM3KgUyMzUzMTAAKg0SAjM3KgUyMzM4ODAAKg0S
+      AjM3KgUyMzM4NzAAKg0SAjM3KgUyMzM5NzAAKg0SAjM3KgUyMzM5ODAAKg0SAjM3KgUyMzM4NTAA
+      Kg0SAjM3KgUyMzQwMDAAKg0SAjQwKgUyMzU2MzAAKg0SAjQwKgUyMzM5MTAAKg0SAjQwKgUyMzYw
+      MDAAKg0SAjQxKgUyMzU2MzAAKg0SAjQxKgUyMzM5MTAAKg0SAjQxKgUyMzYwMDAAKg4SAzQyQSoF
+      MjMzOTcwACoNEgI0MyoFMjMzOTEwASoNEgI0MyoFMjM2MDAwASoNEgI0MyoFMjM0MTEwASoNEgI0
+      NCoFMjMzOTUwASoNEgI0NCoFMjMzOTEwASoNEgI0NCoFMjM2MDAwASoNEgI0NCoFMjM0MTEwASoO
+      EgMyMzAqBTIzMzk1MAAqDhIDMjMwKgUyMzM5MTAAKg4SAzIzMCoFMjM2MDAwACoOEgMyMzAqBTIz
+      NDExMAAqDhIDMjQwKgUyMzU2MzAAKg4SAzI0MCoFMjMzOTEwACoOEgMyNDAqBTIzNjAwMAAqDhID
+      NDJBKgUyMzM5ODAAKg4SAzQyQSoFMjMzODUwACoOEgM0MkEqBTIzNDAwMAAqDhIDNDJBKgUyMzQx
+      MTAAKg4SAzQyQioFMjM0MTIwACoOEgM0MkIqBTIzMzg3MAAqDhIDNDJCKgUyMzM5NzAAKg4SAzQy
+      QioFMjMzOTgwACoOEgM0MkIqBTIzMzg1MAAqDhIDNDJCKgUyMzQwMDAAKg0SAjQzKgUyMzM5NTAB
+      MAE4BEIICgYKABICZW5SFgoUCg40LzEwLzI2IERldG91chICZW5aGAoWChBLaW5ncyBHYW1lICsg
+      U0hQEgJlbmIICgYKABICZW5q3AEK2QEK0gFPbiBGcmlkYXksIEFwcmlsIDMsIDIwMjYsIFlvbG9i
+      dXMgUm91dGVzIDQyQS9CLCAzNywgNDAsIDQxLCAyNDAsIDQzIFBNLCA0NCBQTSwgYW5kIDIzMCBQ
+      TSBvcGVyYXRpbmcgaW4gRG93bnRvd24gU2FjcmFtZW50byB3aWxsIGJlIHJlcm91dGVkIGR1ZSB0
+      byB0aGUgS2luZ3MgR2FtZSBhdCB0aGUgR29sZGVuIDEgQ2VudGVyIGZyb20gNTozMCBQTSB0byAx
+      MDo0NSBQTS4SAmVucAMSpQYKAzE1OSqdBgoMCOCn6c4GEOCr8M4GKg0SAjQwKgUyMzU3ODAAKg0S
+      AjQwKgUyMzU3NjAAKg0SAjQwKgUyMzU3NTAAKg0SAjQwKgUyMzQxMjAAKg0SAjQwKgUyMzU2MzAA
+      Kg0SAjQwKgUyMzM5MTAAKg0SAjQwKgUyMzYwMDAAKg0SAjQwKgUyMzQxMTAAKg0SAjQwKgUyMzU3
+      NDAAKg0SAjQwKgUyMzU3NzAAKg4SAzQyQSoFMjM0MTEwACoOEgM0MkEqBTIzNTc0MAAqDhIDNDJB
+      KgUyMzU3NzAAKg4SAzQyQioFMjM1NzgwACoOEgM0MkIqBTIzNTc2MAAqDhIDNDJCKgUyMzU3NTAA
+      Kg4SAzQyQioFMjM0MTIwACoOEgM0MkIqBTIzMzg3MAAqDhIDNDJCKgUyMzM5NzAAKg4SAzQyQioF
+      MjMzOTgwACoOEgM0MkIqBTIzMzg1MAAqDhIDNDJCKgUyMzQwMDAAKg4SAzI0MCoFMjM1NzgwACoO
+      EgMyNDAqBTIzNTc2MAAqDhIDMjQwKgUyMzU3NTAAKg4SAzI0MCoFMjM0MTIwACoOEgMyNDAqBTIz
+      NTYzMAAqDhIDMjQwKgUyMzM5MTAAKg4SAzI0MCoFMjM2MDAwACoOEgMyNDAqBTIzNDExMAAqDhID
+      MjQwKgUyMzU3NDAAKg4SAzI0MCoFMjM1NzcwADABOARCCAoGCgASAmVuUhkKFwoRNC8xMS8yNiAm
+      IDQvMTIvMjYSAmVuWhMKEQoLU2FjdG93biBSdW4SAmVuYggKBgoAEgJlbmrMAQrJAQrCAUZyb20g
+      U2F0dXJkYXkgQXByaWwgMTEgYXQgNzowMCBBTSB0byBTdW5kYXksIEFwcmlsIDEyIGF0IDM6MDAg
+      UE0sIFlvbG9idXMgUm91dGVzIDQyQS9CLCA0MCwgYW5kIDI0MCBvcGVyYXRpbmcgaW4gRG93bnRv
+      d24gU2FjcmFtZW50byB3aWxsIGJlIHJlcm91dGVkIGR1ZSB0byB0aGUgU2FjVG93biBSdW4gZXZl
+      bnQgb24gQ2FwaXRhbCBNYWxsEgJlbnADEowJCgMxNjAqhAkKDAjgzvXOBhCw2/bOBioNEgI0NCoF
+      MjM2MDAwASoOEgMyMzAqBTIzMzk1MAAqDhIDMjMwKgUyMzM5MTAAKg4SAzIzMCoFMjM2MDAwACoN
+      EgI0NSoFMjMzOTUwASoNEgI0NSoFMjMzOTEwASoNEgI0NSoFMjM2MDAwASoNEgI0NSoFMjMzODcw
+      ASoNEgI0NSoFMjMzODQwASoNEgIzNyoFMjMzODYwACoNEgIzNyoFMjM1MzUwACoNEgIzNyoFMjMz
+      ODkwACoNEgIzNyoFMjM1MzEwACoNEgIzNyoFMjMzODgwACoNEgIzNyoFMjMzODcwACoNEgIzNyoF
+      MjMzOTcwACoNEgIzNyoFMjMzOTgwACoNEgIzNyoFMjMzODUwACoNEgIzNyoFMjM0MDAwACoNEgI0
+      MCoFMjM1NjMwACoNEgI0MCoFMjMzOTEwACoNEgI0MCoFMjM2MDAwACoNEgI0MCoFMjMzODgwACoN
+      EgI0MCoFMjMzODkwACoNEgI0MCoFMjMzODYwACoNEgI0MSoFMjM1NjMwACoNEgI0MSoFMjMzOTEw
+      ACoNEgI0MSoFMjM2MDAwACoNEgI0MSoFMjMzODgwACoNEgI0MSoFMjMzODkwACoNEgI0MSoFMjMz
+      ODYwACoOEgM0MkEqBTIzMzk3MAAqDhIDNDJBKgUyMzM5ODAAKg4SAzQyQSoFMjMzODUwACoOEgM0
+      MkEqBTIzNDAwMAAqDhIDNDJBKgUyMzQxMTAAKg4SAzQyQioFMjM0MTIwACoOEgM0MkIqBTIzMzg3
+      MAAqDhIDNDJCKgUyMzM5NzAAKg4SAzQyQioFMjMzOTgwACoOEgM0MkIqBTIzMzg1MAAqDhIDNDJC
+      KgUyMzQwMDAAKg4SAzQyQioFMjMzOTYwACoOEgMyNDAqBTIzNTYzMAAqDhIDMjQwKgUyMzM5MTAA
+      Kg4SAzI0MCoFMjM2MDAwACoOEgMyNDAqBTIzMzg4MAAqDhIDMjQwKgUyMzM4OTAAKg4SAzI0MCoF
+      MjMzODYwACoNEgI0MyoFMjMzOTUwASoNEgI0MyoFMjMzOTEwASoNEgI0MyoFMjM2MDAwASoNEgI0
+      NCoFMjMzOTUwASoNEgI0NCoFMjMzOTEwATABOARCCAoGCgASAmVuUhYKFAoONC8xMy8yNiBEZXRv
+      dXISAmVuWiMKIQobR29sZGVuIDEgQ2VudGVyIEV2ZW50ICsgU0hQEgJlbmIICgYKABICZW5q3QEK
+      2gEK0wFPbiBNb25kYXksIEFwcmlsIDEzLCAyMDI2LCBZb2xvYnVzIFJvdXRlcyA0MkEvQiwgMzcs
+      IDQwLCA0MSwgMjQwLCA0MyBQTSwgNDQgUE0sIDIzMCBQTSwgYW5kIDQ1IFBNIG9wZXJhdGluZyBp
+      biBEb3dudG93biBTYWNyYW1lbnRvIHdpbGwgYmUgcmVyb3V0ZWQgZHVlIHRvIGFuIGV2ZW50IGF0
+      IHRoZSBHb2xkZW4gMSBDZW50ZXIgZnJvbSAzOjAwIFBNIHRvIDg6MDAgUE0uEgJlbnADDQotLT09
+      PT09PT09PT09PT09PTI1NzMzNTQ4MDEzMTE2MDgwMzE9PS0t
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '4140'
+      User-Agent:
+      - gcloud-python/3.10.1  gl-python/3.11.13 grpc/1.78.0 gax/2.30.0 gccl/3.10.1
+      X-Goog-API-Client:
+      - gcloud-python/3.10.1  gl-python/3.11.13 grpc/1.78.0 gax/2.30.0 gccl/3.10.1
+        gccl-invocation-id/2b76ca72-31f8-4f32-bd2a-a821cc1f4547
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0yNTczMzU0ODAxMzEx
+        NjA4MDMxPT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/x-protobuf
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/service_alerts/dt=2026-04-01/hour=2026-04-01T00:00:00+00:00/ts=2026-04-01T00:01:20+00:00/base64_url=aHR0cDovL2F2bC55Y3RkLm9yZy9SZWFsVGltZS9HVEZTX1NlcnZpY2VBbGVydHMucGI=/feed/1775601389218176\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt=2026-04-01%2Fhour=2026-04-01T00:00:00%2B00:00%2Fts=2026-04-01T00:01:20%2B00:00%2Fbase64_url=aHR0cDovL2F2bC55Y3RkLm9yZy9SZWFsVGltZS9HVEZTX1NlcnZpY2VBbGVydHMucGI=%2Ffeed\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/service_alerts%2Fdt=2026-04-01%2Fhour=2026-04-01T00:00:00%2B00:00%2Fts=2026-04-01T00:01:20%2B00:00%2Fbase64_url=aHR0cDovL2F2bC55Y3RkLm9yZy9SZWFsVGltZS9HVEZTX1NlcnZpY2VBbGVydHMucGI=%2Ffeed?generation=1775601389218176&alt=media\",\n
+        \ \"name\": \"service_alerts/dt=2026-04-01/hour=2026-04-01T00:00:00+00:00/ts=2026-04-01T00:01:20+00:00/base64_url=aHR0cDovL2F2bC55Y3RkLm9yZy9SZWFsVGltZS9HVEZTX1NlcnZpY2VBbGVydHMucGI=/feed\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1775601389218176\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/x-protobuf\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"2960\",\n  \"md5Hash\": \"KGrnXlkw3nk0wjqyOQVIHQ==\",\n
+        \ \"crc32c\": \"7HFvvg==\",\n  \"etag\": \"CIDTxNDm3JMDEAE=\",\n  \"timeCreated\":
+        \"2026-04-07T22:36:29.225Z\",\n  \"updated\": \"2026-04-07T22:36:29.225Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-04-07T22:36:29.225Z\",\n  \"timeFinalized\":
+        \"2026-04-07T22:36:29.225Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \"{\\\"filename\\\":\\\"feed\\\",\\\"ts\\\":\\\"2026-04-01T00:01:20+00:00\\\",\\\"config\\\":{\\\"extracted_at\\\":\\\"2026-04-01T00:00:00+00:00\\\",\\\"name\\\":\\\"Example\\\",\\\"url\\\":\\\"http://avl.yctd.org/RealTime/GTFS_ServiceAlerts.pb\\\",\\\"feed_type\\\":\\\"service_alerts\\\",\\\"schedule_url_for_validation\\\":\\\"http://www.yolobus.com/GTFS/google_transit.zip\\\",\\\"auth_query_params\\\":{},\\\"auth_headers\\\":{}},\\\"response_code\\\":200,\\\"response_headers\\\":{\\\"Server\\\":\\\"Microsoft-IIS/10.0\\\",\\\"ETag\\\":\\\"W/\\\\\\\"556a91f8dec6dc1:0\\\\\\\"\\\",\\\"Last-Modified\\\":\\\"Tue,
+        07 Apr 2026 22:36:26 GMT\\\",\\\"Accept-Ranges\\\":\\\"bytes\\\",\\\"Content-Length\\\":\\\"2960\\\",\\\"X-Powered-By\\\":\\\"ASP.NET\\\",\\\"Date\\\":\\\"Tue,
+        07 Apr 2026 22:36:27 GMT\\\",\\\"Content-Type\\\":\\\"application/x-protobuf\\\"}}\"\n
+        \ }\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '2276'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Tue, 07 Apr 2026 22:36:29 GMT
+      ETag:
+      - CIDTxNDm3JMDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AMNfjG0vE8-xeSQL-bU_suB0cpLlZv6WTVv1yWUJqRX4QpiadzWXeJB1Q5cn7FCkj6bh8l2ebc7fO8M
+    status:
+      code: 200
+      message: OK
+version: 1
