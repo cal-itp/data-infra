@@ -1,0 +1,151 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+      Accept-Encoding:
+      - gzip, deflate
+      Accept-Language:
+      - en-US,en;q=0.9
+      Cache-Control:
+      - max-age=0
+      Connection:
+      - keep-alive
+      Sec-Ch-Ua:
+      - '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145'
+      Sec-Fetch-Dest:
+      - document
+      Sec-Fetch-Mode:
+      - navigate
+      Sec-Fetch-Site:
+      - cross-site
+      Sec-Fetch-User:
+      - ?1
+      Upgrade-Insecure-Requests:
+      - '1'
+      User-Agent:
+      - Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML,
+        like Gecko) Chrome/145.0.0.0 Safari/537.36
+    method: GET
+    uri: http://avl.yctd.org/RealTime/GTFS_ServiceAlerts.pb
+  response:
+    body:
+      string: '<head><title>Document Moved</title></head>
+
+        <body><h1>Object Moved</h1>This document may be found <a HREF="https://avl.yctd.org/RealTime/GTFS_ServiceAlerts.pb">here</a></body>'
+    headers:
+      Content-Length:
+      - '174'
+      Content-Type:
+      - text/html; charset=UTF-8
+      Date:
+      - Wed, 22 Apr 2026 16:46:27 GMT
+      Location:
+      - https://avl.yctd.org/RealTime/GTFS_ServiceAlerts.pb
+      Server:
+      - Microsoft-IIS/10.0
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 303
+      message: See Other
+- request:
+    body: null
+    headers:
+      Accept:
+      - text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+      Accept-Encoding:
+      - gzip, deflate
+      Accept-Language:
+      - en-US,en;q=0.9
+      Cache-Control:
+      - max-age=0
+      Connection:
+      - keep-alive
+      Sec-Ch-Ua:
+      - '"Not:A-Brand";v="99", "Google Chrome";v="145", "Chromium";v="145'
+      Sec-Fetch-Dest:
+      - document
+      Sec-Fetch-Mode:
+      - navigate
+      Sec-Fetch-Site:
+      - cross-site
+      Sec-Fetch-User:
+      - ?1
+      Upgrade-Insecure-Requests:
+      - '1'
+      User-Agent:
+      - Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML,
+        like Gecko) Chrome/145.0.0.0 Safari/537.36
+    method: GET
+    uri: https://avl.yctd.org/RealTime/GTFS_ServiceAlerts.pb
+  response:
+    body:
+      string: !!binary |
+        CgsKAzIuMBjX9qPPBhL/AwoDMTYzKvcDCgwI+LztzwYQ0NfuzwYqDRICNDAqBTIzNTYzMAAqDRIC
+        NDAqBTIzNjAwMAAqDRICNDEqBTIzMzkxMAAqDRICNDEqBTIzNjAwMAAqDhIDMjQwKgUyMzU2MzAA
+        Kg4SAzI0MCoFMjMzOTEwACoOEgMyNDAqBTIzNjAwMAAqDRICNDAqBTIzMzkxMAAqDRICNDEqBTIz
+        NTYzMAAwATgEQggKBgoAEgJlblIjCiEKG0NhcGl0b2wgTWFsbCBGYXJtZXJzIE1hcmtldBICZW5a
+        MAouCihFdmVyeSBXZWRuZXNkYXkgZnJvbSBBcHJpbCAyOS1PY3RvYmVyIDI5EgJlbmIICgYKABIC
+        ZW5q6wEK6AEK4QFGcm9tIFdlZG5lc2RheSwgQXByaWwgMjksIDIwMjYsIHVudGlsIFdlZG5lc2Rh
+        eSwgT2N0b2JlciAyOCwgMjAyNiwgWW9sb2J1cyBSb3V0ZXMgNDAsIDQxLCBhbmQgMjQwIGdvaW5n
+        IHRocm91Z2ggQ2FwaXRvbCBNYWxsIHdpbGwgYmUgcmVyb3V0ZWQgZXZlcnkgV2VkbmVzZGF5IGZy
+        b20gODozMCBBTSB1bnRpbCAwMjowMCBQTS4gVGhpcyBkZXRvdXIgaGFzIG5vIGJ1cyBzdG9wIGNs
+        b3N1cmVzLiASAmVucAMShAQKAzE2MSr8AwoMCPjHyM8GENDiyc8GKg0SAjQwKgUyMzU2MzAAKg0S
+        AjQwKgUyMzM5MTAAKg0SAjQwKgUyMzYwMDAAKg0SAjQxKgUyMzU2MzAAKg0SAjQxKgUyMzM5MTAA
+        Kg0SAjQxKgUyMzYwMDAAKg4SAzI0MCoFMjM1NjMwACoOEgMyNDAqBTIzMzkxMAAqDhIDMjQwKgUy
+        MzYwMDAAMAE4BEIICgYKABICZW5SIwohChtDYXBpdG9sIE1hbGwgRmFybWVycyBNYXJrZXQSAmVu
+        WjAKLgooRXZlcnkgV2VkbmVzZGF5IGZyb20gQXByaWwgMjktT2N0b2JlciAyORICZW5iCAoGCgAS
+        AmVuavABCu0BCuYBQmVnaW5uaW5nIFdlZG5lc2RheSwgQXByaWwgMjksIDIwMjYsIHVudGlsIFdl
+        ZG5lc2RheSwgT2N0b2JlciAyOCwgMjAyNiwgWW9sb2J1cyBSb3V0ZXMgNDAsIDQxLCBhbmQgMjQw
+        IGdvaW5nIHRocm91Z2ggQ2FwaXRvbCBNYWxsIHdpbGwgYmUgcmVyb3V0ZWQgZXZlcnkgV2VkbmVz
+        ZGF5IGZyb20gODozMCBBTSB1bnRpbCAwMjowMCBQTS4gVGhpcyBkZXRvdXIgaGFzIG5vIGJ1cyBz
+        dG9wIGNsb3N1cmVzLiASAmVucAMS8AYKAzE2NCroBgoMCJCBq88GELSprM8GKg0SAjM3KgUyMzM4
+        NjAAKg0SAjM3KgUyMzUzNTAAKg0SAjM3KgUyMzM4OTAAKg0SAjM3KgUyMzUzMTAAKg0SAjM3KgUy
+        MzM4ODAAKg0SAjM3KgUyMzM4NzAAKg0SAjM3KgUyMzM5NzAAKg0SAjM3KgUyMzM5ODAAKg0SAjM3
+        KgUyMzM4NTAAKg0SAjM3KgUyMzQwMDAAKg0SAjQwKgUyMzU2MzAAKg0SAjQwKgUyMzM5MTAAKg0S
+        AjQwKgUyMzYwMDAAKg0SAjQwKgUyMzM4ODAAKg0SAjQwKgUyMzM4OTAAKg0SAjQxKgUyMzU2MzAA
+        Kg0SAjQxKgUyMzM5MTAAKg0SAjQxKgUyMzYwMDAAKg0SAjQxKgUyMzM4ODAAKg0SAjQxKgUyMzM4
+        OTAAKg4SAzQyQSoFMjMzOTcwACoOEgM0MkEqBTIzMzk4MAAqDhIDNDJBKgUyMzM4NTAAKg4SAzQy
+        QSoFMjM0MDAwACoOEgM0MkEqBTIzNDExMAAqDhIDNDJCKgUyMzQxMjAAKg4SAzQyQioFMjMzODcw
+        ACoOEgM0MkIqBTIzMzk3MAAqDhIDNDJCKgUyMzM5ODAAKg4SAzQyQioFMjMzODUwACoOEgM0MkIq
+        BTIzNDAwMAAqDhIDNDJCKgUyMzM5NjAAKg4SAzI0MCoFMjM1NjMwACoOEgMyNDAqBTIzMzkxMAAq
+        DhIDMjQwKgUyMzYwMDAAKg4SAzI0MCoFMjMzODgwACoOEgMyNDAqBTIzMzg5MAAwATgEQggKBgoA
+        EgJlblIWChQKDjQvMjMvMjYgRGV0b3VyEgJlblojCiEKG0dvbGRlbiAxIENlbnRlciBFdmVudCAr
+        IFNIUBICZW5iCAoGCgASAmVuasQBCsEBCroBT24gVGh1cnNkYXksIEFwcmlsIDIzLCAyMDI2LCBZ
+        b2xvYnVzIFJvdXRlcyA0MkEvQiwgMzcsIDQwLCA0MSwgYW5kIDI0MCBvcGVyYXRpbmcgaW4gRG93
+        bnRvd24gU2FjcmFtZW50byB3aWxsIGJlIHJlcm91dGVkIGR1ZSB0byBhIGNvbmNlcnQgYXQgdGhl
+        IEdvbGRlbiAxIENlbnRlciBmcm9tIDY6MDAgUE0gdG8gMTE6NTkgUE0uEgJlbnADEtYECgMxNjUq
+        zgQKDAiQ6rrPBhC0krzPBioNEgI0MCoFMjM1NjMwACoNEgI0MCoFMjMzOTEwACoNEgI0MCoFMjM2
+        MDAwACoNEgI0MCoFMjMzODgwACoOEgM0MkEqBTIzMzk3MAAqDhIDNDJBKgUyMzM5ODAAKg4SAzQy
+        QSoFMjMzODUwACoOEgM0MkEqBTIzNDAwMAAqDhIDNDJBKgUyMzQxMTAAKg4SAzQyQioFMjM0MTIw
+        ACoOEgM0MkIqBTIzMzg3MAAqDhIDNDJCKgUyMzM5NzAAKg4SAzQyQioFMjMzOTgwACoOEgM0MkIq
+        BTIzMzg1MAAqDhIDNDJCKgUyMzQwMDAAKg4SAzI0MCoFMjM1NjMwACoOEgMyNDAqBTIzMzkxMAAq
+        DhIDMjQwKgUyMzYwMDAAKg4SAzI0MCoFMjMzODgwADABOARCCAoGCgASAmVuUhYKFAoONC8yNi8y
+        NiBEZXRvdXISAmVuWiMKIQobR29sZGVuIDEgQ2VudGVyIEV2ZW50ICsgU0hQEgJlbmIICgYKABIC
+        ZW5qugEKtwEKsAFPbiBTdW5kYXksIEFwcmlsIDI2LCAyMDI2LCBZb2xvYnVzIFJvdXRlcyA0MkEv
+        QiwgNDAsIGFuZCAyNDAgb3BlcmF0aW5nIGluIERvd250b3duIFNhY3JhbWVudG8gd2lsbCBiZSBy
+        ZXJvdXRlZCBkdWUgdG8gYSBjb25jZXJ0IGF0IHRoZSBHb2xkZW4gMSBDZW50ZXIgZnJvbSA2OjAw
+        IFBNIHRvIDExOjU5IFBNLhICZW5wAw==
+    headers:
+      Accept-Ranges:
+      - bytes
+      Content-Length:
+      - '2530'
+      Content-Type:
+      - application/x-protobuf
+      Date:
+      - Wed, 22 Apr 2026 16:46:27 GMT
+      ETag:
+      - W/"b953f68877d2dc1:0"
+      Last-Modified:
+      - Wed, 22 Apr 2026 16:46:15 GMT
+      Server:
+      - Microsoft-IIS/10.0
+      X-Powered-By:
+      - ASP.NET
+    status:
+      code: 200
+      message: OK
+version: 1

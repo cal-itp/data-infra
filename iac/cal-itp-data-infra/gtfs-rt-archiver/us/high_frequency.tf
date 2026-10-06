@@ -1,7 +1,7 @@
 # High-frequency archiver lane for study cohorts (issue #5566).
 #
-# A full parallel copy of the standard archiver pipeline, built from the same
-# source zip and differing only in configuration. Nothing here touches the
+# A full parallel copy of the standard archiver pipeline, built from its own
+# source in services/gtfs-rt-archiver-high-frequency. Nothing here touches the
 # production resources in service.tf / workflow.tf: the cohort feeds keep running
 # on the standard 20s clock as well, so the production RT dataset never develops a
 # gap for a study agency.
@@ -99,7 +99,7 @@ resource "google_workflows_workflow" "gtfs-rt-archiver-high-frequency-clock" {
   project         = "cal-itp-data-infra"
   service_account = data.terraform_remote_state.iam.outputs.google_service_account_gtfs-rt-archiver_email
 
-  source_contents = templatefile("${local.source_path}/clock_high_frequency.yaml", {
+  source_contents = templatefile("${local.hf_source_path}/clock_high_frequency.yaml", {
     cadence_seconds = var.high_frequency_cadence_seconds
     max_tick_index  = local.high_frequency_max_tick_index
   })
@@ -134,13 +134,50 @@ resource "google_cloud_scheduler_job" "gtfs-rt-archiver-high-frequency-clock" {
   }
 }
 
+data "archive_file" "gtfs-rt-archiver-high-frequency" {
+  count = local.high_frequency_enabled
+
+  output_path = local.hf_archive_path
+  source_dir  = local.hf_source_path
+  type        = "zip"
+
+  excludes = [
+    "**/.env",
+    "**/.env.*",
+    "**/tests/**",
+    "**/.git/**",
+    "**/.gitignore",
+    "**/pyproject.toml",
+    "**/*.yaml",
+    "**/uv.lock",
+    "**/README.md",
+    "**/Dockerfile",
+  ]
+}
+
+resource "google_storage_bucket_object" "gtfs-rt-archiver-high-frequency" {
+  count = local.high_frequency_enabled
+
+  name   = "gtfs-rt-archiver-high-frequency-${data.archive_file.gtfs-rt-archiver-high-frequency[0].output_sha512}.zip"
+  bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-rt-archiver_name
+  source = local.hf_archive_path
+
+  content_type = "application/zip"
+  depends_on   = [data.archive_file.gtfs-rt-archiver-high-frequency]
+
+  provisioner "local-exec" {
+    when    = create
+    command = "rm ${data.archive_file.gtfs-rt-archiver-high-frequency[0].output_path}"
+  }
+}
+
 resource "google_cloudfunctions2_function" "gtfs-rt-archiver-high-frequency-heartbeat" {
   count = local.high_frequency_enabled
 
   name     = "gtfs-rt-archiver-high-frequency-heartbeat"
   location = "us-west2"
 
-  depends_on = [google_storage_bucket_object.gtfs-rt-archiver]
+  depends_on = [google_storage_bucket_object.gtfs-rt-archiver-high-frequency]
 
   service_config {
     available_cpu    = "167m"
@@ -171,7 +208,7 @@ resource "google_cloudfunctions2_function" "gtfs-rt-archiver-high-frequency-hear
     source {
       storage_source {
         bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-rt-archiver_name
-        object = "gtfs-rt-archiver-${data.archive_file.gtfs-rt-archiver.output_sha512}.zip"
+        object = google_storage_bucket_object.gtfs-rt-archiver-high-frequency[0].name
       }
     }
   }
@@ -193,7 +230,7 @@ resource "google_cloudfunctions2_function" "gtfs-rt-archiver-high-frequency" {
   name     = "gtfs-rt-archiver-high-frequency"
   location = "us-west2"
 
-  depends_on = [google_storage_bucket_object.gtfs-rt-archiver]
+  depends_on = [google_storage_bucket_object.gtfs-rt-archiver-high-frequency]
 
   service_config {
     available_cpu    = "167m"
@@ -236,7 +273,7 @@ resource "google_cloudfunctions2_function" "gtfs-rt-archiver-high-frequency" {
     source {
       storage_source {
         bucket = data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-gtfs-rt-archiver_name
-        object = "gtfs-rt-archiver-${data.archive_file.gtfs-rt-archiver.output_sha512}.zip"
+        object = google_storage_bucket_object.gtfs-rt-archiver-high-frequency[0].name
       }
     }
   }

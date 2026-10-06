@@ -2,6 +2,11 @@ locals {
   source_path  = "${path.module}/../../../../services/gtfs-rt-archiver"
   archive_path = "${path.module}/build/source.zip"
 
+  # The high-frequency lane ships its own copy of the archiver so that changes for
+  # a study never alter the code the standard archiver runs.
+  hf_source_path  = "${path.module}/../../../../services/gtfs-rt-archiver-high-frequency"
+  hf_archive_path = "${path.module}/build/source-high-frequency.zip"
+
   # Empty cohort means every high-frequency resource has count = 0, so the lane
   # does not exist: no scheduler, no ticks, no workflow executions, no idle
   # instances. "Off" is zero cost, not merely cheap.
