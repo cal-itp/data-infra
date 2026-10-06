@@ -162,7 +162,7 @@ output "google_storage_bucket_calitp-staging-gtfs-download-config-test_name" {
 }
 
 output "google_storage_bucket_calitp-staging-gtfs-rt-raw-compacted_name" {
-  value = google_storage_bucket.calitp-staging["calitp-staging-gtfs-rt-raw-compacted"].name
+  value = google_storage_bucket.calitp-staging-gtfs-rt-raw-compacted.name
 }
 
 output "google_storage_bucket_calitp-staging-gtfs-rt-parsed_name" {
