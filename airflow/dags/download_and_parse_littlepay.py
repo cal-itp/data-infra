@@ -76,6 +76,10 @@ LITTLEPAY_TRANSIT_PROVIDER_CONFIG = {
         "bucket": "littlepay-datafeed-prod-slorta-991b7db0",
         "prefix": "slorta/v3",
     },
+    "yolobus": {
+        "bucket": "littlepay-datafeed-prod-yolobus-3d71d410",
+        "prefix": "yolobus/v3",
+    },
 }
 
 

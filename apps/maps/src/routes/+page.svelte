@@ -3,6 +3,9 @@
     import {onMount, onDestroy} from 'svelte';
     import { page } from '$app/stores';
     import L from 'leaflet';
+    import {maplibreGL} from '@maplibre/maplibre-gl-leaflet';
+    import {setWorkerUrl} from 'maplibre-gl';
+    import maplibreWorkerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
     import colormap from 'colormap';
     import {leafletLayer, LineSymbolizer} from 'protomaps';
     import {strFromU8, decompress, decompressSync} from 'fflate';
@@ -16,25 +19,29 @@
     import * as convert from 'color-convert';
 
     import "leaflet-loading";
+    import 'maplibre-gl/dist/maplibre-gl.css';
 
     const STATE_QUERY_PARAM = "state";
     const START_LAT_LON = [37.6, -120.1];
     const LEAFLET_START_ZOOM = 6;
-    const DEFAULT_BASEMAP_CONFIG = {
-      "url": 'https://{s}.basemaps.cartocdn.com/{variant}/{z}/{x}/{y}{r}.png',
-      "options": {
-        'attribution': '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
-        'subdomains': 'abcd',
-        'maxZoom': 20,
-        'variant': 'light_all',
-      }
-    };
+    const CARTO_BASEMAP_STYLE_URL = 'https://basemaps.cartocdn.com/gl/positron-gl-style/style.json';
     let mapElement;
     let map;
     /** @type {State} */
     let state;
     let outerLayer;
     let loading = false;
+
+    /** @param {L.Map} leafletMap */
+    function addDefaultBasemap(leafletMap) {
+      const cartoApiKey = import.meta.env.VITE_CARTO_BASEMAP_API_KEY;
+      const style = cartoApiKey
+        ? `${CARTO_BASEMAP_STYLE_URL}?key=${encodeURIComponent(cartoApiKey)}`
+        : CARTO_BASEMAP_STYLE_URL;
+
+      setWorkerUrl(maplibreWorkerUrl);
+      maplibreGL({style}).addTo(leafletMap);
+    }
 
     const NSHADES = 10;
     const MAX_MPH = 50;
@@ -505,8 +512,11 @@
           loadingControl: true,
         }).setView(START_LAT_LON, LEAFLET_START_ZOOM);
 
-        const basemapConfig = state.basemap_config || DEFAULT_BASEMAP_CONFIG;
-        L.tileLayer(basemapConfig.url, basemapConfig.options).addTo(map);
+        if (state.basemap_config) {
+          L.tileLayer(state.basemap_config.url, state.basemap_config.options).addTo(map);
+        } else {
+          addDefaultBasemap(map);
+        }
 
         L.control.scale().addTo(map);
 

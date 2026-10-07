@@ -1,14 +1,14 @@
 resource "google_compute_security_policy" "metabase" {
   name        = "metabase-armor"
-  description = "Cloud Armor policy protecting Metabase Cloud Run (production); rules in preview mode pending log review (#5481)"
+  description = "Cloud Armor policy protecting Metabase Cloud Run (production); CRS 4.22 preconfigured WAF rules enforced (#5720)"
 
   rule {
     priority    = 500
     action      = "deny(403)"
-    description = "Geo-restrict to US/CA/GB/NL/HU/NZ"
+    description = "Geo-restrict to US/CA/GB/NZ + EU-27"
     match {
       expr {
-        expression = "!(origin.region_code == 'US' || origin.region_code == 'CA' || origin.region_code == 'GB' || origin.region_code == 'NL' || origin.region_code == 'HU' || origin.region_code == 'NZ')"
+        expression = "!origin.region_code.matches('^US$|^CA$|^GB$|^NZ$|^AT$|^BE$|^BG$|^CY$|^CZ$|^DE$|^DK$|^EE$|^ES$|^FI$|^FR$|^GR$|^HR$|^HU$|^IE$|^IT$|^LT$|^LU$|^LV$|^MT$|^NL$|^PL$|^PT$|^RO$|^SE$|^SI$|^SK$')"
       }
     }
   }
@@ -19,7 +19,7 @@ resource "google_compute_security_policy" "metabase" {
     description = "OWASP SQLi"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('sqli-v33-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v030301-id942420-sqli']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
+        expression = "evaluatePreconfiguredWaf('sqli-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
       }
     }
   }
@@ -30,7 +30,7 @@ resource "google_compute_security_policy" "metabase" {
     description = "OWASP XSS"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('xss-v33-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v030301-id941340-xss']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
+        expression = "evaluatePreconfiguredWaf('xss-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
       }
     }
   }
@@ -41,7 +41,7 @@ resource "google_compute_security_policy" "metabase" {
     description = "OWASP RCE"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('rce-v33-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v030301-id932200-rce']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
+        expression = "evaluatePreconfiguredWaf('rce-v422-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v042200-id932330-rce']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
       }
     }
   }
@@ -52,7 +52,7 @@ resource "google_compute_security_policy" "metabase" {
     description = "OWASP local file inclusion"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('lfi-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
+        expression = "evaluatePreconfiguredWaf('lfi-v422-stable', {'sensitivity': 2}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
       }
     }
   }
@@ -63,7 +63,7 @@ resource "google_compute_security_policy" "metabase" {
     description = "OWASP remote file inclusion"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('rfi-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
+        expression = "evaluatePreconfiguredWaf('rfi-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
       }
     }
   }
@@ -74,7 +74,7 @@ resource "google_compute_security_policy" "metabase" {
     description = "Scanner / bot signatures"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('scannerdetection-v33-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v030301-id913101-scannerdetection']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
+        expression = "evaluatePreconfiguredWaf('scannerdetection-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
       }
     }
   }
@@ -85,7 +85,7 @@ resource "google_compute_security_policy" "metabase" {
     description = "HTTP protocol attacks"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('protocolattack-v33-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v030301-id921170-protocolattack']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
+        expression = "evaluatePreconfiguredWaf('protocolattack-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
       }
     }
   }
@@ -96,7 +96,7 @@ resource "google_compute_security_policy" "metabase" {
     description = "Session fixation"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('sessionfixation-v33-stable') && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
+        expression = "evaluatePreconfiguredWaf('sessionfixation-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
       }
     }
   }
