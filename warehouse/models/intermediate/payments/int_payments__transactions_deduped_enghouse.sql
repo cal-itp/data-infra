@@ -39,7 +39,7 @@ filtered_transactions AS (
     WHERE operation in ('DEBT_RECOVERY_AUTO', 'ONLINE_CLEARING', 'DEBT_RECOVERY_MANUAL', 'PREAUTH_FINAL', 'REFUND')
 ),
 
-stg_enghouse__deduped_transactions AS (
+int_payments__transactions_deduped_enghouse AS (
     SELECT * FROM filtered_transactions
     -- Per operator_id + payment_reference, keep the most recent row of each settlement_type, so a
     -- CREDIT (refund) and a DEBIT (non-refund) for the same payment_reference are kept as separate
@@ -80,4 +80,4 @@ SELECT
     _payments_key,
     _payment_reference_key,
     _content_hash
-FROM stg_enghouse__deduped_transactions
+FROM int_payments__transactions_deduped_enghouse
