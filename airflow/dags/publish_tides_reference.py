@@ -39,8 +39,7 @@ def publish_tides_reference():
     tides). This DAG discovers the tagged models from the dbt manifest and
     exports each one in full to the TIDES bucket as parquet + CSV:
 
-      * *_latest models  -> reference/<model>/ (stable path, overwritten)
-      * history models   -> reference/<model>/dt=<run date>/
+      * all reference models -> reference/<model>/ (stable path, overwritten)
 
     Machine-readable metadata (SAM 5160.1) is published in the same run: a
     Frictionless datapackage.json next to each exported table, and a DCAT-US
@@ -59,9 +58,7 @@ def publish_tides_reference():
         return {
             "dataset_name": model["schema"],
             "table_name": model["name"],
-            "destination_path_prefix": reference_destination_prefix(
-                model["name"], "{{ ds }}"
-            ),
+            "destination_path_prefix": reference_destination_prefix(model["name"]),
             "report_path": (
                 "reference_outcomes/dt={{ ds }}/ts={{ ts }}/"
                 f"{model['name']}_outcomes.jsonl"
@@ -81,9 +78,7 @@ def publish_tides_reference():
     def create_datapackage_kwargs(model):
         return {
             "model_name": model["name"],
-            "destination_path_prefix": reference_destination_prefix(
-                model["name"], "{{ ds }}"
-            ),
+            "destination_path_prefix": reference_destination_prefix(model["name"]),
         }
 
     write_datapackages = TIDESFrictionlessMetadataOperator.partial(
