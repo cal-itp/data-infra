@@ -8,7 +8,7 @@ resource "google_compute_security_policy" "metabase" {
     description = "Geo-restrict to US/CA/GB/NZ + EU-27"
     match {
       expr {
-        expression = "!origin.region_code.matches('^(US|CA|GB|NZ|AT|BE|BG|CY|CZ|DE|DK|EE|ES|FI|FR|GR|HR|HU|IE|IT|LT|LU|LV|MT|NL|PL|PT|RO|SE|SI|SK)$')"
+        expression = "!origin.region_code.matches('^US$|^CA$|^GB$|^NZ$|^AT$|^BE$|^BG$|^CY$|^CZ$|^DE$|^DK$|^EE$|^ES$|^FI$|^FR$|^GR$|^HR$|^HU$|^IE$|^IT$|^LT$|^LU$|^LV$|^MT$|^NL$|^PL$|^PT$|^RO$|^SE$|^SI$|^SK$')"
       }
     }
   }
