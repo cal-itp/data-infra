@@ -71,7 +71,7 @@ models:
       - name: customer_id
         description: '{{ doc("customer_funding_source_customer_id") }}'
       - name: card_scheme
-        description: Card scheme of this funding source. One of (`VISA`, `MASTERCARD`).
+        description: '{{ doc("lp_card_scheme") }}'
       - name: bin
         description: First six numbers of the PAN.
       - name: funding_source_vault_id

@@ -71,7 +71,7 @@ models:
       - name: customer_id
         description: '{{ doc("customer_funding_source_customer_id") }}'
       - name: card_scheme
-        description: Card scheme of this funding source. One of (`VISA`, `MASTERCARD`).
+        description: '{{ doc("lp_card_scheme") }}'
       - name: bin
         description: First six numbers of the PAN.
       - name: funding_source_vault_id
@@ -90,6 +90,8 @@ models:
         data_tests:
           - not_null
       - *_content_hash
+      - name: record_updated_timestamp_utc
+        description: '{{ doc("lp_record_updated_timestamp_utc") }}'
 
   - name: stg_littlepay__device_transaction_purchases_v3
     columns:

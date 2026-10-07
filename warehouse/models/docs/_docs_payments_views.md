@@ -14,6 +14,28 @@ additional context is available
 
 {% enddocs %}
 
+{% docs customer_funding_source_calitp_funding_source_id_rank %}
+
+A ranking of the records using the `funding_source_id`, ordered newest to oldest.
+
+{% enddocs %}
+
+{% docs customer_funding_source_calitp_funding_source_vault_id_rank %}
+
+A ranking of the records using the `funding_source_vault_id`, ordered newest to oldest. 
+
+Arbitrarily ordered where there are duplicates.
+
+{% enddocs %}
+
+{% docs customer_funding_source_calitp_customer_id_rank %}
+
+A ranking of the records using the `customer_id`, ordered newest to oldest.
+
+Arbitrarily ordered where there are duplicates.
+
+{% enddocs %}
+
 {% docs int_payments__regional_agencies_first_tap_by_aggregation %}
 
 One row per `aggregation_id` mapping it to the agency (organization) that operated the earliest
