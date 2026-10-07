@@ -35,6 +35,8 @@ models:
               arguments:
                 to: ref('stg_enghouse__ticket_results')
                 field: tap_id
+              config:
+                where: "tx_status != 2"
       - name: mapping_terminal_id
         description: Not relevant for US projects.
       - name: mapping_merchant_id
@@ -70,11 +72,13 @@ models:
       - name: tx_number
         description: Enghouse internal tap status code. Not meaningful for downstream analysis.
       - name: tx_status
-        description: Enghouse internal tap status code. Not meaningful for downstream analysis.
+        description: Enghouse internal tap status code. Values of 2 indicate a denial at the validator, so they are not linked to transactions or ticket_results
       - name: payment_reference
         description: Payment reference number (PRN / variable symbol) linking the tap to its transaction.
         data_tests:
-          - not_null
+          - not_null:
+              config:
+                where: "tx_status != 2"
       - name: terminal_spdh_code
         description: SPDH terminal protocol response code. 000 indicates approved.
       - name: denylist_version
