@@ -109,6 +109,103 @@ models:
       - name: credit_is_settled
         description: '{{ doc("lp_credit_is_settled") }}'
 
+  - name: int_payments__transactions_deduped_enghouse
+    description: |
+      One row per operator_id + payment_reference + settlement_type, built from
+      stg_enghouse__transactions. For each operator_id + payment_reference, the most recent
+      non-refund (DEBIT) and the most recent refund (CREDIT) are kept as separate rows
+      (payment_reference is not unique between operators; rows with a null payment_reference are all
+      retained).
+      Feeds fct_payments_settlements_enghouse.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - _payment_reference_key
+              - settlement_type
+          config:
+            where: "payment_reference is not null"
+    columns:
+      - name: operator_id
+        description: '{{ doc("enghouse_operator_id") }}'
+      - name: id
+        description: '{{ doc("enghouse_id") }}'
+        data_tests:
+          - unique
+          - not_null
+      - name: operation
+        description: '{{ doc("enghouse_operation") }}'
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ["CARD_VERIFY", "DEBT_RECOVERY_AUTO", "GET_PAR_MANUAL", "ONLINE_CLEARING", "DEBT_RECOVERY_MANUAL", "REFUND", "PREAUTH", "PREAUTH_FINAL"]
+      - name: terminal_id
+        description: '{{ doc("enghouse_terminal_id") }}'
+      - name: mapping_terminal_id
+        description: '{{ doc("enghouse_mapping_terminal_id") }}'
+      - name: mapping_merchant_id
+        description: '{{ doc("enghouse_mapping_merchant_id") }}'
+      - name: timestamp
+        description: '{{ doc("enghouse_timestamp") }}'
+      - name: amount
+        description: '{{ doc("enghouse_amount") }}'
+        data_tests:
+          - not_null
+      - name: payment_reference
+        description: '{{ doc("enghouse_payment_reference") }}'
+      - name: spdh_response
+        description: '{{ doc("enghouse_spdh_response") }}'
+      - name: response_type
+        description: '{{ doc("enghouse_response_type") }}'
+      - name: response_message
+        description: '{{ doc("enghouse_response_message") }}'
+      - name: token
+        description: '{{ doc("enghouse_token") }}'
+        data_tests:
+          # int_payments__settlements_to_aggregations_enghouse picks par and token with
+          # ANY_VALUE() per operator_id + payment_reference, so there must be only one option
+          - &one_card_identifier_per_payment_reference_transactions
+            single_value_per_group:
+              arguments:
+                group_by_columns: [_payment_reference_key]
+                config:
+                  where: "payment_reference IS NOT NULL"
+      - name: issuer_response
+        description: '{{ doc("enghouse_issuer_response") }}'
+      - name: core_response
+        description: '{{ doc("enghouse_core_response") }}'
+      - name: rrn
+        description: '{{ doc("enghouse_rrn") }}'
+        data_tests:
+          - unique
+      - name: authorization_code
+        description: '{{ doc("enghouse_authorization_code") }}'
+      - name: par
+        description: '{{ doc("enghouse_par") }}'
+        data_tests:
+          - *one_card_identifier_per_payment_reference_transactions
+      - name: brand
+        description: '{{ doc("enghouse_brand") }}'
+        data_tests:
+          - *one_card_identifier_per_payment_reference_transactions
+      - name: settlement_type
+        description: '{{ doc("enghouse_settlement_type") }}'
+      - name: agency
+        description: '{{ doc("enghouse_agency") }}'
+      - name: dt
+        description: '{{ doc("enghouse_dt") }}'
+      - name: _line_number
+        description: '{{ doc("enghouse_line_number") }}'
+      - name: _payments_key
+        description: '{{ doc("enghouse_payments_key") }}'
+      - name: _payment_reference_key
+        description: '{{ doc("enghouse_payment_reference_key") }}'
+        data_tests:
+          - not_null
+      - name: _content_hash
+        description: '{{ doc("enghouse_content_hash") }}'
+
   - name: int_payments__settlements_to_aggregations_enghouse
     description: |
       Enghouse settlements aggregated to the `operator_id + payment_reference` level.

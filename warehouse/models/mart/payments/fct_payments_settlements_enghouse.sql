@@ -23,7 +23,7 @@ WITH deduped_transactions AS (
         _line_number,
         _payment_reference_key,
         _content_hash,
-    FROM {{ ref('stg_enghouse__deduped_transactions') }}
+    FROM {{ ref('int_payments__transactions_deduped_enghouse') }}
 ),
 
 payments_entity_mapping AS (
