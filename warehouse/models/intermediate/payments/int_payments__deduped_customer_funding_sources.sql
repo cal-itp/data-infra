@@ -57,13 +57,6 @@ int_payments__deduped_customer_funding_sources AS (
     -- Some funding sources have incomplete information when first present in data, like missing
     -- values for form_factor or issuer_country that are filled in during later exports.
     -- Additionally, sometimes a filled column value is updated in newer exports for a given entry.
-    -- QUALIFY ROW_NUMBER() OVER (
-    --     PARTITION BY
-    --         participant_id,
-    --         funding_source_id,
-    --         customer_id
-    --     ORDER BY littlepay_export_ts DESC
-    -- ) = 1
     WHERE calitp_funding_source_id_rank = 1
 )
 

@@ -3,7 +3,7 @@ WITH int_payments__deduped_customer_funding_sources AS (
     FROM {{ ref('int_payments__deduped_customer_funding_sources') }}
 ),
 
--- We want the last occurrence by funding_source_id and customer_id
+-- We want the last occurrence by funding_source_id (in earlier dedupe step) and customer_id
 select_first_rank AS (
     SELECT DISTINCT
         participant_id,
@@ -11,7 +11,6 @@ select_first_rank AS (
         principal_customer_id
     FROM int_payments__deduped_customer_funding_sources
     WHERE calitp_customer_id_rank = 1
-         AND calitp_funding_source_id_rank = 1
 ),
 
 find_earliest_tap AS (
