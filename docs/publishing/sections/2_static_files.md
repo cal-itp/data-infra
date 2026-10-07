@@ -69,6 +69,8 @@ jupyter nbconvert --to html --no-input --no-prompt my_notebook.ipynb
 
 You can also convert a Jupyter Notebook to PDF for distribution in a few different ways. You might wonder why we don't suggest simply doing  `File -> Save and Export Notebook As -> PDF`. We don't recommend this method because it leaves all your code cells visible, which usually isn't desirable.
 
+An in-browser option is also available for notebooks whose outputs are already saved: [IPYNB to PDF](https://ipynbtopdf.xyz/) renders the notebook locally and can hide code cells without a Python or LaTeX setup. It does not run notebook cells, so execute the notebook and save its outputs first.
+
 All the code below are to be pasted into the <b>terminal</b>.
 
 - The PDF generated has a very academic look, similar to a LaTex document.
