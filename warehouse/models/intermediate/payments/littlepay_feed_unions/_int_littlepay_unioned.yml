@@ -3,6 +3,9 @@ version: 2
 models:
   - name: int_littlepay__unioned_authorisations
   - name: int_littlepay__unioned_customer_funding_source
+    columns:
+      - name: record_updated_timestamp_utc
+        description: '{{ doc("lp_record_updated_timestamp_utc") }}'
   - name: int_littlepay__unioned_device_transaction_purchases
   - name: int_littlepay__unioned_device_transactions
   - name: int_littlepay__unioned_micropayment_adjustments

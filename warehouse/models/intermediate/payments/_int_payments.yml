@@ -622,25 +622,49 @@ models:
 
     columns:
       - name: funding_source_id
-        description: Unique identifier representing the funding source; a guid internal to Littlepay.
+        description: '{{ doc("lp_funding_source_id") }}'
+      - name: funding_source_vault_id
+        description: '{{ doc("lp_funding_source_vault_id") }}'
       - name: customer_id
         description: '{{ doc("customer_funding_source_customer_id") }}'
-      - name: funding_source_vault_id
-        description: Identifies the funding source (for example, card) that the micropayment will be charged to. This is always the card that was tapped. A registered customer can have multiple funding sources linked to them.
+      - name: bin
+        description: '{{ doc("lp_bin") }}'
+      - name: masked_pan
+        description: '{{ doc("lp_masked_pan") }}'
+      - name: card_scheme
+        description: '{{ doc("lp_card_scheme") }}'
+      - name: issuer
+        description: '{{ doc("lp_issuer") }}'
+      - name: issuer_country
+        description: '{{ doc("lp_issuer_country") }}'
+      - name: form_factor
+        description: '{{ doc("lp_form_factor") }}'
       - name: principal_customer_id
         description: '{{ doc("customer_funding_source_principal_customer_id") }}'
       - name: participant_id
         description: '{{ doc("lp_participant_id") }}'
-      - name: calitp_funding_source_id_rank
-        description: A ranking of the records using the `funding_source_id`, ordered newest to oldest
-      - name: calitp_funding_source_vault_id_rank
-        description: A ranking of the records using the `funding_source_vault_id`, ordered newest to oldest
-      - name: calitp_customer_id_rank
-        description: A ranking of the records using the `customer_id`, ordered newest to oldest
+      - name: _line_number
+        description: '{{ doc("lp_line_number") }}'
+      - name: instance
+        description: '{{ doc("lp_instance") }}'
+      - name: feed_version
+        description: '{{ doc("lp_feed_version") }}'
+      - name: extract_filename
+        description: '{{ doc("lp_extract_filename") }}'
+      - name: ts
+        description: '{{ doc("lp_ts") }}'
       - name: littlepay_export_ts
         description: '{{ doc("lp_export_ts") }}'
         data_tests:
           - not_null
+      - name: littlepay_export_date
+        description: '{{ doc("lp_export_date") }}'
+      - name: calitp_funding_source_id_rank
+        description: '{{ doc("customer_funding_source_calitp_funding_source_id_rank") }}'
+      - name: calitp_funding_source_vault_id_rank
+        description: '{{ doc("customer_funding_source_calitp_funding_source_vault_id_rank") }}'
+      - name: calitp_customer_id_rank
+        description: '{{ doc("customer_funding_source_calitp_customer_id_rank") }}'
       - name: _key
         description: '{{ doc("lp_input_row_key") }}'
         data_tests:
