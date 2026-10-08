@@ -1,4 +1,4 @@
-.PHONY: clean clean-postgres pools restart setup start stop sync teardown
+.PHONY: clean clean-postgres composer-constraints pools restart setup start stop sync teardown
 
 COMPOSER_ENVIRONMENT_NAME := calitp-development-composer
 COMPOSER_PATH := composer
@@ -7,11 +7,19 @@ COMPOSER_ENVIRONMENT_PATH := $(COMPOSER_PATH)/$(COMPOSER_ENVIRONMENT_NAME)
 COMPOSER_PROJECT := cal-itp-data-infra-staging
 # create composer-dev either with --from-image-version $(COMPOSER_VERSION)
 COMPOSER_VERSION := composer-3-airflow-2.10.5-build.36
+# e.g. 2.10.5 -> us-docker.pkg.dev/.../airflow-worker-scheduler-2-10-5:<COMPOSER_VERSION>
+AIRFLOW_VERSION_DASHED := $(subst .,-,$(firstword $(subst -build, ,$(lastword $(subst -airflow-, ,$(COMPOSER_VERSION))))))
+COMPOSER_IMAGE := us-docker.pkg.dev/cloud-airflow-releaser/airflow-worker-scheduler-$(AIRFLOW_VERSION_DASHED)/airflow-worker-scheduler-$(AIRFLOW_VERSION_DASHED):$(COMPOSER_VERSION)
 # or with --from-source-environment $(COMPOSER_ENVIRONMENT_SOURCE) --location $(COMPOSER_LOCATION)
 # COMPOSER_ENVIRONMENT_SOURCE := calitp-staging-composer
 # COMPOSER_LOCATION := us-west2
 
-COMPOSER_CMD := uv run composer-dev
+# composer-dev runs on the host, not in Composer, so it's a uv tool rather than a
+# project dependency (its pins would otherwise skew the test environment).
+# composer-dev isn't on PyPI. Pinned to a main commit that includes
+# GoogleCloudPlatform/composer-local-dev#135 (not in any release yet);
+# switch to @0.12.1 once that tag exists.
+COMPOSER_CMD := uv tool run --from "composer-dev @ git+https://github.com/GoogleCloudPlatform/composer-local-dev.git@73ee40101970135a4e16d227d3738544bbc1f34e" composer-dev
 
 WAREHOUSE_PATH := ../warehouse
 WAREHOUSE_TARGET := staging
@@ -26,6 +34,14 @@ else
 	IS_WINDOWS := 0
 	UNAME_S := $(shell uname -s)
 endif
+
+# Pin pyproject.toml's uv constraints to the package versions in the Composer
+# image (plus requirements-c3.txt), then relock so tests match production.
+composer-constraints:
+	docker run --rm --entrypoint bash $(COMPOSER_IMAGE) -c \
+		'python -m pip freeze; python -c "import airflow; print(\"apache-airflow==\" + airflow.__version__)"' \
+		| python3 scripts/update_composer_constraints.py
+	uv lock
 
 restart: sync
 	$(COMPOSER_CMD) restart

@@ -124,7 +124,7 @@ docker push ghcr.io/cal-itp/data-infra/gtfs-schedule-validator:development
 
 ### Common Issues
 
-- If you want to clear out old local Airflow data, you'll need to delete the DAG using `uv run composer-dev run-airflow-cmd calitp-development-composer dags delete <DAG_ID>` where, for example, the `<DAG_ID>` is `create_external_tables`
+- If you want to clear out old local Airflow data, you'll need to delete the DAG using `uv tool run --from "composer-dev @ git+https://github.com/GoogleCloudPlatform/composer-local-dev.git@73ee40101970135a4e16d227d3738544bbc1f34e" composer-dev run-airflow-cmd calitp-development-composer dags delete <DAG_ID>` (the same command `COMPOSER_CMD` in the `Makefile` uses) where, for example, the `<DAG_ID>` is `create_external_tables`
 
 - If you want to reset the Airflow database entirely, you'll need to delete the direcotry where the Postges container stores its data: `make clean-postgres`
 
@@ -176,6 +176,10 @@ Each DAG for this project should have a corresponding test in the `tests/dags` f
 1. `cp .env.example .env`
 2. Fill in requested credentials
 3. `uv run pytest`
+
+Each test session runs against a fresh, temporary `AIRFLOW_HOME` and SQLite metadata database (see `tests/conftest.py`), so test runs don't read or write `~/airflow`.
+
+The `[tool.uv] constraint-dependencies` in `pyproject.toml` pin every package to the version in the Composer image (`COMPOSER_VERSION` in the `Makefile`), overridden by `requirements-c3.txt`, so tests run against what production runs. After changing either, regenerate the constraints and the lockfile with `make composer-constraints` (requires Docker; pulls the image if it isn't local).
 
 
 You can specify which tests you want to run by adding them after the `pytest` command.
