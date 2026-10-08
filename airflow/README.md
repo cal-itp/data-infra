@@ -124,7 +124,7 @@ docker push ghcr.io/cal-itp/data-infra/gtfs-schedule-validator:development
 
 ### Common Issues
 
-- If you want to clear out old local Airflow data, you'll need to delete the DAG using `uv tool run --from "composer-dev @ git+https://github.com/GoogleCloudPlatform/composer-local-dev.git@refs/pull/135/head" composer-dev run-airflow-cmd calitp-development-composer dags delete <DAG_ID>` (the same command `COMPOSER_CMD` in the `Makefile` uses) where, for example, the `<DAG_ID>` is `create_external_tables`
+- If you want to clear out old local Airflow data, you'll need to delete the DAG using `uv tool run --from "composer-dev @ git+https://github.com/GoogleCloudPlatform/composer-local-dev.git@73ee40101970135a4e16d227d3738544bbc1f34e" composer-dev run-airflow-cmd calitp-development-composer dags delete <DAG_ID>` (the same command `COMPOSER_CMD` in the `Makefile` uses) where, for example, the `<DAG_ID>` is `create_external_tables`
 
 - If you want to reset the Airflow database entirely, you'll need to delete the direcotry where the Postges container stores its data: `make clean-postgres`
 
