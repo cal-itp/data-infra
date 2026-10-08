@@ -114,8 +114,8 @@ models:
       One row per operator_id + payment_reference + settlement_type, built from
       stg_enghouse__transactions. For each operator_id + payment_reference, the most recent
       non-refund (DEBIT) and the most recent refund (CREDIT) are kept as separate rows
-      (payment_reference is not unique between operators; rows with a null payment_reference are all
-      retained).
+      (payment_reference is not unique between operators rows with a null payment_reference are all
+      retained but not expected).
       Feeds fct_payments_settlements_enghouse.
     data_tests:
       - dbt_utils.unique_combination_of_columns:
@@ -123,8 +123,6 @@ models:
             combination_of_columns:
               - _payment_reference_key
               - settlement_type
-          config:
-            where: "payment_reference is not null"
     columns:
       - name: operator_id
         description: '{{ doc("enghouse_operator_id") }}'
@@ -154,6 +152,9 @@ models:
           - not_null
       - name: payment_reference
         description: '{{ doc("enghouse_payment_reference") }}'
+        data_tests:
+          # only the settlement operations kept by this model are expected to have a payment_reference
+          - not_null
       - name: spdh_response
         description: '{{ doc("enghouse_spdh_response") }}'
       - name: response_type
@@ -169,8 +170,6 @@ models:
             single_value_per_group:
               arguments:
                 group_by_columns: [_payment_reference_key]
-                config:
-                  where: "payment_reference IS NOT NULL"
       - name: issuer_response
         description: '{{ doc("enghouse_issuer_response") }}'
       - name: core_response

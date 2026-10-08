@@ -1147,8 +1147,6 @@ models:
               - operator_id
               - payment_reference
               - settlement_type
-          config:
-            where: "payment_reference is not null"
     columns:
       - *organization_name
       - name: organization_source_record_id
@@ -1219,9 +1217,5 @@ models:
               arguments:
                 to: ref('fct_payments_aggregations_enghouse')
                 field: _payment_reference_key
-              config:
-                # settlements with no payment_reference have no pay window to match
-                # this behavior is confirmed in a test on payment_reference
-                where: "payment_reference IS NOT NULL"
       - name: _content_hash
         description: '{{ doc("enghouse_content_hash") }}'
