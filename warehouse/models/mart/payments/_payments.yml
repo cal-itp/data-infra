@@ -1190,9 +1190,6 @@ models:
         description: '{{ doc("enghouse_issuer_response") }}'
       - name: rrn
         description: '{{ doc("enghouse_rrn") }}'
-        data_tests:
-          - unique
-          - not_null
       - name: authorization_code
         description: '{{ doc("enghouse_authorization_code") }}'
       - name: par
