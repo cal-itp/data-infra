@@ -15,9 +15,8 @@ import tempfile
 _AIRFLOW_HOME = tempfile.mkdtemp(prefix="airflow-pytest-")
 atexit.register(shutil.rmtree, _AIRFLOW_HOME, ignore_errors=True)
 os.environ["AIRFLOW_HOME"] = _AIRFLOW_HOME
-os.environ["AIRFLOW__DATABASE__SQL_ALCHEMY_CONN"] = (
-    f"sqlite:///{os.path.join(_AIRFLOW_HOME, 'airflow.db')}"
-)
+_AIRFLOW_DB = os.path.join(_AIRFLOW_HOME, "airflow.db")
+os.environ["AIRFLOW__DATABASE__SQL_ALCHEMY_CONN"] = f"sqlite:///{_AIRFLOW_DB}"
 os.environ["AIRFLOW__CORE__LOAD_EXAMPLES"] = "False"
 
 import google.auth._refresh_worker  # noqa: E402
