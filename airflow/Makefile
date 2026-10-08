@@ -16,8 +16,10 @@ COMPOSER_IMAGE := us-docker.pkg.dev/cloud-airflow-releaser/airflow-worker-schedu
 
 # composer-dev runs on the host, not in Composer, so it's a uv tool rather than a
 # project dependency (its pins would otherwise skew the test environment).
-# Point at the PR until https://github.com/cal-itp/data-infra/issues/5310 is resolved.
-COMPOSER_CMD := uv tool run --from "composer-dev @ git+https://github.com/GoogleCloudPlatform/composer-local-dev.git@refs/pull/135/head" composer-dev
+# composer-dev isn't on PyPI. Pinned to a main commit that includes
+# GoogleCloudPlatform/composer-local-dev#135 (not in any release yet);
+# switch to @0.12.1 once that tag exists.
+COMPOSER_CMD := uv tool run --from "composer-dev @ git+https://github.com/GoogleCloudPlatform/composer-local-dev.git@73ee40101970135a4e16d227d3738544bbc1f34e" composer-dev
 
 WAREHOUSE_PATH := ../warehouse
 WAREHOUSE_TARGET := staging
