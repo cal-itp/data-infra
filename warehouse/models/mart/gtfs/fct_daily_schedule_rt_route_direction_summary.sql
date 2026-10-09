@@ -195,12 +195,28 @@ schedule_with_quartet AS (
         common_shape.shape_array_key,
         dim_provider_gtfs_data.trip_updates_gtfs_dataset_key,
         dim_provider_gtfs_data.vehicle_positions_gtfs_dataset_key,
+        dim_provider_gtfs_data._valid_from_service_date,
+        dim_provider_gtfs_data._valid_to_service_date,
+
     FROM schedule_aggregation
     INNER JOIN common_shape USING (service_date, feed_key, route_id, direction_id)
-    INNER JOIN dim_provider_gtfs_data
-        ON schedule_aggregation.schedule_gtfs_dataset_key = dim_provider_gtfs_data.schedule_gtfs_dataset_key
+    INNER JOIN dim_provider_gtfs_data 
+        ON schedule_aggregation.schedule_gtfs_dataset_key = dim_provider_gtfs_data.schedule_gtfs_dataset_key 
         AND schedule_aggregation.service_date BETWEEN dim_provider_gtfs_data._valid_from_service_date AND dim_provider_gtfs_data._valid_to_service_date
+),
 
+-- sometimes, there are multiple records where _valid_from_service_date-_valid_to_service_date overlap for one service_date
+-- Ex: SCVTA Schedule (2026-07-12). One record spans May 2025-Aug 2026, and another spans May 2026-Jul 2026. 
+-- In these cases, always favor the record that is more recent (a smaller number of days between the service_date from the _valid_from_service_date)
+-- it has the smaller DATE_DIFF value.
+schedule_with_quartet_deduped AS (
+    SELECT
+        *,   
+    FROM schedule_with_quartet
+    QUALIFY ROW_NUMBER() OVER(
+        PARTITION BY service_date, schedule_gtfs_dataset_key
+        ORDER BY DATE_DIFF(service_date, _valid_from_service_date, DAY)
+    ) = 1
 ),
 
 route_direction_aggregation AS (
@@ -285,7 +301,7 @@ route_direction_aggregation AS (
         tu.tu_extract_duration_minutes,
         tu.tu_messages_per_minute,
 
-    FROM schedule_with_quartet AS schedule
+    FROM schedule_with_quartet_deduped AS schedule
     INNER JOIN pivoted_timeofday AS pivoted
         ON schedule.service_date = pivoted.service_date
         AND schedule.schedule_gtfs_dataset_key = pivoted.schedule_gtfs_dataset_key
