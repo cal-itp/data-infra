@@ -5,6 +5,7 @@ on:
     paths:
       - 'iac/**'
       - 'services/gtfs-rt-archiver/**'
+      - 'services/gtfs-rt-archiver-high-frequency/**'
 
 env:
   SERVICE_ACCOUNT: 'github-actions-terraform@cal-itp-data-infra.iam.gserviceaccount.com'
@@ -43,14 +44,16 @@ jobs:
           dir_names: true
           files: 'iac/cal-itp-data-infra/**/*.tf'
 
-      # A pure source change under services/gtfs-rt-archiver does not touch any
+      # A pure source change under services/gtfs-rt-archiver(-high-frequency) does not touch any
       # *.tf, but it bumps the archive zip hash, so the archiver iac dir must be
       # planned to surface the Cloud Functions redeploy.
       - name: Archiver source changes
         uses: tj-actions/changed-files@v46
         id: archiver-changes
         with:
-          files: 'services/gtfs-rt-archiver/**'
+          files: |
+            services/gtfs-rt-archiver/**
+            services/gtfs-rt-archiver-high-frequency/**
 
       - name: Compute targets
         id: compute
