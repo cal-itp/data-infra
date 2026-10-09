@@ -36,16 +36,6 @@ clean_columns AS (
 add_keys_drop_full_dupes AS (
     SELECT
         *,
-        -- flag in reverse order, since we usually want the latest
-        DENSE_RANK() OVER (
-            PARTITION BY participant_id, funding_source_id
-            ORDER BY littlepay_export_ts DESC) AS calitp_funding_source_id_rank,
-        DENSE_RANK() OVER (
-            PARTITION BY participant_id, funding_source_vault_id
-            ORDER BY littlepay_export_ts DESC) AS calitp_funding_source_vault_id_rank,
-        DENSE_RANK() OVER (
-            PARTITION BY participant_id, customer_id
-            ORDER BY littlepay_export_ts DESC) AS calitp_customer_id_rank,
         -- generate keys now that input columns have been trimmed & cast and files deduped
         {{ dbt_utils.generate_surrogate_key(['littlepay_export_ts', '_line_number', 'instance']) }} AS _key,
         {{ dbt_utils.generate_surrogate_key(['participant_id', 'funding_source_id', 'customer_id']) }} AS _payments_key,
@@ -73,9 +63,6 @@ stg_littlepay__customer_funding_source AS (
         ts,
         littlepay_export_ts,
         littlepay_export_date,
-        calitp_funding_source_id_rank,
-        calitp_funding_source_vault_id_rank,
-        calitp_customer_id_rank,
         _key,
         _payments_key,
         _content_hash,
@@ -86,16 +73,6 @@ stg_littlepay__customer_funding_source AS (
     -- this one that has no associated micropayments. The one that's dropped appears to be genuine
     -- bad data, mapping to an instance not otherwise associated with this customer_id.
     WHERE _key != 'bf3d17b734923c2429add3c422e3cfe9'
-    -- Some funding sources have incomplete information when first present in data, like missing
-    -- values for form_factor or issuer_country that are filled in during later exports.
-    -- Additionally, sometimes a filled column value is updated in newer exports for a given entry.
-    QUALIFY ROW_NUMBER() OVER (
-        PARTITION BY
-            participant_id,
-            funding_source_id,
-            customer_id
-        ORDER BY littlepay_export_ts DESC
-    ) = 1
 )
 
 SELECT * FROM stg_littlepay__customer_funding_source

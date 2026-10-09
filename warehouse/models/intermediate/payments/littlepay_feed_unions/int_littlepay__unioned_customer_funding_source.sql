@@ -1,7 +1,7 @@
 {{ config(materialized = "table") }}
 
 WITH customer_funding_source_v1 AS (
-    SELECT *
+    SELECT *, SAFE_CAST(NULL AS TIMESTAMP) AS record_updated_timestamp_utc
     FROM {{ ref('stg_littlepay__customer_funding_source') }}
     -- For agencies that had v1 feeds, keep everything before cutover date
     WHERE littlepay_export_date <= '2025-05-16'

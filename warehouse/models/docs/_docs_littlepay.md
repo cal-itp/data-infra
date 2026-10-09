@@ -226,7 +226,7 @@ A unique identifier for each settlement.
 {% docs lp_funding_source_id %}
 Identifies the funding source (for example, card) that the micropayment will be charged to. This is always the card that was tapped.
 
-A registered customer can have multiple funding sources linked to it. This field can be used to join to the `customer_funding_source` feed.
+A registered customer can have multiple funding sources linked to it.
 {% enddocs %}
 
 {% docs lp_settlement_type %}
@@ -258,8 +258,7 @@ If the acquirer is Elavon, then this key will contain the second part of the str
 {% enddocs %}
 
 {% docs lp_record_updated_timestamp_utc %}
-Settlement last updated timestamp.
-Formerly known as settlement_requested_date_time_utc.
+Littlepay-provided timestamp for "when the record was last updated".
 {% enddocs %}
 
 {% docs lp_acquirer %}
@@ -690,7 +689,23 @@ First six numbers of the PAN.
 {% enddocs %}
 
 {% docs lp_card_scheme %}
-Card scheme of this funding source. One of (`VISA`, `MASTERCARD`, `DISCOVER`, `AMEX`). 
+Card scheme of this funding source. One of (`VISA`, `MASTERCARD`, `DISCOVER`, `AMEX`).
+{% enddocs %}
+
+{% docs lp_masked_pan %}
+First six and last four numbers of the PAN.
+{% enddocs %}
+
+{% docs lp_issuer %}
+Name of the card issuer.
+{% enddocs %}
+
+{% docs lp_issuer_country %}
+Country that the card issuer belongs to.
+{% enddocs %}
+
+{% docs lp_form_factor %}
+Form factor describing the contactless EMV device of the funding source.
 {% enddocs %}
 
 {% docs lp_payments_first_tap_organization_source_record_id %}

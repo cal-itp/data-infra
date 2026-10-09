@@ -40,12 +40,27 @@ int_payments__agency_joined_device_transactions AS (
 ),
 
 int_payments__customers AS (
-    SELECT *
+    SELECT
+        participant_id,
+        customer_id,
+        principal_customer_id,
+        earliest_tap
     FROM {{ ref('int_payments__customers') }}
 ),
 
 int_payments__customer_funding_source_vaults AS (
-    SELECT *
+    SELECT
+        participant_id,
+        principal_customer_id,
+        funding_source_vault_id,
+        bin,
+        masked_pan,
+        card_scheme,
+        issuer,
+        issuer_country,
+        form_factor,
+        calitp_valid_at,
+        calitp_invalid_at
     FROM {{ ref('int_payments__customer_funding_source_vaults') }}
 ),
 
@@ -156,8 +171,8 @@ fct_payments_rides_v2 AS (
 
     FROM micropayments
     LEFT JOIN int_payments__customers AS customers
-        ON micropayments.customer_id = customers.customer_id
-        AND micropayments.participant_id = customers.participant_id
+         ON micropayments.customer_id = customers.customer_id
+         AND micropayments.participant_id = customers.participant_id
     LEFT JOIN int_payments__customer_funding_source_vaults AS vaults
         ON micropayments.funding_source_vault_id = vaults.funding_source_vault_id
         AND micropayments.participant_id = vaults.participant_id

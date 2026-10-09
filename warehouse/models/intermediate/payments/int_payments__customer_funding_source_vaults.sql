@@ -4,16 +4,10 @@
     )
 }}
 
-WITH deduped_by_funding_source AS (
+WITH deduped_by_vault_and_extract AS (
     SELECT *
-    FROM {{ ref('int_littlepay__unioned_customer_funding_source') }}
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY participant_id, funding_source_id ORDER BY littlepay_export_ts DESC) = 1
-),
-
-deduped_by_vault_and_extract AS (
-    SELECT *
-    FROM deduped_by_funding_source
-    QUALIFY ROW_NUMBER() OVER (PARTITION BY participant_id, funding_source_vault_id, littlepay_export_ts ORDER BY funding_source_id) = 1
+    FROM {{ ref('int_payments__deduped_customer_funding_sources') }}
+    WHERE calitp_funding_source_vault_id_rank = 1
 ),
 
 int_payments__customer_funding_source_vaults AS (
