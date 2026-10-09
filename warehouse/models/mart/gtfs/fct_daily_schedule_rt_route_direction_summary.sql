@@ -6,11 +6,16 @@
 }}
 
 WITH schedule_trips AS (
-    SELECT * FROM {{ ref('fct_scheduled_trips') }}
+    SELECT * FROM `cal-itp-data-infra.mart_gtfs.fct_scheduled_trips`
+    --{{ ref('fct_scheduled_trips') }}
+    WHERE service_date >= "2026-07-11" AND service_date <= "2026-07-13" AND name in ("SCVTA Schedule", "LA Metro Rail Schedule")
+
 ),
 
 observed_trips AS (
-    SELECT * FROM {{ ref('fct_observed_trips') }}
+    SELECT * FROM `cal-itp-data-infra.mart_gtfs.fct_observed_trips`
+    WHERE service_date >= "2026-07-11" AND service_date <= "2026-07-13"
+    --{{ ref('fct_observed_trips') }}
 ),
 
 -- add this to make sure we correctly link quartets
@@ -18,8 +23,10 @@ dim_provider_gtfs_data AS (
     SELECT
         schedule_gtfs_dataset_key,
         vehicle_positions_gtfs_dataset_key,
-        trip_updates_gtfs_dataset_key
-    FROM {{ ref('dim_provider_gtfs_data') }}
+        trip_updates_gtfs_dataset_key,
+        _valid_from_service_date,
+        _valid_to_service_date,
+    FROM `cal-itp-data-infra-staging.tiffany_mart_transit_database.dim_provider_gtfs_data`--{{ ref('dim_provider_gtfs_data') }}
     GROUP BY 1, 2, 3
 ),
 
@@ -189,7 +196,9 @@ schedule_with_quartet AS (
         dim_provider_gtfs_data.vehicle_positions_gtfs_dataset_key,
     FROM schedule_aggregation
     INNER JOIN common_shape USING (service_date, feed_key, route_id, direction_id)
-    INNER JOIN dim_provider_gtfs_data USING (schedule_gtfs_dataset_key)
+    INNER JOIN dim_provider_gtfs_data
+        ON schedule_aggregation.schedule_gtfs_dataset_key = dim_provider_gtfs_data.schedule_gtfs_dataset_key
+        AND schedule_aggregation.service_date BETWEEN dim_provider_gtfs_data._valid_from_service_date AND dim_provider_gtfs_data._valid_to_service_date
 ),
 
 route_direction_aggregation AS (
