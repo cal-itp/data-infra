@@ -22,12 +22,13 @@ observed_trips AS (
 dim_provider_gtfs_data AS (
     SELECT
         schedule_gtfs_dataset_key,
-        vehicle_positions_gtfs_dataset_key,
-        trip_updates_gtfs_dataset_key,
+        MAX(vehicle_positions_gtfs_dataset_key) AS vehicle_positions_gtfs_dataset_key,
+        MAX(trip_updates_gtfs_dataset_key) AS trip_updates_gtfs_dataset_key,
         _valid_from_service_date,
         _valid_to_service_date,
+
     FROM `cal-itp-data-infra-staging.tiffany_mart_transit_database.dim_provider_gtfs_data`--{{ ref('dim_provider_gtfs_data') }}
-    GROUP BY 1, 2, 3
+    GROUP BY 1, 4, 5
 ),
 
 gtfs_join AS (
@@ -199,6 +200,7 @@ schedule_with_quartet AS (
     INNER JOIN dim_provider_gtfs_data
         ON schedule_aggregation.schedule_gtfs_dataset_key = dim_provider_gtfs_data.schedule_gtfs_dataset_key
         AND schedule_aggregation.service_date BETWEEN dim_provider_gtfs_data._valid_from_service_date AND dim_provider_gtfs_data._valid_to_service_date
+
 ),
 
 route_direction_aggregation AS (
