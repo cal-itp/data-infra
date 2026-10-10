@@ -153,11 +153,6 @@ class Heartbeat:
         batch_at = self.batch_at()
         return batch_at.minute % 5 == 0 and batch_at.second == 0
 
-    def payload(self, download_config: dict) -> dict:
-        if self.cohort() is None:
-            return download_config
-        return download_config | {"batch_at": self.batch_at().isoformat()}
-
     def warn_on_unmatched(self, download_configs: list[dict]) -> None:
         cohort = self.cohort()
         if not cohort:
@@ -180,7 +175,7 @@ class Heartbeat:
         self.warn_on_unmatched(download_configs)
 
         return [
-            json.dumps(self.payload(download_config), separators=(",", ":")).encode()
+            json.dumps(download_config, separators=(",", ":")).encode()
             for download_config in download_configs
             if download_config["feed_type"] in GTFS_RT_FEED_TYPES
             and self.in_cohort(download_config)
