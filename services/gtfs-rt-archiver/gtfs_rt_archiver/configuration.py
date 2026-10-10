@@ -78,6 +78,7 @@ class Configuration:
         schedule_url_for_validation: str,
         url: str,
         computed: bool,
+        use_ts_floor: bool = True,
         secret_resolver: Type = Secret,
         **extras,
     ) -> None:
@@ -92,6 +93,7 @@ class Configuration:
         self.schedule_url_for_validation: str = schedule_url_for_validation
         self.url: str = url
         self.computed: bool = computed
+        self.use_ts_floor: bool = use_ts_floor
         self.secret_resolver: Type = secret_resolver
         if extras:
             logging.warning(f"Unsupported keys {list(extras.keys())}")
@@ -113,11 +115,10 @@ class Configuration:
         # a clean grid, normalizing publish jitter so each poll lands in its own
         # bucket. A faster clock would instead collapse several polls into one bucket
         # (e.g. a 3-second cadence -> 20 polls/min -> 3 buckets), silently
-        # overwriting samples. The high-frequency archiver therefore sets
-        # CALITP_GTFS_RT_TS_UNFLOORED=true to keep the full-resolution publish_time,
-        # giving every poll a distinct path. Unset (or any other value) leaves the
-        # production floor in place.
-        if os.environ.get("CALITP_GTFS_RT_TS_UNFLOORED") == "true":
+        # overwriting samples. The high-frequency archiver disables the floor (see
+        # use_ts_floor, set from CALITP_GTFS_RT_USE_TS_FLOOR in resolve) to keep the
+        # full-resolution publish_time, giving every poll a distinct path.
+        if not self.use_ts_floor:
             return self.publish_time.isoformat()
 
         seconds = math.floor(self.publish_time.second / 20) * 20
@@ -170,5 +171,9 @@ class Configuration:
             project_id=project_id,
             destination_bucket=os.environ["CALITP_BUCKET__GTFS_RT_RAW"],
             publish_time=publish_time,
+            # Only the high-frequency archiver sets this false, to disable the ts()
+            # floor; everywhere else the floor stays on.
+            use_ts_floor=os.environ.get("CALITP_GTFS_RT_USE_TS_FLOOR", "true")
+            == "true",
             **settings,
         )
