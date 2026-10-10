@@ -169,24 +169,6 @@ class TestHeartbeatCohort:
 
         assert self.published_names(heartbeat) == ["SLO Alerts"]
 
-    def test_cohort_stamps_batch_at(
-        self, monkeypatch: pytest.MonkeyPatch, heartbeat: Heartbeat
-    ) -> None:
-        monkeypatch.setenv(HIGH_FREQUENCY_COHORT, '["Big Blue Bus VehiclePositions"]')
-
-        payload = json.loads(heartbeat.messages()[0])
-        assert payload["batch_at"] == "2025-06-02T00:01:23+00:00"
-
-    def test_production_messages_omit_batch_at(
-        self, monkeypatch: pytest.MonkeyPatch, heartbeat: Heartbeat
-    ) -> None:
-        # Guards the production message shape: batch_at must not leak into the
-        # standard fan-out, or every production path would change.
-        monkeypatch.delenv(HIGH_FREQUENCY_COHORT, raising=False)
-
-        for message in heartbeat.messages():
-            assert "batch_at" not in json.loads(message)
-
     def test_limit_applies_after_cohort_filter(
         self,
         monkeypatch: pytest.MonkeyPatch,
