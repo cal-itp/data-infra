@@ -7,15 +7,13 @@
 
 WITH schedule_trips AS (
     SELECT * FROM `cal-itp-data-infra.mart_gtfs.fct_scheduled_trips`
-    --{{ ref('fct_scheduled_trips') }}
+    --`cal-itp-data-infra-staging`.`tiffany_mart_gtfs`.`fct_scheduled_trips`
     WHERE service_date >= "2026-07-11" AND service_date <= "2026-07-13" AND name in ("SCVTA Schedule", "LA Metro Rail Schedule")
-
 ),
 
 observed_trips AS (
     SELECT * FROM `cal-itp-data-infra.mart_gtfs.fct_observed_trips`
     WHERE service_date >= "2026-07-11" AND service_date <= "2026-07-13"
-    --{{ ref('fct_observed_trips') }}
 ),
 
 -- add this to make sure we correctly link quartets
@@ -27,9 +25,10 @@ dim_provider_gtfs_data AS (
         _valid_from_service_date,
         _valid_to_service_date,
 
-    FROM `cal-itp-data-infra-staging.tiffany_mart_transit_database.dim_provider_gtfs_data`--{{ ref('dim_provider_gtfs_data') }}
+    FROM `cal-itp-data-infra-staging.tiffany_mart_transit_database.dim_provider_gtfs_data`--`cal-itp-data-infra-staging`.`tiffany_mart_transit_database`.`dim_provider_gtfs_data`
     GROUP BY 1, 4, 5
 ),
+
 
 gtfs_join AS (
     SELECT
@@ -211,10 +210,10 @@ schedule_with_quartet AS (
 -- it has the smaller DATE_DIFF value.
 schedule_with_quartet_deduped AS (
     SELECT
-        *,   
+        *,
     FROM schedule_with_quartet
     QUALIFY ROW_NUMBER() OVER(
-        PARTITION BY service_date, schedule_gtfs_dataset_key
+        PARTITION BY service_date, schedule_gtfs_dataset_key, route_name, direction_id, route_type
         ORDER BY DATE_DIFF(service_date, _valid_from_service_date, DAY)
     ) = 1
 ),
