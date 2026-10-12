@@ -6,14 +6,11 @@
 }}
 
 WITH schedule_trips AS (
-    SELECT * FROM `cal-itp-data-infra.mart_gtfs.fct_scheduled_trips`
-    --`cal-itp-data-infra-staging`.`tiffany_mart_gtfs`.`fct_scheduled_trips`
-    WHERE service_date >= "2026-07-11" AND service_date <= "2026-07-13" AND name in ("SCVTA Schedule", "LA Metro Rail Schedule")
+    SELECT * FROM {{ ref('fct_scheduled_trips') }}
 ),
 
 observed_trips AS (
-    SELECT * FROM `cal-itp-data-infra.mart_gtfs.fct_observed_trips`
-    WHERE service_date >= "2026-07-11" AND service_date <= "2026-07-13"
+    SELECT * FROM {{ ref('fct_observed_trips') }}
 ),
 
 -- add this to make sure we correctly link quartets
@@ -25,7 +22,7 @@ dim_provider_gtfs_data AS (
         _valid_from_service_date,
         _valid_to_service_date,
 
-    FROM `cal-itp-data-infra-staging.tiffany_mart_transit_database.dim_provider_gtfs_data`--`cal-itp-data-infra-staging`.`tiffany_mart_transit_database`.`dim_provider_gtfs_data`
+    FROM {{ ref('dim_provider_gtfs_data') }}
     GROUP BY 1, 4, 5
 ),
 
