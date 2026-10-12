@@ -2,7 +2,7 @@
 
 WITH datasets AS (
     SELECT *
-    FROM {{ ref('dim_gtfs_datasets') }}
+    FROM `cal-itp-data-infra.mart_transit_database.dim_gtfs_datasets`--{{ ref('dim_gtfs_datasets') }}
 ),
 
 int_gtfs_quality__daily_assessment_candidate_entities AS (
@@ -30,7 +30,7 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
             WHEN gtfs_dataset_type = "schedule" THEN gtfs_dataset_key
             WHEN gtfs_dataset_type IS NOT NULL THEN schedule_to_use_for_rt_validation_gtfs_dataset_key
         END as associated_schedule_gtfs_dataset_key
-    FROM {{ ref('int_gtfs_quality__daily_assessment_candidate_entities') }}
+    FROM `cal-itp-data-infra.staging.int_gtfs_quality__daily_assessment_candidate_entities`--{{ ref('int_gtfs_quality__daily_assessment_candidate_entities') }}
 ),
 
 -- handle cases where there are multiple RT feeds with identical relationships
