@@ -48,7 +48,7 @@ def parse_pins(lines) -> dict[str, str]:
                 print(f"skipping {line}", file=sys.stderr)
                 continue
         else:
-            continue
+            sys.exit(f"unparseable freeze line: {line!r}")
         # drop local version labels (the image's Airflow is "2.10.5+composer"),
         # which don't exist on PyPI; "==2.10.5" still matches the image
         pins[normalize(name)] = version.strip().split("+", 1)[0]

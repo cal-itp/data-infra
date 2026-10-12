@@ -1,3 +1,4 @@
+.DEFAULT_GOAL := restart
 .PHONY: clean clean-postgres composer-constraints pools restart setup start stop sync teardown
 
 COMPOSER_ENVIRONMENT_NAME := calitp-development-composer
@@ -39,8 +40,8 @@ endif
 # image (plus requirements-c3.txt), then relock so tests match production.
 composer-constraints:
 	docker run --rm --entrypoint bash $(COMPOSER_IMAGE) -c \
-		'python -m pip freeze; python -c "import airflow; print(\"apache-airflow==\" + airflow.__version__)"' \
-		| python3 scripts/update_composer_constraints.py
+		'python -m pip freeze && python -c "import airflow; print(\"apache-airflow==\" + airflow.__version__)"' \
+		| uv run python scripts/update_composer_constraints.py
 	uv lock
 
 restart: sync
