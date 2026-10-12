@@ -2,7 +2,7 @@
 
 WITH datasets AS (
     SELECT *
-    FROM {{ ref('dim_gtfs_datasets') }}
+    FROM `cal-itp-data-infra.mart_transit_database.dim_gtfs_datasets`--{{ ref('dim_gtfs_datasets') }}
 ),
 
 int_gtfs_quality__daily_assessment_candidate_entities AS (
@@ -30,7 +30,7 @@ int_gtfs_quality__daily_assessment_candidate_entities AS (
             WHEN gtfs_dataset_type = "schedule" THEN gtfs_dataset_key
             WHEN gtfs_dataset_type IS NOT NULL THEN schedule_to_use_for_rt_validation_gtfs_dataset_key
         END as associated_schedule_gtfs_dataset_key
-    FROM {{ ref('int_gtfs_quality__daily_assessment_candidate_entities') }}
+    FROM `cal-itp-data-infra.staging.int_gtfs_quality__daily_assessment_candidate_entities`--{{ ref('int_gtfs_quality__daily_assessment_candidate_entities') }}
 ),
 
 -- handle cases where there are multiple RT feeds with identical relationships
@@ -181,7 +181,10 @@ dim_provider_gtfs_data AS (
         gtfs_dataset_key_trip_updates AS trip_updates_gtfs_dataset_key,
         CAST(all_versioned._valid_from AS TIMESTAMP) AS _valid_from,
         all_versioned._valid_to,
-        all_versioned._valid_to = {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _is_current
+        all_versioned._valid_to = {{ make_end_of_valid_range('CAST("2099-01-01" AS TIMESTAMP)') }} AS _is_current,
+        EXTRACT(DATE FROM all_versioned._valid_from) AS _valid_from_service_date,
+        EXTRACT(DATE FROM all_versioned._valid_to) AS _valid_to_service_date,
+
     FROM all_versioned
     LEFT JOIN pivoted AS orig
         ON all_versioned.key = orig.key
