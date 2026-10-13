@@ -1,3 +1,4 @@
+import logging
 import os
 from pathlib import Path
 
@@ -16,6 +17,23 @@ AIRFLOW_EXECUTOR = os.environ.get("AIRFLOW__CORE__EXECUTOR")
 
 # point to your dags directory (the one this file lives in)
 dag_parent_dir = Path(__file__).parent
+
+# TEMPORARY DIAGNOSTIC for issue #4814 -- remove before PR
+_diag = logging.getLogger(__name__)
+
+for _name in (
+    "download_gtfs_schedule_v2",
+    "unzip_and_validate_gtfs_schedule_hourly",
+):
+    _d = dag_parent_dir / _name
+
+    _diag.warning(
+        "DIAG_4814 directory=%s exists=%s is_dir=%s contents=%s",
+        _name,
+        _d.exists(),
+        _d.is_dir(),
+        sorted(p.name for p in _d.iterdir()) if _d.is_dir() else None,
+    )
 
 # assumes any subdirectories in the dags directory are Gusty DAGs (with METADATA.yml)
 # (excludes subdirectories like __pycache__)
