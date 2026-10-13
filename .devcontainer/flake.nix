@@ -21,6 +21,7 @@
         };
         wrappedUv = pkgs.writeShellScriptBin "uv" ''
           export LD_LIBRARY_PATH="${pkgs.stdenv.cc.cc.lib}/lib:$LD_LIBRARY_PATH"
+          unset PYTHONPATH
           exec ${pkgs.uv}/bin/uv "$@"
         '';
       in
@@ -31,7 +32,9 @@
             nix-direnv
 
             # Core Python & Packaging
-            python311
+            (python311.withPackages (ps: with ps; [
+              flake8
+            ]))
             wrappedUv
             # uv
 

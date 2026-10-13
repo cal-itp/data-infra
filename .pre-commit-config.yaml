@@ -13,7 +13,7 @@ repos:
         exclude_types: ['yaml']
     # TODO: could we use ruff to replace flake8/isort and maybe black?
   - repo: https://github.com/pycqa/flake8
-    rev: 6.0.0
+    rev: 7.4.1
     hooks:
       - id: flake8
         args: ["--ignore=E501,W503,E231"] # line too long and line before binary operator (black is ok with these) and explicitly ignore the whitespace after colon error

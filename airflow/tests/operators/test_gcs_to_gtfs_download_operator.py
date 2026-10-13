@@ -58,7 +58,7 @@ class TestGCSToGTFSDownloadOperator:
 
         task = test_dag.get_task("gcs_to_gtfs_download")
         task_instance = TaskInstance(task, execution_date=execution_date)
-        xcom_value = task_instance.xcom_pull()
+        xcom_value = task_instance.xcom_pull(task_ids=task.task_id)
         assert xcom_value == {
             "base64_url": "aHR0cDovL2FwcC5tZWNhdHJhbi5jb20vdXJiL3dzL2ZlZWQvYzJsMFpUMXplWFowTzJOc2FXVnVkRDF6Wld4bU8yVjRjR2x5WlQwN2RIbHdaVDFuZEdaek8ydGxlVDAwTWpjd056UTBaVFk0TlRBek9UTXlNREl4TURkak56STBNRFJrTXpZeU5UTTRNekkwWXpJMA==",
             "download_schedule_feed_results": {
