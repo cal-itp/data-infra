@@ -19,7 +19,7 @@
 |  2:00 PM    | 6:00 AM              | 7:00 AM              | [dbt_daily](#dbt_daily)                                                                                                          | Sunday, Tuesday, Wednesday, Friday, and Saturday |
 |  2:00 PM    | 6:00 AM              | 7:00 AM              | [airtable_issue_management](#airtable_issue_management)                                                                          | Fridays    |
 |  5:00 PM    | 9:00 AM              |10:00 AM              | [generate_tides](#generate_tides)                                                                                                      | Monday and Thursday |
-|  -          | -                    | -                    | [dbt_manual_run_with_args](#dbt_manual_run_with_args)<br>[download_gtfs_schedule_v2](./download_gtfs_schedule_v2)<br>[unzip_and_validate_gtfs_schedule_hourly](./unzip_and_validate_gtfs_schedule_hourly)| Runs Only Manually |
+|  -          | -                    | -                    | [dbt_manual_run_with_args](#dbt_manual_run_with_args)									       | Runs Only Manually |
 
 ## dbt_all
 
@@ -88,7 +88,7 @@
 
    - Runs [**GCSDownloadConfigFilterOperator**](airflow/plugins/operators/gcs_download_config_filter_operator.py) to filter for schedule datasets from the previous step.
 
-   - Runs [**DownloadConfigToGCSOperator**](airflow/plugins/operators/download_config_to_gcs_operator.py) and [**DownloadConfigHook**](airflow/plugins/hooks/download_config_hook.py) replacing [download_gtfs_schedule_v2 DAG](airflow/dags/download_gtfs_schedule_v2).
+   - Runs [**DownloadConfigToGCSOperator**](airflow/plugins/operators/download_config_to_gcs_operator.py) and [**DownloadConfigHook**](airflow/plugins/hooks/download_config_hook.py).
 
 > [!NOTE]
 > This process will try to download files from the URL first then from `Manual Download Bucket` if the URL fails
@@ -120,7 +120,7 @@
 
 ### 3. Validates files
 
-   Runs [**ValidateGTFSToGCSOperator**](airflow/plugins/operators/validate_gtfs_to_gcs_operator.py) and [**GTFSValidatorHook**](airflow/plugins/hooks/gtfs_validator_hook.py) replacing [unzip_and_validate_gtfs_schedule_hourly.validate_gtfs_schedule](airflow/dags/unzip_and_validate_gtfs_schedule_hourly/validate_gtfs_schedule.yml).
+   Runs [**ValidateGTFSToGCSOperator**](airflow/plugins/operators/validate_gtfs_to_gcs_operator.py) and [**GTFSValidatorHook**](airflow/plugins/hooks/gtfs_validator_hook.py).
 
    - Validates zip files downloaded on `download_gtfs` DAG.
 
@@ -141,7 +141,7 @@
 
 #### 4.1. Unzips Dataset Files
 
-   Runs [**UnzipGTFSToGCSOperator**](airflow/plugins/operators/unzip_gtfs_to_gcs_operator.py) and [**GTFSUnzipHook**](airflow/plugins/hooks/gtfs_unzip_hook.py) replacing [unzip_and_validate_gtfs_schedule_hourly.unzip_gtfs_schedule](airflow/dags/unzip_and_validate_gtfs_schedule_hourly/unzip_gtfs_schedule.py).
+   Runs [**UnzipGTFSToGCSOperator**](airflow/plugins/operators/unzip_gtfs_to_gcs_operator.py) and [**GTFSUnzipHook**](airflow/plugins/hooks/gtfs_unzip_hook.py).
 
    - Unzips downloaded files from `download_gtfs` DAG.
 
@@ -185,7 +185,7 @@
 
 #### 4.2. Converts files to external tables format (jsonl)
 
-   Runs [**GTFSCSVToJSONLOperator**](airflow/plugins/operators/gtfs_csv_to_jsonl_operator.py) replacing [unzip_and_validate_gtfs_schedule_hourly.convert_to_json](airflow/dags/unzip_and_validate_gtfs_schedule_hourly/convert_to_json).
+   Runs [**GTFSCSVToJSONLOperator**](airflow/plugins/operators/gtfs_csv_to_jsonl_operator.py).
 
    - Converts each csv file from each dataset to jsonl.
 
