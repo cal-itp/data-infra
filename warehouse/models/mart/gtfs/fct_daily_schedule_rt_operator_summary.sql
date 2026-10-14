@@ -7,19 +7,23 @@
 
 WITH daily_schedule AS (
     SELECT *
-    FROM {{ ref('fct_daily_feed_scheduled_service_summary') }}
+    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_feed_scheduled_service_summary` --{{ ref('fct_daily_feed_scheduled_service_summary') }}
+    WHERE service_date >= "2026-09-01" AND service_date <= "2026-09-30"
 ),
 
 daily_rt AS (
     SELECT *
-    FROM {{ ref('fct_daily_rt_service_summary') }}
+    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_rt_service_summary`--{{ ref('fct_daily_rt_service_summary') }}
+    WHERE service_date >= "2026-09-01" AND service_date <= "2026-09-30"
+
 ),
 
 -- these will not be present for each date,
 -- so use left join when bringing it in with daily schedule / daily RT
 daily_tu_stop_metrics AS (
     SELECT *
-    FROM {{ ref('fct_trip_updates_stop_metrics') }}
+    FROM `cal-itp-data-infra.mart_gtfs.fct_trip_updates_stop_metrics`--{{ ref('fct_trip_updates_stop_metrics') }}
+    WHERE service_date >= "2026-09-01" AND service_date <= "2026-09-30"
 ),
 
 tu_operator_aggregation AS (
@@ -106,6 +110,7 @@ daily_summary AS (
         daily_rt.tu_base64_url,
 
         -- trip updates
+        daily_rt.tu_num_distinct_updates,
         COALESCE(daily_rt.n_tu_trips, 0) AS n_tu_trips,
         ROUND(SAFE_DIVIDE(daily_rt.n_tu_trips, daily_schedule.n_trips), 3) AS pct_tu_trips,
         daily_rt.n_tu_routes,
