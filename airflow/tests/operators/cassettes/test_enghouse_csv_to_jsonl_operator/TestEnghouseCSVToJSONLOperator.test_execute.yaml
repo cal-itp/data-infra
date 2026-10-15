@@ -1,0 +1,1049 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/82043e30-6d0f-4af9-9027-f0229276e865
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?prefix=tap%2F&prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#objects"}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '26'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 15 Oct 2026 22:56:47 GMT
+      Expires:
+      - Thu, 15 Oct 2026 22:56:47 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AP6rU80wPguBCUR386yp-jILm29EOR2XS9rQvi1LbasccQmoN71kDwVGz2CSjTYZilUt7xwtCF2MNzc
+      X-Goog-Gcs-Base-Ts:
+      - 1a141c84b0a
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/be59933b-e1ff-4232-92b7-14e33811ad17
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?prefix=tx%2F&prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#objects"}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '26'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 15 Oct 2026 22:56:48 GMT
+      Expires:
+      - Thu, 15 Oct 2026 22:56:48 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AP6rU809eppC6BgbMNn3IBmN8skCPrk63fLnDbDV0zG3D8emmJ39oAMW12W1zVnY7dXYKVE7Ndkxaiw
+      X-Goog-Gcs-Base-Ts:
+      - 1a141c84bc0
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/8e7c690d-41eb-40d4-ad71-448e073f77ec
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?prefix=tr%2F&prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#objects"}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '26'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 15 Oct 2026 22:56:48 GMT
+      Expires:
+      - Thu, 15 Oct 2026 22:56:48 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AP6rU82RfowFCKMFs7VQK2-7RXa4fUQxU7ZyGBS9nxBDQVFV4xdBvKjTzXPoYi-4zl65pRUjUaqX-6k
+      X-Goog-Gcs-Base-Ts:
+      - 1a141c84c36
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/ddb25746-f52e-4932-9b05-1abc1810b4ee
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?prefix=pw%2F&prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#objects","items":[{"kind":"storage#object","id":"calitp-staging-pytest/pw/camarillo/pw_camarillo_pay-window-2026-03-20.csv/1792104868460368","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/pw%2Fcamarillo%2Fpw_camarillo_pay-window-2026-03-20.csv","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/pw%2Fcamarillo%2Fpw_camarillo_pay-window-2026-03-20.csv?generation=1792104868460368&alt=media","name":"pw/camarillo/pw_camarillo_pay-window-2026-03-20.csv","bucket":"calitp-staging-pytest","generation":"1792104868460368","metageneration":"1","contentType":"text/csv","storageClass":"STANDARD","size":"1308","md5Hash":"nC76Mq7jwVnDRQ0zvFTbhg==","crc32c":"F9lybg==","etag":"CNDu1vCOvZcDEAE=","timeCreated":"2026-10-15T22:54:28.472Z","updated":"2026-10-15T22:54:28.472Z","timeStorageClassUpdated":"2026-10-15T22:54:28.472Z","timeFinalized":"2026-10-15T22:54:28.472Z"}]}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '947'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 15 Oct 2026 22:56:48 GMT
+      Expires:
+      - Thu, 15 Oct 2026 22:56:48 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AP6rU82SpYD73XFVFCGELJPq_lpzrTw3F391HlrgxLbjRpVucPxoPCAIhq0X5XFtV2j3007fQT7DK8I
+      X-Goog-Gcs-Base-Ts:
+      - 1a141c84ca4
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/51075c87-7438-4cfc-a338-a11d715cd0c2
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/pw%2Fagency%3Dcamarillo%2Fdt%3D2026-03-20%2Fpw_camarillo_pay-window-2026-03-20.jsonl.gz?fields=name&prettyPrint=false
+  response:
+    body:
+      string: '{"error":{"code":404,"message":"No such object: calitp-staging-pytest/pw/agency=camarillo/dt=2026-03-20/pw_camarillo_pay-window-2026-03-20.jsonl.gz","errors":[{"message":"No
+        such object: calitp-staging-pytest/pw/agency=camarillo/dt=2026-03-20/pw_camarillo_pay-window-2026-03-20.jsonl.gz","domain":"global","reason":"notFound"}]}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '329'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 15 Oct 2026 22:56:48 GMT
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AP6rU82OmM3nsSLKFGN7hBgC-4m2EtEUEv3RN_Xt7_jK1SCG98rHtCbM9E5yFJ7EbfT1VeaaGiWZOdk
+      X-Goog-Gcs-Base-Ts:
+      - 1a141c84d0e
+    status:
+      code: 404
+      message: Not Found
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/dc95ca48-0e4e-4150-9800-10268ab99155
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/pw%2Fcamarillo%2Fpw_camarillo_pay-window-2026-03-20.csv?alt=media
+  response:
+    body:
+      string: 'ID;Token;Amount Settled;Amount To Settle;Debt Settled;Stage;Payment
+        reference;Terminal Id;Open Date;Close Date;Operator Id
+
+        00000000-0000-0000-0000-000000000001;TOKEN00000000000000000000000000000000000000000000000000000000001;0;0;0;Open;9000000001;78001;2026-03-20T19:10:22;;277
+
+        00000000-0000-0000-0000-000000000002;TOKEN00000000000000000000000000000000000000000000000000000000002;100;100;0;Closed;9000000002;78001;2026-03-20T15:22:52;2026-03-21T03:00:04;277
+
+        00000000-0000-0000-0000-000000000003;TOKEN00000000000000000000000000000000000000000000000000000000003;0;0;0;Open;9000000003;78001;2026-03-20T17:16:33;;277
+
+        00000000-0000-0000-0000-000000000004;TOKEN00000000000000000000000000000000000000000000000000000000004;100;100;0;Closed;9000000004;78003;2026-03-20T14:03:52;2026-03-21T03:00:05;277
+
+        00000000-0000-0000-0000-000000000005;TOKEN00000000000000000000000000000000000000000000000000000000005;100;100;0;Closed;9000000005;78001;2026-03-20T12:29:22;2026-03-21T03:00:07;277
+
+        00000000-0000-0000-0000-000000000006;TOKEN00000000000000000000000000000000000000000000000000000000006;100;100;0;Closed;9000000006;78001;2026-03-20T10:39:52;2026-03-21T03:00:08;277
+
+        00000000-0000-0000-0000-000000000007;TOKEN00000000000000000000000000000000000000000000000000000000007;0;0;0;Open;9000000007;78001;2026-03-20T19:13:52;;277
+
+        '
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '1308'
+      Content-Type:
+      - text/csv
+      Date:
+      - Thu, 15 Oct 2026 22:56:48 GMT
+      ETag:
+      - CNDu1vCOvZcDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Thu, 15 Oct 2026 22:54:28 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AP6rU83oGSNLRBUXDInl39yzWALmFgNx7VPtv2ckJnBbs2VaSMKJxO4CSnsIQMtJvuzN66zcH3imVN0
+      X-Goog-Gcs-Base-Ts:
+      - 1a141c84d98
+      X-Goog-Generation:
+      - '1792104868460368'
+      X-Goog-Hash:
+      - crc32c=F9lybg==,md5=nC76Mq7jwVnDRQ0zvFTbhg==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '1308'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/c69c827d-e35e-48ac-bbf3-1916380f807b
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/pw%2Fcamarillo%2Fpw_camarillo_pay-window-2026-03-20.csv?prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/pw/camarillo/pw_camarillo_pay-window-2026-03-20.csv/1792104868460368","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/pw%2Fcamarillo%2Fpw_camarillo_pay-window-2026-03-20.csv","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/pw%2Fcamarillo%2Fpw_camarillo_pay-window-2026-03-20.csv?generation=1792104868460368&alt=media","name":"pw/camarillo/pw_camarillo_pay-window-2026-03-20.csv","bucket":"calitp-staging-pytest","generation":"1792104868460368","metageneration":"1","contentType":"text/csv","storageClass":"STANDARD","size":"1308","md5Hash":"nC76Mq7jwVnDRQ0zvFTbhg==","crc32c":"F9lybg==","etag":"CNDu1vCOvZcDEAE=","timeCreated":"2026-10-15T22:54:28.472Z","updated":"2026-10-15T22:54:28.472Z","timeStorageClassUpdated":"2026-10-15T22:54:28.472Z","timeFinalized":"2026-10-15T22:54:28.472Z"}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '910'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 15 Oct 2026 22:56:48 GMT
+      ETag:
+      - CNDu1vCOvZcDEAE=
+      Expires:
+      - Thu, 15 Oct 2026 22:56:48 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AP6rU814ngPh4DeOtOV5tgTsC-oJGpRptdfsMXx4_fHRFpG7C5TunrPGmqp48cNHMBb4d4yb6wKwwNc
+      X-Goog-Gcs-Base-Ts:
+      - 1a141c84e0b
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/67e67387-85fa-4ab3-a80d-a667fea5ecc2
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/pw%2Fcamarillo%2Fpw_camarillo_pay-window-2026-03-20.csv?prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/pw/camarillo/pw_camarillo_pay-window-2026-03-20.csv/1792104868460368","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/pw%2Fcamarillo%2Fpw_camarillo_pay-window-2026-03-20.csv","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/pw%2Fcamarillo%2Fpw_camarillo_pay-window-2026-03-20.csv?generation=1792104868460368&alt=media","name":"pw/camarillo/pw_camarillo_pay-window-2026-03-20.csv","bucket":"calitp-staging-pytest","generation":"1792104868460368","metageneration":"1","contentType":"text/csv","storageClass":"STANDARD","size":"1308","md5Hash":"nC76Mq7jwVnDRQ0zvFTbhg==","crc32c":"F9lybg==","etag":"CNDu1vCOvZcDEAE=","timeCreated":"2026-10-15T22:54:28.472Z","updated":"2026-10-15T22:54:28.472Z","timeStorageClassUpdated":"2026-10-15T22:54:28.472Z","timeFinalized":"2026-10-15T22:54:28.472Z"}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '910'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 15 Oct 2026 22:56:48 GMT
+      ETag:
+      - CNDu1vCOvZcDEAE=
+      Expires:
+      - Thu, 15 Oct 2026 22:56:48 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AP6rU82CTyrmvckao9vx_bTgg6z90ibU8n8zr-ytvy6ECA0wQUgiU5wx0AhnAvCfKbkHgFl1M2w1GHo
+      X-Goog-Gcs-Base-Ts:
+      - 1a141c84e80
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!binary |
+      LS09PT09PT09PT09PT09PT02ODY4NDQyNzE3ODQxOTA1NjA2PT0NCmNvbnRlbnQtdHlwZTogYXBw
+      bGljYXRpb24vanNvbjsgY2hhcnNldD1VVEYtOA0KDQp7Im5hbWUiOiAicHcvYWdlbmN5PWNhbWFy
+      aWxsby9kdD0yMDI2LTAzLTIwL3B3X2NhbWFyaWxsb19wYXktd2luZG93LTIwMjYtMDMtMjAuanNv
+      bmwuZ3oiLCAibWV0YWRhdGEiOiB7IlBBUlRJVElPTkVEX0FSVElGQUNUX01FVEFEQVRBIjogIntc
+      ImFnZW5jeVwiOlwiY2FtYXJpbGxvXCIsXCJmaWxlbmFtZVwiOlwicHdfY2FtYXJpbGxvX3BheS13
+      aW5kb3ctMjAyNi0wMy0yMC5jc3ZcIixcInBhdGhcIjpcInB3L2NhbWFyaWxsby9wd19jYW1hcmls
+      bG9fcGF5LXdpbmRvdy0yMDI2LTAzLTIwLmNzdlwiLFwidHNcIjpcIjIwMjYtMTAtMTVUMjI6NTQ6
+      MjguNDcyMDAwKzAwOjAwXCIsXCJzaXplXCI6MTMwOH0ifX0NCi0tPT09PT09PT09PT09PT09Njg2
+      ODQ0MjcxNzg0MTkwNTYwNj09DQpjb250ZW50LXR5cGU6IGFwcGxpY2F0aW9uL29jdGV0LXN0cmVh
+      bQ0KDQofiwgAMFrRagL/xdZNa4MwGADg+35GzhXyYZL6XstOg/XiXWzNhkyToulhlP73xSqMba4m
+      JbQ5eHg/THx4CZ5QXSFAeFrJzGNaBK2QNR9Ku/J8+/L8im9ew6vK1hy1LXplbaMuR/gOWjPFp3Cl
+      dr8re1u+D+ntwR1ohQ7lZ6tcZ6feVKf0fkhlP06uurbWZVNcPleux6hx3UVV2qGcYioSzBKKc5IB
+      wUDpWNGV1nRjH5XSxYqm1qrQx3anOgTk/HTyRqTxEOkcIsH/MI6JK5CbxvQuuEBJgym5cwQ+9O2H
+      Hf6UkBwzwBhw6qVNQ7RZPG1235Flwc4SiADGvBBZCGIaDzF9xMims5TsCmUKbiR9RpZ7aach2jye
+      Nn+ENg8eXAo0G+/aBW3ppc1DtEU8bfEIbRGsjYFlXrO99tIWIdoynra873Usb/mDmO6QZUR5/gKQ
+      /qrfhgkAAA0KLS09PT09PT09PT09PT09PT02ODY4NDQyNzE3ODQxOTA1NjA2PT0tLQ==
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '904'
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/c0c3abfc-4a63-495a-8f67-d76100dd6f0d
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT02ODY4NDQyNzE3ODQx
+        OTA1NjA2PT0i
+      x-upload-content-type:
+      - application/octet-stream
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/pw/agency=camarillo/dt=2026-03-20/pw_camarillo_pay-window-2026-03-20.jsonl.gz/1792105008913945\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/pw%2Fagency=camarillo%2Fdt=2026-03-20%2Fpw_camarillo_pay-window-2026-03-20.jsonl.gz\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/pw%2Fagency=camarillo%2Fdt=2026-03-20%2Fpw_camarillo_pay-window-2026-03-20.jsonl.gz?generation=1792105008913945&alt=media\",\n
+        \ \"name\": \"pw/agency=camarillo/dt=2026-03-20/pw_camarillo_pay-window-2026-03-20.jsonl.gz\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1792105008913945\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/octet-stream\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"344\",\n  \"md5Hash\": \"tEKTd41ktKb/YgHnFhIMwQ==\",\n
+        \ \"crc32c\": \"DBJwMw==\",\n  \"etag\": \"CJm807OPvZcDEAE=\",\n  \"timeCreated\":
+        \"2026-10-15T22:56:48.918Z\",\n  \"updated\": \"2026-10-15T22:56:48.918Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-10-15T22:56:48.918Z\",\n  \"timeFinalized\":
+        \"2026-10-15T22:56:48.918Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \"{\\\"agency\\\":\\\"camarillo\\\",\\\"filename\\\":\\\"pw_camarillo_pay-window-2026-03-20.csv\\\",\\\"path\\\":\\\"pw/camarillo/pw_camarillo_pay-window-2026-03-20.csv\\\",\\\"ts\\\":\\\"2026-10-15T22:54:28.472000+00:00\\\",\\\"size\\\":1308}\"\n
+        \ }\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1373'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 15 Oct 2026 22:56:48 GMT
+      ETag:
+      - CJm807OPvZcDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AP6rU80lB6ForPXf3U7aS1zlGuCahBZMMdi25fG943tzXB7lQq-v15cWf1kVwOPk4dHfFuDMm9Wq12U
+      X-Goog-Gcs-Base-Ts:
+      - 1a141c84f1a
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/cad45774-f87c-4108-b3e5-e595f80203aa
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/pw%2Fagency%3Dcamarillo%2Fdt%3D2026-03-20%2Fpw_camarillo_pay-window-2026-03-20.jsonl.gz?prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/pw/agency=camarillo/dt=2026-03-20/pw_camarillo_pay-window-2026-03-20.jsonl.gz/1792105008913945","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/pw%2Fagency=camarillo%2Fdt=2026-03-20%2Fpw_camarillo_pay-window-2026-03-20.jsonl.gz","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/pw%2Fagency=camarillo%2Fdt=2026-03-20%2Fpw_camarillo_pay-window-2026-03-20.jsonl.gz?generation=1792105008913945&alt=media","name":"pw/agency=camarillo/dt=2026-03-20/pw_camarillo_pay-window-2026-03-20.jsonl.gz","bucket":"calitp-staging-pytest","generation":"1792105008913945","metageneration":"1","contentType":"application/octet-stream","storageClass":"STANDARD","size":"344","md5Hash":"tEKTd41ktKb/YgHnFhIMwQ==","crc32c":"DBJwMw==","etag":"CJm807OPvZcDEAE=","timeCreated":"2026-10-15T22:56:48.918Z","updated":"2026-10-15T22:56:48.918Z","timeStorageClassUpdated":"2026-10-15T22:56:48.918Z","timeFinalized":"2026-10-15T22:56:48.918Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"agency\":\"camarillo\",\"filename\":\"pw_camarillo_pay-window-2026-03-20.csv\",\"path\":\"pw/camarillo/pw_camarillo_pay-window-2026-03-20.csv\",\"ts\":\"2026-10-15T22:54:28.472000+00:00\",\"size\":1308}"}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '1286'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 15 Oct 2026 22:56:49 GMT
+      ETag:
+      - CJm807OPvZcDEAE=
+      Expires:
+      - Thu, 15 Oct 2026 22:56:49 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AP6rU81a9ABhvlOr8BL02BJjo5r7ggD9bwcDjb6FO6Y_BQCAWscWn_0Y7KrnG2R-arMCiDIiuS61_Zg
+      X-Goog-Gcs-Base-Ts:
+      - 1a141c84f8c
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/287274c0-94f8-4a27-aa0f-41b73ca71484
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/pw%2Fagency%3Dcamarillo%2Fdt%3D2026-03-20%2Fpw_camarillo_pay-window-2026-03-20.jsonl.gz?prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/pw/agency=camarillo/dt=2026-03-20/pw_camarillo_pay-window-2026-03-20.jsonl.gz/1792105008913945","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/pw%2Fagency=camarillo%2Fdt=2026-03-20%2Fpw_camarillo_pay-window-2026-03-20.jsonl.gz","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/pw%2Fagency=camarillo%2Fdt=2026-03-20%2Fpw_camarillo_pay-window-2026-03-20.jsonl.gz?generation=1792105008913945&alt=media","name":"pw/agency=camarillo/dt=2026-03-20/pw_camarillo_pay-window-2026-03-20.jsonl.gz","bucket":"calitp-staging-pytest","generation":"1792105008913945","metageneration":"1","contentType":"application/octet-stream","storageClass":"STANDARD","size":"344","md5Hash":"tEKTd41ktKb/YgHnFhIMwQ==","crc32c":"DBJwMw==","etag":"CJm807OPvZcDEAE=","timeCreated":"2026-10-15T22:56:48.918Z","updated":"2026-10-15T22:56:48.918Z","timeStorageClassUpdated":"2026-10-15T22:56:48.918Z","timeFinalized":"2026-10-15T22:56:48.918Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"agency\":\"camarillo\",\"filename\":\"pw_camarillo_pay-window-2026-03-20.csv\",\"path\":\"pw/camarillo/pw_camarillo_pay-window-2026-03-20.csv\",\"ts\":\"2026-10-15T22:54:28.472000+00:00\",\"size\":1308}"}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '1286'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 15 Oct 2026 22:56:49 GMT
+      ETag:
+      - CJm807OPvZcDEAE=
+      Expires:
+      - Thu, 15 Oct 2026 22:56:49 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AP6rU82GzIdLjiHCZA3_YUGFNYTuA-zM5hpx44kfkZImE8uArLLHPtBuTC8U3dJTQVUQWHAHwBObhmo
+      X-Goog-Gcs-Base-Ts:
+      - 1a141c84ff8
+    status:
+      code: 200
+      message: OK
+- request:
+    body: "--===============2490659983194143518==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"enghouse_parse_job_results/agency=camarillo/dt=2026-03-20/pw_camarillo_pay-window-2026-03-20.jsonl\"}\r\n--===============2490659983194143518==\r\ncontent-type:
+      application/jsonl\r\n\r\n{\"raw\":{\"agency\":\"camarillo\",\"filename\":\"pw_camarillo_pay-window-2026-03-20.csv\",\"path\":\"pw/camarillo/pw_camarillo_pay-window-2026-03-20.csv\",\"ts\":\"2026-10-15T22:54:28.472000+00:00\",\"size\":1308},\"parsed\":{\"agency\":\"camarillo\",\"filename\":\"pw_camarillo_pay-window-2026-03-20.jsonl.gz\",\"path\":\"pw/agency=camarillo/dt=2026-03-20/pw_camarillo_pay-window-2026-03-20.jsonl.gz\",\"ts\":\"2026-10-15T22:56:48.918000+00:00\",\"size\":344}}\r\n--===============2490659983194143518==--"
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '740'
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/e8f38f9d-71ab-439d-b538-09395266a516
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0yNDkwNjU5OTgzMTk0
+        MTQzNTE4PT0i
+      x-upload-content-type:
+      - application/jsonl
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/enghouse_parse_job_results/agency=camarillo/dt=2026-03-20/pw_camarillo_pay-window-2026-03-20.jsonl/1792105009285949\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/enghouse_parse_job_results%2Fagency=camarillo%2Fdt=2026-03-20%2Fpw_camarillo_pay-window-2026-03-20.jsonl\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/enghouse_parse_job_results%2Fagency=camarillo%2Fdt=2026-03-20%2Fpw_camarillo_pay-window-2026-03-20.jsonl?generation=1792105009285949&alt=media\",\n
+        \ \"name\": \"enghouse_parse_job_results/agency=camarillo/dt=2026-03-20/pw_camarillo_pay-window-2026-03-20.jsonl\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1792105009285949\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/jsonl\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"422\",\n  \"md5Hash\": \"HOuI2FrBHHaWuSCb04mbIQ==\",\n
+        \ \"crc32c\": \"w63U1w==\",\n  \"etag\": \"CL2W6rOPvZcDEAE=\",\n  \"timeCreated\":
+        \"2026-10-15T22:56:49.289Z\",\n  \"updated\": \"2026-10-15T22:56:49.289Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-10-15T22:56:49.289Z\",\n  \"timeFinalized\":
+        \"2026-10-15T22:56:49.289Z\"\n}\n"
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1184'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 15 Oct 2026 22:56:49 GMT
+      ETag:
+      - CL2W6rOPvZcDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AP6rU82r81qxrIsaB86TRBCzeJzesYzcPVcmdRdfmnrXIqUIjqgbFRs4D1nXEGcig79VMt75fA6LWK0
+      X-Goog-Gcs-Base-Ts:
+      - 1a141c8508e
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/960eaa74-ee31-4bdb-866f-221ffc37a4c8
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?prefix=tap%2F&prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#objects"}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '26'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 15 Oct 2026 22:56:50 GMT
+      Expires:
+      - Thu, 15 Oct 2026 22:56:50 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AP6rU83aFvo0TTFq14b4VHROYTC1RY4p2Y3PSv-h5mPsdjMo2R0WHeO-YntBA21ye7IIIY2eQj2vRtE
+      X-Goog-Gcs-Base-Ts:
+      - 1a141c8562c
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/10a91822-94b1-4936-a522-abb8f421ab5d
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?prefix=tx%2F&prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#objects"}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '26'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 15 Oct 2026 22:56:50 GMT
+      Expires:
+      - Thu, 15 Oct 2026 22:56:50 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AP6rU81XPuMOUIBIh0SBd3tXYSpTF8XqShqY8iu8_Sr5rfOxuZdU5PSO6Iz4_L0e1Xk7X8Nt6NBIbp8
+      X-Goog-Gcs-Base-Ts:
+      - 1a141c856b0
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/27bc3706-88b9-4301-b61d-1e172071b1f2
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?prefix=tr%2F&prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#objects"}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '26'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 15 Oct 2026 22:56:50 GMT
+      Expires:
+      - Thu, 15 Oct 2026 22:56:50 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AP6rU82rK33EGqgLuFdpshOS937-COe0i2XXyQMBwMHV6wuoMoom9EGJsEzh4dCCI0YBn1Tchh37k60
+      X-Goog-Gcs-Base-Ts:
+      - 1a141c85736
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/90234aab-caee-4eb7-b307-a88f623cb638
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?prefix=pw%2F&prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#objects","items":[{"kind":"storage#object","id":"calitp-staging-pytest/pw/agency=camarillo/dt=2026-03-20/pw_camarillo_pay-window-2026-03-20.jsonl.gz/1792105008913945","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/pw%2Fagency=camarillo%2Fdt=2026-03-20%2Fpw_camarillo_pay-window-2026-03-20.jsonl.gz","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/pw%2Fagency=camarillo%2Fdt=2026-03-20%2Fpw_camarillo_pay-window-2026-03-20.jsonl.gz?generation=1792105008913945&alt=media","name":"pw/agency=camarillo/dt=2026-03-20/pw_camarillo_pay-window-2026-03-20.jsonl.gz","bucket":"calitp-staging-pytest","generation":"1792105008913945","metageneration":"1","contentType":"application/octet-stream","storageClass":"STANDARD","size":"344","md5Hash":"tEKTd41ktKb/YgHnFhIMwQ==","crc32c":"DBJwMw==","etag":"CJm807OPvZcDEAE=","timeCreated":"2026-10-15T22:56:48.918Z","updated":"2026-10-15T22:56:48.918Z","timeStorageClassUpdated":"2026-10-15T22:56:48.918Z","timeFinalized":"2026-10-15T22:56:48.918Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"agency\":\"camarillo\",\"filename\":\"pw_camarillo_pay-window-2026-03-20.csv\",\"path\":\"pw/camarillo/pw_camarillo_pay-window-2026-03-20.csv\",\"ts\":\"2026-10-15T22:54:28.472000+00:00\",\"size\":1308}"}},{"kind":"storage#object","id":"calitp-staging-pytest/pw/camarillo/pw_camarillo_pay-window-2026-03-20.csv/1792104868460368","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/pw%2Fcamarillo%2Fpw_camarillo_pay-window-2026-03-20.csv","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/pw%2Fcamarillo%2Fpw_camarillo_pay-window-2026-03-20.csv?generation=1792104868460368&alt=media","name":"pw/camarillo/pw_camarillo_pay-window-2026-03-20.csv","bucket":"calitp-staging-pytest","generation":"1792104868460368","metageneration":"1","contentType":"text/csv","storageClass":"STANDARD","size":"1308","md5Hash":"nC76Mq7jwVnDRQ0zvFTbhg==","crc32c":"F9lybg==","etag":"CNDu1vCOvZcDEAE=","timeCreated":"2026-10-15T22:54:28.472Z","updated":"2026-10-15T22:54:28.472Z","timeStorageClassUpdated":"2026-10-15T22:54:28.472Z","timeFinalized":"2026-10-15T22:54:28.472Z"}]}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '2234'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 15 Oct 2026 22:56:51 GMT
+      Expires:
+      - Thu, 15 Oct 2026 22:56:51 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AP6rU83aHNKN5anFyb8ZSXdfbexpiL_RBS7sjd4TjR7yRJZae-Ibxtv1jVIqhKVdzizZqRFEhP2fwFE
+      X-Goog-Gcs-Base-Ts:
+      - 1a141c857b2
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/ad4854ad-e398-49d9-a519-49ca2a930cee
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/pw%2Fagency%3Dcamarillo%2Fdt%3D2026-03-20%2Fpw_camarillo_pay-window-2026-03-20.jsonl.gz?fields=name&prettyPrint=false
+  response:
+    body:
+      string: '{"name":"pw/agency=camarillo/dt=2026-03-20/pw_camarillo_pay-window-2026-03-20.jsonl.gz"}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '88'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Thu, 15 Oct 2026 22:56:51 GMT
+      ETag:
+      - CJm807OPvZcDEAE=
+      Expires:
+      - Thu, 15 Oct 2026 22:56:51 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AP6rU82kf4ENEYbHLUaOveEvWBXlyj3RTCSwXnUpF9a9UQ9XMakD5DlbIvx6vNtU6pak7Mh_H4OO7ek
+      X-Goog-Gcs-Base-Ts:
+      - 1a141c85820
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/b35abae1-10e3-44b4-a9a5-071552fda597
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/pw%2Fagency%3Dcamarillo%2Fdt%3D2026-03-20%2Fpw_camarillo_pay-window-2026-03-20.jsonl.gz?alt=media
+  response:
+    body:
+      string: !!binary |
+        H4sIADBa0WoC/8XWTWuDMBgA4Pt+Rs4V8mGS+l7LToP14l1szYZMk6LpYZT+98UqjG2uJiW0OXh4
+        P0x8eAmeUF0hQHhaycxjWgStkDUfSrvyfPvy/IpvXsOrytYctS16ZW2jLkf4DlozxadwpXa/K3tb
+        vg/p7cEdaIUO5WerXGen3lSn9H5IZT9Orrq21mVTXD5Xrseocd1FVdqhnGIqEswSinOSAcFA6VjR
+        ldZ0Yx+V0sWKptaq0Md2pzoE5Px08kak8RDpHCLB/zCOiSuQm8b0LrhASYMpuXMEPvTthx3+lJAc
+        M8AYcOqlTUO0WTxtdt+RZcHOEogAxrwQWQhiGg8xfcTIprOU7AplCm4kfUaWe2mnIdo8njZ/hDYP
+        HlwKNBvv2gVt6aXNQ7RFPG3xCG0RrI2BZV6zvfbSFiHaMp62vO91LG/5g5jukGVEef4CkP6q34YJ
+        AAA=
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '344'
+      Content-Type:
+      - application/octet-stream
+      Date:
+      - Thu, 15 Oct 2026 22:56:52 GMT
+      ETag:
+      - CJm807OPvZcDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Thu, 15 Oct 2026 22:56:48 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AP6rU802EhuAAaN18-js4K5VYQObvYLmDzsAf-okxv5JZKUKX-Z_qxGpd77xQuozXH1m47vY5SVXDV8
+      X-Goog-Gcs-Base-Ts:
+      - 1a141c85e17
+      X-Goog-Generation:
+      - '1792105008913945'
+      X-Goog-Hash:
+      - crc32c=DBJwMw==,md5=tEKTd41ktKb/YgHnFhIMwQ==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '344'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.16 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/339006fb-8c41-4f44-a8c6-807e4557d21a
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/enghouse_parse_job_results%2Fagency%3Dcamarillo%2Fdt%3D2026-03-20%2Fpw_camarillo_pay-window-2026-03-20.jsonl?alt=media
+  response:
+    body:
+      string: '{"raw":{"agency":"camarillo","filename":"pw_camarillo_pay-window-2026-03-20.csv","path":"pw/camarillo/pw_camarillo_pay-window-2026-03-20.csv","ts":"2026-10-15T22:54:28.472000+00:00","size":1308},"parsed":{"agency":"camarillo","filename":"pw_camarillo_pay-window-2026-03-20.jsonl.gz","path":"pw/agency=camarillo/dt=2026-03-20/pw_camarillo_pay-window-2026-03-20.jsonl.gz","ts":"2026-10-15T22:56:48.918000+00:00","size":344}}'
+    headers:
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '422'
+      Content-Type:
+      - application/jsonl
+      Date:
+      - Thu, 15 Oct 2026 22:56:52 GMT
+      ETag:
+      - CL2W6rOPvZcDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Thu, 15 Oct 2026 22:56:49 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AP6rU81_sxCBNzrPvEVAjcKzcltN_p6JsySzCdJxBDVfCePqLfvEJjqLRNCvML8PufnkCC2DzzPQROk
+      X-Goog-Gcs-Base-Ts:
+      - 1a141c85ea7
+      X-Goog-Generation:
+      - '1792105009285949'
+      X-Goog-Hash:
+      - crc32c=w63U1w==,md5=HOuI2FrBHHaWuSCb04mbIQ==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '422'
+    status:
+      code: 200
+      message: OK
+version: 1
