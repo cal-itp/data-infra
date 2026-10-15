@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
@@ -40,10 +40,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1d5f98c3" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -61,6 +61,12 @@
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
                 gtag('js', new Date());
                 gtag('config', 'G-SZB618VNBZ');
             </script>
@@ -70,6 +76,12 @@
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
                 gtag('js', new Date());
                 gtag('config', 'G-SZB618VNBZ');
             </script>
@@ -77,6 +89,7 @@
     <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'analytics_tools/storing_data';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Using Data Catalogs" href="data_catalogs.html" />
@@ -84,20 +97,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -123,7 +142,51 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -468,7 +531,7 @@
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#storing-new-data-screencast">Storing New Data - Screencast</a></li>
@@ -550,17 +613,17 @@
 <span id="storing-data-parquet"></span><h4>Parquet<a class="headerlink" href="#parquet" title="Link to this heading">#</a></h4>
 <p>Parquet is an “open source columnar storage format for use in data analysis systems.” Columnar storage is more efficient as it is easily compressed and the data is more homogenous. CSV files utilize a row-based storage format which is harder to compress, a reason why Parquets files are preferable for larger datasets. Parquet files are faster to read than CSVs, as they have a higher querying speed and preserve datatypes (ie, Number, Timestamps, Points). They are best for intermediate data storage and large datasets (1GB+) on most any on-disk storage. This file format is also good for passing dataframes between Python and R. A similar option is feather.</p>
 <p>One of the downsides to Parquet files is the inability to quickly look at the dataset in GUI based (Excel, QGIS, etc.) programs. Parquet files also lack built-in support for categorical data.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/task-subfolder/test.parquet&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="s1">'gs://calitp-analytics-data/data-analyses/task-subfolder/test.parquet'</span><span class="p">)</span>
 
-<span class="n">df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/task-subfolder/test.parquet&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s1">'gs://calitp-analytics-data/data-analyses/task-subfolder/test.parquet'</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="csv">
 <span id="id4"></span><h4>CSV<a class="headerlink" href="#csv" title="Link to this heading">#</a></h4>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/task-subfolder/test.csv&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'gs://calitp-analytics-data/data-analyses/task-subfolder/test.csv'</span><span class="p">)</span>
 
-<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/task-subfolder/test.parquet&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">'gs://calitp-analytics-data/data-analyses/task-subfolder/test.parquet'</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -572,15 +635,15 @@
 <span id="id6"></span><h4>Geoparquet<a class="headerlink" href="#geoparquet" title="Link to this heading">#</a></h4>
 <p>Importing geoparquets directly from GCS works with <code class="docutils literal notranslate"><span class="pre">geopandas</span></code>, but exporting geoparquets into GCS requires an extra step of uploading.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
-<span class="n">GCS_FOLDER</span> <span class="o">=</span> <span class="s2">&quot;gs://calitp-analytics-data/data-analyses/task-subfolder/&quot;</span>
+<span class="n">GCS_FOLDER</span> <span class="o">=</span> <span class="s2">"gs://calitp-analytics-data/data-analyses/task-subfolder/"</span>
 
-<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">GCS_FOLDER</span><span class="si">}</span><span class="s2">.parquet&quot;</span><span class="p">)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_parquet</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">GCS_FOLDER</span><span class="si">}</span><span class="s2">.parquet"</span><span class="p">)</span>
 
 <span class="c1"># Save the geodataframe to your local filesystem</span>
-<span class="n">gdf</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s2">&quot;./my-geoparqet.parquet&quot;</span><span class="p">)</span>
+<span class="n">gdf</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s2">"./my-geoparqet.parquet"</span><span class="p">)</span>
 
 <span class="c1"># Put the local file into the GCS bucket</span>
-<span class="n">fs</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">&quot;./my-geoparquet.parquet&quot;</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">GCS_FOLDER</span><span class="si">}</span><span class="s2">my-geoparquet.parquet&quot;</span><span class="p">)</span>
+<span class="n">fs</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="s2">"./my-geoparquet.parquet"</span><span class="p">,</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">GCS_FOLDER</span><span class="si">}</span><span class="s2">my-geoparquet.parquet"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Or, use the <code class="docutils literal notranslate"><span class="pre">calitp_data_analysis</span></code> package that lives in <a class="reference external" href="https://github.com/cal-itp/data-infra/tree/main/packages/calitp-data-analysis/calitp_data_analysis">data-infra</a></p>
@@ -589,7 +652,7 @@
 <span class="n">utils</span><span class="o">.</span><span class="n">geoparquet_gcs_export</span><span class="p">(</span>
     <span class="n">gdf</span><span class="p">,</span>
     <span class="n">GCS_FOLDER</span><span class="p">,</span>
-    <span class="s2">&quot;my-geoparquet&quot;</span>
+    <span class="s2">"my-geoparquet"</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -604,20 +667,20 @@
 <p>Use the <code class="docutils literal notranslate"><span class="pre">calitp_data_analysis</span></code> package to read in or export geojsons.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">calitp_data_analysis</span><span class="w"> </span><span class="kn">import</span> <span class="n">utils</span>
 
-<span class="n">GCS_FOLDER</span> <span class="o">=</span> <span class="s2">&quot;gs://calitp-analytics-data/data-analyses/task-subfolder/&quot;</span>
+<span class="n">GCS_FOLDER</span> <span class="o">=</span> <span class="s2">"gs://calitp-analytics-data/data-analyses/task-subfolder/"</span>
 
 <span class="n">gdf</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">read_geojson</span><span class="p">(</span>
     <span class="n">GCS_FOLDER</span><span class="p">,</span>
-    <span class="s2">&quot;my-geojson.geojson&quot;</span><span class="p">,</span>
-    <span class="n">geojson_type</span> <span class="o">=</span> <span class="s2">&quot;geojson&quot;</span><span class="p">,</span>
+    <span class="s2">"my-geojson.geojson"</span><span class="p">,</span>
+    <span class="n">geojson_type</span> <span class="o">=</span> <span class="s2">"geojson"</span><span class="p">,</span>
     <span class="n">save_locally</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="p">)</span>
 
 <span class="n">utils</span><span class="o">.</span><span class="n">geojson_gcs_export</span><span class="p">(</span>
     <span class="n">gdf</span><span class="p">,</span>
     <span class="n">GCS_FOLDER</span><span class="p">,</span>
-    <span class="s2">&quot;my-geojson.geojson&quot;</span><span class="p">,</span>
-    <span class="n">geojson_type</span> <span class="o">=</span> <span class="s2">&quot;geojson&quot;</span><span class="p">,</span>
+    <span class="s2">"my-geojson.geojson"</span><span class="p">,</span>
+    <span class="n">geojson_type</span> <span class="o">=</span> <span class="s2">"geojson"</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -696,7 +759,7 @@
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#table-of-contents">Table of Contents</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#storing-new-data-screencast">Storing New Data - Screencast</a></li>
@@ -763,8 +826,8 @@ By Cal-ITP
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
 
   <footer class="bd-footer">
   </footer>

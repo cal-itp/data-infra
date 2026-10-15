@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
@@ -40,10 +40,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1d5f98c3" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -61,6 +61,12 @@
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
                 gtag('js', new Date());
                 gtag('config', 'G-SZB618VNBZ');
             </script>
@@ -70,6 +76,12 @@
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
                 gtag('js', new Date());
                 gtag('config', 'G-SZB618VNBZ');
             </script>
@@ -77,6 +89,7 @@
     <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'analytics_new_analysts/06-spatial-analysis-intro';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Working with Geospatial Data: Intermediate" href="07-spatial-analysis-intermediate.html" />
@@ -84,20 +97,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -123,7 +142,51 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -468,7 +531,7 @@
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#merge-tabular-and-geospatial-data-for-spatial-analysis">Merge Tabular and Geospatial Data for Spatial Analysis</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attach-geographic-characteristics-to-all-points-or-lines-that-fall-within-a-boundary">Attach Geographic Characteristics to All Points or Lines That Fall Within a Boundary</a></li>
@@ -554,7 +617,7 @@
 </table>
 </div>
 <p>We could merge these two dfs using the District and CD columns. If our left df is a geodataframe (gdf), then our merged df will also be a gdf.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">merge</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">left_on</span> <span class="o">=</span> <span class="s1">&#39;District&#39;</span><span class="p">,</span> <span class="n">right_on</span> <span class="o">=</span> <span class="s1">&#39;CD&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">merge</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">gdf</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">left_on</span> <span class="o">=</span> <span class="s1">'District'</span><span class="p">,</span> <span class="n">right_on</span> <span class="o">=</span> <span class="s1">'CD'</span><span class="p">)</span>
 <span class="n">merge</span>
 </pre></div>
 </div>
@@ -594,13 +657,13 @@
 <span id="id1"></span><h2>Attach Geographic Characteristics to All Points or Lines That Fall Within a Boundary<a class="headerlink" href="#attach-geographic-characteristics-to-all-points-or-lines-that-fall-within-a-boundary" title="Link to this heading">#</a></h2>
 <p>Sometimes with a point shapefile (list of lat/lon points), we want to count how many points fall within the boundary. Unlike the previous example, these points aren’t attached with Council District information, so we need to generate that ourselves.</p>
 <p>The ArcGIS equivalent of this is a <strong>spatial join</strong> between the point and polygon shapefiles, then <strong>dissolving</strong> to calculate summary statistics.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">locations</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;../folder/paunch_burger_locations.geojson&#39;</span><span class="p">)</span>
-<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;../folder/council_boundaries.geojson&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">locations</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">'../folder/paunch_burger_locations.geojson'</span><span class="p">)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">'../folder/council_boundaries.geojson'</span><span class="p">)</span>
 
 <span class="c1"># Make sure both our gdfs are projected to the same coordinate reference system</span>
 <span class="c1"># (EPSG:4326 = WGS84)</span>
-<span class="n">locations</span> <span class="o">=</span> <span class="n">locations</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s1">&#39;EPSG:4326&#39;</span><span class="p">)</span>
-<span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s1">&#39;EPSG:4326&#39;</span><span class="p">)</span>
+<span class="n">locations</span> <span class="o">=</span> <span class="n">locations</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s1">'EPSG:4326'</span><span class="p">)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s1">'EPSG:4326'</span><span class="p">)</span>
 
 </pre></div>
 </div>
@@ -673,11 +736,11 @@
 </table>
 </div>
 <p>A spatial join finds the Council District the location falls within and attaches that information.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">join</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">sjoin</span><span class="p">(</span><span class="n">locations</span><span class="p">,</span> <span class="n">gdf</span><span class="p">,</span> <span class="n">how</span> <span class="o">=</span> <span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">predicate</span> <span class="o">=</span> <span class="s1">&#39;intersects&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">join</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">sjoin</span><span class="p">(</span><span class="n">locations</span><span class="p">,</span> <span class="n">gdf</span><span class="p">,</span> <span class="n">how</span> <span class="o">=</span> <span class="s1">'inner'</span><span class="p">,</span> <span class="n">predicate</span> <span class="o">=</span> <span class="s1">'intersects'</span><span class="p">)</span>
 
-<span class="c1"># how = &#39;inner&#39; means that we only want to keep observations that matched,</span>
+<span class="c1"># how = 'inner' means that we only want to keep observations that matched,</span>
 <span class="c1"># i.e locations that were within the council district boundaries.</span>
-<span class="c1"># predicate = &#39;intersects&#39; means that we are joining based on whether or not the location</span>
+<span class="c1"># predicate = 'intersects' means that we are joining based on whether or not the location</span>
 <span class="c1"># intersects with the council district.</span>
 </pre></div>
 </div>
@@ -737,17 +800,17 @@
 <p>We want to count the number of Paunch Burger locations and their total sales within each District.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
 <span class="n">summary</span> <span class="o">=</span> <span class="n">join</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span>
-    <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;District&#39;</span><span class="p">],</span>
-    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Store&#39;</span><span class="p">,</span> <span class="s1">&#39;Sales_millions&#39;</span><span class="p">],</span>
-    <span class="n">aggfunc</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Store&#39;</span><span class="p">:</span> <span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="s1">&#39;Sales_millions&#39;</span><span class="p">:</span> <span class="s1">&#39;sum&#39;</span><span class="p">}</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'District'</span><span class="p">],</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'Store'</span><span class="p">,</span> <span class="s1">'Sales_millions'</span><span class="p">],</span>
+    <span class="n">aggfunc</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'Store'</span><span class="p">:</span> <span class="s1">'count'</span><span class="p">,</span> <span class="s1">'Sales_millions'</span><span class="p">:</span> <span class="s1">'sum'</span><span class="p">}</span>
 <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
 
 <span class="n">OR</span>
 
-<span class="n">summary</span> <span class="o">=</span> <span class="p">(</span><span class="n">join</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;District&#39;</span><span class="p">])</span>
+<span class="n">summary</span> <span class="o">=</span> <span class="p">(</span><span class="n">join</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">'District'</span><span class="p">])</span>
             <span class="o">.</span><span class="n">agg</span><span class="p">({</span>
-                <span class="s1">&#39;Store&#39;</span><span class="p">:</span> <span class="s1">&#39;count&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;Sales_millions&#39;</span><span class="p">:</span> <span class="s1">&#39;sum&#39;</span><span class="p">}</span>
+                <span class="s1">'Store'</span><span class="p">:</span> <span class="s1">'count'</span><span class="p">,</span>
+                <span class="s1">'Sales_millions'</span><span class="p">:</span> <span class="s1">'sum'</span><span class="p">}</span>
             <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
           <span class="p">)</span>
 
@@ -755,8 +818,8 @@
 <span class="n">summary</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
     <span class="n">gdf</span><span class="p">,</span>
     <span class="n">summary</span><span class="p">,</span>
-    <span class="n">on</span> <span class="o">=</span> <span class="s1">&#39;District&#39;</span><span class="p">,</span>
-    <span class="n">how</span> <span class="o">=</span> <span class="s1">&#39;inner&#39;</span>
+    <span class="n">on</span> <span class="o">=</span> <span class="s1">'District'</span><span class="p">,</span>
+    <span class="n">how</span> <span class="o">=</span> <span class="s1">'inner'</span>
 <span class="p">)</span>
 
 <span class="n">summary</span>
@@ -790,11 +853,11 @@
 </table>
 </div>
 <p>By keeping the <code class="docutils literal notranslate"><span class="pre">Geometry</span></code> column, we’re able to export this as a GeoJSON or shapefile.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">summary</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">driver</span> <span class="o">=</span> <span class="s1">&#39;GeoJSON&#39;</span><span class="p">,</span>
-    <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;../folder/pawnee_sales_by_district.geojson&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">summary</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">driver</span> <span class="o">=</span> <span class="s1">'GeoJSON'</span><span class="p">,</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="s1">'../folder/pawnee_sales_by_district.geojson'</span><span class="p">)</span>
 
-<span class="n">summary</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">driver</span> <span class="o">=</span> <span class="s1">&#39;ESRI Shapefile&#39;</span><span class="p">,</span>
-    <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;../folder/pawnee_sales_by_district.shp&#39;</span><span class="p">)</span>
+<span class="n">summary</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">driver</span> <span class="o">=</span> <span class="s1">'ESRI Shapefile'</span><span class="p">,</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="s1">'../folder/pawnee_sales_by_district.shp'</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -876,8 +939,8 @@
 </div>
 <p>First, prepare our point gdf and change it to the right projection. Pawnee is in Indiana, so we’ll use EPSG:2965.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use NAD83/Indiana East projection (units are in feet)</span>
-<span class="n">homes</span> <span class="o">=</span> <span class="n">homes</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s1">&#39;EPSG:2965&#39;</span><span class="p">)</span>
-<span class="n">locations</span> <span class="o">=</span> <span class="n">locations</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s1">&#39;EPSG:2965&#39;</span><span class="p">)</span>
+<span class="n">homes</span> <span class="o">=</span> <span class="n">homes</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s1">'EPSG:2965'</span><span class="p">)</span>
+<span class="n">locations</span> <span class="o">=</span> <span class="n">locations</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s1">'EPSG:2965'</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Next, draw a 2 mile buffer around <code class="docutils literal notranslate"><span class="pre">homes</span></code>.</p>
@@ -887,7 +950,7 @@
 <span class="c1"># Overwrite the existing geometry and change it from point to polygon</span>
 <span class="n">miles_to_feet</span> <span class="o">=</span> <span class="mi">5280</span>
 <span class="n">two_miles</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">miles_to_feet</span>
-<span class="n">homes_buffer</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">homes</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="n">two_miles</span><span class="p">)</span>
+<span class="n">homes_buffer</span><span class="p">[</span><span class="s1">'geometry'</span><span class="p">]</span> <span class="o">=</span> <span class="n">homes</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="n">two_miles</span><span class="p">)</span>
 </pre></div>
 </div>
 <section id="select-points-within-a-buffer">
@@ -896,8 +959,8 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sjoin</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">sjoin</span><span class="p">(</span>
     <span class="n">locations</span><span class="p">,</span>
     <span class="n">homes_buffer</span><span class="p">,</span>
-    <span class="n">how</span> <span class="o">=</span> <span class="s1">&#39;inner&#39;</span><span class="p">,</span>
-    <span class="n">predicate</span> <span class="o">=</span> <span class="s1">&#39;intersects&#39;</span>
+    <span class="n">how</span> <span class="o">=</span> <span class="s1">'inner'</span><span class="p">,</span>
+    <span class="n">predicate</span> <span class="o">=</span> <span class="s1">'intersects'</span>
 <span class="p">)</span>
 
 <span class="n">sjoin</span>
@@ -941,12 +1004,12 @@
 </table>
 </div>
 <p>Count the number of Paunch Burger locations for each friend.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">count</span> <span class="o">=</span> <span class="n">sjoin</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="s1">&#39;Name&#39;</span><span class="p">,</span>
-    <span class="n">values</span> <span class="o">=</span> <span class="s1">&#39;Store&#39;</span><span class="p">,</span> <span class="n">aggfunc</span> <span class="o">=</span> <span class="s1">&#39;count&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">count</span> <span class="o">=</span> <span class="n">sjoin</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">index</span> <span class="o">=</span> <span class="s1">'Name'</span><span class="p">,</span>
+    <span class="n">values</span> <span class="o">=</span> <span class="s1">'Store'</span><span class="p">,</span> <span class="n">aggfunc</span> <span class="o">=</span> <span class="s1">'count'</span><span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
 
 <span class="n">OR</span>
 
-<span class="n">count</span> <span class="o">=</span> <span class="n">sjoin</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;Name&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">&#39;Store&#39;</span><span class="p">:</span><span class="s1">&#39;count&#39;</span><span class="p">})</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
+<span class="n">count</span> <span class="o">=</span> <span class="n">sjoin</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'Name'</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">'Store'</span><span class="p">:</span><span class="s1">'count'</span><span class="p">})</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>The final <code class="docutils literal notranslate"><span class="pre">count</span></code>:</p>
@@ -1036,7 +1099,7 @@
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#merge-tabular-and-geospatial-data-for-spatial-analysis">Merge Tabular and Geospatial Data for Spatial Analysis</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attach-geographic-characteristics-to-all-points-or-lines-that-fall-within-a-boundary">Attach Geographic Characteristics to All Points or Lines That Fall Within a Boundary</a></li>
@@ -1093,8 +1156,8 @@ By Cal-ITP
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
 
   <footer class="bd-footer">
   </footer>

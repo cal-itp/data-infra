@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
@@ -40,10 +40,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1d5f98c3" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -61,6 +61,12 @@
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
                 gtag('js', new Date());
                 gtag('config', 'G-SZB618VNBZ');
             </script>
@@ -70,6 +76,12 @@
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
                 gtag('js', new Date());
                 gtag('config', 'G-SZB618VNBZ');
             </script>
@@ -77,6 +89,7 @@
     <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'analytics_new_analysts/02-data-analysis-intermediate';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Data Management" href="03-data-management.html" />
@@ -84,20 +97,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -123,7 +142,51 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -468,7 +531,7 @@
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-new-column-using-a-dictionary-to-map-the-values">Create a New Column Using a Dictionary to Map the Values</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#write-a-function">Write a Function</a></li>
@@ -535,57 +598,57 @@
 <p><a class="reference internal" href="01-data-analysis-intro.html#pandas-intro"><span class="std std-ref">Quick refresher on functions</span></a></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a function called state_abbrev.</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">state_abbrev</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
-    <span class="c1"># The find function returns the index of where &#39;Indiana&#39; is found in</span>
+    <span class="c1"># The find function returns the index of where 'Indiana' is found in</span>
     <span class="c1">#the column. If it cannot find it, it returns -1.</span>
-    <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">Birthplace</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;Indiana&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;IN&#39;</span>
-    <span class="k">elif</span> <span class="n">row</span><span class="o">.</span><span class="n">Birthplace</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;South Carolina&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;SC&#39;</span>
+    <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">Birthplace</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">'Indiana'</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">'IN'</span>
+    <span class="k">elif</span> <span class="n">row</span><span class="o">.</span><span class="n">Birthplace</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">'South Carolina'</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">'SC'</span>
     <span class="c1"># For an exact match, we would write it this way.</span>
-    <span class="k">elif</span> <span class="n">row</span><span class="o">.</span><span class="n">Birthplace</span> <span class="o">==</span> <span class="s1">&#39;Michigan&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;MI&#39;</span>
-    <span class="k">elif</span> <span class="n">row</span><span class="o">.</span><span class="n">Birthplace</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;Minnesota&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;MI&#39;</span>
+    <span class="k">elif</span> <span class="n">row</span><span class="o">.</span><span class="n">Birthplace</span> <span class="o">==</span> <span class="s1">'Michigan'</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">'MI'</span>
+    <span class="k">elif</span> <span class="n">row</span><span class="o">.</span><span class="n">Birthplace</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">'Minnesota'</span><span class="p">)</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">'MI'</span>
 
 <span class="c1"># Apply this function and create the State column.</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;State&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">state_abbrev</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'State'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">state_abbrev</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
 <section id="use-a-dictionary-to-map-the-values">
 <h3>Use a Dictionary to Map the Values<a class="headerlink" href="#use-a-dictionary-to-map-the-values" title="Link to this heading">#</a></h3>
 <p>But, writing a function could take up a lot of space, especially with all the if-elif-else statements. Alternatively, a dictionary would also work. We could use a dictionary and map the four different city-state values into the state abbreviation.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">state_abbrev1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Eagleton, Indiana&#39;</span><span class="p">:</span> <span class="s1">&#39;IN&#39;</span><span class="p">,</span> <span class="s1">&#39;South Carolina&#39;</span><span class="p">:</span> <span class="s1">&#39;SC&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;Michigan&#39;</span><span class="p">:</span> <span class="s1">&#39;MI&#39;</span><span class="p">,</span> <span class="s1">&#39;Partridge, Minnesota&#39;</span><span class="p">:</span> <span class="s1">&#39;MN&#39;</span><span class="p">}</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">state_abbrev1</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'Eagleton, Indiana'</span><span class="p">:</span> <span class="s1">'IN'</span><span class="p">,</span> <span class="s1">'South Carolina'</span><span class="p">:</span> <span class="s1">'SC'</span><span class="p">,</span>
+                <span class="s1">'Michigan'</span><span class="p">:</span> <span class="s1">'MI'</span><span class="p">,</span> <span class="s1">'Partridge, Minnesota'</span><span class="p">:</span> <span class="s1">'MN'</span><span class="p">}</span>
 
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;State&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">Birthplace</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">state_abbrev1</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'State'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">Birthplace</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">state_abbrev1</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>But, if we wanted to avoid writing out all the possible combinations, we would first extract the <em>state</em> portion of the city-state text. Then we could map the state’s full name with its abbreviation.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The split function splits at the comma and expand the columns.</span>
-<span class="c1"># Everything is stored in a new df called &#39;fullname&#39;.</span>
-<span class="n">fullname</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;Birthplace&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">,</span> <span class="n">expand</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="c1"># Everything is stored in a new df called 'fullname'.</span>
+<span class="n">fullname</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'Birthplace'</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">,</span> <span class="n">expand</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Add the City column into our df by extracting the first column (0) from fullname.</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;City&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fullname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'City'</span><span class="p">]</span> <span class="o">=</span> <span class="n">fullname</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="c1"># Add the State column by extracting the second column (1) from fullname.</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;State_full&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fullname</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'State_full'</span><span class="p">]</span> <span class="o">=</span> <span class="n">fullname</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
 
-<span class="c1"># Tom Haverford&#39;s birthplace is South Carolina. We don&#39;t have city information.</span>
+<span class="c1"># Tom Haverford's birthplace is South Carolina. We don't have city information.</span>
 <span class="c1"># So, the City column would be incorrectly filled in with South Carolina, and</span>
 <span class="c1"># the State would say None.</span>
 <span class="c1"># Fix these so the Nones actually display the state information correctly.</span>
 
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;State_full&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">City</span> <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">State</span> <span class="o">==</span> <span class="kc">None</span> <span class="k">else</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'State_full'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="n">row</span><span class="o">.</span><span class="n">City</span> <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">State</span> <span class="o">==</span> <span class="kc">None</span> <span class="k">else</span>
                     <span class="n">row</span><span class="o">.</span><span class="n">State_full</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># Now, use a dictionary to map the values.</span>
-<span class="n">state_abbrev2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;Indiana&#39;</span><span class="p">:</span> <span class="s1">&#39;IN&#39;</span><span class="p">,</span> <span class="s1">&#39;South Carolina&#39;</span><span class="p">:</span> <span class="s1">&#39;SC&#39;</span><span class="p">,</span>
-                <span class="s1">&#39;Michigan&#39;</span><span class="p">:</span> <span class="s1">&#39;MI&#39;</span><span class="p">,</span> <span class="s1">&#39;Minnesota&#39;</span><span class="p">:</span> <span class="s1">&#39;MN&#39;</span><span class="p">}</span>
+<span class="n">state_abbrev2</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'Indiana'</span><span class="p">:</span> <span class="s1">'IN'</span><span class="p">,</span> <span class="s1">'South Carolina'</span><span class="p">:</span> <span class="s1">'SC'</span><span class="p">,</span>
+                <span class="s1">'Michigan'</span><span class="p">:</span> <span class="s1">'MI'</span><span class="p">,</span> <span class="s1">'Minnesota'</span><span class="p">:</span> <span class="s1">'MN'</span><span class="p">}</span>
 
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;State&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">Birthplace</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">state_abbrev2</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'State'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">Birthplace</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">state_abbrev2</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>All 3 methods would give us this <code class="docutils literal notranslate"><span class="pre">df</span></code>:</p>
@@ -620,7 +683,7 @@
 <section id="loop-over-columns-with-a-dictionary">
 <span id="id2"></span><h3>Loop over Columns with a Dictionary<a class="headerlink" href="#loop-over-columns-with-a-dictionary" title="Link to this heading">#</a></h3>
 <p>If there are operations or data transformations that need to be performed on multiple columns, the best way to do that is with a loop.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;colA&#39;</span><span class="p">,</span> <span class="s1">&#39;colB&#39;</span><span class="p">,</span> <span class="s1">&#39;colC&#39;</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'colA'</span><span class="p">,</span> <span class="s1">'colB'</span><span class="p">,</span> <span class="s1">'colC'</span><span class="p">]</span>
 
 <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
     <span class="c1"># Fill in missing values for all columns with zeros</span>
@@ -705,8 +768,8 @@
 </table>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save our existing dfs into a dictionary. The business df is named</span>
-<span class="c1"># &#39;pawnee&quot;; the tom df is named &#39;tom&#39;.</span>
-<span class="n">dfs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;pawnee&#39;</span><span class="p">:</span> <span class="n">business</span><span class="p">,</span> <span class="s1">&#39;tom&#39;</span><span class="p">:</span> <span class="n">tom</span><span class="p">}</span>
+<span class="c1"># 'pawnee"; the tom df is named 'tom'.</span>
+<span class="n">dfs</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'pawnee'</span><span class="p">:</span> <span class="n">business</span><span class="p">,</span> <span class="s1">'tom'</span><span class="p">:</span> <span class="n">tom</span><span class="p">}</span>
 
 <span class="c1"># Create an empty dictionary called summary_dfs to hold the results</span>
 <span class="n">summary_dfs</span> <span class="o">=</span> <span class="p">{}</span>
@@ -718,15 +781,15 @@
 <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">dfs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
     <span class="c1"># Use f string to define a variable join_df (result of our spatial join)</span>
     <span class="c1">## join_{key} would be join_pawnee or join_tom in the loop</span>
-    <span class="n">join_df</span> <span class="o">=</span> <span class="s2">&quot;join_</span><span class="si">{key}</span><span class="s2">&quot;</span>
+    <span class="n">join_df</span> <span class="o">=</span> <span class="s2">"join_</span><span class="si">{key}</span><span class="s2">"</span>
 
     <span class="c1"># Spatial join</span>
-    <span class="n">join_df</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">sjoin</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">council_district</span><span class="p">,</span> <span class="n">how</span> <span class="o">=</span> <span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">op</span> <span class="o">=</span> <span class="s1">&#39;intersects&#39;</span><span class="p">)</span>
+    <span class="n">join_df</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">sjoin</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">council_district</span><span class="p">,</span> <span class="n">how</span> <span class="o">=</span> <span class="s1">'inner'</span><span class="p">,</span> <span class="n">op</span> <span class="o">=</span> <span class="s1">'intersects'</span><span class="p">)</span>
 
     <span class="c1"># Calculate summary stats with groupby, agg, then save it into summary_dfs,</span>
-    <span class="c1"># naming it &#39;pawnee&#39; or &#39;tom&#39;.</span>
-    <span class="n">summary_dfs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">join</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;ID&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
-        <span class="p">{</span><span class="s1">&#39;Business&#39;</span><span class="p">:</span> <span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="s1">&#39;Sales_millions&#39;</span><span class="p">:</span> <span class="s1">&#39;sum&#39;</span><span class="p">})</span>
+    <span class="c1"># naming it 'pawnee' or 'tom'.</span>
+    <span class="n">summary_dfs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">join</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'ID'</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+        <span class="p">{</span><span class="s1">'Business'</span><span class="p">:</span> <span class="s1">'count'</span><span class="p">,</span> <span class="s1">'Sales_millions'</span><span class="p">:</span> <span class="s1">'sum'</span><span class="p">})</span>
 </pre></div>
 </div>
 <p>Now, our <code class="docutils literal notranslate"><span class="pre">summary_dfs</span></code> dictionary contains 2 items, which are the 2 dataframes with everything aggregated.</p>
@@ -736,8 +799,8 @@
     <span class="n">display</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
 <span class="c1"># To access the df</span>
-<span class="n">summary_dfs</span><span class="p">[</span><span class="s2">&quot;pawnee&quot;</span><span class="p">]</span>
-<span class="n">summary_dfs</span><span class="p">[</span><span class="s2">&quot;tom&quot;</span><span class="p">]</span>
+<span class="n">summary_dfs</span><span class="p">[</span><span class="s2">"pawnee"</span><span class="p">]</span>
+<span class="n">summary_dfs</span><span class="p">[</span><span class="s2">"tom"</span><span class="p">]</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">join_tom</span></code>: result of spatial join between tom and council_district</p>
@@ -866,7 +929,7 @@
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#create-a-new-column-using-a-dictionary-to-map-the-values">Create a New Column Using a Dictionary to Map the Values</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#write-a-function">Write a Function</a></li>
@@ -923,8 +986,8 @@ By Cal-ITP
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
 
   <footer class="bd-footer">
   </footer>

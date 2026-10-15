@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
@@ -40,10 +40,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1d5f98c3" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -61,6 +61,12 @@
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
                 gtag('js', new Date());
                 gtag('config', 'G-SZB618VNBZ');
             </script>
@@ -70,6 +76,12 @@
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
                 gtag('js', new Date());
                 gtag('config', 'G-SZB618VNBZ');
             </script>
@@ -77,6 +89,7 @@
     <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'analytics_new_analysts/01-data-analysis-intro';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Data Analysis: Intermediate" href="02-data-analysis-intermediate.html" />
@@ -84,20 +97,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -123,7 +142,51 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -468,7 +531,7 @@
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-and-export-data-in-python-for-data-analysis">Import and Export Data in Python for Data Analysis</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-files"><strong>Local files</strong></a></li>
@@ -521,9 +584,9 @@
 <section id="local-files">
 <h3><strong>Local files</strong><a class="headerlink" href="#local-files" title="Link to this heading">#</a></h3>
 <p>We import a tabular dataframe <code class="docutils literal notranslate"><span class="pre">my_csv.csv</span></code> and an Excel spreadsheet <code class="docutils literal notranslate"><span class="pre">my_excel.xlsx</span></code>.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;./folder/my_csv.csv&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'./folder/my_csv.csv'</span><span class="p">)</span>
 
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;./folder/my_excel.xlsx&#39;</span><span class="p">,</span> <span class="n">sheet_name</span> <span class="o">=</span> <span class="s1">&#39;Sheet1&#39;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">'./folder/my_excel.xlsx'</span><span class="p">,</span> <span class="n">sheet_name</span> <span class="o">=</span> <span class="s1">'Sheet1'</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -531,10 +594,10 @@
 <h3><strong>GCS</strong><a class="headerlink" href="#gcs" title="Link to this heading">#</a></h3>
 <p>The data we use outside of the warehouse can be stored in GCS buckets.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read from GCS</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket-name/df_csv.csv&#39;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'gs://calitp-analytics-data/data-analyses/bucket-name/df_csv.csv'</span><span class="p">)</span>
 
 <span class="c1">#Write to GCS</span>
-<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket-name/df_csv.csv&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">'gs://calitp-analytics-data/data-analyses/bucket-name/df_csv.csv'</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Refer to the <a class="reference internal" href="03-data-management.html#data-management-page"><span class="std std-ref">Data Management best practices</span></a> and <a class="reference internal" href="06-spatial-analysis-intro.html#geo-intro"><span class="std std-ref">Basics of Working with Geospatial Data</span></a> for additional information on importing various file types.</p>
@@ -648,9 +711,9 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">merge1</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
     <span class="n">paunch_locations</span><span class="p">,</span>
     <span class="n">council_population</span><span class="p">,</span>
-    <span class="n">on</span> <span class="o">=</span> <span class="s1">&#39;CD&#39;</span><span class="p">,</span>
-    <span class="n">how</span> <span class="o">=</span> <span class="s1">&#39;inner&#39;</span><span class="p">,</span>
-    <span class="n">validate</span> <span class="o">=</span> <span class="s1">&#39;m:1&#39;</span>
+    <span class="n">on</span> <span class="o">=</span> <span class="s1">'CD'</span><span class="p">,</span>
+    <span class="n">how</span> <span class="o">=</span> <span class="s1">'inner'</span><span class="p">,</span>
+    <span class="n">validate</span> <span class="o">=</span> <span class="s1">'m:1'</span>
 <span class="p">)</span>
 
 <span class="c1"># m:1 many-to-1 merge means that CD appears multiple times in</span>
@@ -661,10 +724,10 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">merge2</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
     <span class="n">merge1</span><span class="p">,</span>
     <span class="n">council_boundaries</span><span class="p">,</span>
-    <span class="n">left_on</span> <span class="o">=</span> <span class="s1">&#39;CD&#39;</span><span class="p">,</span>
-    <span class="n">right_on</span> <span class="o">=</span> <span class="s1">&#39;District&#39;</span><span class="p">,</span>
-    <span class="n">how</span> <span class="o">=</span> <span class="s1">&#39;left&#39;</span><span class="p">,</span>
-    <span class="n">validate</span> <span class="o">=</span> <span class="s1">&#39;m:1&#39;</span>
+    <span class="n">left_on</span> <span class="o">=</span> <span class="s1">'CD'</span><span class="p">,</span>
+    <span class="n">right_on</span> <span class="o">=</span> <span class="s1">'District'</span><span class="p">,</span>
+    <span class="n">how</span> <span class="o">=</span> <span class="s1">'left'</span><span class="p">,</span>
+    <span class="n">validate</span> <span class="o">=</span> <span class="s1">'m:1'</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -769,24 +832,24 @@
 </section>
 <section id="if-else-statements">
 <h3><strong>If-Else Statements</strong><a class="headerlink" href="#if-else-statements" title="Link to this heading">#</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create column called duration. If Songs &gt; 10, duration is &#39;long&#39;.</span>
-<span class="c1"># Otherwise, duration is &#39;short&#39;.</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;duration&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="s1">&#39;long&#39;</span> <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">Songs</span> <span class="o">&gt;</span> <span class="mi">10</span>
-                <span class="k">else</span> <span class="s1">&#39;short&#39;</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create column called duration. If Songs &gt; 10, duration is 'long'.</span>
+<span class="c1"># Otherwise, duration is 'short'.</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'duration'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="s1">'long'</span> <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">Songs</span> <span class="o">&gt;</span> <span class="mi">10</span>
+                <span class="k">else</span> <span class="s1">'short'</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 
-<span class="c1"># Create column called famous. If Band is &#39;Mouse Rat&#39;, famous is 1,</span>
+<span class="c1"># Create column called famous. If Band is 'Mouse Rat', famous is 1,</span>
 <span class="c1"># otherwise 0.</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;famous&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">Band</span> <span class="o">==</span> <span class="s1">&#39;Mouse Rat&#39;</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'famous'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">Band</span> <span class="o">==</span> <span class="s1">'Mouse Rat'</span>
                 <span class="k">else</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 
 <span class="c1"># An equivalent full function would be:</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">tag_famous</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">Band</span> <span class="o">==</span> <span class="s1">&#39;Mouse Rat&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">Band</span> <span class="o">==</span> <span class="s1">'Mouse Rat'</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">1</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">0</span>
 
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;famous&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">tag_famous</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'famous'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">tag_famous</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 
 <span class="n">df</span>
 </pre></div>
@@ -830,8 +893,8 @@
 <span class="c1"># [1] means we want to extract the second word</span>
 <span class="c1"># [0:2] means we want to start at the first character</span>
 <span class="c1"># and stop at (but not include) the 3rd character</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;word2_start&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span>
-                    <span class="n">x</span><span class="o">.</span><span class="n">Band</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'word2_start'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span>
+                    <span class="n">x</span><span class="o">.</span><span class="n">Band</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">" "</span><span class="p">)[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">],</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">df</span>
 </pre></div>
 </div>
@@ -868,15 +931,15 @@
 <p>You should use a full function when a function is too complicated to be a lambda function. These functions are defined by a name and are called upon to operate on the rows of a dataframe. You can also write more complex functions that bundle together all the steps (including nesting more functions) you want to execute over the dataframe.</p>
 <p><code class="docutils literal notranslate"><span class="pre">df.apply</span></code> is one common usage of a function.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">years_active</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">Band</span> <span class="o">==</span> <span class="s1">&#39;Mouse Rat&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;2009-2014&#39;</span>
-    <span class="k">elif</span> <span class="n">row</span><span class="o">.</span><span class="n">Band</span> <span class="o">==</span> <span class="s1">&#39;Scarecrow Boat&#39;</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;2009&#39;</span>
-    <span class="k">elif</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">Band</span> <span class="o">==</span> <span class="s1">&#39;Jet Black Pope&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">Band</span> <span class="o">==</span>
-    <span class="s1">&#39;Nothing Rhymes with Orange&#39;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="s1">&#39;2008&#39;</span>
+    <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">Band</span> <span class="o">==</span> <span class="s1">'Mouse Rat'</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">'2009-2014'</span>
+    <span class="k">elif</span> <span class="n">row</span><span class="o">.</span><span class="n">Band</span> <span class="o">==</span> <span class="s1">'Scarecrow Boat'</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s1">'2009'</span>
+    <span class="k">elif</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">Band</span> <span class="o">==</span> <span class="s1">'Jet Black Pope'</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">Band</span> <span class="o">==</span>
+    <span class="s1">'Nothing Rhymes with Orange'</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s1">'2008'</span>
 
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;Active&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">years_active</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'Active'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">years_active</span><span class="p">,</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">df</span>
 </pre></div>
 </div>
@@ -915,18 +978,18 @@
 <p><b>Method #1</b>: Write a function using if-else statement and apply it using a lambda function.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># The function is called elected_year, and it operates on every row.</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">elected_year</span><span class="p">(</span><span class="n">row</span><span class="p">):</span>
-    <span class="c1"># For each row, if Council_Member says &#39;Leslie Knope&#39;, then return 2012</span>
+    <span class="c1"># For each row, if Council_Member says 'Leslie Knope', then return 2012</span>
     <span class="c1"># as the value.</span>
-    <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">Council_Member</span> <span class="o">==</span> <span class="s1">&#39;Leslie Knope&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">row</span><span class="o">.</span><span class="n">Council_Member</span> <span class="o">==</span> <span class="s1">'Leslie Knope'</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2012</span>
-    <span class="k">elif</span> <span class="n">row</span><span class="o">.</span><span class="n">Council_Member</span> <span class="o">==</span> <span class="s1">&#39;Jeremy Jamm&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">row</span><span class="o">.</span><span class="n">Council_Member</span> <span class="o">==</span> <span class="s1">'Jeremy Jamm'</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2008</span>
-    <span class="k">elif</span> <span class="n">row</span><span class="o">.</span><span class="n">Council_Member</span> <span class="o">==</span> <span class="s1">&#39;Douglass Howser&#39;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">row</span><span class="o">.</span><span class="n">Council_Member</span> <span class="o">==</span> <span class="s1">'Douglass Howser'</span><span class="p">:</span>
         <span class="k">return</span> <span class="mi">2006</span>
 
 <span class="c1"># Use a lambda function to apply the elected_year function to all rows in the df.</span>
-<span class="c1"># Don&#39;t forget axis = 1 (apply function to all rows)!</span>
-<span class="n">council_population</span><span class="p">[</span><span class="s1">&#39;Elected&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">council_population</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span>
+<span class="c1"># Don't forget axis = 1 (apply function to all rows)!</span>
+<span class="n">council_population</span><span class="p">[</span><span class="s1">'Elected'</span><span class="p">]</span> <span class="o">=</span> <span class="n">council_population</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">row</span><span class="p">:</span>
     <span class="n">elected_year</span><span class="p">(</span><span class="n">row</span><span class="p">),</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 
 <span class="n">council_population</span>
@@ -963,19 +1026,19 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create a list to store the new column</span>
 <span class="n">sales_group</span> <span class="o">=</span> <span class="p">[]</span>
 
-<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">paunch_locations</span><span class="p">[</span><span class="s1">&#39;Sales_millions&#39;</span><span class="p">]:</span>
+<span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">paunch_locations</span><span class="p">[</span><span class="s1">'Sales_millions'</span><span class="p">]:</span>
     <span class="c1"># If sales are more than $3M, but less than $5M, tag as moderate.</span>
     <span class="k">if</span> <span class="p">(</span><span class="n">row</span> <span class="o">&gt;=</span> <span class="mi">3</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">row</span> <span class="o">&lt;=</span> <span class="mi">5</span><span class="p">):</span>
-        <span class="n">sales_group</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;moderate&#39;</span><span class="p">)</span>
+        <span class="n">sales_group</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">'moderate'</span><span class="p">)</span>
     <span class="c1"># If sales are more than $5M, tag as high.</span>
     <span class="k">elif</span> <span class="n">row</span> <span class="o">&gt;=</span><span class="mi">5</span><span class="p">:</span>
-        <span class="n">sales_group</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;high&#39;</span><span class="p">)</span>
+        <span class="n">sales_group</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">'high'</span><span class="p">)</span>
     <span class="c1"># Anything else, aka, if sales are less than $3M, tag as low.</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">sales_group</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;low&#39;</span><span class="p">)</span>
+        <span class="n">sales_group</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">'low'</span><span class="p">)</span>
 
 
-<span class="n">paunch_locations</span><span class="p">[</span><span class="s1">&#39;sales_group&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sales_group</span>
+<span class="n">paunch_locations</span><span class="p">[</span><span class="s1">'sales_group'</span><span class="p">]</span> <span class="o">=</span> <span class="n">sales_group</span>
 
 <span class="n">paunch_locations</span>
 </pre></div>
@@ -1049,24 +1112,24 @@
 <p>One of the most common form of summary statistics is aggregating by groups. In Excel, it’s called a pivot table. In ArcGIS, it’s doing a dissolve and calculating summary statistics. There are two ways to do it in Python: <code class="docutils literal notranslate"><span class="pre">groupby</span></code> and <code class="docutils literal notranslate"><span class="pre">agg</span></code> or <code class="docutils literal notranslate"><span class="pre">pivot_table</span></code>.</p>
 <p>To answer the question of how many Paunch Burger locations there are per Council District and the sales generated per resident,</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Method #1: groupby and agg</span>
-<span class="n">pivot</span> <span class="o">=</span> <span class="p">(</span><span class="n">merge2</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">&#39;CD&#39;</span><span class="p">])</span>
-        <span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">&#39;Sales_millions&#39;</span><span class="p">:</span> <span class="s1">&#39;sum&#39;</span><span class="p">,</span>
-              <span class="s1">&#39;Store&#39;</span><span class="p">:</span> <span class="s1">&#39;count&#39;</span><span class="p">,</span>
-              <span class="s1">&#39;Population&#39;</span><span class="p">:</span> <span class="s1">&#39;mean&#39;</span><span class="p">}</span>
+<span class="n">pivot</span> <span class="o">=</span> <span class="p">(</span><span class="n">merge2</span><span class="o">.</span><span class="n">groupby</span><span class="p">([</span><span class="s1">'CD'</span><span class="p">])</span>
+        <span class="o">.</span><span class="n">agg</span><span class="p">({</span><span class="s1">'Sales_millions'</span><span class="p">:</span> <span class="s1">'sum'</span><span class="p">,</span>
+              <span class="s1">'Store'</span><span class="p">:</span> <span class="s1">'count'</span><span class="p">,</span>
+              <span class="s1">'Population'</span><span class="p">:</span> <span class="s1">'mean'</span><span class="p">}</span>
              <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
         <span class="p">)</span>
 
 <span class="c1"># Method #2: pivot table</span>
 <span class="n">pivot</span> <span class="o">=</span> <span class="n">merge2</span><span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span>
-        <span class="n">index</span><span class="o">=</span> <span class="p">[</span><span class="s1">&#39;CD&#39;</span><span class="p">],</span>
-        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Sales_millions&#39;</span><span class="p">,</span> <span class="s1">&#39;Store&#39;</span><span class="p">,</span> <span class="s1">&#39;Population&#39;</span><span class="p">],</span>
+        <span class="n">index</span><span class="o">=</span> <span class="p">[</span><span class="s1">'CD'</span><span class="p">],</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'Sales_millions'</span><span class="p">,</span> <span class="s1">'Store'</span><span class="p">,</span> <span class="s1">'Population'</span><span class="p">],</span>
         <span class="n">aggfunc</span><span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;Sales_millions&#39;</span><span class="p">:</span> <span class="s1">&#39;sum&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;Store&#39;</span><span class="p">:</span> <span class="s1">&#39;count&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;Population&#39;</span><span class="p">:</span> <span class="s1">&#39;mean&#39;</span><span class="p">}</span>
+            <span class="s1">'Sales_millions'</span><span class="p">:</span> <span class="s1">'sum'</span><span class="p">,</span>
+            <span class="s1">'Store'</span><span class="p">:</span> <span class="s1">'count'</span><span class="p">,</span>
+            <span class="s1">'Population'</span><span class="p">:</span> <span class="s1">'mean'</span><span class="p">}</span>
        <span class="p">)</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
 
-    <span class="c1"># to only find one type of summary statistic, use aggfunc = &#39;sum&#39;</span>
+    <span class="c1"># to only find one type of summary statistic, use aggfunc = 'sum'</span>
 
 <span class="c1"># reset_index() will compress the headers of the table, forcing them to appear</span>
 <span class="c1"># in 1 row rather than 2 separate rows</span>
@@ -1112,21 +1175,21 @@
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">xlsxwriter</span>
 
 <span class="c1"># initiate a writer</span>
-<span class="n">writer</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="s1">&#39;../outputs/filename.xlsx&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;xlsxwriter&#39;</span><span class="p">)</span>
+<span class="n">writer</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="s1">'../outputs/filename.xlsx'</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">'xlsxwriter'</span><span class="p">)</span>
 
-<span class="n">council_population</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span> <span class="o">=</span> <span class="s1">&#39;council_pop&#39;</span><span class="p">)</span>
-<span class="n">paunch_locations</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span> <span class="o">=</span> <span class="s1">&#39;paunch_locations&#39;</span><span class="p">)</span>
-<span class="n">merge2</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span> <span class="o">=</span> <span class="s1">&#39;merged_data&#39;</span><span class="p">)</span>
-<span class="n">pivot</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span> <span class="o">=</span> <span class="s1">&#39;pivot&#39;</span><span class="p">)</span>
+<span class="n">council_population</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span> <span class="o">=</span> <span class="s1">'council_pop'</span><span class="p">)</span>
+<span class="n">paunch_locations</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span> <span class="o">=</span> <span class="s1">'paunch_locations'</span><span class="p">)</span>
+<span class="n">merge2</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span> <span class="o">=</span> <span class="s1">'merged_data'</span><span class="p">)</span>
+<span class="n">pivot</span><span class="o">.</span><span class="n">to_excel</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">sheet_name</span> <span class="o">=</span> <span class="s1">'pivot'</span><span class="p">)</span>
 
 <span class="c1"># Close the Pandas Excel writer and output the Excel file.</span>
 <span class="n">writer</span><span class="o">.</span><span class="n">save</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>Geodataframes can be exported as a shapefile or GeoJSON to visualize in ArcGIS/QGIS.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">driver</span> <span class="o">=</span> <span class="s1">&#39;ESRI Shapefile&#39;</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;../folder/my_shapefile.shp&#39;</span> <span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">driver</span> <span class="o">=</span> <span class="s1">'ESRI Shapefile'</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="s1">'../folder/my_shapefile.shp'</span> <span class="p">)</span>
 
-<span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">driver</span> <span class="o">=</span> <span class="s1">&#39;GeoJSON&#39;</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="s1">&#39;../folder/my_geojson.geojson&#39;</span><span class="p">)</span>
+<span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="n">driver</span> <span class="o">=</span> <span class="s1">'GeoJSON'</span><span class="p">,</span> <span class="n">filename</span> <span class="o">=</span> <span class="s1">'../folder/my_geojson.geojson'</span><span class="p">)</span>
 </pre></div>
 </div>
 <br>
@@ -1198,7 +1261,7 @@
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#import-and-export-data-in-python-for-data-analysis">Import and Export Data in Python for Data Analysis</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-files"><strong>Local files</strong></a></li>
@@ -1264,8 +1327,8 @@ By Cal-ITP
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
 
   <footer class="bd-footer">
   </footer>

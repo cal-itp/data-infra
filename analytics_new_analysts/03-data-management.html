@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
@@ -40,10 +40,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1d5f98c3" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -61,6 +61,12 @@
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
                 gtag('js', new Date());
                 gtag('config', 'G-SZB618VNBZ');
             </script>
@@ -70,6 +76,12 @@
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
                 gtag('js', new Date());
                 gtag('config', 'G-SZB618VNBZ');
             </script>
@@ -77,6 +89,7 @@
     <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'analytics_new_analysts/03-data-management';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Working with Jupyter notebooks" href="04-notebooks.html" />
@@ -84,20 +97,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -123,7 +142,51 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -468,7 +531,7 @@
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-and-writing-data">Reading and Writing Data</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gcs">GCS</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-folders">Local Folders</a></li>
@@ -531,9 +594,9 @@
 <p>To write and read a pandas dataframe as a CSV to GCS:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket-name/my_csv.csv&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">'gs://calitp-analytics-data/data-analyses/bucket-name/my_csv.csv'</span><span class="p">)</span>
 
-<span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;gs://calitp-analytics-data/data-analyses/bucket-name/my_csv.csv&#39;</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'gs://calitp-analytics-data/data-analyses/bucket-name/my_csv.csv'</span><span class="p">)</span>
 
 </pre></div>
 </div>
@@ -543,9 +606,9 @@
 <p>Sometimes, it is easiest to simply use your local file system to store data.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">&#39;./my_csv.csv&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s1">'./my_csv.csv'</span><span class="p">)</span>
 
-<span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;./my_csv.csv&#39;</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'./my_csv.csv'</span><span class="p">)</span>
 
 </pre></div>
 </div>
@@ -565,7 +628,7 @@
 <p>Excel/XLSX is a binary file format that holds information about all the worksheets in a file, including both content and formatting. This means Excel files are capable of holding formatting, images, charts, formulas, etc. CSVs are more limited in this respect. A downside to Excel files is that they aren’t commonly readable by data analysis platforms. Every data analysis platform is capable of processing CSVs, but Excel files are a proprietary format that often require extensions in order to be processed. The ease of processing CSVs makes it easier to move data between different platforms, compared with Excel files. Excel files are best for sharing with other teams, except for geographic info (use Shapefiles or GeoJSON instead), if the Excel format is the only available and accessible format.</p>
 <p>You often might want to write multiple dataframes to a single excel files as sheets. Here’s a guide:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## init a writer</span>
-<span class="n">writer</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="s1">&#39;../outputs/filename.xlsx&#39;</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">&#39;xlsxwriter&#39;</span><span class="p">)</span>
+<span class="n">writer</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">ExcelWriter</span><span class="p">(</span><span class="s1">'../outputs/filename.xlsx'</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s1">'xlsxwriter'</span><span class="p">)</span>
 
 <span class="c1">## assume district_dfs is a dictionary of dataframes by council district</span>
 <span class="n">Write</span> <span class="n">each</span> <span class="n">dataframe</span> <span class="n">to</span> <span class="n">a</span> <span class="n">different</span> <span class="n">worksheet</span><span class="o">.</span>
@@ -584,8 +647,8 @@
 <p>Here is a way to use pandas to convert a local CSV file to a Parquet file:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;my_csv_name.csv&#39;</span><span class="p">)</span>
-<span class="n">df2</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s1">&#39;my_parquet_name.parquet&#39;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'my_csv_name.csv'</span><span class="p">)</span>
+<span class="n">df2</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s1">'my_parquet_name.parquet'</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -596,7 +659,7 @@
 <p>Feather is not be the ideal file format if you’re looking for long-term data storage. It is really only equipped for short-term data storage. The Feather files themselves are also smaller than CSVs and have a higher input/output speed, but they don’t necessarily have the same level of compression as Parquet files.</p>
 <p>Once you install the feather package with <code class="docutils literal notranslate"><span class="pre">$</span> <span class="pre">pip</span> <span class="pre">install</span> <span class="pre">feather-format</span></code> then you can easily write a dataframe.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">feather</span>
-<span class="n">path</span> <span class="o">=</span> <span class="s1">&#39;my_data.feather&#39;</span>
+<span class="n">path</span> <span class="o">=</span> <span class="s1">'my_data.feather'</span>
 <span class="n">feather</span><span class="o">.</span><span class="n">write_dataframe</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">path</span><span class="p">)</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">feather</span><span class="o">.</span><span class="n">read_dataframe</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 </pre></div>
@@ -607,7 +670,7 @@
 <p>GeoJSON is an <a class="reference external" href="https://geojson.org/">open-standard format</a> for encoding a variety of geographic data structures using JavaScript Object Notation (JSON).  A GeoJSON object may represent a region of space (a Geometry), a spatially bounded entity (a Feature), or a list of Features (a FeatureCollection). It supports geometry types: Point, LineString, Polygon, MultiPoint, MultiLineString, MultiPolygon, and GeometryCollection. JSON is light and easier to read than most geospatial formats, but GeoJSON files can quickly get too large to handle. The upside is that a GeoJSON file is often easier to work with than a Shapefile.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
 
-<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;https://data.cityofnewyork.us/api/geospatial/tqmj-j8zm?method=export&amp;format=GeoJSON&#39;</span><span class="p">)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">'https://data.cityofnewyork.us/api/geospatial/tqmj-j8zm?method=export&amp;format=GeoJSON'</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -621,12 +684,12 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
 <span class="c1"># read shapefile</span>
-<span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">&#39;./my_folder/&#39;</span><span class="p">)</span>
+<span class="n">gpd</span><span class="o">.</span><span class="n">read_file</span><span class="p">(</span><span class="s1">'./my_folder/'</span><span class="p">)</span>
 
 <span class="c1"># write shapefile</span>
-<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">&#39;./outputs/my_dir_name&#39;</span><span class="p">):</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">mkdirs</span><span class="p">(</span><span class="s1">&#39;./outputs/my_dir_name&#39;</span><span class="p">)</span>
-<span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="s1">&#39;./outputs/my_dir_name&#39;</span><span class="p">)</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="s1">'./outputs/my_dir_name'</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">mkdirs</span><span class="p">(</span><span class="s1">'./outputs/my_dir_name'</span><span class="p">)</span>
+<span class="n">gdf</span><span class="o">.</span><span class="n">to_file</span><span class="p">(</span><span class="s1">'./outputs/my_dir_name'</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -710,7 +773,7 @@
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-and-writing-data">Reading and Writing Data</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gcs">GCS</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-folders">Local Folders</a></li>
@@ -776,8 +839,8 @@ By Cal-ITP
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
 
   <footer class="bd-footer">
   </footer>

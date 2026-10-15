@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
@@ -40,10 +40,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1d5f98c3" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -61,6 +61,12 @@
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
                 gtag('js', new Date());
                 gtag('config', 'G-SZB618VNBZ');
             </script>
@@ -70,6 +76,12 @@
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
                 gtag('js', new Date());
                 gtag('config', 'G-SZB618VNBZ');
             </script>
@@ -77,6 +89,7 @@
     <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'analytics_tools/knowledge_sharing';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Tutorials for New Python Users" href="../analytics_new_analysts/overview.html" />
@@ -84,20 +97,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -123,7 +142,51 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -468,7 +531,7 @@
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-analysis">Data Analysis</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#python">Python</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pandas">Pandas</a></li>
@@ -581,14 +644,14 @@
 <ul class="simple">
 <li><p><a class="reference external" href="https://towardsdatascience.com/all-the-pandas-shift-you-should-know-for-data-analysis-791c1692b5e">Use shift to calculate the number of days between two dates.</a></p></li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;n_days_between&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;prepared_date&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="s1">&#39;prepared_date&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">days</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">'n_days_between'</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s1">'prepared_date'</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="o">.</span><span class="n">shift</span><span class="p">(</span><span class="mi">1</span><span class="p">)[</span><span class="s1">'prepared_date'</span><span class="p">])</span><span class="o">.</span><span class="n">dt</span><span class="o">.</span><span class="n">days</span>
 </pre></div>
 </div>
 <ul class="simple">
 <li><p><a class="reference external" href="https://stackoverflow.com/questions/59181855/get-the-financial-year-from-a-date-in-a-pandas-dataframe-and-add-as-new-column">Assign fiscal year to a date.</a></p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make sure your column is a date time object</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;financial_year&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;base_date&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">year</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">month</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="n">x</span><span class="o">.</span><span class="n">year</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'financial_year'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">'base_date'</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="o">.</span><span class="n">year</span> <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">month</span> <span class="o">&gt;</span> <span class="mi">3</span> <span class="k">else</span> <span class="n">x</span><span class="o">.</span><span class="n">year</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -601,7 +664,7 @@
 </ul>
 </li>
 </ul>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="n">x</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="s2">&quot;Funding Amount&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;$.2s&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Obligated Funding ($2021)&quot;</span><span class="p">))</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>    <span class="n">x</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">X</span><span class="p">(</span><span class="s2">"Funding Amount"</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">alt</span><span class="o">.</span><span class="n">Axis</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">"$.2s"</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">"Obligated Funding ($2021)"</span><span class="p">))</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -610,15 +673,15 @@
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Must install and import cpi package for the function to work.</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">adjust_prices</span><span class="p">(</span><span class="n">df</span><span class="p">):</span>
-    <span class="n">cols</span> <span class="o">=</span>  <span class="p">[</span><span class="s2">&quot;total_requested&quot;</span><span class="p">,</span>
-           <span class="s2">&quot;fed_requested&quot;</span><span class="p">,</span>
-           <span class="s2">&quot;ac_requested&quot;</span><span class="p">]</span>
+    <span class="n">cols</span> <span class="o">=</span>  <span class="p">[</span><span class="s2">"total_requested"</span><span class="p">,</span>
+           <span class="s2">"fed_requested"</span><span class="p">,</span>
+           <span class="s2">"ac_requested"</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">inflation_table</span><span class="p">(</span><span class="n">base_year</span><span class="p">):</span>
         <span class="n">cpi</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
-        <span class="n">series_df</span> <span class="o">=</span> <span class="n">cpi</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">area</span><span class="o">=</span><span class="s2">&quot;U.S. city average&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">()</span>
+        <span class="n">series_df</span> <span class="o">=</span> <span class="n">cpi</span><span class="o">.</span><span class="n">series</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">area</span><span class="o">=</span><span class="s2">"U.S. city average"</span><span class="p">)</span><span class="o">.</span><span class="n">to_dataframe</span><span class="p">()</span>
         <span class="n">inflation_df</span> <span class="o">=</span> <span class="p">(</span><span class="n">series_df</span><span class="p">[</span><span class="n">series_df</span><span class="o">.</span><span class="n">year</span> <span class="o">&gt;=</span> <span class="mi">2008</span><span class="p">]</span>
-                        <span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">&#39;year&#39;</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s1">&#39;value&#39;</span><span class="p">,</span> <span class="n">aggfunc</span><span class="o">=</span><span class="s1">&#39;mean&#39;</span><span class="p">)</span>
+                        <span class="o">.</span><span class="n">pivot_table</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="s1">'year'</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="s1">'value'</span><span class="p">,</span> <span class="n">aggfunc</span><span class="o">=</span><span class="s1">'mean'</span><span class="p">)</span>
                         <span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
                        <span class="p">)</span>
         <span class="n">denominator</span> <span class="o">=</span> <span class="n">inflation_df</span><span class="o">.</span><span class="n">value</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">inflation_df</span><span class="o">.</span><span class="n">year</span><span class="o">==</span><span class="n">base_year</span><span class="p">]</span><span class="o">.</span><span class="n">iloc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -633,14 +696,14 @@
     <span class="n">cpi</span> <span class="o">=</span> <span class="n">inflation_table</span><span class="p">(</span><span class="mi">2021</span><span class="p">)</span>
     <span class="n">cpi</span><span class="o">.</span><span class="n">update</span>
     <span class="n">cpi</span> <span class="o">=</span> <span class="p">(</span><span class="n">cpi</span><span class="o">&gt;&gt;</span><span class="n">select</span><span class="p">(</span><span class="n">_</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">_</span><span class="o">.</span><span class="n">value</span><span class="p">))</span>
-    <span class="n">cpi_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">cpi</span><span class="p">[</span><span class="s1">&#39;year&#39;</span><span class="p">],</span> <span class="n">cpi</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]))</span>
+    <span class="n">cpi_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">cpi</span><span class="p">[</span><span class="s1">'year'</span><span class="p">],</span> <span class="n">cpi</span><span class="p">[</span><span class="s1">'value'</span><span class="p">]))</span>
 
 
     <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
-        <span class="n">multiplier</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;prepared_y&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">cpi_dict</span><span class="p">)</span>
+        <span class="n">multiplier</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">"prepared_y"</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">cpi_dict</span><span class="p">)</span>
 
         <span class="c1">##using 270.97 for 2021 dollars</span>
-        <span class="n">df</span><span class="p">[</span><span class="sa">f</span><span class="s2">&quot;adjusted_</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">*</span> <span class="mf">270.97</span><span class="p">)</span> <span class="o">/</span> <span class="n">multiplier</span><span class="p">)</span>
+        <span class="n">df</span><span class="p">[</span><span class="sa">f</span><span class="s2">"adjusted_</span><span class="si">{</span><span class="n">col</span><span class="si">}</span><span class="s2">"</span><span class="p">]</span> <span class="o">=</span> <span class="p">((</span><span class="n">df</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">*</span> <span class="mf">270.97</span><span class="p">)</span> <span class="o">/</span> <span class="n">multiplier</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">df</span>
 </pre></div>
 </div>
@@ -794,7 +857,7 @@
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#data-analysis">Data Analysis</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#python">Python</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#pandas">Pandas</a></li>
@@ -868,8 +931,8 @@ By Cal-ITP
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
 
   <footer class="bd-footer">
   </footer>

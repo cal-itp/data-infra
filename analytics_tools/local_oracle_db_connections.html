@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
@@ -40,10 +40,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1d5f98c3" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -61,6 +61,12 @@
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
                 gtag('js', new Date());
                 gtag('config', 'G-SZB618VNBZ');
             </script>
@@ -70,6 +76,12 @@
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
                 gtag('js', new Date());
                 gtag('config', 'G-SZB618VNBZ');
             </script>
@@ -77,6 +89,7 @@
     <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'analytics_tools/local_oracle_db_connections';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Useful Python Libraries" href="python_libraries.html" />
@@ -84,20 +97,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -123,7 +142,51 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -468,7 +531,7 @@
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#first-time-set-up">First Time Set-up:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#everyday-workflow">Everyday Workflow</a></li>
 </ul>
@@ -557,10 +620,10 @@ python<span class="w"> </span>–m<span class="w"> </span>pip<span class="w"> </
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">oracledb</span>
 
-<span class="n">oracledb</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="s2">&quot;8.3.0&quot;</span>
+<span class="n">oracledb</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="s2">"8.3.0"</span>
 </pre></div>
 </div>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s2">&quot;cx_Oracle&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">oracledb</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s2">"cx_Oracle"</span><span class="p">]</span> <span class="o">=</span> <span class="n">oracledb</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">sqlalchemy</span><span class="o">.</span><span class="n">__version__</span>
@@ -568,15 +631,15 @@ python<span class="w"> </span>–m<span class="w"> </span>pip<span class="w"> </
 </pre></div>
 </div>
 <p><strong>Step 11:</strong> Connect to the database. For this step, you will need the database Username, Password, Host Name, Service Name and Port.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DIALECT</span> <span class="o">=</span> <span class="s1">&#39;oracle&#39;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">DIALECT</span> <span class="o">=</span> <span class="s1">'oracle'</span>
 
-<span class="n">USERNAME</span> <span class="o">=</span> <span class="s1">&#39;username&#39;</span> <span class="c1">#enter your username</span>
-<span class="n">PASSWORD</span> <span class="o">=</span> <span class="s1">&#39;password&#39;</span> <span class="c1">#enter your password</span>
-<span class="n">HOST</span> <span class="o">=</span> <span class="s1">&#39;host_name&#39;</span> <span class="c1">#enter the oracle db host url</span>
+<span class="n">USERNAME</span> <span class="o">=</span> <span class="s1">'username'</span> <span class="c1">#enter your username</span>
+<span class="n">PASSWORD</span> <span class="o">=</span> <span class="s1">'password'</span> <span class="c1">#enter your password</span>
+<span class="n">HOST</span> <span class="o">=</span> <span class="s1">'host_name'</span> <span class="c1">#enter the oracle db host url</span>
 <span class="n">PORT</span> <span class="o">=</span> <span class="mi">1521</span> <span class="c1"># enter the oracle port number</span>
-<span class="n">SERVICE</span> <span class="o">=</span> <span class="s1">&#39;service_name&#39;</span> <span class="c1"># enter the oracle db service name</span>
+<span class="n">SERVICE</span> <span class="o">=</span> <span class="s1">'service_name'</span> <span class="c1"># enter the oracle db service name</span>
 
-<span class="n">ENGINE_PATH_WIN_AUTH</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">DIALECT</span><span class="si">}</span><span class="s2">://</span><span class="si">{</span><span class="n">USERNAME</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">PASSWORD</span><span class="si">}</span><span class="s2">@</span><span class="si">{</span><span class="n">HOST</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">PORT</span><span class="si">}</span><span class="s2">/?service_name=</span><span class="si">{</span><span class="n">SERVICE</span><span class="si">}</span><span class="s2">&quot;</span>
+<span class="n">ENGINE_PATH_WIN_AUTH</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">DIALECT</span><span class="si">}</span><span class="s2">://</span><span class="si">{</span><span class="n">USERNAME</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">PASSWORD</span><span class="si">}</span><span class="s2">@</span><span class="si">{</span><span class="n">HOST</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">PORT</span><span class="si">}</span><span class="s2">/?service_name=</span><span class="si">{</span><span class="n">SERVICE</span><span class="si">}</span><span class="s2">"</span>
 </pre></div>
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">engine</span> <span class="o">=</span> <span class="n">sqlalchemy</span><span class="o">.</span><span class="n">create_engine</span><span class="p">(</span><span class="n">ENGINE_PATH_WIN_AUTH</span><span class="p">)</span>
@@ -584,7 +647,7 @@ python<span class="w"> </span>–m<span class="w"> </span>pip<span class="w"> </
 </div>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1">## test the query</span>
 
-<span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="s2">&quot;&quot;&quot; select &#39;hello&#39; from dual WHERE 1=1&quot;&quot;&quot;</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">read_sql_query</span><span class="p">(</span><span class="s2">""" select 'hello' from dual WHERE 1=1"""</span><span class="p">,</span> <span class="n">engine</span><span class="p">)</span>
 
 <span class="c1">## should return a one row, one column dataframe with `hello` in the first cell.</span>
 <span class="c1">## if that is the output then you are all set!</span>
@@ -670,7 +733,7 @@ python<span class="w"> </span>–m<span class="w"> </span>pip<span class="w"> </
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#first-time-set-up">First Time Set-up:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#everyday-workflow">Everyday Workflow</a></li>
 </ul>
@@ -721,8 +784,8 @@ By Cal-ITP
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
 
   <footer class="bd-footer">
   </footer>

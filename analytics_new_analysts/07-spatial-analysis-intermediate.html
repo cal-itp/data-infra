@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=3c74b3bc" />
@@ -40,10 +40,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/custom.css?v=1d5f98c3" />
   
   <!-- So that users can add custom icons -->
-  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
 
     <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
     <script src="../_static/doctools.js?v=9a2dae69"></script>
@@ -61,6 +61,12 @@
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
                 gtag('js', new Date());
                 gtag('config', 'G-SZB618VNBZ');
             </script>
@@ -70,6 +76,12 @@
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
                 gtag('js', new Date());
                 gtag('config', 'G-SZB618VNBZ');
             </script>
@@ -77,6 +89,7 @@
     <script src="https://unpkg.com/mermaid@9.4.0/dist/mermaid.min.js"></script>
     <script>mermaid.initialize({startOnLoad:true});</script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'analytics_new_analysts/07-spatial-analysis-intermediate';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Working with Geospatial Data: Advanced" href="08-spatial-analysis-advanced.html" />
@@ -84,20 +97,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -123,7 +142,51 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -468,7 +531,7 @@
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-geometry-column-from-latitude-and-longitude-coordinates">Create Geometry Column from Latitude and Longitude Coordinates</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-geometry-column-from-text">Create Geometry Column from Text</a></li>
@@ -502,7 +565,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point</span>
 
-<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;../folder/pawnee_businesses.csv&#39;</span><span class="p">)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">'../folder/pawnee_businesses.csv'</span><span class="p">)</span>
 </pre></div>
 </div>
 <div class="pst-scrollable-table-container"><table class="table">
@@ -544,7 +607,7 @@
 <p>In ArcGIS/QGIS, this is equivalent to adding XY data, selecting the columns that correspond to latitude and longitude, and exporting the layer as a shapefile.</p>
 <p>First, drop all the points that are potentially problematic (NAs or zeroes).</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Drop NAs</span>
-<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;X&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">])</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">'X'</span><span class="p">,</span> <span class="s1">'Y'</span><span class="p">])</span>
 
 <span class="c1"># Keep non-zero values for X, Y</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">df</span><span class="o">.</span><span class="n">X</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">Y</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)]</span>
@@ -552,15 +615,15 @@
 </div>
 <p>Then, create the <code class="docutils literal notranslate"><span class="pre">geometry</span></code> column.  We use a lambda function and apply it to all rows in our df. For every row, take the XY coordinates and make it Point(X,Y). Make sure you set the projection (coordinate reference system)!</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Rename columns</span>
-<span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;X&#39;</span><span class="p">:</span> <span class="s1">&#39;longitude&#39;</span><span class="p">,</span> <span class="s1">&#39;Y&#39;</span><span class="p">:</span><span class="s1">&#39;latitude&#39;</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'X'</span><span class="p">:</span> <span class="s1">'longitude'</span><span class="p">,</span> <span class="s1">'Y'</span><span class="p">:</span><span class="s1">'latitude'</span><span class="p">},</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="c1"># Create geometry column</span>
-<span class="n">geom_col</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">longitude</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">latitude</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">)</span>
-<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="n">geom_col</span><span class="p">,</span> <span class="n">crs</span> <span class="o">=</span> <span class="s2">&quot;EPSG:4326&quot;</span><span class="p">)</span>
+<span class="n">geom_col</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">points_from_xy</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">longitude</span><span class="p">,</span> <span class="n">df</span><span class="o">.</span><span class="n">latitude</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="s2">"EPSG:4326"</span><span class="p">)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">geometry</span><span class="o">=</span><span class="n">geom_col</span><span class="p">,</span> <span class="n">crs</span> <span class="o">=</span> <span class="s2">"EPSG:4326"</span><span class="p">)</span>
 
-<span class="c1"># Project to different CRS. Pawnee is in Indiana, so we&#39;ll use EPSG:2965.</span>
+<span class="c1"># Project to different CRS. Pawnee is in Indiana, so we'll use EPSG:2965.</span>
 <span class="c1"># In Southern California, use EPSG:2229.</span>
-<span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s1">&#39;EPSG:2965&#39;</span><span class="p">)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gdf</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s1">'EPSG:2965'</span><span class="p">)</span>
 
 <span class="n">gdf</span>
 </pre></div>
@@ -637,7 +700,7 @@
 <p>First, we split <code class="docutils literal notranslate"><span class="pre">Coord</span></code> at the comma.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># We want to expand the result into multiple columns.</span>
 <span class="c1"># Save the result and call it new.</span>
-<span class="n">new</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">Coord</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;, &quot;</span><span class="p">,</span> <span class="n">expand</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
+<span class="n">new</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">Coord</span><span class="o">.</span><span class="n">str</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">", "</span><span class="p">,</span> <span class="n">expand</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Then, extract our X, Y components. Put lat, lon into a Shapely object as demonstrated <a class="reference internal" href="#create-geometry-column-from-latitude-and-longitude-coordinates">in the prior section.</a></p>
@@ -645,19 +708,19 @@
 
 <span class="c1"># 0 corresponds to the portion before the comma. [1:] means starting from</span>
 <span class="c1"># the 2nd character, right after the opening parenthesis, to the comma.</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'lat'</span><span class="p">]</span> <span class="o">=</span> <span class="n">new</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 
 <span class="c1"># 1 corresponds to the portion after the comma. [:-1] means starting from</span>
 <span class="c1"># right after the comma to the 2nd to last character from the end, which</span>
 <span class="c1"># is right before the closing parenthesis.</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'lon'</span><span class="p">]</span> <span class="o">=</span> <span class="n">new</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">str</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Or, do it in one swift move:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Coord&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df</span><span class="p">[</span><span class="s1">'geometry'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">subset</span><span class="o">=</span><span class="p">[</span><span class="s1">'Coord'</span><span class="p">])</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
     <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">Point</span><span class="p">(</span>
-        <span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">Coord</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">:]),</span>
-        <span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">Coord</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">Coord</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">:]),</span>
+        <span class="nb">float</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">Coord</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">","</span><span class="p">)[</span><span class="mi">1</span><span class="p">][:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
         <span class="p">),</span> <span class="n">axis</span> <span class="o">=</span> <span class="mi">1</span><span class="p">)</span>
 
 
@@ -666,7 +729,7 @@
 
 <span class="c1"># Set the coordinate reference system. You must set it first before you</span>
 <span class="c1"># can project.</span>
-<span class="n">gdf</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="s1">&#39;EPSG:4326&#39;</span><span class="p">)</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">set_crs</span><span class="p">(</span><span class="s1">'EPSG:4326'</span><span class="p">)</span>
 </pre></div>
 </div>
 </section>
@@ -714,7 +777,7 @@
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">council_district</span></code> and <code class="docutils literal notranslate"><span class="pre">planning_district</span></code> are polygon shapefiles while <code class="docutils literal notranslate"><span class="pre">df</span></code> is a point shapefile. For simplicity, <code class="docutils literal notranslate"><span class="pre">council_district</span></code> and <code class="docutils literal notranslate"><span class="pre">planning_district</span></code> both use column <code class="docutils literal notranslate"><span class="pre">ID</span></code> as the unique identifier.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save the dataframes into dictionaries</span>
-<span class="n">boundaries</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;council&#39;</span><span class="p">:</span> <span class="n">council_district</span><span class="p">,</span> <span class="s1">&#39;planning&#39;</span><span class="p">:</span> <span class="n">planning_district</span><span class="p">}</span>
+<span class="n">boundaries</span> <span class="o">=</span> <span class="p">{</span><span class="s1">'council'</span><span class="p">:</span> <span class="n">council_district</span><span class="p">,</span> <span class="s1">'planning'</span><span class="p">:</span> <span class="n">planning_district</span><span class="p">}</span>
 
 <span class="c1"># Create empty dictionaries to hold our results</span>
 <span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
@@ -723,15 +786,15 @@
 <span class="c1"># Loop over different boundaries (council, planning)</span>
 <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">boundaries</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
     <span class="c1"># Define new variables using f string</span>
-    <span class="n">join_df</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_join&quot;</span>
-    <span class="n">agg_df</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_summary&quot;</span>
+    <span class="n">join_df</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_join"</span>
+    <span class="n">agg_df</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s2">_summary"</span>
 
-    <span class="c1"># Spatial join, but don&#39;t save it into the results dictionary</span>
-    <span class="n">join_df</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">sjoin</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">how</span> <span class="o">=</span> <span class="s1">&#39;inner&#39;</span><span class="p">,</span> <span class="n">predicate</span> <span class="o">=</span> <span class="s1">&#39;intersects&#39;</span><span class="p">)</span>
+    <span class="c1"># Spatial join, but don't save it into the results dictionary</span>
+    <span class="n">join_df</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">sjoin</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">how</span> <span class="o">=</span> <span class="s1">'inner'</span><span class="p">,</span> <span class="n">predicate</span> <span class="o">=</span> <span class="s1">'intersects'</span><span class="p">)</span>
 
     <span class="c1"># Aggregate and save results into results dictionary</span>
-    <span class="n">results</span><span class="p">[</span><span class="n">agg_df</span><span class="p">]</span> <span class="o">=</span> <span class="n">join_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;ID&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
-        <span class="p">{</span><span class="s1">&#39;Business&#39;</span><span class="p">:</span> <span class="s1">&#39;count&#39;</span><span class="p">,</span> <span class="s1">&#39;Sales_millions&#39;</span><span class="p">:</span> <span class="s1">&#39;sum&#39;</span><span class="p">})</span>
+    <span class="n">results</span><span class="p">[</span><span class="n">agg_df</span><span class="p">]</span> <span class="o">=</span> <span class="n">join_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">'ID'</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+        <span class="p">{</span><span class="s1">'Business'</span><span class="p">:</span> <span class="s1">'count'</span><span class="p">,</span> <span class="s1">'Sales_millions'</span><span class="p">:</span> <span class="s1">'sum'</span><span class="p">})</span>
 </pre></div>
 </div>
 <p>Our results dictionary contains 2 dataframes: <code class="docutils literal notranslate"><span class="pre">council_summary</span></code> and <code class="docutils literal notranslate"><span class="pre">planning_summary</span></code>. We can see the contents of the results dictionary using this:</p>
@@ -740,9 +803,9 @@
     <span class="n">display</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
 
 
-<span class="c1"># To access the &quot;dataframe&quot;, write this:</span>
-<span class="n">results</span><span class="p">[</span><span class="s2">&quot;council_summary&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-<span class="n">results</span><span class="p">[</span><span class="s2">&quot;planning_summary&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="c1"># To access the "dataframe", write this:</span>
+<span class="n">results</span><span class="p">[</span><span class="s2">"council_summary"</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<span class="n">results</span><span class="p">[</span><span class="s2">"planning_summary"</span><span class="p">]</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
 </div>
 <p><code class="docutils literal notranslate"><span class="pre">council_summary</span></code> would look like this, with the total count of Business and sum of Sales_millions within the council district:</p>
@@ -774,11 +837,11 @@
 <span id="id4"></span><h2>Multiple Geometry Columns<a class="headerlink" href="#multiple-geometry-columns" title="Link to this heading">#</a></h2>
 <p>Sometimes we want to iterate over different options, and we want to see the results side-by-side. Here, we draw multiple buffers around <code class="docutils literal notranslate"><span class="pre">df</span></code>, specifically, 100 ft and 200 ft buffers.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Make sure our projection has US feet as its units</span>
-<span class="n">df</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s1">&#39;EPSG:2965&#39;</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">to_crs</span><span class="p">(</span><span class="s1">'EPSG:2965'</span><span class="p">)</span>
 
 <span class="c1"># Add other columns for the different buffers</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;geometry100&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
-<span class="n">df</span><span class="p">[</span><span class="s1">&#39;geometry200&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'geometry100'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="n">df</span><span class="p">[</span><span class="s1">'geometry200'</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">buffer</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span>
 
 <span class="n">df</span>
 </pre></div>
@@ -821,8 +884,8 @@
 </table>
 </div>
 <p>To create a new gdf with just 100 ft buffers, select the relevant geometry column, <code class="docutils literal notranslate"><span class="pre">geometry100</span></code>, and set it as the geometry of the gdf.</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df100</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">&#39;Business&#39;</span><span class="p">,</span> <span class="s1">&#39;Sales_millions&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;geometry100&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">set_geometry</span><span class="p">(</span><span class="s1">&#39;geometry100&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">df100</span> <span class="o">=</span> <span class="n">df</span><span class="p">[[</span><span class="s1">'Business'</span><span class="p">,</span> <span class="s1">'Sales_millions'</span><span class="p">,</span>
+    <span class="s1">'geometry100'</span><span class="p">]]</span><span class="o">.</span><span class="n">set_geometry</span><span class="p">(</span><span class="s1">'geometry100'</span><span class="p">)</span>
 </pre></div>
 </div>
 <br>
@@ -894,7 +957,7 @@
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="visible nav section-nav flex-column">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-geometry-column-from-latitude-and-longitude-coordinates">Create Geometry Column from Latitude and Longitude Coordinates</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#create-geometry-column-from-text">Create Geometry Column from Text</a></li>
@@ -948,8 +1011,8 @@ By Cal-ITP
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
 
   <footer class="bd-footer">
   </footer>
