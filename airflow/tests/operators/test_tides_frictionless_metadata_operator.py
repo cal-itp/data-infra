@@ -83,7 +83,7 @@ class TestTIDESFrictionlessMetadataOperator:
                 "description": "Airtable source record ID.",
             },
             {"name": "name", "type": "string", "description": "Organization name."},
-            {"name": "_valid_from", "type": "datetime"},
+            {"name": "_valid_from", "type": "datetime", "format": "any"},
             {"name": "is_public_entity", "type": "boolean"},
         ]
 
@@ -106,5 +106,8 @@ class TestTIDESFrictionlessMetadataOperator:
             "data_000000000000.parquet",
         ]
         assert [r["format"] for r in datapackage["resources"]] == ["csv", "parquet"]
+        assert all(
+            r["profile"] == "tabular-data-resource" for r in datapackage["resources"]
+        )
         for resource in datapackage["resources"]:
             assert resource["schema"]["fields"] == operator.fields()
