@@ -590,6 +590,97 @@ models:
       - name: has_mismatched_mode
       - name: has_mismatched_direction
       - name: has_mismatched_vehicle_id
+  - name: int_payments__deduped_customer_funding_sources
+    description: |
+      Deduplicated customer_funding_source records.
+      Only the latest record per `participant_id`
+      + `funding_source_id`  is kept
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - participant_id
+              - funding_source_id
+      - dbt_utils.unique_combination_of_columns:
+           arguments:
+             combination_of_columns:
+               - participant_id
+               - funding_source_id
+               - calitp_funding_source_id_rank
+      - dbt_utils.unique_combination_of_columns:
+           arguments:
+             combination_of_columns:
+               - participant_id
+               - funding_source_vault_id
+               - calitp_funding_source_vault_id_rank
+      - dbt_utils.unique_combination_of_columns:
+           arguments:
+             combination_of_columns:
+               - participant_id
+               - customer_id
+               - calitp_customer_id_rank
+
+    columns:
+      - name: funding_source_id
+        description: '{{ doc("lp_funding_source_id") }}'
+      - name: funding_source_vault_id
+        description: '{{ doc("lp_funding_source_vault_id") }}'
+      - name: customer_id
+        description: '{{ doc("customer_funding_source_customer_id") }}'
+      - name: bin
+        description: '{{ doc("lp_bin") }}'
+      - name: masked_pan
+        description: '{{ doc("lp_masked_pan") }}'
+      - name: card_scheme
+        description: '{{ doc("lp_card_scheme") }}'
+      - name: issuer
+        description: '{{ doc("lp_issuer") }}'
+      - name: issuer_country
+        description: '{{ doc("lp_issuer_country") }}'
+      - name: form_factor
+        description: '{{ doc("lp_form_factor") }}'
+      - name: principal_customer_id
+        description: '{{ doc("customer_funding_source_principal_customer_id") }}'
+      - name: participant_id
+        description: '{{ doc("lp_participant_id") }}'
+      - name: _line_number
+        description: '{{ doc("lp_line_number") }}'
+      - name: instance
+        description: '{{ doc("lp_instance") }}'
+      - name: feed_version
+        description: '{{ doc("lp_feed_version") }}'
+      - name: extract_filename
+        description: '{{ doc("lp_extract_filename") }}'
+      - name: ts
+        description: '{{ doc("lp_ts") }}'
+      - name: littlepay_export_ts
+        description: '{{ doc("lp_export_ts") }}'
+        data_tests:
+          - not_null
+      - name: littlepay_export_date
+        description: '{{ doc("lp_export_date") }}'
+      - name: calitp_funding_source_id_rank
+        description: '{{ doc("customer_funding_source_calitp_funding_source_id_rank") }}'
+      - name: calitp_funding_source_vault_id_rank
+        description: '{{ doc("customer_funding_source_calitp_funding_source_vault_id_rank") }}'
+      - name: calitp_customer_id_rank
+        description: '{{ doc("customer_funding_source_calitp_customer_id_rank") }}'
+      - name: _key
+        description: '{{ doc("lp_input_row_key") }}'
+        data_tests:
+          - not_null
+          - unique
+      - name: _payments_key
+        description: '{{ doc("lp_payments_key") }}'
+        data_tests:
+          - not_null
+          - unique
+      - name: _content_hash
+        description: '{{ doc("lp_content_hash") }}'
+        data_tests:
+          - not_null
+          - unique
+
   - name: int_payments__customer_funding_source_vaults
     description: |
       Derived from customer_funding_source records.
