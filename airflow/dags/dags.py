@@ -21,11 +21,7 @@ dag_parent_dir = Path(__file__).parent
 # (excludes subdirectories like __pycache__)
 dag_directories = []
 for child in dag_parent_dir.iterdir():
-    if (
-        child.is_dir()
-        and not str(child).endswith("__")
-        and (child / "METADATA.yml").is_file()
-    ):
+    if child.is_dir() and not str(child).endswith("__"):
         dag_directories.append(str(child))
 
 # DAG Generation ==============================================================
