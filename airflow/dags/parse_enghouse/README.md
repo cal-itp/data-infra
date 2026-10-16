@@ -6,6 +6,8 @@ This DAG converts Enghouse semicolon-delimited CSV files from the raw GCS bucket
 
 Each run scans all files in the raw bucket and skips any already present in the parsed bucket, making it safe to re-run. Late or re-delivered files are automatically picked up on the next scheduled run. This scan-all approach was chosen because Enghouse delivery timing is not guaranteed to be consistent relative to the DAG schedule.
 
+Each file added is saved as a row in the external table enghouse_parse_job_results. This only populates on new files.
+
 Column names are normalised by `BigQueryCleaner` (lowercased, non-word characters replaced with underscores) to insulate downstream models from casing changes in Enghouse source files.
 
 **Re-parsing:** To re-parse a specific file, delete it from `gs://calitp-enghouse-parsed/` and re-trigger the DAG.

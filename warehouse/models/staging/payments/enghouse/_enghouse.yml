@@ -10,6 +10,7 @@ sources:
       - name: ticket_results
       - name: transactions
       - name: pay_windows
+      - name: parse_job_results
 
 models:
   - name: stg_enghouse__taps
