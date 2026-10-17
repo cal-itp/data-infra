@@ -6,7 +6,47 @@ models:
   - name: dim_gtfs_schedule_download_outcomes
     description: Summary of each Download Dataset Zip File
   - name: dim_gtfs_schedule_file_parse_outcomes
-    description: Summary of each Parsed File
+    description: |
+      Each row is a distinct GTFS schedule file parse outcome for audit and Metabase
+      dashboards. Unions parse-outcome records from external_gtfs_schedule and flattens
+      nested feed and parsed-file metadata.
+
+      Grain: one row per feed download attempt (`extract_config_base64_url`, `ts`) and
+      parsed GTFS file (`parsed_gtfs_filename`), after deduplication.
+
+      Partitioned by `dt` so date-filtered queries against this mart can prune partitions.
+      The model remains a full-refresh table; partitioning improves query-time efficiency
+      but does not reduce daily build scan cost.
+    data_tests:
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - extract_config_base64_url
+              - ts
+              - parsed_gtfs_filename
+    columns:
+      - name: dt
+        description: |
+          Hive partition date for the parse outcome record. Filter on this column when
+          querying this table in BigQuery.
+        data_tests:
+          - not_null
+      - name: ts
+        description: Timestamp associated with the parse outcome event.
+        data_tests:
+          - not_null
+      - name: success
+        description: '{{ doc("column_schedule_parse_success") }}'
+      - name: exception
+        description: '{{ doc("column_schedule_parse_exception") }}'
+      - name: extract_config_base64_url
+        description: '{{ doc("column_base64_url") }}'
+        data_tests:
+          - not_null
+      - name: parsed_gtfs_filename
+        description: '{{ doc("column_schedule_parse_gtfs_filename") }}'
+        data_tests:
+          - not_null
   - name: dim_gtfs_schedule_validation_notices
     description: Validation Notices from Dataset Files
   - name: dim_gtfs_schedule_validation_outcomes
