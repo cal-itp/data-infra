@@ -41,7 +41,10 @@ resource "google_compute_security_policy" "metabase" {
     description = "OWASP RCE"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('rce-v422-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v042200-id932330-rce']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
+        # 932270 ("Unix shell expression found") false-positives on ordinary browser
+        # headers/cookies, 403-ing legitimate logins and dashboard loads. Opted out;
+        # the rest of the RCE set is retained and Metabase has no OS-shell sink. Works toward #5784.
+        expression = "evaluatePreconfiguredWaf('rce-v422-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v042200-id932330-rce', 'owasp-crs-v042200-id932270-rce']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
       }
     }
   }
@@ -63,7 +66,9 @@ resource "google_compute_security_policy" "metabase" {
     description = "OWASP remote file inclusion"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('rfi-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
+        # 931130 false-positives on /api/database for legitimate users. Opted out;
+        # the rest of the RFI set is retained. Works toward #5784.
+        expression = "evaluatePreconfiguredWaf('rfi-v422-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v042200-id931130-rfi']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
       }
     }
   }
