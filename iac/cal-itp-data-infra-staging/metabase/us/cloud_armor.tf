@@ -19,7 +19,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "OWASP SQLi"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('sqli-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
+        expression = "evaluatePreconfiguredWaf('sqli-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$')"
       }
     }
   }
@@ -30,7 +30,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "OWASP XSS"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('xss-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
+        expression = "evaluatePreconfiguredWaf('xss-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$')"
       }
     }
   }
@@ -41,7 +41,15 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "OWASP RCE"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('rce-v422-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v042200-id932330-rce']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
+        expression = "evaluatePreconfiguredWaf('rce-v422-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v042200-id932330-rce']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$')"
+      }
+    }
+    preconfigured_waf_config {
+      exclusion {
+        target_rule_set = "rce-v422-stable"
+        request_cookie {
+          operator = "EQUALS_ANY"
+        }
       }
     }
   }
@@ -52,7 +60,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "OWASP local file inclusion"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('lfi-v422-stable', {'sensitivity': 2}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
+        expression = "evaluatePreconfiguredWaf('lfi-v422-stable', {'sensitivity': 2}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$')"
       }
     }
   }
@@ -63,7 +71,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "OWASP remote file inclusion"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('rfi-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
+        expression = "evaluatePreconfiguredWaf('rfi-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$')"
       }
     }
   }
@@ -74,7 +82,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "Scanner / bot signatures"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('scannerdetection-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
+        expression = "evaluatePreconfiguredWaf('scannerdetection-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$')"
       }
     }
   }
@@ -85,7 +93,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "HTTP protocol attacks"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('protocolattack-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
+        expression = "evaluatePreconfiguredWaf('protocolattack-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$')"
       }
     }
   }
@@ -96,7 +104,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "Session fixation"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('sessionfixation-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard')"
+        expression = "evaluatePreconfiguredWaf('sessionfixation-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$')"
       }
     }
   }
