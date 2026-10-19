@@ -19,7 +19,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "OWASP SQLi"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('sqli-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$')"
+        expression = "evaluatePreconfiguredWaf('sqli-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$|^/api/database/[0-9]+/card_autocomplete_suggestions$')"
       }
     }
   }
@@ -30,7 +30,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "OWASP XSS"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('xss-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$')"
+        expression = "evaluatePreconfiguredWaf('xss-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$|^/api/database/[0-9]+/card_autocomplete_suggestions$')"
       }
     }
   }
@@ -41,9 +41,14 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "OWASP RCE"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('rce-v422-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v042200-id932330-rce']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$')"
+        expression = "evaluatePreconfiguredWaf('rce-v422-stable', {'sensitivity': 1, 'opt_out_rule_ids': ['owasp-crs-v042200-id932330-rce']}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$|^/api/database/[0-9]+/card_autocomplete_suggestions$')"
       }
     }
+    # Skip cookie values for RCE signatures. Other state sites set cookies on all of
+    # .ca.gov (e.g. ftb.ca.gov's Akamai `_abck`, which contains `~-1~`), tripping
+    # 932270/932330 and blocking users before Metabase loads (#5791). Low risk:
+    # Metabase never executes cookie values; args, bodies and cookie names are
+    # still inspected.
     preconfigured_waf_config {
       exclusion {
         target_rule_set = "rce-v422-stable"
@@ -60,7 +65,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "OWASP local file inclusion"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('lfi-v422-stable', {'sensitivity': 2}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$')"
+        expression = "evaluatePreconfiguredWaf('lfi-v422-stable', {'sensitivity': 2}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$|^/api/database/[0-9]+/card_autocomplete_suggestions$')"
       }
     }
   }
@@ -71,7 +76,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "OWASP remote file inclusion"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('rfi-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$')"
+        expression = "evaluatePreconfiguredWaf('rfi-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$|^/api/database/[0-9]+/card_autocomplete_suggestions$')"
       }
     }
   }
@@ -82,7 +87,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "Scanner / bot signatures"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('scannerdetection-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$')"
+        expression = "evaluatePreconfiguredWaf('scannerdetection-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$|^/api/database/[0-9]+/card_autocomplete_suggestions$')"
       }
     }
   }
@@ -93,7 +98,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "HTTP protocol attacks"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('protocolattack-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$')"
+        expression = "evaluatePreconfiguredWaf('protocolattack-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$|^/api/database/[0-9]+/card_autocomplete_suggestions$')"
       }
     }
   }
@@ -104,7 +109,7 @@ resource "google_compute_security_policy" "metabase-staging" {
     description = "Session fixation"
     match {
       expr {
-        expression = "evaluatePreconfiguredWaf('sessionfixation-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$')"
+        expression = "evaluatePreconfiguredWaf('sessionfixation-v422-stable', {'sensitivity': 1}) && !request.path.startsWith('/api/dataset') && !request.path.startsWith('/api/card') && !request.path.startsWith('/api/dashboard') && !request.path.matches('^/api/database/[0-9]+/autocomplete_suggestions$|^/api/database/[0-9]+/card_autocomplete_suggestions$')"
       }
     }
   }
