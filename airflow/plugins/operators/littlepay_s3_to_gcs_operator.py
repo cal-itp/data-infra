@@ -17,8 +17,10 @@ LITTLEPAY_ENTITIES = [
     "micropayment-adjustments",
     "micropayment-device-transactions",
     "micropayments",
+    "passes",
     "products",
     "refunds",
+    "revenue-inspection-outcomes",
     "settlements",
     "terminal-device-transactions",
 ]

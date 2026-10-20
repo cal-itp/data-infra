@@ -20,6 +20,8 @@ schema_fields:
     type: STRING
   - name: product_id
     type: STRING
+  - name: pass_id
+    type: STRING
   - name: type
     type: STRING  # Daily_Cap, Weekly_Cap
   - name: description
