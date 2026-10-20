@@ -432,8 +432,7 @@ A person with Docker set up locally can build a development version of the under
 docker build -t ghcr.io/cal-itp/data-infra/warehouse:development .
 ```
 
-That image can be used alongside [a local Airflow instance](../airflow/README.md) to test changes locally prior to merging, [if pushed to GHCR first](https://github.com/cal-itp/data-infra/tree/main/airflow#podoperators).
-
+The development image can be pushed to GHCR for testing. See the [warehouse image build workflow](../.github/workflows/build-warehouse-image.yml) for information about publishing the image.
 
 ## Deploying Changes to Production
 

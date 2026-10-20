@@ -112,11 +112,6 @@ Then source it:
 $ source ~/.bashrc
 ```
 
-### PodOperators
-
-Airflow PodOperator tasks execute a specific Docker image; these images are pushed to [GitHub Container Registry](https://ghcr.io/) and production uses `:latest` tags while local uses `:development`. If you want to test these tasks locally, you must build and push development versions of the images used by the tasks, which requires [proper access](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-container-registry).
-
-
 ### Common Issues
 
 - If you want to clear out old local Airflow data, you'll need to delete the DAG using `uv tool run --from "composer-dev @ git+https://github.com/GoogleCloudPlatform/composer-local-dev.git@73ee40101970135a4e16d227d3738544bbc1f34e" composer-dev run-airflow-cmd calitp-development-composer dags delete <DAG_ID>` (the same command `COMPOSER_CMD` in the `Makefile` uses) where, for example, the `<DAG_ID>` is `create_external_tables`
@@ -141,7 +136,6 @@ Airflow deployment is managed automatically by Terraform, automated by Github Ac
 - The `dags/`, `plugins/`, and `../warehouse` directories are deployed automatically when a PR is merged into the `main` branch via terraform from the `iac/cal-itp-data-infra/airflow` directory for production and the `iac/cal-itp-data-infra-staging/airflow` directory for staging.
 - System configuration for worker count, environment variables, `requirements.txt`, and overrides of Airflow configs are deployed via terraform from the `iac/cal-itp-data-infra/composer` directory for production and the `iac/cal-itp-data-infra-staging/composer` directory for staging.
 - Upgrades to Airflow/Composer versions are perfomed by editing the `config.software_config.image_version` value in `environment.tf`.
-- The Docker containers used by `PodOperator` DAGs are built when a PR is merged into the `main` branch. More information can be found in the respective image READMEs.
 - Environment variables for each environment are set via `.<environment>.env` files, (e.g., staging variables are in `.staging.env`).
 
 

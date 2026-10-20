@@ -87,7 +87,6 @@ resource "google_composer_environment" "calitp-staging-composer3" {
         "CALITP_BUCKET__GTFS_SCHEDULE_PARSED"                  = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-schedule-parsed_name}",
         "CALITP_BUCKET__GTFS_SCHEDULE_PARSED_HOURLY"           = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-schedule-parsed-hourly_name}",
         "CALITP_BUCKET__GTFS_SCHEDULE_RAW"                     = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-schedule-raw-v2_name}",
-        "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED"                = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-schedule-unzipped_name}",
         "CALITP_BUCKET__GTFS_SCHEDULE_UNZIPPED_HOURLY"         = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-schedule-unzipped-hourly_name}",
         "CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION"              = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-schedule-validation_name}",
         "CALITP_BUCKET__GTFS_SCHEDULE_VALIDATION_HOURLY"       = "gs://${data.terraform_remote_state.gcs.outputs.google_storage_bucket_calitp-staging-gtfs-schedule-validation-hourly_name}",

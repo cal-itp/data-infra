@@ -10,6 +10,5 @@ from operators.external_table import ExternalTable
 from operators.kuba_to_gcs_operator import KubaToGCSOperator
 from operators.littlepay_raw_sync_feed_v3 import LittlepayRawSyncV3
 from operators.littlepay_to_jsonl_feed_v3 import LittlepayToJSONLV3
-from operators.pod_operator import PodOperator
 from operators.scrape_ntd_xlsx import NtdDataProductXLSXOperator
 from operators.scrape_state_geoportal import StateGeoportalAPIOperator
