@@ -16,6 +16,7 @@ sources:
       - name: micropayments
       - name: products
       - name: refunds
+      - name: revenue_inspection_outcomes
       - name: settlements
       - name: terminal_device_transactions
       - name: raw_littlepay_sync_job_result
