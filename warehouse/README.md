@@ -424,19 +424,6 @@ docker compose run dbt debug
 ```
 
 
-## Testing Warehouse Image Changes
-
-A person with Docker set up locally can build a development version of the underlying warehouse image at any time after making changes to the Dockerfile or its requirements. From the relevant subfolder, run
-
-```bash
-docker build -t ghcr.io/cal-itp/data-infra/warehouse:development .
-```
-
-That image can be used alongside [a local Airflow instance](../airflow/README.md) to test changes locally prior to merging, [if pushed to GHCR first](https://github.com/cal-itp/data-infra/tree/main/airflow#podoperators).
-
-
 ## Deploying Changes to Production
 
-The warehouse image and dbt project are automatically built and deployed on every change that's merged to `main`. When changes to this directory are merged into `main`, the [build-warehouse-image](../.github/workflows/build-warehouse-image.yml) GitHub Action automatically publishes an updated version of the image.
-
-After deploying, no additional steps should be necessary. All internal code referencing the `warehouse` image utilizes [the Airflow image_tag macro](../airflow/dags/macros.py) to automatically fetch the latest version during DAG runs.
+Changes to the dbt project are automatically deployed when relevant changes are merged into `main` through the [Deploy dbt](../.github/workflows/deploy-dbt.yml) GitHub Actions workflow.
