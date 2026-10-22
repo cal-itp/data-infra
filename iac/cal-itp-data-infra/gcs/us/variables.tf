@@ -6,10 +6,6 @@ locals {
     "calitp-gtfs-rt-archiver",
   ])
 
-  requester_pays_buckets = toset([
-    "calitp-tides",
-  ])
-
   site_buckets = toset([
     "calitp-tides-site",
     "calitp-analysis",

@@ -1205,17 +1205,16 @@ resource "google_storage_bucket" "calitp" {
   uniform_bucket_level_access = "true"
 }
 
-resource "google_storage_bucket" "calitp-requester-pays" {
-  for_each                    = local.requester_pays_buckets
-  name                        = each.key
-  default_event_based_hold    = "false"
-  force_destroy               = "false"
-  location                    = "US-WEST2"
-  project                     = "cal-itp-data-infra"
-  public_access_prevention    = "inherited"
-  requester_pays              = "true"
-  storage_class               = "STANDARD"
-  uniform_bucket_level_access = "true"
+# calitp-tides was managed both here (via for-each) and by the standalone
+# google_storage_bucket.calitp-tides below, so every apply toggled its usage
+# logging (#5812). Forget the duplicate state entry without destroying the
+# bucket; the standalone resource remains the sole manager.
+removed {
+  from = google_storage_bucket.calitp-requester-pays
+
+  lifecycle {
+    destroy = false
+  }
 }
 
 resource "google_storage_bucket" "calitp-site" {
