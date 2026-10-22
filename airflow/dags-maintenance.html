@@ -541,7 +541,6 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-clear-a-dag-or-dag-task">How to clear a DAG or DAG task</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#podoperators"><code class="docutils literal notranslate"><span class="pre">PodOperators</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#re-triggering-from-the-command-line">Re-triggering from the command line</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-large-number-of-tasks">Running a large number of tasks</a></li>
 </ul>
@@ -603,10 +602,6 @@
 <p>Failures can be cleared (re-run) via the Airflow user interface (<a class="reference external" href="https://console.cloud.google.com/composer/environments?project=cal-itp-data-infra&amp;amp;supportedpurview=project">accessible via Composer here</a>.)</p>
 <p><a class="reference external" href="https://airflow.apache.org/docs/apache-airflow/stable/ui.html">This Airflow guide</a> can help you use and interpret the Airflow UI.</p>
 </section>
-</section>
-<section id="podoperators">
-<h2><code class="docutils literal notranslate"><span class="pre">PodOperators</span></code><a class="headerlink" href="#podoperators" title="Link to this heading">#</a></h2>
-<p>When restarting a failed run of a DAG that utilizes a <code class="docutils literal notranslate"><span class="pre">PodOperator</span></code>, check the logs before restarting. If the logs show any indication that the prior run’s pod was not killed (for example, if the logs cut off abruptly without showing an explicit task failure), you should check that the <a class="reference external" href="https://kubernetes.io/docs/concepts/workloads/pods/">Kubernetes pod</a> associated with the failed run task has in fact been killed before clearing or restarting the Airflow task. Users with proper access to Kubernetes Engine in Google Cloud can check for any <a class="reference external" href="https://console.cloud.google.com/kubernetes/workload/overview?project=cal-itp-data-infra&amp;amp;pli=1&amp;amp;pageState=(%22savedViews%22:(%22i%22:%229699ac902c0a41ae918282ebfa4f5fb2%22,%22c%22:%5B%5D,%22n%22:%5B%5D),%22workload_list_table%22:(%22p%22:0))">live workloads</a> that correspond to the pod referenced in the failed Airflow task’s run logs.</p>
 </section>
 <section id="re-triggering-from-the-command-line">
 <h2>Re-triggering from the command line<a class="headerlink" href="#re-triggering-from-the-command-line" title="Link to this heading">#</a></h2>
@@ -734,7 +729,6 @@
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-clear-a-dag-or-dag-task">How to clear a DAG or DAG task</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#podoperators"><code class="docutils literal notranslate"><span class="pre">PodOperators</span></code></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#re-triggering-from-the-command-line">Re-triggering from the command line</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-a-large-number-of-tasks">Running a large number of tasks</a></li>
 </ul>
