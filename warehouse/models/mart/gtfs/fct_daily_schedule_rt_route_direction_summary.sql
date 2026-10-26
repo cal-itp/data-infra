@@ -6,11 +6,13 @@
 }}
 
 WITH schedule_trips AS (
-    SELECT * FROM {{ ref('fct_scheduled_trips') }}
+    SELECT * FROM `cal-itp-data-infra.mart_gtfs.fct_scheduled_trips`--{{ ref('fct_scheduled_trips') }}
+    WHERE service_date >= "2026-09-01" AND service_date <= "2026-09-30"
 ),
 
 observed_trips AS (
-    SELECT * FROM {{ ref('fct_observed_trips') }}
+    SELECT * FROM `cal-itp-data-infra.mart_gtfs.fct_observed_trips`--{{ ref('fct_observed_trips') }}
+    WHERE service_date >= "2026-09-01" AND service_date <= "2026-09-30"
 ),
 
 -- add this to make sure we correctly link quartets
@@ -124,6 +126,10 @@ schedule_aggregation AS (
         SUM(num_stop_times) AS num_stop_times,
         COALESCE(ROUND(SUM(service_hours), 2), 0) AS service_hours,
         COALESCE(ROUND(SUM(flex_service_hours), 2), 0) AS flex_service_hours,
+        COALESCE(COUNT(DISTINCT trip_instance_key WHERE is_gtfs_flex_trip = True), 0) AS n_flex_trips,
+        COALESCE(SUM(num_gtfs_flex_stop_times), 0) AS num_gtfs_flex_stop_times,
+        COALESCE(COUNT(DISTINCT trip_instance_key WHERE is_entirely_demand_responsive_trip = True), 0) AS n_demand_response_trips,
+
     FROM gtfs_join
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 ),
@@ -245,6 +251,9 @@ route_direction_aggregation AS (
         schedule.num_stop_times,
         schedule.service_hours,
         schedule.flex_service_hours,
+        schedule.n_flex_trips,
+        schedule.num_gtfs_flex_stop_times,
+        schedule.n_demand_response_trips,
 
         -- from pivoted
         COALESCE(trips_owl, 0) AS daily_trips_owl,
@@ -256,22 +265,22 @@ route_direction_aggregation AS (
 		COALESCE(trips_am_peak, 0) + COALESCE(trips_pm_peak, 0) AS daily_trips_peak,
 		n_trips - (COALESCE(trips_am_peak, 0) + COALESCE(trips_pm_peak, 0)) AS daily_trips_offpeak,
 
-		COALESCE(ROUND(frequency_owl, 2), 0) AS frequency_owl,
-		COALESCE(ROUND(frequency_early_am, 2), 0) AS frequency_early_am,
-		COALESCE(ROUND(frequency_am_peak, 2), 0) AS frequency_am_peak,
-		COALESCE(ROUND(frequency_midday, 2), 0) AS frequency_midday,
-		COALESCE(ROUND(frequency_pm_peak, 2), 0) AS frequency_pm_peak,
-		COALESCE(ROUND(frequency_evening, 2), 0) AS frequency_evening,
+		COALESCE(ROUND(frequency_owl, 3), 0) AS frequency_owl,
+		COALESCE(ROUND(frequency_early_am, 3), 0) AS frequency_early_am,
+		COALESCE(ROUND(frequency_am_peak, 3), 0) AS frequency_am_peak,
+		COALESCE(ROUND(frequency_midday, 3), 0) AS frequency_midday,
+		COALESCE(ROUND(frequency_pm_peak, 3), 0) AS frequency_pm_peak,
+		COALESCE(ROUND(frequency_evening, 3), 0) AS frequency_evening,
 
         -- calculate frequency for peak/offpeak this way by weighting the hours present in each category, add frequency for all_day
 		ROUND(
 			(COALESCE(frequency_am_peak, 0) * 3 + COALESCE(frequency_pm_peak, 0) * 5) / 8,
-		2) AS frequency_peak,
+		3) AS frequency_peak,
 		ROUND(
 			(COALESCE(frequency_owl, 0) * 4 + COALESCE(frequency_early_am, 0) * 3
 			+ COALESCE(frequency_midday, 0) * 5 + COALESCE(frequency_evening, 0) * 4) / 16,
-		2) AS frequency_offpeak,
-        ROUND(n_trips / 24) AS frequency_all_day,
+		3) AS frequency_offpeak,
+        ROUND(n_trips / 24, 3) AS frequency_all_day,
 
         -- follow pattern in fct_observed_trips
         tu_base64_url IS NOT NULL AS appeared_in_tu,
