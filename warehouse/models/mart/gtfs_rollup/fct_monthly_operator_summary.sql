@@ -195,7 +195,7 @@ monthly_summary AS (
         ROUND(SUM(n_flex_trips) / COUNT(DISTINCT service_date), 1) AS daily_flex_trips,
         ROUND(SUM(ttl_flex_service_hours), 1) AS ttl_flex_service_hours,
         ROUND(SUM(ttl_flex_service_hours) / COUNT(DISTINCT service_date), 1) AS daily_flex_service_hours,
-        SUM(num_gtfs_flex_stop_times) AS ttl_flex_arrivals
+        SUM(num_gtfs_flex_stop_times) AS ttl_flex_arrivals,
         ROUND(SUM(num_gtfs_flex_stop_times) / COUNT(DISTINCT service_date), 1) AS daily_flex_arrivals,
         SUM(n_demand_response_trips) AS n_demand_response_trips,
         ROUND(SUM(n_demand_response_trips) / COUNT(DISTINCT service_date), 1) AS daily_demand_response_trips,
