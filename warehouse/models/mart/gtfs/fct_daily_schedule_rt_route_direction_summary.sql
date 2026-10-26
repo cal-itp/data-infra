@@ -6,13 +6,11 @@
 }}
 
 WITH schedule_trips AS (
-    SELECT * FROM `cal-itp-data-infra.mart_gtfs.fct_scheduled_trips`--{{ ref('fct_scheduled_trips') }}
-    WHERE service_date >= "2026-09-01" AND service_date <= "2026-09-30"
+    SELECT * FROM {{ ref('fct_scheduled_trips') }}
 ),
 
 observed_trips AS (
-    SELECT * FROM `cal-itp-data-infra.mart_gtfs.fct_observed_trips`--{{ ref('fct_observed_trips') }}
-    WHERE service_date >= "2026-09-01" AND service_date <= "2026-09-30"
+    SELECT * FROM {{ ref('fct_observed_trips') }}
 ),
 
 -- add this to make sure we correctly link quartets

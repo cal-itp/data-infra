@@ -7,15 +7,13 @@
 
 WITH daily_schedule AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_feed_scheduled_service_summary` --{{ ref('fct_daily_feed_scheduled_service_summary') }}
-    WHERE service_date >= "2026-09-01" AND service_date <= "2026-09-30"
+    FROM {{ ref('fct_daily_feed_scheduled_service_summary') }}
 ),
 
 daily_rt AS (
     SELECT *
     FROM `cal-itp-data-infra.mart_gtfs.fct_daily_rt_service_summary`--{{ ref('fct_daily_rt_service_summary') }}
-    WHERE service_date >= "2026-09-01" AND service_date <= "2026-09-30"
-
+    WHERE service_date >= "2026-09-01"
 ),
 
 -- these will not be present for each date,
@@ -23,7 +21,7 @@ daily_rt AS (
 daily_tu_stop_metrics AS (
     SELECT *
     FROM `cal-itp-data-infra.mart_gtfs.fct_trip_updates_stop_metrics`--{{ ref('fct_trip_updates_stop_metrics') }}
-    WHERE service_date >= "2026-09-01" AND service_date <= "2026-09-30"
+    WHERE service_date >= "2026-09-01"
 ),
 
 tu_operator_aggregation AS (
@@ -92,12 +90,15 @@ daily_summary AS (
         ROUND(daily_schedule.ttl_service_hours, 2) AS ttl_service_hours,
         ROUND(daily_schedule.ttl_flex_service_hours, 2) AS ttl_flex_service_hours,
         COALESCE(daily_schedule.n_trips, 0) AS n_trips,
+        COALESCE(daily_schedule.n_flex_trips, 0) AS n_flex_trips,
         daily_schedule.first_departure_sec,
         daily_schedule.last_arrival_sec,
         daily_schedule.num_stop_times,
+        daily_schedule.num_gtfs_flex_stop_times,
         daily_schedule.n_routes,
         daily_schedule.n_shapes,
         daily_schedule.n_stops,
+        daily_schedule.n_demand_response_trips,
         daily_schedule.contains_warning_duplicate_stop_times_primary_key,
         daily_schedule.contains_warning_duplicate_trip_primary_key,
         daily_schedule.contains_warning_missing_foreign_key_stop_id,
