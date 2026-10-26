@@ -24,6 +24,8 @@ route_direction_aggregation AS (
         -- schedule
         SUM(n_trips) AS n_trips,
 		ROUND(AVG(n_trips), 2) AS daily_trips_all_day,
+        SUM(n_flex_trips) AS n_flex_trips,
+		ROUND(AVG(n_flex_trips), 2) AS daily_flex_trips_all_day,
         COUNT(DISTINCT route_id) AS n_route_ids,
         ROUND(AVG(n_shapes), 1) AS n_shapes,
         ROUND(AVG(avg_stops_served), 1) AS avg_stops_served,
@@ -31,6 +33,12 @@ route_direction_aggregation AS (
         ROUND(SUM(flex_service_hours), 2) AS ttl_flex_service_hours,
         ROUND(SUM(service_hours) / COUNT(DISTINCT service_date), 2) AS daily_service_hours,
         ROUND(SUM(flex_service_hours) / COUNT(DISTINCT service_date), 2) AS daily_flex_service_hours,
+        SUM(num_stop_times) AS ttl_num_stop_times,
+        SUM(num_gtfs_flex_stop_times) AS ttl_num_gtfs_flex_stop_times,
+        ROUND(SUM(num_stop_times) / COUNT(DISTINCT service_date), 2) AS daily_num_stop_times,
+        ROUND(SUM(num_gtfs_flex_stop_times) / COUNT(DISTINCT service_date), 2) AS daily_num_gtfs_flex_stop_times,
+        SUM(n_demand_response_trips) AS n_demand_response_trips,
+		ROUND(AVG(n_demand_response_trips), 2) AS daily_demand_response_trips_all_day,
 
         COUNT(DISTINCT feed_key) AS n_feeds,
         COUNT(DISTINCT service_date) AS n_days,

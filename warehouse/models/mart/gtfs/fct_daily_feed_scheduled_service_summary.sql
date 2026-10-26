@@ -9,15 +9,13 @@ WITH fct_daily_schedule_feeds AS (
     SELECT
         *,
         EXTRACT(DAYOFWEEK FROM date) AS day_num
-    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_schedule_feeds`--{{ ref('fct_daily_schedule_feeds') }}
-    WHERE date >= "2026-09-01"
+    FROM {{ ref('fct_daily_schedule_feeds') }}
 ),
 
 fct_scheduled_trips AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_gtfs.fct_scheduled_trips`--{{ ref('fct_scheduled_trips') }}
-    WHERE service_date >= "2026-09-01"
---service_date < CURRENT_DATE()
+    FROM {{ ref('fct_scheduled_trips') }}
+    WHERE service_date < CURRENT_DATE()
 ),
 
 fct_scheduled_stops AS (
@@ -25,8 +23,8 @@ fct_scheduled_stops AS (
         service_date,
         feed_key,
         stop_id,
-    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_scheduled_stops` --{{ ref('fct_daily_scheduled_stops') }}
-    WHERE service_date >= "2026-09-01"--service_date < CURRENT_DATE()
+    FROM {{ ref('fct_daily_scheduled_stops') }}
+    WHERE service_date < CURRENT_DATE()
 ),
 
 trip_summary AS (
