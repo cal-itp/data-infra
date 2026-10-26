@@ -21,7 +21,7 @@ route_direction_aggregation AS (
         direction_id,
         MAX(route_type) AS route_type,
 
-        -- schedule columns
+        -- schedule
         SUM(n_trips) AS n_trips,
 		ROUND(AVG(n_trips), 2) AS daily_trips_all_day,
         COUNT(DISTINCT route_id) AS n_route_ids,
@@ -32,7 +32,7 @@ route_direction_aggregation AS (
         SUM(num_stop_times) AS ttl_arrivals,
         ROUND(SUM(num_stop_times) / COUNT(DISTINCT service_date), 2) AS daily_arrivals,
 
-        -- flex and demand response columns
+        -- flex and demand response
         SUM(n_flex_trips) AS n_flex_trips,
 		ROUND(AVG(n_flex_trips), 2) AS daily_flex_trips_all_day,
         ROUND(SUM(flex_service_hours), 2) AS ttl_flex_service_hours,
