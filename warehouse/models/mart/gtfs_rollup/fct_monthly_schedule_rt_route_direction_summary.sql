@@ -28,13 +28,21 @@ route_direction_aggregation AS (
         ROUND(AVG(n_shapes), 1) AS n_shapes,
         ROUND(AVG(avg_stops_served), 1) AS avg_stops_served,
         ROUND(SUM(service_hours), 2) AS ttl_service_hours,
-        ROUND(SUM(flex_service_hours), 2) AS ttl_flex_service_hours,
         ROUND(SUM(service_hours) / COUNT(DISTINCT service_date), 2) AS daily_service_hours,
+        SUM(num_stop_times) AS ttl_arrivals,
+        ROUND(SUM(num_stop_times) / COUNT(DISTINCT service_date), 2) AS daily_arrivals,
+
+        -- flex and demand response
+        SUM(n_flex_trips) AS n_flex_trips,
+		ROUND(AVG(n_flex_trips), 2) AS daily_flex_trips_all_day,
+        ROUND(SUM(flex_service_hours), 2) AS ttl_flex_service_hours,
         ROUND(SUM(flex_service_hours) / COUNT(DISTINCT service_date), 2) AS daily_flex_service_hours,
+        SUM(num_gtfs_flex_stop_times) AS ttl_flex_arrivals,
+        ROUND(SUM(num_gtfs_flex_stop_times) / COUNT(DISTINCT service_date), 2) AS daily_flex_arrivals,
+        SUM(n_demand_response_trips) AS n_demand_response_trips,
+		ROUND(AVG(n_demand_response_trips), 2) AS daily_demand_response_trips_all_day,
 
-        COUNT(DISTINCT feed_key) AS n_feeds,
-        COUNT(DISTINCT service_date) AS n_days,
-
+        -- schedule daily trips and frequency (trips per hour) by time-of-day
         ROUND(AVG(daily_trips_owl), 2) AS daily_trips_owl,
         ROUND(AVG(daily_trips_early_am), 2) AS daily_trips_early_am,
         ROUND(AVG(daily_trips_am_peak), 2) AS daily_trips_am_peak,
@@ -68,6 +76,10 @@ route_direction_aggregation AS (
         SUM(n_tu_trips) AS n_tu_trips,
         SUM(tu_extract_duration_minutes) AS tu_extract_duration_minutes,
         ROUND(AVG(tu_messages_per_minute), 1) AS tu_messages_per_minute,
+
+        -- feed aggregation
+        COUNT(DISTINCT feed_key) AS n_feeds,
+        COUNT(DISTINCT service_date) AS n_days,
 
     FROM daily_summary
 	GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12

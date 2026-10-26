@@ -179,21 +179,28 @@ monthly_summary AS (
 
         daily_summary2.day_type,
 
+        -- schedule
         SUM(n_trips) AS n_trips,
         ROUND(SUM(n_trips) / COUNT(DISTINCT service_date), 1) AS daily_trips,
         ROUND(SUM(ttl_service_hours), 1) AS ttl_service_hours,
         ROUND(SUM(ttl_service_hours) / COUNT(DISTINCT service_date), 1) AS daily_service_hours,
-        ROUND(SUM(ttl_flex_service_hours), 1) AS ttl_flex_service_hours,
-        ROUND(SUM(ttl_flex_service_hours) / COUNT(DISTINCT service_date), 1) AS daily_flex_service_hours,
         MAX(n_routes) AS n_routes,
         MAX(n_shapes) AS n_shapes,
         MAX(n_stops) AS n_stops,
-        SUM(num_stop_times) AS num_stop_times,
+        SUM(num_stop_times) AS ttl_arrivals,
         ROUND(SUM(num_stop_times) / COUNT(DISTINCT service_date), 1) AS daily_arrivals,
 
-        COUNT(DISTINCT service_date) AS n_days,
-        COUNT(DISTINCT feed_key) AS n_feeds,
+        -- flex and demand response
+        SUM(n_flex_trips) AS n_flex_trips,
+        ROUND(SUM(n_flex_trips) / COUNT(DISTINCT service_date), 1) AS daily_flex_trips,
+        ROUND(SUM(ttl_flex_service_hours), 1) AS ttl_flex_service_hours,
+        ROUND(SUM(ttl_flex_service_hours) / COUNT(DISTINCT service_date), 1) AS daily_flex_service_hours,
+        SUM(num_gtfs_flex_stop_times) AS ttl_flex_arrivals,
+        ROUND(SUM(num_gtfs_flex_stop_times) / COUNT(DISTINCT service_date), 1) AS daily_flex_arrivals,
+        SUM(n_demand_response_trips) AS n_demand_response_trips,
+        ROUND(SUM(n_demand_response_trips) / COUNT(DISTINCT service_date), 1) AS daily_demand_response_trips,
 
+        -- vehicle positions
         ROUND(AVG(vp_messages_per_minute), 1) AS vp_messages_per_minute,
         SUM(n_vp_trips) AS n_vp_trips,
         ROUND(SUM(n_vp_trips) / COUNT(DISTINCT service_date), 1) AS daily_vp_trips,
@@ -201,6 +208,7 @@ monthly_summary AS (
         MAX(pct_vp_routes) AS pct_vp_routes, -- should the max be used for coverage?
         ROUND(SUM(vp_extract_duration_minutes) / COUNT(DISTINCT service_date), 2) AS daily_vp_extract_duration_minutes,
 
+        -- trip update
         ROUND(AVG(tu_messages_per_minute), 1) AS tu_messages_per_minute,
         SUM(n_tu_trips) AS n_tu_trips,
         ROUND(SUM(n_tu_trips) / COUNT(DISTINCT service_date), 1) AS daily_tu_trips,
@@ -216,6 +224,9 @@ monthly_summary AS (
         ROUND(AVG(pct_predictions_ontime), 3) AS pct_predictions_ontime,
         ROUND(AVG(pct_predictions_late), 3) AS pct_predictions_late,
 
+        -- feed aggregation
+        COUNT(DISTINCT service_date) AS n_days,
+        COUNT(DISTINCT feed_key) AS n_feeds,
         MAX(pivoted.n_days_schedule_only) AS n_days_schedule_only,
         MAX(pivoted.n_days_schedule_and_rt) AS n_days_schedule_and_rt,
         MAX(pivoted.n_days_schedule_and_vp_only) AS n_days_schedule_and_vp_only,

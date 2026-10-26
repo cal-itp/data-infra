@@ -10,7 +10,6 @@ WITH fct_daily_schedule_feeds AS (
         *,
         EXTRACT(DAYOFWEEK FROM date) AS day_num
     FROM {{ ref('fct_daily_schedule_feeds') }}
-
 ),
 
 fct_scheduled_trips AS (
@@ -36,11 +35,14 @@ trip_summary AS (
         SUM(service_hours) AS ttl_service_hours,
         SUM(flex_service_hours) AS ttl_flex_service_hours,
         COUNT(DISTINCT trip_id) AS n_trips,
+        COALESCE(COUNT(DISTINCT trip_instance_key WHERE is_gtfs_flex_trip = True), 0) AS n_flex_trips,
         MIN(trip_first_departure_sec) AS first_departure_sec,
         MAX(trip_last_arrival_sec) AS last_arrival_sec,
         SUM(num_stop_times) AS num_stop_times,
         COUNT(DISTINCT route_id) AS n_routes,
         COUNT(DISTINCT shape_id) AS n_shapes,
+        SUM(num_gtfs_flex_stop_times) AS num_gtfs_flex_stop_times,
+        COALESCE(COUNT(DISTINCT trip_instance_key WHERE is_entirely_demand_responsive_trip = True), 0) AS n_demand_response_trips,
         LOGICAL_OR(
             contains_warning_duplicate_stop_times_primary_key
         ) AS contains_warning_duplicate_stop_times_primary_key,
@@ -75,15 +77,19 @@ fct_daily_feed_scheduled_service_summary AS (
         COALESCE(trips.ttl_service_hours, 0) AS ttl_service_hours,
         COALESCE(trips.ttl_flex_service_hours, 0) AS ttl_flex_service_hours,
         COALESCE(trips.n_trips, 0) AS n_trips,
+        COALESCE(trips.n_flex_trips, 0) AS n_flex_trips,
         trips.first_departure_sec,
         trips.last_arrival_sec,
         COALESCE(trips.num_stop_times, 0) AS num_stop_times,
+        COALESCE(trips.num_gtfs_flex_stop_times, 0) AS num_gtfs_flex_stop_times,
         COALESCE(trips.n_routes, 0) AS n_routes,
         COALESCE(trips.n_shapes, 0) AS n_shapes,
         COALESCE(stops.n_stops, 0) AS n_stops,
+        COALESCE(trips.n_demand_response_trips, 0) AS n_demand_response_trips,
+
         trips.contains_warning_duplicate_stop_times_primary_key,
         trips.contains_warning_duplicate_trip_primary_key,
-        trips.contains_warning_missing_foreign_key_stop_id
+        trips.contains_warning_missing_foreign_key_stop_id,
     FROM fct_daily_schedule_feeds AS feeds
     LEFT JOIN trip_summary AS trips
         ON feeds.feed_key = trips.feed_key

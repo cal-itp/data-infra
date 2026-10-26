@@ -88,12 +88,15 @@ daily_summary AS (
         ROUND(daily_schedule.ttl_service_hours, 2) AS ttl_service_hours,
         ROUND(daily_schedule.ttl_flex_service_hours, 2) AS ttl_flex_service_hours,
         COALESCE(daily_schedule.n_trips, 0) AS n_trips,
+        COALESCE(daily_schedule.n_flex_trips, 0) AS n_flex_trips,
         daily_schedule.first_departure_sec,
         daily_schedule.last_arrival_sec,
         daily_schedule.num_stop_times,
+        daily_schedule.num_gtfs_flex_stop_times,
         daily_schedule.n_routes,
         daily_schedule.n_shapes,
         daily_schedule.n_stops,
+        daily_schedule.n_demand_response_trips,
         daily_schedule.contains_warning_duplicate_stop_times_primary_key,
         daily_schedule.contains_warning_duplicate_trip_primary_key,
         daily_schedule.contains_warning_missing_foreign_key_stop_id,
@@ -106,6 +109,7 @@ daily_summary AS (
         daily_rt.tu_base64_url,
 
         -- trip updates
+        daily_rt.tu_num_distinct_updates,
         COALESCE(daily_rt.n_tu_trips, 0) AS n_tu_trips,
         ROUND(SAFE_DIVIDE(daily_rt.n_tu_trips, daily_schedule.n_trips), 3) AS pct_tu_trips,
         daily_rt.n_tu_routes,
