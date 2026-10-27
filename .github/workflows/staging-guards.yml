@@ -1,0 +1,48 @@
+name: Staging guards
+
+# Sets the `staging/guards` status on every open PR into staging/official:
+# 1. no iac/ changes (infrastructure goes through main)
+# 2. no staging/official history in the PR's branch
+# 3. no files held by another test; such PRs wait (pending) and pass on their
+#    own once the file is released
+# Every run re-evaluates all open PRs, oldest first, so a superseded run can be
+# cancelled safely. See docs/architecture/staging-deployment.md.
+#
+# pull_request_target runs this workflow from the base branch with a write
+# token. It checks out main and only reads the PRs' commits; no PR code runs.
+
+on:
+  pull_request_target:
+    branches:
+      - staging/official
+    types: [opened, synchronize, reopened, edited, ready_for_review]
+  push:
+    branches:
+      - staging/official
+  workflow_dispatch:
+
+concurrency:
+  group: staging-guards
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  statuses: write
+  pull-requests: read
+
+jobs:
+  guards:
+    name: Evaluate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: staging/guards
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 .github/scripts/staging_official.py guards

@@ -1,13 +1,19 @@
 name: Terraform Apply
 
+# Staging pure-infrastructure modules apply from main. The three staging
+# modules that deploy code from outside iac/ apply only from staging/official.
+# See docs/architecture/staging-deployment.md.
+#
+# No `paths` filter: rebuild-staging force-pushes staging/official, so the
+# changed files are computed from the push's before/after commits instead.
+
 on:
   push:
     branches:
       - 'main'
       - 'staging/official'
-    paths:
-      - 'iac/**'
-      - 'services/gtfs-rt-archiver/**'
+  # On staging/official: re-apply the code-reading modules.
+  workflow_dispatch:
 
 env:
   SERVICE_ACCOUNT: 'github-actions-terraform@cal-itp-data-infra.iam.gserviceaccount.com'
@@ -16,11 +22,6 @@ env:
   STAGING_SERVICE_ACCOUNT: 'github-actions-terraform@cal-itp-data-infra-staging.iam.gserviceaccount.com'
   STAGING_WORKLOAD_IDENTITY_PROVIDER: 'projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra'
   STAGING_PROJECT_ID: 'cal-itp-data-infra-staging'
-
-# Optional concurrency guard – ensures only one apply runs per branch at a time
-concurrency:
-  group: terraform-apply-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   targets:
@@ -35,55 +36,66 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
-
-      - name: Staging Changes
-        uses: tj-actions/changed-files@v46
-        id: staging-changes
         with:
-          matrix: true
-          dir_names: true
-          files: 'iac/cal-itp-data-infra-staging/**/*.tf'
+          fetch-depth: 0
 
-      - name: Production Changes
-        uses: tj-actions/changed-files@v46
-        id: production-changes
+      - name: Changed files
+        id: changes
+        uses: ./.github/actions/changed-files
         with:
-          matrix: true
-          dir_names: true
-          files: 'iac/cal-itp-data-infra/**/*.tf'
+          since-ref: ${{ github.ref == 'refs/heads/staging/official' && 'refs/deployed/staging/terraform-apply' || '' }}
 
       # A pure source change under services/gtfs-rt-archiver does not touch any
       # *.tf, but it bumps the archive zip hash, so the archiver iac dir must be
       # applied to redeploy the Cloud Functions.
-      - name: Archiver source changes
-        uses: tj-actions/changed-files@v46
-        id: archiver-changes
-        with:
-          files: 'services/gtfs-rt-archiver/**'
-
       - name: Compute targets
         id: compute
         env:
-          STAGING_TF: ${{ steps.staging-changes.outputs.all_changed_files }}
-          PRODUCTION_TF: ${{ steps.production-changes.outputs.all_changed_files }}
-          ARCHIVER_CHANGED: ${{ steps.archiver-changes.outputs.any_changed }}
+          FILES: ${{ steps.changes.outputs.files }}
+          FULL: ${{ steps.changes.outputs.full }}
+          REF: ${{ github.ref }}
+        shell: python
         run: |
-          staging="${STAGING_TF:-[]}"
-          production="${PRODUCTION_TF:-[]}"
-          if [ "$ARCHIVER_CHANGED" = "true" ]; then
-            staging=$(echo "$staging" | jq -c '. + ["iac/cal-itp-data-infra-staging/gtfs-rt-archiver/us"] | unique')
-            production=$(echo "$production" | jq -c '. + ["iac/cal-itp-data-infra/gtfs-rt-archiver/us"] | unique')
-          fi
-          echo "staging=$staging" >> "$GITHUB_OUTPUT"
-          echo "production=$production" >> "$GITHUB_OUTPUT"
-          echo "Staging targets: $staging"
-          echo "Production targets: $production"
+          import json, os
+
+          CODE_READING = {
+              "iac/cal-itp-data-infra-staging/airflow/us",
+              "iac/cal-itp-data-infra-staging/composer/us",
+              "iac/cal-itp-data-infra-staging/gtfs-rt-archiver/us",
+          }
+          files = [f for f in os.environ["FILES"].splitlines() if f]
+          full = os.environ["FULL"] == "true"
+          on_staging = os.environ["REF"] == "refs/heads/staging/official"
+
+          def tf_dirs(prefix):
+              return {os.path.dirname(f) for f in files if f.startswith(prefix) and f.endswith(".tf")}
+
+          staging = tf_dirs("iac/cal-itp-data-infra-staging/")
+          production = tf_dirs("iac/cal-itp-data-infra/")
+          if any(f.startswith("services/gtfs-rt-archiver/") for f in files):
+              staging.add("iac/cal-itp-data-infra-staging/gtfs-rt-archiver/us")
+              production.add("iac/cal-itp-data-infra/gtfs-rt-archiver/us")
+
+          if on_staging:
+              # Pure-infrastructure changes reach this branch through the sync,
+              # but main already applied them.
+              staging = set(CODE_READING) if full else staging & CODE_READING
+              production = set()
+          else:
+              staging -= CODE_READING
+              if full:
+                  print("::notice::Manual runs on main apply nothing; run on staging/official to re-apply the code-reading modules.")
+
+          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+              out.write(f"staging={json.dumps(sorted(staging))}\n")
+              out.write(f"production={json.dumps(sorted(production))}\n")
+          print(f"Staging targets: {sorted(staging)}")
+          print(f"Production targets: {sorted(production)}")
 
   staging:
     name: Staging
     needs: [targets]
-    # Run only for the official staging branch and when there are staging targets
-    if: ${{ github.ref == 'refs/heads/staging/official' && needs.targets.outputs.staging != '[]' && needs.targets.outputs.staging != '' }}
+    if: ${{ needs.targets.outputs.staging != '[]' && needs.targets.outputs.staging != '' }}
     runs-on: ubuntu-latest
 
     permissions:
@@ -95,9 +107,24 @@ jobs:
       matrix:
         path: ${{ fromJson(needs.targets.outputs.staging) }}
 
+    # One run per module at a time, shared with every workflow that applies it.
+    # Never cancel an apply partway.
+    concurrency:
+      group: terraform-${{ matrix.path }}
+      cancel-in-progress: false
+
     steps:
+      # On staging/official, apply the branch tip: runs reach this lock out of
+      # order, and an older commit must never roll back a newer one.
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          ref: ${{ github.ref == 'refs/heads/staging/official' && 'staging/official' || github.sha }}
+          fetch-depth: 0
+
+      - name: Require main in staging/official
+        if: ${{ github.ref == 'refs/heads/staging/official' }}
+        run: python3 .github/scripts/staging_official.py require-main
 
       - name: Authenticate Google Service Account
         uses: google-github-actions/auth@v2
@@ -122,8 +149,27 @@ jobs:
             git config --global --add safe.directory $GITHUB_WORKSPACE
         with:
           path: ${{ matrix.path }}
-          # Auto‑approve only for the GTFS‑RT archiver when on the official staging branch
+          # Pushes to staging/official come from PR merges, the sync and
+          # rebuilds; the latter two have no PR plan to match.
           auto_approve: ${{ github.ref == 'refs/heads/staging/official' }}
+
+  record:
+    name: Record staging deploy
+    needs: [targets, staging]
+    if: ${{ github.ref == 'refs/heads/staging/official' && !failure() && !cancelled() }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Record deploy
+        uses: ./.github/actions/record-deploy
+        with:
+          ref: refs/deployed/staging/terraform-apply
 
   production:
     name: Production
@@ -139,6 +185,10 @@ jobs:
       fail-fast: false
       matrix:
         path: ${{ fromJson(needs.targets.outputs.production) }}
+
+    concurrency:
+      group: terraform-${{ matrix.path }}
+      cancel-in-progress: false
 
     steps:
       - name: Checkout

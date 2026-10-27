@@ -1,0 +1,76 @@
+name: Changed files
+description: >-
+  Files changed by this push or pull request, computed with git so forced pushes
+  (rebuild-staging) and new branches are handled. Requires a checkout with
+  fetch-depth 0.
+
+inputs:
+  since-ref:
+    description: >-
+      For pushes: a ref recording the last commit this workflow deployed
+      successfully. When it exists, files are diffed from it instead of the
+      push's previous commit, so a failed or skipped deploy is caught up by the
+      next run. Record it with the record-deploy action.
+    required: false
+    default: ''
+
+outputs:
+  files:
+    description: Newline-separated list of changed paths
+    value: ${{ steps.diff.outputs.files }}
+  full:
+    description: >-
+      'true' when the change set can't be computed (new branch, manual run, old
+      commit unavailable). Callers then deploy everything they manage.
+    value: ${{ steps.diff.outputs.full }}
+
+runs:
+  using: composite
+  steps:
+    - id: diff
+      shell: bash
+      env:
+        EVENT: ${{ github.event_name }}
+        BEFORE: ${{ github.event.before }}
+        AFTER: ${{ github.sha }}
+        BASE: ${{ github.event.pull_request.base.sha }}
+        HEAD: ${{ github.event.pull_request.head.sha }}
+        SINCE_REF: ${{ inputs.since-ref }}
+      run: |
+        set -euo pipefail
+        full=false
+        files=""
+        case "$EVENT" in
+          push)
+            if [ -n "$SINCE_REF" ] && git fetch --no-tags --quiet origin "+$SINCE_REF:$SINCE_REF" 2>/dev/null; then
+              echo "Diffing from the last successful deploy, $(git rev-parse --short "$SINCE_REF") ($SINCE_REF)"
+              BEFORE=$(git rev-parse "$SINCE_REF")
+            fi
+            if [[ "$BEFORE" =~ ^0+$ ]]; then
+              echo "New branch: no previous commit to compare with"
+              full=true
+            elif git cat-file -e "$BEFORE^{commit}" 2>/dev/null || git fetch --no-tags --quiet origin "$BEFORE"; then
+              # Two-dot diff: for a forced push this includes files the old
+              # commit had and the new one doesn't (e.g. a dropped staging test).
+              files=$(git diff --name-only --no-renames "$BEFORE" "$AFTER")
+            else
+              echo "::warning::Previous commit $BEFORE is unavailable; treating as a full deploy"
+              full=true
+            fi
+            ;;
+          pull_request|pull_request_target)
+            files=$(git diff --name-only --no-renames "$BASE...$HEAD")
+            ;;
+          *)
+            full=true
+            ;;
+        esac
+        echo "full=$full" >> "$GITHUB_OUTPUT"
+        {
+          echo "files<<CHANGED_FILES_EOF"
+          echo "$files"
+          echo "CHANGED_FILES_EOF"
+        } >> "$GITHUB_OUTPUT"
+        echo "full=$full"
+        echo "Changed files:"
+        echo "$files"

@@ -1,0 +1,17 @@
+name: Record deploy
+description: >-
+  Point a ref at the commit this run deployed, for changed-files' since-ref.
+  Needs a checkout and `contents: write`.
+
+inputs:
+  ref:
+    description: Ref to update, e.g. refs/deployed/staging/deploy-dbt
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - shell: bash
+      env:
+        REF: ${{ inputs.ref }}
+      run: git push --force origin "$GITHUB_SHA:$REF"

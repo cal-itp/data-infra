@@ -46,6 +46,7 @@ parts:
           - file: architecture/services
           - file: architecture/images_and_packages
           - file: architecture/data
+          - file: architecture/staging-deployment
       - file: airflow/dags-maintenance
       - file: transit_database/transitdatabase
   - caption: Contribute to the Docs!

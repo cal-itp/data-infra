@@ -138,11 +138,11 @@ Airflow PodOperator tasks execute a specific Docker image; these images are push
 
 Airflow deployment is managed automatically by Terraform, automated by Github Actions. If you manually deploy Airflow, Terraform will delete the deployment the next time it applies a plan.
 
-- The `dags/`, `plugins/`, and `../warehouse` directories are deployed automatically when a PR is merged into the `main` branch via terraform from the `iac/cal-itp-data-infra/airflow` directory for production and the `iac/cal-itp-data-infra-staging/airflow` directory for staging.
-- System configuration for worker count, environment variables, `requirements.txt`, and overrides of Airflow configs are deployed via terraform from the `iac/cal-itp-data-infra/composer` directory for production and the `iac/cal-itp-data-infra-staging/composer` directory for staging.
+- The `dags/`, `plugins/`, and `../warehouse` directories are deployed automatically via terraform: to production from the `iac/cal-itp-data-infra/airflow` directory when a PR is merged into `main`, and to staging from the `iac/cal-itp-data-infra-staging/airflow` directory when `staging/official` changes. See [Staging Deployment](../docs/architecture/staging-deployment.md).
+- System configuration for worker count, environment variables, `requirements-c3.txt`, and overrides of Airflow configs are deployed via terraform from the `iac/cal-itp-data-infra/composer` directory for production and the `iac/cal-itp-data-infra-staging/composer` directory for staging, following the same branches.
 - Upgrades to Airflow/Composer versions are perfomed by editing the `config.software_config.image_version` value in `environment.tf`.
 - The Docker containers used by `PodOperator` DAGs are built when a PR is merged into the `main` branch. More information can be found in the respective image READMEs.
-- Environment variables for each environment are set via `.<environment>.env` files, (e.g., staging variables are in `.staging.env`).
+- Environment variables for each environment are set via `.<environment>_c3.env` files (e.g., staging variables are in `.staging_c3.env`).
 
 
 ## Structure
@@ -223,22 +223,19 @@ $ uv run pytest tests/scripts/test_gtfs_rt_parser.py::TestGtfsRtParser::test_no_
 
 ## Testing Changes on Staging
 
-If you want to test changes on Airflow Staging without changing Production, you have two options described bellow.
+Staging runs `main` plus the changes being tested on the `staging/official` branch. To test a change there before it reaches production:
 
-Changes applied only to Staging can be overwride at any time, whenever a PR is merged or if someone else also applies to Staging.
+  1. Open a PR from your branch into `staging/official` and get one approval.
+  2. Once the `staging/guards` check passes, merge it (or enable auto-merge). If another test is using a file you change, the check waits until that test ends.
+  3. Follow the deploy on [GitHub Actions](https://github.com/cal-itp/data-infra/actions), then test on [Airflow Staging](https://console.cloud.google/composer/environments/detail/us-west2/calitp-staging-composer).
+  4. Promote it with your PR into `main`, which must match what was tested.
 
-So, before applying your changes, inform on `#data-infra` channel in the Cal-ITP Slack.
-
-
-### Apply automaticaly via staging branch
-
-  1. Create a new branch starting with `staging/` (for example: `staging/my-changes`).
-  2. Make your changes and push to Github.
-  3. Visualize the progress of the workflow applying the changes through Terraform on [Github Actions](https://github.com/cal-itp/data-infra/actions).
-  4. Once it is completed, you can test your changes on [Airflow Staging](https://console.cloud.google/composer/environments/detail/us-west2/calitp-staging-composer).
+Branches named `staging/*` other than `staging/official` no longer deploy anything. See [Staging Deployment](../docs/architecture/staging-deployment.md) for updating, dropping and promoting tests, and for what the checks mean.
 
 
-### Manually apply
+### Manually apply (break-glass only)
+
+A local `terraform apply` deploys your checkout over whatever `staging/official` deployed, and the next deploy from `staging/official` overwrites it again. Use it only when the automation can't, and tell the team in `#data-infra`.
 
   1. Make your changes
   2. Login with google cloud `gcloud auth application-default login --login-config=../iac/login.json`
@@ -250,7 +247,7 @@ So, before applying your changes, inform on `#data-infra` channel in the Cal-ITP
 
 ## Deploying Changes to Production
 
-We have a [GitHub Action](../.github/workflows/deploy-airflow.yml) that runs when PRs touching this directory merge to the `main` branch. The GitHub Action updates the requirements sourced from [requirements.txt](./requirements.txt) and syncs the [DAGs](./dags) and [plugins](./plugins) directories to the bucket that Composer watches for code/data to parse. As of 2025-07-16, this bucket is `calitp-composer` on production and `calitp-staging-composer` on staging.
+The [composer-apply-files](../.github/workflows/composer-apply-files.yml) GitHub Action runs when changes to this directory merge into `main`. It applies Terraform that updates the Composer environment from [requirements-c3.txt](./requirements-c3.txt) and [.production_c3.env](./.production_c3.env), and syncs the [DAGs](./dags) and [plugins](./plugins) directories to the bucket that Composer watches for code/data to parse. The same workflow deploys to staging when `staging/official` changes.
 
 
 ## Secrets

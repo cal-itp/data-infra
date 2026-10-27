@@ -1,5 +1,12 @@
 name: Plan Terraform for Warehouse and DAG changes
 
+# Staging deploys from staging/official, so staging plans preview it:
+# - PRs into staging/official: planned on the PR's merge result.
+# - PRs into main: planned on staging/official with the PR merged in, which is
+#   what the sync will deploy once the PR merges.
+# Production plans run only on PRs into main.
+# See docs/architecture/staging-deployment.md.
+
 on:
   pull_request:
     paths:
@@ -98,7 +105,7 @@ jobs:
     needs: [airflow-changes]
 
     # If there are changes to airflow iac files `terraform-plan` workflow will take care
-    if: ${{ needs.airflow-changes.outputs.staging == '[]' || needs.airflow-changes.outputs.staging == '' }}
+    if: ${{ (github.base_ref == 'main' || github.base_ref == 'staging/official') && (needs.airflow-changes.outputs.staging == '[]' || needs.airflow-changes.outputs.staging == '') }}
 
     permissions:
       contents: read
@@ -108,8 +115,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Preview staging/official with this PR
+        id: preview
+        if: ${{ github.base_ref == 'main' }}
+        uses: ./.github/actions/staging-preview-checkout
+        with:
+          head: ${{ github.event.pull_request.head.sha }}
 
       - uses: google-github-actions/auth@v2
+        if: ${{ steps.preview.outputs.ok != 'false' }}
         with:
           create_credentials_file: 'true'
           project_id: cal-itp-data-infra-staging
@@ -117,6 +134,7 @@ jobs:
           service_account: 'github-actions-terraform@cal-itp-data-infra-staging.iam.gserviceaccount.com'
 
       - name: Terraform Plan
+        if: ${{ steps.preview.outputs.ok != 'false' }}
         uses: dflook/terraform-plan@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -130,7 +148,7 @@ jobs:
     needs: [composer-changes]
 
     # If there are changes to composer iac files `terraform-plan` workflow will take care
-    if: ${{ needs.composer-changes.outputs.staging == '[]' || needs.composer-changes.outputs.staging == '' }}
+    if: ${{ (github.base_ref == 'main' || github.base_ref == 'staging/official') && (needs.composer-changes.outputs.staging == '[]' || needs.composer-changes.outputs.staging == '') }}
 
     permissions:
       contents: read
@@ -140,8 +158,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Preview staging/official with this PR
+        id: preview
+        if: ${{ github.base_ref == 'main' }}
+        uses: ./.github/actions/staging-preview-checkout
+        with:
+          head: ${{ github.event.pull_request.head.sha }}
 
       - uses: google-github-actions/auth@v2
+        if: ${{ steps.preview.outputs.ok != 'false' }}
         with:
           create_credentials_file: 'true'
           project_id: cal-itp-data-infra-staging
@@ -149,6 +177,7 @@ jobs:
           service_account: 'github-actions-terraform@cal-itp-data-infra-staging.iam.gserviceaccount.com'
 
       - name: Terraform Plan
+        if: ${{ steps.preview.outputs.ok != 'false' }}
         uses: dflook/terraform-plan@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -162,7 +191,7 @@ jobs:
     needs: [airflow-changes]
 
     # If there are changes to airflow iac files `terraform-plan` workflow will take care
-    if: ${{ needs.airflow-changes.outputs.production == '[]' || needs.airflow-changes.outputs.production == '' }}
+    if: ${{ github.base_ref == 'main' && (needs.airflow-changes.outputs.production == '[]' || needs.airflow-changes.outputs.production == '') }}
 
     permissions:
       contents: read
@@ -194,7 +223,7 @@ jobs:
     needs: [composer-changes]
 
     # If there are changes to composer iac files `terraform-plan` workflow will take care
-    if: ${{ needs.composer-changes.outputs.production == '[]' || needs.composer-changes.outputs.production == '' }}
+    if: ${{ github.base_ref == 'main' && (needs.composer-changes.outputs.production == '[]' || needs.composer-changes.outputs.production == '') }}
 
     permissions:
       contents: read

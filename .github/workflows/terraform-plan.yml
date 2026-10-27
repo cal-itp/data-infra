@@ -1,5 +1,13 @@
 name: Terraform Plan
 
+# PRs into main: production plans, and staging plans for pure-infrastructure
+# modules (applied from main). Staging plans for the three code-reading modules
+# are computed on staging/official with the PR merged in, since that's what the
+# sync will apply.
+# PRs into staging/official can't change iac/ (staging/guards); they only get a
+# staging archiver plan when they change its source.
+# See docs/architecture/staging-deployment.md.
+
 on:
   pull_request:
     paths:
@@ -58,6 +66,7 @@ jobs:
           STAGING_TF: ${{ steps.staging-changes.outputs.all_changed_files }}
           PRODUCTION_TF: ${{ steps.production-changes.outputs.all_changed_files }}
           ARCHIVER_CHANGED: ${{ steps.archiver-changes.outputs.any_changed }}
+          BASE_REF: ${{ github.base_ref }}
         run: |
           staging="${STAGING_TF:-[]}"
           production="${PRODUCTION_TF:-[]}"
@@ -65,6 +74,19 @@ jobs:
             staging=$(echo "$staging" | jq -c '. + ["iac/cal-itp-data-infra-staging/gtfs-rt-archiver/us"] | unique')
             production=$(echo "$production" | jq -c '. + ["iac/cal-itp-data-infra/gtfs-rt-archiver/us"] | unique')
           fi
+          case "$BASE_REF" in
+            main) ;;
+            staging/official)
+              # Only code changes are allowed here; the archiver is the one
+              # code-reading module this workflow plans.
+              staging=$(echo "$staging" | jq -c 'map(select(. == "iac/cal-itp-data-infra-staging/gtfs-rt-archiver/us"))')
+              production='[]'
+              ;;
+            *)
+              staging='[]'
+              production='[]'
+              ;;
+          esac
           echo "staging=$staging" >> "$GITHUB_OUTPUT"
           echo "production=$production" >> "$GITHUB_OUTPUT"
           echo "Staging targets: $staging"
@@ -73,8 +95,7 @@ jobs:
   staging:
     name: Staging
     needs: [targets]
-    # Run only when the PR targets the official staging branch and there are staging targets
-    if: ${{ (github.base_ref == 'staging/official' || github.base_ref == 'main') && needs.targets.outputs.staging != '[]' && needs.targets.outputs.staging != '' }}
+    if: ${{ needs.targets.outputs.staging != '[]' && needs.targets.outputs.staging != '' }}
     runs-on: ubuntu-latest
 
     permissions:
@@ -90,8 +111,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      # Code-reading modules deploy staging from staging/official, so on PRs
+      # into main their staging plan previews staging/official + this PR.
+      - name: Preview staging/official with this PR
+        id: preview
+        if: ${{ github.base_ref == 'main' && (contains(matrix.path, '/airflow/us') || contains(matrix.path, '/composer/us') || contains(matrix.path, '/gtfs-rt-archiver/us')) }}
+        uses: ./.github/actions/staging-preview-checkout
+        with:
+          head: ${{ github.event.pull_request.head.sha }}
 
       - name: Authenticate Google Service Account
+        if: ${{ steps.preview.outputs.ok != 'false' }}
         uses: google-github-actions/auth@v2
         with:
           create_credentials_file: true
@@ -100,23 +133,27 @@ jobs:
           service_account: ${{ env.STAGING_SERVICE_ACCOUNT }}
 
       - name: Setup GCloud utilities
+        if: ${{ steps.preview.outputs.ok != 'false' }}
         uses: google-github-actions/setup-gcloud@v3
 
       - name: Terraform Formatting
+        if: ${{ steps.preview.outputs.ok != 'false' }}
         uses: dflook/terraform-fmt-check@v1
         with:
           path: ${{ matrix.path }}
 
       - name: Terraform Validation
+        if: ${{ steps.preview.outputs.ok != 'false' }}
         uses: dflook/terraform-validate@v1
         with:
           path: ${{ matrix.path }}
 
       - name: Note archiver redeploy
-        if: contains(matrix.path, 'gtfs-rt-archiver')
+        if: ${{ steps.preview.outputs.ok != 'false' && contains(matrix.path, 'gtfs-rt-archiver') }}
         run: echo "::notice title=Archiver redeploy::Planning ${{ matrix.path }} — GTFS-RT archiver source (services/gtfs-rt-archiver) changed; zip hash bumped, so the Cloud Functions redeploy."
 
       - name: Terraform Plan
+        if: ${{ steps.preview.outputs.ok != 'false' }}
         uses: dflook/terraform-plan@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,22 +1,29 @@
 name: Apply Terraform for Warehouse and DAG changes
 
+# Production deploys from main; staging deploys only from staging/official.
+# See docs/architecture/staging-deployment.md.
+#
+# No `paths` filter: rebuild-staging force-pushes staging/official, so the
+# changed files are computed from the push's before/after commits instead.
+
 on:
   push:
     branches:
       - 'main'
-      - 'staging/**'
-    paths:
-      - 'airflow/**'
+      - 'staging/official'
 
 jobs:
-  airflow-changes:
-    name: Detect Airflow Terraform changes
+  changes:
+    name: Detect changes
 
     runs-on: ubuntu-latest
 
     outputs:
-      staging: ${{ steps.staging-changes.outputs.all_changed_files }}
-      production: ${{ steps.production-changes.outputs.all_changed_files }}
+      airflow: ${{ steps.flags.outputs.airflow }}
+      staging-airflow-tf: ${{ steps.flags.outputs.staging-airflow-tf }}
+      staging-composer-tf: ${{ steps.flags.outputs.staging-composer-tf }}
+      production-airflow-tf: ${{ steps.flags.outputs.production-airflow-tf }}
+      production-composer-tf: ${{ steps.flags.outputs.production-composer-tf }}
 
     steps:
       - name: Checkout
@@ -24,68 +31,55 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Staging Changes
-        uses: tj-actions/changed-files@v46
-        id: staging-changes
+      - name: Changed files
+        id: changes
+        uses: ./.github/actions/changed-files
         with:
-          matrix: true
-          dir_names: true
-          files: 'iac/cal-itp-data-infra-staging/airflow/**/*.tf'
+          since-ref: ${{ github.ref == 'refs/heads/staging/official' && 'refs/deployed/staging/composer-apply-files' || '' }}
 
-      - name: Production Changes
-        uses: tj-actions/changed-files@v46
-        id: production-changes
-        with:
-          matrix: true
-          dir_names: true
-          files: 'iac/cal-itp-data-infra/airflow/**/*.tf'
-
-  composer-changes:
-    name: Detect Composer Terraform changes
-
-    runs-on: ubuntu-latest
-
-    outputs:
-      staging: ${{ steps.staging-changes.outputs.all_changed_files }}
-      production: ${{ steps.production-changes.outputs.all_changed_files }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Staging Changes
-        uses: tj-actions/changed-files@v46
-        id: staging-changes
-        with:
-          matrix: true
-          dir_names: true
-          files: 'iac/cal-itp-data-infra-staging/composer/**/*.tf'
-
-      - name: Production Changes
-        uses: tj-actions/changed-files@v46
-        id: production-changes
-        with:
-          matrix: true
-          dir_names: true
-          files: 'iac/cal-itp-data-infra/composer/**/*.tf'
+      # A new branch or manual run (full=true) is covered by terraform-apply.yml,
+      # which re-applies every code-reading module.
+      - name: Compute flags
+        id: flags
+        env:
+          FILES: ${{ steps.changes.outputs.files }}
+        run: |
+          has() { grep -qE "$1" <<< "$FILES" && echo true || echo false; }
+          {
+            echo "airflow=$(has '^airflow/')"
+            echo "staging-airflow-tf=$(has '^iac/cal-itp-data-infra-staging/airflow/.*\.tf$')"
+            echo "staging-composer-tf=$(has '^iac/cal-itp-data-infra-staging/composer/.*\.tf$')"
+            echo "production-airflow-tf=$(has '^iac/cal-itp-data-infra/airflow/.*\.tf$')"
+            echo "production-composer-tf=$(has '^iac/cal-itp-data-infra/composer/.*\.tf$')"
+          } | tee -a "$GITHUB_OUTPUT"
 
   airflow-staging:
     name: Staging Airflow
     runs-on: ubuntu-latest
-    needs: [airflow-changes]
+    needs: [changes]
 
     # If there are changes to airflow iac files `terraform-apply` workflow will take care
-    if: ${{ needs.airflow-changes.outputs.staging == '[]' || needs.airflow-changes.outputs.staging == '' }}
+    if: ${{ github.ref == 'refs/heads/staging/official' && needs.changes.outputs.airflow == 'true' && needs.changes.outputs.staging-airflow-tf != 'true' }}
 
     permissions:
       contents: read
       id-token: write
 
+    concurrency:
+      group: terraform-iac/cal-itp-data-infra-staging/airflow/us
+      cancel-in-progress: false
+
     steps:
+      # Apply the branch tip: runs reach this lock out of order, and an older
+      # commit must never roll back a newer one.
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          ref: staging/official
+          fetch-depth: 0
+
+      - name: Require main in staging/official
+        run: python3 .github/scripts/staging_official.py require-main
 
       - uses: google-github-actions/auth@v2
         with:
@@ -100,23 +94,35 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: iac/cal-itp-data-infra-staging/airflow/us
-          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
+          auto_approve: true
 
   composer-staging:
     name: Staging Composer
     runs-on: ubuntu-latest
-    needs: [composer-changes]
+    needs: [changes]
 
     # If there are changes to composer iac files `terraform-apply` workflow will take care
-    if: ${{ needs.composer-changes.outputs.staging == '[]' || needs.composer-changes.outputs.staging == '' }}
+    if: ${{ github.ref == 'refs/heads/staging/official' && needs.changes.outputs.airflow == 'true' && needs.changes.outputs.staging-composer-tf != 'true' }}
 
     permissions:
       contents: read
       id-token: write
 
+    concurrency:
+      group: terraform-iac/cal-itp-data-infra-staging/composer/us
+      cancel-in-progress: false
+
     steps:
+      # Apply the branch tip: runs reach this lock out of order, and an older
+      # commit must never roll back a newer one.
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          ref: staging/official
+          fetch-depth: 0
+
+      - name: Require main in staging/official
+        run: python3 .github/scripts/staging_official.py require-main
 
       - uses: google-github-actions/auth@v2
         with:
@@ -131,19 +137,41 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           path: iac/cal-itp-data-infra-staging/composer/us
-          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
+          auto_approve: true
+
+  record:
+    name: Record staging deploy
+    needs: [changes, airflow-staging, composer-staging]
+    if: ${{ github.ref == 'refs/heads/staging/official' && !failure() && !cancelled() }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Record deploy
+        uses: ./.github/actions/record-deploy
+        with:
+          ref: refs/deployed/staging/composer-apply-files
 
   airflow-production:
     name: Production Airflow
     runs-on: ubuntu-latest
-    needs: [airflow-changes]
+    needs: [changes]
 
     # If there are changes to airflow iac files `terraform-apply` workflow will take care
-    if: ${{ github.ref == 'refs/heads/main' && (needs.airflow-changes.outputs.production == '[]' || needs.airflow-changes.outputs.production == '') }}
+    if: ${{ github.ref == 'refs/heads/main' && needs.changes.outputs.airflow == 'true' && needs.changes.outputs.production-airflow-tf != 'true' }}
 
     permissions:
       contents: read
       id-token: write
+
+    concurrency:
+      group: terraform-iac/cal-itp-data-infra/airflow/us
+      cancel-in-progress: false
 
     steps:
       - name: Checkout
@@ -166,14 +194,18 @@ jobs:
   composer-production:
     name: Production Composer
     runs-on: ubuntu-latest
-    needs: [composer-changes]
+    needs: [changes]
 
     # If there are changes to composer iac files `terraform-apply` workflow will take care
-    if: ${{ github.ref == 'refs/heads/main' && (needs.composer-changes.outputs.production == '[]' || needs.composer-changes.outputs.production == '') }}
+    if: ${{ github.ref == 'refs/heads/main' && needs.changes.outputs.airflow == 'true' && needs.changes.outputs.production-composer-tf != 'true' }}
 
     permissions:
       contents: read
       id-token: write
+
+    concurrency:
+      group: terraform-iac/cal-itp-data-infra/composer/us
+      cancel-in-progress: false
 
     steps:
       - name: Checkout

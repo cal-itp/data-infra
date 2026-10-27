@@ -435,6 +435,18 @@ docker build -t ghcr.io/cal-itp/data-infra/warehouse:development .
 That image can be used alongside [a local Airflow instance](../airflow/README.md) to test changes locally prior to merging, [if pushed to GHCR first](https://github.com/cal-itp/data-infra/tree/main/airflow#podoperators).
 
 
+## Testing Changes on Staging
+
+Pull requests no longer run models in the shared `staging` datasets. Instead, every PR that changes models or seeds gets advisory CI checks, reported in a **dbt CI checks** comment:
+
+- an empty build (`dbt build --empty`) of the changed models and everything downstream, into `ci_pr_<number>*` datasets in the staging project, which checks SQL, columns and types;
+- a BigQuery dry-run estimate of how much a full refresh of each model scans, measured on staging data.
+
+Staging dbt runs, docs and the Metabase sync happen when changes reach the `staging/official` branch: through a staging test (a PR into `staging/official`), or through the automatic sync after a merge into `main`. To test changes on real staging data before production, open a PR into `staging/official`. See [Staging Deployment](../docs/architecture/staging-deployment.md).
+
+Your personal `<name>_*` datasets work as before.
+
+
 ## Deploying Changes to Production
 
 The warehouse image and dbt project are automatically built and deployed on every change that's merged to `main`. When changes to this directory are merged into `main`, the [build-warehouse-image](../.github/workflows/build-warehouse-image.yml) GitHub Action automatically publishes an updated version of the image.

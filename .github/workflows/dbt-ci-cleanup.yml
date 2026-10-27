@@ -1,0 +1,57 @@
+name: Clean up dbt CI datasets
+
+# deploy-dbt.yml's CI checks build empty tables in ci_pr_<n>* datasets in the
+# staging project. Delete them when the PR closes, and sweep any older than
+# three days in case a cleanup was missed.
+
+on:
+  pull_request:
+    types: [closed]
+    paths:
+      - 'warehouse/**'
+  schedule:
+    - cron: '17 9 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  cleanup:
+    name: Delete CI datasets
+    runs-on: ubuntu-latest
+    # Fork PRs never get credentials, so they never create datasets.
+    if: ${{ github.event_name != 'pull_request' || !github.event.pull_request.head.repo.fork }}
+
+    steps:
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: cal-itp-data-infra-staging
+          workload_identity_provider: 'projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra'
+          service_account: 'github-actions-service-account@cal-itp-data-infra-staging.iam.gserviceaccount.com'
+
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Delete datasets
+        env:
+          PROJECT: cal-itp-data-infra-staging
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+        run: |
+          set -euo pipefail
+          datasets=$(bq ls --project_id="$PROJECT" --max_results=10000 --format=json \
+            | jq -r '.[].datasetReference.datasetId' | grep -E '^ci_pr_[0-9]+(_|$)' || true)
+          cutoff_ms=$(( ($(date +%s) - 3 * 24 * 3600) * 1000 ))
+          for dataset in $datasets; do
+            if [ -n "$PR_NUMBER" ]; then
+              [[ "$dataset" =~ ^ci_pr_${PR_NUMBER}(_|$) ]] || continue
+            else
+              modified=$(bq show --format=json "$PROJECT:$dataset" | jq -r '.lastModifiedTime')
+              [ "$modified" -lt "$cutoff_ms" ] || continue
+            fi
+            echo "Deleting $PROJECT:$dataset"
+            bq rm -r -f -d "$PROJECT:$dataset"
+          done

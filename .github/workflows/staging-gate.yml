@@ -1,0 +1,51 @@
+name: Staging gate
+
+# Sets the `staging/gate` status on every open PR into main (Guard 5):
+# - a PR carrying a tested change must match staging/official on every file
+#   it changes (fails otherwise)
+# - other PRs changing a file a test holds wait (pending) until the test ends
+# - PRs touching nothing under test pass; staging testing is optional
+# - `staging-check-override` passes it (the next sync drops the affected test)
+# Also posts an advisory comment when a PR contains commits from a dropped test.
+# Runs on staging/official pushes too, so results don't go stale.
+# See docs/architecture/staging-deployment.md.
+#
+# pull_request_target runs this workflow from main with a write token. It
+# checks out main and only reads the PRs' commits; no PR code runs.
+
+on:
+  pull_request_target:
+    branches:
+      - main
+    types: [opened, synchronize, reopened, edited, labeled, unlabeled]
+  push:
+    branches:
+      - staging/official
+  workflow_dispatch:
+
+concurrency:
+  group: staging-gate
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  statuses: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  gate:
+    name: Evaluate
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: staging/gate
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 .github/scripts/staging_official.py gate

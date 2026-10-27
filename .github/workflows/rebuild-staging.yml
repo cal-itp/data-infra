@@ -1,0 +1,65 @@
+name: Rebuild staging/official
+
+# Drop staging tests: reset staging/official to main and re-merge every other
+# active test, then force-push. The deploys triggered by that push redeploy the
+# dropped tests' files from main. The sync and the monitor also rebuild, for
+# conflicts and expired tests.
+# See docs/architecture/staging-deployment.md.
+
+on:
+  workflow_dispatch:
+    inputs:
+      drop:
+        description: Staging PR numbers to drop (space or comma separated), or "all"
+        required: true
+        type: string
+      reason:
+        description: Reason, posted on each dropped test's PR
+        required: false
+        type: string
+      dry_run:
+        description: Only print what would happen
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: staging-official-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  rebuild:
+    name: Rebuild
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create App token
+        id: app
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.STAGING_BOT_APP_ID }}
+          private-key: ${{ secrets.STAGING_BOT_PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ steps.app.outputs.token }}
+
+      - name: Rebuild
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          GIT_AUTHOR_NAME: ${{ steps.app.outputs.app-slug }}[bot]
+          GIT_AUTHOR_EMAIL: ${{ steps.app.outputs.app-slug }}[bot]@users.noreply.github.com
+          DROP: ${{ inputs.drop }}
+          REASON: ${{ inputs.reason }}
+          DRY_RUN: ${{ inputs.dry_run }}
+        run: |
+          args=(--drop "$DROP")
+          if [ -n "$REASON" ]; then args+=(--reason "$REASON"); fi
+          if [ "$DRY_RUN" = "true" ]; then args+=(--dry-run); fi
+          python3 .github/scripts/staging_official.py rebuild "${args[@]}"

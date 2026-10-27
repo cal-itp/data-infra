@@ -1,0 +1,35 @@
+name: Staging preview checkout
+description: >-
+  Check out staging/official with a PR's head merged in: what staging will run
+  once the PR merges into main and the sync brings it over. Used for staging
+  plans of the code-reading modules on PRs into main. Requires a checkout with
+  fetch-depth 0.
+
+inputs:
+  head:
+    description: Commit to merge into staging/official
+    required: true
+
+outputs:
+  ok:
+    description: "'false' if the head conflicts with staging/official"
+    value: ${{ steps.merge.outputs.ok }}
+
+runs:
+  using: composite
+  steps:
+    - id: merge
+      shell: bash
+      env:
+        HEAD_SHA: ${{ inputs.head }}
+      run: |
+        set -euo pipefail
+        git fetch --no-tags --quiet origin +refs/heads/staging/official:refs/remotes/origin/staging/official
+        git -c advice.detachedHead=false checkout --quiet --detach origin/staging/official
+        if git -c user.name=preview -c user.email=preview@example.com merge --no-ff --no-edit --quiet "$HEAD_SHA"; then
+          echo "ok=true" >> "$GITHUB_OUTPUT"
+        else
+          git merge --abort
+          echo "::warning::This PR conflicts with staging/official, so no staging preview is available. A test holds some of these files."
+          echo "ok=false" >> "$GITHUB_OUTPUT"
+        fi

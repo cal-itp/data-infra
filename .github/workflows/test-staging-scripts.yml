@@ -1,0 +1,31 @@
+name: Test staging/official scripts
+
+on:
+  pull_request:
+    paths:
+      - '.github/scripts/**'
+      - '.github/workflows/test-staging-scripts.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: pytest
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run tests
+        run: |
+          pip install pytest
+          git config --global user.name test
+          git config --global user.email test@example.com
+          git config --global init.defaultBranch main
+          python -m pytest .github/scripts/tests -v

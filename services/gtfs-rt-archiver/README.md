@@ -26,6 +26,8 @@ The Clock is a Google Workflow created via Terraform according to `clock.yaml`.
 The Heartbeat and Service are deployed to Cloud Run Services, and the source is shared between them.
 The code is copied from this directory, compressed into a zip file, and uploaded to a bucket via Terraform.
 
+Changes deploy to production when merged into `main`, and to staging from the `staging/official` branch like other code: to test a change in staging first, open a PR into `staging/official`. See [Staging Deployment](../../docs/architecture/staging-deployment.md).
+
 
 ## Development
 

@@ -1,9 +1,14 @@
 name: Build dbt Model Report
 
+# Staging Airflow reads calitp-staging-dbt-artifacts, so the artifacts upload
+# follows staging/official, where staging code deploys from. A forced push that
+# the paths filter misses only delays the upload until the next warehouse change,
+# since each upload is a full compile.
+# See docs/architecture/staging-deployment.md.
 on:
   push:
     branches:
-      - main
+      - staging/official
     paths:
       - .github/workflows/build-model-report.yml
       - 'warehouse/**'
@@ -14,7 +19,7 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  cancel-in-progress: true
 
 env:
   PYTHON_VERSION: '3.11'
@@ -206,7 +211,7 @@ jobs:
       contents: read
       id-token: write
 
-    if: ${{ github.ref == 'refs/heads/main' }}
+    if: ${{ github.ref == 'refs/heads/staging/official' }}
 
     steps:
       - name: Download compilation artifacts

@@ -1,20 +1,30 @@
 name: Deploy dbt
 
+# - push to main: production (dbt runs, docs, Metabase, Airflow upload)
+# - push to staging/official: staging, the same steps
+# - pull requests: compile, Airflow plans and advisory CI checks; nothing is
+#   written to shared staging
+# See docs/architecture/staging-deployment.md.
+#
+# Pushes have no `paths` filter: rebuild-staging force-pushes staging/official,
+# so the changed files are computed from the push's before/after commits.
+
 on:
   push:
     branches:
       - main
-    paths:
-      - .github/workflows/deploy-dbt.yml
-      - 'warehouse/**'
+      - staging/official
   pull_request:
     paths:
       - .github/workflows/deploy-dbt.yml
+      - .github/scripts/dbt_ci_report.py
       - 'warehouse/**'
 
+# PRs cancel their own superseded runs. Deploys never cancel or replace each
+# other: each push's run deploys only that push's changed models.
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   PYTHON_VERSION: '3.11'
@@ -31,17 +41,97 @@ env:
   DBT_DOCS_URL: ${{ github.ref == 'refs/heads/main' && 'https://dbt-docs.dds.dot.ca.gov' || 'https://dbt-docs-staging.dds.dot.ca.gov' }}
 
 jobs:
+  changes:
+    name: Detect changes
+    runs-on: ubuntu-latest
+
+    outputs:
+      dbt: ${{ steps.compute.outputs.dbt }}
+      full: ${{ steps.changes.outputs.full }}
+      has-changed: ${{ steps.compute.outputs.has-changed }}
+      has-changed-seeds: ${{ steps.compute.outputs.has-changed-seeds }}
+      changed-models: ${{ steps.compute.outputs.changed-models }}
+      changed-seeds: ${{ steps.compute.outputs.changed-seeds }}
+      changed-downstream: ${{ steps.compute.outputs.changed-downstream }}
+      staging-airflow-tf: ${{ steps.compute.outputs.staging-airflow-tf }}
+      production-airflow-tf: ${{ steps.compute.outputs.production-airflow-tf }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Changed files
+        id: changes
+        uses: ./.github/actions/changed-files
+        with:
+          since-ref: ${{ github.ref == 'refs/heads/staging/official' && 'refs/deployed/staging/deploy-dbt' || '' }}
+
+      # Deleted models and seeds are skipped: a model a dropped staging test
+      # added no longer exists, so there is nothing to run.
+      - name: Compute changes
+        id: compute
+        env:
+          FILES: ${{ steps.changes.outputs.files }}
+        shell: python
+        run: |
+          import fnmatch, os
+
+          files = [f for f in os.environ["FILES"].splitlines() if f]
+          def present(prefix, pattern):
+              return [
+                  f[len("warehouse/"):]
+                  for f in files
+                  if f.startswith(prefix) and fnmatch.fnmatch(f, pattern) and os.path.exists(f)
+              ]
+
+          models = present("warehouse/models/", "*.sql")
+          seeds = [s for s in present("warehouse/seeds/", "*.csv") if s.count("/") == 1]
+          dbt = any(f.startswith("warehouse/") or f == ".github/workflows/deploy-dbt.yml" for f in files)
+          changed = models + seeds
+          outputs = {
+              "dbt": str(dbt).lower(),
+              "has-changed": str(bool(changed)).lower(),
+              "has-changed-seeds": str(bool(seeds)).lower(),
+              "changed-models": " ".join(models),
+              "changed-seeds": " ".join(seeds),
+              "changed-downstream": "+ ".join(changed) + "+" if changed else "",
+              "staging-airflow-tf": str(any(
+                  f.startswith("iac/cal-itp-data-infra-staging/airflow/") and f.endswith(".tf") for f in files
+              )).lower(),
+              "production-airflow-tf": str(any(
+                  f.startswith("iac/cal-itp-data-infra/airflow/") and f.endswith(".tf") for f in files
+              )).lower(),
+          }
+          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+              for key, value in outputs.items():
+                  out.write(f"{key}={value}\n")
+                  print(f"{key}={value}")
+
   compile:
     name: Compile dbt and upload artifacts
     runs-on: ubuntu-latest
+    needs: [changes]
+
+    if: ${{ needs.changes.outputs.dbt == 'true' || needs.changes.outputs.full == 'true' }}
 
     permissions:
       contents: read
       id-token: write
 
     steps:
+      # On staging/official, use the branch tip: runs finish out of order, and
+      # an older commit must never roll back a newer one.
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          ref: ${{ github.ref == 'refs/heads/staging/official' && 'staging/official' || github.sha }}
+          fetch-depth: 0
+
+      - name: Require main in staging/official
+        if: ${{ github.ref == 'refs/heads/staging/official' }}
+        run: python3 .github/scripts/staging_official.py require-main
 
       - name: Authenticate Google Service Account
         uses: google-github-actions/auth@v2
@@ -93,8 +183,11 @@ jobs:
         working-directory: warehouse
         run: uv run dbt docs generate --target ${{ env.DBT_TARGET }} --no-compile
 
+      # Uploads only on deploys. PRs used to upload to the staging docs bucket,
+      # which staging Airflow also reads its manifest from.
       # Don't send run_results.json because DBT_DOCS_BUCKET is a public bucket
       - name: Upload catalog.json and manifest.json
+        if: ${{ github.event_name == 'push' }}
         uses: google-github-actions/upload-cloud-storage@v2
         with:
           path: './warehouse/target/'
@@ -106,6 +199,7 @@ jobs:
             content-type: application/json
 
       - name: Upload index.html
+        if: ${{ github.event_name == 'push' }}
         uses: google-github-actions/upload-cloud-storage@v2
         with:
           path: './warehouse/target/'
@@ -117,6 +211,7 @@ jobs:
             content-type: text/html; charset=utf-8
 
       - name: Upload partial_parse.msgpack
+        if: ${{ github.event_name == 'push' }}
         uses: google-github-actions/upload-cloud-storage@v2
         with:
           path: './warehouse/target/'
@@ -127,68 +222,36 @@ jobs:
           headers: |-
             content-type: application/vnd.msgpack
 
-  dbt-changed:
-    name: Detect dbt model and seed changes
-    runs-on: ubuntu-latest
-
-    outputs:
-      has-changed: ${{ steps.changed-downstream.outputs.any_changed }}
-      has-changed-seeds: ${{ steps.changed-seeds.outputs.any_changed }}
-      changed-models: ${{ steps.changed-models.outputs.all_changed_files }}
-      changed-seeds: ${{ steps.changed-seeds.outputs.all_changed_files }}
-      changed-downstream: "${{ steps.changed-downstream.outputs.all_changed_files }}+"
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: List changed models
-        uses: tj-actions/changed-files@v46
-        id: changed-models
-        with:
-          path: warehouse
-          files: models/**/*.sql
-
-      - name: List changed seeds
-        uses: tj-actions/changed-files@v46
-        id: changed-seeds
-        with:
-          path: warehouse
-          files: seeds/*.csv
-
-      - name: List changed models and seeds with plus sign
-        uses: tj-actions/changed-files@v46
-        id: changed-downstream
-        with:
-          path: warehouse
-          separator: "+ "
-          files: |
-            models/**/*.sql
-            seeds/*.csv
-
-      - name: Print changed files
-        if: ${{ steps.changed-downstream.outputs.any_changed == 'true' }}
-        env:
-          CHANGED_FILES: "${{ steps.changed-downstream.outputs.all_changed_files }}+"
-        run: |
-          echo "List changed files: $CHANGED_FILES"
-
   dbt-run:
     name: Run dbt changed models in warehouse
     runs-on: ubuntu-latest
-    needs: [dbt-changed]
+    needs: [changes]
 
-    if: ${{ needs.dbt-changed.outputs.has-changed == 'true' }}
+    # Deploys only. A new branch (full=true) runs no models: it starts equal to main.
+    if: ${{ github.event_name == 'push' && needs.changes.outputs.has-changed == 'true' }}
 
     permissions:
       contents: read
       id-token: write
 
+    # Staging runs one at a time and are never cancelled; a replaced pending run
+    # is safe because the next run diffs from the last recorded deploy.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/staging/official' && 'staging-dbt-run' || format('dbt-run-{0}', github.run_id) }}
+      cancel-in-progress: false
+
     steps:
+      # On staging/official, use the branch tip: runs finish out of order, and
+      # an older commit must never roll back a newer one.
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          ref: ${{ github.ref == 'refs/heads/staging/official' && 'staging/official' || github.sha }}
+          fetch-depth: 0
+
+      - name: Require main in staging/official
+        if: ${{ github.ref == 'refs/heads/staging/official' }}
+        run: python3 .github/scripts/staging_official.py require-main
 
       - name: Authenticate Google Service Account
         uses: google-github-actions/auth@v2
@@ -230,29 +293,186 @@ jobs:
 
       - name: List changed and downstream models
         working-directory: warehouse
-        run: uv run dbt list --select "${{ needs.dbt-changed.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --resource-type=model
+        run: uv run dbt list --select "${{ needs.changes.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --resource-type=model
 
       - name: Run seeds
-        if: ${{ needs.dbt-changed.outputs.has-changed-seeds == 'true' }}
+        if: ${{ needs.changes.outputs.has-changed-seeds == 'true' }}
         working-directory: warehouse
-        run: uv run dbt seed --select "${{ needs.dbt-changed.outputs.changed-seeds }}" --target ${{ env.DBT_TARGET }}
+        run: uv run dbt seed --select "${{ needs.changes.outputs.changed-seeds }}" --target ${{ env.DBT_TARGET }}
 
       - name: Full-Refresh changed models
+        if: ${{ needs.changes.outputs.changed-models != '' }}
         working-directory: warehouse
-        run: uv run dbt run --select "${{ needs.dbt-changed.outputs.changed-models }}" --target ${{ env.DBT_TARGET }} --full-refresh
+        run: uv run dbt run --select "${{ needs.changes.outputs.changed-models }}" --target ${{ env.DBT_TARGET }} --full-refresh
 
       - name: Run downstream models
         working-directory: warehouse
-        run: uv run dbt run --select "${{ needs.dbt-changed.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --exclude "${{ needs.dbt-changed.outputs.changed-models }}"
+        run: uv run dbt run --select "${{ needs.changes.outputs.changed-downstream }}" --target ${{ env.DBT_TARGET }} --exclude "${{ needs.changes.outputs.changed-models }}"
+
+  ci-checks:
+    name: dbt CI checks (advisory)
+    runs-on: ubuntu-latest
+    needs: [changes]
+
+    # PRs only, instead of running in shared staging. Advisory until its cost
+    # and false-failure rate are known; see docs/architecture/staging-deployment.md.
+    if: ${{ github.event_name == 'pull_request' && needs.changes.outputs.has-changed == 'true' && github.actor != 'dependabot[bot]' }}
+    continue-on-error: true
+
+    permissions:
+      contents: read
+      id-token: write
+      pull-requests: write
+
+    env:
+      CI_SCHEMA: ci_pr_${{ github.event.number }}
+      CI_PROFILES_DIR: ${{ github.workspace }}/../dbt-ci-profiles
+      BASE_DIR: ${{ github.workspace }}/../dbt-ci-base
+      BASE_TARGET: ${{ github.workspace }}/../dbt-ci-base-target
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Authenticate Google Service Account
+        uses: google-github-actions/auth@v2
+        with:
+          create_credentials_file: 'true'
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: ${{ env.WORKLOAD_IDENTITY_PROVIDER }}
+          service_account: ${{ env.SERVICE_ACCOUNT }}
+
+      - name: Setup GCloud utilities
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          working-directory: warehouse
+          python-version: ${{ env.PYTHON_VERSION }}
+          enable-cache: true
+          cache-python: true
+
+      - name: Cache venv and dbt packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            warehouse/.venv
+            warehouse/dbt_packages
+          key: dbt-setup-${{ runner.os }}-py${{ env.PYTHON_VERSION }}-${{ hashFiles('warehouse/uv.lock', 'warehouse/packages.yml') }}
+
+      - name: Install the project
+        working-directory: warehouse
+        run: uv sync --locked --all-extras --dev
+
+      - name: Install dbt dependencies
+        working-directory: warehouse
+        run: uv run dbt deps
+
+      # A `ci` target writing to ci_pr_<n>_* datasets in the staging project,
+      # with a per-query spending cap. Generated here rather than added to
+      # warehouse/profiles.yml, which Airflow deploys.
+      - name: Write CI profile
+        working-directory: warehouse
+        run: |
+          mkdir -p "$CI_PROFILES_DIR"
+          uv run python - <<'EOF'
+          import os, yaml
+          with open("profiles.yml") as f:
+              profiles = yaml.safe_load(f)
+          outputs = profiles["calitp_warehouse"]["outputs"]
+          staging = dict(outputs["staging"])
+          ci = dict(staging, schema=os.environ["CI_SCHEMA"], maximum_bytes_billed=10_000_000_000)
+          profile = {"calitp_warehouse": {"target": "ci", "outputs": {"ci": ci, "staging": staging}}}
+          with open(os.path.join(os.environ["CI_PROFILES_DIR"], "profiles.yml"), "w") as f:
+              yaml.safe_dump(profile, f)
+          EOF
+
+      # state:modified compares against the PR's base branch, parsed with the
+      # staging target so deferred refs resolve to the staging datasets.
+      - name: Parse the base branch
+        working-directory: warehouse
+        run: |
+          git worktree add --detach "$BASE_DIR" "${{ github.event.pull_request.base.sha }}"
+          uv run dbt deps --project-dir "$BASE_DIR/warehouse"
+          uv run dbt parse --project-dir "$BASE_DIR/warehouse" --profiles-dir "$CI_PROFILES_DIR" \
+            --target staging --target-path "$BASE_TARGET"
+
+      - name: List changed models
+        working-directory: warehouse
+        run: |
+          uv run dbt ls --profiles-dir "$CI_PROFILES_DIR" --target ci --state "$BASE_TARGET" \
+            --select "state:modified,resource_type:model" --output name --quiet > "$RUNNER_TEMP/modified.txt" || true
+          cat "$RUNNER_TEMP/modified.txt"
+
+      # --favor-state resolves refs to the staging tables, so the dry run sees
+      # real (staging) data volumes for unchanged upstream models.
+      - name: Compile changed models for dry runs
+        working-directory: warehouse
+        run: |
+          uv run dbt compile --profiles-dir "$CI_PROFILES_DIR" --target ci \
+            --defer --favor-state --state "$BASE_TARGET" \
+            --select "state:modified+,resource_type:model"
+          mkdir -p "$RUNNER_TEMP/compile"
+          cp target/manifest.json target/run_results.json "$RUNNER_TEMP/compile/"
+
+      # Empty tables: checks SQL, columns and types across the changed chain.
+      # Microbatch models are limited to one batch.
+      - name: Build changed models with no data
+        id: build
+        continue-on-error: true
+        working-directory: warehouse
+        run: |
+          uv run dbt build --profiles-dir "$CI_PROFILES_DIR" --target ci --empty \
+            --defer --state "$BASE_TARGET" --select "state:modified+" \
+            --event-time-start "$(date -u -d yesterday +%F)" --event-time-end "$(date -u +%F)"
+
+      - name: Write report
+        id: report
+        if: ${{ always() }}
+        working-directory: warehouse
+        run: |
+          uv run python ../.github/scripts/dbt_ci_report.py \
+            --compile-dir "$RUNNER_TEMP/compile" \
+            --build-results target/run_results.json \
+            --build-outcome "${{ steps.build.outcome }}" \
+            --modified "$RUNNER_TEMP/modified.txt" \
+            --project "${{ env.PROJECT_ID }}" > "$RUNNER_TEMP/dbt-ci-report.md"
+          cat "$RUNNER_TEMP/dbt-ci-report.md" >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Find existing report comment
+        if: ${{ always() && steps.report.outcome == 'success' }}
+        id: find-report
+        uses: peter-evans/find-comment@v3
+        with:
+          issue-number: ${{ github.event.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '<!-- dbt-ci-report -->'
+
+      - name: Post or update report comment
+        if: ${{ always() && steps.report.outcome == 'success' }}
+        uses: peter-evans/create-or-update-comment@v4
+        with:
+          comment-id: ${{ steps.find-report.outputs.comment-id }}
+          issue-number: ${{ github.event.number }}
+          body-path: ${{ runner.temp }}/dbt-ci-report.md
+          edit-mode: replace
+
+      - name: Fail if the empty build failed
+        if: ${{ steps.build.outcome == 'failure' }}
+        run: exit 1
 
   metabase:
     name: Sync Metabase
     runs-on: ubuntu-latest
-    needs: [compile, dbt-run]
+    needs: [changes, compile, dbt-run]
 
-    # Skip on Dependabot PRs: Dependabot runs see a separate secrets
-    # namespace, so METABASE_API_KEY expands to "" and the sync step 401s.
-    if: ${{ !failure() && !cancelled() && github.actor != 'dependabot[bot]' }}
+    # Runs on deploys only (main: production, staging/official: staging).
+    # Skip Dependabot: its runs see a separate secrets namespace, so
+    # METABASE_API_KEY expands to "" and the sync step 401s.
+    if: ${{ !failure() && !cancelled() && github.event_name == 'push' && (needs.changes.outputs.dbt == 'true' || needs.changes.outputs.full == 'true') && github.actor != 'dependabot[bot]' }}
 
     permissions:
       contents: read
@@ -261,6 +481,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          ref: ${{ github.ref == 'refs/heads/staging/official' && 'staging/official' || github.sha }}
 
       - name: Authenticate Google Service Account
         uses: google-github-actions/auth@v2
@@ -424,56 +646,14 @@ jobs:
             exit 1
           fi
 
-  airflow-changes:
-    name: Detect Airflow Terraform changes
-    runs-on: ubuntu-latest
-    needs: [compile]
-
-    outputs:
-      staging: ${{ steps.staging-changes.outputs.all_changed_files }}
-      production: ${{ steps.production-changes.outputs.all_changed_files }}
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Staging Changes
-        uses: tj-actions/changed-files@v46
-        id: staging-changes
-        with:
-          matrix: true
-          dir_names: true
-          files: 'iac/cal-itp-data-infra-staging/airflow/**/*.tf'
-
-      - name: Production Changes
-        uses: tj-actions/changed-files@v46
-        id: production-changes
-        with:
-          matrix: true
-          dir_names: true
-          files: 'iac/cal-itp-data-infra/airflow/**/*.tf'
-
-      - name: Print Staging changed files
-        env:
-          CHANGED_FILES: ${{ steps.staging-changes.outputs.all_changed_files }}
-        run: |
-          echo "List Staging changed files: $CHANGED_FILES"
-
-      - name: Print Production changed files
-        env:
-          CHANGED_FILES: ${{ steps.production-changes.outputs.all_changed_files }}
-        run: |
-          echo "List Production changed files: $CHANGED_FILES"
-
   plan-changes-airflow-staging:
     name: Staging Plan for Airflow Changes
     runs-on: ubuntu-latest
-    needs: [airflow-changes]
+    needs: [changes]
 
-     # If there are changes to staging airflow iac files `terraform-plan` workflow will take care
-    if: ${{ github.ref != 'refs/heads/main' && !contains(github.ref, 'refs/heads/staging') && (needs.airflow-changes.outputs.staging == '[]' || needs.airflow-changes.outputs.staging == '') }}
+    # If there are changes to staging airflow iac files `terraform-plan` workflow will take care.
+    # PRs into main preview staging/official + this PR, which the sync deploys after merging.
+    if: ${{ github.event_name == 'pull_request' && (github.base_ref == 'main' || github.base_ref == 'staging/official') && needs.changes.outputs.staging-airflow-tf != 'true' }}
 
     permissions:
       contents: read
@@ -483,8 +663,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Preview staging/official with this PR
+        id: preview
+        if: ${{ github.base_ref == 'main' }}
+        uses: ./.github/actions/staging-preview-checkout
+        with:
+          head: ${{ github.event.pull_request.head.sha }}
 
       - uses: google-github-actions/auth@v2
+        if: ${{ steps.preview.outputs.ok != 'false' }}
         with:
           create_credentials_file: 'true'
           project_id: cal-itp-data-infra-staging
@@ -492,6 +682,7 @@ jobs:
           service_account: 'github-actions-terraform@cal-itp-data-infra-staging.iam.gserviceaccount.com'
 
       - name: Terraform Plan
+        if: ${{ steps.preview.outputs.ok != 'false' }}
         uses: dflook/terraform-plan@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -502,10 +693,10 @@ jobs:
   plan-changes-airflow-production:
     name: Production Plan for Airflow Changes
     runs-on: ubuntu-latest
-    needs: [airflow-changes]
+    needs: [changes]
 
-     # If there are changes to production airflow iac files `terraform-plan` workflow will take care
-    if: ${{ github.ref != 'refs/heads/main' && (needs.airflow-changes.outputs.production == '[]' || needs.airflow-changes.outputs.production == '') }}
+    # If there are changes to production airflow iac files `terraform-plan` workflow will take care
+    if: ${{ github.event_name == 'pull_request' && github.base_ref == 'main' && needs.changes.outputs.production-airflow-tf != 'true' }}
 
     permissions:
       contents: read
@@ -534,18 +725,31 @@ jobs:
   apply-changes-airflow-staging:
     name: Staging Apply Airflow Changes
     runs-on: ubuntu-latest
-    needs: [airflow-changes]
+    # After compile: the module uploads the manifest compile put in the docs bucket.
+    needs: [changes, compile]
 
-     # If there are changes to staging airflow iac files `terraform-apply` workflow will take care
-    if: ${{ (github.ref == 'refs/heads/main' || contains(github.ref, 'refs/heads/staging')) && (needs.airflow-changes.outputs.staging == '[]' || needs.airflow-changes.outputs.staging == '') }}
+    # If there are changes to staging airflow iac files `terraform-apply` workflow will take care
+    if: ${{ github.ref == 'refs/heads/staging/official' && (needs.changes.outputs.dbt == 'true' || needs.changes.outputs.full == 'true') && needs.changes.outputs.staging-airflow-tf != 'true' }}
 
     permissions:
       contents: read
       id-token: write
 
+    concurrency:
+      group: terraform-iac/cal-itp-data-infra-staging/airflow/us
+      cancel-in-progress: false
+
     steps:
+      # On staging/official, use the branch tip: runs finish out of order, and
+      # an older commit must never roll back a newer one.
       - name: Checkout
         uses: actions/checkout@v6
+        with:
+          ref: ${{ github.ref == 'refs/heads/staging/official' && 'staging/official' || github.sha }}
+          fetch-depth: 0
+
+      - name: Require main in staging/official
+        run: python3 .github/scripts/staging_official.py require-main
 
       - uses: google-github-actions/auth@v2
         with:
@@ -566,14 +770,18 @@ jobs:
   apply-changes-airflow-production:
     name: Production Apply Airflow Changes
     runs-on: ubuntu-latest
-    needs: [airflow-changes]
+    needs: [changes, compile]
 
-     # If there are changes to production airflow iac files `terraform-apply` workflow will take care
-    if: ${{ github.ref == 'refs/heads/main' && (needs.airflow-changes.outputs.production == '[]' || needs.airflow-changes.outputs.production == '') }}
+    # If there are changes to production airflow iac files `terraform-apply` workflow will take care
+    if: ${{ github.ref == 'refs/heads/main' && needs.changes.outputs.dbt == 'true' && needs.changes.outputs.production-airflow-tf != 'true' }}
 
     permissions:
       contents: read
       id-token: write
+
+    concurrency:
+      group: terraform-iac/cal-itp-data-infra/airflow/us
+      cancel-in-progress: false
 
     steps:
       - name: Checkout
@@ -594,3 +802,23 @@ jobs:
           path: iac/cal-itp-data-infra/airflow/us
           # use auto_approve: 'true' only here to make sure model changes are applied even if the plan was different
           auto_approve: 'true'
+
+  # Metabase isn't required: a failed metadata sync shouldn't make the next
+  # deploy re-run every model since this one.
+  record:
+    name: Record staging deploy
+    needs: [changes, compile, dbt-run, apply-changes-airflow-staging]
+    if: ${{ github.ref == 'refs/heads/staging/official' && !failure() && !cancelled() }}
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Record deploy
+        uses: ./.github/actions/record-deploy
+        with:
+          ref: refs/deployed/staging/deploy-dbt

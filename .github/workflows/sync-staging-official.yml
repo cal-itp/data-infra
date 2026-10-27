@@ -1,0 +1,59 @@
+name: Sync main into staging/official
+
+# staging/official = main + the tests currently running. After every push to
+# main, merge main into it. If the merge conflicts, the test holding the
+# conflicting files is dropped (see rebuild-staging.yml) and its author notified.
+# See docs/architecture/staging-deployment.md.
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+# Shared by everything that pushes to staging/official; never cancelled.
+concurrency:
+  group: staging-official-writer
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    name: Sync
+    runs-on: ubuntu-latest
+
+    steps:
+      # Pushes made with GITHUB_TOKEN don't trigger other workflows, so the
+      # staging deploys would never run. The App also bypasses the ruleset.
+      - name: Create App token
+        id: app
+        uses: actions/create-github-app-token@v2
+        with:
+          app-id: ${{ vars.STAGING_BOT_APP_ID }}
+          private-key: ${{ secrets.STAGING_BOT_PRIVATE_KEY }}
+
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ steps.app.outputs.token }}
+
+      - name: Sync
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token }}
+          GIT_AUTHOR_NAME: ${{ steps.app.outputs.app-slug }}[bot]
+          GIT_AUTHOR_EMAIL: ${{ steps.app.outputs.app-slug }}[bot]@users.noreply.github.com
+          STAGING_STEWARD: ${{ vars.STAGING_STEWARD }}
+          STAGING_TEAM: ${{ vars.STAGING_TEAM }}
+        run: python3 .github/scripts/staging_official.py sync
+
+      - name: Open or update the incident issue
+        if: ${{ failure() }}
+        env:
+          GH_TOKEN: ${{ steps.app.outputs.token || github.token }}
+          STAGING_STEWARD: ${{ vars.STAGING_STEWARD }}
+          STAGING_TEAM: ${{ vars.STAGING_TEAM }}
+        run: python3 .github/scripts/staging_official.py incident "The sync of \`${GITHUB_SHA::8}\` into staging/official failed."
