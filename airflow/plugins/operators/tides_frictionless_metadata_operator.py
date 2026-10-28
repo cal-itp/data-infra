@@ -109,6 +109,10 @@ class TIDESFrictionlessMetadataOperator(BaseOperator):
                 "name": name,
                 "type": FRICTIONLESS_TYPES.get(column["type"].upper(), "any"),
             }
+            # BigQuery exports TIMESTAMP/DATETIME as "YYYY-MM-DD HH:MM:SS[.ffffff] [UTC]",
+            # which isn't ISO-8601; "any" lets Frictionless parse it against the schema.
+            if field["type"] == "datetime":
+                field["format"] = "any"
             description = manifest_columns.get(name, {}).get("description")
             if description:
                 field["description"] = description
@@ -148,6 +152,8 @@ class TIDESFrictionlessMetadataOperator(BaseOperator):
                 {
                     "name": file_name.replace(".", "-").lower(),
                     "path": file_name,
+                    # tabular-data-package requires every resource to declare this
+                    "profile": "tabular-data-resource",
                     "format": file_name.rsplit(".", 1)[-1],
                     "schema": {"fields": fields},
                 }
