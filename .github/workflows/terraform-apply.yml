@@ -80,6 +80,12 @@ jobs:
     if: ${{ needs.targets.outputs.staging != '[]' && needs.targets.outputs.staging != '' }}
     runs-on: ubuntu-latest
 
+    # Queue applies per state directory: every staging/** branch (and main) writes the same
+    # staging state. Never cancel a running apply; it can leave state locked or half-applied.
+    concurrency:
+      group: terraform-apply-${{ matrix.path }}
+      cancel-in-progress: false
+
     permissions:
       contents: read
       id-token: write
@@ -123,6 +129,10 @@ jobs:
     needs: [targets]
     if: ${{ github.ref == 'refs/heads/main' && needs.targets.outputs.production != '[]' && needs.targets.outputs.production != '' }}
     runs-on: ubuntu-latest
+
+    concurrency:
+      group: terraform-apply-${{ matrix.path }}
+      cancel-in-progress: false
 
     permissions:
       contents: read
