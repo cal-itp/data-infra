@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - 'main'
-      - 'staging/official'
+      - 'staging/**'
     paths:
       - 'iac/**'
       - 'services/gtfs-rt-archiver/**'
@@ -16,11 +16,6 @@ env:
   STAGING_SERVICE_ACCOUNT: 'github-actions-terraform@cal-itp-data-infra-staging.iam.gserviceaccount.com'
   STAGING_WORKLOAD_IDENTITY_PROVIDER: 'projects/473674835135/locations/global/workloadIdentityPools/github-actions/providers/data-infra'
   STAGING_PROJECT_ID: 'cal-itp-data-infra-staging'
-
-# Optional concurrency guard – ensures only one apply runs per branch at a time
-concurrency:
-  group: terraform-apply-${{ github.ref }}
-  cancel-in-progress: true
 
 jobs:
   targets:
@@ -82,9 +77,14 @@ jobs:
   staging:
     name: Staging
     needs: [targets]
-    # Run only for the official staging branch and when there are staging targets
-    if: ${{ github.ref == 'refs/heads/staging/official' && needs.targets.outputs.staging != '[]' && needs.targets.outputs.staging != '' }}
+    if: ${{ needs.targets.outputs.staging != '[]' && needs.targets.outputs.staging != '' }}
     runs-on: ubuntu-latest
+
+    # Queue applies per state directory: every staging/** branch (and main) writes the same
+    # staging state. Never cancel a running apply; it can leave state locked or half-applied.
+    concurrency:
+      group: terraform-apply-${{ matrix.path }}
+      cancel-in-progress: false
 
     permissions:
       contents: read
@@ -122,14 +122,17 @@ jobs:
             git config --global --add safe.directory $GITHUB_WORKSPACE
         with:
           path: ${{ matrix.path }}
-          # Auto‑approve only for the GTFS‑RT archiver when on the official staging branch
-          auto_approve: ${{ github.ref == 'refs/heads/staging/official' }}
+          auto_approve: ${{ contains(github.ref, 'refs/heads/staging') }}
 
   production:
     name: Production
     needs: [targets]
     if: ${{ github.ref == 'refs/heads/main' && needs.targets.outputs.production != '[]' && needs.targets.outputs.production != '' }}
     runs-on: ubuntu-latest
+
+    concurrency:
+      group: terraform-apply-${{ matrix.path }}
+      cancel-in-progress: false
 
     permissions:
       contents: read
