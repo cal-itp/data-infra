@@ -1,3 +1,4 @@
+# Deploy marker: staging pilot for PR #5834 (branch-only, not merged to main)
 resource "google_composer_environment" "calitp-staging-composer3" {
   name    = "calitp-staging-composer3"
   region  = "us-west2"
