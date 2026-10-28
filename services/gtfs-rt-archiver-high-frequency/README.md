@@ -139,6 +139,10 @@ feed, in the same format Airflow writes for the standard archiver:
   ```
 
   (Staging's equivalent bucket is `calitp-staging-gtfs-download-config`.)
+- No blank lines, and no newline after the last line. The heartbeat splits the file on
+  newlines and parses every piece, so an empty piece fails every tick with a
+  `JSONDecodeError`. `jq -c` ends each line with a newline; the gzip command in
+  [step 2](#2-upload-the-config) strips the last one.
 - For a feed that isn't in Airtable, write the line by hand. `extracted_at` can be the
   date you wrote it, and `schedule_url_for_validation` is the agency's GTFS Schedule
   zip.
@@ -158,7 +162,8 @@ own issue), since feed changes no longer go through a pull request.
 ### 2. Upload the config
 
 Build `configs.jsonl` (see [The config file](#the-config-file)), check it has at most 5
-lines, then upload it to the config bucket **twice**: once as the source the daily
+lines (each line is one feed, so an agency's vehicle positions and trip updates count
+as 2), then upload it to the config bucket **twice**: once as the source the daily
 refresh copies, and once into today's dated path so the heartbeat can read it straight
 away.
 
@@ -166,7 +171,8 @@ away.
 BUCKET=gs://calitp-staging-gtfs-rt-high-frequency-config   # or the production bucket
 NOW=$(date -u +%Y-%m-%dT%H:%M:%SZ)
 
-gzip -kf configs.jsonl
+# $(...) drops the trailing newline that jq leaves (see "The config file").
+printf '%s' "$(cat configs.jsonl)" | gzip -c > configs.jsonl.gz
 gcloud storage cp configs.jsonl.gz "$BUCKET/source/configs.jsonl.gz"
 gcloud storage cp configs.jsonl.gz "$BUCKET/gtfs_download_configs/dt=${NOW:0:10}/ts=$NOW/configs.jsonl.gz"
 ```
@@ -216,7 +222,8 @@ To canary, start with a single feed in the config and add the rest once it looks
 ## Changing feeds
 
 No pull request is needed. Edit `configs.jsonl` and repeat [step 2](#2-upload-the-config).
-The change takes effect on the next minute's ticks. Record any newly added agency's
+Because step 2 also uploads today's dated copy, the change takes effect on the next
+minute's ticks; uploading only `source/` would wait for the next daily refresh. Record any newly added agency's
 agreement on the issue first.
 
 Every upload is kept as a previous version of `source/configs.jsonl.gz`, so the history
