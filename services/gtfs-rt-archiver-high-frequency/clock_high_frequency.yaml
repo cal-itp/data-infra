@@ -1,9 +1,10 @@
 # High-frequency clock for the study cohort (see issue #5566).
 #
-# A sibling of clock.yaml rather than a parameterization of it: clock.yaml has no
-# test coverage, and converting production from its three-branch `parallel` block
-# to a loop cannot be verified before it reaches prod. Consolidating the two behind
-# templatefile variables is a reasonable follow-up once this has soaked.
+# A sibling of the standard archiver's clock.yaml rather than a parameterization
+# of it: clock.yaml has no test coverage, and converting production from its
+# three-branch `parallel` block to a loop cannot be verified before it reaches
+# prod. Consolidating the two behind templatefile variables is a reasonable
+# follow-up once this has soaked.
 #
 # Rendered through templatefile(). A single-dollar interpolation is substituted by
 # Terraform; a double-dollar one is escaped down to a single dollar and evaluated
@@ -26,25 +27,6 @@ main:
         assign:
           - currentTime: $${sys.now()}
           - currentMinute: $${math.floor(currentTime / 60) * 60}
-          - limit: null
-
-    # The Cloud Scheduler payload is a live control surface: publishing
-    # {"limit": 1} throttles the cohort to a single feed with no redeploy, which is
-    # how the first production enablement is canaried. A missing or malformed
-    # payload must not take the clock down, hence the catch.
-    - readSchedulerPayload:
-        try:
-          steps:
-            - decode:
-                assign:
-                  - payload: $${json.decode(base64.decode(event.data.message.data))}
-                  - limit: $${map.get(payload, "limit")}
-        except:
-          as: e
-          steps:
-            - useNoLimit:
-                assign:
-                  - limit: null
 
     - publishMessages:
         for:
@@ -62,7 +44,6 @@ main:
                   - batchTime: $${currentMinute + 60 + tick * ${cadence_seconds}}
                   - data:
                       batch_at: $${time.format(batchTime)}
-                      limit: $${limit}
             - sleep:
                 call: sys.sleep_until
                 args:

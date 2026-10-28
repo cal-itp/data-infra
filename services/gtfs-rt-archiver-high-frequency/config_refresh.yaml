@@ -1,0 +1,25 @@
+# Daily refresh of the high-frequency download config (see README.md).
+#
+# The heartbeat is the standard archiver's code unchanged, and it only reads
+# configs under gtfs_download_configs/dt=<one of the last 5 days>/. The standard
+# archiver gets a new dated file from Airflow every day; this lane's config is
+# maintained by hand, so this workflow copies the hand-edited source object into
+# today's dated path to keep the heartbeat from running out of config.
+#
+# Loaded with file(), not templatefile(), so interpolations use a single dollar.
+main:
+  steps:
+    - init:
+        assign:
+          - bucket: ${text.replace_all(sys.get_env("CALITP_BUCKET__GTFS_DOWNLOAD_CONFIG"), "gs://", "")}
+          - now: ${time.format(sys.now())}
+          - destination: ${"gtfs_download_configs/dt=" + text.substring(now, 0, 10) + "/ts=" + now + "/configs.jsonl.gz"}
+    - copy:
+        call: googleapis.storage.v1.objects.copy
+        args:
+          sourceBucket: ${bucket}
+          sourceObject: ${text.url_encode("source/configs.jsonl.gz")}
+          destinationBucket: ${bucket}
+          destinationObject: ${text.url_encode(destination)}
+    - done:
+        return: ${destination}

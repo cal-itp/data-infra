@@ -60,7 +60,7 @@ class TestArchiver:
             "service_alerts",
             "dt=2026-04-01",
             "hour=2026-04-01T00:00:00+00:00",
-            "ts=2026-04-01T00:01:20+00:00",
+            "ts=2026-04-01T00:01:23.450000+00:00",
             f"base64_url={configuration.base64_url()}",
             "feed",
         )
@@ -76,7 +76,7 @@ class TestArchiver:
         archiver.save(result=downloader.get())
         assert json.loads(blob.metadata["PARTITIONED_ARTIFACT_METADATA"]) == {
             "filename": "feed",
-            "ts": "2026-04-01T00:01:20+00:00",
+            "ts": "2026-04-01T00:01:23.450000+00:00",
             "config": {
                 "extracted_at": "2026-04-01T00:00:00+00:00",
                 "name": "Example",

@@ -7,10 +7,10 @@ locals {
   hf_source_path  = "${path.module}/../../../../services/gtfs-rt-archiver-high-frequency"
   hf_archive_path = "${path.module}/build/source-high-frequency.zip"
 
-  # Empty cohort means every high-frequency resource has count = 0, so the lane
-  # does not exist: no scheduler, no ticks, no workflow executions, no idle
-  # instances. "Off" is zero cost, not merely cheap.
-  high_frequency_enabled = length(var.high_frequency_cohort) > 0 ? 1 : 0
+  # Off means every high-frequency resource except the two buckets has count = 0,
+  # so the lane does not exist: no scheduler, no ticks, no workflow executions, no
+  # idle instances. "Off" is zero cost, not merely cheap.
+  high_frequency_count = var.high_frequency_enabled ? 1 : 0
 
   # 3s cadence => 20 ticks per minute => range [0, 19] in the clock workflow.
   high_frequency_max_tick_index = 60 / var.high_frequency_cadence_seconds - 1
@@ -20,15 +20,14 @@ locals {
 # selects apply targets with files: 'iac/cal-itp-data-infra/**/*.tf'
 # (.github/workflows/terraform-apply.yml), so a tfvars-only commit would match
 # nothing and silently produce no plan and no apply.
-variable "high_frequency_cohort" {
-  description = "Download config names to archive on the high-frequency clock. Empty list disables the lane entirely. Time-boxed study use only -- see the runbook in services/gtfs-rt-archiver/README.md."
-  type        = list(string)
-  default     = []
-
-  validation {
-    condition     = length(var.high_frequency_cohort) <= 2
-    error_message = "The high-frequency cohort is capped at 2 feeds. A larger cohort at this cadence is a cost and agency-load incident, not a study."
-  }
+#
+# Which feeds the lane archives is not set here: it is the hand-maintained
+# download config in the high-frequency config bucket, which changes without a PR.
+# See services/gtfs-rt-archiver-high-frequency/README.md.
+variable "high_frequency_enabled" {
+  description = "Whether the high-frequency archiver lane exists. Seed the config bucket before turning it on."
+  type        = bool
+  default     = false
 }
 
 variable "high_frequency_cadence_seconds" {
