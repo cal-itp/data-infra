@@ -116,6 +116,9 @@ pools:
 		pools set rt_validate_pool 1 ""
 	$(COMPOSER_CMD) run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
+		pools set rt_compaction_pool 2 ""
+	$(COMPOSER_CMD) run-airflow-cmd \
+		$(COMPOSER_ENVIRONMENT_NAME) \
 		pools set schedule_parse_pool 4 ""
 	$(COMPOSER_CMD) run-airflow-cmd \
 		$(COMPOSER_ENVIRONMENT_NAME) \
