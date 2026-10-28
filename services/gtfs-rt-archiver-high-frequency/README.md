@@ -49,7 +49,7 @@ path.
 | Data bucket | `gs://calitp-staging-gtfs-rt-raw-high-frequency` | `gs://calitp-gtfs-rt-raw-high-frequency` |
 | Clock scheduler job | `gtfs-rt-archiver-staging-high-frequency-clock` | `gtfs-rt-archiver-high-frequency-clock` |
 | Config refresh workflow | `gtfs-rt-archiver-staging-high-frequency-config-refresh` | `gtfs-rt-archiver-high-frequency-config-refresh` |
-| Applied when | merged to `staging/official` (auto-approved) | merged to `main` (manual approval) |
+| Applied when | pushed to any `staging/**` branch (auto-approved), or merged to `main` | merged to `main` (manual approval) |
 
 Every resource except the two buckets only exists while `high_frequency_enabled` is
 `true`, so when no study is running the lane costs nothing. The buckets are kept so
@@ -189,11 +189,17 @@ variable "high_frequency_enabled" {
 }
 ```
 
-Open a pull request against `staging/official`, review the Terraform plan comment
-(it should only *create* `*-high-frequency*` resources, and nothing in `service.tf` or
-`workflow.tf` should change), then merge it. Change the value in `variables.tf`, not
-in a `terraform.tfvars`: CI picks apply targets by changed `*.tf` files, so a
-tfvars-only change would plan and apply nothing.
+Commit that on a `staging/<name>` branch and push it. Any push to a `staging/**` branch
+auto-applies the staging Terraform it changed. Do not merge the change to `main`: it
+would turn the lane on in staging for good. The plan should only *create*
+`*-high-frequency*` resources, and nothing in `service.tf` or `workflow.tf` should
+change. Change the value in `variables.tf`, not in a `terraform.tfvars`: CI picks apply
+targets by changed `*.tf` files, so a tfvars-only change would plan and apply nothing.
+
+Staging Terraform state is shared. Any later staging apply of the archiver directory
+from a branch where `high_frequency_enabled` is `false` turns the lane off again,
+including merges to `main` that touch the archiver. Keep the soak short. When it is
+done, push `high_frequency_enabled = false` to the same branch.
 
 Then check the results (see [Checking that it works](#checking-that-it-works)).
 
