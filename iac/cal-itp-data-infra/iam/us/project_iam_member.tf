@@ -667,12 +667,12 @@ resource "google_project_iam_member" "ms-entra-id-DDS_Payments_Admins" {
   project = "cal-itp-data-infra"
 }
 
-resource "google_project_iam_member" "ms-entra-id-DDS_Warehouse_Users_Flex" {
+resource "google_project_iam_member" "ms-entra-id-DDS_data_flexible_class" {
   for_each = toset([
     "roles/viewer",
   ])
   role    = each.key
-  member  = "principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DDS_Warehouse_Users_Flex"
+  member  = "principalSet://iam.googleapis.com/locations/global/workforcePools/dot-ca-gov/group/DDS_data_flexible_class"
   project = "cal-itp-data-infra"
 }
 
