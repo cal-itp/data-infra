@@ -65,7 +65,7 @@ Navigate to the GCP Composer/ Airflow UI (link in your onboarding docs) and find
 
 **For Elavon agencies:**
 
-1. **sync_elavon** - Downloads raw data from Elavon's SFTP server
+1. **Raw data ingestion** - Terraform-managed SFTP infrastructure transfers Elavon files to GCS (no sync DAG needed)
 2. **parse_elavon** - Converts and processes Elavon data to BigQuery-compatible format
 
 **For all agencies:**
@@ -81,7 +81,7 @@ Open the GCP Console and explore these buckets:
 - `calitp-payments-littlepay-raw-v3` - Raw Littlepay data files
 - `calitp-payments-littlepay-parsed-v3` - Parsed Littlepay JSONL files
 - `calitp-enghouse-raw` - Raw Enghouse data files
-- `calitp-elavon-raw` - Raw Elavon data files
+- `calitp-elavon-raw-v2` - Raw Elavon data files
 - `calitp-elavon-parsed` - Parsed Elavon JSONL files
 
 ### Data Warehouse
@@ -263,7 +263,7 @@ Now that you understand the basics:
 ## Common Questions
 
 **Q: How often does data update?**\
-A: Sync DAGs run hourly for Littlepay, Enghouse data is delivered directly to GCS daily, Elavon data syncs daily, and dbt transformations run daily. For dats feeds that also have parse tasks (currently Littlepay and Elavon), data will not update until they also run.
+A: The Littlepay sync DAG runs hourly, Enghouse data is delivered directly to GCS daily, and Elavon data is transferred to GCS through Terraform-managed SFTP infrastructure. For Littlepay and Elavon, data is subsequently processed by their respective parse DAGs. dbt transformations run on their configured schedules.
 
 **Q: Why do we have both fare collection data (Littlepay/Enghouse) and payment processor data (Elavon)?**\
 A: Fare collection vendors handle tap events and fare calculation; Elavon handles actual payment processing. We need both for complete visibility into the payments data ecosystem.

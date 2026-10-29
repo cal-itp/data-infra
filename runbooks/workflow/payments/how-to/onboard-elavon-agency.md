@@ -24,9 +24,9 @@ All Cal-ITP partner agencies currently use Elavon as their payment processor. El
 **Key Characteristics:**
 
 - **Shared Data Feed:** All agencies' data comes through a single SFTP server
-- **Organization-Based Filtering:** Data is filtered by `cutomer_name` in raw data, and either `customer_name` or `organization_name` in enriched mart tables downstream
+- **Organization-Based Filtering:** Data is filtered by `customer_name` in raw data, and either `customer_name` or `organization_name` in enriched mart tables downstream
 - **No Per-Agency Credentials:** Unlike Littlepay, there are no agency-specific access credentials needed
-- **Sync Method:** Data is synced via `sync_elavon` DAG to Elavon raw data bucket in GCS
+- **Sync Method:** Data is transferred from Elavon's SFTP server to the `calitp-elavon-raw-v2` GCS bucket using Terraform-managed SFTP infrastructure
 - **Parse Method:** Data is parsed via `parse_elavon` DAG from raw data bucket to parsed data bucket
 
 **Elavon Raw Data Tables:**
@@ -120,37 +120,38 @@ Create a pull request, get it reviewed, and merge.
 
 After all PRs are merged, actions have succeeded, and relevant DAGs have run, verify data flows through the pipeline.
 
-### 3.1 Verify Sync DAG
+### 3.1 Check Raw Data in GCS
 
-After the data is expected to be made available from Elavon, and once the time of the next scheduled DAG run has passed:
-
-1. Navigate to the Airflow UI
-2. Find `sync_elavon` DAG, click into it
-3. Ensure that the most recent run shows as a green 'success'.
-
-### 3.2 Check Raw Data in GCS
+After new data is expected to be available from Elavon:
 
 1. Navigate to Google Cloud Storage
-2. Select the bucket `calitp-elavon-raw`
-3. You should see at least one zip file within that directory, ex: `gs://calitp-elavon-raw/ts=2023-07-28T00:00:09.900973+00:00/010PR001618FUND20230131.zip`
+2. Select the bucket `calitp-elavon-raw-v2`
+3. Confirm that recent Elavon ZIP files are present
 
-### 3.3 Verify Parse DAG
+Raw data ingestion is handled by Terraform-managed SFTP infrastructure rather than an Airflow sync DAG.
 
-Once the time of the next scheduled sync DAG run has passed, and the time of the next scheduled parse DAG run has passed:
+### 3.2 Verify Parse DAG
+
+After new raw data is available and the next scheduled parse DAG run has completed:
 
 1. Navigate to the Airflow UI
-2. Find `parse_elavon` DAG, click into it
-3. Ensure that the most recent run shows as a green 'success'.
+2. Find `parse_elavon` DAG and open it
+3. Ensure that the most recent run shows as a green 'success'
 
-### 3.4 Check Parsed Data in GCS
+### 3.3 Check Parsed Data in GCS
 
-1. Navigate to Google Cloud Storage
-2. Select the bucket `calitp-elavon-parsed`
-3. Select the directory `transactions/`
-4. Select the directory of the agency whose sync task you are verifying, ex: `instance=mst/`
-5. You should see recent date directories and zip files, ex: `calitp-elavon-parsed/transactions/dt=2023-07-29/execution_ts=2023-07-29T02:00:15.074963+00:00/transactions.jsonl.gz`
+1. Navigate to Google Cloud Storage.
+2. Select the bucket `calitp-elavon-parsed`.
+3. Open the `transactions/` directory.
+4. Select a recent date partition, such as `dt=2026-10-15/`.
+5. Open the corresponding `execution_ts=.../` directory.
+6. Confirm that parsed `.jsonl.gz` files are present, such as `010PR001618FUND20230131.jsonl.gz`.
 
-### 3.5 Verify External Tables
+Example path:
+
+`gs://calitp-elavon-parsed/transactions/dt=2026-10-15/execution_ts=2026-10-15T02:00:11.803237+00:00/010PR001618FUND20230131.jsonl.gz`
+
+### 3.4 Verify External Tables
 
 In BigQuery, query:
 
@@ -160,7 +161,7 @@ FROM `cal-itp-data-infra.external_elavon.transactions`
 WHERE customer_name = '<elavon-customer-name>'
 ```
 
-### 3.6 Verify dbt Transformations
+### 3.5 Verify dbt Transformations
 
 After the next scheduled run of the `dbt_all` or `dbt_daily` DAG, run the below queries or check the [Onboarding Dashboard](https://metabase.dds.dot.ca.gov/dashboard/369-agency-onboarding-dashboard):
 
@@ -193,7 +194,7 @@ After completing Littlepay onboarding:
 **Solutions:**
 
 - Check that agency is actually in Elavon's data feed
-- Confirm `sync_elavon` DAG is running successfully
+- Confirm that recent Elavon files have arrived in the `calitp-elavon-raw-v2` GCS bucket
 - Check that `parse_elavon` DAG completed
 
 ### Row-Level Security Not Working
@@ -221,8 +222,8 @@ After completing Littlepay onboarding:
 
 ```mermaid
 graph LR
-    A[Elavon SFTP Server] --> B[sync_elavon DAG]
-    B --> C[GCS: calitp-elavon-raw]
+    A[Elavon SFTP Server] --> B[Terraform-managed SFTP ingestion]
+    B --> C[GCS: calitp-elavon-raw-v2]
     C --> D[parse_elavon DAG]
     D --> E[GCS: calitp-elavon-parsed]
     E --> F[External Tables]
