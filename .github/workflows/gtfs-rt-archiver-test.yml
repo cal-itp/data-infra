@@ -5,17 +5,16 @@ on:
   push:
     branches:
       - 'main'
-      - 'staging/official'
+      - 'staging/**'
     paths:
       - services/gtfs-rt-archiver/**
+      - services/gtfs-rt-archiver-high-frequency/**
 
   # Also run when a PR is opened, synchronized, or reopened that touches the same paths
   pull_request:
-    branches:
-      - 'main'
-      - 'staging/official'
     paths:
       - services/gtfs-rt-archiver/**
+      - services/gtfs-rt-archiver-high-frequency/**
 
 concurrency:
   group: gtfs-rt-archiver-test-${{ github.ref }}
@@ -32,13 +31,21 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
+    # The high-frequency lane is a separate copy of the archiver with its own tests.
+    strategy:
+      fail-fast: false
+      matrix:
+        service:
+          - gtfs-rt-archiver
+          - gtfs-rt-archiver-high-frequency
+
     permissions:
       contents: read
       id-token: write
 
     defaults:
       run:
-        working-directory: services/gtfs-rt-archiver
+        working-directory: services/${{ matrix.service }}
 
     steps:
       - name: Checkout
@@ -64,7 +71,7 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           enable-cache: true
           cache-python: true
-          working-directory: services/gtfs-rt-archiver
+          working-directory: services/${{ matrix.service }}
 
       - name: Install the project
         run: uv sync --locked --all-extras --dev

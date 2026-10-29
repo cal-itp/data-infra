@@ -38,6 +38,14 @@ resource "google_container_cluster" "sftp-endpoints" {
     workload_metadata_config {
       mode = "GKE_METADATA"
     }
+
+    reservation_affinity {
+      consume_reservation_type = "NO_RESERVATION"
+    }
+
+    gvnic {
+      enabled = true
+    }
   }
 
   addons_config {
