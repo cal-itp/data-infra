@@ -304,9 +304,19 @@ class TestGtfsRtCompactor:
         monkeypatch.setenv("CALITP_BUCKET__GTFS_RT_RAW", "gs://raw")
         monkeypatch.setenv("CALITP_BUCKET__GTFS_RT_RAW_COMPACTED", "gs://compacted")
         monkeypatch.setenv("CALITP_BUCKET__GTFS_RT_PARSED", "gs://parsed")
-        today = datetime.date.today().isoformat()
+        monkeypatch.setattr(
+            compactor,
+            "storage_client",
+            lambda **kwargs: pytest.fail("guard must fire before any GCS client"),
+        )
+        # Tomorrow in UTC is always incomplete; local today() is already a
+        # complete UTC day during Pacific evenings.
+        tomorrow = (
+            datetime.datetime.now(datetime.timezone.utc).date()
+            + datetime.timedelta(days=1)
+        ).isoformat()
 
-        result = CliRunner().invoke(compactor.app, [FEED_TYPE, today])
+        result = CliRunner().invoke(compactor.app, [FEED_TYPE, tomorrow])
 
         assert result.exit_code != 0
         assert "not fully in the past" in str(result.exception)
