@@ -20,10 +20,10 @@ graph TB
 
     C --> F[sync_littlepay_v3 DAG]
     C2 --> H2[GCS: calitp-enghouse-raw]
-    E --> G[sync_elavon DAG]
+    E --> G[Terraform-managed SFTP ingestion]
 
     F --> H[GCS: calitp-payments-littlepay-raw-v3]
-    G --> I[GCS: calitp-elavon-raw]
+    G --> I[GCS: calitp-elavon-raw-v2]
 
     H --> J[parse_littlepay_v3 DAG]
     H2 --> J2[No parse needed]
@@ -126,16 +126,16 @@ Elavon provides data through an SFTP server with a single shared directory for a
 **File Format (Elavon Raw):**
 
 ```
-gs://calitp-elavon-raw/ts=2026-01-28T00:00:33.636202+00:00/010PR001618FUND20260127.zip
+gs://calitp-elavon-raw-v2/ts=2026-01-28T00:00:33.636202+00:00/010PR001618FUND20260127.zip
 ```
 
 **File Format (Elavon Parsed):**
 
 ```
 gs://calitp-elavon-parsed/transactions/
-  dt=2026-01-28/
-    execution_ts=2026-01-28T02:33:15.654837+00:00/
-      transactions.jsonl.gz
+  dt=2026-10-15/
+    execution_ts=2026-10-15T02:00:11.803237+00:00/
+      010PR001618FUND20230131.jsonl.gz
 ```
 
 Files are pipe-separated text files inside zip archives, with all agencies' data mixed together. After parsing, they're separated by date and converted to JSONL. The different transaction types are separated downstream into transaction-specific files in the warehouse using the `batch_type` field.
@@ -185,37 +185,25 @@ gs://calitp-payments-littlepay-raw-v3/device-transactions/
         202601281105_devicetransactions.psv
 ```
 
-### Elavon Sync Process
+### Elavon Raw Data Ingestion
 
-**DAG:** `sync_elavon`\
-**Schedule:** Daily at midnight (`0 0 * * *`)\
-**Code:** `airflow/dags/sync_elavon/`
+Elavon provides raw data through a shared SFTP server. Data is transferred to the `calitp-elavon-raw-v2` GCS bucket using Terraform-managed SFTP infrastructure rather than an Airflow sync DAG.
 
 #### What Happens:
 
-1. **SFTP Connection**
+1. **SFTP Data Transfer**
 
-   - Connects using credentials from Secret Manager
-   - Lists all files in `/data` directory
+   - Elavon files are received through the configured SFTP infrastructure.
+   - Files are stored in the `calitp-elavon-raw-v2` bucket.
 
-2. **Mirror Download**
+2. **Raw File Storage**
 
-   - Downloads entire directory contents
-   - Preserves original file names and structure
-   - Uploads to GCS with timestamp partition
+   - Files remain in their original ZIP format.
+   - The raw files are subsequently processed by the `parse_elavon` DAG.
 
-3. **Full Snapshot**
+**Raw Data Bucket:**
 
-   - Each run creates a complete snapshot
-   - Allows point-in-time recovery
-   - Files remain zipped at this stage
-   - We should explore making this more efficient (not downloading entire history) in future
-
-**Example File Path:**
-
-```
-gs://calitp-elavon-raw/ts=2026-01-28T00:00:33.636202+00:00/010PR001618FUND20260127.zip
-```
+`gs://calitp-elavon-raw-v2/`
 
 ## Part 3: Parse Stage - Format Conversion
 
@@ -275,7 +263,7 @@ JSONL Output (gzipped):
 ### Elavon Parse Process
 
 **DAG:** `parse_elavon`\
-**Schedule:** Daily at 2:00 AM (`0 2 * * *`) - runs 2 hours after sync\
+**Schedule:** Daily at 2:00 AM (`0 2 * * *`)\
 **Code:** `airflow/dags/parse_elavon/`
 
 #### What Happens:
@@ -290,12 +278,7 @@ JSONL Output (gzipped):
    - Handles quoted fields
    - Manages encoding issues
 
-3. **Filter by Agency**
-
-   - Identifies agency using `customer_name` field
-   - Separates mixed data into agency-specific files
-
-4. **Write JSONL**
+3. **Write JSONL**
 
    - Converts to JSONL format
    - Gzips output
@@ -514,7 +497,7 @@ In Airflow:
 You now understand:
 
 - ✅ How vendor data is structured and accessed (Littlepay, Enghouse, Elavon)
-- ✅ The sync process for Littlepay and Elavon (and why Enghouse doesn't need one)
+- ✅ How raw data is ingested for Littlepay, Enghouse, and Elavon
 - ✅ Why and how we parse data
 - ✅ How external tables make data queryable
 - ✅ The dbt transformation layers (staging, intermediate, mart)
@@ -533,16 +516,16 @@ You now understand:
 **Q: Why not load data directly into BigQuery tables?**\
 A: External tables preserve the raw data in GCS, allowing us to replay transformations without re-syncing from vendors. It also separates storage from compute.
 
-**Q: Why do we need both sync and parse DAGs?**\
-A: Sync preserves the exact vendor format. Parse converts to BigQuery-compatible format. This separation allows us to re-parse without re-syncing.
+**Q: Why do some data sources require parsing after ingestion?**\
+A: Raw data ingestion preserves vendor files in GCS. Parsing converts files into BigQuery-compatible formats when needed. Keeping these stages separate allows files to be re-parsed without retrieving them again from the vendor.
 
 **Q: How long does data take to appear in dashboards?**\
-A: Data for all vendors should appear within 24 hours. Exact timing depends on when the data was published by a vendor, and the particular schedules for the sync/parse/and transform tasks.
+A: Data for all vendors should appear within 24 hours. Exact timing depends on vendor delivery, ingestion, parsing (where applicable), and dbt transformation schedules.
 
 **Q: What if a file is corrupted?**\
 A: We can re-run the parse DAG for that specific partition without re-syncing from the vendor.
 
-**Q: Why doesn't Enghouse have sync and parse DAGs like Littlepay and Elavon?**\
+**Q: Why doesn't Enghouse require a parse DAG?**\
 A: Enghouse delivers data directly to our GCS bucket (`gs://calitp-enghouse-raw/`) via SFTP, so there is no vendor-managed bucket for us to copy from (no sync needed). Additionally, Enghouse delivers data as CSV files that BigQuery external tables can read directly — no format conversion is required (no parse needed). Data lands in GCS and is immediately queryable via the external tables once `create_external_tables` has been run.
 
 ______________________________________________________________________

@@ -3,7 +3,7 @@
 | Time_in_UTC | Time_in_PST          | Time_in_PDT          | DAG                                                                                                                              | Schedule   |
 |   :---:     | :---:                | :---:                |:---                                                                                                                              | :---:      |
 |  0:00 AM    | 4 PM<br>previous day | 5 PM<br>previous day | [publish_gtfs](#publish_gtfs)                                                                                                    | Mondays    |
-|  0:00 AM    | 4 PM<br>previous day | 5 PM<br>previous day | [sync_elavon](./sync_elavon)<br>[sync_kuba](./sync_kuba)<br>[scrape_feed_aggregators](./scrape_feed_aggregators)<br>[copy_production_to_staging](./copy_production_to_staging) | Every day  |
+|  0:00 AM    | 4 PM<br>previous day | 5 PM<br>previous day | [sync_kuba](./sync_kuba)<br>[scrape_feed_aggregators](./scrape_feed_aggregators)<br>[copy_production_to_staging](./copy_production_to_staging) | Every day  |
 |  2:00 AM    | 6 PM<br>previous day | 7 PM<br>previous day | [airtable_loader_v2](./airtable_loader_v2)<br>[parse_elavon](./parse_elavon)                                                     | Every Day  |
 |  3:00 AM    | 7 PM<br>previous day | 8 PM<br>previous day | [download_parse_and_validate_gtfs](#download_parse_and_validate_gtfs)                                                            | Every Day  |
 |  4:00 AM    | 8 PM<br>previous day | 9 PM<br>previous day | [scrape_state_geoportal](./scrape_state_geoportal)                                                                               | 1st Day of the month |
