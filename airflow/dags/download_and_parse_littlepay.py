@@ -6,6 +6,7 @@ from operators.littlepay_psv_to_jsonl_operator import LittlepayPSVToJSONLOperato
 from operators.littlepay_s3_to_gcs_operator import LittlepayS3ToGCSOperator
 
 from airflow.decorators import dag, task_group
+from airflow.exceptions import AirflowSkipException
 from airflow.operators.latest_only import LatestOnlyOperator
 from airflow.providers.amazon.aws.operators.s3 import S3ListOperator
 from airflow.utils.trigger_rule import TriggerRule
@@ -83,6 +84,21 @@ LITTLEPAY_TRANSIT_PROVIDER_CONFIG = {
 }
 
 
+def parse_kwargs(file):
+    # TEMPORARY: CCJPA refunds PSVs are repeatedly malformed and break the pipeline.
+    # They are still downloaded, but parsing is skipped. Remove this check to revert.
+    if file["provider"] == "ccjpa" and file["filename"].endswith("refunds.psv"):
+        raise AirflowSkipException(f"Skipping parse of {file['filename']} for ccjpa")
+
+    return {
+        "entity": file["entity"],
+        "provider": file["provider"],
+        "filename": file["filename"],
+        "ts": file["ts"],
+        "source_path": file["destination_path"],
+    }
+
+
 @dag(
     # 12pm UTC (5am PDT/4am PST) every day
     schedule="0 12 * * *",
@@ -147,17 +163,7 @@ def download_and_parse_littlepay():
                 destination_path="{{ task.entity }}/instance={{ task.provider }}/extract_filename={{ task.filename }}/ts={{ task.ts }}/{{ splitext(task.filename)[0] }}.jsonl.gz",
                 report_path="littlepay_parse_job_results/instance={{ task.provider }}/ts={{ task.ts }}/results_{{ splitext(task.filename)[0] }}.jsonl",
                 pool="littlepay_parse_pool",
-            ).expand_kwargs(
-                synced_files.output.map(
-                    lambda file: {
-                        "entity": file["entity"],
-                        "provider": file["provider"],
-                        "filename": file["filename"],
-                        "ts": file["ts"],
-                        "source_path": file["destination_path"],
-                    }
-                )
-            )
+            ).expand_kwargs(synced_files.output.map(parse_kwargs))
 
             (source_paths >> synced_files >> parsed_files)
 
