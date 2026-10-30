@@ -41,15 +41,6 @@ data "terraform_remote_state" "gcs" {
   }
 }
 
-data "terraform_remote_state" "gke" {
-  backend = "gcs"
-
-  config = {
-    bucket = "calitp-staging-gcp-components-tfstate"
-    prefix = "cal-itp-data-infra-staging/gke"
-  }
-}
-
 data "terraform_remote_state" "iam" {
   backend = "gcs"
 
