@@ -1,3 +1,29 @@
+"""
+Compacts each UTC day of raw GTFS-RT fetches into hourly parquet archive
+files, one task per feed type. The work happens in
+plugins/scripts/gtfs_rt_compactor.py; see its docstring for the archive
+layout and write-once semantics.
+
+Schedule: daily at 03:30 UTC, when the day being compacted ({{ ds }}, the
+run's data interval start) has been closed for 3.5 hours — the archiver only
+ever writes into the current hour, so that day can no longer change. With
+catchup=True and max_active_runs=1, days backfill oldest-first one at a time.
+
+The compactor CLI reads its buckets from environment variables that
+Terraform sets on the Composer environment (composer/us/environment.tf);
+the bash command passes no bucket arguments. The CLI's --raw-bucket /
+--compacted-bucket / --outcomes-bucket flags override them for local or
+manual runs:
+
+    CALITP_BUCKET__GTFS_RT_RAW            source of tiny raw objects (read)
+    CALITP_BUCKET__GTFS_RT_RAW_COMPACTED  destination archive (write-once)
+    CALITP_BUCKET__GTFS_RT_PARSED         per-hour outcome files (rewritten
+                                          every run, success or failure)
+
+Tasks draw from rt_compaction_pool, which must exist in the Airflow
+environment before enabling the DAG (pools are provisioned by hand, like
+rt_parse_pool; see the Makefile pools target for local dev).
+"""
 import os
 from datetime import datetime, timedelta
 
