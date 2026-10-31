@@ -50,7 +50,6 @@ resource "google_container_node_pool" "tfer--data-infra-apps_apps-v2" {
     spot = "false"
   }
 
-  node_count     = "1"
   node_locations = ["us-west1-a", "us-west1-b", "us-west1-c"]
   project        = "cal-itp-data-infra"
 
