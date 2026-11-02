@@ -20,8 +20,22 @@ settlement_aggregations_customer_map as (
 ),
 
 vaults as (
-    select * from {{ ref('int_payments__customer_funding_source_vaults') }}
+    select
+        *, LENGTH(bin) AS bin_len
+    from {{ ref('int_payments__customer_funding_source_vaults') }}
 ),
+
+vaults_with_rank AS (
+    select *, DENSE_RANK() OVER (
+        PARTITION BY (* EXCEPT funding_source_vault_id, bin, bin_len)
+        ORDER BY littlepay_export_ts DESC, bin_len DESC
+    ) AS non_bin_rank
+),
+
+deduped_vaults AS (
+    SELECT * except bin_len
+    WHERE non_bin_rank = 1
+)
 
 aggregations_map_to_customers_vaults as (
     select
