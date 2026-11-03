@@ -100,8 +100,8 @@ def parse_kwargs(file):
 
 
 @dag(
-    # 12pm UTC (5am PDT/4am PST) every day
-    schedule="0 12 * * *",
+    # 12:30pm UTC (5:30am PDT/4:30am PST) every day
+    schedule="30 12 * * *",
     start_date=datetime(2026, 4, 1),
     catchup=False,
     tags=["payments", "littlepay"],
