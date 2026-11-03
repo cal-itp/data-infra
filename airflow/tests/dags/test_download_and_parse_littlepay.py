@@ -1,9 +1,14 @@
 import json
+import sys
 from datetime import UTC, datetime
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
-from download_and_parse_littlepay import filter_existing_littlepay_files
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "dags"))
+
+from download_and_parse_littlepay import filter_existing_littlepay_files  # noqa: E402
 
 SOURCE_PATH = "atn/v3/authorisations/202510241114_authorisations.psv"
 GCS_OBJECT = (
