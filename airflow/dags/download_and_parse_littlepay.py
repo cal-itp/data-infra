@@ -1,21 +1,15 @@
-import json
-import logging
 import os
 from datetime import datetime, timedelta
 
 from dags import email_on_failure, log_failure_to_slack
 from operators.littlepay_psv_to_jsonl_operator import LittlepayPSVToJSONLOperator
+from operators.littlepay_s3_list_filter_operator import LittlepayS3ListFilterOperator
 from operators.littlepay_s3_to_gcs_operator import LittlepayS3ToGCSOperator
 
-from airflow.decorators import dag, task, task_group
+from airflow.decorators import dag, task_group
 from airflow.exceptions import AirflowSkipException
 from airflow.operators.latest_only import LatestOnlyOperator
-from airflow.providers.amazon.aws.hooks.s3 import S3Hook
-from airflow.providers.amazon.aws.operators.s3 import S3ListOperator
-from airflow.providers.google.cloud.hooks.gcs import GCSHook
 from airflow.utils.trigger_rule import TriggerRule
-
-logger = logging.getLogger(__name__)
 
 LITTLEPAY_TRANSIT_PROVIDER_CONFIG = {
     "atn": {
@@ -105,106 +99,6 @@ def parse_kwargs(file):
     }
 
 
-@task
-def filter_existing_littlepay_files(
-    source_paths: list[str],
-    provider: str,
-    source_bucket: str,
-    source_prefix: str,
-    aws_conn_id: str,
-    destination_bucket: str,
-) -> list[str]:
-    """Return S3 files that are new or changed since their last GCS copy."""
-    s3_hook = S3Hook(aws_conn_id=aws_conn_id)
-    gcs_hook = GCSHook()
-    bucket_name = destination_bucket.removeprefix("gs://")
-
-    # Retrieve current S3 metadata using paginated listings.
-    s3_objects = {}
-    paginator = s3_hook.get_conn().get_paginator("list_objects_v2")
-
-    for page in paginator.paginate(
-        Bucket=source_bucket,
-        Prefix=source_prefix,
-    ):
-        for obj in page.get("Contents", []):
-            s3_objects[obj["Key"]] = obj
-
-    paths_to_copy = []
-
-    for source_path in source_paths:
-        current_s3 = s3_objects.get(source_path)
-
-        # Do not create a copy task for a source that has disappeared.
-        if current_s3 is None:
-            logger.warning("S3 source no longer exists: %s", source_path)
-            continue
-
-        parts = source_path.split("/")
-        if len(parts) < 3:
-            paths_to_copy.append(source_path)
-            continue
-
-        entity = parts[2]
-        filename = os.path.basename(source_path)
-        prefix = f"{entity}/instance={provider}/filename={filename}"
-
-        prior_objects = (
-            gcs_hook.list(
-                bucket_name=bucket_name,
-                prefix=prefix,
-                match_glob=f"**/{filename}",
-            )
-            or []
-        )
-
-        if not prior_objects:
-            paths_to_copy.append(source_path)
-            continue
-
-        # Match PriorArtifact.retrieve(): use the newest GCS artifact.
-        latest_object = max(
-            prior_objects,
-            key=lambda name: gcs_hook.get_blob_update_time(
-                bucket_name=bucket_name,
-                object_name=name,
-            ),
-        )
-
-        metadata = (
-            gcs_hook.get_metadata(
-                bucket_name=bucket_name,
-                object_name=latest_object,
-            )
-            or {}
-        )
-
-        try:
-            artifact_metadata = json.loads(
-                metadata.get("PARTITIONED_ARTIFACT_METADATA", "{}")
-            )
-            previous_s3 = artifact_metadata.get("s3object") or {}
-        except (TypeError, ValueError, AttributeError):
-            previous_s3 = {}
-
-        # Preserve the existing operator's modification checks.
-        unchanged = current_s3["LastModified"].isoformat() == previous_s3.get(
-            "LastModified"
-        ) and current_s3["ETag"] == previous_s3.get("ETag")
-
-        if not unchanged:
-            paths_to_copy.append(source_path)
-
-    logger.info(
-        "Littlepay provider %s: %d source files, %d to copy",
-        provider,
-        len(source_paths),
-        len(paths_to_copy),
-    )
-
-    return paths_to_copy
-
-
 @dag(
     # 12pm UTC (5am PDT/4am PST) every day
     schedule="0 12 * * *",
@@ -230,23 +124,16 @@ def download_and_parse_littlepay():
 
         @task_group(group_id=provider)
         def provider_group(provider=provider, config=config):
-            source_paths = S3ListOperator(
-                task_id=f"{provider}_littlepay_list",
+            files_to_copy = LittlepayS3ListFilterOperator(
+                task_id=f"{provider}_littlepay_list_filter",
                 retries=1,
                 retry_delay=timedelta(seconds=10),
-                prefix=config["prefix"],
-                bucket=config["bucket"],
-                aws_conn_id=f"aws_{provider}",
-                pool="littlepay_list_pool",
-            )
-
-            files_to_copy = filter_existing_littlepay_files(
-                source_paths=source_paths.output,
                 provider=provider,
                 source_bucket=config["bucket"],
                 source_prefix=config["prefix"],
                 aws_conn_id=f"aws_{provider}",
                 destination_bucket=os.environ.get("CALITP_BUCKET__LITTLEPAY_RAW_V3"),
+                pool="littlepay_list_pool",
             )
 
             synced_files = LittlepayS3ToGCSOperator.partial(
@@ -265,7 +152,7 @@ def download_and_parse_littlepay():
                 destination_path="{{ task.entity }}/instance={{ task.provider }}/filename={{ basename(task.source_path) }}/ts={{ task.ts }}/{{ basename(task.source_path) }}",
                 report_path="raw_littlepay_sync_job_result/instance={{ task.provider }}/ts={{ task.ts }}/results_{{ splitext(basename(task.source_path))[0] }}.jsonl",
                 pool="littlepay_download_pool",
-            ).expand(source_path=files_to_copy)
+            ).expand(source_path=files_to_copy.output)
 
             parsed_files = LittlepayPSVToJSONLOperator.partial(
                 task_id=f"{provider}_littlepay_parse",
@@ -280,7 +167,7 @@ def download_and_parse_littlepay():
                 pool="littlepay_parse_pool",
             ).expand_kwargs(synced_files.output.map(parse_kwargs))
 
-            (source_paths >> files_to_copy >> synced_files >> parsed_files)
+            (files_to_copy >> synced_files >> parsed_files)
 
         provider_groups.append(provider_group())
 

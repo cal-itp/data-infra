@@ -1,14 +1,9 @@
 import json
-import sys
 from datetime import UTC, datetime
-from pathlib import Path
 from unittest.mock import MagicMock, patch
 
 import pytest
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[2] / "dags"))
-
-from download_and_parse_littlepay import filter_existing_littlepay_files  # noqa: E402
+from operators.littlepay_s3_list_filter_operator import LittlepayS3ListFilterOperator
 
 SOURCE_PATH = "atn/v3/authorisations/202510241114_authorisations.psv"
 GCS_OBJECT = (
@@ -24,8 +19,8 @@ ETAG = '"abc123"'
 @pytest.fixture
 def mock_hooks():
     with (
-        patch("download_and_parse_littlepay.S3Hook") as s3_class,
-        patch("download_and_parse_littlepay.GCSHook") as gcs_class,
+        patch("operators.littlepay_s3_list_filter_operator.S3Hook") as s3_class,
+        patch("operators.littlepay_s3_list_filter_operator.GCSHook") as gcs_class,
     ):
         s3 = s3_class.return_value
         gcs = gcs_class.return_value
@@ -61,14 +56,15 @@ def mock_hooks():
 
 
 def run_filter():
-    return filter_existing_littlepay_files.function(
-        source_paths=[SOURCE_PATH],
+    operator = LittlepayS3ListFilterOperator(
+        task_id="test_littlepay_list_filter",
         provider="atn",
         source_bucket="mock-littlepay-bucket",
         source_prefix="atn/v3",
         aws_conn_id="aws_atn",
         destination_bucket="gs://mock-littlepay-raw",
     )
+    return operator.execute(context={})
 
 
 def test_unchanged_file_is_excluded(mock_hooks):
@@ -98,7 +94,7 @@ def test_new_file_is_included(mock_hooks):
     assert run_filter() == [SOURCE_PATH]
 
 
-def test_missing_s3_file_is_excluded(mock_hooks):
+def test_empty_s3_listing_returns_no_files(mock_hooks):
     s3, _ = mock_hooks
     s3.get_conn.return_value.get_paginator.return_value.paginate.return_value = [
         {"Contents": []}
