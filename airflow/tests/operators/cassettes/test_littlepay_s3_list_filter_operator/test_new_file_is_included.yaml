@@ -1,0 +1,48 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.10 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.10 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/5c2255ca-a5e9-4623-9a05-5b14b0076057
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?matchGlob=%2A%2A%2Fpytest_filter_new_20261103.psv&prefix=authorisations%2Finstance%3Datn%2Ffilename%3Dpytest_filter_new_20261103.psv&prettyPrint=false
+  response:
+    body:
+      string: '{"kind":"storage#objects"}'
+    headers:
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '26'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 04 Nov 2026 00:02:32 GMT
+      Expires:
+      - Wed, 04 Nov 2026 00:02:32 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AFy3sg09esqihYIVyqV89LAErrR9FUHM8s8IW4Wv6m00W3p9VkZHwJOEcYnPbi1FH3ZmQDSIyjIR2e8
+      X-Goog-Gcs-Base-Ts:
+      - 1a1a3dd4f5b
+    status:
+      code: 200
+      message: OK
+version: 1

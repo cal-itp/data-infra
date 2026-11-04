@@ -1,0 +1,271 @@
+interactions:
+- request:
+    body: "--===============0926852279573665396==\r\ncontent-type: application/json;
+      charset=UTF-8\r\n\r\n{\"name\": \"authorisations/instance=atn/filename=pytest_filter_modified_20261103.psv/ts=2026-11-03T00:00:00+00:00/pytest_filter_modified_20261103.psv\",
+      \"metadata\": {\"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"s3object\\\": {\\\"LastModified\\\":
+      \\\"2026-11-04T00:01:34+00:00\\\", \\\"ETag\\\": \\\"\\\\\\\"old-etag\\\\\\\"\\\"}}\"}}\r\n--===============0926852279573665396==\r\ncontent-type:
+      text/plain\r\n\r\ntest littlepay content\r\n--===============0926852279573665396==--"
+    headers:
+      Accept:
+      - application/json
+      Accept-Encoding:
+      - gzip, deflate
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '520'
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.10 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.10 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/854d0925-0c6d-48bb-a344-ca8ca1240f7b
+      content-type:
+      - !!binary |
+        bXVsdGlwYXJ0L3JlbGF0ZWQ7IGJvdW5kYXJ5PSI9PT09PT09PT09PT09PT0wOTI2ODUyMjc5NTcz
+        NjY1Mzk2PT0i
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - text/plain
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/authorisations/instance=atn/filename=pytest_filter_modified_20261103.psv/ts=2026-11-03T00:00:00+00:00/pytest_filter_modified_20261103.psv/1793750497039609\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/authorisations%2Finstance=atn%2Ffilename=pytest_filter_modified_20261103.psv%2Fts=2026-11-03T00:00:00%2B00:00%2Fpytest_filter_modified_20261103.psv\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/authorisations%2Finstance=atn%2Ffilename=pytest_filter_modified_20261103.psv%2Fts=2026-11-03T00:00:00%2B00:00%2Fpytest_filter_modified_20261103.psv?generation=1793750497039609&alt=media\",\n
+        \ \"name\": \"authorisations/instance=atn/filename=pytest_filter_modified_20261103.psv/ts=2026-11-03T00:00:00+00:00/pytest_filter_modified_20261103.psv\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1793750497039609\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"text/plain\",\n  \"storageClass\":
+        \"STANDARD\",\n  \"size\": \"22\",\n  \"md5Hash\": \"GTxL6wpd+G2/DNYmaYtR3Q==\",\n
+        \ \"crc32c\": \"ZuJE2A==\",\n  \"etag\": \"CPmpxKmB7ZcDEAE=\",\n  \"timeCreated\":
+        \"2026-11-04T00:01:37.045Z\",\n  \"updated\": \"2026-11-04T00:01:37.045Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-11-04T00:01:37.045Z\",\n  \"timeFinalized\":
+        \"2026-11-04T00:01:37.045Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \"{\\\"s3object\\\": {\\\"LastModified\\\": \\\"2026-11-04T00:01:34+00:00\\\",
+        \\\"ETag\\\": \\\"\\\\\\\"old-etag\\\\\\\"\\\"}}\"\n  }\n}\n"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1498'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 04 Nov 2026 00:01:37 GMT
+      ETag:
+      - CPmpxKmB7ZcDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AFy3sg1QKZtOoumbrPeU0aOK8QO-fTa8Fj1bQR1NTj5lnYlrksLAz5u7VpV0k6cWGtiS4hzkOSgE6n4
+      X-Goog-Gcs-Base-Ts:
+      - 1a1a3dc771b
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.10 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.10 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/679bf41b-ae70-4ed9-bef4-574a6b7265d0
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?matchGlob=%2A%2A%2Fpytest_filter_modified_20261103.psv&prefix=authorisations%2Finstance%3Datn%2Ffilename%3Dpytest_filter_modified_20261103.psv&prettyPrint=false
+  response:
+    body:
+      string: '{"kind":"storage#objects","items":[{"kind":"storage#object","id":"calitp-staging-pytest/authorisations/instance=atn/filename=pytest_filter_modified_20261103.psv/ts=2026-11-03T00:00:00+00:00/pytest_filter_modified_20261103.psv/1793750497039609","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/authorisations%2Finstance=atn%2Ffilename=pytest_filter_modified_20261103.psv%2Fts=2026-11-03T00:00:00%2B00:00%2Fpytest_filter_modified_20261103.psv","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/authorisations%2Finstance=atn%2Ffilename=pytest_filter_modified_20261103.psv%2Fts=2026-11-03T00:00:00%2B00:00%2Fpytest_filter_modified_20261103.psv?generation=1793750497039609&alt=media","name":"authorisations/instance=atn/filename=pytest_filter_modified_20261103.psv/ts=2026-11-03T00:00:00+00:00/pytest_filter_modified_20261103.psv","bucket":"calitp-staging-pytest","generation":"1793750497039609","metageneration":"1","contentType":"text/plain","storageClass":"STANDARD","size":"22","md5Hash":"GTxL6wpd+G2/DNYmaYtR3Q==","crc32c":"ZuJE2A==","etag":"CPmpxKmB7ZcDEAE=","timeCreated":"2026-11-04T00:01:37.045Z","updated":"2026-11-04T00:01:37.045Z","timeStorageClassUpdated":"2026-11-04T00:01:37.045Z","timeFinalized":"2026-11-04T00:01:37.045Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"s3object\":
+        {\"LastModified\": \"2026-11-04T00:01:34+00:00\", \"ETag\": \"\\\"old-etag\\\"\"}}"}}]}'
+    headers:
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '1448'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 04 Nov 2026 00:01:38 GMT
+      Expires:
+      - Wed, 04 Nov 2026 00:01:38 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AFy3sg1PDVOwisFpjVZOX5UitO-E4bolVg_VvSmGYQ1a1LUHc_5T34V4MEe02uZ56zu4zth3-vuNqT8
+      X-Goog-Gcs-Base-Ts:
+      - 1a1a3dc7ce0
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.10 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.10 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/30b855dd-03bd-4dbe-8481-f269c4c55ecc
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/authorisations%2Finstance%3Datn%2Ffilename%3Dpytest_filter_modified_20261103.psv%2Fts%3D2026-11-03T00%3A00%3A00%2B00%3A00%2Fpytest_filter_modified_20261103.psv?prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/authorisations/instance=atn/filename=pytest_filter_modified_20261103.psv/ts=2026-11-03T00:00:00+00:00/pytest_filter_modified_20261103.psv/1793750497039609","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/authorisations%2Finstance=atn%2Ffilename=pytest_filter_modified_20261103.psv%2Fts=2026-11-03T00:00:00%2B00:00%2Fpytest_filter_modified_20261103.psv","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/authorisations%2Finstance=atn%2Ffilename=pytest_filter_modified_20261103.psv%2Fts=2026-11-03T00:00:00%2B00:00%2Fpytest_filter_modified_20261103.psv?generation=1793750497039609&alt=media","name":"authorisations/instance=atn/filename=pytest_filter_modified_20261103.psv/ts=2026-11-03T00:00:00+00:00/pytest_filter_modified_20261103.psv","bucket":"calitp-staging-pytest","generation":"1793750497039609","metageneration":"1","contentType":"text/plain","storageClass":"STANDARD","size":"22","md5Hash":"GTxL6wpd+G2/DNYmaYtR3Q==","crc32c":"ZuJE2A==","etag":"CPmpxKmB7ZcDEAE=","timeCreated":"2026-11-04T00:01:37.045Z","updated":"2026-11-04T00:01:37.045Z","timeStorageClassUpdated":"2026-11-04T00:01:37.045Z","timeFinalized":"2026-11-04T00:01:37.045Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"s3object\":
+        {\"LastModified\": \"2026-11-04T00:01:34+00:00\", \"ETag\": \"\\\"old-etag\\\"\"}}"}}'
+    headers:
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '1411'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 04 Nov 2026 00:01:38 GMT
+      ETag:
+      - CPmpxKmB7ZcDEAE=
+      Expires:
+      - Wed, 04 Nov 2026 00:01:38 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AFy3sg3Hqm1u6062iElxcwAnLla_T0kqAYrOZeLVi0A0__GOJ7QFYIwdsbVpJ-R2j6fqLMvm
+      X-Goog-Gcs-Base-Ts:
+      - 1a1a3dc7dbd
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.10 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.10 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/b13d6b45-c0ac-4839-820c-7c61ff0aeb43
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/authorisations%2Finstance%3Datn%2Ffilename%3Dpytest_filter_modified_20261103.psv%2Fts%3D2026-11-03T00%3A00%3A00%2B00%3A00%2Fpytest_filter_modified_20261103.psv?prettyPrint=false&projection=noAcl
+  response:
+    body:
+      string: '{"kind":"storage#object","id":"calitp-staging-pytest/authorisations/instance=atn/filename=pytest_filter_modified_20261103.psv/ts=2026-11-03T00:00:00+00:00/pytest_filter_modified_20261103.psv/1793750497039609","selfLink":"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/authorisations%2Finstance=atn%2Ffilename=pytest_filter_modified_20261103.psv%2Fts=2026-11-03T00:00:00%2B00:00%2Fpytest_filter_modified_20261103.psv","mediaLink":"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/authorisations%2Finstance=atn%2Ffilename=pytest_filter_modified_20261103.psv%2Fts=2026-11-03T00:00:00%2B00:00%2Fpytest_filter_modified_20261103.psv?generation=1793750497039609&alt=media","name":"authorisations/instance=atn/filename=pytest_filter_modified_20261103.psv/ts=2026-11-03T00:00:00+00:00/pytest_filter_modified_20261103.psv","bucket":"calitp-staging-pytest","generation":"1793750497039609","metageneration":"1","contentType":"text/plain","storageClass":"STANDARD","size":"22","md5Hash":"GTxL6wpd+G2/DNYmaYtR3Q==","crc32c":"ZuJE2A==","etag":"CPmpxKmB7ZcDEAE=","timeCreated":"2026-11-04T00:01:37.045Z","updated":"2026-11-04T00:01:37.045Z","timeStorageClassUpdated":"2026-11-04T00:01:37.045Z","timeFinalized":"2026-11-04T00:01:37.045Z","metadata":{"PARTITIONED_ARTIFACT_METADATA":"{\"s3object\":
+        {\"LastModified\": \"2026-11-04T00:01:34+00:00\", \"ETag\": \"\\\"old-etag\\\"\"}}"}}'
+    headers:
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '1411'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Wed, 04 Nov 2026 00:01:38 GMT
+      ETag:
+      - CPmpxKmB7ZcDEAE=
+      Expires:
+      - Wed, 04 Nov 2026 00:01:38 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AFy3sg0uwv0sO64qyXN4ZbFtzI4URrslZCmLoL6Ld8WlhyfeRUsrM1gSqHorGLONiHb0k_Nx6fRvHI0
+      X-Goog-Gcs-Base-Ts:
+      - 1a1a3dc7e4b
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '0'
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.10 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.10 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/94d819f5-07aa-40bb-bc7e-ce2e6c9db089
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: DELETE
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/authorisations%2Finstance%3Datn%2Ffilename%3Dpytest_filter_modified_20261103.psv%2Fts%3D2026-11-03T00%3A00%3A00%2B00%3A00%2Fpytest_filter_modified_20261103.psv?prettyPrint=false
+  response:
+    body:
+      string: ''
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '0'
+      Content-Type:
+      - application/json
+      Date:
+      - Wed, 04 Nov 2026 00:01:39 GMT
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AFy3sg1ZDi4Km831vfvF6qYXLK9ByJGJOZplZfdjG4Ev3Jx8_VR6QadE5mEbrHeTUMSXiYxE
+      X-Goog-Gcs-Base-Ts:
+      - 1a1a3dc7f4b
+    status:
+      code: 204
+      message: No Content
+version: 1
