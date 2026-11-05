@@ -7,6 +7,7 @@
 #
 import gzip
 import io
+import json
 import logging
 import os
 import zipfile
@@ -57,6 +58,18 @@ class ElavonExtract(PartitionedGCSArtifact):
         )
 
 
+def get_audit_data(fs, path):
+    """Get GCS object metadata for the parsing audit record."""
+    info = fs.info(path)
+    return {
+        "agency": None,
+        "filename": os.path.basename(path),
+        "path": path.removeprefix("gs://").split("/", 1)[-1],
+        "ts": info["mtime"].isoformat(),
+        "size": info["size"],
+    }
+
+
 def process_elavon_data_to_jsonl():
     fs = get_fs()
 
@@ -87,6 +100,27 @@ def process_elavon_data_to_jsonl():
 
         logger.info(f"Saving {filename} with {len(cleaned_df)} rows")
         extract.save_to_gcs(fs=fs)
+
+        # Record metadata for the raw and successfully parsed files.
+        raw_audit_data = get_audit_data(fs, file)
+        parsed_audit_data = get_audit_data(fs, extract.path)
+
+        audit_path = (
+            f"{CALITP_BUCKET__ELAVON_PARSED}/"
+            "elavon_parse_job_results/"
+            + "/".join(extract.serialized_partitions)
+            + f"/{os.path.splitext(filename)[0]}.jsonl"
+        )
+
+        fs.pipe(
+            path=audit_path,
+            value=json.dumps(
+                {"raw": raw_audit_data, "parsed": parsed_audit_data},
+                separators=(",", ":"),
+                default=str,
+            ).encode(),
+        )
+        logger.info("Saved audit record to %s", audit_path)
 
 
 if __name__ == "__main__":
