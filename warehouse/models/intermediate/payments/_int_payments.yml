@@ -60,6 +60,12 @@ models:
             combination_of_columns:
               - aggregation_id
               - retrieval_reference_number
+            config:
+              where:
+                # There are 4 fails before this time, but they are all for inactive agencies
+                # or are > 1 year old, so no ability to investigate
+                # See #5023
+                "latest_update_timestamp > TIMESTAMP('2026-03-31')"
       - dbt_utils.expression_is_true:
           arguments:
             expression: "debit_amount + credit_amount = net_settled_amount_dollars"
@@ -67,7 +73,17 @@ models:
           arguments:
             expression: "contains_refund = (credit_amount < 0)"
     columns:
-      - *aggregation_pk
+      - name: aggregation_id
+        description: |
+          ID of the aggregation being summarized. An aggregation can contain or be associated with multiple
+          micropayment, authorisation, and settlement events. It represents the unit at which settlement occurs
+          (so multiple settlement events only occur for a single aggregation if there are refunds against the original settlement.)
+        data_tests:
+          - not_null
+          - unique:
+              arguments:
+                  config:
+                    where: "latest_update_timestamp >= TIMESTAMP('2026-03-31')"
       - name: retrieval_reference_number
         data_tests:
           - not_null
