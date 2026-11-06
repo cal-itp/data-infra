@@ -67,7 +67,10 @@ def gcs_branch(bucket_name, object_name, present, missing):
     tags=["gtfs"],
     user_defined_macros={"urlsafe_b64encode": urlsafe_b64encode},
     default_args={
-        "email": os.getenv("CALITP_NOTIFY_EMAIL"),
+        "email": [
+            os.getenv("CALITP_NOTIFY_EMAIL"),
+            os.getenv("AIRFLOW_ALERTS_INFRASTRUCTURE_EMAIL"),
+        ],
         "email_on_failure": email_on_failure(),
         "email_on_retry": False,
         "on_failure_callback": log_failure_to_slack,
