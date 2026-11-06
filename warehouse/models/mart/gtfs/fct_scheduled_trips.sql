@@ -1,37 +1,42 @@
-{{ config(
-    materialized='table',
-    cluster_by='service_date') }}
+{{
+    config(
+        materialized='table',
+        cluster_by='service_date'
+    )
+}}
 
 WITH int_gtfs_schedule__daily_scheduled_service_index AS (
     SELECT *
-    FROM {{ ref('int_gtfs_schedule__daily_scheduled_service_index') }}
+    FROM `cal-itp-data-infra.staging.int_gtfs_schedule__daily_scheduled_service_index`--{{ ref('int_gtfs_schedule__daily_scheduled_service_index') }}
+    WHERE service_date >= "2026-11-01"
 ),
 
 dim_trips AS (
     SELECT *
-    FROM {{ ref('dim_trips') }}
+    FROM `cal-itp-data-infra.mart_gtfs.dim_trips`--{{ ref('dim_trips') }}
 ),
 
 dim_routes AS (
     SELECT *
-    FROM {{ ref('dim_routes') }}
+    FROM `cal-itp-data-infra.mart_gtfs.dim_routes`--{{ ref('dim_routes') }}
 ),
 
 fct_daily_schedule_feeds AS (
-    SELECT * FROM {{ ref('fct_daily_schedule_feeds') }}
+    SELECT *
+    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_schedule_feeds`--{{ ref('fct_daily_schedule_feeds') }}
 ),
 
 dim_shapes_arrays AS (
-    SELECT * FROM {{ ref('dim_shapes_arrays') }}
+    SELECT * FROM `cal-itp-data-infra.mart_gtfs.dim_shapes_arrays`--{{ ref('dim_shapes_arrays') }}
 ),
 
 dim_gtfs_datasets AS (
     SELECT *
-    FROM {{ ref('dim_gtfs_datasets') }}
+    FROM `cal-itp-data-infra.mart_transit_database.dim_gtfs_datasets`--{{ ref('dim_gtfs_datasets') }}
 ),
 
 stop_times_grouped AS (
-    SELECT * FROM {{ ref('int_gtfs_schedule__stop_times_grouped') }}
+    SELECT * FROM `cal-itp-data-infra.staging.int_gtfs_schedule__stop_times_grouped`--{{ ref('int_gtfs_schedule__stop_times_grouped') }}
 ),
 
 -- use seed to fill in where shape_ids are missing
@@ -76,6 +81,7 @@ gtfs_joins AS (
         trips.base64_url,
         service_index.service_id,
         service_index.feed_timezone,
+        stop_times_grouped._feed_valid_from,
 
         trips.key AS trip_key,
         trips.trip_id AS trip_id,
@@ -167,6 +173,7 @@ fct_scheduled_trips AS (
         gtfs_joins.key,
         {{ dbt_utils.generate_surrogate_key(['gtfs_joins.service_date', 'gtfs_joins.base64_url', 'gtfs_joins.trip_id', 'gtfs_joins.iteration_num']) }} AS trip_instance_key,
         gtfs_joins.feed_timezone,
+        gtfs_joins._feed_valid_from,
         gtfs_joins.base64_url,
 
         dim_gtfs_datasets.name,
