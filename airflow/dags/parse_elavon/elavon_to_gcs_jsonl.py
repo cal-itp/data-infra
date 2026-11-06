@@ -109,7 +109,7 @@ def process_elavon_data_to_jsonl():
             f"{CALITP_BUCKET__ELAVON_PARSED}/"
             "elavon_parse_job_results/"
             + "/".join(extract.serialized_partitions)
-            + f"/{os.path.splitext(filename)[0]}.jsonl"
+            + f"/{filename.removesuffix('.jsonl.gz')}.jsonl"
         )
 
         fs.pipe(
