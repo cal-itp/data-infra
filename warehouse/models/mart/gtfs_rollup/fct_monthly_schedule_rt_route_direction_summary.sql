@@ -22,7 +22,8 @@ route_direction_aggregation AS (
         MAX(route_type) AS route_type,
 
         -- schedule
-        SUM(n_trips) AS n_trips,
+        SUM(n_trips) AS n_trips, -- this is trip_instance_key, which gives us accurate counts by time-of-day
+        SUM(n_trip_ids) AS n_trip_ids, -- this is trip_id, which undercounts for frequency based trips by time-of-day
 		ROUND(AVG(n_trips), 2) AS daily_trips_all_day,
         COUNT(DISTINCT route_id) AS n_route_ids,
         ROUND(AVG(n_shapes), 1) AS n_shapes,
