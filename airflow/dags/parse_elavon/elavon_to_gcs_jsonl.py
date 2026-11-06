@@ -62,7 +62,6 @@ def get_audit_data(fs, path):
     """Get GCS object metadata for the parsing audit record."""
     info = fs.info(path)
     return {
-        "agency": None,
         "filename": os.path.basename(path),
         "path": path.removeprefix("gs://").split("/", 1)[-1],
         "ts": info["mtime"].isoformat(),
