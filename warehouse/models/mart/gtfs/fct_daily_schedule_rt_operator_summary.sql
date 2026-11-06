@@ -7,19 +7,22 @@
 
 WITH daily_schedule AS (
     SELECT *
-    FROM {{ ref('fct_daily_feed_scheduled_service_summary') }}
+    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_feed_scheduled_service_summary`--{{ ref('fct_daily_feed_scheduled_service_summary') }}
+    WHERE service_date >= "2026-09-01" AND service_date <= "2026-09-02"
 ),
 
 daily_rt AS (
     SELECT *
-    FROM {{ ref('fct_daily_rt_service_summary') }}
+    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_rt_service_summary`--{{ ref('fct_daily_rt_service_summary') }}
+    WHERE service_date >= "2026-09-01" AND service_date <= "2026-09-02"
 ),
 
 -- these will not be present for each date,
 -- so use left join when bringing it in with daily schedule / daily RT
 daily_tu_stop_metrics AS (
     SELECT *
-    FROM {{ ref('fct_trip_updates_stop_metrics') }}
+    FROM `cal-itp-data-infra.mart_gtfs.fct_trip_updates_stop_metrics`--{{ ref('fct_trip_updates_stop_metrics') }}
+    WHERE service_date >= "2026-09-01" AND service_date <= "2026-09-02"
 ),
 
 tu_operator_aggregation AS (
@@ -41,38 +44,19 @@ tu_operator_aggregation AS (
 ),
 
 prediction_error_by_operator AS (
-    {{ get_percentiles_by_group(
+    {{ unscaled_and_scaled_prediction_error_percentiles_by_group(
         'daily_tu_stop_metrics',
-        ('service_date', 'base64_url', 'schedule_base64_url'),
-        array_col='prediction_error_by_minute_array',
-        decimals=1)
-    }}
-),
-
-scaled_prediction_error_by_operator AS (
-    {{ get_percentiles_by_group(
-        'daily_tu_stop_metrics',
-        ('service_date', 'base64_url', 'schedule_base64_url'),
-        array_col='scaled_prediction_error_by_minute_array',
-        decimals=3)
+        ('service_date', 'base64_url', 'schedule_base64_url')
+    )
     }}
 ),
 
 -- join all calculated trip update metrics
 tu_operator_metrics AS (
     SELECT
-        tu_operator_aggregation.*,
-
-        pe.value_array AS prediction_error_sec_array,
-        pe.value_percentile_array AS prediction_error_sec_percentile_array,
-
-        spe.value_array AS scaled_prediction_error_sec_array,
-        spe.value_percentile_array AS scaled_prediction_error_sec_percentile_array,
-
+        *
     FROM tu_operator_aggregation
-    INNER JOIN prediction_error_by_operator AS pe
-        USING (service_date, base64_url, schedule_base64_url)
-    INNER JOIN scaled_prediction_error_by_operator AS spe
+    INNER JOIN prediction_error_by_operator
         USING (service_date, base64_url, schedule_base64_url)
 ),
 
@@ -127,7 +111,9 @@ daily_summary AS (
         tu_operator_metrics.prediction_error_sec_array,
         tu_operator_metrics.prediction_error_sec_percentile_array,
         tu_operator_metrics.scaled_prediction_error_sec_array,
-        tu_operator_metrics.scaled_prediction_error_sec_percentile_array,
+        tu_operator_metrics.pos_prediction_error_sec_array,
+        tu_operator_metrics.pos_prediction_error_sec_percentile_array,
+        tu_operator_metrics.neg_prediction_error_sec_array,
 
         -- vehicle positions
         daily_rt.vp_num_distinct_updates,
