@@ -226,7 +226,6 @@ def download_parse_and_validate_gtfs():
 
     @task(trigger_rule=TriggerRule.ALL_DONE)
     def check_download_failures():
-        raise AirflowException("TEST ONLY: Infrastructure alert routing verification")
         context = get_current_context()
         dag_run = context["dag_run"]
 
