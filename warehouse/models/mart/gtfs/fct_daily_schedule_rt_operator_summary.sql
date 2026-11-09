@@ -69,7 +69,7 @@ daily_summary AS (
         ROUND(daily_schedule.ttl_service_hours, 2) AS ttl_service_hours,
         ROUND(daily_schedule.ttl_flex_service_hours, 2) AS ttl_flex_service_hours,
         COALESCE(daily_schedule.n_trips, 0) AS n_trips,
-        COALESCE(daily_schedule.n_trip_instances, 0) AS n_trip_instances,
+        COALESCE(daily_schedule.n_trip_ids, 0) AS n_trip_ids,
         COALESCE(daily_schedule.n_flex_trips, 0) AS n_flex_trips,
         daily_schedule.first_departure_sec,
         daily_schedule.last_arrival_sec,
