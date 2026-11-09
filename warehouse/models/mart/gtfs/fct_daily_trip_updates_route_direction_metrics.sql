@@ -1,7 +1,12 @@
 {{
     config(
-        materialized='table',
-        cluster_by=['tu_base64_url', 'schedule_base64_url'],
+        materialized='view',
+        partition_by={
+            'field': 'service_date',
+            'data_type': 'date',
+            'granularity': 'day'
+        },
+        cluster_by=['tu_base64_url', 'tu_name', 'schedule_base64_url', 'schedule_name'],
     )
 }}
 
@@ -14,14 +19,13 @@ WITH tu_trip_metrics AS (
 
         trip_metrics.* EXCEPT(service_date, base64_url, trip_key),
 
-    FROM `cal-itp-data-infra.mart_gtfs.fct_trip_updates_trip_metrics` AS trip_metrics--{{ ref('fct_trip_updates_trip_metrics') }}
-    INNER JOIN `cal-itp-data-infra.mart_gtfs.fct_trip_updates_trip_summaries` AS trip_summaries
+    FROM {{ ref('fct_trip_updates_trip_metrics') }} AS trip_metrics
+    INNER JOIN {{ ref('fct_trip_updates_trip_summaries') }} AS trip_summaries
         ON trip_summaries.service_date = trip_metrics.service_date
         AND trip_summaries.base64_url = trip_metrics.base64_url
         AND trip_summaries.key = trip_metrics.trip_key
         -- join tables with trip_key because it includes trip_id and trip_start_time
         -- this trip_key isn't carried into fct_observed_trips, because we use trip_instance_key downstream
-    WHERE trip_metrics.service_date >= "2026-10-01" AND trip_metrics.service_date < "2026-11-01"
 ),
 
 -- we may not have a full month for these metrics to be calculated

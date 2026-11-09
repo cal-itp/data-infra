@@ -17,8 +17,7 @@ tu_stop_metrics AS ( -- noqa: L045
         schedule_base64_url,
         prediction_error_by_minute_array,
         scaled_prediction_error_by_minute_array,
-    FROM `cal-itp-data-infra.mart_gtfs.fct_trip_updates_stop_metrics`--{{ ref('fct_trip_updates_stop_metrics') }}
-    WHERE service_date >= "2026-10-01"
+    FROM {{ ref('fct_trip_updates_stop_metrics') }}
 ),
 
 prediction_array_results AS (
@@ -89,9 +88,9 @@ monthly_summary AS (
 
         -- schedule
         SUM(n_trips) AS n_trips,
-        SUM(n_trip_instances) AS n_trip_instances,
+        SUM(n_trip_ids) AS n_trip_ids,
         ROUND(SUM(n_trips) / COUNT(DISTINCT service_date), 1) AS daily_trips,
-        ROUND(SUM(n_trip_instances) / COUNT(DISTINCT service_date), 1) AS daily_trip_instances,
+        ROUND(SUM(n_trip_ids) / COUNT(DISTINCT service_date), 1) AS daily_trip_ids,
         ROUND(SUM(ttl_service_hours), 1) AS ttl_service_hours,
         ROUND(SUM(ttl_service_hours) / COUNT(DISTINCT service_date), 1) AS daily_service_hours,
         MAX(n_routes) AS n_routes,

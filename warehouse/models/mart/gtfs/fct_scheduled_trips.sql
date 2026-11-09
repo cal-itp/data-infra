@@ -7,36 +7,35 @@
 
 WITH int_gtfs_schedule__daily_scheduled_service_index AS (
     SELECT *
-    FROM `cal-itp-data-infra.staging.int_gtfs_schedule__daily_scheduled_service_index`--{{ ref('int_gtfs_schedule__daily_scheduled_service_index') }}
-    WHERE service_date >= "2026-11-01"
+    FROM {{ ref('int_gtfs_schedule__daily_scheduled_service_index') }}
 ),
 
 dim_trips AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_gtfs.dim_trips`--{{ ref('dim_trips') }}
+    FROM {{ ref('dim_trips') }}
 ),
 
 dim_routes AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_gtfs.dim_routes`--{{ ref('dim_routes') }}
+    FROM {{ ref('dim_routes') }}
 ),
 
 fct_daily_schedule_feeds AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_schedule_feeds`--{{ ref('fct_daily_schedule_feeds') }}
+    FROM {{ ref('fct_daily_schedule_feeds') }}
 ),
 
 dim_shapes_arrays AS (
-    SELECT * FROM `cal-itp-data-infra.mart_gtfs.dim_shapes_arrays`--{{ ref('dim_shapes_arrays') }}
+    SELECT * FROM {{ ref('dim_shapes_arrays') }}
 ),
 
 dim_gtfs_datasets AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_transit_database.dim_gtfs_datasets`--{{ ref('dim_gtfs_datasets') }}
+    FROM {{ ref('dim_gtfs_datasets') }}
 ),
 
 stop_times_grouped AS (
-    SELECT * FROM `cal-itp-data-infra.staging.int_gtfs_schedule__stop_times_grouped`--{{ ref('int_gtfs_schedule__stop_times_grouped') }}
+    SELECT * FROM {{ ref('int_gtfs_schedule__stop_times_grouped') }}
 ),
 
 -- use seed to fill in where shape_ids are missing

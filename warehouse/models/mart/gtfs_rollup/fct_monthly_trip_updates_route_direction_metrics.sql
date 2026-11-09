@@ -1,7 +1,12 @@
 {{
     config(
-        materialized='table',
-        cluster_by=['month_first_day', 'tu_base64_url'],
+        materialized='view',
+        partition_by={
+            'field': 'month_first_day',
+            'data_type': 'date',
+            'granularity': 'month'
+        },
+        cluster_by=['month_first_day', 'tu_base64_url', 'tu_name'],
     )
 }}
 

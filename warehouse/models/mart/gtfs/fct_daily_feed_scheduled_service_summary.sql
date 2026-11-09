@@ -9,14 +9,13 @@ WITH fct_daily_schedule_feeds AS (
     SELECT
         *,
         EXTRACT(DAYOFWEEK FROM date) AS day_num
-    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_schedule_feeds` AS feeds--{{ ref('fct_daily_schedule_feeds') }}
-    WHERE feeds.date >= "2026-10-01"
+    FROM {{ ref('fct_daily_schedule_feeds') }}
 ),
 
 fct_scheduled_trips AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_gtfs.fct_scheduled_trips`--{{ ref('fct_scheduled_trips') }}
-    WHERE service_date >= "2026-10-01" AND service_date < CURRENT_DATE()
+    FROM {{ ref('fct_scheduled_trips') }}
+    WHERE service_date < CURRENT_DATE()
 ),
 
 fct_scheduled_stops AS (
@@ -24,8 +23,8 @@ fct_scheduled_stops AS (
         service_date,
         feed_key,
         stop_id,
-    FROM `cal-itp-data-infra.mart_gtfs.fct_daily_scheduled_stops`--{{ ref('fct_daily_scheduled_stops') }}
-    WHERE service_date >= "2026-10-01" AND service_date < CURRENT_DATE()
+    FROM {{ ref('fct_daily_scheduled_stops') }}
+    WHERE service_date < CURRENT_DATE()
 ),
 
 trip_summary AS (
@@ -35,8 +34,8 @@ trip_summary AS (
         gtfs_dataset_key,
         SUM(service_hours) AS ttl_service_hours,
         SUM(flex_service_hours) AS ttl_flex_service_hours,
-        COUNT(DISTINCT trip_id) AS n_trips,
-        COUNT(DISTINCT trip_instance_key) AS n_trip_instances,
+        COUNT(DISTINCT trip_instance_key) AS n_trips,
+        COUNT(DISTINCT trip_id) AS n_trip_ids,
         COALESCE(COUNT(DISTINCT trip_instance_key WHERE is_gtfs_flex_trip = True), 0) AS n_flex_trips,
         MIN(trip_first_departure_sec) AS first_departure_sec,
         MAX(trip_last_arrival_sec) AS last_arrival_sec,
@@ -79,7 +78,7 @@ fct_daily_feed_scheduled_service_summary AS (
         COALESCE(trips.ttl_service_hours, 0) AS ttl_service_hours,
         COALESCE(trips.ttl_flex_service_hours, 0) AS ttl_flex_service_hours,
         COALESCE(trips.n_trips, 0) AS n_trips,
-        COALESCE(trips.n_trip_instances, 0) AS n_trip_instances,
+        COALESCE(trips.n_trip_ids, 0) AS n_trip_ids,
         COALESCE(trips.n_flex_trips, 0) AS n_flex_trips,
         trips.first_departure_sec,
         trips.last_arrival_sec,

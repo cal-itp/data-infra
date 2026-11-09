@@ -6,20 +6,18 @@
             'data_type': 'date',
             'granularity': 'day'
         },
-        cluster_by=['schedule_gtfs_dataset_key', 'schedule_name'],
+        cluster_by=['schedule_name', 'schedule_gtfs_dataset_key'],
     )
 }}
 
 WITH schedule_trips AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_gtfs.fct_scheduled_trips`--{{ ref('fct_scheduled_trips') }}
-    WHERE service_date >= "2026-10-01"
+    FROM {{ ref('fct_scheduled_trips') }}
 ),
 
 observed_trips AS (
     SELECT *
-    FROM `cal-itp-data-infra.mart_gtfs.fct_observed_trips`--{{ ref('fct_observed_trips') }}
-    WHERE service_date >= "2026-10-01"
+    FROM {{ ref('fct_observed_trips') }}
 ),
 
 schedule_rt_trips AS (
