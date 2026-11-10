@@ -57,7 +57,7 @@ class SODAToGCSOperator(BaseOperator):
 
     def execute(self, context: Context) -> str:
         paths: list[str] = []
-        for page in range(1, self.soda_hook().total_pages(self.resource) + 1):
+        for page in range(1, self.soda_hook().total_pages(self.resource)):
             response = self.soda_hook().page(self.resource, page=page)
             data = JsonlFormatter(response).format()
             object_name = f"{self.object_path}/page-{page:04}.jsonl.gz"
