@@ -22,6 +22,12 @@ class SODAHook(BaseHook):
             .run(endpoint=f"resource/{resource}.json", data={"$select": "count(*)"})
             .json()
         )
+
+        n_rows = int(response_json[0]["count"])
+        print(f"# rows: {n_rows}")
+        print(f"# pages: {n_rows / (limit * 1.0)}")
+        print(f"ceiling pages: {ceil(n_rows / (limit * 1.0))}")
+
         return ceil(int(response_json[0]["count"]) / (limit * 1.0))
 
     def page(self, resource: str, page: int, limit: int = 1000) -> list[dict[str, str]]:
