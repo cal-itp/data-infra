@@ -16,7 +16,7 @@ class SODAHook(BaseHook):
     def http_hook(self) -> HttpHook:
         return HttpHook(method=self._method, http_conn_id=self._http_conn_id)
 
-    def total_pages(self, resource: str, limit: int = 5_000) -> int:
+    def total_pages(self, resource: str, limit: int = 1000) -> int:
         response_json = (
             self.http_hook()
             .run(endpoint=f"resource/{resource}.json", data={"$select": "count(*)"})
@@ -24,9 +24,7 @@ class SODAHook(BaseHook):
         )
         return ceil(int(response_json[0]["count"]) / (limit * 1.0))
 
-    def page(
-        self, resource: str, page: int, limit: int = 5_000
-    ) -> list[dict[str, str]]:
+    def page(self, resource: str, page: int, limit: int = 1000) -> list[dict[str, str]]:
         offset = max(page - 1, 0) * limit
         response_json = (
             self.http_hook()
