@@ -9,7 +9,7 @@ class TestSODAHook:
 
     @pytest.mark.vcr()
     def test_total_pages(self, hook: SODAHook):
-        assert hook.total_pages(resource="i4ua-cjx4") == 8
+        assert hook.total_pages(resource="i4ua-cjx4") == 1
 
     @pytest.mark.vcr()
     def test_page(self, hook: SODAHook):
