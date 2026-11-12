@@ -27,9 +27,9 @@ class SODAHook(BaseHook):
         return ceil(n_pages) + 1
 
     def page(self, resource: str) -> list[dict[str, str]]:
-        #offset = max(page - 1, 0) * limit
+        # offset = max(page - 1, 0) * limit
         response_json = (
-            self.http_hook(method="POST")
+            self.http_hook()
             .run(
                 endpoint=f"api/v3/views/{resource}/query.json",
             )
