@@ -29,7 +29,7 @@ class SODAHook(BaseHook):
     def page(self, resource: str) -> list[dict[str, str]]:
         #offset = max(page - 1, 0) * limit
         response_json = (
-            self.http_hook()
+            self.http_hook(method="POST")
             .run(
                 endpoint=f"api/v3/views/{resource}/query.json",
             )
