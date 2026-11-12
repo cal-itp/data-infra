@@ -23,7 +23,8 @@ class SODAHook(BaseHook):
             .json()
         )
 
-        return ceil(int(response_json[0]["count"]) / limit) + 1
+        n_pages = int(response_json[0]["count"]) / limit
+        return ceil(n_pages) + 1
 
     def page(self, resource: str, page: int, limit: int = 1000) -> list[dict[str, str]]:
         offset = max(page - 1, 0) * limit
