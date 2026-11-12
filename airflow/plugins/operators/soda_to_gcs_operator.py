@@ -53,7 +53,7 @@ class SODAToGCSOperator(BaseOperator):
         return GCSHook(gcp_conn_id=self.gcp_conn_id)
 
     def soda_hook(self) -> SODAHook:
-        return SODAHook(method="POST", http_conn_id=self.http_conn_id)
+        return SODAHook(method="GET", http_conn_id=self.http_conn_id)
 
     def execute(self, context: Context) -> str:
         paths: list[str] = []
