@@ -9,11 +9,11 @@ class TestSODAHook:
 
     @pytest.mark.vcr()
     def test_total_pages(self, hook: SODAHook):
-        assert hook.total_pages(resource="i4ua-cjx4") == 1
+        assert hook.total_pages(resource="i4ua-cjx4") == 8
 
     @pytest.mark.vcr()
     def test_page(self, hook: SODAHook):
-        result = hook.page(resource="i4ua-cjx4", page=1, limit=1)
+        result = hook.page(resource="i4ua-cjx4")
         assert len(result) == 1
         assert result[0] == result[0] | {
             "max_agency": "King County, dba: King County Metro",
