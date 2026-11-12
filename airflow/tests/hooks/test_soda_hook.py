@@ -5,15 +5,15 @@ from hooks.soda_hook import SODAHook
 class TestSODAHook:
     @pytest.fixture
     def hook(self) -> SODAHook:
-        return SODAHook(method="GET", http_conn_id="http_ntd")
+        return SODAHook(method="POST", http_conn_id="http_ntd")
 
     @pytest.mark.vcr()
     def test_total_pages(self, hook: SODAHook):
-        assert hook.total_pages(resource="i4ua-cjx4") == 7
+        assert hook.total_pages(resource="i4ua-cjx4") == 1
 
     @pytest.mark.vcr()
     def test_page(self, hook: SODAHook):
-        result = hook.page(resource="i4ua-cjx4", page=1, limit=1)
+        result = hook.page(resource="i4ua-cjx4")
         assert len(result) == 1
         assert result[0] == result[0] | {
             "max_agency": "King County, dba: King County Metro",
