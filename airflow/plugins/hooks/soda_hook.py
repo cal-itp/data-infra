@@ -8,7 +8,7 @@ class SODAHook(BaseHook):
     _http_conn_id: str
     _method: str
 
-    def __init__(self, method: str = "GET", http_conn_id: str = "soda_default"):
+    def __init__(self, method: str = "POST", http_conn_id: str = "soda_default"):
         super().__init__()
         self._http_conn_id: str = http_conn_id
         self._method: str = method
@@ -19,7 +19,7 @@ class SODAHook(BaseHook):
     def total_pages(self, resource: str, limit: int = 1000) -> int:
         response_json = (
             self.http_hook()
-            .run(endpoint=f"resource/{resource}.json", data={"$select": "count(*)"})
+            .run(endpoint=f"api/v3/views/{resource}/query.json", data={"$select": "count(*)"})
             .json()
         )
 
@@ -31,7 +31,7 @@ class SODAHook(BaseHook):
             self.http_hook()
             .run(
                 endpoint=f"resource/{resource}.json",
-                data={"$limit": limit, "$offset": offset},
+                page={"pageSize": limit, "pageNumber": page},
             )
             .json()
         )
