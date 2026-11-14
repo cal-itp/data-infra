@@ -597,13 +597,5 @@ models:
       - *lp_export_ts
       - *lp_line_number
       - *payments_input_row_key
-      - *_content_hash
-      # uniqueness not enforced here: re-exported settlements can repeat _payments_key
-      # with a new _content_hash; deduped downstream in int_payments__settlements_deduped (see #5810)
-      - name: _payments_key
-        description: '{{ doc("lp_payments_key") }}'
-        data_tests:
-          - not_null
-          - unique
-
+      - *payments_key_full_uniqueness
   - name: stg_littlepay__terminal_device_transactions_v3
