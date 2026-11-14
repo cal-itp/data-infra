@@ -597,7 +597,5 @@ models:
       - *lp_export_ts
       - *lp_line_number
       - *payments_input_row_key
-      - *_content_hash
       - *payments_key_full_uniqueness
-
   - name: stg_littlepay__terminal_device_transactions_v3
