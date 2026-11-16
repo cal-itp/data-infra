@@ -1,19 +1,14 @@
 import gzip
 import json
-import os
 from datetime import datetime, timedelta, timezone
 
+import dags.parse_elavon.elavon_to_gcs_jsonl as elavon_parser  # noqa: E402
+import pendulum
 import pytest
-from freezegun import freeze_time
-
-# The parser reads its bucket settings when imported.
-os.environ["CALITP_BUCKET__ELAVON_RAW"] = "gs://calitp-staging-pytest/elavon/raw"
-os.environ["CALITP_BUCKET__ELAVON_PARSED"] = "gs://calitp-staging-pytest"
-
 from dags.parse_elavon.elavon_to_gcs_jsonl import (  # noqa: E402
-    ElavonExtract,
     process_elavon_data_to_jsonl,
 )
+from freezegun import freeze_time
 
 from airflow.models.dag import DAG  # noqa: E402
 from airflow.operators.python import PythonOperator  # noqa: E402
@@ -46,15 +41,19 @@ class TestElavonParseAudit:
 
     @freeze_time("2026-11-06 12:00:00", tz_offset=0)
     @pytest.mark.vcr
-    def test_execute(self, operator, execution_date):
-        assert os.environ["CALITP_BUCKET__ELAVON_RAW"] == (
-            "gs://calitp-staging-pytest/elavon/raw"
+    def test_execute(self, operator, execution_date, monkeypatch):
+        monkeypatch.setattr(
+            pendulum,
+            "now",
+            lambda: pendulum.datetime(2026, 11, 6, 12, 0, 0, tz="UTC"),
         )
-        assert os.environ["CALITP_BUCKET__ELAVON_PARSED"] == (
-            "gs://calitp-staging-pytest"
+        monkeypatch.setattr(
+            elavon_parser,
+            "CALITP_BUCKET__ELAVON_RAW",
+            "gs://calitp-staging-pytest/elavon/raw",
         )
 
-        dt = ElavonExtract.__fields__["dt"].default.isoformat()
+        dt = "2026-11-06"
 
         operator.run(
             start_date=execution_date,

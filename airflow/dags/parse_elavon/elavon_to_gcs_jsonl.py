@@ -94,7 +94,11 @@ def process_elavon_data_to_jsonl():
         cleaned_df = df.rename(make_name_bq_safe, axis="columns")
 
         filename = file.split("/")[-1].rsplit(".", 1)[0] + ".jsonl.gz"
-        extract = ElavonExtract(filename=filename, execution_ts=execution_ts)
+        extract = ElavonExtract(
+            filename=filename,
+            execution_ts=execution_ts,
+            dt=execution_ts.date(),
+        )
         extract.data = cleaned_df
 
         logger.info(f"Saving {filename} with {len(cleaned_df)} rows")
