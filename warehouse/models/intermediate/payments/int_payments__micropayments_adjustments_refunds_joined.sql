@@ -105,7 +105,7 @@ int_payments__micropayments_adjustments_refunds_joined AS (
         AND debit_micropayments.aggregation_id = aggregation_refunds.aggregation_id
     LEFT JOIN micropayments_per_aggregation
         ON debit_micropayments.participant_id = micropayments_per_aggregation.participant_id
-        AND debit_micropayments.participant_id = micropayments_per_aggregation.aggregation_id
+        AND debit_micropayments.aggregation_id = micropayments_per_aggregation.aggregation_id
 )
 
 SELECT * FROM int_payments__micropayments_adjustments_refunds_joined
