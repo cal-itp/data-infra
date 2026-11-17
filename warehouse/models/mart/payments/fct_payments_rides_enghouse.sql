@@ -72,7 +72,6 @@ join_orgs AS (
         ticket_results.reason,
         ticket_results.tap_id,
         ticket_results.ticket_type,
-        ticket_results.created_dttm,
         ticket_results.line,
         ticket_results.start_station,
         ticket_results.end_station,
@@ -135,7 +134,7 @@ join_orgs AS (
         ON ticket_results.tap_id = taps.tap_id
     LEFT JOIN participants_to_routes_and_agency AS routes
         ON routes.operator_id = ticket_results.operator_id
-            AND EXTRACT(DATE FROM TIMESTAMP(ticket_results.start_dttm)) = routes.date
+            AND EXTRACT(DATE FROM ticket_results.start_dttm AT TIME ZONE "America/Los_Angeles") = routes.date
             AND routes.route_id = taps.line_public_number
             AND CAST(ticket_results.start_dttm AS TIMESTAMP)
                 BETWEEN CAST(routes._in_use_from AS TIMESTAMP)
@@ -161,7 +160,6 @@ fct_payments_rides_enghouse AS (
         reason,
         tap_id,
         ticket_type,
-        created_dttm,
         line,
         start_station,
         end_station,
