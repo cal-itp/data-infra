@@ -1,13 +1,18 @@
 {{ config(materialized='table') }}
 
 WITH daily_summary AS (
-    SELECT *
+    SELECT
+        *,
+        DATE_TRUNC(service_date, MONTH) AS month_first_day,
+        {{ generate_day_type('service_date') }} AS day_type,
     FROM {{ ref('fct_daily_schedule_rt_operator_summary') }}
 ),
 
-tu_stop_metrics AS (
+tu_stop_metrics AS ( -- noqa: L045
     SELECT
         service_date,
+        DATE_TRUNC(service_date, MONTH) AS month_first_day,
+        {{ generate_day_type('service_date') }} AS day_type,
         base64_url,
         schedule_base64_url,
         prediction_error_by_minute_array,
@@ -15,110 +20,12 @@ tu_stop_metrics AS (
     FROM {{ ref('fct_trip_updates_stop_metrics') }}
 ),
 
-tu_stop_metrics2 AS ( -- noqa: L045
-    SELECT
-        *,
-        DATE_TRUNC(service_date, MONTH) AS month_first_day,
-        {{ generate_day_type('service_date') }} AS day_type,
-    FROM tu_stop_metrics
-),
-
-prediction_error_by_operator AS (
-    {{ get_percentiles_by_group(
-        'tu_stop_metrics2',
-        ('month_first_day', 'day_type', 'base64_url', 'schedule_base64_url'),
-        array_col='prediction_error_by_minute_array',
-        decimals=1)
-    }}
-),
-
-scaled_prediction_error_by_operator AS (
-    {{ get_percentiles_by_group(
-        'tu_stop_metrics2',
-        ('month_first_day', 'day_type', 'base64_url', 'schedule_base64_url'),
-        array_col='scaled_prediction_error_by_minute_array',
-        decimals=3)
-    }}
-),
-
--- select only positive values for array (only do it on unscaled)
-prediction_errors_subset AS ( -- noqa: L045
-	SELECT
-		month_first_day,
-		day_type,
-		base64_url,
-		schedule_base64_url,
-	    ARRAY(
-            SELECT pe FROM UNNEST(prediction_error_by_minute_array) AS pe WHERE pe > 0
-        ) AS pos_prediction_error,
-	    ARRAY(
-            SELECT pe FROM UNNEST(prediction_error_by_minute_array) AS pe WHERE pe < 0
-        ) AS neg_prediction_error,
-	FROM tu_stop_metrics2
-),
-
-pos_prediction_errors AS (
-    {{ get_percentiles_by_group(
-        'prediction_errors_subset',
-        ('month_first_day', 'day_type',
-        'base64_url', 'schedule_base64_url'),
-        array_col='pos_prediction_error',
-        decimals=1)
-    }}
-),
-
-neg_prediction_errors AS (
-    {{ get_percentiles_by_group(
-        'prediction_errors_subset',
-        ('month_first_day', 'day_type',
-        'base64_url', 'schedule_base64_url'),
-        array_col='neg_prediction_error',
-        decimals=1)
-    }}
-),
-
 prediction_array_results AS (
-    SELECT
-        month_first_day,
-        day_type,
-        base64_url,
-        schedule_base64_url,
-
-        pe.value_array AS prediction_error_sec_array,
-        pe.value_percentile_array AS prediction_error_sec_percentile_array,
-        spe.value_array AS scaled_prediction_error_sec_array,
-
-        -- there seems to be some null elements in the pos/neg ones, why? isolating this join to where data is complete hasn't made this go away
-        ARRAY(
-            SELECT
-                COALESCE(pe, 0) AS pe
-                FROM UNNEST(pos_pe.value_array) AS pe
-        ) AS pos_prediction_error_sec_array,
-        ARRAY(
-            SELECT
-                COALESCE(pe, 0) AS pe
-                FROM UNNEST(neg_pe.value_array) AS pe
-        ) AS neg_prediction_error_sec_array,
-		-- do this because the Newmark paper plots these arrays
-		-- to create the charts where smaller errors (closer to zero) are better,
-		-- the larger positive errors reverse the percentiles them so that the 10th percentile has larger values
-		ARRAY_REVERSE(pos_pe.value_percentile_array) AS pos_prediction_error_sec_percentile_array
-
-    FROM prediction_error_by_operator AS pe
-    INNER JOIN scaled_prediction_error_by_operator AS spe
-        USING (month_first_day, day_type, base64_url, schedule_base64_url)
-    LEFT JOIN pos_prediction_errors AS pos_pe --not sure if filtering impacts rows disappearing, use left join for now
-        USING (month_first_day, day_type, base64_url, schedule_base64_url)
-    LEFT JOIN neg_prediction_errors AS neg_pe
-        USING (month_first_day, day_type, base64_url, schedule_base64_url)
-),
-
-daily_summary2 AS (
-    SELECT
-        *,
-        DATE_TRUNC(service_date, MONTH) AS month_first_day,
-        {{ generate_day_type('service_date') }} AS day_type,
-    FROM daily_summary
+    {{ unscaled_and_scaled_prediction_error_percentiles_by_group(
+        'tu_stop_metrics',
+        ('month_first_day', 'day_type', 'base64_url', 'schedule_base64_url')
+    )
+    }}
 ),
 
 -- create pivot table that shows how many days in each gtfs_availability
@@ -137,7 +44,7 @@ day_counts_by_availability AS (
 
             gtfs_availability,
 
-        FROM daily_summary2
+        FROM daily_summary
     )
     PIVOT(
         COUNT(DISTINCT service_date) AS n_days
@@ -166,22 +73,24 @@ pivoted AS (
 monthly_summary AS (
     SELECT
 
-        EXTRACT(month FROM daily_summary2.month_first_day) AS month,
-        EXTRACT(year FROM daily_summary2.month_first_day) AS year,
-        daily_summary2.month_first_day,
+        EXTRACT(month FROM daily_summary.month_first_day) AS month,
+        EXTRACT(year FROM daily_summary.month_first_day) AS year,
+        daily_summary.month_first_day,
 
-        daily_summary2.schedule_name,
-        daily_summary2.schedule_base64_url,
+        daily_summary.schedule_name,
+        daily_summary.schedule_base64_url,
         vp_name,
-        daily_summary2.vp_base64_url,
+        daily_summary.vp_base64_url,
         tu_name,
-        daily_summary2.tu_base64_url,
+        daily_summary.tu_base64_url,
 
-        daily_summary2.day_type,
+        daily_summary.day_type,
 
         -- schedule
         SUM(n_trips) AS n_trips,
+        SUM(n_trip_ids) AS n_trip_ids,
         ROUND(SUM(n_trips) / COUNT(DISTINCT service_date), 1) AS daily_trips,
+        ROUND(SUM(n_trip_ids) / COUNT(DISTINCT service_date), 1) AS daily_trip_ids,
         ROUND(SUM(ttl_service_hours), 1) AS ttl_service_hours,
         ROUND(SUM(ttl_service_hours) / COUNT(DISTINCT service_date), 1) AS daily_service_hours,
         MAX(n_routes) AS n_routes,
@@ -232,14 +141,14 @@ monthly_summary AS (
         MAX(pivoted.n_days_schedule_and_vp_only) AS n_days_schedule_and_vp_only,
         MAX(pivoted.n_days_schedule_and_tu_only) AS n_days_schedule_and_tu_only,
 
-    FROM daily_summary2
+    FROM daily_summary
     LEFT JOIN pivoted
-        ON daily_summary2.month_first_day = pivoted.month_first_day
-        AND daily_summary2.schedule_name = pivoted.schedule_name
-        AND daily_summary2.schedule_base64_url = pivoted.schedule_base64_url
-        AND daily_summary2.vp_base64_url = pivoted.vp_base64_url
-        AND daily_summary2.tu_base64_url = pivoted.tu_base64_url
-        AND daily_summary2.day_type = pivoted.day_type
+        ON daily_summary.month_first_day = pivoted.month_first_day
+        AND daily_summary.schedule_name = pivoted.schedule_name
+        AND daily_summary.schedule_base64_url = pivoted.schedule_base64_url
+        AND daily_summary.vp_base64_url = pivoted.vp_base64_url
+        AND daily_summary.tu_base64_url = pivoted.tu_base64_url
+        AND daily_summary.day_type = pivoted.day_type
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 ),
 

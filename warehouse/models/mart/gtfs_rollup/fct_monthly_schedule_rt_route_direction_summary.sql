@@ -22,7 +22,8 @@ route_direction_aggregation AS (
         MAX(route_type) AS route_type,
 
         -- schedule
-        SUM(n_trips) AS n_trips,
+        SUM(n_trips) AS n_trips, -- this is trip_instance_key, which gives us accurate counts by time-of-day
+        SUM(n_trip_ids) AS n_trip_ids, -- this is trip_id, which undercounts for frequency based trips by time-of-day
 		ROUND(AVG(n_trips), 2) AS daily_trips_all_day,
         COUNT(DISTINCT route_id) AS n_route_ids,
         ROUND(AVG(n_shapes), 1) AS n_shapes,
@@ -87,23 +88,35 @@ route_direction_aggregation AS (
 
 route_direction_aggregation_with_typology AS (
     SELECT
-        *,
+        route_direction_aggregation.*,
         -- get what we can based on route name to separate our bus types
         -- https://github.com/cal-itp/data-analyses/blob/dd3b5f963bfa480fb949c5949bea6485431361fe/gtfs_funnel/nacto_utils.py#L24-L58
 		CASE
             WHEN route_type = "0" OR route_type = "1" OR route_type = "2" THEN "rail"
             WHEN route_type = "4" THEN "ferry"
             WHEN (
-              CONTAINS_SUBSTR(route_name, "Express")
-              OR CONTAINS_SUBSTR(route_name, "Limited")
+              CONTAINS_SUBSTR(route_direction_aggregation.route_name, "Express")
+              OR CONTAINS_SUBSTR(route_direction_aggregation.route_name, "Limited")
             ) AND route_type = "3" THEN "express"
-            WHEN CONTAINS_SUBSTR(route_name, "Rapid") AND route_type = "3" THEN "rapid"
+            WHEN CONTAINS_SUBSTR(route_direction_aggregation.route_name, "Rapid") AND route_type = "3" THEN "rapid"
             WHEN route_type = "3" THEN "bus"
             WHEN route_type = "5" THEN "cable_tram"
             WHEN route_type = "11" THEN "trolleybus"
             ELSE "unknown"
 		END AS route_typology,
+
+        tu.* EXCEPT(month_first_day, day_type, tu_name, tu_base64_url, schedule_name, schedule_base64_url, route_name, direction_id, n_tu_trips, n_tu_stops),
+        tu.n_tu_trips AS n_tu_trips_prediction_accuracy, -- trips over which prediction accuracy metrics are counted (only 1 week per month)
+        tu.n_tu_stops AS n_tu_stops_prediction_accuracy,
+
     FROM route_direction_aggregation
+    LEFT JOIN {{ ref('fct_monthly_trip_updates_route_direction_metrics') }} AS tu
+        ON route_direction_aggregation.month_first_day = tu.month_first_day
+        AND route_direction_aggregation.day_type = tu.day_type
+        AND route_direction_aggregation.tu_base64_url = tu.tu_base64_url
+        AND route_direction_aggregation.schedule_base64_url = tu.schedule_base64_url
+        AND route_direction_aggregation.route_name = tu.route_name
+        AND COALESCE(route_direction_aggregation.direction_id, -1) = COALESCE(tu.direction_id, -1)
 )
 
 SELECT * FROM route_direction_aggregation_with_typology

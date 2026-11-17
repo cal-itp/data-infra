@@ -41,38 +41,19 @@ tu_operator_aggregation AS (
 ),
 
 prediction_error_by_operator AS (
-    {{ get_percentiles_by_group(
+    {{ unscaled_and_scaled_prediction_error_percentiles_by_group(
         'daily_tu_stop_metrics',
-        ('service_date', 'base64_url', 'schedule_base64_url'),
-        array_col='prediction_error_by_minute_array',
-        decimals=1)
-    }}
-),
-
-scaled_prediction_error_by_operator AS (
-    {{ get_percentiles_by_group(
-        'daily_tu_stop_metrics',
-        ('service_date', 'base64_url', 'schedule_base64_url'),
-        array_col='scaled_prediction_error_by_minute_array',
-        decimals=3)
+        ('service_date', 'base64_url', 'schedule_base64_url')
+    )
     }}
 ),
 
 -- join all calculated trip update metrics
 tu_operator_metrics AS (
     SELECT
-        tu_operator_aggregation.*,
-
-        pe.value_array AS prediction_error_sec_array,
-        pe.value_percentile_array AS prediction_error_sec_percentile_array,
-
-        spe.value_array AS scaled_prediction_error_sec_array,
-        spe.value_percentile_array AS scaled_prediction_error_sec_percentile_array,
-
+        *
     FROM tu_operator_aggregation
-    INNER JOIN prediction_error_by_operator AS pe
-        USING (service_date, base64_url, schedule_base64_url)
-    INNER JOIN scaled_prediction_error_by_operator AS spe
+    INNER JOIN prediction_error_by_operator
         USING (service_date, base64_url, schedule_base64_url)
 ),
 
@@ -88,6 +69,7 @@ daily_summary AS (
         ROUND(daily_schedule.ttl_service_hours, 2) AS ttl_service_hours,
         ROUND(daily_schedule.ttl_flex_service_hours, 2) AS ttl_flex_service_hours,
         COALESCE(daily_schedule.n_trips, 0) AS n_trips,
+        COALESCE(daily_schedule.n_trip_ids, 0) AS n_trip_ids,
         COALESCE(daily_schedule.n_flex_trips, 0) AS n_flex_trips,
         daily_schedule.first_departure_sec,
         daily_schedule.last_arrival_sec,
@@ -127,7 +109,9 @@ daily_summary AS (
         tu_operator_metrics.prediction_error_sec_array,
         tu_operator_metrics.prediction_error_sec_percentile_array,
         tu_operator_metrics.scaled_prediction_error_sec_array,
-        tu_operator_metrics.scaled_prediction_error_sec_percentile_array,
+        tu_operator_metrics.pos_prediction_error_sec_array,
+        tu_operator_metrics.pos_prediction_error_sec_percentile_array,
+        tu_operator_metrics.neg_prediction_error_sec_array,
 
         -- vehicle positions
         daily_rt.vp_num_distinct_updates,

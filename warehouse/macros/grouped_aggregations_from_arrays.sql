@@ -33,3 +33,92 @@ results AS (
 
 SELECT * FROM results
 {% endmacro %}
+
+{% macro unscaled_and_scaled_prediction_error_percentiles_by_group(table_name, iterable_of_group_columns) %}
+
+WITH prediction_error_by_group AS (
+    {{ get_percentiles_by_group(
+        table_name,
+        iterable_of_group_columns,
+        array_col='prediction_error_by_minute_array',
+        decimals=1)
+    }}
+),
+
+scaled_prediction_error_by_group AS (
+    {{ get_percentiles_by_group(
+        table_name,
+        iterable_of_group_columns,
+        array_col='scaled_prediction_error_by_minute_array',
+        decimals=3)
+    }}
+),
+
+-- select only positive values for array (only do it on unscaled)
+prediction_errors_subset AS ( -- noqa: L045
+	SELECT
+		{{ list_of_columns(iterable_of_group_columns) }},
+	    ARRAY(
+            SELECT pe FROM UNNEST(prediction_error_by_minute_array) AS pe WHERE pe > 0
+        ) AS pos_prediction_error,
+	    ARRAY(
+            SELECT pe FROM UNNEST(prediction_error_by_minute_array) AS pe WHERE pe < 0
+        ) AS neg_prediction_error,
+	FROM {{ table_name }}
+),
+
+pos_prediction_errors AS (
+    {{ get_percentiles_by_group(
+        'prediction_errors_subset',
+        iterable_of_group_columns,
+        array_col='pos_prediction_error',
+        decimals=1)
+    }}
+),
+
+neg_prediction_errors AS (
+    {{ get_percentiles_by_group(
+        'prediction_errors_subset',
+        iterable_of_group_columns,
+        array_col='neg_prediction_error',
+        decimals=1)
+    }}
+),
+
+prediction_array_results AS (
+    SELECT
+        pe.{{ list_of_columns(iterable_of_group_columns) }},
+
+
+        pe.value_array AS prediction_error_sec_array,
+        pe.value_percentile_array AS prediction_error_sec_percentile_array,
+        spe.value_array AS scaled_prediction_error_sec_array,
+
+        -- there seems to be some null elements in the pos/neg ones, why? isolating this join to where data is complete hasn't made this go away
+        ARRAY(
+            SELECT
+                COALESCE(pe, 0) AS pe
+                FROM UNNEST(pos_pe.value_array) AS pe
+        ) AS pos_prediction_error_sec_array,
+        ARRAY(
+            SELECT
+                COALESCE(pe, 0) AS pe
+                FROM UNNEST(neg_pe.value_array) AS pe
+        ) AS neg_prediction_error_sec_array,
+		-- do this because the Newmark paper plots these arrays
+		-- to create the charts where smaller errors (closer to zero) are better,
+		-- the larger positive errors reverse the percentiles them so that the 10th percentile has larger values
+		ARRAY_REVERSE(pos_pe.value_percentile_array) AS pos_prediction_error_sec_percentile_array
+
+    FROM prediction_error_by_group AS pe
+    INNER JOIN scaled_prediction_error_by_group AS spe
+        USING ({{ list_of_columns(iterable_of_group_columns) }})
+    LEFT JOIN pos_prediction_errors AS pos_pe --not sure if filtering impacts rows disappearing, use left join for now
+        USING ({{ list_of_columns(iterable_of_group_columns) }})
+    LEFT JOIN neg_prediction_errors AS neg_pe
+        USING ({{ list_of_columns(iterable_of_group_columns) }})
+)
+
+SELECT * FROM prediction_array_results
+
+{% endmacro %}

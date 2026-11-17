@@ -5,12 +5,12 @@
     )
 }}
 
-WITH schedule_trips AS (
-    SELECT * FROM {{ ref('fct_scheduled_trips') }}
-),
-
-observed_trips AS (
-    SELECT * FROM {{ ref('fct_observed_trips') }}
+WITH schedule_rt_trips AS (
+    SELECT
+        *,
+        {{ generate_time_of_day_hours('time_of_day') }} AS n_hours,
+    FROM {{ ref('fct_daily_scheduled_rt_trips') }}
+    WHERE in_rt_only IS FALSE -- remove rows in full outer join that don't have schedule
 ),
 
 -- add this to make sure we correctly link quartets
@@ -26,26 +26,6 @@ dim_provider_gtfs_data AS (
     GROUP BY 1, 4, 5
 ),
 
-
-gtfs_join AS (
-    SELECT
-        schedule.service_date,
-        COALESCE(schedule.base64_url, rt.schedule_base64_url) AS schedule_base64_url,
-        COALESCE(schedule.name, rt.schedule_name) AS schedule_gtfs_dataset_name,
-        COALESCE(schedule.gtfs_dataset_key, rt.schedule_gtfs_dataset_key) AS schedule_gtfs_dataset_key,
-        schedule.trip_instance_key,
-
-        schedule.* EXCEPT(service_date, base64_url, name, gtfs_dataset_key, trip_instance_key),
-        rt.* EXCEPT(service_date, schedule_base64_url, schedule_name, schedule_gtfs_dataset_key, trip_instance_key),
-        {{ generate_time_of_day_hours('time_of_day') }} AS n_hours,
-
-    FROM schedule_trips AS schedule
-    LEFT JOIN observed_trips AS rt
-        ON schedule.service_date = rt.service_date
-        AND schedule.base64_url = rt.schedule_base64_url
-        AND schedule.trip_instance_key = rt.trip_instance_key
-),
-
 time_of_day_counts AS (
     SELECT
         service_date,
@@ -56,7 +36,7 @@ time_of_day_counts AS (
 
         COUNT(DISTINCT trip_instance_key) AS n_trips,
         MAX(n_hours) AS n_hours,
-    FROM gtfs_join
+    FROM schedule_rt_trips
     GROUP BY 1, 2, 3, 4, 5
 ),
 
@@ -92,7 +72,7 @@ common_shape AS (
         shape_array_key,
         COUNT(DISTINCT trip_instance_key) AS n_trips
 
-    FROM gtfs_join
+    FROM schedule_rt_trips
     GROUP BY 1, 2, 3, 4, 5, 6
     QUALIFY ROW_NUMBER() OVER (
         PARTITION BY
@@ -104,19 +84,20 @@ schedule_aggregation AS (
     SELECT
         service_date,
         schedule_base64_url,
-        schedule_gtfs_dataset_name,
+        schedule_name,
         schedule_gtfs_dataset_key,
         feed_key,
 
         route_id,
-        {{ parse_route_id('schedule_gtfs_dataset_name', 'route_id') }} AS route_id_cleaned,
+        {{ parse_route_id('schedule_name', 'route_id') }} AS route_id_cleaned,
         {{ get_combined_route_name(
-            'schedule_gtfs_dataset_name',
+            'schedule_name',
             'route_id', 'route_short_name', 'route_long_name'
         ) }} AS route_name,
         direction_id,
         route_type,
 
+        COUNT(DISTINCT trip_id) AS n_trip_ids,
         COUNT(DISTINCT trip_instance_key) AS n_trips,
         COUNT(DISTINCT route_id) AS n_routes,
         COUNT(DISTINCT shape_id) AS n_shapes,
@@ -128,7 +109,7 @@ schedule_aggregation AS (
         COALESCE(SUM(num_gtfs_flex_stop_times), 0) AS num_gtfs_flex_stop_times,
         COALESCE(COUNT(DISTINCT trip_instance_key WHERE is_entirely_demand_responsive_trip = True), 0) AS n_demand_response_trips,
 
-    FROM gtfs_join
+    FROM schedule_rt_trips
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 ),
 
@@ -141,7 +122,7 @@ tu_aggregation AS (
         tu_gtfs_dataset_key,
 
         {{ get_combined_route_name(
-            'schedule_gtfs_dataset_name',
+            'schedule_name',
             'route_id', 'route_short_name', 'route_long_name'
         ) }} AS route_name,
         route_id,
@@ -155,7 +136,7 @@ tu_aggregation AS (
             SAFE_DIVIDE(SUM(tu_num_distinct_extract_ts),
             SUM(tu_extract_duration_minutes)
         ), 2), 0) AS tu_messages_per_minute,
-    FROM gtfs_join
+    FROM schedule_rt_trips
     WHERE tu_base64_url IS NOT NULL
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
 ),
@@ -169,7 +150,7 @@ vp_aggregation AS (
         vp_gtfs_dataset_key,
 
         {{ get_combined_route_name(
-            'schedule_gtfs_dataset_name',
+            'schedule_name',
             'route_id', 'route_short_name', 'route_long_name'
         ) }} AS route_name,
         route_id,
@@ -183,7 +164,7 @@ vp_aggregation AS (
             SAFE_DIVIDE(SUM(vp_num_distinct_extract_ts),
             SUM(vp_extract_duration_minutes)
         ), 2), 0) AS vp_messages_per_minute,
-    FROM gtfs_join
+    FROM schedule_rt_trips
     WHERE vp_base64_url IS NOT NULL
     GROUP BY 1, 2, 3, 4, 5, 6, 7, 8
 ),
@@ -223,7 +204,7 @@ route_direction_aggregation AS (
     SELECT
         schedule.service_date,
         schedule.schedule_base64_url,
-        schedule.schedule_gtfs_dataset_name AS schedule_name,
+        schedule.schedule_name,
         schedule.schedule_gtfs_dataset_key,
         schedule.feed_key,
 
@@ -243,6 +224,7 @@ route_direction_aggregation AS (
         vp.vp_base64_url,
 
         schedule.n_trips,
+        schedule.n_trip_ids,
         schedule.n_routes,
         schedule.n_shapes,
         schedule.avg_stops_served,
@@ -286,10 +268,10 @@ route_direction_aggregation AS (
 
         -- add this to detect rows that are nulls that are double counting schedule data
         COUNT(tu_base64_url) OVER(
-            PARTITION BY schedule.service_date, schedule_gtfs_dataset_name, schedule.route_id, schedule.direction_id
+            PARTITION BY schedule.service_date, schedule_name, schedule.route_id, schedule.direction_id
         ) AS has_tu,
         COUNT(vp_base64_url) OVER(
-            PARTITION BY schedule.service_date, schedule_gtfs_dataset_name, schedule.route_id, schedule.direction_id
+            PARTITION BY schedule.service_date, schedule_name, schedule.route_id, schedule.direction_id
         ) AS has_vp,
 
         -- vehicle positions

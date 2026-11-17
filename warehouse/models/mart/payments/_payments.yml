@@ -233,7 +233,12 @@ models:
           Aggregation ID that uniquely identifies this aggregation.
         data_tests:
           - not_null
-          - unique
+          - unique:
+              arguments:
+                where:
+                  # There are a very small number of duplicates that are too old to investigate / associated with inactive agencies before this time
+                  "latest_settlement_update_datetime > DATETIME('2026-03-31')"
+
       - name: aggregation_datetime
         description: |
           Datetime of settlement if present, otherwise falls back to authorisation, otherwise falls back to micropayment.
