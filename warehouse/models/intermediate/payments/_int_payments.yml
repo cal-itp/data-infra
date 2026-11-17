@@ -490,7 +490,9 @@ models:
           arguments:
             expression: "micropayment_refund_amount <= charge_amount"
           config:
-            error_if: '>50'
+            # agencies often make refunds for testing that are greater than the actual payment, triggering this test
+            # this value may need to be increased in the future
+            error_if: '>100'
     columns:
       - *participant_id
       - &micropayment_id
