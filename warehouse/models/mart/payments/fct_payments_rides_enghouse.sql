@@ -1,12 +1,20 @@
 {{ config(materialized = 'table',
     post_hook="{{ payments_enghouse_row_access_policy() }}") }}
 
-WITH ticket_results AS (
-    SELECT * FROM {{ ref('stg_enghouse__ticket_results') }}
+WITH taps AS (
+    SELECT * FROM {{ ref('stg_enghouse__taps') }}
 ),
 
-taps AS (
-    SELECT * FROM {{ ref('stg_enghouse__taps') }}
+ticket_results AS (
+    SELECT
+        ticket_results.*,
+        -- ride time is the tap time; fall back to created_dttm when the tap is missing
+        COALESCE(taps.terminal_date, ticket_results.created_dttm) AS ride_timestamp,
+        -- mapping and schedule dates are Pacific calendar dates
+        DATE(COALESCE(taps.terminal_date, ticket_results.created_dttm), "America/Los_Angeles") AS ride_date_pacific
+    FROM {{ ref('stg_enghouse__ticket_results') }} AS ticket_results
+    LEFT JOIN taps
+        ON ticket_results.tap_id = taps.tap_id
 ),
 
 payments_entity_mapping AS (
@@ -72,10 +80,10 @@ join_orgs AS (
         ticket_results.reason,
         ticket_results.tap_id,
         ticket_results.ticket_type,
+        ticket_results.created_dttm,
         ticket_results.line,
         ticket_results.start_station,
         ticket_results.end_station,
-        ticket_results.start_dttm,
         ticket_results.end_dttm,
         ticket_results.ticket_code,
         ticket_results.dt,
@@ -134,19 +142,19 @@ join_orgs AS (
         ON ticket_results.tap_id = taps.tap_id
     LEFT JOIN participants_to_routes_and_agency AS routes
         ON routes.operator_id = ticket_results.operator_id
-            AND EXTRACT(DATE FROM ticket_results.start_dttm AT TIME ZONE "America/Los_Angeles") = routes.date
+            AND ticket_results.ride_date_pacific = routes.date
             AND routes.route_id = taps.line_public_number
-            AND CAST(ticket_results.start_dttm AS TIMESTAMP)
-                BETWEEN CAST(routes._in_use_from AS TIMESTAMP)
-                AND CAST(routes._in_use_until AS TIMESTAMP)
+            AND ticket_results.ride_date_pacific
+                BETWEEN CAST(routes._in_use_from AS DATE)
+                AND CAST(routes._in_use_until AS DATE)
     LEFT JOIN payments_entity_mapping AS direct_map
         ON ticket_results.operator_id = direct_map.operator_id
-            AND CAST(ticket_results.start_dttm AS TIMESTAMP)
-                BETWEEN CAST(direct_map._in_use_from AS TIMESTAMP)
-                AND CAST(direct_map._in_use_until AS TIMESTAMP)
+            AND ticket_results.ride_date_pacific
+                BETWEEN CAST(direct_map._in_use_from AS DATE)
+                AND CAST(direct_map._in_use_until AS DATE)
     LEFT JOIN dim_orgs
         ON direct_map.organization_source_record_id = dim_orgs.source_record_id
-        AND CAST(ticket_results.start_dttm AS TIMESTAMP) BETWEEN dim_orgs._valid_from AND dim_orgs._valid_to
+        AND ticket_results.ride_timestamp BETWEEN dim_orgs._valid_from AND dim_orgs._valid_to
 ),
 
 fct_payments_rides_enghouse AS (
@@ -160,10 +168,10 @@ fct_payments_rides_enghouse AS (
         reason,
         tap_id,
         ticket_type,
+        created_dttm,
         line,
         start_station,
         end_station,
-        start_dttm,
         end_dttm,
         ticket_code,
         dt,

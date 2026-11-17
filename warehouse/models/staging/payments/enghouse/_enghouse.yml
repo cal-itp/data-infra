@@ -162,7 +162,8 @@ models:
       records how much was charged, the fare type applied, and the tap it corresponds to.
 
       Rows are deduplicated by id and operator_id. When the same ticket appears in multiple deliveries
-      (e.g., before and after clearing), the row with populated timestamps is preferred.
+      (e.g., before and after clearing), the row with a populated created_dttm is preferred; otherwise
+      the earliest delivery is kept.
     columns:
       - name: operator_id
         description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
@@ -189,20 +190,18 @@ models:
                 field: tap_id
       - name: ticket_type
         description: Type of ticket.
+      - name: created_dttm
+        description: |
+          Timestamp when the ticket result was created in the Enghouse system. This is not the
+          ride time; use the tap's terminal_date for that.
+        data_tests:
+          - enghouse_timestamp_has_no_timezone
       - name: line
         description: Line, if provided by the validator.
       - name: start_station
         description: Zone where the trip started.
       - name: end_station
         description: Zone where the trip ended.
-      - name: start_dttm
-        description: Timestamp when the ticket started.
-        data_tests:
-          - enghouse_timestamp_has_no_timezone
-          - not_null:
-              arguments:
-                config:
-                  where: "dt >= '2026-01-11'"
       - name: end_dttm
         description: Only relevant for time-based tickets.
         data_tests:

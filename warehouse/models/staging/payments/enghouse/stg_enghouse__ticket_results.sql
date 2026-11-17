@@ -13,10 +13,10 @@ clean_columns AS (
         {{ trim_make_empty_string_null('reason') }} AS reason,
         {{ trim_make_empty_string_null('tap_id') }} AS tap_id,
         {{ trim_make_empty_string_null('ticket_type') }} AS ticket_type,
+        {{ parse_enghouse_timestamp('created_dttm') }} AS created_dttm,
         {{ trim_make_empty_string_null('line') }} AS line,
         {{ trim_make_empty_string_null('start_station') }} AS start_station,
         {{ trim_make_empty_string_null('end_station') }} AS end_station,
-        {{ parse_enghouse_timestamp('start_dttm') }} AS start_dttm,
         {{ parse_enghouse_timestamp('end_dttm') }} AS end_dttm,
         {{ trim_make_empty_string_null('ticket_code') }} AS ticket_code,
         agency,
@@ -35,7 +35,7 @@ deduplicated AS (
             *,
             ROW_NUMBER() OVER (
                 PARTITION BY id, operator_id
-                ORDER BY (start_dttm IS NOT NULL) DESC, dt ASC
+                ORDER BY (created_dttm IS NOT NULL) DESC, dt ASC
             ) AS row_num
         FROM clean_columns
     )
@@ -53,10 +53,10 @@ stg_enghouse__ticket_results AS (
         reason,
         tap_id,
         ticket_type,
+        created_dttm,
         line,
         start_station,
         end_station,
-        start_dttm,
         end_dttm,
         ticket_code,
         agency,

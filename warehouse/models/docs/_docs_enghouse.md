@@ -280,11 +280,15 @@ Masked primary account number.
 {% enddocs %}
 
 {% docs eh_latest_ticket_result_update_timestamp %}
-The most recent ticket result timestamp in the pay window
+The most recent ticket result timestamp in the pay window: the later of each ticket result's
+`created_dttm` and `end_dttm`. `created_dttm` is when Enghouse created the ticket record, not the
+ride time; use `latest_tap_terminal_date` for the time of the latest tap.
 {% enddocs %}
 
 {% docs eh_latest_ticket_result_update_datetime %}
-The most recent ticket result datetime in the pay window
+The most recent ticket result datetime in the pay window: the later of each ticket result's
+`created_dttm` and `end_dttm`. `created_dttm` is when Enghouse created the ticket result, not the
+ride time; use `latest_tap_terminal_datetime` for the time of the latest tap.
 {% enddocs %}
 
 {% docs eh_latest_ticket_result_update_datetime_pacific %}

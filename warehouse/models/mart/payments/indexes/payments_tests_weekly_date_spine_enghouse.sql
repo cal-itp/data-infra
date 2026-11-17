@@ -1,10 +1,10 @@
 {{ config(materialized='ephemeral') }}
 
-{% set min_week_list = dbt_utils.get_column_values(table=ref('fct_payments_rides_enghouse'), column='start_dttm', where='start_dttm IS NOT NULL', order_by = 'start_dttm', max_records = 1) %}
+{% set min_week_list = dbt_utils.get_column_values(table=ref('fct_payments_rides_enghouse'), column='terminal_date', where='terminal_date IS NOT NULL', order_by = 'terminal_date', max_records = 1) %}
 
 {% set min_week = min_week_list[0].strftime('%Y-%m-%d') if min_week_list and min_week_list[0] else (modules.datetime.date.today() - modules.datetime.timedelta(days=7)).isoformat() %}
 
-{% set max_week_list = dbt_utils.get_column_values(table=ref('fct_payments_rides_enghouse'), column='start_dttm', where='start_dttm IS NOT NULL', order_by = 'start_dttm DESC', max_records = 1) %}
+{% set max_week_list = dbt_utils.get_column_values(table=ref('fct_payments_rides_enghouse'), column='terminal_date', where='terminal_date IS NOT NULL', order_by = 'terminal_date DESC', max_records = 1) %}
 
 {% set max_week = max_week_list[0].strftime('%Y-%m-%d') if max_week_list and max_week_list[0] else modules.datetime.date.today().isoformat() %}
 
