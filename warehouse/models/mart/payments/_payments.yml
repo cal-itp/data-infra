@@ -868,7 +868,7 @@ models:
         description: Type of ticket.
       - name: created_dttm
         description: |
-          Timestamp when the ticket result was created in the Enghouse system. This is not 
+          Timestamp when the ticket result was created in the Enghouse system. This is not
           when the user tapped their card - see `terminal_date`.
       - name: line
         description: Line, if provided by the validator.
