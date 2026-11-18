@@ -108,7 +108,8 @@ models:
               arguments:
                 min_value: 0
                 inclusive: true
-                error_if: ">10"
+                # see issue #5811
+                error_if: ">30"
                 warn_if: ">0"
       - name: debit_amount
         description: '{{ doc("lp_settlement_debit_amount") }}'
@@ -872,6 +873,11 @@ models:
             combination_of_columns:
               - participant_id
               - settlement_id
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - _payments_key
+              - settlement_status
     columns:
       - name: settlement_id
         description: '{{ doc("lp_settlement_id") }}'

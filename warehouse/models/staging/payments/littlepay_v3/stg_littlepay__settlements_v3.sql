@@ -44,7 +44,7 @@ clean_columns AS (
         {{ dbt_utils.generate_surrogate_key(['participant_id',
         'settlement_id', 'aggregation_id', 'customer_id', 'funding_source_id', 'amount',
         'retrieval_reference_number', 'littlepay_reference_number', 'external_reference_number',
-        'settlement_type', 'record_updated_timestamp_utc', 'acquirer_code']) }} AS _content_hash,
+        'settlement_type', 'acquirer_code']) }} AS _content_hash,
     FROM source
 ),
 
