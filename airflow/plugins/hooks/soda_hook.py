@@ -22,15 +22,16 @@ class SODAHook(BaseHook):
             .run(endpoint=f"resource/{resource}.json", data={"$select": "count(*)"})
             .json()
         )
-        return ceil(int(response_json[0]["count"]) / (limit * 1.0))
 
-    def page(self, resource: str, page: int, limit: int = 1000) -> list[dict[str, str]]:
-        offset = max(page - 1, 0) * limit
+        n_pages = int(response_json[0]["count"]) / limit
+        return ceil(n_pages) + 1
+
+    def page(self, resource: str) -> list[dict[str, str]]:
+        # offset = max(page - 1, 0) * limit
         response_json = (
             self.http_hook()
             .run(
-                endpoint=f"resource/{resource}.json",
-                data={"$limit": limit, "$offset": offset},
+                endpoint=f"api/v3/views/{resource}/query.json",
             )
             .json()
         )
