@@ -867,15 +867,15 @@ models:
       - name: ticket_type
         description: Type of ticket.
       - name: created_dttm
-        description: Timestamp when the ticket was created.
+        description: |
+          Timestamp when the ticket result was created in the Enghouse system. This is not
+          when the user tapped their card - see `terminal_date`.
       - name: line
         description: Line, if provided by the validator.
       - name: start_station
         description: Zone where the trip started.
       - name: end_station
         description: Zone where the trip ended.
-      - name: start_dttm
-        description: Timestamp when the ticket started.
       - name: end_dttm
         description: Only relevant for time-based tickets.
       - name: ticket_code
@@ -897,7 +897,9 @@ models:
       - name: server_date
         description: Timestamp when the tap was received on the Enghouse server.
       - name: terminal_date
-        description: Timestamp when the tap was created on the terminal.
+        description: |
+          Timestamp when the tap was created on the terminal. This is the best timestamp
+          available for when the user tapped their card.
       - name: tx_number
         description: Enghouse internal status of tap, not relevant for customer.
       - name: tx_status

@@ -66,9 +66,12 @@ models:
       - name: server_date
       # Not used anywhere, so not addinga not null test
         description: Timestamp when the tap was received on the Enghouse server.
+        data_tests:
+          - enghouse_timestamp_has_no_timezone
       - name: terminal_date
         description: Timestamp when the tap was created on the terminal.
         data_tests:
+          - enghouse_timestamp_has_no_timezone
           - not_null
       - name: tx_number
         description: Enghouse internal tap status code. Not meaningful for downstream analysis.
@@ -159,7 +162,8 @@ models:
       records how much was charged, the fare type applied, and the tap it corresponds to.
 
       Rows are deduplicated by id and operator_id. When the same ticket appears in multiple deliveries
-      (e.g., before and after clearing), the row with populated timestamps is preferred.
+      (e.g., before and after clearing), the row with a populated created_dttm is preferred; otherwise
+      the earliest delivery is kept.
     columns:
       - name: operator_id
         description: Enghouse's internal identifier for the agency (referred to as "operator" by Enghouse).
@@ -187,22 +191,21 @@ models:
       - name: ticket_type
         description: Type of ticket.
       - name: created_dttm
-        description: Timestamp when the ticket was created.
+        description: |
+          Timestamp when the ticket result was created in the Enghouse system. This is not the
+          ride time; use the tap's terminal_date for that.
+        data_tests:
+          - enghouse_timestamp_has_no_timezone
       - name: line
         description: Line, if provided by the validator.
       - name: start_station
         description: Zone where the trip started.
       - name: end_station
         description: Zone where the trip ended.
-      - name: start_dttm
-        description: Timestamp when the ticket started.
-        data_tests:
-          - not_null:
-              arguments:
-                config:
-                  where: "dt >= '2026-01-11'"
       - name: end_dttm
         description: Only relevant for time-based tickets.
+        data_tests:
+          - enghouse_timestamp_has_no_timezone
       - name: ticket_code
         description: Additional information for the ticket or ticket type.
       - name: agency
@@ -242,6 +245,7 @@ models:
       - name: timestamp
         description: '{{ doc("enghouse_timestamp") }}'
         data_tests:
+          - enghouse_timestamp_has_no_timezone
           - not_null
       - name: amount
         description: '{{ doc("enghouse_amount") }}'
@@ -345,10 +349,16 @@ models:
       - name: open_timestamp
         description: Timestamp when the pay window was opened.
         data_tests:
+          - enghouse_timestamp_has_no_timezone:
+              arguments:
+                source_column: open_date
           - not_null
       - name: close_timestamp
         description: Timestamp when the pay window was closed.
         data_tests:
+          - enghouse_timestamp_has_no_timezone:
+              arguments:
+                source_column: close_date
           - not_null:
               arguments:
                 config:

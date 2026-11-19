@@ -20,7 +20,7 @@ count_rides AS (
 
     FROM payments_tests_weekly_date_spine AS spine
     INNER JOIN payments_rides
-        ON (spine.operator_id = payments_rides.operator_id) AND DATE(start_dttm) >= week_start AND DATE(start_dttm) <= week_end
+        ON (spine.operator_id = payments_rides.operator_id) AND DATE(terminal_date, "America/Los_Angeles") >= week_start AND DATE(terminal_date, "America/Los_Angeles") <= week_end
     GROUP BY week_start, operator_id
 ),
 

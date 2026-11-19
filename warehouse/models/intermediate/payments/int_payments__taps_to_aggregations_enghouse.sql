@@ -15,10 +15,10 @@ ticket_results AS (
         tap_id,
         id,
         amount,
-        GREATEST(
-            COALESCE(start_dttm, end_dttm),
-            COALESCE(end_dttm, start_dttm)
-        ) AS ticket_result_update_timestamp
+        -- created_dttm is when Enghouse created the ticket result, not the ride time
+        -- switch to using start_dttm if we have confident it is strictly ordered
+        -- due to bad time zone handling from EH we don't have that right now
+        created_dttm AS ticket_result_update_timestamp
     FROM {{ ref('stg_enghouse__ticket_results') }}
 ),
 
