@@ -5,7 +5,6 @@ tags:
 catchup: False
 default_args:
     owner: airflow
-    email: "{{ env_var('AIRFLOW_ALERTS_INFRASTRUCTURE_EMAIL') }}"
     depends_on_past: False
     start_date: "2025-07-06"
     email_on_failure: True
