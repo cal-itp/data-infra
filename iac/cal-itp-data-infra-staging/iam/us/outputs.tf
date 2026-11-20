@@ -185,3 +185,15 @@ output "google_service_account_elavon-sftp-service-account_name" {
 output "google_service_account_elavon-sftp-service-account_email" {
   value = google_service_account.elavon-sftp-service-account.email
 }
+
+output "google_service_account_nocodb-service-account_id" {
+  value = google_service_account.nocodb-service-account.id
+}
+
+output "google_service_account_nocodb-service-account_email" {
+  value = google_service_account.nocodb-service-account.email
+}
+
+output "google_service_account_nocodb-service-account_name" {
+  value = google_service_account.nocodb-service-account.name
+}
