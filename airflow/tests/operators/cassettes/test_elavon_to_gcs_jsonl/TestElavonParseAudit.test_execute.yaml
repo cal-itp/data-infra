@@ -1,0 +1,480 @@
+interactions:
+- request:
+    body: null
+    headers:
+      Authorization:
+      - FILTERED
+      User-Agent:
+      - python-gcsfs/2025.12.0
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o?delimiter=%2F&maxResults=1000&prefix=elavon%2Fraw%2F
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#objects\",\n  \"items\": [\n    {\n      \"kind\":
+        \"storage#object\",\n      \"id\": \"calitp-staging-pytest/elavon/raw/elavon-test.zip/1793998489073606\",\n
+        \     \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/elavon%2Fraw%2Felavon-test.zip\",\n
+        \     \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/elavon%2Fraw%2Felavon-test.zip?generation=1793998489073606&alt=media\",\n
+        \     \"name\": \"elavon/raw/elavon-test.zip\",\n      \"bucket\": \"calitp-staging-pytest\",\n
+        \     \"generation\": \"1793998489073606\",\n      \"metageneration\": \"1\",\n
+        \     \"contentType\": \"application/zip\",\n      \"storageClass\": \"STANDARD\",\n
+        \     \"size\": \"214\",\n      \"md5Hash\": \"dfVDCt4ctb5wL4h90D1RBQ==\",\n
+        \     \"crc32c\": \"lYcgig==\",\n      \"etag\": \"CMbvrJWd9JcDEAE=\",\n      \"timeCreated\":
+        \"2026-11-06T20:54:49.107Z\",\n      \"updated\": \"2026-11-06T20:54:49.107Z\",\n
+        \     \"timeStorageClassUpdated\": \"2026-11-06T20:54:49.107Z\",\n      \"timeFinalized\":
+        \"2026-11-06T20:54:49.107Z\"\n    }\n  ]\n}\n"
+    headers:
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '1020'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Fri, 06 Nov 2026 21:45:24 GMT
+      Expires:
+      - Fri, 06 Nov 2026 21:45:24 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AFy3sg1hUm-vrCeD2VlNyD9TLdGm7YlG2hkm0wJuI_TV9uYrr4uENqAjYZTJfksDI2d9M_je
+      X-Goog-Gcs-Base-Ts:
+      - 1a1b2d2d8b1
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Authorization:
+      - FILTERED
+      User-Agent:
+      - python-gcsfs/2025.12.0
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/elavon%2Fraw%2Felavon-test.zip?alt=media
+  response:
+    body:
+      string: !!binary |
+        UEsDBBQAAAAAANemZl2psLITVgAAAFYAAAAPAAAAZWxhdm9uLXRlc3QuY3N2VHJhbnNhY3Rpb24g
+        RGF0ZXxBbW91bnR8UmVmZXJlbmNlCjIwMjYtMTEtMDF8MTAuMDB8VEVTVC0wMDEKMjAyNi0xMS0w
+        MnwyMC4wMHxURVNULTAwMgpQSwECFAMUAAAAAADXpmZdqbCyE1YAAABWAAAADwAAAAAAAAAAAAAA
+        gAEAAAAAZWxhdm9uLXRlc3QuY3N2UEsFBgAAAAABAAEAPQAAAIMAAAAAAA==
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '214'
+      Content-Type:
+      - application/zip
+      Date:
+      - Fri, 06 Nov 2026 21:45:24 GMT
+      Etag:
+      - CMbvrJWd9JcDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Fri, 06 Nov 2026 20:54:49 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AFy3sg3kumGtvKgQeVehyWPc4lqQXDIHcx_ON9MBLnViA3icReDQpNnxn-YUjsg1UYHYJejw
+      X-Goog-Gcs-Base-Ts:
+      - 1a1b2d2d8e9
+      X-Goog-Generation:
+      - '1793998489073606'
+      X-Goog-Hash:
+      - crc32c=lYcgig==,md5=dfVDCt4ctb5wL4h90D1RBQ==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '214'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!python/object/new:_io.BytesIO
+      state: !!python/tuple
+      - !!binary |
+        LS09PTA9PQpDb250ZW50LVR5cGU6IGFwcGxpY2F0aW9uL2pzb247IGNoYXJzZXQ9VVRGLTgKCnsi
+        bmFtZSI6ICJ0cmFuc2FjdGlvbnMvZHQ9MjAyNi0xMS0wNi9leGVjdXRpb25fdHM9MjAyNi0xMS0w
+        NlQxMjowMDowMCswMDowMC9lbGF2b24tdGVzdC5qc29ubC5neiJ9Ci0tPT0wPT0KQ29udGVudC1U
+        eXBlOiBhcHBsaWNhdGlvbi9vY3RldC1zdHJlYW0KCh+LCABAwe1qAv+rViopSswrTkwuyczPi09J
+        LElVslIyMjAy0zU01DUwVNJRSszNL80rAYoaGugZGAAFilLTUotS85JBKkNcg0N0DYDqarmq8Zpk
+        hGySEW6TjIAmAQDk3jjmlAAAAAotLT09MD09LS0=
+      - 0
+      - null
+    headers:
+      Authorization:
+      - FILTERED
+      Content-Type:
+      - multipart/related; boundary="==0=="
+      User-Agent:
+      - python-gcsfs/2025.12.0
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/transactions/dt=2026-11-06/execution_ts=2026-11-06T12:00:00+00:00/elavon-test.jsonl.gz/1794001525122516\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/transactions%2Fdt=2026-11-06%2Fexecution_ts=2026-11-06T12:00:00%2B00:00%2Felavon-test.jsonl.gz\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/transactions%2Fdt=2026-11-06%2Fexecution_ts=2026-11-06T12:00:00%2B00:00%2Felavon-test.jsonl.gz?generation=1794001525122516&alt=media\",\n
+        \ \"name\": \"transactions/dt=2026-11-06/execution_ts=2026-11-06T12:00:00+00:00/elavon-test.jsonl.gz\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1794001525122516\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/octet-stream\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"102\",\n  \"md5Hash\": \"DDbazr28GsWp/1lVvDfimw==\",\n
+        \ \"crc32c\": \"532/og==\",\n  \"etag\": \"CNTLhr2o9JcDEAE=\",\n  \"timeCreated\":
+        \"2026-11-06T21:45:25.129Z\",\n  \"updated\": \"2026-11-06T21:45:25.129Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-11-06T21:45:25.129Z\",\n  \"timeFinalized\":
+        \"2026-11-06T21:45:25.129Z\"\n}\n"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1147'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Fri, 06 Nov 2026 21:45:25 GMT
+      Etag:
+      - CNTLhr2o9JcDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AFy3sg19ZfpYfN2oiKSB7MgODgKVcTTpTK4CyzvJCZ-psgxZkxAAuQphQe2S13VoiJ1Kv7Ms
+      X-Goog-Gcs-Base-Ts:
+      - 1a1b2d2d98c
+    status:
+      code: 200
+      message: OK
+- request:
+    body:
+      metadata:
+        PARTITIONED_ARTIFACT_METADATA: '{"filename": "elavon-test.jsonl.gz", "execution_ts":
+          "2026-11-06T12:00:00+00:00", "dt": "2026-11-06"}'
+    headers:
+      Authorization:
+      - FILTERED
+      User-Agent:
+      - python-gcsfs/2025.12.0
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: PATCH
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/transactions%2Fdt=2026-11-06%2Fexecution_ts=2026-11-06T12:00:00%2B00:00%2Felavon-test.jsonl.gz?fields=metadata
+  response:
+    body:
+      string: "{\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\": \"{\\\"filename\\\":
+        \\\"elavon-test.jsonl.gz\\\", \\\"execution_ts\\\": \\\"2026-11-06T12:00:00+00:00\\\",
+        \\\"dt\\\": \\\"2026-11-06\\\"}\"\n  }\n}\n"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '177'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Fri, 06 Nov 2026 21:45:25 GMT
+      Etag:
+      - CNTLhr2o9JcDEAI=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AFy3sg2FAwRWG_ydd1jouffeuZo0UCHSr_uEtdm_sjldxm6CrgFD2_YfuaUFIphFFhssAhWK
+      X-Goog-Gcs-Base-Ts:
+      - 1a1b2d2d9d0
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Authorization:
+      - FILTERED
+      User-Agent:
+      - python-gcsfs/2025.12.0
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: GET
+    uri: https://storage.googleapis.com/storage/v1/b/calitp-staging-pytest/o/transactions%2Fdt=2026-11-06%2Fexecution_ts=2026-11-06T12:00:00%2B00:00%2Felavon-test.jsonl.gz
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/transactions/dt=2026-11-06/execution_ts=2026-11-06T12:00:00+00:00/elavon-test.jsonl.gz/1794001525122516\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/transactions%2Fdt=2026-11-06%2Fexecution_ts=2026-11-06T12:00:00%2B00:00%2Felavon-test.jsonl.gz\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/transactions%2Fdt=2026-11-06%2Fexecution_ts=2026-11-06T12:00:00%2B00:00%2Felavon-test.jsonl.gz?generation=1794001525122516&alt=media\",\n
+        \ \"name\": \"transactions/dt=2026-11-06/execution_ts=2026-11-06T12:00:00+00:00/elavon-test.jsonl.gz\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1794001525122516\",\n
+        \ \"metageneration\": \"2\",\n  \"contentType\": \"application/octet-stream\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"102\",\n  \"md5Hash\": \"DDbazr28GsWp/1lVvDfimw==\",\n
+        \ \"crc32c\": \"532/og==\",\n  \"etag\": \"CNTLhr2o9JcDEAI=\",\n  \"timeCreated\":
+        \"2026-11-06T21:45:25.129Z\",\n  \"updated\": \"2026-11-06T21:45:25.196Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-11-06T21:45:25.129Z\",\n  \"timeFinalized\":
+        \"2026-11-06T21:45:25.129Z\",\n  \"metadata\": {\n    \"PARTITIONED_ARTIFACT_METADATA\":
+        \"{\\\"filename\\\": \\\"elavon-test.jsonl.gz\\\", \\\"execution_ts\\\": \\\"2026-11-06T12:00:00+00:00\\\",
+        \\\"dt\\\": \\\"2026-11-06\\\"}\"\n  }\n}\n"
+    headers:
+      Cache-Control:
+      - private, max-age=0, must-revalidate, no-transform
+      Content-Length:
+      - '1321'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Fri, 06 Nov 2026 21:45:25 GMT
+      Etag:
+      - CNTLhr2o9JcDEAI=
+      Expires:
+      - Fri, 06 Nov 2026 21:45:25 GMT
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AFy3sg2NPNf7rzcTyJbXjKDAuckuydclvfgwvtGcQKLsXHkujhLDy355BamM4jaNUUgQ1Kdy
+      X-Goog-Gcs-Base-Ts:
+      - 1a1b2d2da3e
+    status:
+      code: 200
+      message: OK
+- request:
+    body: !!python/object/new:_io.BytesIO
+      state: !!python/tuple
+      - !!binary |
+        LS09PTA9PQpDb250ZW50LVR5cGU6IGFwcGxpY2F0aW9uL2pzb247IGNoYXJzZXQ9VVRGLTgKCnsi
+        bmFtZSI6ICJlbGF2b25fcGFyc2Vfam9iX3Jlc3VsdHMvZHQ9MjAyNi0xMS0wNi9leGVjdXRpb25f
+        dHM9MjAyNi0xMS0wNlQxMjowMDowMCswMDowMC9lbGF2b24tdGVzdC5qc29ubCJ9Ci0tPT0wPT0K
+        Q29udGVudC1UeXBlOiBhcHBsaWNhdGlvbi9vY3RldC1zdHJlYW0KCnsicmF3Ijp7ImZpbGVuYW1l
+        IjoiZWxhdm9uLXRlc3QuemlwIiwicGF0aCI6ImVsYXZvbi9yYXcvZWxhdm9uLXRlc3QuemlwIiwi
+        dHMiOiIyMDI2LTExLTA2VDIwOjU0OjQ5LjEwNzAwMCswMDowMCIsInNpemUiOjIxNH0sInBhcnNl
+        ZCI6eyJmaWxlbmFtZSI6ImVsYXZvbi10ZXN0Lmpzb25sLmd6IiwicGF0aCI6InRyYW5zYWN0aW9u
+        cy9kdD0yMDI2LTExLTA2L2V4ZWN1dGlvbl90cz0yMDI2LTExLTA2VDEyOjAwOjAwKzAwOjAwL2Vs
+        YXZvbi10ZXN0Lmpzb25sLmd6IiwidHMiOiIyMDI2LTExLTA2VDIxOjQ1OjI1LjE5NjAwMCswMDow
+        MCIsInNpemUiOjEwMn19Ci0tPT0wPT0tLQ==
+      - 0
+      - null
+    headers:
+      Authorization:
+      - FILTERED
+      Content-Type:
+      - multipart/related; boundary="==0=="
+      User-Agent:
+      - python-gcsfs/2025.12.0
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+    method: POST
+    uri: https://storage.googleapis.com/upload/storage/v1/b/calitp-staging-pytest/o?uploadType=multipart
+  response:
+    body:
+      string: "{\n  \"kind\": \"storage#object\",\n  \"id\": \"calitp-staging-pytest/elavon_parse_job_results/dt=2026-11-06/execution_ts=2026-11-06T12:00:00+00:00/elavon-test.jsonl/1794001525396297\",\n
+        \ \"selfLink\": \"https://www.googleapis.com/storage/v1/b/calitp-staging-pytest/o/elavon_parse_job_results%2Fdt=2026-11-06%2Fexecution_ts=2026-11-06T12:00:00%2B00:00%2Felavon-test.jsonl\",\n
+        \ \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/elavon_parse_job_results%2Fdt=2026-11-06%2Fexecution_ts=2026-11-06T12:00:00%2B00:00%2Felavon-test.jsonl?generation=1794001525396297&alt=media\",\n
+        \ \"name\": \"elavon_parse_job_results/dt=2026-11-06/execution_ts=2026-11-06T12:00:00+00:00/elavon-test.jsonl\",\n
+        \ \"bucket\": \"calitp-staging-pytest\",\n  \"generation\": \"1794001525396297\",\n
+        \ \"metageneration\": \"1\",\n  \"contentType\": \"application/octet-stream\",\n
+        \ \"storageClass\": \"STANDARD\",\n  \"size\": \"317\",\n  \"md5Hash\": \"0ExQvTUaKSmHOAtFeRIp1g==\",\n
+        \ \"crc32c\": \"3FORCA==\",\n  \"etag\": \"CMmml72o9JcDEAE=\",\n  \"timeCreated\":
+        \"2026-11-06T21:45:25.401Z\",\n  \"updated\": \"2026-11-06T21:45:25.401Z\",\n
+        \ \"timeStorageClassUpdated\": \"2026-11-06T21:45:25.401Z\",\n  \"timeFinalized\":
+        \"2026-11-06T21:45:25.401Z\"\n}\n"
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Length:
+      - '1183'
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Fri, 06 Nov 2026 21:45:25 GMT
+      Etag:
+      - CMmml72o9JcDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AFy3sg3OzYejdfDd2XXEZ6Lmi2ynMnJb9h4AW_XVWeMpeG2rJvGFaQuYThbzslf9jbISM7d5
+      X-Goog-Gcs-Base-Ts:
+      - 1a1b2d2da9d
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.10 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.10 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/7b0867e8-ab6f-4125-aa63-d10a31a9150f
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/transactions%2Fdt%3D2026-11-06%2Fexecution_ts%3D2026-11-06T12%3A00%3A00%2B00%3A00%2Felavon-test.jsonl.gz?alt=media
+  response:
+    body:
+      string: !!binary |
+        H4sIAEDB7WoC/6tWKilKzCtOTC7JzM+LT0ksSVWyUjIyMDLTNTTUNTBU0lFKzM0vzSsBihoa6BkY
+        AAWKUtNSi1LzkkEqQ1yDQ3QNgOpquarxmmSEbJIRbpOMgCYBAOTeOOaUAAAA
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '102'
+      Content-Type:
+      - application/octet-stream
+      Date:
+      - Fri, 06 Nov 2026 21:45:26 GMT
+      ETag:
+      - CNTLhr2o9JcDEAI=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Fri, 06 Nov 2026 21:45:25 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AFy3sg2hnwINx3rfrvtSQZh4rgFxVWs_0E5sgJ-45M8PnKXx2NOIp-ORVZKOCdwvEiL3AK1X
+      X-Goog-Gcs-Base-Ts:
+      - 1a1b2d2e034
+      X-Goog-Generation:
+      - '1794001525122516'
+      X-Goog-Hash:
+      - crc32c=532/og==,md5=DDbazr28GsWp/1lVvDfimw==
+      X-Goog-Metageneration:
+      - '2'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '102'
+    status:
+      code: 200
+      message: OK
+- request:
+    body: null
+    headers:
+      Accept:
+      - application/json
+      Authorization:
+      - FILTERED
+      Connection:
+      - keep-alive
+      User-Agent:
+      - gcloud-python/2.19.0  gl-python/3.11.10 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+      X-Goog-API-Client:
+      - gcloud-python/2.19.0  gl-python/3.11.10 grpc/1.80.0 gax/2.30.3 gccl/2.19.0
+        gccl-invocation-id/b0b18766-4c9c-4442-bad1-f7407e2cbbe4
+      accept-encoding:
+      - gzip
+      content-type:
+      - application/json; charset=UTF-8
+      x-goog-user-project:
+      - cal-itp-data-infra-staging
+      x-upload-content-type:
+      - application/json; charset=UTF-8
+    method: GET
+    uri: https://storage.googleapis.com/download/storage/v1/b/calitp-staging-pytest/o/elavon_parse_job_results%2Fdt%3D2026-11-06%2Fexecution_ts%3D2026-11-06T12%3A00%3A00%2B00%3A00%2Felavon-test.jsonl?alt=media
+  response:
+    body:
+      string: '{"raw":{"filename":"elavon-test.zip","path":"elavon/raw/elavon-test.zip","ts":"2026-11-06T20:54:49.107000+00:00","size":214},"parsed":{"filename":"elavon-test.jsonl.gz","path":"transactions/dt=2026-11-06/execution_ts=2026-11-06T12:00:00+00:00/elavon-test.jsonl.gz","ts":"2026-11-06T21:45:25.196000+00:00","size":102}}'
+    headers:
+      Cache-Control:
+      - no-cache, no-store, max-age=0, must-revalidate
+      Content-Disposition:
+      - attachment
+      Content-Length:
+      - '317'
+      Content-Type:
+      - application/octet-stream
+      Date:
+      - Fri, 06 Nov 2026 21:45:27 GMT
+      ETag:
+      - CMmml72o9JcDEAE=
+      Expires:
+      - Mon, 01 Jan 1990 00:00:00 GMT
+      Last-Modified:
+      - Fri, 06 Nov 2026 21:45:25 GMT
+      Pragma:
+      - no-cache
+      Server:
+      - UploadServer
+      Vary:
+      - Origin
+      - X-Origin
+      X-GUploader-UploadID:
+      - AFy3sg1p5cnBopnoALu5J2yFzhMRbwh4DvCbfjDxImfAoXin2W1-6wzrtZpjwjK9rUFoi2Kv
+      X-Goog-Gcs-Base-Ts:
+      - 1a1b2d2e111
+      X-Goog-Generation:
+      - '1794001525396297'
+      X-Goog-Hash:
+      - crc32c=3FORCA==,md5=0ExQvTUaKSmHOAtFeRIp1g==
+      X-Goog-Metageneration:
+      - '1'
+      X-Goog-Storage-Class:
+      - STANDARD
+      X-Goog-Stored-Content-Encoding:
+      - identity
+      X-Goog-Stored-Content-Length:
+      - '317'
+    status:
+      code: 200
+      message: OK
+version: 1
