@@ -52,6 +52,24 @@ int_payments__customers_vaults_to_aggregations as (
         and aggregations.participant_id = vaults.participant_id
         and aggregations.max_time >= vaults.calitp_valid_at
         and aggregations.max_time < vaults.calitp_invalid_at
+),
+
+bin_deduped_customers_vaults_to_aggregations as (
+    -- when the same card appears with both a 6-digit BIN (BIN6) and an 8-digit BIN (BIN8)
+    -- that starts with those same 6 digits, keep only the BIN8 row
+    select *
+    from int_payments__customers_vaults_to_aggregations
+    qualify not (
+        length(bin) = 6
+        and countif(length(bin) = 8) over (
+            partition by
+                participant_id,
+                aggregation_id,
+                principal_customer_id,
+                card_scheme,
+                left(bin, 6)
+        ) > 0
+    )
 )
 
-select * from int_payments__customers_vaults_to_aggregations
+select * from bin_deduped_customers_vaults_to_aggregations
