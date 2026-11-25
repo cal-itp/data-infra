@@ -1,0 +1,35 @@
+
+operator: operators.ExternalTable
+bucket: "{{ env_var('CALITP_BUCKET__ELAVON_PARSED') }}"
+source_objects:
+  - "elavon_parse_job_results/*.jsonl"
+destination_project_dataset_table: "external_elavon.parse_job_results"
+source_format: NEWLINE_DELIMITED_JSON
+use_bq_client: true
+hive_options:
+  mode: CUSTOM
+  require_partition_filter: false
+  source_uri_prefix: "elavon_parse_job_results/{dt:DATE}/{execution_ts:TIMESTAMP}/"
+schema_fields:
+  - name: raw
+    type: RECORD
+    fields:
+      - name: filename
+        type: STRING
+      - name: path
+        type: STRING
+      - name: ts
+        type: TIMESTAMP
+      - name: size
+        type: INTEGER
+  - name: parsed
+    type: RECORD
+    fields:
+      - name: filename
+        type: STRING
+      - name: path
+        type: STRING
+      - name: ts
+        type: TIMESTAMP
+      - name: size
+        type: INTEGER
