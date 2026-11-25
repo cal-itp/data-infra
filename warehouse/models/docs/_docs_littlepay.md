@@ -352,8 +352,12 @@ Possible values:
 The type of product / rule that created the adjustment. Additional values may be added over time.
 
 Possible values:
-* `MULTI_DAY_CAP`
 * `DAILY_CAP`
+* `FIXED`
+* `MULTI_DAY_CAP`
+* `PASS`
+* `PERCENTAGE`
+* `TIME_BASED_CAP`
 * `WEEKLY_CAP`
 {% enddocs %}
 

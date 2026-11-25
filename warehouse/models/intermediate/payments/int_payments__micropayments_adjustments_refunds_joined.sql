@@ -27,6 +27,16 @@ adjustments AS (
     FROM {{ ref('int_littlepay__unioned_micropayment_adjustments') }}
     -- we only want adjustments that were actually applied
     WHERE applied
+    -- a small number of micropayments have multiple applied adjustments (ex. a transfer discount and a fare cap)
+    -- in all observed cases the lower value adjustment was redundant, so keep only the highest value one
+    -- and prefer capping adjustments in the case of a tie
+    QUALIFY ROW_NUMBER() OVER (
+        PARTITION BY participant_id, micropayment_id
+        ORDER BY
+            amount DESC,
+            type IN ('{{ var("LITTLEPAY_CAPPING_ADJUSTMENT_TYPES") | join("', '") }}') DESC,
+            adjustment_id DESC
+    ) = 1
 ),
 
 products AS (
