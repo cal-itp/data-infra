@@ -9,6 +9,16 @@ models:
   - name: int_littlepay__unioned_device_transaction_purchases
   - name: int_littlepay__unioned_device_transactions
   - name: int_littlepay__unioned_micropayment_adjustments
+    data_tests:
+      # per Littlepay, a micropayment should never have more than one applied capping adjustment
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - participant_id
+              - micropayment_id
+          config:
+            where: >-
+              applied AND type IN ('{{ var("LITTLEPAY_CAPPING_ADJUSTMENT_TYPES") | join("', '") }}')
   - name: int_littlepay__unioned_micropayment_device_transactions
   - name: int_littlepay__unioned_micropayments
   - name: int_littlepay__unioned_product_data
