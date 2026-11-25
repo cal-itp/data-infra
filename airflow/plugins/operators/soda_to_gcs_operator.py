@@ -53,20 +53,19 @@ class SODAToGCSOperator(BaseOperator):
         return GCSHook(gcp_conn_id=self.gcp_conn_id)
 
     def soda_hook(self) -> SODAHook:
-        return SODAHook(method="GET", http_conn_id=self.http_conn_id)
+        return SODAHook(method="POST", http_conn_id=self.http_conn_id)
 
     def execute(self, context: Context) -> str:
         paths: list[str] = []
-        for page in range(1, self.soda_hook().total_pages(self.resource)):
-            response = self.soda_hook().page(self.resource, page=page)
-            data = JsonlFormatter(response).format()
-            object_name = f"{self.object_path}/page-{page:04}.jsonl.gz"
-            paths.append(os.path.join(self.bucket_name, object_name))
-            self.gcs_hook().upload(
-                data=data,
-                bucket_name=self.bucket_name.replace("gs://", ""),
-                object_name=object_name,
-                mime_type="application/jsonl",
-                gzip=True,
-            )
+        response = self.soda_hook().page(self.resource)
+        data = JsonlFormatter(response).format()
+        object_name = f"{self.object_path}.jsonl.gz"
+        paths.append(os.path.join(self.bucket_name, object_name))
+        self.gcs_hook().upload(
+            data=data,
+            bucket_name=self.bucket_name.replace("gs://", ""),
+            object_name=object_name,
+            mime_type="application/jsonl",
+            gzip=True,
+        )
         return paths
