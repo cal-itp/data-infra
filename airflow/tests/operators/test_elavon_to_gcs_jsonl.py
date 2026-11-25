@@ -43,11 +43,6 @@ class TestElavonParseAudit:
     @pytest.mark.vcr
     def test_execute(self, operator, execution_date, monkeypatch):
         monkeypatch.setattr(
-            pendulum,
-            "now",
-            lambda: pendulum.datetime(2026, 11, 6, 12, 0, 0, tz="UTC"),
-        )
-        monkeypatch.setattr(
             elavon_parser,
             "CALITP_BUCKET__ELAVON_RAW",
             "gs://calitp-staging-pytest/elavon/raw",
@@ -55,11 +50,12 @@ class TestElavonParseAudit:
 
         dt = "2026-11-06"
 
-        operator.run(
-            start_date=execution_date,
-            end_date=execution_date + timedelta(days=1),
-            ignore_first_depends_on_past=True,
-        )
+        with pendulum.test_local_timezone(pendulum.timezone("UTC")):
+            operator.run(
+                start_date=execution_date,
+                end_date=execution_date + timedelta(days=1),
+                ignore_first_depends_on_past=True,
+            )
 
         hook = GCSHook()
         bucket = "calitp-staging-pytest"
