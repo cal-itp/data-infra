@@ -98,6 +98,7 @@ stg_littlepay__refunds_v3 AS (
         -- we have multiple rows for some refunds as the refund moves through different statuses; we should handle this later
         {{ dbt_utils.generate_surrogate_key(['refund_id', 'approval_status']) }} AS _payments_key
     FROM clean_columns
+    {{ qualify_dedupe_full_duplicate_lp_rows() }}
 )
 
 SELECT * FROM stg_littlepay__refunds_v3

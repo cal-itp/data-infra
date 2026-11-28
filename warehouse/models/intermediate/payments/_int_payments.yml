@@ -340,6 +340,12 @@ models:
             expression: "refund_amount = micropayments_refund_amount"
             config:
               where: "source_table='both_refunds_and_micropayments'"
+      - dbt_utils.unique_combination_of_columns:
+          arguments:
+            combination_of_columns:
+              - participant_id
+              - refund_id
+            where: 'refund_id IS NOT NULL'
     columns:
       - name: refund_id
         description: The unique identifier for each requested refund. (Only present if refund was in refunds table.)
