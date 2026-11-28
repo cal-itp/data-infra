@@ -1,18 +1,28 @@
-# the empty data block is required to inherit the `provider "google"` block from provider.tf
+# GTFS-RT monitoring and alerting configuration.
+# Defines the notification channel and alert policies for GTFS-RT
+# ingestion activity and archiver performance.
+
+# 1. Google Cloud project
+# The empty data block inherits the Google provider configuration
+# from provider.tf.
 data "google_project" "project" {
 }
 
+# 2. GTFS-RT email notification channel
+# Routes monitoring alerts to the dedicated GTFS-RT distribution list.
 resource "google_monitoring_notification_channel" "email_dds_notify" {
   project      = data.google_project.project.project_id
   type         = "email"
-  display_name = "GTFS-RT Archivers Email Alert Channel - DDS App Notify"
-  description  = "Send gtfs-rt archivers alerts to dds.app.notify@dot.ca.gov."
+  display_name = "GTFS-RT Alerts"
+  description  = "Send GTFS-RT monitoring alerts to gtfs-rt-alerts@dot.ca.gov."
   labels = {
-    email_address = "dds.app.notify@dot.ca.gov"
+    email_address = "gtfs-rt-alerts@dot.ca.gov"
   }
 }
 
-# 2. Define the Alerting Policy
+# 3. GTFS-RT ingestion activity alert
+# Detects unusually low write activity in the GTFS-RT raw bucket,
+# which may indicate ingestion problems.
 resource "google_monitoring_alert_policy" "gtfs_low_write_alert" {
   display_name = "Low Write Activity - GTFS Bucket"
   project      = data.google_project.project.project_id
@@ -60,7 +70,7 @@ resource "google_monitoring_alert_policy" "gtfs_low_write_alert" {
     google_monitoring_notification_channel.email_dds_notify.name,
   ]
 
-  # Metadata to help Vivian or other team members when they receive the alert
+  # Provide context to help recipients investigate the alert.
   documentation {
     content   = "The GTFS Realtime raw bucket has dropped below 4000 writes in the last 5 minutes. This usually indicates the ingestion pipeline is stalled or a feed provider is down."
     mime_type = "text/markdown"
@@ -74,7 +84,9 @@ resource "google_monitoring_alert_policy" "gtfs_low_write_alert" {
   enabled = true
 }
 
-# 3. Define the GTFS-RT archiver latency alert
+# 4. GTFS-RT archiver latency alert
+# Detects sustained high Cloud Run request latency,
+# which may indicate archiver performance degradation.
 resource "google_monitoring_alert_policy" "gtfs_rt_archiver_high_latency_alert" {
   display_name = "High Fetch Latency - GTFS-RT Archiver"
   project      = data.google_project.project.project_id
